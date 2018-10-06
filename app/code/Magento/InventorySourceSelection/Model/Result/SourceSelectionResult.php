@@ -9,11 +9,13 @@ namespace Magento\InventorySourceSelection\Model\Result;
 
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultExtensionInterface;
 
 /**
  * @inheritdoc
  */
-class SourceSelectionResult implements SourceSelectionResultInterface
+class SourceSelectionResult extends AbstractExtensibleModel implements SourceSelectionResultInterface
 {
     /**
      * @var SourceSelectionItemInterface[]
@@ -49,5 +51,28 @@ class SourceSelectionResult implements SourceSelectionResultInterface
     public function isShippable(): bool
     {
         return $this->isShippable;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(
+                SourceSelectionResultExtensionInterface::class
+            );
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(SourceSelectionResultExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

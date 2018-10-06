@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelection\Model\Request;
 
+use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * @inheritdoc
  */
-class InventoryRequest implements InventoryRequestInterface
+class InventoryRequest extends AbstractExtensibleModel implements InventoryRequestInterface
 {
     /**
      * @var int
@@ -87,5 +89,28 @@ class InventoryRequest implements InventoryRequestInterface
     public function setItems(array $items): void
     {
         $this->items = $items;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(
+                InventoryRequestExtensionInterface::class
+            );
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(InventoryRequestExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

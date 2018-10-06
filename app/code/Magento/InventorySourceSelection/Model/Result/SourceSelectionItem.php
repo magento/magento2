@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventorySourceSelection\Model\Result;
 
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemExtensionInterface;
 
 /**
  * @inheritdoc
  */
-class SourceSelectionItem implements SourceSelectionItemInterface
+class SourceSelectionItem extends AbstractExtensibleModel implements SourceSelectionItemInterface
 {
     /**
      * @var string
@@ -78,5 +80,28 @@ class SourceSelectionItem implements SourceSelectionItemInterface
     public function getQtyAvailable(): float
     {
         return $this->qtyAvailable;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(
+                SourceSelectionItemExtensionInterface::class
+            );
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(SourceSelectionItemExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }
