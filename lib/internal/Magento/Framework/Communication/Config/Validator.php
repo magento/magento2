@@ -46,6 +46,8 @@ class Validator
     {
         try {
             $this->validateType($responseSchema);
+        } catch (\InvalidArgumentException $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new \LogicException(
                 sprintf(
@@ -67,6 +69,8 @@ class Validator
     {
         try {
             $this->validateType($requestSchema);
+        } catch (\InvalidArgumentException $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new \LogicException(
                 sprintf(
@@ -90,6 +94,8 @@ class Validator
     {
         try {
             $this->methodsMap->getMethodParams($serviceName, $methodName);
+        } catch (\InvalidArgumentException $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new \LogicException(
                 sprintf(
