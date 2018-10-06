@@ -63,7 +63,7 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
 
         if (!empty($agreementId)) {
             $select = $this->getConnection()->select()->from(
-                ['agreement_store' => 'checkout_agreement_store']
+                ['agreement_store' => $this->getResource()->getTable('checkout_agreement_store')]
             )->where(
                 'agreement_store.agreement_id IN (?)',
                 $agreementId
