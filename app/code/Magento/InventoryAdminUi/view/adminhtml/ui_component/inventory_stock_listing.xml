@@ -123,7 +123,7 @@
                 component="Magento_InventoryAdminUi/js/stock/grid/cell/assigned-sources"
                 sortOrder="40">
             <settings>
-                <label translate="true">Assigned sources list</label>
+                <label translate="true">Assigned sources</label>
                 <sortable>false</sortable>
             </settings>
         </column>
