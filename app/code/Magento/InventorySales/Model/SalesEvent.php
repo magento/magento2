@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model;
 
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface;
 
 /**
  * @inheritdoc
  */
-class SalesEvent implements SalesEventInterface
+class SalesEvent extends AbstractExtensibleModel implements SalesEventInterface
 {
     /**
      * @var string
@@ -75,5 +77,26 @@ class SalesEvent implements SalesEventInterface
             'object_type' => $this->getObjectType(),
             'object_id' => $this->getObjectId(),
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(SalesEventInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(SalesEventExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }
