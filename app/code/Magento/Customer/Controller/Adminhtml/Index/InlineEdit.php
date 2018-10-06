@@ -10,7 +10,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
-use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Message\MessageInterface;
 
 /**
  * Customer inline edit action
