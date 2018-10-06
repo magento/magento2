@@ -94,8 +94,8 @@ class MethodsMap
      *  'validatePassword' => 'boolean'
      * ]
      * </pre>
-     * @throws \InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws \InvalidArgumentException if methods don't have annotation
+     * @throws \ReflectionException for missing DocBock or invalid reflection class
      */
     public function getMethodsMap($interfaceName)
     {
@@ -150,8 +150,8 @@ class MethodsMap
      *
      * @param string $interfaceName
      * @return array
-     * @throws \ReflectionException
-     * @throws \InvalidArgumentException
+     * @throws \ReflectionException for missing DocBock or invalid reflection class
+     * @throws \InvalidArgumentException if methods don't have annotation
      */
     private function getMethodMapViaReflection($interfaceName)
     {

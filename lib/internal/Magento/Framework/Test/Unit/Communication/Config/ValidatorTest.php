@@ -1,14 +1,27 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\Test\Unit\Communication\Config;
-
 
 use Magento\Framework\Communication\Config\Validator;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 
+/**
+ * Unit test for \Magento\Framework\Communication\Config\Validator class
+ */
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var TypeProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $typeProcessor;
+
+    /**
+     * @var MethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $methodsMap;
 
     public function setUp()
@@ -18,7 +31,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->methodsMap->expects(static::any())
             ->method('getMethodsMap')
             ->will($this->throwException(new \InvalidArgumentException('message', 333)));
-
 
         $this->typeProcessor = $this->createMock(TypeProcessor::class);
         $this->typeProcessor->expects(static::any())
@@ -33,6 +45,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException  \LogicException
      * @expectedExceptionCode 333
+     * @expectedExceptionMessage Response schema definition has service class with wrong annotated methods
      */
     public function testValidateResponseSchemaType()
     {
@@ -44,6 +57,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException  \LogicException
      * @expectedExceptionCode 333
+     * @expectedExceptionMessage Request schema definition has service class with wrong annotated methods
      */
     public function testValidateRequestSchemaType()
     {
