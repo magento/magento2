@@ -1,8 +1,4 @@
 <?php
-/**
- * m2git
- */
-
 namespace Magento\Framework\Test\Unit\Communication\Config;
 
 
