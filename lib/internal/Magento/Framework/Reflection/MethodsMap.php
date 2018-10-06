@@ -94,6 +94,8 @@ class MethodsMap
      *  'validatePassword' => 'boolean'
      * ]
      * </pre>
+     * @throws \InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function getMethodsMap($interfaceName)
     {
@@ -148,6 +150,8 @@ class MethodsMap
      *
      * @param string $interfaceName
      * @return array
+     * @throws \ReflectionException
+     * @throws \InvalidArgumentException
      */
     private function getMethodMapViaReflection($interfaceName)
     {
