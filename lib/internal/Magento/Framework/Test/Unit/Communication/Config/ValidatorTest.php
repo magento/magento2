@@ -17,7 +17,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->methodsMap->expects(static::any())
             ->method('getMethodsMap')
-            ->will($this->throwException(new \InvalidArgumentException()));
+            ->will($this->throwException(new \InvalidArgumentException('message', 333)));
 
 
         $this->typeProcessor = $this->createMock(TypeProcessor::class);
@@ -32,7 +32,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException  \LogicException
-     * @expectedExceptionCode 123
+     * @expectedExceptionCode 333
      */
     public function testValidateResponseSchemaType()
     {
@@ -43,7 +43,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException  \LogicException
-     * @expectedExceptionCode 123
+     * @expectedExceptionCode 333
      */
     public function testValidateRequestSchemaType()
     {

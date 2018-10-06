@@ -13,7 +13,6 @@ use Magento\Framework\Reflection\MethodsMap;
  */
 class Validator
 {
-    const INVALID_ANNOTATIONS = 123;
     /**
      * @var TypeProcessor
      */
@@ -50,7 +49,7 @@ class Validator
         } catch (\InvalidArgumentException $e) {
             throw new \LogicException(
                 'Response schema definition has wrong annotations',
-                self::INVALID_ANNOTATIONS,
+                $e->getCode(),
                 $e
             );
         } catch (\Exception $e) {
@@ -77,7 +76,7 @@ class Validator
         } catch (\InvalidArgumentException $e) {
             throw new \LogicException(
                 'Response schema definition has wrong annotations',
-                self::INVALID_ANNOTATIONS,
+                $e->getCode(),
                 $e
             );
         } catch (\Exception $e) {
