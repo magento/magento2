@@ -476,7 +476,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $users = $role->getRoleUsers();
         $rowsCount = 0;
 
-        if (sizeof($users) > 0) {
+        if (count($users) > 0) {
             $bind = ['reload_acl_flag' => 1];
             $where = ['user_id IN(?)' => $users];
             $rowsCount = $connection->update($this->getTable('admin_user'), $bind, $where);

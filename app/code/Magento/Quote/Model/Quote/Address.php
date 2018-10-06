@@ -691,7 +691,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function hasItems()
     {
-        return sizeof($this->getAllItems()) > 0;
+        return count($this->getAllItems()) > 0;
     }
 
     /**

@@ -44,7 +44,7 @@ class Product extends AbstractDb
     public function saveMultiple(array $insertData)
     {
         $connection = $this->getConnection();
-        if (sizeof($insertData) <= self::CHUNK_SIZE) {
+        if (count($insertData) <= self::CHUNK_SIZE) {
             return $connection->insertMultiple($this->getTable(self::TABLE_NAME), $insertData);
         }
         $data = array_chunk($insertData, self::CHUNK_SIZE);

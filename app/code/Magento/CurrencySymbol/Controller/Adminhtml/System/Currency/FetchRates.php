@@ -41,7 +41,7 @@ class FetchRates extends CurrencyAction implements HttpGetActionInterface, HttpP
             }
             $rates = $importModel->fetchRates();
             $errors = $importModel->getMessages();
-            if (sizeof($errors) > 0) {
+            if (count($errors) > 0) {
                 foreach ($errors as $error) {
                     $this->messageManager->addWarning($error);
                 }

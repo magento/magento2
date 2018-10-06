@@ -91,7 +91,7 @@ class Collection extends AbstractAction
 
         $actions[] = $action;
         if (!$action->getId()) {
-            $action->setId($this->getId() . '.' . sizeof($actions));
+            $action->setId($this->getId() . '.' . count($actions));
         }
 
         $this->setActions($actions);

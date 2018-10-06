@@ -68,7 +68,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function countStores()
     {
-        return sizeof($this->_stores->getItems());
+        return count($this->_stores->getItems());
     }
 
     /**

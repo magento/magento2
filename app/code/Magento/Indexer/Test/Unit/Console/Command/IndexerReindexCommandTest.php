@@ -85,7 +85,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->stateMock->expects($this->never())->method('setAreaCode');
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(1, sizeof($optionsList));
+        $this->assertSame(1, count($optionsList));
         $this->assertSame('index', $optionsList[0]->getName());
     }
 

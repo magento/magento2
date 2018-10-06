@@ -1430,7 +1430,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function hasItems()
     {
-        return sizeof($this->getAllItems()) > 0;
+        return count($this->getAllItems()) > 0;
     }
 
     /**

@@ -160,7 +160,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      */
     public function getCount()
     {
-        return sizeof($this->_items);
+        return count($this->_items);
     }
 
     /**

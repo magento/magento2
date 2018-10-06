@@ -65,7 +65,7 @@ abstract class AbstractSource implements
     {
         $options = $this->getAllOptions();
         // Fixed for tax_class_id and custom_design
-        if (sizeof($options) > 0) {
+        if (count($options) > 0) {
             foreach ($options as $option) {
                 if (isset($option['value']) && $option['value'] == $value) {
                     return isset($option['label']) ? $option['label'] : $option['value'];

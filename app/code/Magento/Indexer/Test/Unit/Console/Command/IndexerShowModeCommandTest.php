@@ -23,7 +23,7 @@ class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonSetup
         $this->stateMock->expects($this->never())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);
         $this->command = new IndexerShowModeCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(1, sizeof($optionsList));
+        $this->assertSame(1, count($optionsList));
         $this->assertSame('index', $optionsList[0]->getName());
     }
 
