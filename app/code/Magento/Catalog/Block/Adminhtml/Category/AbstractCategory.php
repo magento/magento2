@@ -103,10 +103,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     {
         $root = $this->getRoot();
         return $root && $root->getId();
-        if ($root && $root->getId()) {
-            return true;
-        }
-        return false;
     }
 
     /**
