@@ -38,6 +38,8 @@ class Validator
     }
 
     /**
+     * Validate response schema definition for topic
+     *
      * @param string $responseSchema
      * @param string $topicName
      * @return void
@@ -65,6 +67,8 @@ class Validator
     }
 
     /**
+     * Validate request schema definition for topic
+     *
      * @param string $requestSchema
      * @param string $topicName
      * @return void
@@ -92,6 +96,8 @@ class Validator
     }
 
     /**
+     * Validate service method specified in the definition of handler
+     *
      * @param string $serviceName
      * @param string $methodName
      * @param string $handlerName
