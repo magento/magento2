@@ -123,9 +123,7 @@ class System implements ConfigTypeInterface
     public function get($path = '')
     {
         if ($path === '') {
-            $this->data = array_replace_recursive($this->data, $allData = $this->loadAllData());
-            $allData = $this->postProcessor->process($allData);
-            $this->data = array_replace_recursive($this->data, $allData);
+            $this->data = array_replace_recursive($this->data, $this->loadAllData());
 
             return $this->data;
         }
@@ -146,7 +144,7 @@ class System implements ConfigTypeInterface
         if (count($pathParts) === 1 && $pathParts[0] !== ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$pathParts[0]])) {
                 $data = $this->readData();
-                $this->data = $this->postProcessor->process($data);
+                $this->data = array_replace_recursive($this->data, $this->postProcessor->process($data));
             }
 
             return $this->data[$pathParts[0]];
@@ -194,9 +192,10 @@ class System implements ConfigTypeInterface
             $data = $this->readData();
         } else {
             $data = $this->serializer->unserialize($cachedData);
+            $this->data = $data;
         }
 
-        return $data;
+        return $this->postProcessor->process($data);
     }
 
     /**
