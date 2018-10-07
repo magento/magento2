@@ -14,7 +14,8 @@ use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Save action for catalog rule
+ * @package Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
  */
 class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog implements HttpPostActionInterface
 {
@@ -40,7 +41,9 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog imple
     }
 
     /**
-     * @return void
+     * Execute save action from catalog rule
+     *
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
