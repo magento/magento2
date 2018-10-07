@@ -101,6 +101,8 @@ class System implements ConfigTypeInterface
     }
 
     /**
+     * Get config value by path.
+     *
      * System configuration is separated by scopes (default, websites, stores). Configuration of a scope is inherited
      * from its parent scope (store inherits website).
      *
@@ -243,6 +245,7 @@ class System implements ConfigTypeInterface
 
     /**
      * Cache configuration data.
+     *
      * Caches data per scope to avoid reading data for all scopes on every request
      *
      * @param array $data
