@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Api\Data;
+
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**

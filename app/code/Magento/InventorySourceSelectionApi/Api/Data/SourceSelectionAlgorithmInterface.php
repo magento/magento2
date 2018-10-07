@@ -43,7 +43,9 @@ interface SourceSelectionAlgorithmInterface extends ExtensibleDataInterface
     /**
      * Set an extension attributes object
      *
+     * @codingStandardsIgnoreStart
      * @param \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmExtensionInterface $extensionAttributes
+     * @codingStandardsIgnoreEnd
      * @return void
      */
     public function setExtensionAttributes(SourceSelectionAlgorithmExtensionInterface $extensionAttributes);
