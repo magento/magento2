@@ -127,7 +127,7 @@ class Validator
      * @param string $typeName
      * @return $this
      * @throws \Exception In case when type is invalid
-`     * @throws \InvalidArgumentException if methods don't have annotation
+     * @throws \InvalidArgumentException if methods don't have annotation
      */
     protected function validateType($typeName)
     {
