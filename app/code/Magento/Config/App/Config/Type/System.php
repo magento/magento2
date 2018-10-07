@@ -123,7 +123,9 @@ class System implements ConfigTypeInterface
     public function get($path = '')
     {
         if ($path === '') {
-            $this->data = array_replace_recursive($this->data, $this->loadAllData());
+            $this->data = array_replace_recursive($this->data, $allData = $this->loadAllData());
+            $allData = $this->postProcessor->process($allData);
+            $this->data = array_replace_recursive($this->data, $allData);
 
             return $this->data;
         }
@@ -154,7 +156,9 @@ class System implements ConfigTypeInterface
 
         if ($scopeType === ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$scopeType])) {
-                $this->data = array_replace_recursive($this->data, $this->loadDefaultScopeData($scopeType));
+                $this->data = array_replace_recursive($this->data, $scopeData = $this->loadDefaultScopeData($scopeType));
+                $scopeData = $this->postProcessor->process($scopeData);
+                $this->data = array_replace_recursive($this->data, $scopeData);
             }
 
             return $this->getDataByPathParts($this->data[$scopeType], $pathParts);
@@ -164,6 +168,8 @@ class System implements ConfigTypeInterface
 
         if (!isset($this->data[$scopeType][$scopeId])) {
             $scopeData = $this->loadScopeData($scopeType, $scopeId);
+            $this->data = array_replace_recursive($this->data, $scopeData);
+            $scopeData = $this->postProcessor->process($scopeData);
             $this->data = array_replace_recursive($this->data, $scopeData);
         }
 
@@ -186,7 +192,6 @@ class System implements ConfigTypeInterface
         } else {
             $data = $this->serializer->unserialize($cachedData);
         }
-        $data = $this->postProcessor->process($data);
 
         return $data;
     }
@@ -207,7 +212,6 @@ class System implements ConfigTypeInterface
         } else {
             $data = [$scopeType => $this->serializer->unserialize($cachedData)];
         }
-        $data = $this->postProcessor->process($data);
 
         return $data;
     }
@@ -238,7 +242,6 @@ class System implements ConfigTypeInterface
         } else {
             $data = [$scopeType => [$scopeId => $this->serializer->unserialize($cachedData)]];
         }
-        $data = $this->postProcessor->process($data);
 
         return $data;
     }
