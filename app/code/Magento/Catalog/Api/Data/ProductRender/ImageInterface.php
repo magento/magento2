@@ -111,7 +111,7 @@ interface ImageInterface extends ExtensibleDataInterface
     /**
      * Retrieve resize width
      *
-     * This width is image dimension, which represents the width, that can be used for perfomance improvements
+     * This width is image dimension, which represents the width, that can be used for performance improvements
      *
      * @return float
      * @since 101.1.0

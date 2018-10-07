@@ -102,7 +102,7 @@ define([
         /**
          * Applies search query.
          *
-         * @param {String} [value=inputValue] - If not specfied, then
+         * @param {String} [value=inputValue] - If not specified, then
          *      value of the input field will be used.
          * @returns {Search} Chainable.
          */

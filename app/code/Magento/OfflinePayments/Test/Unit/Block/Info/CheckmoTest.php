@@ -116,7 +116,7 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
         // First we set the property $this->_mailingAddress
         $this->block->getMailingAddress();
 
-        // And now we get already setted property $this->_mailingAddress
+        // And now we get already set property $this->_mailingAddress
         static::assertEquals($mailingAddress, $this->block->getMailingAddress());
     }
 }

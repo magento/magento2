@@ -526,7 +526,7 @@ define([
         },
 
         /**
-         * Fired when image setted
+         * Fired when image set
          * @param {Event} event
          * @param {Object} imageData
          * @private

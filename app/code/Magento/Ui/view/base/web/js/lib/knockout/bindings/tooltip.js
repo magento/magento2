@@ -137,14 +137,14 @@ define([
         },
 
         /**
-         * Check can tooltip setted on current position or not. If can't setted - delegate call.
+         * Check can tooltip set on current position or not. If can't set - delegate call.
          *
          * @param {Object} s - object with sizes and positions elements
          * @param {Object} map - mapping for get direction positions
          * @param {String} direction - vertical or horizontal
-         * @param {String} className - class whats should be setted to tooltip
+         * @param {String} className - class whats should be set to tooltip
          * @param {String} side - parent method name
-         * @param {String} delegate - method name if tooltip can't be setted in current position
+         * @param {String} delegate - method name if tooltip can't be set in current position
          * @returns {Object} tooltip data (position, className, etc)
          */
         _topLeftChecker: function (s, map, direction, className, side, delegate) {
@@ -177,14 +177,14 @@ define([
         },
 
         /**
-         * Check can tooltip setted on current position or not. If can't setted - delegate call.
+         * Check can tooltip set on current position or not. If can't set - delegate call.
          *
          * @param {Object} s - object with sizes and positions elements
          * @param {Object} map - mapping for get direction positions
          * @param {String} direction - vertical or horizontal
-         * @param {String} className - class whats should be setted to tooltip
+         * @param {String} className - class whats should be set to tooltip
          * @param {String} side - parent method name
-         * @param {String} delegate - method name if tooltip can't be setted in current position
+         * @param {String} delegate - method name if tooltip can't be set in current position
          * @returns {Object} tooltip data (position, className, etc)
          */
         _bottomRightChecker: function (s, map, direction, className, side, delegate) {
@@ -260,7 +260,7 @@ define([
          * @param {Object} s - object with sizes and positions elements
          * @param {Object} data - current data (position, className, etc)
          * @param {Object} config - tooltip config
-         * @param {String} delegate - method name if tooltip can't be setted in current position
+         * @param {String} delegate - method name if tooltip can't be set in current position
          * @param {Object} map - mapping for get direction positions
          * @param {String} direction - vertical or horizontal
          * @returns {Object} tooltip data (position, className, etc)
@@ -303,7 +303,7 @@ define([
          * @param {Object} s - object with sizes and positions elements
          * @param {Object} data - current data (position, className, etc)
          * @param {Object} config - tooltip config
-         * @param {String} delegate - method name if tooltip can't be setted in current position
+         * @param {String} delegate - method name if tooltip can't be set in current position
          * @param {Object} map - mapping for get direction positions
          * @param {String} direction - vertical or horizontal
          * @param {Object} startPosition - start position

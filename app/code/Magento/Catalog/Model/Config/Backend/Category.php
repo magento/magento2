@@ -56,7 +56,7 @@ class Category extends \Magento\Framework\App\Config\Value
 
             $tree = $this->_catalogCategory->getTreeModel();
 
-            // Create copy of categories attributes for choosed store
+            // Create copy of categories attributes for chosen store
             $tree->load();
             $root = $tree->getNodeById($rootId);
 

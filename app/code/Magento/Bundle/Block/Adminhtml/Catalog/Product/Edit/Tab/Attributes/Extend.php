@@ -5,7 +5,7 @@
  */
 
 /**
- * Bundle Extended Attribures Block
+ * Bundle Extended Attributes Block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -75,7 +75,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
     }
 
     /**
-     * Execute method getElementHtml from parrent class
+     * Execute method getElementHtml from parent class
      *
      * @return string
      */

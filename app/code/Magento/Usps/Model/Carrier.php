@@ -448,7 +448,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $package->addChild('FirstClassMailType', 'PARCEL');
             }
             $package->addChild('ZipOrigination', $r->getOrigPostal());
-            //only 5 chars avaialble
+            //only 5 chars available
             $package->addChild('ZipDestination', substr($r->getDestPostal(), 0, 5));
             $package->addChild('Pounds', $r->getWeightPounds());
             $package->addChild('Ounces', $r->getWeightOunces());

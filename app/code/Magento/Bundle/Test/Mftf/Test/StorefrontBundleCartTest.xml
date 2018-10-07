@@ -116,7 +116,7 @@
         <dontSee selector="{{StorefrontBundledSection.nthOptionDiv('3')}}" userInput="Please select one of the options." stepKey="error15"/>
         <see selector="{{StorefrontBundledSection.nthOptionDiv('4')}}" userInput="This is a required field." stepKey="error16"/>
 
-        <!-- Fill option 4, dont see any validation errors -->
+        <!-- Fill option 4, don't see any validation errors -->
         <selectOption selector="select[multiple='multiple']" userInput="$$simpleProduct1.name$$ +$123.00" stepKey="selectOption4"/>
         <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddToCart5"/>
         <dontSee selector="{{StorefrontBundledSection.nthOptionDiv('1')}}" userInput="This is a required field." stepKey="error17"/>

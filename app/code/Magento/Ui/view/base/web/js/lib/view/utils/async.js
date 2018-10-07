@@ -103,7 +103,7 @@ define([
 
     /**
      * Creates promise that will be resolved
-     * when requested component is registred.
+     * when requested component is registered.
      *
      * @param {String} name - Name of component.
      * @returns {jQueryPromise}

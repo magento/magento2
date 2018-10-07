@@ -38,7 +38,7 @@ class Apply extends \Magento\Framework\Data\Form\Element\Multiselect
     }
 
     /**
-     * Dublicate interface of \Magento\Framework\Data\Form\Element\AbstractElement::setReadonly
+     * Duplicate interface of \Magento\Framework\Data\Form\Element\AbstractElement::setReadonly
      *
      * @param bool $readonly
      * @param bool $useDisabled

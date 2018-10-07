@@ -148,7 +148,7 @@ define([
         },
 
         /**
-         * Removes provided file from thes files list.
+         * Removes provided file from this files list.
          *
          * @param {Object} file
          * @returns {FileUploader} Chainable.
@@ -323,8 +323,8 @@ define([
         },
 
         /**
-         * Handler which is invoked when files are choosed for upload.
-         * May be used for implementation of aditional validation rules,
+         * Handler which is invoked when files are chosen for upload.
+         * May be used for implementation of additional validation rules,
          * e.g. total files and a total size rules.
          *
          * @param {Event} e - Event object.

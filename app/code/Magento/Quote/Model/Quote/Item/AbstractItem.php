@@ -538,7 +538,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     }
 
     /**
-     * Specify custom item price (used in case whe we have apply not product price to item)
+     * Specify custom item price (used in case when we have apply not product price to item)
      *
      * @param   float $value
      * @return  \Magento\Quote\Model\Quote\Item\AbstractItem

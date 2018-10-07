@@ -177,7 +177,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
-     * Get formated in base currency base grand total value
+     * Get formatted in base currency base grand total value
      *
      * @return string
      */

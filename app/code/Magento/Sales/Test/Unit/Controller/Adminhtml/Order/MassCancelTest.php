@@ -221,7 +221,7 @@ class MassCancelTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test for excluded orders
-     * Two orders could't be canceled
+     * Two orders couldn't be canceled
      */
     public function testExcludedCannotCancelOrders()
     {

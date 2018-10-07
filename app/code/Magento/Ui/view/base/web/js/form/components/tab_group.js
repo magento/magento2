@@ -35,7 +35,7 @@ define([
         },
 
         /**
-         * Activates element if one is first or if one has 'active' propert
+         * Activates element if one is first or if one has 'active' property
          * set to true.
          *
          * @param  {Object} elem

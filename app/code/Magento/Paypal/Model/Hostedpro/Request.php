@@ -44,7 +44,7 @@ class Request extends DataObject
     protected $buttonVarFormat = 'L_BUTTONVAR%d';
 
     /**
-     * Request Parameters which dont have to wrap as button vars
+     * Request Parameters which don't have to wrap as button vars
      *
      * @var string[]
      */

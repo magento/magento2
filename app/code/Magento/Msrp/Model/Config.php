@@ -113,7 +113,7 @@ class Config
     }
 
     /**
-     * Return Msrp explanation message for "Whats This" window
+     * Return Msrp explanation message for "What's This" window
      *
      * @return string
      */

@@ -134,7 +134,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Return formated price
+     * Return formatted price
      *
      * @param array $value
      * @param bool $flag

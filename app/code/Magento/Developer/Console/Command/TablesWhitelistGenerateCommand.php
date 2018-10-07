@@ -144,7 +144,7 @@ class TablesWhitelistGenerateCommand extends Command
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        //If script comes here, that we sucessfully write whitelist configuration
+        //If script comes here, that we successfully write whitelist configuration
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 

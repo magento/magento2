@@ -135,7 +135,7 @@ class AjaxLoadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Check if validation throws a localized catched exception in case of incorrect id
+     * Check if validation throws a localized caught exception in case of incorrect id
      */
     public function testExecuteLocalizedException()
     {
@@ -185,7 +185,7 @@ class AjaxLoadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Check if validation throws a localized catched exception in case of incorrect id
+     * Check if validation throws a localized caught exception in case of incorrect id
      */
     public function testExecuteException()
     {

@@ -182,7 +182,7 @@ class Flat extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
 
     /**
      * Check whether the attribute is a real field in entity table
-     * Rewrited for EAV Collection
+     * Rewritten for EAV Collection
      *
      * @param integer|string|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return bool

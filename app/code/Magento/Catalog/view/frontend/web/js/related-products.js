@@ -37,7 +37,7 @@ define([
 
         /**
          * This method either checks all checkboxes for a product's set of related products (select all)
-         * or unchecks them (unselect all).
+         * or unchecks them (deselect all).
          * @private
          * @param {jQuery.Event} e - Click event on either the "select all" link or the "unselect all" link.
          * @return {Boolean} - Prevent default event action and event propagation.

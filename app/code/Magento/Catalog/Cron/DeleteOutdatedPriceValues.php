@@ -76,7 +76,7 @@ class DeleteOutdatedPriceValues
     /**
      * Checks if price scope config option explicitly equal to global value.
      *
-     * Such strict comparision is required to prevent price deleting when
+     * Such strict comparison is required to prevent price deleting when
      * price scope config option is null for some reason.
      *
      * @return bool

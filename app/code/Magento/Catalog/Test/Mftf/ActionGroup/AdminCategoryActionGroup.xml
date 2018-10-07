@@ -154,7 +154,7 @@
 
         <fillField stepKey="fillCategoryName" selector="{{AdminProductCategoryCreationSection.nameInput}}" userInput="{{categoryName}}"/>
 
-        <!-- Search and select a parent catagory for the product -->
+        <!-- Search and select a parent category for the product -->
         <click stepKey="clickParentCategory" selector="{{AdminProductCategoryCreationSection.parentCategory}}"/>
         <waitForPageLoad stepKey="waitForDropDownVisible"/>
         <fillField stepKey="searchForParent" userInput="{{parentCategoryName}}" selector="{{AdminProductCategoryCreationSection.parentSearch}}"/>

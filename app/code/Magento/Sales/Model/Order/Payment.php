@@ -824,7 +824,7 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * Cancel a creditmemo: substract its totals from the payment
+     * Cancel a creditmemo: subtract its totals from the payment
      *
      * @param Creditmemo $creditmemo
      * @return $this

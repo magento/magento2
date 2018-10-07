@@ -37,7 +37,7 @@ class InstructionsTest extends \PHPUnit\Framework\TestCase
             ->willReturn('get the instruction here');
         $this->assertEquals('get the instruction here', $this->_instructions->getInstructions());
 
-        // And we get the already setted param $this->_instructions
+        // And we get the already set param $this->_instructions
         $this->assertEquals('get the instruction here', $this->_instructions->getInstructions());
     }
 

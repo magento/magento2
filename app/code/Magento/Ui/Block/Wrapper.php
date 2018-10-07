@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Model\UiComponentGenerator;
 
 /**
- * This block is wrapper for UI component, this done in order to save compatability with old
+ * This block is wrapper for UI component, this done in order to save compatibility with old
  * widgets mechanism
  */
 class Wrapper extends \Magento\Framework\View\Element\Template
@@ -35,7 +35,7 @@ class Wrapper extends \Magento\Framework\View\Element\Template
     /**
      * Add external data to data provider
      *
-     * Can be usefull when we need to inject common data for few instances of UI components
+     * Can be useful when we need to inject common data for few instances of UI components
      *
      * @param UiComponentInterface $uiComponent
      * @param array $widgetData

@@ -38,7 +38,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         </before>
 
-        <!--Create website, Sore adn Store View-->
+        <!--Create website, Sore and Store View-->
         <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
             <argument name="newWebsiteName" value="secondWebsite"/>
             <argument name="websiteCode" value="second_website"/>

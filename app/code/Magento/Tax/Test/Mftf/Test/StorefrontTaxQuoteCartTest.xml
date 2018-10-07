@@ -75,7 +75,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -191,7 +191,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -297,7 +297,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -403,7 +403,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>

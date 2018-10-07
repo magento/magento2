@@ -293,7 +293,7 @@ define([
         },
 
         /**
-         * Ment to preprocess data associated with a current columns' field.
+         * Meant to preprocess data associated with a current columns' field.
          *
          * @param {Object} record - Data to be preprocessed.
          * @returns {String}

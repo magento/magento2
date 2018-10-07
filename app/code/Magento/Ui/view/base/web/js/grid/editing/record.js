@@ -138,7 +138,7 @@ define([
         },
 
         /**
-         * Creates fields for the specfied columns.
+         * Creates fields for the specified columns.
          *
          * @param {Array} columns - An array of column instances.
          * @returns {Record} Chainable.
@@ -277,7 +277,7 @@ define([
         },
 
         /**
-         * Counts total errors ammount accros all fields.
+         * Counts total errors amount accros all fields.
          *
          * @returns {Number}
          */

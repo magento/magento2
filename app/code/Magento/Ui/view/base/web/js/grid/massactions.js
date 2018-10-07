@@ -95,8 +95,8 @@ define([
         },
 
         /**
-         * Adds new action. If action with a specfied identifier
-         * already exists, than the original one will be overrided.
+         * Adds new action. If action with a specified identifier
+         * already exists, than the original one will be overridden.
          *
          * @param {Object} action - Action object.
          * @returns {Massactions} Chainable.

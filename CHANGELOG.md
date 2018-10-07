@@ -157,7 +157,7 @@ To get detailed information about changes in Magento 2.1.0, please visit [Magent
     * Updated styles 
 * Sample Data:
     * Improved sample data installation UX
-    * Updated sample data with Product Heros, color swatches, MAP and rule based product relations
+    * Updated sample data with Product Heroes, color swatches, MAP and rule based product relations
     * Improved sample data upgrade flow
     * Added the ability to log errors and set the error flag during sample data installation
 * Various improvements:
@@ -2284,7 +2284,7 @@ Tests:
   * Fixed an issue where no results were found for Coupons reports
   * Fixed an issue with incremental Qty setting
   * Fixed an issue with allowing importing of negative weight values
-  * Fixed an issue with Inventory - Only X left Treshold being not dependent on Qty for Item's Status to Become Out of Stock
+  * Fixed an issue with Inventory - Only X left Threshold being not dependent on Qty for Item's Status to Become Out of Stock
   * Fixed an issue where the "Catalog Search Index index was rebuilt." message was displayed when reindexing the Catalog Search index
  * Search module:
   * Integrated the Search library to the advanced search functionality
@@ -2706,7 +2706,7 @@ Tests:
    * Ability to support extensible service data objects
    * No Code Duplication in Root Templates
  * Fixed bugs:
-   * Persistance session application. Loggin out the customer
+   * Persistence session application. Logging out the customer
    * Placing the order with two terms and conditions
    * Saving of custom option by service catalogProductCustomOptionsWriteServiceV1
    * Placing the order on frontend if enter in the street address line 1 and 2 255 symbols

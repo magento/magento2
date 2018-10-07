@@ -244,7 +244,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             $options = $attribute->getSource()->getAllOptions(false);
         }
         if ($size = count($options)) {
-            // add empty vaue option
+            // add empty value option
             $firstOption = reset($options);
 
             if ('' === $firstOption['value']) {

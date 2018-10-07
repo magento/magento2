@@ -379,7 +379,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
-     * Explode to array if string setted
+     * Explode to array if string set
      *
      * @return array
      */
@@ -393,7 +393,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
-     * Unserialize if serialized string setted
+     * Unserialize if serialized string set
      *
      * @return array
      */

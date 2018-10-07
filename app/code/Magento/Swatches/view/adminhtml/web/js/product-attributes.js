@@ -425,7 +425,7 @@ define([
 
             swatchProductAttributes.bindAttributeInputType();
 
-            // @todo: refactor collapsable component
+            // @todo: refactor collapsible component
             $('.attribute-popup .collapse, [data-role="advanced_fieldset-content"]')
                 .collapsable()
                 .collapse('hide');

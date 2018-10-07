@@ -66,7 +66,7 @@
         <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="searchForAttrSet"/>
         <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
 
-        <!-- See new attibute set -->
+        <!-- See new attribute set -->
         <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="seeTestGroupName"/>
         <dontSeeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('meta_keyword')}}" stepKey="dontSeeMetaKeyword"/>
 

@@ -25,7 +25,7 @@ class FullTextSearchCheck
      * to join catalog_eav_attribute table to search query or not
      *
      * In case when the $query does not requires full text search
-     * - we can skipp joining catalog_eav_attribute table because it becomes excessive
+     * - we can skip joining catalog_eav_attribute table because it becomes excessive
      *
      * @param QueryInterface $query
      * @return bool

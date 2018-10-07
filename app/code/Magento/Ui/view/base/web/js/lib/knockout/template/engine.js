@@ -161,7 +161,7 @@ define([
     };
 
     /**
-     * Overrided method of native knockout template engine.
+     * Overridden method of native knockout template engine.
      * Caches template after it's unique name and renders in once.
      * If template name is not typeof string, delegates work to knockout.templateSources.anonymousTemplate.
      * @param  {*} template
@@ -222,7 +222,7 @@ define([
     };
 
     /**
-     * Overrided method of native knockout template engine.
+     * Overridden method of native knockout template engine.
      * Should return array of html elements.
      * @param  {TemplateSource} templateSource - object with methods 'nodes' and 'data'.
      * @return {Array} - array of html elements
@@ -234,7 +234,7 @@ define([
     };
 
     /**
-     * Overrided method of native knockout template engine.
+     * Overridden method of native knockout template engine.
      * Created in order to invoke makeTemplateSource method with custom set of params.
      * @param  {*} template - template identifier
      * @param  {ko.bindingContext} bindingContext

@@ -15,7 +15,7 @@ define([
     'use strict';
 
     /**
-     * Removes non plain object items from the specfied array.
+     * Removes non plain object items from the specified array.
      *
      * @param {Array} container - Array whose value should be filtered.
      * @returns {Array}

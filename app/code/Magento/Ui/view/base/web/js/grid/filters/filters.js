@@ -302,7 +302,7 @@ define([
         },
 
         /**
-         * Tells wether specified filter should be visible.
+         * Tells whether specified filter should be visible.
          *
          * @param {Object} filter
          * @returns {Boolean}

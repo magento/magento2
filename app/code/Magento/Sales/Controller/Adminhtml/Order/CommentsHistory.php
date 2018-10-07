@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Sales\Controller\Adminhtml\Order as OrderAction;
 
 /**
- * Comments History tab, needs to be accessible by POST becuase of tabs mechanism.
+ * Comments History tab, needs to be accessible by POST because of tabs mechanism.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
