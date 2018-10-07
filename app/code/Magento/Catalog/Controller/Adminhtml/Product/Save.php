@@ -128,7 +128,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
 
                 $originalSku = $product->getSku();
                 $canSaveCustomOptions = $product->getCanSaveCustomOptions();
-                $product->setSku(trim($data['product']['sku']));
                 $product->save();
                 $this->handleImageRemoveError($data, $product->getId());
                 $this->getCategoryLinkManagement()->assignProductToCategories(

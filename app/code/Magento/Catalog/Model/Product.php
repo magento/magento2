@@ -2441,7 +2441,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function setSku($sku)
     {
-        return $this->setData(self::SKU, $sku);
+        return $this->setData(self::SKU, trim($sku));
     }
 
     /**

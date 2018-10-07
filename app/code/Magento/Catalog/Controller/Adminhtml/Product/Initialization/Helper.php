@@ -160,6 +160,7 @@ class Helper
 
         $productData = $this->normalize($productData);
         $productData = $this->convertSpecialFromDateStringToObject($productData);
+        $productData['sku'] = trim($productData['sku']);
 
         if (!empty($productData['is_downloadable'])) {
             $productData['product_has_weight'] = 0;
