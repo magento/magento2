@@ -156,7 +156,10 @@ class System implements ConfigTypeInterface
 
         if ($scopeType === ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$scopeType])) {
-                $this->data = array_replace_recursive($this->data, $scopeData = $this->loadDefaultScopeData($scopeType));
+                $this->data = array_replace_recursive(
+                    $this->data,
+                    $scopeData = $this->loadDefaultScopeData($scopeType)
+                );
                 $scopeData = $this->postProcessor->process($scopeData);
                 $this->data = array_replace_recursive($this->data, $scopeData);
             }
