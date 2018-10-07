@@ -51,7 +51,7 @@
         <!--Click "Save Addresses" -->
         <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveAddress"/>
         <waitForPageLoad stepKey="waitForAddressSaved"/>
-        <dontSeeElement selector="{{CheckoutNewAddressModalPopupSection.newAddressModalPopup}}" stepKey="dontSeeModalPopup"/>
+        <dontSeeElement selector="{{StorefrontCheckoutAddressPopupSection.newAddressModalPopup}}" stepKey="dontSeeModalPopup"/>
 
         <!--Select Shipping Rate "Flat Rate"-->
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" stepKey="selectFlatShippingMethod"/>
@@ -63,7 +63,7 @@
         </actionGroup>
 
         <!--Close Popup and click next-->
-        <click selector="{{CheckoutNewAddressModalPopupSection.closeAddressModalPopup}}" stepKey="closePopup"/>
+        <click selector="{{StorefrontCheckoutAddressPopupSection.closeAddressModalPopup}}" stepKey="closePopup"/>
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
 
