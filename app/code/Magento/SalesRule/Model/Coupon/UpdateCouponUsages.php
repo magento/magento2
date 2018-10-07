@@ -42,27 +42,27 @@ class UpdateCouponUsages
     /**
      * @var DeleteCustomerUsage
      */
-    private $deleteCustomerRuleUsage;
+    private $deleteCustomerUsage;
 
     /**
      * @param RuleFactory $ruleFactory
      * @param CustomerFactory $ruleCustomerFactory
      * @param Coupon $coupon
      * @param Usage $couponUsage
-     * @param DeleteCustomerUsage $deleteCustomerRuleUsage
+     * @param DeleteCustomerUsage $deleteCustomerUsage
      */
     public function __construct(
         RuleFactory $ruleFactory,
         CustomerFactory $ruleCustomerFactory,
         Coupon $coupon,
         Usage $couponUsage,
-        DeleteCustomerUsage $deleteCustomerRuleUsage = null
+        DeleteCustomerUsage $deleteCustomerUsage = null
     ) {
         $this->ruleFactory = $ruleFactory;
         $this->ruleCustomerFactory = $ruleCustomerFactory;
         $this->coupon = $coupon;
         $this->couponUsage = $couponUsage;
-        $this->deleteCustomerRuleUsage = $deleteCustomerRuleUsage ? :
+        $this->deleteCustomerUsage = $deleteCustomerUsage ? :
             ObjectManager::getInstance()->get(DeleteCustomerUsage::class);
     }
 
@@ -136,7 +136,7 @@ class UpdateCouponUsages
                 /** Delete the rules from salesrule_customer table when time used updated to 0 */
                 $updatedTimeUsed = $ruleCustomer->getTimesUsed();
                 if ($updatedTimeUsed === 0) {
-                    $this->deleteCustomerRuleUsage->execute($ruleId, $customerId, $updatedTimeUsed);
+                    $this->deleteCustomerUsage->execute($ruleId, $customerId, $updatedTimeUsed);
                 }
             }
         } elseif ($increment) {
