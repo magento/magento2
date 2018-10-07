@@ -15,6 +15,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Save action for catalog rule
+ * 
  * @package Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
  */
 class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog implements HttpPostActionInterface
