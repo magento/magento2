@@ -68,7 +68,7 @@
 
         <!-- 5. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="inputProductName2"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('$$createSimpleProduct.custom_attributes[url_key]$$.html')}}" stepKey="seeInListValue1"/>
