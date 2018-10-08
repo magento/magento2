@@ -161,26 +161,34 @@ class DbStorage extends AbstractStorage
         $oldUrlsSelect->from(
             $this->resource->getTableName(self::TABLE_NAME)
         );
-        /** @var UrlRewrite $url */
+
         foreach ($urls as $url) {
-            $oldUrlsSelect->orWhere(
-                $this->connection->quoteIdentifier(
-                    UrlRewrite::ENTITY_TYPE
-                ) . ' = ?',
-                $url->getEntityType()
-            );
-            $oldUrlsSelect->where(
-                $this->connection->quoteIdentifier(
-                    UrlRewrite::ENTITY_ID
-                ) . ' = ?',
-                $url->getEntityId()
-            );
-            $oldUrlsSelect->where(
-                $this->connection->quoteIdentifier(
-                    UrlRewrite::STORE_ID
-                ) . ' = ?',
-                $url->getStoreId()
-            );
+            $result[$url->getEntityType()][$url->getStoreId()][] = $url->getEntityId();
+        }
+
+        foreach ($result as $type => $stores) {
+            foreach ($stores as $store => $entities){
+                $oldUrlsSelect->orWhere(
+                    $this->connection->quoteIdentifier(
+                        UrlRewrite::ENTITY_TYPE
+                    ) . ' = ?',
+                    $type
+                );
+
+                $oldUrlsSelect->where(
+                    $this->connection->quoteIdentifier(
+                        UrlRewrite::ENTITY_ID
+                    ) . ' IN (?)',
+                    array_unique($entities)
+                );
+
+                $oldUrlsSelect->where(
+                    $this->connection->quoteIdentifier(
+                        UrlRewrite::STORE_ID
+                    ) . ' = ?',
+                    $store
+                );
+            }
         }
 
         // prevent query locking in a case when nothing to delete
