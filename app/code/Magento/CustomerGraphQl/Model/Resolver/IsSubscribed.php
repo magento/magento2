@@ -9,15 +9,15 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Newsletter\Model\SubscriberFactory;
 
 /**
- * Customers field resolver, used for GraphQL request processing.
+ * is_subscribed customer field resolver
  */
-class Customer implements ResolverInterface
+class IsSubscribed implements ResolverInterface
 {
     /**
      * @var CheckCustomerAccount
@@ -25,20 +25,20 @@ class Customer implements ResolverInterface
     private $checkCustomerAccount;
 
     /**
-     * @var CustomerDataProvider
+     * @var SubscriberFactory
      */
-    private $customerDataProvider;
+    private $subscriberFactory;
 
     /**
      * @param CheckCustomerAccount $checkCustomerAccount
-     * @param CustomerDataProvider $customerDataProvider
+     * @param SubscriberFactory $subscriberFactory
      */
     public function __construct(
         CheckCustomerAccount $checkCustomerAccount,
-        CustomerDataProvider $customerDataProvider
+        SubscriberFactory $subscriberFactory
     ) {
         $this->checkCustomerAccount = $checkCustomerAccount;
-        $this->customerDataProvider = $customerDataProvider;
+        $this->subscriberFactory = $subscriberFactory;
     }
 
     /**
@@ -57,8 +57,7 @@ class Customer implements ResolverInterface
 
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
 
-        $currentUserId = (int)$currentUserId;
-        $data = $this->customerDataProvider->getCustomerById($currentUserId);
-        return $data;
+        $status = $this->subscriberFactory->create()->loadByCustomerId($currentUserId)->isSubscribed();
+        return (bool)$status;
     }
 }
