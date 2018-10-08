@@ -21,6 +21,7 @@ class UpdateCustomTableMapPlugin
      * @param EntityGeneratorFactory $subject
      * @param array $data
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeCreate(
         EntityGeneratorFactory $subject,
