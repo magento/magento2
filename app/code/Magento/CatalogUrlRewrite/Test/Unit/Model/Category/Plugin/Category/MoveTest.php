@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Category;
 
-use Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move as CategoryMovePlugin;
+use Magento\CatalogUrlRewrite\Plugin\Model\Category\Move as CategoryMovePlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
