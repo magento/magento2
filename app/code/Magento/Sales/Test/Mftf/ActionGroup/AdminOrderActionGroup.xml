@@ -161,8 +161,8 @@
     <actionGroup name="verifyCreatedOrderInformation">
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" after="seeSuccessMessage" stepKey="seeOrderPendingStatus"/>
-        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" before="seeOrderPendingStatus" stepKey="getOrderId"/>
-        <assertNotEmpty actual="$getOrderId" before="getOrderId" stepKey="assertOrderIdIsNotEmpty"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="getOrderId"/>
+        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty"/>
     </actionGroup>
 
     <!--Check that customer information is correct in order-->
