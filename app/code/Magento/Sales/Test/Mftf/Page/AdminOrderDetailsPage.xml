@@ -15,7 +15,7 @@
         <section name="OrderDetailsMessagesSection"/>
         <section name="AdminOrderItemsOrderedSection"/>
         <section name="AdminOrderTotalSection"/>
-        <section name="AdminOrderDetailsOrderViewSection"/>
+        <section name="AdminOrderViewTabsSection"/>
         <section name="AdminOrderInvoicesTabSection"/>
         <section name="AdminOrderShipmentsTabSection"/>
         <section name="AdminOrderCreditMemosTabSection"/>

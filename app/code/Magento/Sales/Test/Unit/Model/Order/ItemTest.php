@@ -243,11 +243,12 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      * Test different combinations of item qty setups
      *
      * @param array $options
-     * @param float $expectedResult
+     * @param array $expectedResult
+     * @return void
      *
      * @dataProvider getItemQtyVariants
      */
-    public function testGetSimpleQtyToMethods(array $options, $expectedResult)
+    public function testGetSimpleQtyToMethods(array $options, array $expectedResult)
     {
         $this->model->setData($options);
         $this->assertSame($this->model->getSimpleQtyToShip(), $expectedResult['to_ship']);
@@ -260,7 +261,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getItemQtyVariants()
+    public function getItemQtyVariants(): array
     {
         return [
             'empty_item' => [

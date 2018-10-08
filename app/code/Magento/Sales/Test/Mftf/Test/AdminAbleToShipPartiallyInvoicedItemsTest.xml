@@ -32,7 +32,7 @@
         <!--Create new order-->
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
         <actionGroup ref="navigateToNewOrderPageNewCustomerSingleStore" stepKey="startToCreateNewOrder"/>
-        <actionGroup ref="addSimpleProductToOrderWithCustomQuantity" stepKey="addSimpleProductToOrderWithUserDefinedQty">
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrderWithUserDefinedQty">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="quantity" value="10"/>
         </actionGroup>
@@ -80,7 +80,7 @@
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Invoiced 5" stepKey="see5itemsInvoiced"/>
         <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage"/>
-        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoicesTab"/>
+        <click selector="{{AdminOrderViewTabsSection.invoices}}" stepKey="clickInvoicesTab"/>
         <waitForLoadingMaskToDisappear after="clickInvoicesTab" stepKey="waitForInvoiceGridToLoad"/>
         <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="$665.00" after="waitForInvoiceGridToLoad" stepKey="seeOrderInvoiceTabInGrid"/>
 
@@ -100,7 +100,7 @@
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems1"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 5" stepKey="see5itemsShipped"/>
         <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage1"/>
-        <click selector="{{AdminOrderDetailsOrderViewSection.shipments}}" stepKey="clickShipmentsTab"/>
+        <click selector="{{AdminOrderViewTabsSection.shipments}}" stepKey="clickShipmentsTab"/>
         <waitForLoadingMaskToDisappear after="clickShipmentsTab" stepKey="waitForShipmentsGridToLoad"/>
         <see selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" userInput="5.0000" after="waitForShipmentsGridToLoad" stepKey="seeOrderShipmentsTabInGrid"/>
 
@@ -120,7 +120,7 @@
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems2"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Refunded 5" stepKey="see5itemsRefunded"/>
         <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage2"/>
-        <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemosTab"/>
+        <click selector="{{AdminOrderViewTabsSection.creditMemos}}" stepKey="clickCreditMemosTab"/>
         <waitForLoadingMaskToDisappear after="clickCreditMemosTab" stepKey="waitForCreditMemosGridToLoad"/>
         <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="$665.00" after="waitForCreditMemosGridToLoad" stepKey="seeOrderCreditMemoTabInGrid"/>
 
@@ -140,7 +140,7 @@
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems3"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Invoiced 10" stepKey="see10itemsInvoiced"/>
         <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage3"/>
-        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoicesTab1"/>
+        <click selector="{{AdminOrderViewTabsSection.invoices}}" stepKey="clickInvoicesTab1"/>
         <waitForLoadingMaskToDisappear after="clickInvoicesTab1" stepKey="waitForInvoiceGridToLoad1"/>
         <see selector="{{AdminOrderInvoicesTabSection.gridRow('2')}}" userInput="$615.00" after="waitForInvoiceGridToLoad1" stepKey="seeOrderInvoiceTabInGrid1"/>
 
@@ -160,7 +160,7 @@
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToItemsOrdered2"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 10" stepKey="seeAllItemsShipped"/>
         <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage5"/>
-        <click selector="{{AdminOrderDetailsOrderViewSection.shipments}}" stepKey="clickShipmentsTab1"/>
+        <click selector="{{AdminOrderViewTabsSection.shipments}}" stepKey="clickShipmentsTab1"/>
         <waitForLoadingMaskToDisappear after="clickShipmentsTab1" stepKey="waitForShipmentsGridToLoad1"/>
         <see selector="{{AdminOrderShipmentsTabSection.gridRow('2')}}" userInput="5.0000" after="waitForShipmentsGridToLoad1" stepKey="seeOrderShipmentsTabInGrid1"/>
 
