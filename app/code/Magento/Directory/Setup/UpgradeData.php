@@ -63,10 +63,10 @@ class UpgradeData implements UpgradeDataInterface
             'AU-NS' => 'New South Wales',
             'AU-NT' => 'Northern Territory',
             'AU-QL' => 'Queensland',
-            'HR-SA' => 'South Australia',
-            'HR-TS' => 'Tasmania',
-            'HR-VI' => 'Victoria',
-            'HR-WA' => 'Western Australia'
+            'AU-SA' => 'South Australia',
+            'AU-TS' => 'Tasmania',
+            'AU-VI' => 'Victoria',
+            'AU-WA' => 'Western Australia'
         ];
     }
 
