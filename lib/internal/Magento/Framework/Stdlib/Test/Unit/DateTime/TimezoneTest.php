@@ -124,15 +124,11 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedResult
      * @dataProvider getConvertConfigTimeToUtcFixtures
      */
-    public function testConvertConfigTimeToUtc($date, $configuredTimezone, $configuredLocale, $expectedResult)
+    public function testConvertConfigTimeToUtc($date, $configuredTimezone, $expectedResult)
     {
-        $this->localeResolver
-            ->method('getLocale')
-            ->willReturn($configuredLocale);
-
         $this->scopeConfigWillReturnConfiguredTimezone($configuredTimezone);
 
-        $this->assertEquals($expectedResult, $this->getTimezone()->convertConfigTimeToUtcWithPattern($date));
+        $this->assertEquals($expectedResult, $this->getTimezone()->convertConfigTimeToUtc($date));
     }
 
     /**
@@ -145,37 +141,16 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
             'string' => [
                 '2016-10-10 10:00:00',
                 'UTC',
-                null,
                 '2016-10-10 10:00:00'
-            ],
-            'string-en_US' => [
-                'Sep 29, 2018, 6:07:38 PM',
-                'UTC',
-                'en_US',
-                '2018-09-29 18:07:38'
-            ],
-            'string-pt_BR' => [
-                '29 de set de 2018 18:07:38',
-                'UTC',
-                'pt_BR',
-                '2018-09-29 18:07:38'
-            ],
-            'string-tr_TR' => [
-                '29 Eyl 2018 18:07:38',
-                'UTC',
-                'tr_TR',
-                '2018-09-29 18:07:38'
             ],
             'datetime' => [
                 new \DateTime('2016-10-10 10:00:00', new \DateTimeZone('UTC')),
                 'UTC',
-                null,
                 '2016-10-10 10:00:00'
             ],
             'datetimeimmutable' => [
                 new \DateTimeImmutable('2016-10-10 10:00:00', new \DateTimeZone('UTC')),
                 'UTC',
-                null,
                 '2016-10-10 10:00:00'
             ]
         ];
