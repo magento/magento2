@@ -11,6 +11,9 @@ use Magento\Framework\App\Config\Data\ProcessorFactory;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Post-process config values using their backend models.
+ */
 class MetadataConfigTypeProcessor implements PostProcessorInterface
 {
     /**
