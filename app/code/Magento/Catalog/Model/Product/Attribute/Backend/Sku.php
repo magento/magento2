@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Catalog product SKU backend attribute model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * Catalog product SKU backend attribute model.
+ */
 class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
@@ -130,6 +128,8 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Remove extra spaces from attribute value before save.
+     *
      * @param Product $object
      * @return void
      */
