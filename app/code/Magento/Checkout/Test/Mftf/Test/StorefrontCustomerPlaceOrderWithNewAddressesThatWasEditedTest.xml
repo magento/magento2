@@ -86,6 +86,6 @@
              selector="{{StorefrontCustomerOrderViewSection.billingAddress}}" stepKey="checkBillingAddress"/>
 
         <!--Logout from customer account-->
-        <amOnPage url="customer/account/logout/" stepKey="logoutCustomer"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
     </test>
 </tests>
