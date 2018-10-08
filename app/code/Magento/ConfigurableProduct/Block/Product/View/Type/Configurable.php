@@ -21,344 +21,331 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * @api
  * @since 100.0.2
  */
-class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
-{
-    /**
-     * Catalog product
-     *
-     * @var \Magento\Catalog\Helper\Product
-     */
-    protected $catalogProduct = null;
+class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView {
+	/**
+	 * Catalog product
+	 *
+	 * @var \Magento\Catalog\Helper\Product
+	 */
+	protected $catalogProduct = null;
 
-    /**
-     * Current customer
-     *
-     * @deprecated 100.2.0, as unused property
-     * @var CurrentCustomer
-     */
-    protected $currentCustomer;
+	/**
+	 * Current customer
+	 *
+	 * @deprecated 100.2.0, as unused property
+	 * @var CurrentCustomer
+	 */
+	protected $currentCustomer;
 
-    /**
-     * Prices
-     *
-     * @var array
-     */
-    protected $_prices = [];
+	/**
+	 * Prices
+	 *
+	 * @var array
+	 */
+	protected $_prices = [];
 
-    /**
-     * @var \Magento\Framework\Json\EncoderInterface
-     */
-    protected $jsonEncoder;
+	/**
+	 * @var \Magento\Framework\Json\EncoderInterface
+	 */
+	protected $jsonEncoder;
 
-    /**
-     * @var \Magento\ConfigurableProduct\Helper\Data $imageHelper
-     */
-    protected $helper;
+	/**
+	 * @var \Magento\ConfigurableProduct\Helper\Data $imageHelper
+	 */
+	protected $helper;
 
-    /**
-     * @var PriceCurrencyInterface
-     */
-    protected $priceCurrency;
+	/**
+	 * @var PriceCurrencyInterface
+	 */
+	protected $priceCurrency;
 
-    /**
-     * @var ConfigurableAttributeData
-     */
-    protected $configurableAttributeData;
+	/**
+	 * @var ConfigurableAttributeData
+	 */
+	protected $configurableAttributeData;
 
-    /**
-     * @var Format
-     */
-    private $localeFormat;
+	/**
+	 * @var Format
+	 */
+	private $localeFormat;
 
-    /**
-     * @var Session
-     */
-    private $customerSession;
+	/**
+	 * @var Session
+	 */
+	private $customerSession;
 
-    /**
-     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices
-     */
-    private $variationPrices;
+	/**
+	 * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices
+	 */
+	private $variationPrices;
 
-    /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\ConfigurableProduct\Helper\Data $helper
-     * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param CurrentCustomer $currentCustomer
-     * @param PriceCurrencyInterface $priceCurrency
-     * @param ConfigurableAttributeData $configurableAttributeData
-     * @param array $data
-     * @param Format|null $localeFormat
-     * @param Session|null $customerSession
-     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices|null $variationPrices
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     */
-    public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\ConfigurableProduct\Helper\Data $helper,
-        \Magento\Catalog\Helper\Product $catalogProduct,
-        CurrentCustomer $currentCustomer,
-        PriceCurrencyInterface $priceCurrency,
-        ConfigurableAttributeData $configurableAttributeData,
-        array $data = [],
-        Format $localeFormat = null,
-        Session $customerSession = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
-    ) {
-        $this->priceCurrency = $priceCurrency;
-        $this->helper = $helper;
-        $this->jsonEncoder = $jsonEncoder;
-        $this->catalogProduct = $catalogProduct;
-        $this->currentCustomer = $currentCustomer;
-        $this->configurableAttributeData = $configurableAttributeData;
-        $this->stockStatusData = ObjectManager::getInstance()->get(StockRegistryInterface::class);
-        $this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(Format::class);
-        $this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(Session::class);
-        $this->variationPrices = $variationPrices ?: ObjectManager::getInstance()->get(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
-        );
+	/**
+	 * @param \Magento\Catalog\Block\Product\Context $context
+	 * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
+	 * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+	 * @param \Magento\ConfigurableProduct\Helper\Data $helper
+	 * @param \Magento\Catalog\Helper\Product $catalogProduct
+	 * @param CurrentCustomer $currentCustomer
+	 * @param PriceCurrencyInterface $priceCurrency
+	 * @param ConfigurableAttributeData $configurableAttributeData
+	 * @param array $data
+	 * @param Format|null $localeFormat
+	 * @param Session|null $customerSession
+	 * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices|null $variationPrices
+	 * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+	 */
+	public function __construct(
+		\Magento\Catalog\Block\Product\Context $context,
+		\Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
+		\Magento\Framework\Json\EncoderInterface $jsonEncoder,
+		\Magento\ConfigurableProduct\Helper\Data $helper,
+		\Magento\Catalog\Helper\Product $catalogProduct,
+		CurrentCustomer $currentCustomer,
+		PriceCurrencyInterface $priceCurrency,
+		ConfigurableAttributeData $configurableAttributeData,
+		array $data = [],
+		Format $localeFormat = null,
+		Session $customerSession = null,
+		\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
+	) {
+		$this->priceCurrency = $priceCurrency;
+		$this->helper = $helper;
+		$this->jsonEncoder = $jsonEncoder;
+		$this->catalogProduct = $catalogProduct;
+		$this->currentCustomer = $currentCustomer;
+		$this->configurableAttributeData = $configurableAttributeData;
+		$this->stockStatusData = ObjectManager::getInstance()->get(StockRegistryInterface::class);
+		$this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(Format::class);
+		$this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(Session::class);
+		$this->variationPrices = $variationPrices ?: ObjectManager::getInstance()->get(
+			\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
+		);
 
-        parent::__construct(
-            $context,
-            $arrayUtils,
-            $data
-        );
-    }
+		parent::__construct(
+			$context,
+			$arrayUtils,
+			$data
+		);
+	}
 
-    /**
-     * Get cache key informative items.
-     *
-     * @return array
-     * @since 100.2.0
-     */
-    public function getCacheKeyInfo()
-    {
-        $parentData = parent::getCacheKeyInfo();
-        $parentData[] = $this->priceCurrency->getCurrency()->getCode();
-        $parentData[] = $this->customerSession->getCustomerGroupId();
-        return $parentData;
-    }
+	/**
+	 * Get cache key informative items.
+	 *
+	 * @return array
+	 * @since 100.2.0
+	 */
+	public function getCacheKeyInfo() {
+		$parentData = parent::getCacheKeyInfo();
+		$parentData[] = $this->priceCurrency->getCurrency()->getCode();
+		$parentData[] = $this->customerSession->getCustomerGroupId();
+		return $parentData;
+	}
 
-    /**
-     * Get allowed attributes
-     *
-     * @return array
-     */
-    public function getAllowAttributes()
-    {
-        return $this->getProduct()->getTypeInstance()->getConfigurableAttributes($this->getProduct());
-    }
+	/**
+	 * Get allowed attributes
+	 *
+	 * @return array
+	 */
+	public function getAllowAttributes() {
+		return $this->getProduct()->getTypeInstance()->getConfigurableAttributes($this->getProduct());
+	}
 
-    /**
-     * Check if allowed attributes have options
-     *
-     * @return bool
-     */
-    public function hasOptions()
-    {
-        $attributes = $this->getAllowAttributes();
-        if (count($attributes)) {
-            foreach ($attributes as $attribute) {
-                /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
-                if ($attribute->getData('options')) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+	/**
+	 * Check if allowed attributes have options
+	 *
+	 * @return bool
+	 */
+	public function hasOptions() {
+		$attributes = $this->getAllowAttributes();
+		if (count($attributes)) {
+			foreach ($attributes as $attribute) {
+				/** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
+				if ($attribute->getData('options')) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-    /**
-     * Get Allowed Products
-     *
-     * @return \Magento\Catalog\Model\Product[]
-     */
-    public function getAllowProducts()
-    {
-        if (!$this->hasAllowProducts()) {
-            $products = [];
-            $skipSaleableCheck = $this->catalogProduct->getSkipSaleableCheck();
-            $allProducts = $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct(), null);
-            foreach ($allProducts as $product) {
-                if ($product->isSaleable() || $skipSaleableCheck) {
-                    $products[] = $product;
-                }
-            }
-            $this->setAllowProducts($products);
-        }
-        return $this->getData('allow_products');
-    }
+	/**
+	 * Get Allowed Products
+	 *
+	 * @return \Magento\Catalog\Model\Product[]
+	 */
+	public function getAllowProducts() {
+		if (!$this->hasAllowProducts()) {
+			$products = [];
+			$skipSaleableCheck = $this->catalogProduct->getSkipSaleableCheck();
+			$allProducts = $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct(), null);
+			foreach ($allProducts as $product) {
+				if ($product->isSaleable() || $skipSaleableCheck) {
+					$products[] = $product;
+				}
+			}
+			$this->setAllowProducts($products);
+		}
+		return $this->getData('allow_products');
+	}
 
-    /**
-     * Retrieve current store
-     *
-     * @return \Magento\Store\Model\Store
-     */
-    public function getCurrentStore()
-    {
-        return $this->_storeManager->getStore();
-    }
+	/**
+	 * Retrieve current store
+	 *
+	 * @return \Magento\Store\Model\Store
+	 */
+	public function getCurrentStore() {
+		return $this->_storeManager->getStore();
+	}
 
-    /**
-     * Returns additional values for js config, con be overridden by descendants
-     *
-     * @return array
-     */
-    protected function _getAdditionalConfig()
-    {
-        return [];
-    }
+	/**
+	 * Returns additional values for js config, con be overridden by descendants
+	 *
+	 * @return array
+	 */
+	protected function _getAdditionalConfig() {
+		return [];
+	}
 
-    /**
-     * Composes configuration for js
-     *
-     * @return string
-     */
-    public function getJsonConfig()
-    {
-        $store = $this->getCurrentStore();
-        $currentProduct = $this->getProduct();
+	/**
+	 * Composes configuration for js
+	 *
+	 * @return string
+	 */
+	public function getJsonConfig() {
+		$store = $this->getCurrentStore();
+		$currentProduct = $this->getProduct();
 
-        $options = $this->helper->getOptions($currentProduct, $this->getAllowProducts());
-        $attributesData = $this->configurableAttributeData->getAttributesData($currentProduct, $options);
+		$options = $this->helper->getOptions($currentProduct, $this->getAllowProducts());
+		$attributesData = $this->configurableAttributeData->getAttributesData($currentProduct, $options);
 
-        $config = [
-            'attributes' => $attributesData['attributes'],
-            'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
-            'currencyFormat' => $store->getCurrentCurrency()->getOutputFormat(),
-            'optionPrices' => $this->getOptionPrices(),
-            'priceFormat' => $this->localeFormat->getPriceFormat(),
-            'prices' => $this->variationPrices->getFormattedPrices($this->getProduct()->getPriceInfo()),
-            'productId' => $currentProduct->getId(),
-            'stockStatus' => $this->getStockStatus(),
-            'chooseText' => __('Choose an Option...'),
-            'images' => $this->getOptionImages(),
-            'index' => isset($options['index']) ? $options['index'] : [],
-        ];
+		$config = [
+			'attributes' => $attributesData['attributes'],
+			'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
+			'currencyFormat' => $store->getCurrentCurrency()->getOutputFormat(),
+			'optionPrices' => $this->getOptionPrices(),
+			'priceFormat' => $this->localeFormat->getPriceFormat(),
+			'prices' => $this->variationPrices->getFormattedPrices($this->getProduct()->getPriceInfo()),
+			'productId' => $currentProduct->getId(),
+			'stockStatus' => $this->getStockStatus(),
+			'chooseText' => __('Choose an Option...'),
+			'images' => $this->getOptionImages(),
+			'index' => isset($options['index']) ? $options['index'] : [],
+		];
 
-        if ($currentProduct->hasPreconfiguredValues() && !empty($attributesData['defaultValues'])) {
-            $config['defaultValues'] = $attributesData['defaultValues'];
-        }
+		if ($currentProduct->hasPreconfiguredValues() && !empty($attributesData['defaultValues'])) {
+			$config['defaultValues'] = $attributesData['defaultValues'];
+		}
 
-        $config = array_merge($config, $this->_getAdditionalConfig());
+		$config = array_merge($config, $this->_getAdditionalConfig());
 
-        return $this->jsonEncoder->encode($config);
-    }
+		return $this->jsonEncoder->encode($config);
+	}
 
-    /**
-     * Get product stock status for configurable variations
-     *
-     * @return array
-     * @since 100.2.0
-     */
-    public function getStockStatus()
-    {
-        $stockStatus = [];
-        foreach ($this->getAllowProducts() as $product) {
-            $productStockObject = $this->stockStatusData->getStockItem($product->getId());
-            $isInStock = $productStockObject['is_in_stock'];
-            $stockStatus[$product->getId()] = [$this->localeFormat->getNumber($isInStock)];
-        }
-        return $stockStatus;
-    }
+	/**
+	 * Get product stock status for configurable variations
+	 *
+	 * @return array
+	 * @since 100.2.0
+	 */
+	public function getStockStatus() {
+		$stockStatus = [];
+		foreach ($this->getAllowProducts() as $product) {
+			$productStockObject = $this->stockStatusData->getStockItem($product->getId());
+			$isInStock = $productStockObject['is_in_stock'];
+			$stockStatus[$product->getId()] = [$this->localeFormat->getNumber($isInStock)];
+		}
+		return $stockStatus;
+	}
 
-    /**
-     * Get product images for configurable variations
-     *
-     * @return array
-     * @since 100.2.0
-     */
-    protected function getOptionImages()
-    {
-        $images = [];
-        foreach ($this->getAllowProducts() as $product) {
-            $productImages = $this->helper->getGalleryImages($product) ?: [];
-            foreach ($productImages as $image) {
-                $images[$product->getId()][] =
-                    [
-                    'thumb' => $image->getData('small_image_url'),
-                    'img' => $image->getData('medium_image_url'),
-                    'full' => $image->getData('large_image_url'),
-                    'caption' => $image->getLabel(),
-                    'position' => $image->getPosition(),
-                    'isMain' => $image->getFile() == $product->getImage(),
-                    'type' => str_replace('external-', '', $image->getMediaType()),
-                    'videoUrl' => $image->getVideoUrl(),
-                ];
-            }
-        }
+	/**
+	 * Get product images for configurable variations
+	 *
+	 * @return array
+	 * @since 100.2.0
+	 */
+	protected function getOptionImages() {
+		$images = [];
+		foreach ($this->getAllowProducts() as $product) {
+			$productImages = $this->helper->getGalleryImages($product) ?: [];
+			foreach ($productImages as $image) {
+				$images[$product->getId()][] =
+				[
+					'thumb' => $image->getData('small_image_url'),
+					'img' => $image->getData('medium_image_url'),
+					'full' => $image->getData('large_image_url'),
+					'caption' => $image->getLabel(),
+					'position' => $image->getPosition(),
+					'isMain' => $image->getFile() == $product->getImage(),
+					'type' => str_replace('external-', '', $image->getMediaType()),
+					'videoUrl' => $image->getVideoUrl(),
+				];
+			}
+		}
 
-        return $images;
-    }
+		return $images;
+	}
 
-    /**
-     * @return array
-     */
-    protected function getOptionPrices()
-    {
-        $prices = [];
-        foreach ($this->getAllowProducts() as $product) {
-            $tierPrices = [];
-            $priceInfo = $product->getPriceInfo();
-            $tierPriceModel = $priceInfo->getPrice('tier_price');
-            $tierPricesList = $tierPriceModel->getTierPriceList();
-            foreach ($tierPricesList as $tierPrice) {
-                $tierPrices[] = [
-                    'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
-                    'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
-                    'percentage' => $this->localeFormat->getNumber(
-                        $tierPriceModel->getSavePercent($tierPrice['price'])
-                    ),
-                ];
-            }
+	/**
+	 * @return array
+	 */
+	protected function getOptionPrices() {
+		$prices = [];
+		foreach ($this->getAllowProducts() as $product) {
+			$tierPrices = [];
+			$priceInfo = $product->getPriceInfo();
+			$tierPriceModel = $priceInfo->getPrice('tier_price');
+			$tierPricesList = $tierPriceModel->getTierPriceList();
+			foreach ($tierPricesList as $tierPrice) {
+				$tierPrices[] = [
+					'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
+					'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
+					'percentage' => $this->localeFormat->getNumber(
+						$tierPriceModel->getSavePercent($tierPrice['price'])
+					),
+				];
+			}
 
-            $prices[$product->getId()] =
-                [
-                'oldPrice' => [
-                    'amount' => $this->localeFormat->getNumber(
-                        $priceInfo->getPrice('regular_price')->getAmount()->getValue()
-                    ),
-                ],
-                'basePrice' => [
-                    'amount' => $this->localeFormat->getNumber(
-                        $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
-                    ),
-                ],
-                'finalPrice' => [
-                    'amount' => $this->localeFormat->getNumber(
-                        $priceInfo->getPrice('final_price')->getAmount()->getValue()
-                    ),
-                ],
-                'tierPrices' => $tierPrices,
-            ];
-        }
-        return $prices;
-    }
+			$prices[$product->getId()] =
+			[
+				'oldPrice' => [
+					'amount' => $this->localeFormat->getNumber(
+						$priceInfo->getPrice('regular_price')->getAmount()->getValue()
+					),
+				],
+				'basePrice' => [
+					'amount' => $this->localeFormat->getNumber(
+						$priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
+					),
+				],
+				'finalPrice' => [
+					'amount' => $this->localeFormat->getNumber(
+						$priceInfo->getPrice('final_price')->getAmount()->getValue()
+					),
+				],
+				'tierPrices' => $tierPrices,
+			];
+		}
+		return $prices;
+	}
 
-    /**
-     * Replace ',' on '.' for js
-     *
-     * @deprecated 100.2.0 Will be removed in major release
-     * @param float $price
-     * @return string
-     */
-    protected function _registerJsPrice($price)
-    {
-        return str_replace(',', '.', $price);
-    }
+	/**
+	 * Replace ',' on '.' for js
+	 *
+	 * @deprecated 100.2.0 Will be removed in major release
+	 * @param float $price
+	 * @return string
+	 */
+	protected function _registerJsPrice($price) {
+		return str_replace(',', '.', $price);
+	}
 
-    /**
-     * Should we generate "As low as" block or not
-     *
-     * @return bool
-     * @since 100.2.0
-     */
-    public function showMinimalPrice()
-    {
-        return true;
-    }
+	/**
+	 * Should we generate "As low as" block or not
+	 *
+	 * @return bool
+	 * @since 100.2.0
+	 */
+	public function showMinimalPrice() {
+		return true;
+	}
 }

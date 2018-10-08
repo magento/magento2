@@ -336,10 +336,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $stockStatus = $productTypeMock->expects($this->once())
-            ->method('getStockStatus')
-            ->with($productMock)
-            ->willReturn([]);
+        $this->block->setData('product', $productMock);
+        $stockStatus = $this->block->getStockStatus();
 
         $expectedArray = $this->getExpectedArray($productId, $amount, $priceQty, $percentage, $stockStatus);
         $expectedJson = json_encode($expectedArray);
