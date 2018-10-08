@@ -9,6 +9,7 @@ use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 use Magento\Framework\Webapi\Exception;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
+use Magento\SalesSequence\Model\ResourceModel\Profile as ResourceProfile;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -24,6 +25,11 @@ class Builder
      * @var resourceMetadata
      */
     protected $resourceMetadata;
+
+    /**
+     * @var ResourceProfile
+     */
+    protected $resourceProfile;
 
     /**
      * @var ProfileFactory
@@ -89,6 +95,7 @@ class Builder
      * @param ProfileFactory $profileFactory
      * @param AppResource $appResource
      * @param DdlSequence $ddlSequence
+     * @param ResourceProfile $resourceProfile
      * @param Logger $logger
      */
     public function __construct(
@@ -97,6 +104,7 @@ class Builder
         ProfileFactory $profileFactory,
         AppResource $appResource,
         DdlSequence $ddlSequence,
+        ResourceProfile $resourceProfile,
         Logger $logger
     ) {
         $this->resourceMetadata = $resourceMetadata;
@@ -106,6 +114,7 @@ class Builder
         $this->ddlSequence = $ddlSequence;
         $this->logger = $logger;
         $this->data = array_flip($this->pattern);
+        $this->resourceProfile = $resourceProfile;
     }
 
     /**
@@ -263,5 +272,34 @@ class Builder
             throw $e;
         }
         $this->data = array_flip($this->pattern);
+    }
+
+    /**
+     * Deletes all sequence linked entites
+     *
+     * @throws \Exception
+     * @return void
+     */
+    public function delete($entityType, $storeId)
+    {
+        $metadata = $this->resourceMetadata->loadByEntityTypeAndStore(
+            $entityType,
+            $storeId
+        );
+
+        $profileIds = $this->resourceProfile->getProfileIds($metadata->getId());
+
+        foreach ($profileIds as $profileId) {
+            $this->appResource->getConnection()->delete(
+                $this->appResource->getTableName('sales_sequence_profile'),
+                ['profile_id = ?' => $profileId]
+            );
+        }
+
+        $this->appResource->getConnection()->dropTable(
+            $metadata->getSequenceTable()
+        );
+
+        $this->resourceMetadata->delete($metadata);
     }
 }

@@ -77,4 +77,21 @@ class Profile extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         return $profile;
     }
+
+    /*
+     * Get profile ids by metadata id
+     * @param int $metadataId
+     * @return int[]
+     */
+    public function getProfileIds($metadataId)
+    {
+        $connection = $this->getConnection();
+        $bind = ['meta_id' => $metadataId];
+        $select = $connection->select()
+            ->from($this->getMainTable(), ['profile_id'])
+            ->where('meta_id = :meta_id')
+            ->where('is_active = 1');
+
+        return $connection->fetchCol($select, $bind);
+    }
 }
