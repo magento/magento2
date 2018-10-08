@@ -18,7 +18,7 @@
             <resource ref="Magento_InventoryApi::source"/>
         </resources>
     </route>
-    <route url="/V1/inventory/low-quantity-notification" method="DELETE">
+    <route url="/V1/inventory/low-quantity-notification/:sourceCode/:sku" method="DELETE">
         <service class="Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemConfigurationInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::source"/>
