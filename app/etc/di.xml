@@ -1179,6 +1179,10 @@
                     <item name="type" xsi:type="string">text/xml</item>
                     <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Request\Deserializer\Xml</item>
                 </item>
+                <item name="application_urlencoded" xsi:type="array">
+                    <item name="type" xsi:type="string">application/x-www-form-urlencoded</item>
+                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Request\Deserializer\FormUrlencoded</item>
+                </item>
             </argument>
         </arguments>
     </type>
