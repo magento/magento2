@@ -34,7 +34,7 @@ class Template
     ) {
         $this->logger = $logger;
         $document = new \DOMDocument(static::XML_VERSION, static::XML_ENCODING);
-        $document->loadXML($content);
+        $document->loadXML($content, LIBXML_PARSEHUGE);
         $this->templateNode = $document->documentElement;
     }
 
