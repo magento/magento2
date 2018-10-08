@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="EnabledWYSIWYG">
-        <amOnPage url="admin/admin/system_config/edit/section/cms/" stepKey="navigateToConfigurationPage" />
+        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToConfigurationPage" />
         <waitForPageLoad stepKey="wait1"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitForEnableWYSIWYGDropdown1" />
@@ -20,7 +20,7 @@
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
     </actionGroup>
     <actionGroup name="DisabledWYSIWYG">
-        <amOnPage url="admin/admin/system_config/edit/section/cms/" stepKey="navigateToConfigurationPage" />
+        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToConfigurationPage" />
         <waitForPageLoad stepKey="wait3"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitForEnableWYSIWYGDropdown2" time="30"/>
