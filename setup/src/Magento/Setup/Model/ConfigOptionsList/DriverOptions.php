@@ -17,7 +17,7 @@ class DriverOptions
     /**
      * Get driver options.
      *
-     * @params array $options
+     * @param array $options
      * @return array
      */
     public function getDriverOptions(array $options): array
