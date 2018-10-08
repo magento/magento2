@@ -70,7 +70,7 @@ class PurgeCache
                 $socketAdapter->close();
             } catch (\Exception $e) {
                 $this->logger->critical($e->getMessage(), compact('server', 'tagsPattern'));
-                return false;
+                continue;
             }
         }
 
