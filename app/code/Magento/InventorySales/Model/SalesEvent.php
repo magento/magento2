@@ -70,18 +70,6 @@ class SalesEvent extends AbstractExtensibleModel implements SalesEventInterface
     /**
      * @inheritdoc
      */
-    public function toArray(): array
-    {
-        return [
-            'event_type' => $this->getType(),
-            'object_type' => $this->getObjectType(),
-            'object_id' => $this->getObjectId(),
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getExtensionAttributes()
     {
         $extensionAttributes = $this->_getExtensionAttributes();

@@ -39,12 +39,6 @@ interface SalesEventInterface extends ExtensibleDataInterface
     public function getObjectId(): string;
 
     /**
-     * Convert this object to an associative array whose keys represent object properties.
-     * This method is used to facilitate object serialization.
-     */
-    public function toArray(): array;
-
-    /**
      * Retrieve existing extension attributes object
      *
      * Null for return is specified for proper work SOAP requests parser

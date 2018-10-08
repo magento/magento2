@@ -54,11 +54,18 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
     private $serializer;
 
     /**
+     * @var SalesEventToArrayConverterInterface
+     */
+    private $salesEventToArrayConverter;
+
+    /**
      * @param ReservationBuilderInterface $reservationBuilder
      * @param AppendReservationsInterface $appendReservations
      * @param StockResolverInterface $stockResolver
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
+     * @param SerializerInterface $serializer
+     * @param SalesEventToArrayConverterInterface $salesEventToArrayConverter
      */
     public function __construct(
         ReservationBuilderInterface $reservationBuilder,
@@ -66,7 +73,8 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
         StockResolverInterface $stockResolver,
         GetProductTypesBySkusInterface $getProductTypesBySkus,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        SalesEventToArrayConverterInterface $salesEventToArrayConverter
     ) {
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
@@ -74,6 +82,7 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
         $this->getProductTypesBySkus = $getProductTypesBySkus;
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->serializer = $serializer;
+        $this->salesEventToArrayConverter = $salesEventToArrayConverter;
     }
 
     /**
@@ -105,7 +114,7 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
                     ->setSku($item->getSku())
                     ->setQuantity((float)$item->getQuantity())
                     ->setStockId($stockId)
-                    ->setMetadata($this->serializer->serialize($salesEvent->toArray()))
+                    ->setMetadata($this->serializer->serialize($this->salesEventToArrayConverter->convert($salesEvent)))
                     ->build();
             }
         }
