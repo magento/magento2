@@ -9,7 +9,7 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -56,7 +56,7 @@ class GenerateCustomerToken implements ResolverInterface
             $token = $this->customerTokenService->createCustomerAccessToken($args['email'], $args['password']);
             return ['token' => $token];
         } catch (AuthenticationException $e) {
-            throw new GraphQlAuthorizationException(__($e->getMessage()), $e);
+            throw new GraphQlAuthenticationException(__($e->getMessage()), $e);
         }
     }
 }
