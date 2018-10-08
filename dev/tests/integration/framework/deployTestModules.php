@@ -38,3 +38,25 @@ if ($files === false) {
 foreach ($files as $file) {
     include $file;
 }
+
+register_shutdown_function('deleteTestModules', $pathToCommittedTestModules, $pathToInstalledMagentoInstanceModules);
+
+/**
+ * Delete all test module directories which have been created before
+ *
+ * @param string $pathToCommittedTestModules
+ * @param string $pathToInstalledMagentoInstanceModules
+ */
+function deleteTestModules($pathToCommittedTestModules, $pathToInstalledMagentoInstanceModules)
+{
+    $filesystem = new \Symfony\Component\Filesystem\Filesystem();
+    $iterator = new DirectoryIterator($pathToCommittedTestModules);
+    /** @var SplFileInfo $file */
+    foreach ($iterator as $file) {
+        if ($file->isDir() && !in_array($file->getFilename(), ['.', '..'])) {
+            $targetDirPath = $pathToInstalledMagentoInstanceModules . '/' . $file->getFilename();
+            $filesystem->remove($targetDirPath);
+        }
+    }
+    unset($iterator, $file);
+}
