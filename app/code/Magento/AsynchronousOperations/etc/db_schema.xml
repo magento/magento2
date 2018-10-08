@@ -27,6 +27,9 @@
         <constraint xsi:type="unique" name="MAGENTO_BULK_UUID">
             <column name="uuid"/>
         </constraint>
+        <index name="MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID" indexType="btree">
+            <column name="user_id"/>
+        </index>
     </table>
     <table name="magento_operation" resource="default" engine="innodb" comment="Operation entity">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
