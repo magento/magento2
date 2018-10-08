@@ -28,6 +28,9 @@ class QuoteItemQtyList
      */
     public function getQty($productId, $quoteItemId, $quoteId, $itemQty)
     {
+        if (empty($quoteItemId)) {
+            return;
+        }
         $qty = $itemQty;
         if (isset(
             $this->_checkedQuoteItems[$quoteId][$productId]['qty']
