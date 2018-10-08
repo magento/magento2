@@ -46,6 +46,28 @@ class UpgradeData implements UpgradeDataInterface
         if (version_compare($context->getVersion(), '2.0.2', '<')) {
             $this->addCountryRegions($setup, 'IN', $this->getDataForIndia());
         }
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
+            $this->addCountryRegions($setup, 'AU', $this->getDataForAustralia());
+        }
+    }
+
+    /**
+     * Australia states data.
+     *
+     * @return array
+     */
+    private function getDataForAustralia()
+    {
+        return [
+            'AU-AC' => 'Australian Capital Territory',
+            'AU-NS' => 'New South Wales',
+            'AU-NT' => 'Northern Territory',
+            'AU-QL' => 'Queensland',
+            'HR-SA' => 'South Australia',
+            'HR-TS' => 'Tasmania',
+            'HR-VI' => 'Victoria',
+            'HR-WA' => 'Western Australia'
+        ];
     }
 
     /**
