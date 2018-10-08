@@ -294,4 +294,20 @@ abstract class AbstractDataProvider implements DataProviderInterface
     {
         return  $this->collection->getAllIds();
     }
+
+    /**
+     * Check configuration looking for a no-collection usage
+     *
+     * @return bool
+     */
+    public function useCollection()
+    {
+        $configData = $this->getConfigData();
+
+        if (isset($configData['noCollection']) && $configData['noCollection']) {
+            return false;
+        }
+
+        return true;
+    }
 }
