@@ -9,6 +9,9 @@ namespace Magento\CatalogInventory\Api;
  * Interface StockRepositoryInterface
  * @api
  * @since 100.0.2
+ *
+ * @deprecated CatalogInventory will be replaced by Multi-Source Inventory (MSI)
+ *             see https://github.com/magento-engcom/msi/wiki/Technical-Vision.-Catalog-Inventory
  */
 interface StockRepositoryInterface
 {

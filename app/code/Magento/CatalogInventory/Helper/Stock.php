@@ -18,6 +18,9 @@ use Magento\Store\Model\StoreManagerInterface;
  * Class Stock
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ *
+ * @deprecated CatalogInventory will be replaced by Multi-Source Inventory (MSI)
+ *             see https://github.com/magento-engcom/msi/wiki/Technical-Vision.-Catalog-Inventory
  */
 class Stock
 {
