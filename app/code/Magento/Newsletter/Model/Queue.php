@@ -7,6 +7,7 @@ namespace Magento\Newsletter\Model;
 
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverterInterface;
 
 /**
  * Newsletter queue model.
@@ -118,6 +119,11 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     private $timezone;
 
     /**
+     * @var LocalizedDateToUtcConverterInterface
+     */
+    private $utcConverter;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Newsletter\Model\Template\Filter $templateFilter
@@ -144,7 +150,8 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        TimezoneInterface $timezone = null
+        TimezoneInterface $timezone = null,
+        LocalizedDateToUtcConverterInterface $utcConverter = null
     ) {
         parent::__construct(
             $context,
@@ -159,9 +166,10 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         $this->_problemFactory = $problemFactory;
         $this->_subscribersCollection = $subscriberCollectionFactory->create();
         $this->_transportBuilder = $transportBuilder;
-        $this->timezone = $timezone ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            TimezoneInterface::class
-        );
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->timezone = $timezone ?: $objectManager->get(TimezoneInterface::class);
+        $this->utcConverter = $utcConverter ?? $objectManager->get(LocalizedDateToUtcConverterInterface::class);
     }
 
     /**
@@ -196,7 +204,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         if ($startAt === null || $startAt == '') {
             $this->setQueueStartAt(null);
         } else {
-            $this->setQueueStartAt($this->timezone->convertConfigTimeToUtc($startAt));
+            $this->setQueueStartAt($this->utcConverter->convertLocalizedDateToUtc($startAt));
         }
         return $this;
     }
