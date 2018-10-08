@@ -175,7 +175,12 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $preferenceClass = $this->config->getPreference($className);
         $class = new ClassReflection($preferenceClass ?: $className);
 
-        $constructor = $class->getMethod('__construct');
+        try {
+            $constructor = $class->getMethod('__construct');
+        } catch (\ReflectionException $e) {
+            $constructor = null;
+        }
+
         if ($constructor === null) {
             return [];
         }
