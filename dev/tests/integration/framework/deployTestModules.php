@@ -5,7 +5,8 @@
  */
 
 /**
- * @var $testFrameworkDir string - Must be defined in parent script.
+ * @var string $testFrameworkDir - Must be defined in parent script.
+ * @var \Magento\TestFramework\Bootstrap\Settings $settings - Must be defined in parent script.
  */
 
 /** Copy test modules to app/code/Magento to make them visible for Magento instance */
@@ -39,7 +40,10 @@ foreach ($files as $file) {
     include $file;
 }
 
-register_shutdown_function('deleteTestModules', $pathToCommittedTestModules, $pathToInstalledMagentoInstanceModules);
+if (!$settings->get('TESTS_PARALLEL_THREAD', 0)) {
+    // Only delete modules if we are not using parallel executions
+    register_shutdown_function('deleteTestModules', $pathToCommittedTestModules, $pathToInstalledMagentoInstanceModules);
+}
 
 /**
  * Delete all test module directories which have been created before

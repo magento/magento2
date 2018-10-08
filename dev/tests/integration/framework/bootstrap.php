@@ -19,14 +19,14 @@ if (!defined('INTEGRATION_TESTS_DIR')) {
     define('INTEGRATION_TESTS_DIR', $testsBaseDir);
 }
 
-$testFrameworkDir = __DIR__;
-require_once 'deployTestModules.php';
-
 try {
     setCustomErrorHandler();
 
     /* Bootstrap the application */
     $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
+
+    $testFrameworkDir = __DIR__;
+    require_once 'deployTestModules.php';
 
     if ($settings->get('TESTS_EXTRA_VERBOSE_LOG')) {
         $filesystem = new \Magento\Framework\Filesystem\Driver\File();
