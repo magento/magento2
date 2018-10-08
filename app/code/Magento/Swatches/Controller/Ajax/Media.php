@@ -25,17 +25,25 @@ class Media extends \Magento\Framework\App\Action\Action
     private $swatchHelper;
 
     /**
+     * @var \Magento\PageCache\Model\Config
+     */
+    protected $config;
+
+    /**
      * @param Context $context
      * @param \Magento\Catalog\Model\ProductFactory $productModelFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param \Magento\PageCache\Model\Config $config
      */
     public function __construct(
         Context $context,
         \Magento\Catalog\Model\ProductFactory $productModelFactory,
-        \Magento\Swatches\Helper\Data $swatchHelper
+        \Magento\Swatches\Helper\Data $swatchHelper,
+        \Magento\PageCache\Model\Config $config
     ) {
         $this->productModelFactory = $productModelFactory;
         $this->swatchHelper = $swatchHelper;
+        $this->config = $config;
 
         parent::__construct($context);
     }
@@ -48,14 +56,22 @@ class Media extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $productMedia = [];
+
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+
+        /** @var \Magento\Framework\App\ResponseInterface $response */
+        $response = $this->getResponse();
+
         if ($productId = (int)$this->getRequest()->getParam('product_id')) {
             $productMedia = $this->swatchHelper->getProductMediaGallery(
                 $this->productModelFactory->create()->load($productId)
             );
+            $resultJson->setHeader('X-Magento-Tags', 'catalog_product_' . $productId);
+
+            $response->setPublicHeaders($this->config->getTtl());
         }
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setData($productMedia);
         return $resultJson;
     }
