@@ -78,7 +78,8 @@ class Categories implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
@@ -106,7 +107,6 @@ class Categories implements ResolverInterface
             /** @var CategoryInterface | \Magento\Catalog\Model\Category $item */
             foreach ($this->collection as $item) {
                 if (in_array($item->getId(), $categoryIds)) {
-
                     // Try to extract all requested fields from the loaded collection data
                     $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item, true);
                     $requestedFields = $that->attributesJoiner->getQueryFields($info->fieldNodes[0]);
@@ -118,7 +118,6 @@ class Categories implements ResolverInterface
 
                     // If not all requested fields were extracted from the collection, start more complex extraction
                     $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item);
-
                 }
             }
 
