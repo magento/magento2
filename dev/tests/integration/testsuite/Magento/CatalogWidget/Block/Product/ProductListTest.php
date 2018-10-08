@@ -136,12 +136,14 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
      * Check that collection returns correct result if use not contains operator for string attribute
      *
      * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Catalog/_files/product_special_price.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_xss.php
      * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @dataProvider createCollectionForSkuDataProvider
+     * @param string $encodedConditions
+     * @param string $sku
      * @return void
      */
-    public function testCreateCollectionForSku($encodedConditions)
+    public function testCreateCollectionForSku($encodedConditions, $sku)
     {
         $this->block->setData('conditions_encoded', $encodedConditions);
         $productCollection = $this->block->createCollection();
@@ -151,7 +153,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
             $productCollection->count(),
             "Product collection was not filtered according to the widget condition."
         );
-        $this->assertEquals('virtual-product', $productCollection->getFirstItem()->getSku());
+        $this->assertEquals($sku, $productCollection->getFirstItem()->getSku());
     }
 
     /**
@@ -163,11 +165,11 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
             'contains' => ['^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,'
                 . '`aggregator`:`all`,`value`:`1`,`new_child`:``^],'
                 . '`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,'
-                . '`attribute`:`sku`,`operator`:`^[^]`,`value`:`virtual`^]^]'],
+                . '`attribute`:`sku`,`operator`:`^[^]`,`value`:`virtual`^]^]' , 'virtual-product'],
             'not contains' => ['^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,'
                 . '`aggregator`:`all`,`value`:`1`,`new_child`:``^],'
                 . '`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,'
-                . '`attribute`:`sku`,`operator`:`!^[^]`,`value`:`simple`^]^]']
+                . '`attribute`:`sku`,`operator`:`!^[^]`,`value`:`virtual`^]^]', 'product-with-xss']
         ];
     }
 }
