@@ -158,6 +158,9 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * The method should check that the payment is available, as this is not always the case.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @exceptedExceptionMessage Please provide payment for the order.
      */
     public function testDoesNothingWhenNoPaymentIsAvailable()
     {
