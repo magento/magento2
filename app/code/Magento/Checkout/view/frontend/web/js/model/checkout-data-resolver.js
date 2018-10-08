@@ -75,6 +75,7 @@ define([
             }
 
             newCustomerShippingAddress = checkoutData.getNewCustomerShippingAddress();
+
             if (newCustomerShippingAddress) {
                 createShippingAddress(newCustomerShippingAddress);
             }

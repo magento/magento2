@@ -27,6 +27,7 @@ define([
     }
 
     validatedEmail = checkoutData.getValidatedEmailValue();
+
     if (validatedEmail && !customer.isLoggedIn()) {
         quote.guestEmail = validatedEmail;
     }
