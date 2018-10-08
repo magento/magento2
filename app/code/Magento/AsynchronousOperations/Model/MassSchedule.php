@@ -23,6 +23,8 @@ use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Class MassSchedule used for adding multiple entities as Operations to Bulk Management with the status tracking
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Suppressed without refactoring to not introduce BiC
  */
 class MassSchedule
 {
@@ -93,10 +95,10 @@ class MassSchedule
     /**
      * Schedule new bulk operation based on the list of entities
      *
-     * @param $topicName
-     * @param $entitiesArray
-     * @param null $groupId
-     * @param null $userId
+     * @param string $topicName
+     * @param array $entitiesArray
+     * @param string $groupId
+     * @param string $userId
      * @return AsyncResponseInterface
      * @throws BulkException
      * @throws LocalizedException

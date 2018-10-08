@@ -43,6 +43,7 @@ interface BulkSummaryInterface extends \Magento\Framework\Bulk\BulkSummaryInterf
 
     /**
      * Set user type
+     *
      * @param int $userType
      * @return $this
      */
