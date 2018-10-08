@@ -17,11 +17,11 @@ foreach ($filters as $media_type) {
     }, $media_type['files']));
 }
 
-$resizeConfig = ($block->getIsResizeEnabled())
+$resizeConfig = ($block->getImageUploadConfigData()->getIsResizeEnabled())
     ? "{action: 'resize', maxWidth: "
-        . $block->getImageUploadMaxWidth()
+        . $block->escapeHtml($block->getImageUploadMaxWidth())
         . ", maxHeight: "
-        . $block->getImageUploadMaxHeight()
+        . $block->escapeHtml($block->getImageUploadMaxHeight())
         . "}"
     : "{action: 'resize'}";
 ?>

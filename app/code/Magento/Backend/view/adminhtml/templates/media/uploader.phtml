@@ -15,7 +15,7 @@
             "maxFileSize": <?= /* @escapeNotVerified */ $block->getFileSizeService()->getMaxFileSize() ?>,
             "maxWidth": <?= /* @escapeNotVerified */ $block->getImageUploadMaxWidth() ?>,
             "maxHeight": <?= /* @escapeNotVerified */ $block->getImageUploadMaxHeight() ?>,
-            "isResizeEnabled": <?= /* @noEscape */ $block->getIsResizeEnabled() ?>
+            "isResizeEnabled": <?= /* @noEscape */ $block->getImageUploadConfigData()->getIsResizeEnabled() ?>
         }
     }'
 >
