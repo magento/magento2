@@ -65,16 +65,17 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         DbValidator $dbValidator,
         DriverOptions $driverOptions = null
     ) {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->configGenerator = $configGenerator;
         $this->dbValidator = $dbValidator;
         foreach ($this->configOptionsListClasses as $className) {
-            $this->configOptionsCollection[] = \Magento\Framework\App\ObjectManager::getInstance()->get($className);
+            $this->configOptionsCollection[] = $objectManager->get($className);
         }
-        $this->driverOptions = $driverOptions ?? \Magento\Framework\App\ObjectManager::getInstance()->get(DriverOptions::class);
+        $this->driverOptions = $driverOptions ?? $objectManager->get(DriverOptions::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getOptions()
@@ -201,7 +202,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
     {
@@ -225,7 +226,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {

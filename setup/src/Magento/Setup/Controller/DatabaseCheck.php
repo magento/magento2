@@ -11,6 +11,9 @@ use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 
+/**
+ * Class DatabaseCheck
+ */
 class DatabaseCheck extends AbstractActionController
 {
     /**
@@ -66,6 +69,8 @@ class DatabaseCheck extends AbstractActionController
     }
 
     /**
+     * Is Driver Options Given
+     * 
      * @param array $params
      * @return bool
      */
