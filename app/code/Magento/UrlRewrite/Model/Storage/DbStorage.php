@@ -161,7 +161,9 @@ class DbStorage extends AbstractStorage
         $oldUrlsSelect->from(
             $this->resource->getTableName(self::TABLE_NAME)
         );
+        $result = [];
 
+        /** @var UrlRewrite $url */
         foreach ($urls as $url) {
             $result[$url->getEntityType()][$url->getStoreId()][] = $url->getEntityId();
         }
