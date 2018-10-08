@@ -54,7 +54,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetServicesSetsTopicFromRoute()
+    public function testGetServicesSetsTopicFromServiceContractName()
     {
         $services = [
             Converter::KEY_ROUTES => [
@@ -77,14 +77,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'async.V1.products.POST' => [
                 'interface' => 'Magento\Catalog\Api\ProductRepositoryInterface',
                 'method' => 'save',
-                'topic' => 'async.V1.products.POST',
+                'topic' => 'async.magento.catalog.api.productrepositoryinterface.save.POST',
             ]
         ];
         */
         $result = $this->config->getServices();
 
-        $expectedTopic = 'async.V1.products.POST';
-        $this->assertArrayHasKey($expectedTopic, $result);
-        $this->assertEquals($result[$expectedTopic]['topic'], $expectedTopic);
-    }
-}
+        $expectedTopic = 'async.magento.catalog.api.productrepositoryinterface.save.POST';
+        $lookupKey = 'async.V1.products.POST';
+        $this->assertArrayHasKey($lookupKey, $result);
+        $this->assertEquals($result[$lookupKey]['topic'], $expectedTopic);
+    }}
