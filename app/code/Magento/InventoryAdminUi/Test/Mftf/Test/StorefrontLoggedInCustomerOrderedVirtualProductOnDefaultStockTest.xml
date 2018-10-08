@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontLoggedInCustomerOrderedVirtualProductOnDefaultStockTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Virtual Product"/>
             <title value="Logged customer place order with virtual product on default stock"/>
             <description value="Customer should be able to place order with virtual product on default stock."/>

@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminStockCannotBeDeletedWhenSalesChannelIsAssignedTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Delete Stock"/>
             <title value="Cannot Delete Stock when a Sales Channel is assigned"/>
             <description value="You should not be able to delete a Stock when a Sales Channel is assigned."/>

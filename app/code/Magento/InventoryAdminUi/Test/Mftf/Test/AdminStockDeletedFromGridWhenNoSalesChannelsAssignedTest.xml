@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminStockDeletedFromGridWhenNoSalesChannelsAssignedTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Delete Stock"/>
             <title value="Delete Stock from Stock Grid"/>
             <description value="You should be able to Delete a Stock from the Grid if it does NOT have a Sales Channel assigned."/>

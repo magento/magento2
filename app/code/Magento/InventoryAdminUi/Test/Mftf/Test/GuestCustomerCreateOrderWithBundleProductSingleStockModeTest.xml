@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="GuestCustomerCreateOrderWithBundleProductSingleStockModeTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Create order with bundle product in single stock mode from storefront as guest customer."/>
             <title value="Create order with bundle product in single stock from storefront as guest customer."/>
             <description value="Check, guest customer able to create order with bundle product in single stock mode from storefront."/>

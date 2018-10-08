@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreateVirtualProductWithDefaultSourceTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Virtual Product"/>
             <title value="Virtual Product created with Default Source assigned by Admin user"/>
             <description value="Virtual Product created with Default Source assigned by Admin user"/>

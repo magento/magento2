@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCanDeleteSourcesAssignedToStockTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Delete Sources from Stocks"/>
             <title value="Delete Sources Assigned to Stock"/>
             <description value="You should be able to Delete Sources that are assigned to a Stock."/>

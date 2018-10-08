@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminManageStockOnProductPageTurnedOffForSimpleProductTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Configuration-Catalog-Products-Simple product"/>
             <title value="Manage Stock on Product page turned off for Simple Product in admin"/>
             <description value="You should be able to turn off Manage Stock option on Product page."/>

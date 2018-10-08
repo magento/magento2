@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminMultipleWebsitesAssignedAsSalesChannelsToStockTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Assign Websites to Stocks"/>
             <title value="Assign Multiple Websites as Sales Channels to Stock"/>
             <description value="You should be able to assign multiple Websites as Sales Channels to a Stock."/>

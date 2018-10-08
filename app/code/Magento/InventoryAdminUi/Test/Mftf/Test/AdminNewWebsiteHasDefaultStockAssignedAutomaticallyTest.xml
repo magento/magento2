@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminNewWebsiteHasDefaultStockAssignedAutomaticallyTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Stock Assignment"/>
             <title value="New Website should be assigned to the Default Stock automatically"/>
             <description value="You should see new Websites automatically added to the Default Stock after they are created."/>

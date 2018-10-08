@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAssignMultipleSourcesToStockTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Assign Sources to Stocks"/>
             <title value="Multiple Sources assigned to a Stock"/>
             <description value="You should be able to assign multiple Sources to a Stock, via the Admin."/>

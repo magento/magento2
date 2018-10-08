@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAddMultipleSourcesToProductTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Sources to Products"/>
             <title value="Add Multiple Sources to a Product"/>
             <description value="You should be able to add Multiple Sources to a Product."/>

@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreatePartialShipmentForOrderWithConfigurableProductFromCustomSourceTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Sales-Shipments"/>
             <title value="Admin user created partial shipment for order with Configurable product from Test source and Main Website."/>
             <description value="You should be able to create partial shipment for order from Custom Source."/>

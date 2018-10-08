@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreatePartialShipmentForOrderWithSimpleProductInSingleStockModeTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Sales-Shipments"/>
             <title value="Admin user created partial shipment for order placed from Main website with Simple product in Single Stock mode"/>
             <description value="You should be able to create partial shipment in Single Stock mode."/>

@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminManageSourcesSearchByKeywordTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Search By Keyword in a Grid"/>
             <title value="Search by Keyword on the Manage Sources grid"/>
             <description value="You should be able to Search by Keyword from the Manage Sources grid."/>

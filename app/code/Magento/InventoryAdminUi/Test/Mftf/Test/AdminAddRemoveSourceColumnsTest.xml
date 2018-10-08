@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAddRemoveSourceColumnsTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add/Remove Grid Columns"/>
             <title value="Add/Remove Source Grid Columns"/>
             <description value="You should be able to toggle Columns on/off in the Source Grid."/>

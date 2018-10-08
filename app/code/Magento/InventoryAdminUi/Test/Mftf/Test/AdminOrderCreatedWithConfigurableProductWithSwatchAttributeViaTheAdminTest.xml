@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminOrderCreatedWithConfigurableProductWithSwatchAttributeViaTheAdminTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Order"/>
             <title value="Create an Order with a Configurable Product with Visual Swatch Attributes via the Admin."/>
             <description value="You should be able to place an Order using a Configurable Product with Visual Swatch Attributes that is assigned to a Source with a Stock."/>

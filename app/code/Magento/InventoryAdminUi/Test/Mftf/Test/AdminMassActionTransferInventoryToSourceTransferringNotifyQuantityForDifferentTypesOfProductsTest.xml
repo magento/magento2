@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminMassActionTransferInventoryToSourceTransferringNotifyQuantityForDifferentTypesOfProductsTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Transfer inventory to source"/>
             <title value="Notify Quantity transferring when admin user apply mass action 'Transfer Inventory To Source' on Products grid to different types of products"/>
             <description value="You should be able use mass action 'Transfer inventory to source' to transfer notify quantity via mass action on products grid"/>

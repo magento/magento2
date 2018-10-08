@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminUseDecimalQuantityOnSimpleProductTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Admin user applied 'Use decimals' to Simple product in Advanced inventory on  product page"/>
             <title value="Admin user applied 'Use decimals' to Simple product in Advanced inventory on  product page"/>
             <description value="Admin user applied 'Use decimals' to Simple product in Advanced inventory on  product page"/>

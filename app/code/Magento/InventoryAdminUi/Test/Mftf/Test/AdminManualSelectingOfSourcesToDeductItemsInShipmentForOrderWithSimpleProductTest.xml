@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminManualSelectingOfSourcesToDeductItemsInShipmentForOrderWithSimpleProductTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Source Selection"/>
             <title value="Manual selecting of sources to deduct items in Shipment for order with Simple product in Admin"/>
             <description value="You should be able to manually select the Sources to deduct when Shipment is created."/>

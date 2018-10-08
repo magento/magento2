@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCanSetOnlyXLeftThresholdForVirtualProductWithDefaultSourceTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Admin user apply 'Only X left Threshold' for Virtual product on Default source"/>
             <title value="Admin user apply 'Only X left Threshold' for Virtual product on Default source"/>
             <description value="Admin user apply 'Only X left Threshold' for Virtual product on Default source"/>

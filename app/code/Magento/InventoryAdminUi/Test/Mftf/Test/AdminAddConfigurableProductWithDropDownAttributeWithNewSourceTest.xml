@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAddConfigurableProductWithDropDownAttributeWithNewSourceTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Configurable Product"/>
             <title value="Create a Configurable Product with a drop down attribute assigned to a New Source"/>
             <description value="You should be able to create a Configurable Product that is assigned to a New Source with a drop down attribute."/>

@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminUserSetStatusForEachSourceItemTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Admin user set for Product stock status for each Source"/>
             <title value="Admin user set for Product stock status for each Source"/>
             <description value="Admin user set for Product stock status for each Source"/>

@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminDefaultStockCannotBeDeletedTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Delete Stock"/>
             <title value="Cannot Delete Default Stock from the Stock Grid"/>
             <description value="You should not be able to delete the Default Stock from the Stock Grid."/>

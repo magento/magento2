@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminMassActionAssignProductSourcesForDifferentTypesOfProductsTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Assign source to products"/>
             <title value="MFTF Admin user apply to different types of products mass action 'Assign product sources' on Products grid"/>
             <description value="You should be able to assign sources to different types of products via mass action"/>

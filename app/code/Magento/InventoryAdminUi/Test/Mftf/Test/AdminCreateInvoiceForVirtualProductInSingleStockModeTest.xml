@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreateInvoiceForVirtualProductInSingleStockModeTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Create invoice for virtual product in Single Stock mode."/>
             <title value="Create invoice for virtual product in Single Stock mode."/>
             <description value="Check, admin user able to create invoice for virtual product in Single Stock mode."/>

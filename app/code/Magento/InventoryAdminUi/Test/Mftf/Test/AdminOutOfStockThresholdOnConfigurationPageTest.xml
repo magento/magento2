@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminOutOfStockThresholdOnConfigurationPageTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Configuration Settings"/>
             <title value="Out-of-Stock Threshold on the Configuration page functions correctly"/>
             <description value="You should be able to set the Out-of-Stock Threshold on the Configuration page."/>

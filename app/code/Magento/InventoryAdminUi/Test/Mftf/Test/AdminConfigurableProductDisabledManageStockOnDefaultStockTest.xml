@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminConfigurableProductDisabledManageStockOnDefaultStockTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Check 'Manage Stock' system configuration value affection on configurable product on default source."/>
             <title value="Check 'Manage Stock' system configuration value affection on configurable product on default source."/>
             <description value="Verify, that configurable product with children on default source and 'Out of Stock' status is visible on storefront in case 'Manage Stock' system configuration value is set to 'No'."/>

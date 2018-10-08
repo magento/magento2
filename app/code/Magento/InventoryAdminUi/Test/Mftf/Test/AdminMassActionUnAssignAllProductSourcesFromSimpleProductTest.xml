@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminMassActionUnAssignAllProductSourcesFromSimpleProductTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Unassign source from product"/>
             <title value="Admin user apply to several simple products mass action 'Unassign product sources' on Products grid to unassign all assigned sources"/>
             <description value="You should be able to unassign all sources from simple products via mass action"/>

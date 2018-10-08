@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminSourceCodeFieldCannotContainWhitespaceTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Field Validation"/>
             <title value="Source Code cannot contain Whitespace"/>
             <description value="You should NOT be able to Save a Source with a Source Code that contains Whitespace."/>
