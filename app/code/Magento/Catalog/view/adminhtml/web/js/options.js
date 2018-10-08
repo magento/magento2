@@ -182,22 +182,15 @@ define([
             });
         }
         editForm.on('beforeSubmit', function () {
-            var optionsValues = [],
-                optionContainer = optionPanel.find('table tbody');
+            var optionContainer = optionPanel.find('table tbody');
 
             if (optionPanel.hasClass(activePanelClass)) {
-                optionContainer.find('input,select,textarea')
-                    .serializeArray()
-                    .map(function (el) {
-                        optionsValues.push(el.name + '=' + el.value);
-                    });
-
                 jQuery('<input>')
                     .attr({
                         type: 'hidden',
                         name: 'serialized_options'
                     })
-                    .val(JSON.stringify(optionsValues))
+                    .val(optionContainer.find('input, select, textarea').serialize())
                     .prependTo(editForm);
             }
             tableBody = optionContainer.detach();

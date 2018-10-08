@@ -13,8 +13,8 @@
             <title value="Admin should be able to create dropdown product attribute"/>
             <description value="Admin should be able to create dropdown product attribute"/>
             <severity value="BLOCKER"/>
-            <testCaseId value="MC-4140"/>
-            <group value="attribute"/>
+            <testCaseId value="MC-4982"/>
+            <group value="Catalog"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
@@ -68,7 +68,7 @@
         <!-- Check attribute data -->
         <grabValueFrom selector="{{DropdownAttributeOptionsSection.nthAdminLabel('2')}}"
                        stepKey="secondOptionAdminLabel"/>
-        <assertEquals actual="$secondOptionAdminLabel" expected="Fish &amp; Chips"
+        <assertEquals actual="$secondOptionAdminLabel" expected="'Fish &amp; Chips'"
                       stepKey="assertSecondOption"/>
     </test>
 </tests>
