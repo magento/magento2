@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Category;
+namespace Magento\CatalogUrlRewrite\Plugin\Model\Category;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\Category;
