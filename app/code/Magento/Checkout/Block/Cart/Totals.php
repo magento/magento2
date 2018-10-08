@@ -40,11 +40,11 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Sales\Model\Config $salesConfig
-     * @param array $layoutProcessors
-     * @param array $data
+     * @param \Magento\Customer\Model\Session                  $customerSession
+     * @param \Magento\Checkout\Model\Session                  $checkoutSession
+     * @param \Magento\Sales\Model\Config                      $salesConfig
+     * @param array                                            $layoutProcessors
+     * @param array                                            $data
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -121,9 +121,9 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
-     * @param mixed $total
+     * @param mixed    $total
      * @param int|null $area
-     * @param int $colspan
+     * @param int      $colspan
      * @return string
      */
     public function renderTotal($total, $area = null, $colspan = 1)
@@ -146,9 +146,9 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * Render totals html for specific totals area (footer, body)
      *
-     * @param   null|string $area
-     * @param   int $colspan
-     * @return  string
+     * @param  null|string $area
+     * @param  int         $colspan
+     * @return string
      */
     public function renderTotals($area = null, $colspan = 1)
     {

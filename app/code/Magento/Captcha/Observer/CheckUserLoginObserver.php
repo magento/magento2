@@ -60,12 +60,12 @@ class CheckUserLoginObserver implements ObserverInterface
     protected $authentication;
 
     /**
-     * @param \Magento\Captcha\Helper\Data $helper
-     * @param \Magento\Framework\App\ActionFlag $actionFlag
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Captcha\Helper\Data                       $helper
+     * @param \Magento\Framework\App\ActionFlag                  $actionFlag
+     * @param \Magento\Framework\Message\ManagerInterface        $messageManager
      * @param \Magento\Framework\Session\SessionManagerInterface $customerSession
-     * @param CaptchaStringResolver $captchaStringResolver
-     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param CaptchaStringResolver                              $captchaStringResolver
+     * @param \Magento\Customer\Model\Url                        $customerUrl
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -120,7 +120,7 @@ class CheckUserLoginObserver implements ObserverInterface
     /**
      * Check captcha on user login page
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param  \Magento\Framework\Event\Observer $observer
      * @throws NoSuchEntityException
      * @return $this
      */

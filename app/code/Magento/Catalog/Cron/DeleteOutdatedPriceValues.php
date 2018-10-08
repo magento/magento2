@@ -33,9 +33,9 @@ class DeleteOutdatedPriceValues
     private $scopeConfig;
 
     /**
-     * @param ResourceConnection $resource
+     * @param ResourceConnection  $resource
      * @param AttributeRepository $attributeRepository
-     * @param ScopeConfig $scopeConfig
+     * @param ScopeConfig         $scopeConfig
      */
     public function __construct(
         ResourceConnection $resource,
@@ -58,7 +58,9 @@ class DeleteOutdatedPriceValues
             return;
         }
 
-        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $priceAttribute */
+        /**
+ * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $priceAttribute 
+*/
         $priceAttribute = $this->attributeRepository
             ->get(ProductAttributeInterface::ENTITY_TYPE_CODE, ProductAttributeInterface::CODE_PRICE);
         $connection = $this->resource->getConnection();

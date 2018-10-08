@@ -23,7 +23,7 @@ use Magento\Sales\Api\CreditmemoManagementInterface as CreditmemoManager;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 100.0.2
+ * @since                                            100.0.2
  */
 class Payment extends Info implements OrderPaymentInterface
 {
@@ -49,6 +49,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * Whether can void
+     *
      * @var string
      */
     protected $_canVoidLookup = null;
@@ -116,23 +117,23 @@ class Payment extends Info implements OrderPaymentInterface
     private $creditmemoManager = null;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
-     * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
+     * @param \Magento\Framework\Model\Context                                $context
+     * @param \Magento\Framework\Registry                                     $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory               $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory                    $customAttributeFactory
+     * @param \Magento\Payment\Helper\Data                                    $paymentData
+     * @param \Magento\Framework\Encryption\EncryptorInterface                $encryptor
+     * @param \Magento\Sales\Model\Order\CreditmemoFactory                    $creditmemoFactory
+     * @param PriceCurrencyInterface                                          $priceCurrency
+     * @param \Magento\Sales\Api\TransactionRepositoryInterface               $transactionRepository
      * @param \Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface $transactionManager
-     * @param Transaction\BuilderInterface $transactionBuilder
-     * @param Payment\Processor $paymentProcessor
-     * @param OrderRepositoryInterface $orderRepository
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
-     * @param CreditmemoManager $creditmemoManager
+     * @param Transaction\BuilderInterface                                    $transactionBuilder
+     * @param Payment\Processor                                               $paymentProcessor
+     * @param OrderRepositoryInterface                                        $orderRepository
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource         $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb                   $resourceCollection
+     * @param array                                                           $data
+     * @param CreditmemoManager                                               $creditmemoManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -190,7 +191,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @codeCoverageIgnore
      *
-     * @param Order $order
+     * @param  Order $order
      * @return $this
      */
     public function setOrder(Order $order)
@@ -204,7 +205,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Retrieve order model object
      *
      * @codeCoverageIgnore
-     * @return Order
+     * @return             Order
      */
     public function getOrder()
     {
@@ -218,7 +219,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Sets transaction id for current payment
      *
-     * @param string $transactionId
+     * @param  string $transactionId
      * @return $this
      */
     public function setTransactionId($transactionId)
@@ -241,7 +242,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Sets transaction close flag
      *
-     * @param bool $isClosed
+     * @param  bool $isClosed
      * @return $this
      */
     public function setIsTransactionClosed($isClosed)
@@ -265,7 +266,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns transaction parent
      *
      * @return string
-     * @since 100.1.0
+     * @since  100.1.0
      */
     public function setParentTransactionId($txnId)
     {
@@ -326,7 +327,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Authorize or authorize and capture payment on gateway, if applicable
      * This method is supposed to be called only when order is placed
      *
-     * @return $this
+     * @return                                       $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -388,10 +389,10 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Set appropriate state to order or add status to order history
      *
-     * @param Order $order
-     * @param string $orderState
-     * @param string $orderStatus
-     * @param bool $isCustomerNotified
+     * @param  Order  $order
+     * @param  string $orderState
+     * @param  string $orderStatus
+     * @param  bool   $isCustomerNotified
      * @return void
      */
     protected function updateOrder(Order $order, $orderState, $orderStatus, $isCustomerNotified)
@@ -402,28 +403,28 @@ class Payment extends Info implements OrderPaymentInterface
         $originalOrderStatus = $order->getStatus();
 
         switch (true) {
-            case ($message && ($originalOrderState == Order::STATE_PAYMENT_REVIEW)):
-                $order->addStatusToHistory($originalOrderStatus, $message, $isCustomerNotified);
-                break;
-            case ($message):
-            case ($originalOrderState && $message):
-            case ($originalOrderState != $orderState):
-            case ($originalOrderStatus != $orderStatus):
-                $order->setState($orderState)
-                    ->setStatus($orderStatus)
-                    ->addStatusHistoryComment($message)
-                    ->setIsCustomerNotified($isCustomerNotified);
-                break;
-            default:
-                break;
+        case ($message && ($originalOrderState == Order::STATE_PAYMENT_REVIEW)):
+            $order->addStatusToHistory($originalOrderStatus, $message, $isCustomerNotified);
+            break;
+        case ($message):
+        case ($originalOrderState && $message):
+        case ($originalOrderState != $orderState):
+        case ($originalOrderStatus != $orderStatus):
+            $order->setState($orderState)
+                ->setStatus($orderStatus)
+                ->addStatusHistoryComment($message)
+                ->setIsCustomerNotified($isCustomerNotified);
+            break;
+        default:
+            break;
         }
     }
 
     /**
      * Perform actions based on passed action name
      *
-     * @param string $action
-     * @param Order $order
+     * @param  string $action
+     * @param  Order  $order
      * @return void
      */
     protected function processAction($action, Order $order)
@@ -432,21 +433,21 @@ class Payment extends Info implements OrderPaymentInterface
         $baseTotalDue = $order->getBaseTotalDue();
 
         switch ($action) {
-            case \Magento\Payment\Model\Method\AbstractMethod::ACTION_ORDER:
-                $this->_order($baseTotalDue);
-                break;
-            case \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE:
-                $this->authorize(true, $baseTotalDue);
-                // base amount will be set inside
-                $this->setAmountAuthorized($totalDue);
-                break;
-            case \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE:
-                $this->setAmountAuthorized($totalDue);
-                $this->setBaseAmountAuthorized($baseTotalDue);
-                $this->capture(null);
-                break;
-            default:
-                break;
+        case \Magento\Payment\Model\Method\AbstractMethod::ACTION_ORDER:
+            $this->_order($baseTotalDue);
+            break;
+        case \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE:
+            $this->authorize(true, $baseTotalDue);
+            // base amount will be set inside
+            $this->setAmountAuthorized($totalDue);
+            break;
+        case \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE:
+            $this->setAmountAuthorized($totalDue);
+            $this->setBaseAmountAuthorized($baseTotalDue);
+            $this->capture(null);
+            break;
+        default:
+            break;
         }
     }
 
@@ -456,7 +457,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Updates transactions hierarchy, if required
      * Updates payment totals, updates order status and adds proper comments
      *
-     * @param null|Invoice $invoice
+     * @param  null|Invoice $invoice
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
@@ -472,8 +473,8 @@ class Payment extends Info implements OrderPaymentInterface
      * Prevents transaction double processing
      * Updates payment totals, updates order status and adds proper comments
      *
-     * @param float $amount
-     * @param bool $skipFraudDetection
+     * @param  float $amount
+     * @param  bool  $skipFraudDetection
      * @return $this
      */
     public function registerCaptureNotification($amount, $skipFraudDetection = false)
@@ -484,9 +485,9 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Process authorization notification
      *
-     * @param float $amount
+     * @param  float $amount
      * @return $this
-     * @see self::_authorize()
+     * @see    self::_authorize()
      */
     public function registerAuthorizationNotification($amount)
     {
@@ -496,7 +497,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Register payment fact: update self totals from the invoice
      *
-     * @param Invoice $invoice
+     * @param  Invoice $invoice
      * @return $this
      */
     public function pay($invoice)
@@ -517,7 +518,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Cancel specified invoice: update self totals from it
      *
-     * @param Invoice $invoice
+     * @param  Invoice $invoice
      * @return $this
      */
     public function cancelInvoice($invoice)
@@ -578,9 +579,9 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Void payment online
      *
-     * @param \Magento\Framework\DataObject $document
+     * @param  \Magento\Framework\DataObject $document
      * @return $this
-     * @see self::_void()
+     * @see    self::_void()
      */
     public function void(\Magento\Framework\DataObject $document)
     {
@@ -593,9 +594,9 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Process void notification
      *
-     * @param float $amount
+     * @param  float $amount
      * @return $this
-     * @see self::_void()
+     * @see    self::_void()
      */
     public function registerVoidNotification($amount = null)
     {
@@ -609,7 +610,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Sets creditmemo for current payment
      *
-     * @param Creditmemo $creditmemo
+     * @param  Creditmemo $creditmemo
      * @return $this
      */
     public function setCreditmemo(Creditmemo $creditmemo)
@@ -636,10 +637,10 @@ class Payment extends Info implements OrderPaymentInterface
      * Updates transactions hierarchy, if required
      * Updates payment totals, updates order status and adds proper comments
      *
-     * @param Creditmemo $creditmemo
-     * @return $this
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param                                        Creditmemo $creditmemo
+     * @return                                       $this
+     * @throws                                       \Exception
+     * @throws                                       \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -745,8 +746,8 @@ class Payment extends Info implements OrderPaymentInterface
      *       then we should create a creditmemo from invoice and also refund it offline
      * TODO: implement logic of chargebacks reimbursements (via negative amount)
      *
-     * @param float $amount
-     * @return $this
+     * @param                                        float $amount
+     * @return                                       $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function registerRefundNotification($amount)
@@ -826,7 +827,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Cancel a creditmemo: subtract its totals from the payment
      *
-     * @param Creditmemo $creditmemo
+     * @param  Creditmemo $creditmemo
      * @return $this
      */
     public function cancelCreditmemo($creditmemo)
@@ -900,7 +901,9 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $transactionId = $this->getLastTransId();
 
-        /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
+        /**
+ * @var \Magento\Payment\Model\Method\AbstractMethod $method 
+*/
         $method = $this->getMethodInstance();
         $method->setStore($this->getOrder()->getStoreId());
         if ($method->acceptPayment($this)) {
@@ -925,7 +928,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Accept order with payment method instance
      *
-     * @param bool $isOnline
+     * @param  bool $isOnline
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -934,7 +937,9 @@ class Payment extends Info implements OrderPaymentInterface
         $transactionId = $isOnline ? $this->getLastTransId() : $this->getTransactionId();
 
         if ($isOnline) {
-            /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
+            /**
+ * @var \Magento\Payment\Model\Method\AbstractMethod $method 
+*/
             $method = $this->getMethodInstance();
             $method->setStore($this->getOrder()->getStoreId());
 
@@ -966,7 +971,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Performs registered payment update.
      *
-     * @param bool $isOnline
+     * @param  bool $isOnline
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -1036,7 +1041,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Cancel invoice and register order cancellation
      *
      * @param Invoice|false $invoice
-     * @param string $message
+     * @param string        $message
      */
     protected function cancelInvoiceAndRegisterCancellation($invoice, $message)
     {
@@ -1050,7 +1055,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Sets order state status to 'payment_review' with appropriate message
      *
-     * @param string $message
+     * @param string   $message
      * @param int|null $transactionId
      */
     protected function setOrderStatePaymentReview($message, $transactionId)
@@ -1083,7 +1088,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * For skipping 1,2,3 operations the skip_order_processing flag should be set in a payment object
      *
-     * @param float $amount
+     * @param  float $amount
      * @return $this
      */
     protected function _order($amount)
@@ -1097,7 +1102,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Prevents transaction double processing
      * Updates payment totals, updates order status and adds proper comments
      *
-     * @param bool $isOnline
+     * @param bool  $isOnline
      * @param float $amount
      *
      * @return $this
@@ -1113,10 +1118,10 @@ class Payment extends Info implements OrderPaymentInterface
      *       the amount void amount, for informational purposes.
      * Updates payment totals, updates order status and adds proper comments
      *
-     * @param bool $isOnline
-     * @param float $amount
-     * @param string $gatewayCallback
-     * @return $this
+     * @param                                        bool   $isOnline
+     * @param                                        float  $amount
+     * @param                                        string $gatewayCallback
+     * @return                                       $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -1141,9 +1146,9 @@ class Payment extends Info implements OrderPaymentInterface
 
         // if the authorization was untouched, we may assume voided amount = order grand total
         // but only if the payment auth amount equals to order grand total
-        if ($authTransaction &&
-            $order->getBaseGrandTotal() == $this->getBaseAmountAuthorized() &&
-            0 == $this->getBaseAmountCanceled()
+        if ($authTransaction 
+            && $order->getBaseGrandTotal() == $this->getBaseAmountAuthorized() 
+            && 0 == $this->getBaseAmountCanceled()
         ) {
             if ($authTransaction->canVoidAuthorizationCompletely()) {
                 $amount = (double)$order->getBaseGrandTotal();
@@ -1171,9 +1176,9 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Public access to _addTransaction method
      *
-     * @param string $type
-     * @param \Magento\Sales\Model\AbstractModel $salesDocument
-     * @param bool $failSafe
+     * @param  string                             $type
+     * @param  \Magento\Sales\Model\AbstractModel $salesDocument
+     * @param  bool                               $failSafe
      * @return null|Transaction
      */
     public function addTransaction($type, $salesDocument = null, $failSafe = false)
@@ -1202,7 +1207,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Import details data of specified transaction
      *
-     * @param Transaction $transactionTo
+     * @param  Transaction $transactionTo
      * @return $this
      */
     public function importTransactionInfo(Transaction $transactionTo)
@@ -1229,7 +1234,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Totals updater utility method
      * Updates self totals by keys in data array('key' => $delta)
      *
-     * @param array $data
+     * @param  array $data
      * @return void
      */
     protected function _updateTotals($data)
@@ -1245,8 +1250,8 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Append transaction ID (if any) message to the specified message
      *
-     * @param Transaction|null $transaction
-     * @param string $message
+     * @param  Transaction|null $transaction
+     * @param  string           $message
      * @return string
      */
     protected function _appendTransactionToMessage($transaction, $message)
@@ -1263,7 +1268,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Prepend a "prepared_message" that may be set to the payment instance before, to the specified message
      * Prepends value to the specified string or to the comment of specified order status history item instance
      *
-     * @param string|\Magento\Sales\Model\Order\Status\History $messagePrependTo
+     * @param  string|\Magento\Sales\Model\Order\Status\History $messagePrependTo
      * @return string|\Magento\Sales\Model\Order\Status\History
      */
     public function prependMessage($messagePrependTo)
@@ -1290,8 +1295,8 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Round up and cast specified amount to float or string
      *
-     * @param string|float $amount
-     * @param bool $asFloat
+     * @param  string|float $amount
+     * @param  bool         $asFloat
      * @return string|float
      */
     public function formatAmount($amount, $asFloat = false)
@@ -1303,7 +1308,8 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * Format price with currency sign
-     * @param float $amount
+     *
+     * @param  float $amount
      * @return string
      */
     public function formatPrice($amount)
@@ -1313,6 +1319,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * Lookup an authorization transaction using parent transaction id, if set
+     *
      * @return Transaction|false
      */
     public function getAuthorizationTransaction()
@@ -1327,7 +1334,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Decide whether authorization transaction may close (if the amount to capture will cover entire order)
      *
-     * @param float $amountToCapture
+     * @param  float $amountToCapture
      * @return bool
      */
     public function isCaptureFinal($amountToCapture)
@@ -1350,8 +1357,8 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Additional transaction info setter
      *
-     * @param string $key
-     * @param string $value
+     * @param  string $key
+     * @param  string $value
      * @return void
      */
     public function setTransactionAdditionalInfo($key, $value)
@@ -1384,9 +1391,9 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Prepare credit memo
      *
-     * @param $amount
-     * @param $baseGrandTotal
-     * @param false|Invoice $invoice
+     * @param  $amount
+     * @param  $baseGrandTotal
+     * @param  false|Invoice  $invoice
      * @return mixed
      */
     protected function prepareCreditMemo($amount, $baseGrandTotal, $invoice)
@@ -1427,7 +1434,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Return invoice model for transaction
      *
-     * @param string $transactionId
+     * @param  string $transactionId
      * @return Invoice|false
      */
     protected function _getInvoiceForTransactionId($transactionId)
@@ -1781,7 +1788,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Returns cc_ss_issue
      *
-     * @return string
+     * @return     string
      * @deprecated 100.1.0 unused
      */
     public function getCcSsIssue()
@@ -1792,7 +1799,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Returns cc_ss_start_month
      *
-     * @return string
+     * @return     string
      * @deprecated 100.1.0 unused
      */
     public function getCcSsStartMonth()
@@ -1803,7 +1810,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Returns cc_ss_start_year
      *
-     * @return string
+     * @return     string
      * @deprecated 100.1.0 unused
      */
     public function getCcSsStartYear()
@@ -2169,6 +2176,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     *
      * @deprecated 100.1.0 unused
      */
     public function setCcSsStartYear($ccSsStartYear)
@@ -2258,6 +2266,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     *
      * @deprecated 100.1.0 unused
      */
     public function setCcSsStartMonth($ccSsStartMonth)
@@ -2363,6 +2372,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     *
      * @deprecated 100.1.0 unused
      */
     public function setCcSsIssue($ccSsIssue)
@@ -2423,7 +2433,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Sales\Api\Data\OrderPaymentExtensionInterface $extensionAttributes
+     * @param  \Magento\Sales\Api\Data\OrderPaymentExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderPaymentExtensionInterface $extensionAttributes)
@@ -2434,7 +2444,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Sets whether transaction is pending
      *
-     * @param bool|int $flag
+     * @param  bool|int $flag
      * @return $this
      */
     public function setIsTransactionPending($flag)
@@ -2447,7 +2457,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Whether transaction is pending
      *
-     * @return bool
+     * @return                                       bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsTransactionPending()
@@ -2458,7 +2468,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Sets whether fraud was detected
      *
-     * @param bool|int $flag
+     * @param  bool|int $flag
      * @return $this
      */
     public function setIsFraudDetected($flag)
@@ -2471,7 +2481,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Whether fraud was detected
      *
-     * @return bool
+     * @return                                       bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsFraudDetected()
@@ -2482,7 +2492,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Sets whether should close parent transaction
      *
-     * @param int|bool $flag
+     * @param  int|bool $flag
      * @return $this
      */
     public function setShouldCloseParentTransaction($flag)
@@ -2495,7 +2505,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Whether should close parent transaction
      *
-     * @return bool
+     * @return                                       bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShouldCloseParentTransaction()
@@ -2505,7 +2515,8 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * Set payment parent transaction id and current transaction id if it not set
-     * @param Transaction $transaction
+     *
+     * @param  Transaction $transaction
      * @return void
      */
     private function setTransactionIdsForRefund(Transaction $transaction)
@@ -2528,15 +2539,17 @@ class Payment extends Info implements OrderPaymentInterface
      * Collects order invoices totals by provided keys.
      * Returns result as {key: amount}.
      *
-     * @param Order $order
-     * @param array $keys
+     * @param  Order $order
+     * @param  array $keys
      * @return array
      */
     private function collectTotalAmounts(Order $order, array $keys)
     {
         $result = array_fill_keys($keys, 0.00);
         $invoiceCollection = $order->getInvoiceCollection();
-        /** @var Invoice $invoice */
+        /**
+ * @var Invoice $invoice 
+*/
         foreach ($invoiceCollection as $invoice) {
             foreach ($keys as $key) {
                 $result[$key] += $invoice->getData($key);

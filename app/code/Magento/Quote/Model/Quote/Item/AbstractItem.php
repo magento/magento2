@@ -19,33 +19,33 @@ use Magento\Framework\Api\AttributeValueFactory;
  *  - original_custom_price - original defined value of custom price without any conversion
  *
  * @api
- * @method float getDiscountAmount()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountAmount(float $amount)
- * @method float getBaseDiscountAmount()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountAmount(float $amount)
- * @method float getDiscountPercent()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountPercent()
- * @method float getOriginalDiscountAmount()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setOriginalDiscountAmount()
- * @method float getBaseOriginalDiscountAmount()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseOriginalDiscountAmount()
- * @method float getDiscountCalculationPrice()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountCalculationPrice()
- * @method float getBaseDiscountCalculationPrice()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountCalculationPrice($price)
- * @method int[] getAppliedRuleIds()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setAppliedRuleIds(array $ruleIds)
- * @method float getBaseTaxAmount()
- * @method float getBaseDiscountTaxCompensation()
- * @method float getBaseRowTotal()
- * @method float getQtyOrdered()
- * @method float getRowTotalInclTax()
- * @method float getTaxAmount()
- * @method float getDiscountTaxCompensation()
- * @method float getRowTotal()
- * @method float getPriceInclTax()
+ * @method                                         float getDiscountAmount()
+ * @method                                         \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountAmount(float $amount)
+ * @method                                         float getBaseDiscountAmount()
+ * @method                                         \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountAmount(float $amount)
+ * @method                                         float getDiscountPercent()
+ * @method                                         \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountPercent()
+ * @method                                         float getOriginalDiscountAmount()
+ * @method                                         \Magento\Quote\Model\Quote\Item\AbstractItem setOriginalDiscountAmount()
+ * @method                                         float getBaseOriginalDiscountAmount()
+ * @method                                         \Magento\Quote\Model\Quote\Item\AbstractItem setBaseOriginalDiscountAmount()
+ * @method                                         float getDiscountCalculationPrice()
+ * @method                                         \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountCalculationPrice()
+ * @method                                         float getBaseDiscountCalculationPrice()
+ * @method                                         \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountCalculationPrice($price)
+ * @method                                         int[] getAppliedRuleIds()
+ * @method                                         \Magento\Quote\Model\Quote\Item\AbstractItem setAppliedRuleIds(array $ruleIds)
+ * @method                                         float getBaseTaxAmount()
+ * @method                                         float getBaseDiscountTaxCompensation()
+ * @method                                         float getBaseRowTotal()
+ * @method                                         float getQtyOrdered()
+ * @method                                         float getRowTotalInclTax()
+ * @method                                         float getTaxAmount()
+ * @method                                         float getDiscountTaxCompensation()
+ * @method                                         float getRowTotal()
+ * @method                                         float getPriceInclTax()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 100.0.2
+ * @since                                          100.0.2
  */
 abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
@@ -83,15 +83,15 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     protected $priceCurrency;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Model\Context                        $context
+     * @param \Magento\Framework\Registry                             $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory       $extensionFactory
+     * @param AttributeValueFactory                                   $customAttributeFactory
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface         $productRepository
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface       $priceCurrency
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
+     * @param \Magento\Framework\Data\Collection\AbstractDb           $resourceCollection
+     * @param array                                                   $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -255,7 +255,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Add message of quote item to array of messages
      *
-     * @param   string $message
+     * @param  string $message
      * @return $this
      */
     public function addMessage($message)
@@ -267,8 +267,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Get messages array of quote item
      *
-     * @param   bool $string flag for converting messages to string
-     * @return  array|string
+     * @param  bool $string flag for converting messages to string
+     * @return array|string
      */
     public function getMessage($string = true)
     {
@@ -281,7 +281,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Removes message by text
      *
-     * @param string $text
+     * @param  string $text
      * @return $this
      */
     public function removeMessageByText($text)
@@ -379,7 +379,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Get original (not related with parent item) item quantity
      *
-     * @return  int|float
+     * @return int|float
      */
     public function getQty()
     {
@@ -389,7 +389,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Get total item quantity (include parent item relation)
      *
-     * @return  int|float
+     * @return int|float
      */
     public function getTotalQty()
     {
@@ -519,8 +519,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Set original price to item (calculation price will be refreshed too)
      *
-     * @param   float $price
-     * @return  \Magento\Quote\Model\Quote\Item\AbstractItem
+     * @param  float $price
+     * @return \Magento\Quote\Model\Quote\Item\AbstractItem
      */
     public function setOriginalPrice($price)
     {
@@ -540,8 +540,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Specify custom item price (used in case when we have apply not product price to item)
      *
-     * @param   float $value
-     * @return  \Magento\Quote\Model\Quote\Item\AbstractItem
+     * @param  float $value
+     * @return \Magento\Quote\Model\Quote\Item\AbstractItem
      */
     public function setCustomPrice($value)
     {
@@ -563,8 +563,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Specify item price (base calculation price and converted price will be refreshed too)
      *
-     * @param   float $value
-     * @return  $this
+     * @param  float $value
+     * @return $this
      */
     public function setPrice($value)
     {
@@ -575,6 +575,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
 
     /**
      * Get item price converted to quote currency
+     *
      * @return float
      */
     public function getConvertedPrice()
@@ -589,7 +590,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
 
     /**
      * Set new value for converted price
-     * @param float $value
+     *
+     * @param  float $value
      * @return $this
      */
     public function setConvertedPrice($value)
@@ -627,8 +629,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
             $calculate = $this->getProduct()->getPriceType();
         }
 
-        if (null !== $calculate &&
-            (int)$calculate === \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
+        if (null !== $calculate 
+            && (int)$calculate === \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
         ) {
             return true;
         }
@@ -649,8 +651,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
             $shipmentType = $this->getProduct()->getShipmentType();
         }
 
-        if (null !== $shipmentType &&
-            (int)$shipmentType === \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
+        if (null !== $shipmentType 
+            && (int)$shipmentType === \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
         ) {
             return true;
         }

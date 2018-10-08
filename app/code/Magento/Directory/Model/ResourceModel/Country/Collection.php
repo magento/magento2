@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 100.0.2
+ * @since                                          100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -74,20 +74,20 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Locale\ListsInterface $localeLists
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Directory\Model\ResourceModel\CountryFactory $countryFactory
-     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\App\Helper\AbstractHelper $helperData
-     * @param array $countriesWithNotRequiredStates
-     * @param mixed $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
+     * @param                                          \Magento\Framework\Data\Collection\EntityFactory             $entityFactory
+     * @param                                          \Psr\Log\LoggerInterface                                     $logger
+     * @param                                          \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param                                          \Magento\Framework\Event\ManagerInterface                    $eventManager
+     * @param                                          \Magento\Framework\Locale\ListsInterface                     $localeLists
+     * @param                                          \Magento\Framework\App\Config\ScopeConfigInterface           $scopeConfig
+     * @param                                          \Magento\Directory\Model\ResourceModel\CountryFactory        $countryFactory
+     * @param                                          \Magento\Framework\Stdlib\ArrayUtils                         $arrayUtils
+     * @param                                          \Magento\Framework\Locale\ResolverInterface                  $localeResolver
+     * @param                                          \Magento\Framework\App\Helper\AbstractHelper                 $helperData
+     * @param                                          array                                                        $countriesWithNotRequiredStates
+     * @param                                          mixed                                                        $connection
+     * @param                                          \Magento\Framework\Model\ResourceModel\Db\AbstractDb         $resource
+     * @param                                          \Magento\Store\Model\StoreManagerInterface|null              $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -129,14 +129,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Add top destinition countries to head of option array
      *
-     * @param $emptyLabel
-     * @param $options
+     * @param  $emptyLabel
+     * @param  $options
      * @return array
      */
     private function addForegroundCountriesToOptionArray($emptyLabel, $options)
     {
-        if ($emptyLabel !== false && count($this->_foregroundCountries) !== 0 &&
-            count($options) === count($this->_foregroundCountries)
+        if ($emptyLabel !== false && count($this->_foregroundCountries) !== 0 
+            && count($options) === count($this->_foregroundCountries)
         ) {
             $options[] = ['value' => '', 'label' => $emptyLabel];
             return $options;
@@ -158,7 +158,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Return Allowed Countries reader
      *
      * @deprecated 100.1.2
-     * @return \Magento\Directory\Model\AllowedCountries
+     * @return     \Magento\Directory\Model\AllowedCountries
      */
     private function getAllowedCountriesReader()
     {
@@ -172,7 +172,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Load allowed countries for current store
      *
-     * @param null|int|string|\Magento\Store\Model\Store $store
+     * @param  null|int|string|\Magento\Store\Model\Store $store
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     public function loadByStore($store = null)
@@ -190,7 +190,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Loads Item By Id
      *
-     * @param string $countryId
+     * @param  string $countryId
      * @return \Magento\Directory\Model\ResourceModel\Country|null
      */
     public function getItemById($countryId)
@@ -209,8 +209,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * $iso can be either array containing 'iso2', 'iso3' values or string with containing one of that values directly.
      * The collection will contain countries where at least one of country $iso fields matches $countryCode.
      *
-     * @param string|string[] $countryCode
-     * @param string|string[] $iso
+     * @param  string|string[] $countryCode
+     * @param  string|string[] $iso
      * @return $this
      */
     public function addCountryCodeFilter($countryCode, $iso = ['iso3', 'iso2'])
@@ -244,7 +244,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Add filter by country code(s) to collection
      *
-     * @param string|string[] $countryId
+     * @param  string|string[] $countryId
      * @return $this
      */
     public function addCountryIdFilter($countryId)
@@ -262,7 +262,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Convert collection items to select options array
      *
-     * @param string|boolean $emptyLabel
+     * @param  string|boolean $emptyLabel
      * @return array
      */
     public function toOptionArray($emptyLabel = ' ')
@@ -309,7 +309,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Adds default country to options
      *
-     * @param array $options
+     * @param  array $options
      * @return void
      */
     private function addDefaultCountryToOptions(array &$options)
@@ -334,7 +334,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Set foreground countries array
      *
-     * @param string|array $foregroundCountries
+     * @param  string|array $foregroundCountries
      * @return $this
      */
     public function setForegroundCountries($foregroundCountries)
@@ -350,13 +350,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get list of countries with required states
      *
      * @return \Magento\Directory\Model\Country[]
-     * @since 100.1.0
+     * @since  100.1.0
      */
     public function getCountriesWithRequiredStates()
     {
         $countries = [];
         foreach ($this->getItems() as $country) {
-            /** @var \Magento\Directory\Model\Country $country  */
+            /**
+ * @var \Magento\Directory\Model\Country $country  
+*/
             if ($country->getRegionCollection()->getSize() > 0
                 && !in_array($country->getId(), $this->countriesWithNotRequiredStates)
             ) {

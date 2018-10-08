@@ -22,9 +22,10 @@ class Wrapper extends \Magento\Framework\View\Element\Template
 
     /**
      * Wrapper constructor.
-     * @param Template\Context $context
+     *
+     * @param Template\Context     $context
      * @param UiComponentGenerator $uiComponentGenerator
-     * @param array $data
+     * @param array                $data
      */
     public function __construct(Template\Context $context, UiComponentGenerator $uiComponentGenerator, array $data = [])
     {
@@ -37,8 +38,8 @@ class Wrapper extends \Magento\Framework\View\Element\Template
      *
      * Can be useful when we need to inject common data for few instances of UI components
      *
-     * @param UiComponentInterface $uiComponent
-     * @param array $widgetData
+     * @param  UiComponentInterface $uiComponent
+     * @param  array                $widgetData
      * @return void
      */
     private function injectDataInDataSource(UiComponentInterface $uiComponent, array $widgetData)
@@ -56,8 +57,8 @@ class Wrapper extends \Magento\Framework\View\Element\Template
      * Instead of DataProvider it allows to launch few instances of one Ui Component on one page, depend
      * on entire data
      *
-     * @param UiComponentInterface $uiComponent
-     * @param array $data
+     * @param  UiComponentInterface $uiComponent
+     * @param  array                $data
      * @return void
      */
     private function addDataToChildComponents(UiComponentInterface $uiComponent, array $data)
@@ -82,12 +83,14 @@ class Wrapper extends \Magento\Framework\View\Element\Template
      * Additional settings and data can be provided in this method
      * This data will be merged and can be used on store front with according ui component.
      *
-     * @param array $data -> data, that can be injected to data source or to child components
+     * @param  array $data -> data, that can be injected to data source or to child components
      * @return string
      */
     public function renderApp($data = [])
     {
-        /** @var \Magento\Ui\Component\AbstractComponent $uiComponent */
+        /**
+ * @var \Magento\Ui\Component\AbstractComponent $uiComponent 
+*/
         $uiComponent = $this->uiComponentGenerator
             ->generateUiComponent($this->getData('uiComponent'), $this->getLayout());
         $this->injectDataInDataSource($uiComponent, $this->getData());

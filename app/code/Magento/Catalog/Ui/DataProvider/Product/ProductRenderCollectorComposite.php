@@ -21,6 +21,7 @@ class ProductRenderCollectorComposite implements ProductRenderCollectorInterface
 
     /**
      * ProductRenderCollectorComposite constructor.
+     *
      * @param array $productProviders
      */
     public function __construct(array $productProviders = [])

@@ -7,7 +7,7 @@
 /**
  * Product options abstract type block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Product\View\Options;
 
@@ -45,9 +45,9 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
-     * @param \Magento\Catalog\Helper\Data $catalogData,
-     * @param array $data
+     * @param \Magento\Framework\Pricing\Helper\Data           $pricingHelper
+     * @param \Magento\Catalog\Helper\Data                     $catalogData,
+     * @param array                                            $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -63,7 +63,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
     /**
      * Set Product object
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param  \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      */
     public function setProduct(\Magento\Catalog\Model\Product $product = null)
@@ -85,7 +85,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
     /**
      * Set option
      *
-     * @param \Magento\Catalog\Model\Product\Option $option
+     * @param  \Magento\Catalog\Model\Product\Option $option
      * @return \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      */
     public function setOption(\Magento\Catalog\Model\Product\Option $option)
@@ -136,8 +136,8 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
     /**
      * Return formatted price
      *
-     * @param array $value
-     * @param bool $flag
+     * @param  array $value
+     * @param  bool  $flag
      * @return string
      */
     protected function _formatPrice($value, $flag = true)
@@ -173,8 +173,8 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
     /**
      * Get price with including/excluding tax
      *
-     * @param float $price
-     * @param bool $includingTax
+     * @param  float $price
+     * @param  bool  $includingTax
      * @return float
      */
     public function getPrice($price, $includingTax = null)
@@ -190,7 +190,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
     /**
      * Returns price converted to current currency rate
      *
-     * @param float $price
+     * @param  float $price
      * @return float|string
      */
     public function getCurrencyPrice($price)

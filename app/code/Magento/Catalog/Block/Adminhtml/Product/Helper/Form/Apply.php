@@ -7,7 +7,7 @@
 /**
  * Attribute form apply element
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
@@ -40,8 +40,8 @@ class Apply extends \Magento\Framework\Data\Form\Element\Multiselect
     /**
      * Duplicate interface of \Magento\Framework\Data\Form\Element\AbstractElement::setReadonly
      *
-     * @param bool $readonly
-     * @param bool $useDisabled
+     * @param  bool $readonly
+     * @param  bool $useDisabled
      * @return $this
      */
     public function setReadonly($readonly, $useDisabled = false)

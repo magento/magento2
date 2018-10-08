@@ -23,7 +23,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @since 100.0.2
+ * @since                                          100.0.2
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
 {
@@ -133,23 +133,23 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     private $serializer;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\View\FileSystem $viewFileSystem
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Catalog\Model\Product\Type $productType
-     * @param \Magento\Widget\Model\Config\Reader $reader
-     * @param \Magento\Widget\Model\Widget $widgetModel
-     * @param \Magento\Widget\Model\NamespaceResolver $namespaceResolver
-     * @param \Magento\Framework\Math\Random $mathRandom
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Widget\Helper\Conditions $conditionsHelper
+     * @param \Magento\Framework\Model\Context                        $context
+     * @param \Magento\Framework\Registry                             $registry
+     * @param \Magento\Framework\Escaper                              $escaper
+     * @param \Magento\Framework\View\FileSystem                      $viewFileSystem
+     * @param \Magento\Framework\App\Cache\TypeListInterface          $cacheTypeList
+     * @param \Magento\Catalog\Model\Product\Type                     $productType
+     * @param \Magento\Widget\Model\Config\Reader                     $reader
+     * @param \Magento\Widget\Model\Widget                            $widgetModel
+     * @param \Magento\Widget\Model\NamespaceResolver                 $namespaceResolver
+     * @param \Magento\Framework\Math\Random                          $mathRandom
+     * @param \Magento\Framework\Filesystem                           $filesystem
+     * @param \Magento\Widget\Helper\Conditions                       $conditionsHelper
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $relatedCacheTypes
-     * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param \Magento\Framework\Data\Collection\AbstractDb           $resourceCollection
+     * @param array                                                   $relatedCacheTypes
+     * @param array                                                   $data
+     * @param \Magento\Framework\Serialize\Serializer\Json            $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -216,7 +216,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     /**
      * Processing object before save data
      *
-     * @return $this
+     * @return                                       $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -329,7 +329,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * The widget code is the 'id' attribute in the widget node.
      * 'code' is used in Magento\Widget\Model\Widget->getWidgetsArray when the array of widgets is created.
      *
-     * @param string $code
+     * @param  string $code
      * @return $this
      */
     public function setCode($code)
@@ -342,7 +342,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Setter
      * Prepare widget type
      *
-     * @param string $type
+     * @param  string $type
      * @return $this
      */
     public function setType($type)
@@ -410,7 +410,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve option array of widget types
      *
-     * @param string $value
+     * @param  string $value
      * @return array
      */
     public function getWidgetsOptionArray($value = 'code')
@@ -426,9 +426,9 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     /**
      * Get the widget reference (code or namespace\class name) for the passed in type or code.
      *
-     * @param string $matchParam
-     * @param string $value
-     * @param string $requestedParam
+     * @param  string $matchParam
+     * @param  string $value
+     * @param  string $requestedParam
      * @return string|null
      */
     public function getWidgetReference($matchParam, $value, $requestedParam)
@@ -447,7 +447,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     /**
      * Load widget XML config and merge with theme widget config
      *
-     * @return array|null
+     * @return                                       array|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getWidgetConfigAsArray()
@@ -536,7 +536,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve widget templates that supported by specified container name
      *
-     * @param string $containerName
+     * @param  string $containerName
      * @return array
      */
     public function getWidgetSupportedTemplatesByContainer($containerName)
@@ -570,9 +570,9 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     /**
      * Generate layout update xml
      *
-     * @param string $container
-     * @param string $templatePath
-     * @return string
+     * @param                                        string $container
+     * @param                                        string $templatePath
+     * @return                                       string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

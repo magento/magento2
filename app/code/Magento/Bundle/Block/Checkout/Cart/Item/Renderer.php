@@ -25,17 +25,17 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
     protected $_bundleProductConfiguration = null;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\View\Element\Template\Context                          $context
+     * @param \Magento\Catalog\Helper\Product\Configuration                             $productConfig
+     * @param \Magento\Checkout\Model\Session                                           $checkoutSession
      * @param \Magento\Catalog\Block\Product\ImageBuilder|\Magento\Catalog\Helper\Image $imageBuilder
-     * @param \Magento\Framework\Url\Helper\Data $urlHelper
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param InterpretationStrategyInterface $messageInterpretationStrategy
-     * @param Configuration $bundleProductConfiguration
-     * @param array $data
+     * @param \Magento\Framework\Url\Helper\Data                                        $urlHelper
+     * @param \Magento\Framework\Message\ManagerInterface                               $messageManager
+     * @param PriceCurrencyInterface                                                    $priceCurrency
+     * @param \Magento\Framework\Module\Manager                                         $moduleManager
+     * @param InterpretationStrategyInterface                                           $messageInterpretationStrategy
+     * @param Configuration                                                             $bundleProductConfiguration
+     * @param array                                                                     $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

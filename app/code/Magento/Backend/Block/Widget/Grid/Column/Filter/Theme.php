@@ -17,10 +17,10 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     protected $_labelFactory;
 
     /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Framework\DB\Helper $resourceHelper
+     * @param \Magento\Backend\Block\Context                    $context
+     * @param \Magento\Framework\DB\Helper                      $resourceHelper
      * @param \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory
-     * @param array $data
+     * @param array                                             $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -63,7 +63,9 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     {
         $options = $this->getColumn()->getOptions();
         if (empty($options) || !is_array($options)) {
-            /** @var $label \Magento\Framework\View\Design\Theme\Label */
+            /**
+ * @var $label \Magento\Framework\View\Design\Theme\Label 
+*/
             $label = $this->_labelFactory->create();
             $options = $label->getLabelsCollection();
         }
@@ -73,7 +75,7 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * Render SELECT options
      *
-     * @param array $options
+     * @param  array $options
      * @return string
      */
     protected function _drawOptions($options)

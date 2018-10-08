@@ -58,10 +58,10 @@ class QueueManagement
     private $messageStatusCollectionFactory;
 
     /**
-     * @param \Magento\MysqlMq\Model\ResourceModel\Queue $messageResource
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\MysqlMq\Model\ResourceModel\Queue                          $messageResource
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface                  $scopeConfig
      * @param \Magento\MysqlMq\Model\ResourceModel\MessageStatusCollectionFactory $messageStatusCollectionFactory
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime                         $dateTime
      */
     public function __construct(
         \Magento\MysqlMq\Model\ResourceModel\Queue $messageResource,
@@ -78,9 +78,9 @@ class QueueManagement
     /**
      * Add message to all specified queues.
      *
-     * @param string $topic
-     * @param string $message
-     * @param string[] $queueNames
+     * @param  string   $topic
+     * @param  string   $message
+     * @param  string[] $queueNames
      * @return $this
      */
     public function addMessageToQueues($topic, $message, $queueNames)
@@ -93,11 +93,11 @@ class QueueManagement
     /**
      * Add messages to all specified queues.
      *
-     * @param string $topic
-     * @param array $messages
-     * @param string[] $queueNames
+     * @param  string   $topic
+     * @param  array    $messages
+     * @param  string[] $queueNames
      * @return $this
-     * @since 100.2.0
+     * @since  100.2.0
      */
     public function addMessagesToQueues($topic, $messages, $queueNames)
     {
@@ -136,7 +136,7 @@ class QueueManagement
     /**
      * Based on message status, updated date and timeout for the status, move it to next state
      *
-     * @param MessageStatus $messageStatus
+     * @param  MessageStatus $messageStatus
      * @return void
      */
     private function processMessagePerStatus($messageStatus)
@@ -144,11 +144,13 @@ class QueueManagement
         $now = $this->dateTime->gmtTimestamp();
 
         if ($messageStatus->getStatus() == self::MESSAGE_STATUS_COMPLETE
-            && strtotime($messageStatus->getUpdatedAt()) < ($now - $this->getCompletedMessageLifetime())) {
+            && strtotime($messageStatus->getUpdatedAt()) < ($now - $this->getCompletedMessageLifetime())
+        ) {
             $messageStatus->setStatus(self::MESSAGE_STATUS_TO_BE_DELETED)
                 ->save();
         } elseif ($messageStatus->getStatus() == self::MESSAGE_STATUS_ERROR
-            && strtotime($messageStatus->getUpdatedAt()) < ($now - $this->getErrorMessageLifetime())) {
+            && strtotime($messageStatus->getUpdatedAt()) < ($now - $this->getErrorMessageLifetime())
+        ) {
             $messageStatus->setStatus(self::MESSAGE_STATUS_TO_BE_DELETED)
                 ->save();
         } elseif ($messageStatus->getStatus() == self::MESSAGE_STATUS_IN_PROGRESS
@@ -257,8 +259,8 @@ class QueueManagement
      *
      * If queue does not contain enough messages, method is not waiting for more messages.
      *
-     * @param string $queue
-     * @param int|null $maxMessagesNumber
+     * @param  string   $queue
+     * @param  int|null $maxMessagesNumber
      * @return array <pre>
      * [
      *     [
@@ -296,7 +298,7 @@ class QueueManagement
     /**
      * Push message back to queue for one more processing trial. Affects message in particular queue only.
      *
-     * @param int $messageRelationId
+     * @param  int $messageRelationId
      * @return void
      */
     public function pushToQueueForRetry($messageRelationId)
@@ -307,8 +309,8 @@ class QueueManagement
     /**
      * Change status of messages.
      *
-     * @param int[] $messageRelationIds
-     * @param int $status
+     * @param  int[] $messageRelationIds
+     * @param  int   $status
      * @return void
      */
     public function changeStatus($messageRelationIds, $status)

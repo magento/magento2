@@ -16,7 +16,7 @@ use Magento\Tax\Helper\Data;
 /**
  *  Website Payments Pro Hosted Solution request model to get token.
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 class Request extends DataObject
 {
@@ -73,9 +73,9 @@ class Request extends DataObject
 
     /**
      * @param \Magento\Framework\Locale\Resolver $localeResolver
-     * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param array $data
+     * @param \Magento\Customer\Helper\Address   $customerAddress
+     * @param \Magento\Tax\Helper\Data           $taxData
+     * @param array                              $data
      */
     public function __construct(
         Resolver $localeResolver,
@@ -118,7 +118,7 @@ class Request extends DataObject
     /**
      * Append payment data to request
      *
-     * @param \Magento\Paypal\Model\Hostedpro $paymentMethod
+     * @param  \Magento\Paypal\Model\Hostedpro $paymentMethod
      * @return $this
      */
     public function setPaymentMethod($paymentMethod)
@@ -133,7 +133,7 @@ class Request extends DataObject
     /**
      * Append order data to request
      *
-     * @param \Magento\Sales\Model\Order $order
+     * @param  \Magento\Sales\Model\Order $order
      * @return $this
      */
     public function setOrder(Order $order)
@@ -149,7 +149,7 @@ class Request extends DataObject
      * Add amount data to request
      *
      * @access public
-     * @param \Magento\Sales\Model\Order $order
+     * @param  \Magento\Sales\Model\Order $order
      * @return $this
      */
     public function setAmount(Order $order)
@@ -160,7 +160,8 @@ class Request extends DataObject
 
     /**
      * Calculate amount for order
-     * @param \Magento\Sales\Model\Order $order
+     *
+     * @param  \Magento\Sales\Model\Order $order
      * @return array
      * @throws \Exception
      */
@@ -176,7 +177,8 @@ class Request extends DataObject
 
     /**
      * Get payment amount data with excluded tax
-     * @param \Magento\Sales\Model\Order $order
+     *
+     * @param  \Magento\Sales\Model\Order $order
      * @return array
      */
     private function getNonTaxableAmount(Order $order)
@@ -195,7 +197,8 @@ class Request extends DataObject
 
     /**
      * Get order amount data with included tax
-     * @param \Magento\Sales\Model\Order $order
+     *
+     * @param  \Magento\Sales\Model\Order $order
      * @return array
      */
     private function getTaxableAmount(Order $order)
@@ -211,7 +214,7 @@ class Request extends DataObject
     /**
      * Get payment request data as array
      *
-     * @param \Magento\Paypal\Model\Hostedpro $paymentMethod
+     * @param  \Magento\Paypal\Model\Hostedpro $paymentMethod
      * @return array
      */
     protected function getPaymentData(Hostedpro $paymentMethod)
@@ -238,7 +241,7 @@ class Request extends DataObject
     /**
      * Get order request data as array
      *
-     * @param \Magento\Sales\Model\Order $order
+     * @param  \Magento\Sales\Model\Order $order
      * @return array
      */
     protected function getOrderData(Order $order)
@@ -266,8 +269,8 @@ class Request extends DataObject
     /**
      * Export address data to request
      *
-     * @param DataObject $address
-     * @param string $type
+     * @param  DataObject $address
+     * @param  string     $type
      * @return array
      */
     protected function getAddress(DataObject $address, $type = '')
@@ -292,7 +295,7 @@ class Request extends DataObject
     /**
      * Export region code from address data
      *
-     * @param DataObject $address
+     * @param  DataObject $address
      * @return string
      */
     protected function getRegion(DataObject $address)
@@ -304,7 +307,7 @@ class Request extends DataObject
     /**
      * Export streets from address data
      *
-     * @param DataObject $address
+     * @param  DataObject $address
      * @return array
      */
     protected function getAddressStreets(DataObject $address)

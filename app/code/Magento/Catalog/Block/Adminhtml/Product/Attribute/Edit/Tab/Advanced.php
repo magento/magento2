@@ -7,7 +7,7 @@
 /**
  * Product attribute add/edit form main tab
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
@@ -47,12 +47,12 @@ class Advanced extends Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param Yesno $yesNo
-     * @param Data $eavData
-     * @param array $disableScopeChangeList
-     * @param array $data
+     * @param \Magento\Framework\Registry             $registry
+     * @param \Magento\Framework\Data\FormFactory     $formFactory
+     * @param Yesno                                   $yesNo
+     * @param Data                                    $eavData
+     * @param array                                   $disableScopeChangeList
+     * @param array                                   $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -72,7 +72,7 @@ class Advanced extends Generic
     /**
      * Adding product form elements for editing attribute
      *
-     * @return $this
+     * @return                  $this
      * @SuppressWarnings(PHPMD)
      */
     protected function _prepareForm()

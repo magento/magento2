@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Config\Backend;
 /**
  * Config category field backend
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 class Category extends \Magento\Framework\App\Config\Value
 {
@@ -22,14 +22,14 @@ class Category extends \Magento\Framework\App\Config\Value
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Catalog\Model\Category $catalogCategory
+     * @param \Magento\Framework\Model\Context                        $context
+     * @param \Magento\Framework\Registry                             $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface      $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface          $cacheTypeList
+     * @param \Magento\Catalog\Model\Category                         $catalogCategory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
+     * @param \Magento\Framework\Data\Collection\AbstractDb           $resourceCollection
+     * @param array                                                   $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

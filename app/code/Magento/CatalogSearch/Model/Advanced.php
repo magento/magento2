@@ -22,6 +22,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog advanced search model
+ *
  * @method int getEntityTypeId()
  * @method \Magento\CatalogSearch\Model\Advanced setEntityTypeId(int $value)
  * @method int getAttributeSetId()
@@ -39,11 +40,11 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method string getUpdatedAt()
  * @method \Magento\CatalogSearch\Model\Advanced setUpdatedAt(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author                                         Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
- * @since 100.0.2
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ * @since                                          100.0.2
+ * @deprecated                                     CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
  *             will replace it as the default search engine.
  */
 class Advanced extends \Magento\Framework\Model\AbstractModel
@@ -114,17 +115,17 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Construct
      *
-     * @param Context $context
-     * @param Registry $registry
+     * @param Context                    $context
+     * @param Registry                   $registry
      * @param AttributeCollectionFactory $attributeCollectionFactory
-     * @param Visibility $catalogProductVisibility
-     * @param Config $catalogConfig
-     * @param CurrencyFactory $currencyFactory
-     * @param ProductFactory $productFactory
-     * @param StoreManagerInterface $storeManager
-     * @param ProductCollectionFactory $productCollectionFactory
-     * @param AdvancedFactory $advancedFactory
-     * @param array $data
+     * @param Visibility                 $catalogProductVisibility
+     * @param Config                     $catalogConfig
+     * @param CurrencyFactory            $currencyFactory
+     * @param ProductFactory             $productFactory
+     * @param StoreManagerInterface      $storeManager
+     * @param ProductCollectionFactory   $productCollectionFactory
+     * @param AdvancedFactory            $advancedFactory
+     * @param array                      $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -160,9 +161,9 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Add advanced search filters to product collection
      *
-     * @param   array $values
-     * @return  $this
-     * @throws LocalizedException
+     * @param                                        array $values
+     * @return                                       $this
+     * @throws                                       LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -281,7 +282,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Prepare product collection
      *
-     * @param Collection $collection
+     * @param  Collection $collection
      * @return $this
      */
     public function prepareProductCollection($collection)
@@ -299,7 +300,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @param EntityAttribute $attribute
-     * @param mixed $value
+     * @param mixed           $value
      * @return void
      */
     protected function addSearchCriteria($attribute, $value)
@@ -314,9 +315,9 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      *
      * @todo: Move this code to block
      *
-     * @param   EntityAttribute $attribute
-     * @param   mixed $value
-     * @return  string|bool
+     * @param                                        EntityAttribute $attribute
+     * @param                                        mixed           $value
+     * @return                                       string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -326,7 +327,9 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             if (isset($value['from']) && isset($value['to'])) {
                 if (!empty($value['from']) || !empty($value['to'])) {
                     if (isset($value['currency'])) {
-                        /** @var $currencyModel Currency */
+                        /**
+ * @var $currencyModel Currency 
+*/
                         $currencyModel = $this->_currencyFactory->create()->load($value['currency']);
                         $from = $currencyModel->format($value['from'], [], false);
                         $to = $currencyModel->format($value['to'], [], false);
@@ -354,8 +357,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             }
         }
 
-        if (($attribute->getFrontendInput() == 'select' ||
-                $attribute->getFrontendInput() == 'multiselect') && is_array($value)
+        if (($attribute->getFrontendInput() == 'select' 
+            || $attribute->getFrontendInput() == 'multiselect') && is_array($value)
         ) {
             foreach ($value as $key => $val) {
                 $value[$key] = $attribute->getSource()->getOptionText($val);

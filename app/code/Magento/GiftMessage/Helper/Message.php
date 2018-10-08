@@ -10,13 +10,13 @@ use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 
 /**
  * Gift Message helper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Message extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Gift messages allow section in configuration
-     *
      */
     const XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS = 'sales/gift_options/allow_items';
 
@@ -69,13 +69,13 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     private $_storeManager;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Helper\Context           $context
+     * @param \Magento\Store\Model\StoreManagerInterface      $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\GiftMessage\Model\MessageFactory $giftMessageFactory
-     * @param \Magento\Framework\Escaper $escaper
-     * @param array $skipMessageCheck
+     * @param \Magento\Framework\View\LayoutFactory           $layoutFactory
+     * @param \Magento\GiftMessage\Model\MessageFactory       $giftMessageFactory
+     * @param \Magento\Framework\Escaper                      $escaper
+     * @param array                                           $skipMessageCheck
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -102,9 +102,9 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve inline giftmessage edit form for specified entity
      *
-     * @param string $type
-     * @param \Magento\Framework\DataObject $entity
-     * @param bool $dontDisplayContainer
+     * @param  string                        $type
+     * @param  \Magento\Framework\DataObject $entity
+     * @param  bool                          $dontDisplayContainer
      * @return string
      */
     public function getInline($type, \Magento\Framework\DataObject $entity, $dontDisplayContainer = false)
@@ -131,10 +131,10 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check if giftmessages is allowed for specified entity.
      *
-     * @param string $type
-     * @param \Magento\Framework\DataObject $entity
-     * @param \Magento\Store\Model\Store|int|null $store
-     * @return bool|string|null
+     * @param                                        string                              $type
+     * @param                                        \Magento\Framework\DataObject       $entity
+     * @param                                        \Magento\Store\Model\Store|int|null $store
+     * @return                                       bool|string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isMessagesAllowed($type, \Magento\Framework\DataObject $entity, $store = null)
@@ -193,8 +193,8 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check availability of gift messages from store config if flag eq 2.
      *
-     * @param bool $productConfig
-     * @param \Magento\Store\Model\Store|int|null $store
+     * @param  bool                                $productConfig
+     * @param  \Magento\Store\Model\Store|int|null $store
      * @return bool|string|null
      */
     protected function _getDependenceFromStoreConfig($productConfig, $store = null)
@@ -214,7 +214,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve escaped and preformated gift message text for specified entity
      *
-     * @param \Magento\Framework\DataObject $entity
+     * @param  \Magento\Framework\DataObject $entity
      * @return string|null
      */
     public function getEscapedGiftMessage(\Magento\Framework\DataObject $entity)
@@ -229,7 +229,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve gift message for entity. If message not exists return null
      *
-     * @param \Magento\Framework\DataObject $entity
+     * @param  \Magento\Framework\DataObject $entity
      * @return \Magento\GiftMessage\Model\Message
      */
     public function getGiftMessageForEntity(\Magento\Framework\DataObject $entity)
@@ -246,7 +246,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * If cached data not found return null.
      *
-     * @param string $key
+     * @param  string $key
      * @return mixed
      */
     public function getCached($key)
@@ -260,7 +260,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check availability for internal cached data with specified key
      *
-     * @param string $key
+     * @param  string $key
      * @return bool
      */
     public function isCached($key)
@@ -271,8 +271,8 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Set internal cache data with specified key
      *
-     * @param string $key
-     * @param mixed $value
+     * @param  string $key
+     * @param  mixed  $value
      * @return $this
      */
     public function setCached($key, $value)
@@ -284,9 +284,9 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check availability for onepage checkout items
      *
-     * @param array $quote
-     * @param \Magento\Store\Model\Store|int|null $store
-     * @return bool
+     * @param                                        array                               $quote
+     * @param                                        \Magento\Store\Model\Store|int|null $store
+     * @return                                       bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getAvailableForQuoteItems($quote, $store = null)
@@ -302,9 +302,9 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check availability for multishipping checkout items
      *
-     * @param array $items
-     * @param \Magento\Store\Model\Store|int|null $store
-     * @return bool
+     * @param                                        array                               $items
+     * @param                                        \Magento\Store\Model\Store|int|null $store
+     * @return                                       bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getAvailableForAddressItems($items, $store = null)
@@ -320,7 +320,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve gift message with specified id
      *
-     * @param int $messageId
+     * @param  int $messageId
      * @return \Magento\GiftMessage\Model\Message
      */
     public function getGiftMessage($messageId = null)

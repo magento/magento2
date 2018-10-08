@@ -27,7 +27,7 @@ class FullTextSearchCheck
      * In case when the $query does not requires full text search
      * - we can skip joining catalog_eav_attribute table because it becomes excessive
      *
-     * @param QueryInterface $query
+     * @param  QueryInterface $query
      * @return bool
      * @throws \InvalidArgumentException
      */
@@ -44,20 +44,20 @@ class FullTextSearchCheck
     private function processQuery(QueryInterface $query)
     {
         switch ($query->getType()) {
-            case QueryInterface::TYPE_MATCH:
-                return true;
+        case QueryInterface::TYPE_MATCH:
+            return true;
                 break;
 
-            case QueryInterface::TYPE_BOOL:
-                return $this->processBoolQuery($query);
+        case QueryInterface::TYPE_BOOL:
+            return $this->processBoolQuery($query);
                 break;
 
-            case QueryInterface::TYPE_FILTER:
-                return $this->processFilterQuery($query);
+        case QueryInterface::TYPE_FILTER:
+            return $this->processFilterQuery($query);
                 break;
 
-            default:
-                throw new \InvalidArgumentException(sprintf('Unknown query type \'%s\'', $query->getType()));
+        default:
+            throw new \InvalidArgumentException(sprintf('Unknown query type \'%s\'', $query->getType()));
         }
     }
 
@@ -97,21 +97,21 @@ class FullTextSearchCheck
     private function processFilterQuery(Filter $query)
     {
         switch ($query->getReferenceType()) {
-            case Filter::REFERENCE_QUERY:
-                return $this->processQuery($query->getReference());
+        case Filter::REFERENCE_QUERY:
+            return $this->processQuery($query->getReference());
                 break;
 
-            case Filter::REFERENCE_FILTER:
-                return false;
+        case Filter::REFERENCE_FILTER:
+            return false;
                 break;
 
-            default:
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'Unknown reference type \'%s\'',
-                        $query->getReferenceType()
-                    )
-                );
+        default:
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Unknown reference type \'%s\'',
+                    $query->getReferenceType()
+                )
+            );
         }
     }
 }

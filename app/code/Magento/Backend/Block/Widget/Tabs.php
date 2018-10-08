@@ -51,10 +51,10 @@ class Tabs extends \Magento\Backend\Block\Widget
     private $_jsonEncoder;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Template\Context  $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param array $data
+     * @param \Magento\Backend\Model\Auth\Session      $authSession
+     * @param array                                    $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -80,7 +80,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * Set destination element id
      *
-     * @param string $elementId
+     * @param  string $elementId
      * @return $this
      */
     public function setDestElementId($elementId)
@@ -92,10 +92,10 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * Add new tab after another
      *
-     * @param   string $tabId new tab Id
-     * @param   array|\Magento\Framework\DataObject $tab
-     * @param   string $afterTabId
-     * @return  void
+     * @param  string                              $tabId      new tab Id
+     * @param  array|\Magento\Framework\DataObject $tab
+     * @param  string                              $afterTabId
+     * @return void
      */
     public function addTabAfter($tabId, $tab, $afterTabId)
     {
@@ -106,10 +106,10 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * Add new tab
      *
-     * @param   string $tabId
-     * @param   array|\Magento\Framework\DataObject|string $tab
-     * @return  $this
-     * @throws  \Exception
+     * @param                                        string                                     $tabId
+     * @param                                        array|\Magento\Framework\DataObject|string $tab
+     * @return                                       $this
+     * @throws                                       \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addTab($tabId, $tab)
@@ -157,8 +157,8 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * Add tab by tab block name
      *
-     * @param string $tab
-     * @param string $tabId
+     * @param  string $tab
+     * @param  string $tabId
      * @return void
      * @throws \Exception
      */
@@ -189,14 +189,12 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Set Active Tab
      * Tab has to be not hidden and can show
      *
-     * @param string $tabId
+     * @param  string $tabId
      * @return $this
      */
     public function setActiveTab($tabId)
     {
-        if (isset(
-            $this->_tabs[$tabId]
-        ) && $this->canShowTab(
+        if (isset($this->_tabs[$tabId]) && $this->canShowTab(
             $this->_tabs[$tabId]
         ) && !$this->getTabIsHidden(
             $this->_tabs[$tabId]
@@ -215,7 +213,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * Set Active Tab
      *
-     * @param string $tabId
+     * @param  string $tabId
      * @return $this
      */
     protected function _setActiveTab($tabId)
@@ -244,7 +242,9 @@ class Tabs extends \Magento\Backend\Block\Widget
         }
 
         if ($this->_activeTab === null && !empty($this->_tabs)) {
-            /** @var TabInterface $tab */
+            /**
+ * @var TabInterface $tab 
+*/
             $this->_activeTab = (reset($this->_tabs))->getId();
         }
         
@@ -329,7 +329,9 @@ class Tabs extends \Magento\Backend\Block\Widget
 
         $ordered = [];
 
-        /** @var TabInterface $tab */
+        /**
+ * @var TabInterface $tab 
+*/
         foreach ($orderByPosition as $tab) {
             $ordered[$tab->getId()] = $tab;
         }
@@ -359,7 +361,7 @@ class Tabs extends \Magento\Backend\Block\Widget
 
     /**
      * @param \Magento\Framework\DataObject|TabInterface $tab
-     * @param bool $withPrefix
+     * @param bool                                       $withPrefix
      * @return string
      */
     public function getTabId($tab, $withPrefix = true)
@@ -471,9 +473,9 @@ class Tabs extends \Magento\Backend\Block\Widget
      * Mark tabs as dependent of each other
      * Arbitrary number of tabs can be specified, but at least two
      *
-     * @param string $tabOneId
-     * @param string $tabTwoId
-     * @return void
+     * @param                                         string $tabOneId
+     * @param                                         string $tabTwoId
+     * @return                                        void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function bindShadowTabs($tabOneId, $tabTwoId)
@@ -506,7 +508,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * Obtain shadow tabs information
      *
-     * @param bool $asJson
+     * @param  bool $asJson
      * @return array|string
      */
     public function getAllShadowTabs($asJson = true)
@@ -529,9 +531,9 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * Set tab property by tab's identifier
      *
-     * @param string $tab
-     * @param string $key
-     * @param mixed $value
+     * @param  string $tab
+     * @param  string $key
+     * @param  mixed  $value
      * @return $this
      */
     public function setTabData($tab, $key, $value)
@@ -549,7 +551,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * Removes tab with passed id from tabs block
      *
-     * @param string $tabId
+     * @param  string $tabId
      * @return $this
      */
     public function removeTab($tabId)

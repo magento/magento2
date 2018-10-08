@@ -16,14 +16,14 @@ use Magento\Framework\Filesystem\DirectoryList;
  * Perform fetching reports from remote servers with following saving them to database
  * Prepare report rows for \Magento\Paypal\Model\Report\Settlement\Row model
  *
- * @method string getReportDate()
- * @method \Magento\Paypal\Model\Report\Settlement setReportDate(string $value)
- * @method string getAccountId()
- * @method \Magento\Paypal\Model\Report\Settlement setAccountId(string $value)
- * @method string getFilename()
- * @method \Magento\Paypal\Model\Report\Settlement setFilename(string $value)
- * @method string getLastModified()
- * @method \Magento\Paypal\Model\Report\Settlement setLastModified(string $value)
+ * @method                                         string getReportDate()
+ * @method                                         \Magento\Paypal\Model\Report\Settlement setReportDate(string $value)
+ * @method                                         string getAccountId()
+ * @method                                         \Magento\Paypal\Model\Report\Settlement setAccountId(string $value)
+ * @method                                         string getFilename()
+ * @method                                         \Magento\Paypal\Model\Report\Settlement setFilename(string $value)
+ * @method                                         string getLastModified()
+ * @method                                         \Magento\Paypal\Model\Report\Settlement setLastModified(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Settlement extends \Magento\Framework\Model\AbstractModel
@@ -179,15 +179,15 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     private $serializer;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Model\Context                        $context
+     * @param \Magento\Framework\Registry                             $registry
+     * @param \Magento\Framework\Filesystem                           $filesystem
+     * @param \Magento\Store\Model\StoreManagerInterface              $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface      $scopeConfig
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param \Magento\Framework\Data\Collection\AbstractDb           $resourceCollection
+     * @param array                                                   $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null       $serializer
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -239,7 +239,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * Goes to specified host/path and fetches reports from there.
      * Save reports to database.
      *
-     * @param \Magento\Framework\Filesystem\Io\Sftp $connection
+     * @param  \Magento\Framework\Filesystem\Io\Sftp $connection
      * @return int Number of report rows that were fetched and saved successfully
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -303,7 +303,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     /**
      * Connect to an SFTP server using specified configuration
      *
-     * @param array $config
+     * @param  array $config
      * @return \Magento\Framework\Filesystem\Io\Sftp
      * @throws \InvalidArgumentException
      */
@@ -327,9 +327,9 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     /**
      * Parse CSV file and collect report rows
      *
-     * @param string $localCsv Path to CSV file
-     * @param string $format CSV format(column names)
-     * @return $this
+     * @param                                        string $localCsv Path to CSV file
+     * @param                                        string $format   CSV format(column names)
+     * @return                                       $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function parseCsv($localCsv, $format = 'new')
@@ -348,51 +348,51 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
             }
             $lineType = $line[0];
             switch ($lineType) {
-                case 'RH':
-                    // Report header.
-                    $lastModified = new \DateTime($line[1]);
-                    $this->setReportLastModified(
-                        $lastModified->format('Y-m-d H:i:s')
-                    );
-                    //$this->setAccountId($columns[2]); -- probably we'll just take that from the section header...
-                    break;
-                case 'FH':
-                    // File header.
-                    // Nothing interesting here, move along
-                    break;
-                case 'SH':
-                    // Section header.
-                    $this->setAccountId($line[3]);
-                    $this->loadByAccountAndDate();
-                    break;
-                case 'CH':
-                    // Section columns.
-                    // In case ever the column order is changed, we will have the items recorded properly
-                    // anyway. We have named, not numbered columns.
-                    $count = count($line);
-                    for ($i = 1; $i < $count; $i++) {
-                        $sectionColumns[$line[$i]] = $i;
-                    }
-                    $flippedSectionColumns = array_flip($sectionColumns);
-                    break;
-                case 'SB':
-                    // Section body.
-                    $this->_rows[] = $this->getBodyItems($line, $flippedSectionColumns, $rowMap);
-                    break;
-                case 'SC':
-                    // Section records count.
-                case 'RC':
-                    // Report records count.
-                case 'SF':
-                    // Section footer.
-                case 'FF':
-                    // File footer.
-                case 'RF':
-                    // Report footer.
-                    // Nothing to see here, move along
-                    break;
-                default:
-                    break;
+            case 'RH':
+                // Report header.
+                $lastModified = new \DateTime($line[1]);
+                $this->setReportLastModified(
+                    $lastModified->format('Y-m-d H:i:s')
+                );
+                //$this->setAccountId($columns[2]); -- probably we'll just take that from the section header...
+                break;
+            case 'FH':
+                // File header.
+                // Nothing interesting here, move along
+                break;
+            case 'SH':
+                // Section header.
+                $this->setAccountId($line[3]);
+                $this->loadByAccountAndDate();
+                break;
+            case 'CH':
+                // Section columns.
+                // In case ever the column order is changed, we will have the items recorded properly
+                // anyway. We have named, not numbered columns.
+                $count = count($line);
+                for ($i = 1; $i < $count; $i++) {
+                    $sectionColumns[$line[$i]] = $i;
+                }
+                $flippedSectionColumns = array_flip($sectionColumns);
+                break;
+            case 'SB':
+                // Section body.
+                $this->_rows[] = $this->getBodyItems($line, $flippedSectionColumns, $rowMap);
+                break;
+            case 'SC':
+                // Section records count.
+            case 'RC':
+                // Report records count.
+            case 'SF':
+                // Section footer.
+            case 'FF':
+                // File footer.
+            case 'RF':
+                // Report footer.
+                // Nothing to see here, move along
+                break;
+            default:
+                break;
             }
         }
         return $this;
@@ -401,9 +401,9 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     /**
      * Parse columns from line of csv file
      *
-     * @param array $line
-     * @param array $sectionColumns
-     * @param array $rowMap
+     * @param  array $line
+     * @param  array $sectionColumns
+     * @param  array $rowMap
      * @return array
      */
     private function getBodyItems(array $line, array $sectionColumns, array $rowMap)
@@ -426,12 +426,14 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     /**
      * Format date columns in UTC
      *
-     * @param string $lineItem
+     * @param  string $lineItem
      * @return string
      */
     private function formatDateTimeColumns($lineItem)
     {
-        /** @var DateTime $date */
+        /**
+ * @var DateTime $date 
+*/
         $date = new DateTime($lineItem, new \DateTimeZone('UTC'));
         return $date->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
     }
@@ -441,7 +443,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      *
      * PayPal api returns amounts in cents, hence the values need to be divided by 100
      *
-     * @param string $lineItem
+     * @param  string $lineItem
      * @return float
      */
     private function formatAmountColumn($lineItem)
@@ -473,45 +475,45 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     /**
      * Return name for row column
      *
-     * @param string $field Field name in row model
-     * @return \Magento\Framework\Phrase|string
+     * @param                                        string $field Field name in row model
+     * @return                                       \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFieldLabel($field)
     {
         switch ($field) {
-            case 'report_date':
-                return __('Report Date');
-            case 'account_id':
-                return __('Merchant Account');
-            case 'transaction_id':
-                return __('Transaction ID');
-            case 'invoice_id':
-                return __('Invoice ID');
-            case 'paypal_reference_id':
-                return __('PayPal Reference ID');
-            case 'paypal_reference_id_type':
-                return __('PayPal Reference ID Type');
-            case 'transaction_event_code':
-                return __('Event Code');
-            case 'transaction_event':
-                return __('Event');
-            case 'transaction_initiation_date':
-                return __('Start Date');
-            case 'transaction_completion_date':
-                return __('Finish Date');
-            case 'transaction_debit_or_credit':
-                return __('Debit or Credit');
-            case 'gross_transaction_amount':
-                return __('Gross Amount');
-            case 'fee_debit_or_credit':
-                return __('Fee Debit or Credit');
-            case 'fee_amount':
-                return __('Fee Amount');
-            case 'custom_field':
-                return __('Custom');
-            default:
-                return $field;
+        case 'report_date':
+            return __('Report Date');
+        case 'account_id':
+            return __('Merchant Account');
+        case 'transaction_id':
+            return __('Transaction ID');
+        case 'invoice_id':
+            return __('Invoice ID');
+        case 'paypal_reference_id':
+            return __('PayPal Reference ID');
+        case 'paypal_reference_id_type':
+            return __('PayPal Reference ID Type');
+        case 'transaction_event_code':
+            return __('Event Code');
+        case 'transaction_event':
+            return __('Event');
+        case 'transaction_initiation_date':
+            return __('Start Date');
+        case 'transaction_completion_date':
+            return __('Finish Date');
+        case 'transaction_debit_or_credit':
+            return __('Debit or Credit');
+        case 'gross_transaction_amount':
+            return __('Gross Amount');
+        case 'fee_debit_or_credit':
+            return __('Fee Debit or Credit');
+        case 'fee_amount':
+            return __('Fee Amount');
+        case 'custom_field':
+            return __('Custom');
+        default:
+            return $field;
         }
     }
 
@@ -519,8 +521,8 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      * Iterate through website configurations and collect all SFTP configurations
      * Filter config values if necessary
      *
-     * @param bool $automaticMode Whether to skip settings with disabled Automatic Fetching or not
-     * @return array
+     * @param                                        bool $automaticMode Whether to skip settings with disabled Automatic Fetching or not
+     * @return                                       array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -587,7 +589,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     /**
      * Converts a filename to date of report.
      *
-     * @param string $filename
+     * @param  string $filename
      * @return string
      */
     protected function _fileNameToDate($filename)
@@ -601,7 +603,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     /**
      * Filter SFTP file list by filename format
      *
-     * @param array $list List of files as per $connection->rawls()
+     * @param  array $list List of files as per $connection->rawls()
      * @return array Trimmed down list of files
      */
     protected function _filterReportsList($list)

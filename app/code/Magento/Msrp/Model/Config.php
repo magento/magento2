@@ -40,9 +40,9 @@ class Config
     protected $storeId;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface  $scopeConfig
      * @param StoreManagerInterface $storeManager
-     * @param Escaper $escaper
+     * @param Escaper               $escaper
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -57,7 +57,7 @@ class Config
     /**
      * Set a specified store ID value
      *
-     * @param int $store
+     * @param  int $store
      * @return $this
      */
     public function setStoreId($store)
