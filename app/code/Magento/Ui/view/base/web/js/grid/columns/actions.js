@@ -79,7 +79,7 @@ define([
 
         /**
          * Adds new action. If an action with the specified identifier
-         * already exists, then the original will be overriden.
+         * already exists, then the original will be overridden.
          *
          * @param {String} index - Actions' identifier.
          * @param {Object} action - Actions' data.
