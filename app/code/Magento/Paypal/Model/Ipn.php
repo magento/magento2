@@ -341,6 +341,10 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
     protected function _registerPaymentFailure()
     {
         $this->_importPaymentInformation();
+        /** @var \Magento\Sales\Model\Order\Invoice $invoice */
+        foreach ($this->_order->getInvoiceCollection() as $invoice) {
+            $invoice->cancel()->save();
+        }
         $this->_order->registerCancellation($this->_createIpnComment(''))->save();
     }
 
