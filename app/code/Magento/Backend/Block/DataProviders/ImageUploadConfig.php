@@ -20,6 +20,9 @@ class ImageUploadConfig implements ArgumentInterface
      */
     private $imageUploadConfig;
 
+    /**
+     * @param ImageUploadConfigInterface $imageUploadConfig
+     */
     public function __construct(ImageUploadConfigInterface $imageUploadConfig)
     {
         $this->imageUploadConfig = $imageUploadConfig;

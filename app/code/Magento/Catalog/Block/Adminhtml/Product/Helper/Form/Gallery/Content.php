@@ -19,6 +19,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Backend\Block\DataProviders\ImageUploadConfig as ImageUploadConfigDataProvider;
+
 /**
  * Block for gallery content.
  */

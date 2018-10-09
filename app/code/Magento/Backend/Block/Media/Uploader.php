@@ -45,6 +45,13 @@ class Uploader extends \Magento\Backend\Block\Widget
     private $imageUploadConfig;
 
     /**
+     * @var UploadConfigInterface
+     * @deprecated
+     * @see \Magento\Backend\Model\Image\ImageUploadConfigInterface
+     */
+    private $imageConfig;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
      * @param array $data
@@ -58,10 +65,12 @@ class Uploader extends \Magento\Backend\Block\Widget
         array $data = [],
         Json $jsonEncoder = null,
         UploadConfigInterface $imageConfig = null,
-        ImageUploadConfigInterface $imageUploadConfig  = null
+        ImageUploadConfigInterface $imageUploadConfig = null
     ) {
         $this->_fileSizeService = $fileSize;
         $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
+        $this->imageConfig = $imageConfig
+            ?: ObjectManager::getInstance()->get(UploadConfigInterface::class);
         $this->imageUploadConfig = $imageUploadConfig
             ?: ObjectManager::getInstance()->get(ImageUploadConfigInterface::class);
         parent::__construct($context, $data);

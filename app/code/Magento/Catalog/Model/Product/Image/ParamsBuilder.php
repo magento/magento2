@@ -65,6 +65,8 @@ class ParamsBuilder
     }
 
     /**
+     * Build image params
+     *
      * @param array $imageArguments
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -85,6 +87,8 @@ class ParamsBuilder
     }
 
     /**
+     * Overwrite default values
+     *
      * @param array $imageArguments
      * @return array
      */
@@ -110,6 +114,8 @@ class ParamsBuilder
     }
 
     /**
+     * Get watermark
+     *
      * @param string $type
      * @return array
      */
@@ -150,6 +156,7 @@ class ParamsBuilder
 
     /**
      * Get frame from product_image_white_borders
+     *
      * @return bool
      */
     private function hasDefaultFrame(): bool
