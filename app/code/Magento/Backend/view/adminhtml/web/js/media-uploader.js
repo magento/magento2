@@ -44,7 +44,9 @@ define([
                 };
 
             if (isResizeEnabled === 0) {
-                resizeConfiguration = {action: 'resize'};
+                resizeConfiguration = {
+                    action: 'resize'
+                };
             }
 
             this.element.find('input[type=file]').fileupload({
