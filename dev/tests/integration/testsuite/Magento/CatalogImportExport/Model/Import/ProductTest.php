@@ -958,6 +958,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $errors = $this->_model->setParameters(
             [
                 'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                Import::FIELD_NAME_VALIDATION_STRATEGY => null,
                 'entity' => 'catalog_product'
             ]
         )->setSource(
