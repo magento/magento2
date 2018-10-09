@@ -17,6 +17,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
+ * TransportBuilder
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
