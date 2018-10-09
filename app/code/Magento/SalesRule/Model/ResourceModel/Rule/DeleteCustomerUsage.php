@@ -9,7 +9,7 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
 class DeleteCustomerUsage
 {
     /** @var \Magento\SalesRule\Model\ResourceModel\Rule\Customer */
-    protected $_customerRuleDetails;
+    private $customerRuleDetails;
 
     /**
      * DeleteCustomerUsage constructor.
@@ -18,7 +18,7 @@ class DeleteCustomerUsage
     public function __construct(
         Customer $customerRuleDetails
     ) {
-        $this->_customerRuleDetails = $customerRuleDetails;
+        $this->customerRuleDetails = $customerRuleDetails;
     }
 
     /**
@@ -29,10 +29,10 @@ class DeleteCustomerUsage
      */
     public function execute($ruleId, $customerId, $updatedTimeUsed)
     {
-        $connection = $this->_customerRuleDetails->getConnection();
+        $connection = $this->customerRuleDetails->getConnection();
         if ($updatedTimeUsed === 0) {
             $connection->delete(
-                $connection->getTableName('salesrule_customer'),
+                $this->customerRuleDetails->getTable('salesrule_customer'),
                 ['rule_id = ?' => $ruleId, 'customer_id = ?' => $customerId]
             );
         }
