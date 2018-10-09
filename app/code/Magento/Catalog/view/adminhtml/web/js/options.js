@@ -182,15 +182,22 @@ define([
             });
         }
         editForm.on('beforeSubmit', function () {
-            var optionContainer = optionPanel.find('table tbody');
+            var optionContainer = optionPanel.find('table tbody'),
+                optionsValues;
 
             if (optionPanel.hasClass(activePanelClass)) {
+                optionsValues = jQuery.map(
+                    optionContainer.find('tr'),
+                    function (row) {
+                        return jQuery(row).find('input, select, textarea').serialize();
+                    }
+                );
                 jQuery('<input>')
                     .attr({
                         type: 'hidden',
                         name: 'serialized_options'
                     })
-                    .val(optionContainer.find('input, select, textarea').serialize())
+                    .val(JSON.stringify(optionsValues))
                     .prependTo(editForm);
             }
             tableBody = optionContainer.detach();
