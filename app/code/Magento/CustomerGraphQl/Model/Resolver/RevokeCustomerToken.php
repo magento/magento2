@@ -5,11 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Resolver\Customer\Account;
+namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\Authorization\Model\UserContextInterface;
+use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -20,9 +19,9 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 class RevokeCustomerToken implements ResolverInterface
 {
     /**
-     * @var UserContextInterface
+     * @var CheckCustomerAccount
      */
-    private $userContext;
+    private $checkCustomerAccount;
 
     /**
      * @var CustomerTokenServiceInterface
@@ -30,14 +29,14 @@ class RevokeCustomerToken implements ResolverInterface
     private $customerTokenService;
 
     /**
-     * @param UserContextInterface $userContext
+     * @param CheckCustomerAccount $checkCustomerAccount
      * @param CustomerTokenServiceInterface $customerTokenService
      */
     public function __construct(
-        UserContextInterface $userContext,
+        CheckCustomerAccount $checkCustomerAccount,
         CustomerTokenServiceInterface $customerTokenService
     ) {
-        $this->userContext = $userContext;
+        $this->checkCustomerAccount = $checkCustomerAccount;
         $this->customerTokenService = $customerTokenService;
     }
 
@@ -51,17 +50,11 @@ class RevokeCustomerToken implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $customerId = (int)$this->userContext->getUserId();
+        $currentUserId = $context->getUserId();
+        $currentUserType = $context->getUserType();
 
-        if ($customerId === 0) {
-            throw new GraphQlAuthorizationException(
-                __(
-                    'Current customer does not have access to the resource "%1"',
-                    [\Magento\Customer\Model\Customer::ENTITY]
-                )
-            );
-        }
+        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
 
-        return $this->customerTokenService->revokeCustomerAccessToken($customerId);
+        return $this->customerTokenService->revokeCustomerAccessToken((int)$currentUserId);
     }
 }
