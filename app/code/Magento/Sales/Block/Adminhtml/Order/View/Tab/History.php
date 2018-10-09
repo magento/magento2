@@ -303,11 +303,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         $createdAtA = $a['created_at'];
         $createdAtB = $b['created_at'];
 
-        /** @var $createdAtA \DateTime */
-        if ($createdAtA->getTimestamp() == $createdAtB->getTimestamp()) {
-            return 0;
-        }
-        return $createdAtA->getTimestamp() < $createdAtB->getTimestamp() ? -1 : 1;
+        return $createdAtA->getTimestamp() <=> $createdAtB->getTimestamp();
     }
 
     /**
