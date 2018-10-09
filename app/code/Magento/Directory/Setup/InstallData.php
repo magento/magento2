@@ -809,14 +809,6 @@ class InstallData implements InstallDataInterface
             ['BR', 'SE', 'Sergipe'],
             ['BR', 'TO', 'Tocantins'],
             ['BR', 'DF', 'Distrito Federal'],
-            ['AU', 'ACT', 'Australian Capital Territory'],
-            ['AU', 'NSW', 'New South Wales'],
-            ['AU', 'VIC', 'Victoria'],
-            ['AU', 'QLD', 'Queensland'],
-            ['AU', 'SA', 'South Australia'],
-            ['AU', 'TAS', 'Tasmania'],
-            ['AU', 'WA', 'Western Australia'],
-            ['AU', 'NT', 'Northern Territory'],
         ];
 
         foreach ($data as $row) {
