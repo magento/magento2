@@ -95,8 +95,6 @@
         <waitForPageLoad time="60" stepKey="waitForPageLoad9"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
         <waitForPageLoad time="60" stepKey="waitForPageLoad10"/>
-        <scrollToTopOfPage stepKey="scrollToTopMessage" />
-        <waitForPageLoad stepKey="waitForPageLoad11"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="checkSuccessMessage"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
         <waitForPageLoad stepKey="waitForPageLoad12"/>
