@@ -40,6 +40,16 @@
             <createData entity="BasicMsiStock4" stepKey="createCustomStock4"/>
         </before>
         <after>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheManageStockPageToCleanUpBefore"/>
+            <waitForPageLoad stepKey="waitPageToCleanUpBefore" />
+            <click selector="{{AdminManageStockGridControls.multicheckDropdown}}" stepKey="openDropdownToSelectAllToCleanUpBefore"/>
+            <click selector="{{AdminManageStockGridControls.multicheckOption('Select All')}}" stepKey="selectAllToCleanUpBefore"/>
+            <click selector="//button[@class='action-select']" stepKey="massActionsToCleanUpBefore"/>
+            <waitForPageLoad time="5" stepKey="waitForPageLoad1"/>
+            <click selector="#anchor-content .action-menu._active span" stepKey="massDeleteToCleanUpBefore"/>
+            <click selector=".action-accept" stepKey="okToCleanUpBefore"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoaded"/>
+
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
