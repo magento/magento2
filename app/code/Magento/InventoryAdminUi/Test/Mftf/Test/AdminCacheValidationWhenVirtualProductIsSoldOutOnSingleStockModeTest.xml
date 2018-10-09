@@ -6,11 +6,10 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCacheValidationWhenVirtualProductIsSoldOutOnSingleStockModeTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
-            <stories value="Cache validation when Virtual product on Single stock mode totally sold"/>
+            <stories value="Cache Validation"/>
             <title value="Cache validation when Virtual product on Single stock mode totally sold"/>
             <description value="Cache validation when Virtual product on Single stock mode totally sold"/>
             <testCaseId value="1745"/>
