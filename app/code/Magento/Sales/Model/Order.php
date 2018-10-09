@@ -1855,6 +1855,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getCreatedAtFormatted($format)
     {
+        $format = (is_string($format)) ? $this->getDateFormatValue($format) : $format;
         return $this->timezone->formatDateTime(
             new \DateTime($this->getCreatedAt()),
             $format,
@@ -4375,6 +4376,33 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function setShippingMethod($shippingMethod)
     {
         return $this->setData('shipping_method', $shippingMethod);
+    }
+    
+    /**
+     * Get date format value for relative string
+     *
+     * @param string $format
+     * @return int|null
+     */
+    protected function getDateFormatValue($format)
+    {
+        if (empty($this->_dateFormatValues)) {
+            $this->setDateFormatValues();
+        }
+        return array_key_exists($format, $this->_dateFormatValues) ? $this->_dateFormatValues[$format] : null;
+    }
+    
+    /**
+     * Map Date formats with its relative values
+     */
+    protected function setDateFormatValues()
+    {
+        $this->_dateFormatValues = [
+            'full' => \IntlDateFormatter::FULL,
+            'short' => \IntlDateFormatter::SHORT,
+            'medium' => \IntlDateFormatter::MEDIUM,
+            'long' => \IntlDateFormatter::LONG
+        ];
     }
 
     //@codeCoverageIgnoreEnd
