@@ -21,7 +21,7 @@ class UnitBaseCalculatorTest extends \PHPUnit\Framework\TestCase
 
     const CODE = 'CODE';
     const TYPE = 'TYPE';
-    const ROW_TAX = 44.958682408681;
+    const ROW_TAX = 44.954135954136;
     const ROW_TAX_ROUNDED = 44.95;
     const PRICE_INCL_TAX = 495.4954954955;
     const PRICE_INCL_TAX_ROUNDED = 495.50;
