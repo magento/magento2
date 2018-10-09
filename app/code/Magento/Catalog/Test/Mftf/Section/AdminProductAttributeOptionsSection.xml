@@ -8,7 +8,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="DropdownAttributeOptionsSection">
-        <element name="nthAdminLabel" type="input"
+        <element name="nthOptionAdminLabel" type="input"
                  selector="(//*[@id='manage-options-panel']//tr[{{var}}]//input[contains(@name, 'option[value]')])[1]" parameterized="true"/>
     </section>
 </sections>

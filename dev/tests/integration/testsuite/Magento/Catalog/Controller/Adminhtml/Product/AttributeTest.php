@@ -302,10 +302,10 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
             $optionId = 'option_' . $i;
             $optionRowData = [];
-            $optionRowData["option"]["order"][$optionId] = $i + 1;
-            $optionRowData["option"]["value"][$optionId][0] = 'value_' . $i . '_admin';
-            $optionRowData["option"]["value"][$optionId][1] = $expectedOptionLabelOnStoreView;
-            $optionRowData["option"]["delete"][$optionId] = '';
+            $optionRowData['option']['order'][$optionId] = $i + 1;
+            $optionRowData['option']['value'][$optionId][0] = 'value_' . $i . '_admin';
+            $optionRowData['option']['value'][$optionId][1] = $expectedOptionLabelOnStoreView;
+            $optionRowData['option']['delete'][$optionId] = '';
             $optionsData[] = http_build_query($optionRowData);
         }
         $attributeData['serialized_options'] = json_encode($optionsData);

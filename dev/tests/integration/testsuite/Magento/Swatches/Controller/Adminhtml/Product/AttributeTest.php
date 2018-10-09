@@ -59,12 +59,12 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
             $optionId = 'option_' .$i;
             $optionRowData = [];
-            $optionRowData["optionvisual"]["order"][$optionId] = $i + 1;
-            $optionRowData["defaultvisual"][] = $optionId;
-            $optionRowData["swatchvisual"]["value"][$optionId] = $this->getRandomColor();
-            $optionRowData["optionvisual"]["value"][$optionId][0] = 'value_' . $i .'_admin';
-            $optionRowData["optionvisual"]["value"][$optionId][1] = $expectedOptionLabelOnStoreView;
-            $optionRowData["optionvisual"]["delete"][$optionId] = '';
+            $optionRowData['optionvisual']['order'][$optionId] = $i + 1;
+            $optionRowData['defaultvisual'][] = $optionId;
+            $optionRowData['swatchvisual']['value'][$optionId] = $this->getRandomColor();
+            $optionRowData['optionvisual']['value'][$optionId][0] = 'value_' . $i .'_admin';
+            $optionRowData['optionvisual']['value'][$optionId][1] = $expectedOptionLabelOnStoreView;
+            $optionRowData['optionvisual']['delete'][$optionId] = '';
             $optionsData[] = http_build_query($optionRowData);
         }
         return [
@@ -101,12 +101,12 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
             $optionId = 'option_' . $i;
             $optionRowData = [];
-            $optionRowData["optiontext"]["order"][$optionId] = $i + 1;
-            $optionRowData["defaulttext"][] = $optionId;
-            $optionRowData["swatchtext"]["value"][$optionId] = 'x' . $i ;
-            $optionRowData["optiontext"]["value"][$optionId][0] = 'value_' . $i . '_admin';
-            $optionRowData["optiontext"]["value"][$optionId][1]= $expectedOptionLabelOnStoreView;
-            $optionRowData["optiontext"]["delete"][$optionId]='';
+            $optionRowData['optiontext']['order'][$optionId] = $i + 1;
+            $optionRowData['defaulttext'][] = $optionId;
+            $optionRowData['swatchtext']['value'][$optionId] = 'x' . $i ;
+            $optionRowData['optiontext']['value'][$optionId][0] = 'value_' . $i . '_admin';
+            $optionRowData['optiontext']['value'][$optionId][1]= $expectedOptionLabelOnStoreView;
+            $optionRowData['optiontext']['delete'][$optionId]='';
             $optionsData[] = http_build_query($optionRowData);
         }
         return [

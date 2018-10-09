@@ -21,11 +21,9 @@
         </before>
         <after>
             <!-- Remove attribute -->
-            <actionGroup ref="navigateToCreatedProductAttribute" stepKey="navigateToAttribute">
+            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="visualSwatchAttribute"/>
             </actionGroup>
-            <click selector="{{AttributePropertiesSection.DeleteAttribute}}" stepKey="deleteAttribute"/>
-
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
