@@ -165,10 +165,13 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     }
 
     /**
+     * Retrieve constructor data
+     *
      * @param string $className
      * @param array $data
      * @return array
      * @throws \ReflectionException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getConstructorData(string $className, array $data): array
     {

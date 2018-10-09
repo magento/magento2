@@ -537,6 +537,7 @@ class TypeProcessor
 
     /**
      * Resolve fully qualified type name in the class alias context
+     *
      * @param ClassReflection $sourceClass
      * @param string $typeName
      * @return string
