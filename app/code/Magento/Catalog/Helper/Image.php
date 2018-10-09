@@ -408,7 +408,7 @@ class Image extends AbstractHelper
     /**
      * Add watermark to image
      *
-     * size param in format 100x200
+     * Size param in format 100x200
      *
      * @param string $fileName
      * @param string $position
@@ -662,7 +662,7 @@ class Image extends AbstractHelper
     /**
      * Set watermark size
      *
-     * param size in format 100x200
+     * Param size in format 100x200
      *
      * @param string $size
      * @return $this

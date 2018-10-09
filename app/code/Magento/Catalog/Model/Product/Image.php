@@ -549,7 +549,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * Add watermark to image
      *
-     * size param in format 100x200
+     * Size param in format 100x200
      *
      * @param string $file
      * @param string $position
@@ -690,7 +690,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Get relative watermark file path
-     * or false if file not found
+     *
+     * Return false if file not found
      *
      * @return string | bool
      */
