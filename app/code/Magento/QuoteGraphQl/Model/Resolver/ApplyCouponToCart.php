@@ -60,7 +60,6 @@ class ApplyCouponToCart implements ResolverInterface
         }
         $couponCode = $args['input']['coupon_code'];
 
-
         $currentUserId = $context->getUserId();
         $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId);
         $cartId = $cart->getId();

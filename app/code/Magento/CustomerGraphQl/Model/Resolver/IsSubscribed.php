@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 
 /**
- * is_subscribed customer field resolver
+ * Customer is_subscribed field resolver
  */
 class IsSubscribed implements ResolverInterface
 {
