@@ -71,7 +71,6 @@ class CustomerPlugin
         $resultId = $result->getId();
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = $this->subscriberFactory->create();
-        $subscriber->updateSubscription($resultId);
         // update the result only if the original customer instance had different value.
         $initialExtensionAttributes = $result->getExtensionAttributes();
         if ($initialExtensionAttributes === null) {
