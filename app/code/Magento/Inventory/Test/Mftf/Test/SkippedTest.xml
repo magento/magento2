@@ -15,6 +15,13 @@
             </skip>
         </annotations>
     </test>
+    <test name="AdminCreateInvoiceForVirtualProductInSingleStockModeTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
 
     <test name="EndToEndB2CGuestUserTest">
         <annotations>
