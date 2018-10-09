@@ -114,5 +114,8 @@
         <click selector="{{AdminOrderDetailsOrderViewSection.information}}" stepKey="clickInformation"/>
         <waitForPageLoad stepKey="waitForPageLoad31"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="checkOrderStatus"/>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory1.name$$)}}" stepKey="navigateToCategoryPage2"/>
+        <see selector=".empty" userInput="We can't find products matching the selection." stepKey="seeErrorMessage1"/>
     </test>
 </tests>
