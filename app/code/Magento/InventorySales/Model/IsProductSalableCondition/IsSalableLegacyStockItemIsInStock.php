@@ -5,19 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\InventorySalesApi\IsProductSalable;
+namespace Magento\InventorySales\Model\IsProductSalableCondition;
 
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemManagementAllowedForSku;
-use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
- * Skip condition chain for products with negative legacy stock item "is in stock" status and disallowed
- * source item management
+ * @inheritdoc
  */
-class SkipConditionChainForOutOfStockProductsWithDisallowedSourceItemManagementPlugin
+class IsSalableLegacyStockItemIsInStock implements IsProductSalableInterface
 {
     /**
      * @var IsSourceItemManagementAllowedForSku
@@ -58,16 +57,12 @@ class SkipConditionChainForOutOfStockProductsWithDisallowedSourceItemManagementP
     }
 
     /**
-     * @param IsProductSalableInterface $subject
-     * @param callable $proceed
-     * @param string $sku
-     * @param int $stockId
-     * @return bool
+     * @inheritdoc
      */
-    public function aroundExecute(IsProductSalableInterface $subject, callable $proceed, string $sku, int $stockId)
+    public function execute(string $sku, int $stockId): bool
     {
         if ($this->isSourceItemManagementAllowedForSku->execute($sku)) {
-            return $proceed($sku, $stockId);
+            return true;
         }
 
         $scopeId = $this->stockConfiguration->getDefaultScopeId();
@@ -78,6 +73,6 @@ class SkipConditionChainForOutOfStockProductsWithDisallowedSourceItemManagementP
         if (!$isInStock) {
             return false;
         }
-        return $proceed($sku, $stockId);
+        return true;
     }
 }

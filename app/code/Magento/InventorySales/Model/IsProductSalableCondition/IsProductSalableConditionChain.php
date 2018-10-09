@@ -19,7 +19,12 @@ class IsProductSalableConditionChain implements IsProductSalableInterface
     /**
      * @var IsProductSalableInterface[]
      */
-    private $conditions;
+    private $unrequiredConditions;
+
+    /**
+     * @var IsProductSalableInterface[]
+     */
+    private $requiredConditions;
 
     /**
      * @param array $conditions
@@ -36,9 +41,22 @@ class IsProductSalableConditionChain implements IsProductSalableInterface
     private function setConditions(array $conditions)
     {
         $this->validateConditions($conditions);
-        $conditions = $this->sortConditions($conditions);
-        // TODO just assign conditions, postpone sorting on fist execute call - no logic in constructors
-        $this->conditions = array_column($conditions, 'object');
+
+        $unrequiredConditions = array_filter(
+            $conditions,
+            function ($item) {
+                return !isset($item['required']);
+            }
+        );
+        $this->unrequiredConditions = array_column($this->sortConditions($unrequiredConditions), 'object');
+
+        $requiredConditions = array_filter(
+            $conditions,
+            function ($item) {
+                return isset($item['required']) && (bool) $item['required'];
+            }
+        );
+        $this->requiredConditions = array_column($requiredConditions, 'object');
     }
 
     /**
@@ -52,7 +70,7 @@ class IsProductSalableConditionChain implements IsProductSalableInterface
                 throw new LocalizedException(__('Parameter "object" must be present.'));
             }
 
-            if (empty($condition['sort_order'])) {
+            if (empty($condition['required']) && empty($condition['sort_order'])) {
                 throw new LocalizedException(__('Parameter "sort_order" must be present.'));
             }
 
@@ -85,8 +103,13 @@ class IsProductSalableConditionChain implements IsProductSalableInterface
     public function execute(string $sku, int $stockId): bool
     {
         try {
-            foreach ($this->conditions as $condition) {
-                if ($condition->execute($sku, $stockId) === true) {
+            foreach ($this->requiredConditions as $requiredCondition) {
+                if ($requiredCondition->execute($sku, $stockId) === false) {
+                    return false;
+                }
+            }
+            foreach ($this->unrequiredConditions as $unrequiredCondition) {
+                if ($unrequiredCondition->execute($sku, $stockId) === true) {
                     return true;
                 }
             }

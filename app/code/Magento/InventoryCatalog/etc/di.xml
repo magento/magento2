@@ -140,9 +140,4 @@
         <plugin name="adapt_verify_stock_to_negative_min_qty"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Spi\StockStateProvider\AdaptVerifyStockToNegativeMinQtyPlugin"/>
     </type>
-    <!-- Is Product Salable -->
-    <type name="Magento\InventorySalesApi\Api\IsProductSalableInterface">
-        <plugin name="skip_condition_chain_for_products_with_negative_legacy_stock_item_stock_status"
-                type="Magento\InventoryCatalog\Plugin\InventorySalesApi\IsProductSalable\SkipConditionChainForOutOfStockProductsWithDisallowedSourceItemManagementPlugin"/>
-    </type>
 </config>
