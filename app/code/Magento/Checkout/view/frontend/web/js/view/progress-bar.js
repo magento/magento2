@@ -23,11 +23,17 @@ define([
 
         /** @inheritdoc */
         initialize: function () {
+            var steps;
+
             this._super();
             window.addEventListener('hashchange', _.bind(stepNavigator.handleHash, stepNavigator));
 
             if (!window.location.hash) {
-                stepNavigator.setHash(stepNavigator.steps().sort(stepNavigator.sortItems)[0].code);
+                steps = stepNavigator.steps();
+
+                if (steps.length) {
+                    stepNavigator.setHash(steps.sort(stepNavigator.sortItems)[0].code);
+                }
             }
 
             stepNavigator.handleHash();
