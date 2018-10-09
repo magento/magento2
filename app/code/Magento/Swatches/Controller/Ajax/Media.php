@@ -64,10 +64,11 @@ class Media extends \Magento\Framework\App\Action\Action
         $response = $this->getResponse();
 
         if ($productId = (int)$this->getRequest()->getParam('product_id')) {
+            $product = $this->productModelFactory->create()->load($productId);
             $productMedia = $this->swatchHelper->getProductMediaGallery(
-                $this->productModelFactory->create()->load($productId)
+                $product
             );
-            $resultJson->setHeader('X-Magento-Tags', 'catalog_product_' . $productId);
+            $resultJson->setHeader('X-Magento-Tags', implode(',', $product->getIdentities()));
 
             $response->setPublicHeaders($this->config->getTtl());
         }
