@@ -21,4 +21,17 @@
         <data key="simple_action">by_percent</data>
         <data key="discount_amount">10</data>
     </entity>
+    <entity name="CatalogRuleByPercentWith96Amount" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="groups">
+            <item>NOT LOGGED IN</item>
+        </array>
+        <array key="websites">
+            <item>Main Website</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">96</data>
+    </entity>
 </entities>

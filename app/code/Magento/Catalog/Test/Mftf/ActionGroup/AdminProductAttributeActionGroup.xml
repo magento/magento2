@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="navigateToEditProductAttribute">
+        <arguments>
+            <argument name="ProductAttribute" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <fillField selector="{{AdminProductAttributeGridSection.gridFilterFrontEndLabel}}" userInput="{{ProductAttribute}}" stepKey="navigateToAttributeEditPage1" />
+        <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="navigateToAttributeEditPage2" />
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="navigateToAttributeEditPage3" />
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+    </actionGroup>
+    <actionGroup name="changeUseForPromoRuleConditionsProductAttribute">
+        <arguments>
+            <argument name="option" type="string"/>
+        </arguments>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStoreFrontPropertiesTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <selectOption selector="{{StorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="{{option}}" stepKey="changeOption"/>
+        <click selector="{{AttributePropertiesSection.save}}" stepKey="saveAttribute"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the product attribute." stepKey="successMessage"/>
+    </actionGroup>
+</actionGroups>
