@@ -66,6 +66,7 @@
             <waitForPageLoad time="5" stepKey="waitForPageLoad1"/>
             <click selector="#anchor-content .action-menu._active span" stepKey="massDeleteToCleanUp"/>
             <click selector=".action-accept" stepKey="okToCleanUp"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
