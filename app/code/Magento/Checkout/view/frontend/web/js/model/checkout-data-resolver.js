@@ -214,6 +214,7 @@ define([
 
             selectedBillingAddress = checkoutData.getSelectedBillingAddress();
             newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress();
+
             if (selectedBillingAddress) {
                 if (selectedBillingAddress == 'new-customer-address' && newCustomerBillingAddressData) { //eslint-disable-line
                     selectBillingAddress(createBillingAddress(newCustomerBillingAddressData));
