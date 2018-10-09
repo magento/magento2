@@ -406,20 +406,20 @@ define([
          *   - configurable-matrix-serialized;
          *   - associated_product_ids_serialized.
          */
-         serializeData: function () {
-             this.source.data['configurable-matrix-serialized'] =
-                 JSON.stringify(this.source.data['configurable-matrix']);
-             if ($('.admin__field-error').length===0) {
-                 delete this.source.data['configurable-matrix'];
-             }
+        serializeData: function () {
+            this.source.data['configurable-matrix-serialized'] =
+                JSON.stringify(this.source.data['configurable-matrix']);
+            if ($(this.errorSelector).length===0) {
+                delete this.source.data['configurable-matrix'];
+            }
 
 
-             this.source.data['associated_product_ids_serialized'] =
-                 JSON.stringify(this.source.data['associated_product_ids']);
-             if ($('.admin__field-error').length===0) {
-                 delete this.source.data['associated_product_ids'];
-             }
-         },
+            this.source.data['associated_product_ids_serialized'] =
+                JSON.stringify(this.source.data['associated_product_ids']);
+            if ($(this.errorSelector).length===0) {
+                delete this.source.data['associated_product_ids'];
+            }
+        },
 
         /**
          * Check for newly added attributes

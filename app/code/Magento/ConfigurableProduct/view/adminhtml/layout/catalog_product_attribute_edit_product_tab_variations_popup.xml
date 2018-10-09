@@ -6,5 +6,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="catalog_product_attribute_edit_popup"/>
+    <body>
+        <referenceBlock name="product.composite.fieldset">
+            <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Composite\Fieldset\Configurable" name="product.composite.fieldset.configurable" before="product.composite.fieldset.options" template="Magento_ConfigurableProduct::catalog/product/composite/fieldset/configurable.phtml"/>
+        </referenceBlock>
+    </body>
 </page>
