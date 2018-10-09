@@ -10,7 +10,6 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 
@@ -51,7 +50,6 @@ class IsSubscribed implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var ContextInterface $context */
         $currentUserId = $context->getUserId();
         $currentUserType = $context->getUserType();
 

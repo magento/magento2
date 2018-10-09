@@ -13,7 +13,6 @@ use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -44,8 +43,8 @@ class ChangePassword implements ResolverInterface
 
     /**
      * @param CheckCustomerAccount $checkCustomerAccount
-     * @param CheckCustomerAccount $checkCustomerPassword
-     * @param CheckCustomerPassword $accountManagement
+     * @param CheckCustomerPassword $checkCustomerPassword
+     * @param AccountManagementInterface $accountManagement
      * @param CustomerDataProvider $customerDataProvider
      */
     public function __construct(
@@ -78,7 +77,6 @@ class ChangePassword implements ResolverInterface
             throw new GraphQlInputException(__('"newPassword" value should be specified'));
         }
 
-        /** @var ContextInterface $context */
         $currentUserId = $context->getUserId();
         $currentUserType = $context->getUserType();
         $currentUserId = (int)$currentUserId;
