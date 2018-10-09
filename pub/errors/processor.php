@@ -381,7 +381,7 @@ class Processor
 
     /**
      * Render page
-     * 
+     *
      * @param string $template
      * @return string
      */
