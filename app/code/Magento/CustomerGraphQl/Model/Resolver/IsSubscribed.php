@@ -55,7 +55,7 @@ class IsSubscribed implements ResolverInterface
 
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
 
-        $status = $this->subscriberFactory->create()->loadByCustomerId($currentUserId)->isSubscribed();
+        $status = $this->subscriberFactory->create()->loadByCustomerId((int)$currentUserId)->isSubscribed();
         return (bool)$status;
     }
 }

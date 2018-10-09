@@ -79,9 +79,9 @@ class ChangePassword implements ResolverInterface
 
         $currentUserId = $context->getUserId();
         $currentUserType = $context->getUserType();
-        $currentUserId = (int)$currentUserId;
-
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
+
+        $currentUserId = (int)$currentUserId;
         $this->checkCustomerPassword->execute($args['currentPassword'], $currentUserId);
 
         $this->accountManagement->changePasswordById($currentUserId, $args['currentPassword'], $args['newPassword']);

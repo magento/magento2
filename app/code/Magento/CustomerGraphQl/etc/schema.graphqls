@@ -9,7 +9,7 @@ type Mutation {
     generateCustomerToken(email: String!, password: String!): CustomerToken @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\GenerateCustomerToken") @doc(description:"Retrieve Customer token")
     changeCustomerPassword(currentPassword: String!, newPassword: String!): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ChangePassword") @doc(description:"Changes password for logged in customer")
     updateCustomer (input: UpdateCustomerInput): UpdateCustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Update customer personal information")
-    revokeCustomerToken: Boolean @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\Customer\\Account\\RevokeCustomerToken") @doc(description:"Revoke Customer token")
+    revokeCustomerToken: Boolean @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RevokeCustomerToken") @doc(description:"Revoke Customer token")
 }
 
 type CustomerToken {
