@@ -193,4 +193,16 @@
     <type name="Magento\Eav\Api\AttributeSetRepositoryInterface">
         <plugin name="remove_products" type="Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts"/>
     </type>
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Attributes">
+        <arguments>
+            <argument name="excludeFields" xsi:type="array">
+                <item name="0" xsi:type="string">category_ids</item>
+                <item name="1" xsi:type="string">gallery</item>
+                <item name="2" xsi:type="string">image</item>
+                <item name="3" xsi:type="string">media_gallery</item>
+                <item name="4" xsi:type="string">quantity_and_stock_status</item>
+                <item name="5" xsi:type="string">tier_price</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
