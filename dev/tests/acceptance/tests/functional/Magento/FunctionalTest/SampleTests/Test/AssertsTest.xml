@@ -11,7 +11,9 @@
     <test name="AssertTest">
         <annotations>
             <features value="Test Asserts"/>
-            <group value="skip"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
         </annotations>
 
         <createData entity="Simple_US_Customer" stepKey="createData2"/>

@@ -39,6 +39,7 @@
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
         <waitForPageLoad stepKey="waitForRulesPage"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForNewRulePageMask"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsite"/>
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="chooseNotLoggedInCustomerGroup"/>
