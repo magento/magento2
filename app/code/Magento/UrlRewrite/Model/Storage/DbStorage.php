@@ -59,7 +59,8 @@ class DbStorage extends AbstractStorage
         DataObjectHelper $dataObjectHelper,
         ResourceConnection $resource,
         LoggerInterface $logger = null
-    ) {
+    )
+    {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
         $this->logger = $logger ?: ObjectManager::getInstance()
@@ -87,7 +88,8 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $data
+     * @return array
      */
     protected function doFindAllByData(array $data)
     {
@@ -95,7 +97,8 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $data
+     * @return array|mixed|null
      */
     protected function doFindOneByData(array $data)
     {
@@ -169,7 +172,7 @@ class DbStorage extends AbstractStorage
         }
 
         foreach ($result as $type => $stores) {
-            foreach ($stores as $store => $entities){
+            foreach ($stores as $store => $entities) {
                 $oldUrlsSelect->orWhere(
                     $this->connection->quoteIdentifier(
                         UrlRewrite::ENTITY_TYPE
@@ -299,7 +302,7 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $data
      */
     public function deleteByData(array $data)
     {
