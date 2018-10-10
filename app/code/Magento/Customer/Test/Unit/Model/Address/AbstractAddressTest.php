@@ -6,6 +6,8 @@
 
 namespace Magento\Customer\Test\Unit\Model\Address;
 
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -41,6 +43,9 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Model\Address\AbstractAddress  */
     protected $model;
 
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManager;
+
     protected function setUp()
     {
         $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
@@ -69,8 +74,17 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(
+        $this->allowedCountriesReaderMock = $this->createPartialMock(
+            \Magento\Directory\Model\AllowedCountries::class,
+            ['getAllowedCountries']
+        );
+        $this->shareConfigMock = $this->createPartialMock(
+            \Magento\Customer\Model\Config\Share::class,
+            ['isGlobalScope']
+        );
+
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $this->objectManager->getObject(
             \Magento\Customer\Model\Address\AbstractAddress::class,
             [
                 'context' => $this->contextMock,
@@ -275,13 +289,14 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $data
-     * @param $expected
+     * @param array $data
+     * @param array|bool $expected
      *
      * @dataProvider validateDataProvider
      */
-    public function testValidate($data, $expected)
+    public function testValidate(array $data, $expected)
     {
+        $countryId = isset($data['country_id']) ? $data['country_id'] : null;
         $attributeMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
         $attributeMock->expects($this->any())
             ->method('getIsRequired')
@@ -295,8 +310,54 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
             ->method('getCountriesWithOptionalZip')
             ->will($this->returnValue([]));
 
-        $this->directoryDataMock->expects($this->never())
-            ->method('isRegionRequired');
+        $this->directoryDataMock->expects($this->any())
+            ->method('isRegionRequired')
+            ->willReturn($data['region_required']);
+
+        $countryCollectionMock = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Country\Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllIds'])
+            ->getMock();
+
+        $this->directoryDataMock->method('getCountryCollection')
+            ->willReturn($countryCollectionMock);
+
+        $countryCollectionMock->method('getAllIds')
+            ->willReturn([$countryId]);
+
+        $regionModelMock = $this->getMockBuilder(\Magento\Directory\Model\Region::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCountryId', 'getName', 'load', 'loadByCode'])
+            ->getMock();
+
+        $this->regionFactoryMock->expects($this->any())->method('create')->willReturn($regionModelMock);
+
+        $regionModelMock->expects($this->any())->method('load')->with($data['region_id'])->willReturnSelf();
+        $regionModelMock->expects($this->any())->method('getCountryId')->willReturn($countryId);
+        $regionModelMock->expects($this->any())->method('getName')->willReturn($data['region']);
+        $regionModelMock->expects($this->any())
+            ->method('loadByCode')
+            ->with($data['region'], $countryId)
+            ->willReturnSelf();
+
+        $countryModelMock = $this->getMockBuilder(\Magento\Directory\Model\Country::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getRegionCollection', 'load'])
+            ->getMock();
+
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            '_countryModels',
+            [$countryId => $countryModelMock]
+        );
+
+        $countryModelMock->expects($this->any())->method('load')->with($countryId, null)->willReturnSelf();
+        $regionCollectionMock = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Region\Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllIds'])
+            ->getMock();
+        $countryModelMock->expects($this->any())->method('getRegionCollection')->willReturn($regionCollectionMock);
+        $regionCollectionMock->expects($this->any())->method('getAllIds')->willReturn($data['allowed_regions']);
 
         foreach ($data as $key => $value) {
             $this->model->setData($key, $value);
@@ -321,8 +382,11 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
             'country_id' => $countryId,
             'postcode' => 07201,
             'region_id' => 1,
+            'region' => 'RegionName',
+            'region_required' => false,
             'company' => 'Magento',
-            'fax' => '222-22-22'
+            'fax' => '222-22-22',
+            'allowed_regions' => ['1'],
         ];
         return [
             'firstname' => [
@@ -348,6 +412,30 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
             'postcode' => [
                 array_merge(array_diff_key($data, ['postcode' => '']), ['country_id' => $countryId++]),
                 ['postcode is a required field.'],
+            ],
+            'region' => [
+                array_merge(
+                    $data,
+                    [
+                        'region_required' => true,
+                        'country_id' => $countryId++,
+                        'allowed_regions' => [],
+                        'region' => '',
+                    ]
+                ),
+                ['region is a required field.'],
+            ],
+            'region_id1' => [
+                array_merge($data, ['country_id' => $countryId, 'region_required' => true, 'region_id' => '']),
+                ['regionId is a required field.'],
+            ],
+            'region_id2' => [
+                array_merge($data, ['country_id' => $countryId, 'region_id' => 2, 'allowed_regions' => []]),
+                true,
+            ],
+            'region_id3' => [
+                array_merge($data, ['country_id' => $countryId, 'region_id' => 2, 'allowed_regions' => [1, 3]]),
+                ['Invalid value of "2" provided for the regionId field.'],
             ],
             'country_id' => [
                 array_diff_key($data, ['country_id' => '']),
@@ -387,5 +475,14 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
             ['single line', ['single line']],
             ['single line', 'single line'],
         ];
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            '_countryModels',
+            []
+        );
     }
 }

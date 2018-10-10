@@ -178,6 +178,25 @@ class Mode
     }
 
     /**
+     * Enable Default mode
+     *
+     * @return void
+     */
+    public function enableDefaultMode()
+    {
+        $this->filesystem->cleanupFilesystem(
+            [
+                DirectoryList::CACHE,
+                DirectoryList::GENERATED_CODE,
+                DirectoryList::GENERATED_METADATA,
+                DirectoryList::TMP_MATERIALIZATION_DIR,
+                DirectoryList::STATIC_VIEW,
+            ]
+        );
+        $this->setStoreMode(State::MODE_DEFAULT);
+    }
+
+    /**
      * Get current mode information
      *
      * @return string
@@ -215,17 +234,17 @@ class Mode
     private function saveAppConfigs($mode)
     {
         $configs = $this->configProvider->getConfigs($this->getMode(), $mode);
-        foreach ($configs as $path => $item) {
-            $this->emulatedAreaProcessor->process(function () use ($path, $item) {
-                $this->processorFacadeFactory->create()->process(
+        foreach ($configs as $path => $value) {
+            $this->emulatedAreaProcessor->process(function () use ($path, $value) {
+                $this->processorFacadeFactory->create()->processWithLockTarget(
                     $path,
-                    $item['value'],
+                    $value,
                     ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                     null,
-                    $item['lock']
+                    true
                 );
             });
-            $this->output->writeln('Config "' . $path . ' = ' . $item['value'] . '" has been saved.');
+            $this->output->writeln('Config "' . $path . ' = ' . $value . '" has been saved.');
         }
     }
 }

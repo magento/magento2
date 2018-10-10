@@ -102,6 +102,11 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0.00, $this->finalPrice->getValue());
     }
 
+    /**
+     * @param $price
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getProductMock($price)
     {
         $priceTypeMock = $this->createMock(\Magento\Catalog\Pricing\Price\FinalPrice::class);

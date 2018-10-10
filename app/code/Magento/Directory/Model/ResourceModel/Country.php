@@ -44,7 +44,7 @@ class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             default:
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please correct the country code: %1.', $code)
+                    __('Please correct the country code: %1.', htmlspecialchars($code))
                 );
         }
 

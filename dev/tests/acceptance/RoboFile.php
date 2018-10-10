@@ -4,26 +4,16 @@
  * See COPYING.txt for license details.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
 /** This is project's console commands configuration for Robo task runner.
  *
- * @codingStandardsIgnoreFile
+ * @codingStandardsIgnoreStart
  * @see http://robo.li/
  */
 class RoboFile extends \Robo\Tasks
 {
     use Robo\Task\Base\loadShortcuts;
-
-    /**
-     * Duplicate the Example configuration files used to customize the Project for customization.
-     *
-     * @return void
-     */
-    function cloneFiles()
-    {
-        $this->_exec('cp -vn .env.example .env');
-        $this->_exec('cp -vf codeception.dist.yml codeception.yml');
-        $this->_exec('cp -vf tests'. DIRECTORY_SEPARATOR .'functional.suite.dist.yml tests'. DIRECTORY_SEPARATOR .'functional.suite.yml');
-    }
 
     /**
      * Duplicate the Example configuration files for the Project.
@@ -33,21 +23,40 @@ class RoboFile extends \Robo\Tasks
      */
     function buildProject()
     {
-        $this->cloneFiles();
-        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept build');
+        passthru($this->getBaseCmd("build:project"));
     }
 
     /**
-     * Generate all Tests in PHP.
+     * Generate all Tests in PHP OR Generate set of tests via passing array of tests
      *
+     * @param array $tests
      * @param array $opts
      * @return void
      */
-    function generateTests($opts = ['config' => null])
+    function generateTests(array $tests, $opts = [
+        'config' => null,
+        'force' => false,
+        'nodes' => null,
+        'lines' => null,
+        'tests' => null
+    ])
     {
-        require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
-        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllCestFiles($opts['config']);
-        $this->say("Generate Tests Command Run");
+        $baseCmd = $this->getBaseCmd("generate:tests");
+
+        $mftfArgNames = ['config', 'nodes', 'lines', 'tests'];
+        // append arguments to the end of the command
+        foreach ($opts as $argName => $argValue) {
+            if (in_array($argName, $mftfArgNames) && $argValue !== null) {
+                $baseCmd .= " --$argName $argValue";
+            }
+        }
+
+        // use a separate conditional for the force flag (casting bool to string in php is hard)
+        if ($opts['force']) {
+            $baseCmd .= ' --force';
+        }
+
+        $this->taskExec($baseCmd)->args($tests)->run();
     }
 
     /**
@@ -62,55 +71,21 @@ class RoboFile extends \Robo\Tasks
         if (empty($args)) {
             throw new Exception("Please provide suite name(s) after generate:suite command");
         }
-
-        require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
-        $sg = \Magento\FunctionalTestingFramework\Suite\SuiteGenerator::getInstance();
-
-        foreach ($args as $arg) {
-            $sg->generateSuite($arg);
-        }
+        $baseCmd = $this->getBaseCmd("generate:suite");
+        $this->taskExec($baseCmd)->args($args)->run();
     }
 
     /**
-     * Run all Functional tests.
+     * Run all Tests with the specified @group tag'.
      *
+     * @param array $args
      * @return void
      */
-    function functional()
+    function group(array $args)
     {
-        $this->_exec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional --skip-group skip');
-    }
-
-    /**
-     * Run all Tests with the specified @group tag, excluding @group 'skip'.
-     *
-     * @param string $args
-     * @return void
-     */
-    function group($args = '')
-    {
-        $this->taskExec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional --verbose --steps --skip-group skip --group')->args($args)->run();
-    }
-
-    /**
-     * Run all Functional tests located under the Directory Path provided.
-     *
-     * @param string $args
-     * @return void
-     */
-    function folder($args = '')
-    {
-        $this->taskExec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional')->args($args)->run();
-    }
-
-    /**
-     * Run all Tests marked with the @group tag 'example'.
-     *
-     * @return void
-     */
-    function example()
-    {
-        $this->_exec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run --group example --skip-group skip');
+        $args = array_merge($args, ['-k']);
+        $baseCmd = $this->getBaseCmd("run:group");
+        $this->taskExec($baseCmd)->args($args)->run();
     }
 
     /**
@@ -182,12 +157,15 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run the Pre-Install system check script.
+     * Private function for returning the formatted command for the passthru to mftf bin execution.
      *
-     * @return void
+     * @param string $command
+     * @return string
      */
-    function preInstall()
+    private function getBaseCmd($command)
     {
-        $this->_exec('php pre-install.php');
+        $this->writeln("\033[01;31m Use of robo will be deprecated with next major release, please use <root>/vendor/bin/mftf $command \033[0m");
+        chdir(__DIR__);
+        return realpath('../../../vendor/bin/mftf') . " $command";
     }
 }

@@ -290,7 +290,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test successfull nested transaction
+     * Test successful nested transaction
      */
     public function testNestedTransactionCommitSuccess()
     {
@@ -312,7 +312,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test successfull nested transaction
+     * Test successful nested transaction
      */
     public function testNestedTransactionRollBackSuccess()
     {
@@ -334,7 +334,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test successfull nested transaction
+     * Test successful nested transaction
      */
     public function testNestedTransactionLastRollBack()
     {
@@ -439,7 +439,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             'insert' => 'insertValue',
         ];
         $fields = ['select', 'insert'];
-        $sqlQuery = "INSERT INTO `some_table` (`index`,`row`,`select`,`insert`) VALUES (?, ?, ?, ?) "
+        $sqlQuery = "INSERT  INTO `some_table` (`index`,`row`,`select`,`insert`) VALUES (?, ?, ?, ?) "
             . "ON DUPLICATE KEY UPDATE `select` = VALUES(`select`), `insert` = VALUES(`insert`)";
 
         $stmtMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
@@ -508,6 +508,9 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getIndexNameDataProvider()
     {
         // 65 characters long - will be compressed

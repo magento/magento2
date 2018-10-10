@@ -10,6 +10,7 @@
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
 use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
+use Magento\Framework\Authorization;
 
 class MassactionTest extends \PHPUnit\Framework\TestCase
 {
@@ -42,6 +43,11 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_requestMock;
+
+    /**
+     * @var Authorization|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_authorizationMock;
 
     /**
      * @var VisibilityChecker|\PHPUnit_Framework_MockObject_MockObject
@@ -86,11 +92,17 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
         $this->visibilityCheckerMock = $this->getMockBuilder(VisibilityChecker::class)
             ->getMockForAbstractClass();
 
+        $this->_authorizationMock = $this->getMockBuilder(Authorization::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isAllowed'])
+            ->getMock();
+
         $arguments = [
             'layout' => $this->_layoutMock,
             'request' => $this->_requestMock,
             'urlBuilder' => $this->_urlModelMock,
-            'data' => ['massaction_id_field' => 'test_id', 'massaction_id_filter' => 'test_id']
+            'data' => ['massaction_id_field' => 'test_id', 'massaction_id_filter' => 'test_id'],
+            'authorization' => $this->_authorizationMock,
         ];
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -145,6 +157,10 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl')
             ->willReturnMap($urlReturnValueMap);
 
+        $this->_authorizationMock->expects($this->any())
+            ->method('isAllowed')
+            ->willReturn(true);
+
         $this->_block->addItem($itemId, $item);
         $this->assertEquals(1, $this->_block->getCount());
 
@@ -184,6 +200,28 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
                         "id" => 'test_id2',
                     ]
                 )
+            ],
+            [
+                'enabled',
+                new \Magento\Framework\DataObject(["label" => "Test Item Enabled", "url" => "*/*/test2"]),
+                new \Magento\Framework\DataObject(
+                    [
+                        "label" => "Test Item Enabled",
+                        "url" => "http://localhost/index.php/backend/admin/test/test2",
+                        "id" => 'enabled',
+                    ]
+                )
+            ],
+            [
+                'refresh',
+                new \Magento\Framework\DataObject(["label" => "Test Item Refresh", "url" => "*/*/test2"]),
+                new \Magento\Framework\DataObject(
+                    [
+                        "label" => "Test Item Refresh",
+                        "url" => "http://localhost/index.php/backend/admin/test/test2",
+                        "id" => 'refresh',
+                    ]
+                )
             ]
         ];
     }
@@ -205,6 +243,9 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_block->getSelected());
     }
 
+    /**
+     * @return array
+     */
     public function selectedDataProvider()
     {
         return [
@@ -237,7 +278,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     public function testGetGridIdsJsonWithUseSelectAll(array $items, $result)
     {
         $this->_block->setUseSelectAll(true);
-        
+
         if ($this->_block->getMassactionIdField()) {
             $massActionIdField = $this->_block->getMassactionIdField();
         } else {
@@ -290,13 +331,19 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
      * @param int $count
      * @param bool $withVisibilityChecker
      * @param bool $isVisible
+     * @param bool $isAllowed
+     *
      * @dataProvider addItemDataProvider
      */
-    public function testAddItem($itemId, $item, $count, $withVisibilityChecker, $isVisible)
+    public function testAddItem($itemId, $item, $count, $withVisibilityChecker, $isVisible, $isAllowed)
     {
         $this->visibilityCheckerMock->expects($this->any())
             ->method('isVisible')
             ->willReturn($isVisible);
+
+        $this->_authorizationMock->expects($this->any())
+            ->method('isAllowed')
+            ->willReturn($isAllowed);
 
         if ($withVisibilityChecker) {
             $item['visible'] = $this->visibilityCheckerMock;
@@ -311,7 +358,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap($urlReturnValueMap);
 
         $this->_block->addItem($itemId, $item);
-        $this->assertEquals($count, $this->_block->getCount());
+        $this->assertEquals($count, $this->_block->getCount(), $itemId);
     }
 
     /**
@@ -325,7 +372,8 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
                 'item' => ['label' => 'Test 1', 'url' => '*/*/test1'],
                 'count' => 1,
                 'withVisibilityChecker' => false,
-                '$isVisible' => false,
+                'isVisible' => false,
+                'isAllowed' => true,
             ],
             [
                 'itemId' => 'test2',
@@ -333,21 +381,56 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
                 'count' => 1,
                 'withVisibilityChecker' => false,
                 'isVisible' => true,
+                'isAllowed' => true,
             ],
             [
-                'itemId' => 'test1',
-                'item' => ['label' => 'Test 1. Hide', 'url' => '*/*/test1'],
+                'itemId' => 'test3',
+                'item' => ['label' => 'Test 3. Hide', 'url' => '*/*/test3'],
                 'count' => 0,
                 'withVisibilityChecker' => true,
                 'isVisible' => false,
+                'isAllowed' => true,
             ],
             [
-                'itemId' => 'test2',
-                'item' => ['label' => 'Test 2. Does not hide', 'url' => '*/*/test2'],
+                'itemId' => 'test4',
+                'item' => ['label' => 'Test 4. Does not hide', 'url' => '*/*/test4'],
                 'count' => 1,
                 'withVisibilityChecker' => true,
                 'isVisible' => true,
-            ]
+                'isAllowed' => true,
+            ],
+            [
+                'itemId' => 'enable',
+                'item' => ['label' => 'Test 5. Not restricted', 'url' => '*/*/test5'],
+                'count' => 1,
+                'withVisibilityChecker' => true,
+                'isVisible' => true,
+                'isAllowed' => true,
+            ],
+            [
+                'itemId' => 'enable',
+                'item' => ['label' => 'Test 5. restricted', 'url' => '*/*/test5'],
+                'count' => 0,
+                'withVisibilityChecker' => true,
+                'isVisible' => true,
+                'isAllowed' => false,
+            ],
+            [
+                'itemId' => 'refresh',
+                'item' => ['label' => 'Test 6. Not Restricted', 'url' => '*/*/test6'],
+                'count' => 1,
+                'withVisibilityChecker' => true,
+                'isVisible' => true,
+                'isAllowed' => true,
+            ],
+            [
+                'itemId' => 'refresh',
+                'item' => ['label' => 'Test 6. Restricted', 'url' => '*/*/test6'],
+                'count' => 0,
+                'withVisibilityChecker' => true,
+                'isVisible' => true,
+                'isAllowed' => false,
+            ],
         ];
     }
 }

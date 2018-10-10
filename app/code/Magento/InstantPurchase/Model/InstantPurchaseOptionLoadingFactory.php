@@ -100,7 +100,7 @@ class InstantPurchaseOptionLoadingFactory
     /**
      * Loads customer address model by identifier.
      *
-     * @param $addressId
+     * @param int $addressId
      * @return Address
      */
     private function getAddress($addressId): Address

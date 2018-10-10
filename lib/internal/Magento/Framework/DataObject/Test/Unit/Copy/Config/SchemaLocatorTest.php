@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\DataObject\Test\Unit\Copy\Config;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**

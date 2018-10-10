@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminProductAttributeGridSection">
+        <element name="attributeCode" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="createNewAttributeBtn" type="button" selector="#add"/>
+        <element name="gridFilterFrontEndLabel" type="input" selector="#attributeGrid_filter_frontend_label"/>
+        <element name="search" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
+        <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
+        <element name="firstRow" type="button" selector="//*[@id='attributeGrid_table']/tbody/tr[1]"/>
+        <element name="attributeCodeFilterInput" type="input" selector=".admin__data-grid-filters input[name='attribute_code']"/>
+    </section>
+</sections>

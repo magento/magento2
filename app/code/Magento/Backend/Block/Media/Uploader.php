@@ -3,7 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Block\Media;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Image\Adapter\ConfigInterface;
 
 /**
  * Adminhtml media library uploader
@@ -28,16 +34,33 @@ class Uploader extends \Magento\Backend\Block\Widget
     protected $_fileSizeService;
 
     /**
+     * @var Json
+     */
+    private $jsonEncoder;
+
+    /**
+     * @var ConfigInterface
+     */
+    private $imageConfig;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
      * @param array $data
+     * @param Json $jsonEncoder
+     * @param ConfigInterface $imageConfig
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
-        array $data = []
+        array $data = [],
+        Json $jsonEncoder = null,
+        ConfigInterface $imageConfig = null
     ) {
         $this->_fileSizeService = $fileSize;
+        $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
+        $this->imageConfig = $imageConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
+
         parent::__construct($context, $data);
     }
 
@@ -80,6 +103,26 @@ class Uploader extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Image Upload Maximum Width Config
+     *
+     * @return int
+     */
+    public function getImageUploadMaxWidth()
+    {
+        return $this->imageConfig->getMaxWidth();
+    }
+
+    /**
+     * Get Image Upload Maximum Height Config
+     *
+     * @return int
+     */
+    public function getImageUploadMaxHeight()
+    {
+        return $this->imageConfig->getMaxHeight();
+    }
+
+    /**
      * Prepares layout and set element renderer
      *
      * @return $this
@@ -107,7 +150,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      */
     public function getConfigJson()
     {
-        return $this->_coreData->jsonEncode($this->getConfig()->getData());
+        return $this->jsonEncoder->encode($this->getConfig()->getData());
     }
 
     /**

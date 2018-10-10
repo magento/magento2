@@ -44,6 +44,7 @@ class InstallData implements InstallDataInterface
         $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
         $attributes = [
             'country_of_manufacture',
+            'manufacturer',
             'minimal_price',
             'msrp',
             'msrp_display_actual_price_type',

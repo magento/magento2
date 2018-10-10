@@ -15,6 +15,12 @@ class Test extends \Magento\SomeModule\Model\One\Test
      */
     protected $_factory;
 
+    /**
+     * Test constructor.
+     *
+     * @param \Magento\SomeModule\Model\Proxy $proxy
+     * @param \Magento\SomeModule\Model\ElementFactory $factory
+     */
     public function __construct(
         \Magento\SomeModule\Model\Proxy $proxy,
         \Magento\SomeModule\Model\ElementFactory $factory

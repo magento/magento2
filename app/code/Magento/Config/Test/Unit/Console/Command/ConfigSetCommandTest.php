@@ -94,7 +94,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->processorFacadeMock);
         $this->processorFacadeMock->expects($this->once())
-            ->method('process')
+            ->method('processWithLockTarget')
             ->willReturn('Some message');
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')

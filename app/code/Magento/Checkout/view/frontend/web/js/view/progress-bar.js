@@ -26,6 +26,11 @@ define([
         initialize: function () {
             this._super();
             $(window).hashchange(_.bind(stepNavigator.handleHash, stepNavigator));
+
+            if (!window.location.hash) {
+                stepNavigator.setHash(stepNavigator.steps().sort(stepNavigator.sortItems)[0].code);
+            }
+
             stepNavigator.handleHash();
         },
 

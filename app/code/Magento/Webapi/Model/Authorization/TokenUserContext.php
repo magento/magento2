@@ -133,6 +133,11 @@ class TokenUserContext implements UserContextInterface
             // other user-type tokens are considered always valid
             return false;
         }
+
+        if (empty($tokenTtl)) {
+            return false;
+        }
+
         if ($this->dateTime->strToTime($token->getCreatedAt()) < ($this->date->gmtTimestamp() - $tokenTtl * 3600)) {
             return true;
         }

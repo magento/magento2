@@ -5,8 +5,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Framework\Api\ArrayObjectSearch;
 
 class Text extends AbstractData
@@ -19,7 +21,7 @@ class Text extends AbstractData
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
+     * @param AttributeMetadataInterface $attribute
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param string $value
      * @param string $entityTypeCode
@@ -29,7 +31,7 @@ class Text extends AbstractData
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute,
+        AttributeMetadataInterface $attribute,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         $value,
         $entityTypeCode,
@@ -72,26 +74,7 @@ class Text extends AbstractData
             return true;
         }
 
-        // validate length
-        $length = $this->_string->strlen(trim($value));
-
-        $validateRules = $attribute->getValidationRules();
-
-        $minTextLength = ArrayObjectSearch::getArrayElementByName(
-            $validateRules,
-            'min_text_length'
-        );
-        if ($minTextLength !== null && $length < $minTextLength) {
-            $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $minTextLength);
-        }
-
-        $maxTextLength = ArrayObjectSearch::getArrayElementByName(
-            $validateRules,
-            'max_text_length'
-        );
-        if ($maxTextLength !== null && $length > $maxTextLength) {
-            $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $maxTextLength);
-        }
+        $errors = $this->validateLength($value, $attribute, $errors);
 
         $result = $this->_validateInputRule($value);
         if ($result !== true) {
@@ -126,5 +109,43 @@ class Text extends AbstractData
     public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {
         return $this->_applyOutputFilter($this->_value);
+    }
+
+    /**
+     * Length validation
+     *
+     * @param mixed $value
+     * @param AttributeMetadataInterface $attribute
+     * @param array $errors
+     * @return array
+     */
+    protected function validateLength($value, AttributeMetadataInterface $attribute, array $errors): array
+    {
+        // validate length
+        $label = __($attribute->getStoreLabel());
+
+        $length = $this->_string->strlen(trim($value));
+
+        $validateRules = $attribute->getValidationRules();
+
+        if (!empty(ArrayObjectSearch::getArrayElementByName($validateRules, 'input_validation'))) {
+            $minTextLength = ArrayObjectSearch::getArrayElementByName(
+                $validateRules,
+                'min_text_length'
+            );
+            if ($minTextLength !== null && $length < $minTextLength) {
+                $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $minTextLength);
+            }
+
+            $maxTextLength = ArrayObjectSearch::getArrayElementByName(
+                $validateRules,
+                'max_text_length'
+            );
+            if ($maxTextLength !== null && $length > $maxTextLength) {
+                $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $maxTextLength);
+            }
+        }
+
+        return $errors;
     }
 }

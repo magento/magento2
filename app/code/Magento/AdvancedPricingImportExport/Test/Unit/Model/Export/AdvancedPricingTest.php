@@ -213,7 +213,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             '_getCustomerGroupById',
             'correctExportData'
         ]);
-        $this->advancedPricing = $this->getMockbuilder(
+        $this->advancedPricing = $this->getMockBuilder(
             \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing::class
         )
             ->setMethods($mockMethods)
@@ -347,6 +347,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      * @param $object
      * @param $property
      * @return mixed
+     * @throws \ReflectionException
      */
     protected function getPropertyValue($object, $property)
     {
@@ -362,6 +363,8 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      * @param $object
      * @param $property
      * @param $value
+     * @return mixed
+     * @throws \ReflectionException
      */
     protected function setPropertyValue(&$object, $property, $value)
     {

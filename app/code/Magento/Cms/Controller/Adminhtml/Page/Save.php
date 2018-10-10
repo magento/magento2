@@ -46,7 +46,6 @@ class Save extends \Magento\Backend\App\Action
      * @param DataPersistorInterface $dataPersistor
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
-     *
      */
     public function __construct(
         Action\Context $context,
@@ -90,11 +89,10 @@ class Save extends \Magento\Backend\App\Action
 
             $id = $this->getRequest()->getParam('page_id');
             if ($id) {
-                $model->load($id);
-                if (!$model->getId()) {
+                try {
+                    $model = $this->pageRepository->getById($id);
+                } catch (LocalizedException $e) {
                     $this->messageManager->addErrorMessage(__('This page no longer exists.'));
-                    /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-                    $resultRedirect = $this->resultRedirectFactory->create();
                     return $resultRedirect->setPath('*/*/');
                 }
             }

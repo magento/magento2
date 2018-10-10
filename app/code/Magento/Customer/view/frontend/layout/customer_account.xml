@@ -6,6 +6,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Customer My Account (All Pages)" design_abstraction="custom">
+    <head>
+        <title>My Account</title>
+    </head>
     <body>
         <attribute name="class" value="account"/>
         <referenceContainer name="sidebar.main">
@@ -19,7 +22,7 @@
                     </arguments>
                     <block class="Magento\Customer\Block\Account\SortLinkInterface" name="customer-account-navigation-account-link">
                         <arguments>
-                            <argument name="label" xsi:type="string" translate="true">Account Dashboard</argument>
+                            <argument name="label" xsi:type="string" translate="true">My Account</argument>
                             <argument name="path" xsi:type="string">customer/account</argument>
                             <argument name="sortOrder" xsi:type="number">250</argument>
                         </arguments>

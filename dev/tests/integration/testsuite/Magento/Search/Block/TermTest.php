@@ -44,6 +44,14 @@ class TermTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
+        foreach ($actual as &$value) {
+            unset($value['query_id']);
+        }
+
+        foreach ($expected as &$value) {
+            unset($value['query_id']);
+        }
+
         self::assertEquals(
             $expected,
             $actual
@@ -62,7 +70,6 @@ class TermTest extends \PHPUnit\Framework\TestCase
                 [
                     '1st query' =>
                         [
-                            'query_id' => '1',
                             'query_text' => '1st query',
                             'num_results' => '1',
                             'popularity' => '5',
@@ -76,7 +83,6 @@ class TermTest extends \PHPUnit\Framework\TestCase
                         ],
                     '2nd query' =>
                         [
-                            'query_id' => '2',
                             'query_text' => '2nd query',
                             'num_results' => '1',
                             'popularity' => '10',
@@ -90,7 +96,6 @@ class TermTest extends \PHPUnit\Framework\TestCase
                         ],
                     '3rd query' =>
                         [
-                            'query_id' => '3',
                             'query_text' => '3rd query',
                             'num_results' => '1',
                             'popularity' => '1',

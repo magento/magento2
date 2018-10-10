@@ -6,8 +6,10 @@
 namespace Magento\Tax\Test\Unit\Block\Grid\Renderer;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Block\Grid\Renderer\Codes;
+use Magento\Backend\Block\Context;
 
 /**
  * Test for Tax Rates codes column of Tax Rules grid.
@@ -24,7 +26,26 @@ class CodesTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->codes = $objectManager->getObject(Codes::class);
+        $escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escaper->expects($this->any())
+            ->method('escapeHtml')
+            ->willReturnCallback(
+                function ($str) {
+                    return 'ESCAPED:' .$str;
+                }
+            );
+        $context = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context->expects($this->any())
+            ->method('getEscaper')
+            ->willReturn($escaper);
+        $this->codes = $objectManager->getObject(
+            Codes::class,
+            ['context' => $context]
+        );
     }
 
     /**
@@ -32,7 +53,7 @@ class CodesTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $ratesCodes
      * @param string $expected
-     * @see Magento\Tax\Block\Grid\Renderer\Codes::render
+     * @see Codes::render
      * @dataProvider ratesCodesDataProvider
      */
     public function testRenderCodes($ratesCodes, $expected)
@@ -50,8 +71,8 @@ class CodesTest extends \PHPUnit\Framework\TestCase
     public function ratesCodesDataProvider()
     {
         return [
-            [['some_code'], 'some_code'],
-            [['some_code', 'some_code2'], 'some_code, some_code2'],
+            [['some_code'], 'ESCAPED:some_code'],
+            [['some_code', 'some_code2'], 'ESCAPED:some_code, some_code2'],
             [[], ''],
             [null, '']
         ];

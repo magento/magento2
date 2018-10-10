@@ -14,9 +14,6 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-            /**
-             * @param string $filename
-             */
             function ($filename) {
                 $dom = new \DOMDocument();
                 $xmlFile = file_get_contents($filename);
@@ -27,9 +24,9 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
 
                 $schemaLocations = [];
                 preg_match('/xsi:noNamespaceSchemaLocation=\s*"(urn:[^"]+)"/s', $xmlFile, $schemaLocations);
-                $this->assertEquals(
+                $this->assertCount(
                     2,
-                    count($schemaLocations),
+                    $schemaLocations,
                     'The XML file at ' . $filename . ' does not have a schema properly defined.  It should '
                     . 'have a xsi:noNamespaceSchemaLocation attribute defined with a URN path.  E.g. '
                     . 'xsi:noNamespaceSchemaLocation="urn:magento:framework:Relative_Path/something.xsd"'
@@ -60,6 +57,7 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryPath) {
             $libSchemas = array_merge($libSchemas, $this->_getFiles($libraryPath, '*.xsd'));
         }
+
         return $this->_dataSet(array_merge($codeSchemas, $libSchemas));
     }
 
@@ -68,7 +66,7 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
         $componentRegistrar = new ComponentRegistrar();
         $codeXml = [];
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
-            $codeXml = array_merge($codeXml, $this->_getFiles($modulePath, '*.xml', '/.\/Test\/Unit\/./'));
+            $codeXml = array_merge($codeXml, $this->_getFiles($modulePath, '*.xml', '/.\/Test\/Unit/'));
         }
         $this->_filterSpecialCases($codeXml);
         $designXml = [];
@@ -79,6 +77,7 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryPath) {
             $libXml = array_merge($libXml, $this->_getFiles($libraryPath, '*.xml', '/.\/Test\/./'));
         }
+
         return $this->_dataSet(array_merge($codeXml, $designXml, $libXml));
     }
 
@@ -107,8 +106,12 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
             '#conf/schema.xml$#',
             '#conf/solrconfig.xml$#',
             '#layout/swagger_index_index.xml$#',
-            '#Doc/etc/doc/vars.xml$#'
+            '#Doc/etc/doc/vars.xml$#',
+            '#phpunit.xml$#',
+            '#app/code/(?!Magento)(.*?)/.*?/Test/.*\.xml$#',
+            '#Test/Mftf#',
         ];
+
         foreach ($list as $pattern) {
             foreach ($files as $key => $value) {
                 if (preg_match($pattern, $value)) {
@@ -124,6 +127,7 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
         foreach ($files as $file) {
             $data[substr($file, strlen(BP))] = [$file];
         }
+
         return $data;
     }
 }

@@ -65,7 +65,7 @@ class YesNo
     }
 
     /**
-     * Creates Question object from from given array of messages.
+     * Creates Question object from given array of messages.
      *
      * @param string[] $messages array of messages
      * @return Question

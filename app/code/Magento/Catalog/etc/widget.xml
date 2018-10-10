@@ -292,7 +292,7 @@
         </parameters>
         <containers>
             <container name="sidebar.main">
-                <template name="default" value="list" />
+                <template name="default" value="sidebar" />
             </container>
             <container name="content">
                 <template name="grid" value="grid" />

@@ -6,7 +6,7 @@
 
 return [
     'empty_required_field' => [
-        'title' => '',
+        'title' => null,
         'type' => 'field',
         'sort_order' => 1,
         'is_require' => 1,
@@ -14,17 +14,6 @@ return [
         'price_type' => 'fixed',
         'sku' => 'sku1',
         'max_characters' => 10,
-    ],
-    'negative_price' => [
-        'title' => 'area option',
-        'type' => 'area',
-        'sort_order' => 2,
-        'is_require' => 0,
-        'price' => -20,
-        'price_type' => 'percent',
-        'sku' => 'sku2',
-        'max_characters' => 20,
-
     ],
     'negative_value_of_image_size' => [
         'title' => 'file option',
@@ -54,7 +43,7 @@ return [
                 'price' => 10.0,
                 'price_type' => 'fixed',
                 'sku' => 'radio option 1 sku',
-                'title' => '',
+                'title' => null,
                 'sort_order' => 1,
             ],
         ],

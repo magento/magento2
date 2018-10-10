@@ -6,8 +6,6 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
-use Magento\Framework\Exception\InputException;
-
 class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterface
 {
     /**
@@ -53,7 +51,7 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
      */
     public function save(\Magento\Eav\Api\Data\AttributeSetInterface $attributeSet)
     {
-        $this->validate($attributeSet);
+        $this->validateBeforeSave($attributeSet);
         return $this->attributeSetRepository->save($attributeSet);
     }
 
@@ -122,6 +120,31 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
     {
         $productEntityId = $this->eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getId();
         if ($attributeSet->getEntityTypeId() != $productEntityId) {
+            throw new \Magento\Framework\Exception\StateException(
+                __('Provided Attribute set non product Attribute set.')
+            );
+        }
+    }
+
+    /**
+     * Validate attribute set entity type id.
+     *
+     * @param  \Magento\Eav\Api\Data\AttributeSetInterface $attributeSet
+     * @return void
+     * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function validateBeforeSave(\Magento\Eav\Api\Data\AttributeSetInterface $attributeSet)
+    {
+        $productEntityId = $this->eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getId();
+        $result = $attributeSet->getEntityTypeId() === $productEntityId;
+        if (!$result && $attributeSet->getAttributeSetId()) {
+            $existingAttributeSet = $this->attributeSetRepository->get($attributeSet->getAttributeSetId());
+            $attributeSet->setEntityTypeId($existingAttributeSet->getEntityTypeId());
+            $result = $existingAttributeSet->getEntityTypeId() === $productEntityId;
+        }
+        if (!$result) {
             throw new \Magento\Framework\Exception\StateException(
                 __('Provided Attribute set non product Attribute set.')
             );

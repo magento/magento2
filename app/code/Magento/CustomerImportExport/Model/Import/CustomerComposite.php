@@ -288,6 +288,28 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     }
 
     /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        //Preparing both customer and address imports for mass validation.
+        $source = $this->getSource();
+        $this->_customerEntity->prepareCustomerData($source);
+        $source->rewind();
+        $rows = [];
+        foreach ($source as $row) {
+            $rows[] = [
+                Address::COLUMN_EMAIL => $row[Customer::COLUMN_EMAIL],
+                Address::COLUMN_WEBSITE => $row[Customer::COLUMN_WEBSITE]
+            ];
+        }
+        $source->rewind();
+        $this->_addressEntity->prepareCustomerData($rows);
+
+        return parent::validateData();
+    }
+
+    /**
      * Validate data row
      *
      * @param array $rowData

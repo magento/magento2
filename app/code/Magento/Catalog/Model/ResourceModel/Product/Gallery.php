@@ -190,7 +190,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'value.' . $linkField . ' = entity.' . $linkField,
                 ]
             ),
-            ['label', 'position', 'disabled']
+            []
         )->joinLeft(
             ['default_value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
             implode(
@@ -201,8 +201,15 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'default_value.' . $linkField . ' = entity.' . $linkField,
                 ]
             ),
-            ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
-        )->where(
+            []
+        )->columns([
+            'label' => $this->getConnection()->getIfNullSql('`value`.`label`', '`default_value`.`label`'),
+            'position' => $this->getConnection()->getIfNullSql('`value`.`position`', '`default_value`.`position`'),
+            'disabled' => $this->getConnection()->getIfNullSql('`value`.`disabled`', '`default_value`.`disabled`'),
+            'label_default' => 'default_value.label',
+            'position_default' => 'default_value.position',
+            'disabled_default' => 'default_value.disabled'
+        ])->where(
             $mainTableAlias . '.attribute_id = ?',
             $attributeId
         )->where(

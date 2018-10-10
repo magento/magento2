@@ -147,6 +147,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->_model->save($inputData, $inputId, $inputTags);
     }
 
+    /**
+     * @return array
+     */
     public function saveDataProvider()
     {
         $configTag = \Magento\Framework\App\Config::CACHE_TAG;
@@ -190,6 +193,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->_model->remove('test_id'));
     }
 
+    /**
+     * @return array
+     */
     public function successFailureDataProvider()
     {
         return ['success' => [true], 'failure' => [false]];
