@@ -13,7 +13,7 @@
             <stories value="Add Configurable Product"/>
             <title value="Create a Configurable Product with a drop down attribute assigned to a New Source"/>
             <description value="You should be able to create a Configurable Product that is assigned to a New Source with a drop down attribute."/>
-            <testCaseId value="1304"/>
+            <testCaseId value="MSI-1304"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

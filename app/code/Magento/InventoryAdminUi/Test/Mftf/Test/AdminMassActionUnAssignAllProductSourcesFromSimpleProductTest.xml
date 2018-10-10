@@ -13,11 +13,12 @@
             <stories value="Unassign source from product"/>
             <title value="Admin user apply to several simple products mass action 'Unassign product sources' on Products grid to unassign all assigned sources"/>
             <description value="You should be able to unassign all sources from simple products via mass action"/>
-            <testCaseId value="1496"/>
+            <testCaseId value="MSI-1496"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
+
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="BasicMsiStock1" stepKey="customStock"/>
@@ -109,7 +110,6 @@
             <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
         </before>
-
         <after>
             <comment userInput="Disable created sources." stepKey="disableCreatedSourcesComment"/>
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableFirstCreatedSource">

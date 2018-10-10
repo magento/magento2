@@ -13,7 +13,7 @@
             <stories value="Add Order"/>
             <title value="Create an Order with a Virtual Product via the Storefront"/>
             <description value="You should be able to create an Order with a Virtual Product from the Storefront."/>
-            <testCaseId value="1043"/>
+            <testCaseId value="MSI-1043"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

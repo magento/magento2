@@ -13,7 +13,7 @@
             <stories value="Create invoice for virtual product in Single Stock mode."/>
             <title value="Create invoice for virtual product in Single Stock mode."/>
             <description value="Check, admin user able to create invoice for virtual product in Single Stock mode."/>
-            <testCaseId value="1128"/>
+            <testCaseId value="MSI-1128"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>
@@ -27,7 +27,6 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         </before>
-
         <after>
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>

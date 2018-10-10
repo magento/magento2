@@ -13,11 +13,12 @@
             <stories value="Sales-Shipments"/>
             <title value="Admin user created shipment for whole order with Configurable product from Test source and Main Website"/>
             <description value="You should be able to create shipment for whole order from Custom Source."/>
-            <testCaseId value="1139"/>
+            <testCaseId value="MSI-1139"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
+
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="_minimalSource" stepKey="createSource1"/>
@@ -128,7 +129,6 @@
 
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose"/>
         </before>
-
         <after>
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource1">
                 <argument name="sourceCode" value="$$createSource1.source[source_code]$$"/>

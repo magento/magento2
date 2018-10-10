@@ -13,11 +13,12 @@
             <stories value="Sales-Backorder"/>
             <title value="Admin user set negative 'Out-of-Stock Threshold' in combination with backorders for virtual product on Default source"/>
             <description value="You should be able to create order from Default Source with backorders in combination with negative out of stock threshold."/>
-            <testCaseId value="1477"/>
+            <testCaseId value="MSI-1477"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
+
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="_minimalSource" stepKey="customSource"/>
@@ -68,7 +69,6 @@
 
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose"/>
         </before>
-
         <after>
             <comment userInput="Disable source, as it can brake single source mode tests." stepKey="disableCustomSourceComment"/>
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">

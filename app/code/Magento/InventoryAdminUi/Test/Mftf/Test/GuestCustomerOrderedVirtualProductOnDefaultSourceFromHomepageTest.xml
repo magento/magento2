@@ -13,7 +13,7 @@
             <stories value="Add Virtual Product"/>
             <title value="Guest ordered virtual product on default source"/>
             <description value="Guest should be able to place order with virtual product on default source."/>
-            <testCaseId value="1296"/>
+            <testCaseId value="MSI-1296"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -44,7 +44,6 @@
 
             <createData entity="VirtualProduct" stepKey="product"/>
         </before>
-
         <after>
             <comment userInput="Disable source, as it can brake single source mode tests." stepKey="disableCustomSourceComment"/>
             <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceList"/>

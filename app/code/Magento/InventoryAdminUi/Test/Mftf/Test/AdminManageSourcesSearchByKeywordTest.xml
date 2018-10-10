@@ -13,7 +13,7 @@
             <stories value="Search By Keyword in a Grid"/>
             <title value="Search by Keyword on the Manage Sources grid"/>
             <description value="You should be able to Search by Keyword from the Manage Sources grid."/>
-            <testCaseId value="506"/>
+            <testCaseId value="MSI-506"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

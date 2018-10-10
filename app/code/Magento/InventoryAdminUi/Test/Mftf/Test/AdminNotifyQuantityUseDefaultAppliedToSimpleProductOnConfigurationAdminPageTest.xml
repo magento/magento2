@@ -13,7 +13,7 @@
             <stories value="Use 'Notify for Quantity Below' system value with custom source on simple product"/>
             <title value="Use 'Notify for Quantity Below' system value with custom source on simple product"/>
             <description value="Verify, that simple product with custom source can use 'Notify for Quantity Below' system value for specified source."/>
-            <testCaseId value="955"/>
+            <testCaseId value="MSI-955"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -46,7 +46,6 @@
             <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneAssignCustomSourceToCustomStock"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
         </before>
-
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
 

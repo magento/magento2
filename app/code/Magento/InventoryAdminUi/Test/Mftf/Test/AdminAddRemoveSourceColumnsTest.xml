@@ -13,7 +13,7 @@
             <stories value="Add/Remove Grid Columns"/>
             <title value="Add/Remove Source Grid Columns"/>
             <description value="You should be able to toggle Columns on/off in the Source Grid."/>
-            <testCaseId value="627"/>
+            <testCaseId value="MSI-627"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

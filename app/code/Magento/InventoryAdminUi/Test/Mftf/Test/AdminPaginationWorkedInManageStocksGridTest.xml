@@ -13,7 +13,7 @@
             <stories value="Configuration-Stocks"/>
             <title value="Pagination worked in Manage Stocks grid - Admin user"/>
             <description value="You should be able to switch between pages on Manage Stocks grid"/>
-            <testCaseId value="936"/>
+            <testCaseId value="MSI-936"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -44,7 +44,6 @@
             <createData entity="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" stepKey="createStock22"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
-
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>

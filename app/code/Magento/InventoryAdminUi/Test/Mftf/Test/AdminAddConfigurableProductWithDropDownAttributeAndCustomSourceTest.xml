@@ -13,7 +13,7 @@
             <stories value="Create Configurable Product with drop down attribute and custom source."/>
             <title value="Create Configurable Product with drop down attribute and custom source."/>
             <description value="You should be able to create a Configurable Product that is assigned to the Custom Source with a drop down attribute."/>
-            <testCaseId value="963"/>
+            <testCaseId value="MSI-963"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -44,7 +44,6 @@
             <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDoneCustomSourceAssignment"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
         </before>
-
         <after>
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>

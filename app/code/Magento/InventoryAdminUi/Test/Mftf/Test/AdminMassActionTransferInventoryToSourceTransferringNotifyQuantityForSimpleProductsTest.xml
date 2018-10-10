@@ -13,7 +13,7 @@
             <stories value="Transfer notify quantity"/>
             <title value="Notify Quantity transferring when admin user apply mass action 'Transfer Inventory To Source' on Products grid to several simple products"/>
             <description value="You should be able use massaction 'Transfer inventory to source' to transfer notify quantity via mass action on products grid"/>
-            <testCaseId value="1522"/>
+            <testCaseId value="MSI-1522"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -21,6 +21,7 @@
                 <issueId value="MSI-1509"/>
             </skip>
         </annotations>
+
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="BasicMsiStock1" stepKey="createStock"/>
@@ -86,7 +87,6 @@
             <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
         </before>
-
         <after>
             <comment userInput="Disable created sources." stepKey="disableCreatedSourcesComment"/>
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableFirstCreatedSource">

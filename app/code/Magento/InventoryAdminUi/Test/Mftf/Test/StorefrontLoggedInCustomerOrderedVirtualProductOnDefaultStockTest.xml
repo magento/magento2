@@ -13,7 +13,7 @@
             <stories value="Add Virtual Product"/>
             <title value="Logged customer place order with virtual product on default stock"/>
             <description value="Customer should be able to place order with virtual product on default stock."/>
-            <testCaseId value="1298"/>
+            <testCaseId value="MSI-1298"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -57,7 +57,6 @@
 
             <createData entity="VirtualProduct" stepKey="product"/>
         </before>
-
         <after>
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
 

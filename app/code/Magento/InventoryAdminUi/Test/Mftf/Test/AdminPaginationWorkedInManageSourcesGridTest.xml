@@ -13,7 +13,7 @@
             <stories value="Grid Pagination"/>
             <title value="Pagination worked in Manage Sources grid - Admin user"/>
             <description value="You should be able to switch between pages on Manage Sources grid"/>
-            <testCaseId value="933"/>
+            <testCaseId value="MSI-933"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="sort_order_test"/>
@@ -44,7 +44,6 @@
             <createData entity="SpecialSourceForAdminPaginationWorkedInManageSourcesGridTest" stepKey="createSource22"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
-
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>

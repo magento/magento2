@@ -13,11 +13,12 @@
             <stories value="CatalogInventory stock option"/>
             <title value="Admin user apply 'Only X left Threshold' for Simple product on Single stock mode"/>
             <description value="In Single Stock mode you should be able to create order with simple order and enabled config 'Only X left Threshold'."/>
-            <testCaseId value="1526"/>
+            <testCaseId value="MSI-1526"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>
         </annotations>
+
         <before>
             <comment userInput="Fill config 'Only X left Threshold'." stepKey="fillConfigComment"/>
             <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 500" stepKey="fillConfigValue"/>
@@ -59,6 +60,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
+
         <comment userInput="Customer login to storefront." stepKey="customerLoginToStorefrontComment"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
             <argument name="Customer" value="$$createCustomer$$"/>

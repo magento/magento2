@@ -13,11 +13,12 @@
             <stories value="Transfer inventory to source"/>
             <title value="Admin user apply to different types of products mass action 'Transfer Inventory To Source' on Products grid"/>
             <description value="You should be able to transfer inventory to source via mass action on products grid"/>
-            <testCaseId value="1516"/>
+            <testCaseId value="MSI-1516"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
+
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="BasicMsiStock1" stepKey="createStock"/>
@@ -103,7 +104,6 @@
             <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
         </before>
-
         <after>
             <comment userInput="Delete all products after test" stepKey="deleteAllProductsViaGridAfterTestComment"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductsGridForDeleteAllProductsComment"/>

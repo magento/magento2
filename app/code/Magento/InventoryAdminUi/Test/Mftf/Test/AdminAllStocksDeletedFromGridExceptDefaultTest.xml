@@ -13,7 +13,7 @@
             <stories value="Delete Stock"/>
             <title value="Delete all Stocks from Stock Grid"/>
             <description value="You should be able to Delete all Stocks from the Grid except Default if it does NOT have a Sales Channel assigned."/>
-            <testCaseId value="858"/>
+            <testCaseId value="MSI-858"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

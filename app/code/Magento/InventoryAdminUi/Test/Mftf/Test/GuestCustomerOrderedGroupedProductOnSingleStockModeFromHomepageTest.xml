@@ -13,7 +13,7 @@
             <stories value="Add Grouped Product"/>
             <title value="Guest customer ordered grouped product on single stock mode from homepage"/>
             <description value="Guest customer should be able to place order with grouped product on single stock."/>
-            <testCaseId value="1317"/>
+            <testCaseId value="MSI-1317"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>
@@ -33,7 +33,6 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <waitForPageLoad stepKey="waitForDashboardLoad"/>
         </before>
-
         <after>
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>

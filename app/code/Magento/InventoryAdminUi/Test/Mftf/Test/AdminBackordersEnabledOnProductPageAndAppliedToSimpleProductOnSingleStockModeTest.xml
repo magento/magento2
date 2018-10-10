@@ -13,11 +13,12 @@
             <stories value="CatalogInventory stock option"/>
             <title value="Backorders enabled on Product page and applied from Homepage to Simple product on Single Stock mode"/>
             <description value="In single stock mode you should be able to create order with simple product and enabled backorders on product page"/>
-            <testCaseId value="1559"/>
+            <testCaseId value="MSI-1559"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
+
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
@@ -66,6 +67,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
+
         <comment userInput="Customer login to storefront." stepKey="customerLoginToStorefrontComment"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
             <argument name="Customer" value="$$createCustomer$$"/>

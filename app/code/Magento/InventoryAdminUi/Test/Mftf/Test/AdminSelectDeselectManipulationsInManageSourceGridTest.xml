@@ -13,7 +13,7 @@
             <stories value="Configuration-Sources"/>
             <title value="Select / Deselect manipulations in Manage Source grid by Admin user"/>
             <description value="You should be able to mass Select and Deselect Sources on Manage Source grid"/>
-            <testCaseId value="494"/>
+            <testCaseId value="MSI-494"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -47,7 +47,6 @@
             <createData entity="_minimalSource" stepKey="createSource22"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
-
         <after>
             <!--Test will fail until MSI-1041 is merged-->
             <actionGroup ref="ChangeAllSourcesStatusActionGroup" stepKey="disableAllSources"/>

@@ -13,7 +13,7 @@
             <stories value="Check 'Manage Stock' system configuration value affection on simple product with custom source."/>
             <title value="Check 'Manage Stock' system configuration value affection on simple product with custom source."/>
             <description value="Verify, that simple product with custom source and 'Out of Stock' status is visible on storefront in case 'Manage Stock' system configuration value is set to 'No'."/>
-            <testCaseId value="958"/>
+            <testCaseId value="MSI-958"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -32,7 +32,6 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <waitForPageLoad stepKey="waitForDashboardLoad"/>
         </before>
-
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
 

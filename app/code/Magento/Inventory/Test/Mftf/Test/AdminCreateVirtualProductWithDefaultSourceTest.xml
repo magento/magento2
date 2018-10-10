@@ -13,7 +13,7 @@
             <stories value="Add Virtual Product"/>
             <title value="Virtual Product created with Default Source assigned by Admin user"/>
             <description value="Virtual Product created with Default Source assigned by Admin user"/>
-            <testCaseId value="1499"/>
+            <testCaseId value="MSI-1499"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

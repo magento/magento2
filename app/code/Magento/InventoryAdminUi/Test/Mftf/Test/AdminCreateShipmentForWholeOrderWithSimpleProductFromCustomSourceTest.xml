@@ -13,7 +13,7 @@
             <stories value="Sales-Shipments"/>
             <title value="Admin user created shipment for whole order with Simple product from Test source and Main Website"/>
             <description value="You should be able to create shipment for whole order from Custom Source."/>
-            <testCaseId value="1136"/>
+            <testCaseId value="MSI-1136"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -95,7 +95,6 @@
                        stepKey="fillSourceQtyField4"/>
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose"/>
         </before>
-
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
