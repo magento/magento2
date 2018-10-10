@@ -97,7 +97,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
      */
-    public function testCustomerUpdatedEmail()
+    public function testCustomerUpdatedEmailGetById()
     {
         $objectManager = Bootstrap::getObjectManager();
 
@@ -111,6 +111,26 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $customer->setEmail('new@example.com');
         $this->customerRepository->save($customer);
 
+        $subscriber->loadByEmail('new@example.com');
+        $this->assertTrue($subscriber->isSubscribed());
+        $this->assertEquals(1, (int)$subscriber->getCustomerId());
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
+     */
+    public function testCustomerUpdatedEmailGet()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
+        $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
+        $subscriber->loadByEmail('customer@example.com');
+        $this->assertTrue($subscriber->isSubscribed());
+        $this->assertEquals(1, (int)$subscriber->getCustomerId());
+        $customer = $this->customerRepository->get('customer@example.com');
+        $customer->setEmail('new@example.com');
+        $this->customerRepository->save($customer);
         $subscriber->loadByEmail('new@example.com');
         $this->assertTrue($subscriber->isSubscribed());
         $this->assertEquals(1, (int)$subscriber->getCustomerId());
@@ -138,9 +158,25 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
      */
-    public function testCustomerDeletedAdminArea()
+    public function testCustomerDeletedAdminAreaGetById()
     {
         $customer = $this->customerRepository->getById(1);
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
+        $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
+        $subscriber->loadByEmail('customer@example.com');
+        $this->assertTrue($subscriber->isSubscribed());
+        $this->customerRepository->delete($customer);
+        $this->verifySubscriptionNotExist('customer@example.com');
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
+     */
+    public function testCustomerDeletedAdminAreaGet()
+    {
+        $customer = $this->customerRepository->get('customer@example.com');
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = $objectManager->create(\Magento\Newsletter\Model\Subscriber::class);
