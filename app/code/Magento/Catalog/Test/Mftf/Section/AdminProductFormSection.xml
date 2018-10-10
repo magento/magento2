@@ -23,6 +23,7 @@
         <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
         <element name="productNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
+        <element name="productTaxClass" type="select" selector="//*[@name='product[tax_class_id]']"/>
         <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
