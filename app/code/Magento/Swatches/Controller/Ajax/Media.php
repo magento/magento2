@@ -12,7 +12,7 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class Media
  */
-class Media extends \Magento\Framework\App\Action\Action
+class Media extends \Magento\Framework\App\Action\Action implements \Magento\Framework\App\Action\HttpGetActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Product Factory
