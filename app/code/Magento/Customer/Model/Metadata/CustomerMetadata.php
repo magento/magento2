@@ -34,15 +34,25 @@ class CustomerMetadata implements CustomerMetadataInterface
     private $attributeMetadataDataProvider;
 
     /**
+     * List of system attributes which should be available to the clients.
+     *
+     * @var string[]
+     */
+    private $systemAttributes;
+
+    /**
      * @param AttributeMetadataConverter $attributeMetadataConverter
      * @param AttributeMetadataDataProvider $attributeMetadataDataProvider
+     * @param string[] $systemAttributes
      */
     public function __construct(
         AttributeMetadataConverter $attributeMetadataConverter,
-        AttributeMetadataDataProvider $attributeMetadataDataProvider
+        AttributeMetadataDataProvider $attributeMetadataDataProvider,
+        array $systemAttributes = []
     ) {
         $this->attributeMetadataConverter = $attributeMetadataConverter;
         $this->attributeMetadataDataProvider = $attributeMetadataDataProvider;
+        $this->systemAttributes = $systemAttributes;
     }
 
     /**
@@ -136,25 +146,12 @@ class CustomerMetadata implements CustomerMetadataInterface
 
             if (!$isDataObjectMethod
                 && (!$attributeMetadata->isSystem()
-                    || in_array($attributeCode, $this->getAllowedSystemAttributesList())
+                    || in_array($attributeCode, $this->systemAttributes)
                 )
             ) {
                 $customAttributes[] = $attributeMetadata;
             }
         }
         return $customAttributes;
-    }
-
-    /**
-     * Get list of system attributes which should be available to the clients
-     *
-     * @return array
-     */
-    private function getAllowedSystemAttributesList()
-    {
-        return [
-            'disable_auto_group_change',
-            'reward_update_notification'
-        ];
     }
 }
