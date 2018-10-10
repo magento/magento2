@@ -415,7 +415,7 @@ type Products @doc(description: "The Products object is the top-level object ret
     items: [ProductInterface] @doc(description: "An array of products that match the specified search criteria")
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query")
     total_count: Int @doc(description: "The number of products returned")
-    filters: [LayerFilter] @doc(description: "Layered navigation filters array")
+    filters: [LayerFilter] @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\LayerFilters") @doc(description: "Layered navigation filters array")
     sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\SortFields")
 }
 
