@@ -310,7 +310,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
                     foreach ($selectionIds as $selectionId) {
                         $entity = $selections->getItemByColumnValue('selection_id', $selectionId);
-                        if ($entity->getEntityId()) {
+                        if (isset($entity) && $entity->getEntityId()) {
                             $skuParts[] = $entity->getSku();
                         }
                     }
