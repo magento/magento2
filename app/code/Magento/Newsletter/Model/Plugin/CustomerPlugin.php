@@ -72,14 +72,10 @@ class CustomerPlugin
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = $this->subscriberFactory->create();
         $subscriber->updateSubscription($resultId);
+
+        $initialExtensionAttributes = $customer->getExtensionAttributes();
+        $newExtensionAttributes = $result->getExtensionAttributes();
         // update the result only if the original customer instance had different value.
-        $initialExtensionAttributes = $result->getExtensionAttributes();
-        if ($initialExtensionAttributes === null) {
-            /** @var CustomerExtensionInterface $initialExtensionAttributes */
-            $initialExtensionAttributes = $this->extensionFactory->create(CustomerInterface::class);
-            $result->setExtensionAttributes($initialExtensionAttributes);
-        }
-        $newExtensionAttributes = $customer->getExtensionAttributes();
         if ($newExtensionAttributes
             && $initialExtensionAttributes->getIsSubscribed() !== $newExtensionAttributes->getIsSubscribed()
         ) {
@@ -159,6 +155,19 @@ class CustomerPlugin
             $extensionAttributes->setIsSubscribed($isSubscribed);
         }
         return $customer;
+    }
+
+    /**
+     * Plugin after get customer that obtains newsletter subscription status for given customer.
+     *
+     * @param CustomerRepository $subject
+     * @param CustomerInterface $customer
+     * @return CustomerInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterGet(CustomerRepository $subject, CustomerInterface $customer)
+    {
+        return $this->afterGetById($subject, $customer);
     }
 
     /**
