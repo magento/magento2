@@ -134,11 +134,71 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
     }
 
     /**
+     * Additional data handling.
+     *
      * @param array $data
      * @return array
      */
     protected function changeStructureOfTheData(array $data)
     {
+        $serializedOptions = $this->getSerializeOptions($data, ['option']);
+        if ($serializedOptions) {
+            $data['serialized_options'] = $serializedOptions;
+            unset($data['option']);
+        }
+
         return $data;
+    }
+
+    /**
+     * Provides serialized product attribute options.
+     *
+     * @param array $data
+     * @param array $optionKeys
+     * @return string
+     */
+    protected function getSerializeOptions(array $data, array $optionKeys): string
+    {
+        $options = [];
+        foreach ($optionKeys as $optionKey) {
+            if (!empty($data[$optionKey])) {
+                $options = array_merge(
+                    $options,
+                    $this->getEncodedOptions([$optionKey => $data[$optionKey]])
+                );
+            }
+        }
+
+        return json_encode($options);
+    }
+
+    /**
+     * Provides encoded attribute values.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function getEncodedOptions(array $data): array
+    {
+        $optionsData = [];
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($data));
+
+        foreach ($iterator as $value) {
+            $depth = $iterator->getDepth();
+            $option = '';
+            $level = 0;
+            $option .= $iterator->getSubIterator($level)->key();
+            $level++;
+
+            while ($level <= $depth) {
+                $option .= '[' . $iterator->getSubIterator($level)->key() . ']';
+                $level++;
+            }
+
+            $option .= '=' . $value;
+            $optionsData[] = $option;
+        }
+
+        return $optionsData;
     }
 }
