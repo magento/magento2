@@ -80,7 +80,7 @@ class ConfiguredRegularPrice extends AbstractPrice implements ConfiguredPriceInt
             if ($this->value === null) {
                 $price = $this->product->getPrice();
                 $priceInCurrentCurrency = $this->priceCurrency->convertAndRound($price);
-                $this->value = $priceInCurrentCurrency ? floatval($priceInCurrentCurrency) : false;
+                $this->value = $priceInCurrentCurrency ? (float)$priceInCurrentCurrency : false;
             }
             return $this->value;
         }

@@ -62,6 +62,7 @@ class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     {
         /** @var $sitemap \Magento\Sitemap\Model\Sitemap */
         $sitemap = $this->_sitemapFactory->create();
+        $sitemap->setStoreId($row->getStoreId());
         $url = $this->escapeHtml($sitemap->getSitemapUrl($row->getSitemapPath(), $row->getSitemapFilename()));
 
         $fileName = preg_replace('/^\//', '', $row->getSitemapPath() . $row->getSitemapFilename());

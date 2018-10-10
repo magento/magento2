@@ -13,8 +13,8 @@
         <element name="ProductPriceByNumber" type="text" selector="//main//li[{{var1}}]//span[@class='price']" parameterized="true"/>
         <element name="ProductInfoByNumber" type="text" selector="//main//li[{{var1}}]//div[@class='product-item-info']" parameterized="true"/>
         <element name="ProductAddToCompareByNumber" type="text" selector="//main//li[{{var1}}]//a[contains(@class, 'tocompare')]" parameterized="true"/>
-
-        <element name="ProductTitleByName" type="button" selector="//main//li//a[contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="productAddToCartByName" type="button" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//a[contains(@class, 'tocart')]" parameterized="true"/>
+        <element name="productTitleByName" type="button" selector="//main//li//a[contains(text(), '{{var1}}')]" parameterized="true"/>
         <element name="ProductPriceByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//span[@class='price']" parameterized="true"/>
         <element name="ProductImageByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//img[@class='product-image-photo']" parameterized="true"/>
         <element name="ProductInfoByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//div[@class='product-item-info']" parameterized="true"/>

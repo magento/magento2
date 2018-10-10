@@ -59,7 +59,9 @@ class MassDisable extends \Magento\Backend\App\Action
             $item->save();
         }
 
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been disabled.', $collection->getSize()));
+        $this->messageManager->addSuccessMessage(
+            __('A total of %1 record(s) have been disabled.', $collection->getSize())
+        );
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

@@ -16,7 +16,7 @@
         </arguments>
         <seeInCurrentUrl url="/{{category.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
         <seeInTitle userInput="{{category.name}}" stepKey="assertCategoryNameInTitle"/>
-        <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+        <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryName"/>
         <see userInput="{{productCount}}" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCount"/>
     </actionGroup>
 
@@ -25,9 +25,14 @@
         <arguments>
             <argument name="product"/>
         </arguments>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="assertProductName"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName(product.name)}}" stepKey="assertProductName"/>
         <see userInput="${{product.price}}.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
+        <seeElement selector="{{StorefrontCategoryProductSection.productAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
+    </actionGroup>
+
+    <actionGroup name="StorefrontSwitchCategoryViewToListMode">
+        <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="switchCategoryViewToListMode"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryTitle"/>
     </actionGroup>
 </actionGroups>

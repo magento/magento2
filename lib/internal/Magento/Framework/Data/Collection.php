@@ -285,7 +285,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if ($this->_totalRecords === null) {
             $this->_totalRecords = count($this->getItems());
         }
-        return intval($this->_totalRecords);
+        return (int)$this->_totalRecords;
     }
 
     /**
@@ -851,7 +851,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function getFlag($flag)
     {
-        return isset($this->_flags[$flag]) ? $this->_flags[$flag] : null;
+        return $this->_flags[$flag] ?? null;
     }
 
     /**

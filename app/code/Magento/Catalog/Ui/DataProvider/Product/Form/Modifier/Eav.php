@@ -40,6 +40,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as Attrib
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 101.0.0
  */
 class Eav extends AbstractModifier
@@ -281,7 +282,7 @@ class Eav extends AbstractModifier
             if ($attributes) {
                 $meta[$groupCode]['children'] = $this->getAttributesMeta($attributes, $groupCode);
                 $meta[$groupCode]['arguments']['data']['config']['componentType'] = Fieldset::NAME;
-                $meta[$groupCode]['arguments']['data']['config']['label'] = __('%1', $group->getAttributeGroupName());
+                $meta[$groupCode]['arguments']['data']['config']['label'] = __($group->getAttributeGroupName());
                 $meta[$groupCode]['arguments']['data']['config']['collapsible'] = true;
                 $meta[$groupCode]['arguments']['data']['config']['dataScope'] = self::DATA_SCOPE_PRODUCT;
                 $meta[$groupCode]['arguments']['data']['config']['sortOrder'] =
@@ -608,7 +609,7 @@ class Eav extends AbstractModifier
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
         $configPath = ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER);
-
+        $attributeCode = $attribute->getAttributeCode();
         $meta = $this->arrayManager->set($configPath, [], [
             'dataType' => $attribute->getFrontendInput(),
             'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
@@ -617,7 +618,7 @@ class Eav extends AbstractModifier
             'notice' => $attribute->getNote(),
             'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
             'label' => $attribute->getDefaultFrontendLabel(),
-            'code' => $attribute->getAttributeCode(),
+            'code' => $attributeCode,
             'source' => $groupCode,
             'scopeLabel' => $this->getScopeLabel($attribute),
             'globalScope' => $this->isScopeGlobal($attribute),
@@ -647,7 +648,8 @@ class Eav extends AbstractModifier
             ]);
         }
 
-        if (in_array($attribute->getAttributeCode(), $this->attributesToDisable)) {
+        $product = $this->locator->getProduct();
+        if (in_array($attributeCode, $this->attributesToDisable) || $product->isLockedAttribute($attributeCode)) {
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'disabled' => true,
             ]);
@@ -853,7 +855,7 @@ class Eav extends AbstractModifier
     {
         $valueMap = $this->formElementMapper->getMappings();
 
-        return isset($valueMap[$value]) ? $valueMap[$value] : $value;
+        return $valueMap[$value] ?? $value;
     }
 
     /**
@@ -907,6 +909,9 @@ class Eav extends AbstractModifier
         $attributeCode = $attribute->getAttributeCode();
         /** @var Product $product */
         $product = $this->locator->getProduct();
+        if ($product->isLockedAttribute($attributeCode)) {
+            return false;
+        }
 
         if (isset($this->canDisplayUseDefault[$attributeCode])) {
             return $this->canDisplayUseDefault[$attributeCode];

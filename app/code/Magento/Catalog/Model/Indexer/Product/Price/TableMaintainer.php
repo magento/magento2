@@ -183,7 +183,7 @@ class TableMaintainer
     public function createTablesForDimensions(array $dimensions)
     {
         $mainTableName = $this->getMainTable($dimensions);
-        //Create index table for dimensions based on on main replica table
+        //Create index table for dimensions based on main replica table
         //Using main replica table is necessary for backward capability and TableResolver plugin work
         $this->createTable(
             $this->getTable(self::MAIN_INDEX_TABLE . $this->additionalTableSuffix),

@@ -32,12 +32,16 @@ class ImageExtractor implements TypeDataExtractorInterface
                     continue;
                 }
                 $attributeTagName = $attribute->tagName;
-                if ($attributeTagName === 'background') {
-                    $nodeValue = $this->processImageBackground($attribute->nodeValue);
-                } elseif ($attributeTagName === 'width' || $attributeTagName === 'height') {
-                    $nodeValue = intval($attribute->nodeValue);
+                if ((bool)$attribute->getAttribute('xsi:nil') !== true) {
+                    if ($attributeTagName === 'background') {
+                        $nodeValue = $this->processImageBackground($attribute->nodeValue);
+                    } elseif ($attributeTagName === 'width' || $attributeTagName === 'height') {
+                            $nodeValue = (int)$attribute->nodeValue;
+                    } else {
+                        $nodeValue = $attribute->nodeValue;
+                    }
                 } else {
-                    $nodeValue = $attribute->nodeValue;
+                    $nodeValue = null;
                 }
                 $result[$mediaParentTag][$moduleNameImage][Image::MEDIA_TYPE_CONFIG_NODE][$imageId][$attribute->tagName]
                     = $nodeValue;
