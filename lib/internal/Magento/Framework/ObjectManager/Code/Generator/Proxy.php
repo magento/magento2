@@ -165,7 +165,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => $parameters,
             'body' => $this->_getMethodBody($method->getName(), $parameterNames),
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
-            'returnType' => $method->getReturnType(),
+            'returnType' => $this->getReturnTypeValue($method->getReturnType()),
         ];
 
         return $methodInfo;
@@ -244,5 +244,24 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             }
         }
         return $result;
+    }
+
+    /**
+     * Returns return type
+     *
+     * @param mixed $returnType
+     * @return null|string
+     */
+    private function getReturnTypeValue($returnType)
+    {
+        $returnTypeValue = null;
+
+        if ($returnType) {
+            $returnTypeValue = ($returnType->getName() === 'self')
+                ? $this->getSourceClassName()
+                : $returnType->getName();
+        }
+
+        return $returnTypeValue;
     }
 }
