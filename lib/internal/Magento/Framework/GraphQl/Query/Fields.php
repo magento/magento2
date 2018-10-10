@@ -21,7 +21,7 @@ class Fields
     private $fieldsUsedInQuery = [];
 
     /**
-     * Prints AST to string. Capable of printing GraphQL queries and Type definition language.
+     * Set Query for extracting list of fields.
      *
      * @param string $query
      * @return void
@@ -42,6 +42,7 @@ class Fields
                 ]
             );
         } catch (\Exception $e) {
+            // If a syntax error is encountered do not collect fields
         }
         if (isset($queryFields['IntrospectionQuery'])) {
             // It must be possible to query any fields during introspection query
