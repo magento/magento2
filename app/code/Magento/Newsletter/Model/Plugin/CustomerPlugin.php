@@ -76,23 +76,29 @@ class CustomerPlugin
         $resultId = $result->getId();
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = $this->subscriberFactory->create();
-        $subscriber->updateSubscription($resultId);
 
-        $initialExtensionAttributes = $customer->getExtensionAttributes();
-        $newExtensionAttributes = $result->getExtensionAttributes();
+        $subscriber->updateSubscription($resultId);
         // update the result only if the original customer instance had different value.
+        $initialExtensionAttributes = $customer->getExtensionAttributes();
+        if ($initialExtensionAttributes === null) {
+            /** @var CustomerExtensionInterface $initialExtensionAttributes */
+            $initialExtensionAttributes = $this->extensionFactory->create(CustomerInterface::class);
+        }
+
+        $newExtensionAttributes = $result->getExtensionAttributes();
         if ($newExtensionAttributes
             && $initialExtensionAttributes->getIsSubscribed() !== $newExtensionAttributes->getIsSubscribed()
         ) {
             if ($newExtensionAttributes->getIsSubscribed() === true) {
                 $subscriber->subscribeCustomerById($resultId);
-            } elseif ($newExtensionAttributes->getIsSubscribed() === false) {
+            } else {
                 $subscriber->unsubscribeCustomerById($resultId);
             }
         }
         $isSubscribed = $subscriber->isSubscribed();
         $this->customerSubscriptionStatus[$resultId] = $isSubscribed;
         $initialExtensionAttributes->setIsSubscribed($isSubscribed);
+
         return $result;
     }
 
