@@ -79,6 +79,13 @@
             </skip>
         </annotations>
     </test>
+    <test name="AdminAddConfigurableProductWithTextSwatchAttributeAndDefaultSourceTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
 
     <test name="EndToEndB2CGuestUserTest">
         <annotations>
