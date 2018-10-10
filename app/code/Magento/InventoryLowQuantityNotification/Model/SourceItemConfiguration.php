@@ -37,7 +37,9 @@ class SourceItemConfiguration extends AbstractExtensibleModel implements SourceI
      */
     public function getNotifyStockQty(): ?float
     {
-        return $this->getData(self::INVENTORY_NOTIFY_QTY);
+        return $this->getData(self::INVENTORY_NOTIFY_QTY) === null ?
+            null:
+            (float)$this->getData(self::INVENTORY_NOTIFY_QTY);
     }
 
     /**

@@ -67,7 +67,9 @@ class Reservation implements ReservationInterface
      */
     public function getReservationId(): ?int
     {
-        return $this->reservationId;
+        return $this->reservationId === null ?
+            null:
+            (int)$this->reservationId;
     }
 
     /**
