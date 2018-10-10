@@ -427,7 +427,7 @@ class GitRepo
                 'diff HEAD %s/%s -- %s',
                 $remoteAlias,
                 $remoteBranch,
-                $this->workTree . '/' . $fileName
+                $fileName
             )
         );
 
