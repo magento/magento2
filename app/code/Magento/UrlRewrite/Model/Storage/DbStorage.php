@@ -24,12 +24,12 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 class DbStorage extends AbstractStorage
 {
     /**
-     * DB Storage table name
+     * DB Storage table name.
      */
     const TABLE_NAME = 'url_rewrite';
 
     /**
-     * Code of "Integrity constraint violation: 1062 Duplicate entry" error
+     * Code of "Integrity constraint violation: 1062 Duplicate entry" error.
      */
     const ERROR_CODE_DUPLICATE_ENTRY = 1062;
 
@@ -39,7 +39,7 @@ class DbStorage extends AbstractStorage
     protected $connection;
 
     /**
-     * @var Resource
+     * @var ResourceConnection
      */
     protected $resource;
 
@@ -49,9 +49,9 @@ class DbStorage extends AbstractStorage
     private $logger;
 
     /**
-     * @param UrlRewriteFactory $urlRewriteFactory
-     * @param DataObjectHelper $dataObjectHelper
-     * @param ResourceConnection $resource
+     * @param UrlRewriteFactory    $urlRewriteFactory
+     * @param DataObjectHelper     $dataObjectHelper
+     * @param ResourceConnection   $resource
      * @param LoggerInterface|null $logger
      */
     public function __construct(
@@ -59,8 +59,7 @@ class DbStorage extends AbstractStorage
         DataObjectHelper $dataObjectHelper,
         ResourceConnection $resource,
         LoggerInterface $logger = null
-    )
-    {
+    ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
         $this->logger = $logger ?: ObjectManager::getInstance()
@@ -70,9 +69,10 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * Prepare select statement for specific filter
+     * Prepare select statement for specific filter.
      *
      * @param array $data
+     *
      * @return Select
      */
     protected function prepareSelect(array $data)
@@ -81,14 +81,17 @@ class DbStorage extends AbstractStorage
         $select->from($this->resource->getTableName(self::TABLE_NAME));
 
         foreach ($data as $column => $value) {
-            $select->where($this->connection->quoteIdentifier($column) . ' IN (?)', $value);
+            $select->where($this->connection->quoteIdentifier($column).' IN (?)', $value);
         }
 
         return $select;
     }
 
     /**
+     * Find all rows by specific filter. Template method.
+     *
      * @param array $data
+     *
      * @return array
      */
     protected function doFindAllByData(array $data)
@@ -97,7 +100,10 @@ class DbStorage extends AbstractStorage
     }
 
     /**
+     * Find row by specific filter. Template method.
+     *
      * @param array $data
+     *
      * @return array|mixed|null
      */
     protected function doFindOneByData(array $data)
@@ -111,7 +117,7 @@ class DbStorage extends AbstractStorage
 
             $data[UrlRewrite::REQUEST_PATH] = [
                 rtrim($requestPath, '/'),
-                rtrim($requestPath, '/') . '/',
+                rtrim($requestPath, '/').'/',
             ];
 
             $resultsFromDb = $this->connection->fetchAll($this->prepareSelect($data));
@@ -122,7 +128,7 @@ class DbStorage extends AbstractStorage
 
                 // If request path matches the DB value or it's redirect - we can return result from DB
                 $canReturnResultFromDb = ($resultFromDb[UrlRewrite::REQUEST_PATH] === $requestPath
-                    || in_array((int)$resultFromDb[UrlRewrite::REDIRECT_TYPE], $redirectTypes, true));
+                    || in_array((int) $resultFromDb[UrlRewrite::REDIRECT_TYPE], $redirectTypes, true));
 
                 // Otherwise return 301 redirect to request path from DB results
                 $result = $canReturnResultFromDb ? $resultFromDb : [
@@ -156,7 +162,6 @@ class DbStorage extends AbstractStorage
      * Delete old URLs from DB.
      *
      * @param UrlRewrite[] $urls
-     * @return void
      */
     private function deleteOldUrls(array $urls): void
     {
@@ -176,21 +181,21 @@ class DbStorage extends AbstractStorage
                 $oldUrlsSelect->orWhere(
                     $this->connection->quoteIdentifier(
                         UrlRewrite::ENTITY_TYPE
-                    ) . ' = ?',
+                    ).' = ?',
                     $type
                 );
 
                 $oldUrlsSelect->where(
                     $this->connection->quoteIdentifier(
                         UrlRewrite::ENTITY_ID
-                    ) . ' IN (?)',
+                    ).' IN (?)',
                     array_unique($entities)
                 );
 
                 $oldUrlsSelect->where(
                     $this->connection->quoteIdentifier(
                         UrlRewrite::STORE_ID
-                    ) . ' = ?',
+                    ).' = ?',
                     $store
                 );
             }
@@ -200,7 +205,7 @@ class DbStorage extends AbstractStorage
         $checkOldUrlsSelect = clone $oldUrlsSelect;
         $checkOldUrlsSelect->reset(Select::COLUMNS);
         $checkOldUrlsSelect->columns('count(*)');
-        $hasOldUrls = (bool)$this->connection->fetchOne($checkOldUrlsSelect);
+        $hasOldUrls = (bool) $this->connection->fetchOne($checkOldUrlsSelect);
 
         if ($hasOldUrls) {
             $this->connection->query(
@@ -212,7 +217,7 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function doReplace(array $urls)
     {
@@ -254,10 +259,10 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * Insert multiple
+     * Insert multiple.
      *
      * @param array $data
-     * @return void
+     *
      * @throws \Magento\Framework\Exception\AlreadyExistsException|\Exception
      * @throws \Exception
      */
@@ -279,11 +284,13 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * Get filter for url rows deletion due to provided urls
+     * Get filter for url rows deletion due to provided urls.
      *
      * @param UrlRewrite[] $urls
+     *
      * @return array
-     * @deprecated Not used anymore.
+     *
+     * @deprecated not used anymore
      */
     protected function createFilterDataBasedOnUrls($urls)
     {
@@ -302,6 +309,8 @@ class DbStorage extends AbstractStorage
     }
 
     /**
+     * Remove rewrites that contains some rewrites data.
+     *
      * @param array $data
      */
     public function deleteByData(array $data)
