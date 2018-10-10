@@ -161,7 +161,7 @@ class Helper
         $productData = $this->normalize($productData);
         $productData = $this->convertSpecialFromDateStringToObject($productData);
 
-        if(isset($productData['sku'])) {
+        if (isset($productData['sku'])) {
             $productData['sku'] = trim($productData['sku']);
         }
 
