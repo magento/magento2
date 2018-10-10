@@ -17,7 +17,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @throws \ReflectionException
      * @return void
      */
-    public function testCollectionCreate(): void
+    public function testCollectionCreate()
     {
         $objectManager = Bootstrap::getObjectManager();
 
