@@ -115,4 +115,44 @@
         <!-- Save the tax rate -->
         <click stepKey="saveTaxRate" selector="{{AdminTaxRulesSection.save}}"/>
     </actionGroup>
+
+    <!--Add Product Tax Class-->
+    <actionGroup name="addProductTaxClass">
+        <arguments>
+            <argument name="prodTaxClassName" type="string"/>
+        </arguments>
+        <!--Click Additional Settings-->
+        <click stepKey="clickAdditionalSettings" selector="{{AdminTaxRulesSection.additionalSettings}}"/>
+        <!--Click Product Add New Tax Class Button-->
+        <click stepKey="clickProdAddNewTaxClassBtn" selector="{{AdminTaxRulesSection.productAddNewTaxClass}}"/>
+        <!--Fill field-->
+        <fillField stepKey="fillProdNewTaxClass" selector="{{AdminTaxRulesSection.fieldProdNewTaxClass}}" userInput="{{prodTaxClassName}}"/>
+        <!-- Save Product tax rate -->
+        <click stepKey="saveProdTaxRate" selector="{{AdminTaxRulesSection.saveProdNewTaxClass}}"/>
+    </actionGroup>
+
+    <!--Add New Tax Rule -->
+    <actionGroup name="addNewTaxRuleActionGroup">
+        <!-- Go to tax rule page -->
+        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
+        <waitForPageLoad stepKey="waitForTaxRatePage"/>
+        <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
+    </actionGroup>
+
+    <!--Delete Product Tax Class-->
+    <actionGroup name="deleteProductTaxClass">
+        <arguments>
+            <argument name="taxClassName" type="string"/>
+        </arguments>
+        <!-- Go to tax rule page -->
+        <amOnPage url="{{AdminNewTaxRulePage.url}}" stepKey="goToNewTaxRulePage"/>
+        <waitForPageLoad stepKey="waitForTaxRatePage"/>
+        <click stepKey="clickAdditionalSettings" selector="{{AdminTaxRulesSection.additionalSettings}}"/>
+        <scrollTo stepKey="scrollToAdditionalSettings" selector="{{AdminTaxRulesSection.additionalSettings}}"/>
+        <moveMouseOver stepKey="hoverDeleteElement" selector="{{AdminTaxRulesSection.deleteTaxClassName(taxClassName)}}"/>
+        <click stepKey="deleteFirstTaxClass" selector="{{AdminTaxRulesSection.deleteTaxClass(taxClassName)}}"/>
+        <waitForElementVisible selector="{{AdminTaxRulesSection.popUpDialogOK}}" stepKey="waitForElementBecomeVisible"/>
+        <click stepKey="acceptPopUpDialog" selector="{{AdminTaxRulesSection.popUpDialogOK}}"/>
+        <waitForPageLoad stepKey="waitForProductTaxClassDeleted"/>
+    </actionGroup>
 </actionGroups>
