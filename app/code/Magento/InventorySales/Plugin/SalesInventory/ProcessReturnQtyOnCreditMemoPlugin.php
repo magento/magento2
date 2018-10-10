@@ -14,6 +14,8 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 
 class ProcessReturnQtyOnCreditMemoPlugin
 {
@@ -33,18 +35,34 @@ class ProcessReturnQtyOnCreditMemoPlugin
     private $processRefundItems;
 
     /**
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemManagementAllowedForProductType;
+
+    /**
+     * @var GetProductTypesBySkusInterface
+     */
+    private $getProductTypesBySkus;
+
+    /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param ItemsToRefundInterfaceFactory $itemsToRefundFactory
      * @param ProcessRefundItemsInterface $processRefundItems
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
+     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
         ItemsToRefundInterfaceFactory $itemsToRefundFactory,
-        ProcessRefundItemsInterface $processRefundItems
+        ProcessRefundItemsInterface $processRefundItems,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
+        GetProductTypesBySkusInterface $getProductTypesBySkus
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->itemsToRefundFactory = $itemsToRefundFactory;
         $this->processRefundItems = $processRefundItems;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
+        $this->getProductTypesBySkus = $getProductTypesBySkus;
     }
 
     /**
@@ -68,12 +86,16 @@ class ProcessReturnQtyOnCreditMemoPlugin
     ) {
         $items = [];
         foreach ($creditmemo->getItems() as $item) {
+            /** @var OrderItemInterface $orderItem */
             $orderItem = $item->getOrderItem();
-            $qty = (float)$item->getQty();
-            if ($this->canReturnItem($orderItem, $qty, $returnToStockItems) && !$orderItem->isDummy()) {
-                $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
-                    [$item->getProductId()]
-                )[$item->getProductId()];
+            $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
+                [$item->getProductId()]
+            )[$item->getProductId()];
+            $productType = $orderItem->getProductType() ?: $this->getProductTypesBySkus->execute(
+                [$itemSku]
+            )[$itemSku];
+            if ($this->isSourceItemManagementAllowedForProductType->execute($productType)) {
+                $qty = (float)$item->getQty();
                 $processedQty = $orderItem->getQtyCanceled() - $orderItem->getQtyRefunded();
                 $items[$itemSku] = [
                     'qty' => ($items[$itemSku]['qty'] ?? 0) + $qty,
@@ -91,18 +113,5 @@ class ProcessReturnQtyOnCreditMemoPlugin
             ]);
         }
         $this->processRefundItems->execute($order, $itemsToRefund, $returnToStockItems);
-    }
-
-    /**
-     * @param OrderItemInterface $orderItem
-     * @param float $qty
-     * @param array $returnToStockItems
-     * @return bool
-     */
-    private function canReturnItem(OrderItemInterface $orderItem, float $qty, array $returnToStockItems): bool
-    {
-        $parentItemId = $orderItem->getParentItemId();
-        return (in_array($orderItem->getId(), $returnToStockItems)
-                || in_array($parentItemId, $returnToStockItems)) && $qty;
     }
 }
