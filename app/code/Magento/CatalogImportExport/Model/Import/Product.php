@@ -1574,10 +1574,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $rowScope = $this->getRowScope($rowData);
 
                 $urlKey = $this->getUrlKey($rowData);
-                if (!empty($rowData[self::URL_KEY]))  {
+                if (!empty($rowData[self::URL_KEY])) {
                     // If url_key column and its value were in the CSV file
                     $rowData[self::URL_KEY] = $urlKey;
-                } else if($this->isNeedToChangeUrlKey($rowData)) {
+                } else if ($this->isNeedToChangeUrlKey($rowData)) {
                     // If url_key column was empty or even not declared in the CSV file but by the rules it is need to
                     // be setteed. In case when url_key is generating from name column we have to ensure that the bunch
                     // of products will pass for the event with url_key column.
@@ -2825,7 +2825,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Whether a url key is needed to be change.
-     * Returns false if
      *
      * @param array $rowData
      * @return bool
