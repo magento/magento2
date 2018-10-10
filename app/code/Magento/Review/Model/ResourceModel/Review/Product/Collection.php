@@ -405,7 +405,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $idsSelect = clone $this->getSelect();
         $idsSelect->reset(Select::LIMIT_COUNT);
         $idsSelect->reset(Select::LIMIT_OFFSET);
-        $idsSelect->reset(Select::COLUMNS);
+
         $idsSelect->columns('rt.review_id');
         return $this->getConnection()->fetchCol($idsSelect);
     }
