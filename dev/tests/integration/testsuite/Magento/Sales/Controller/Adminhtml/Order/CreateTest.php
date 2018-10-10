@@ -96,18 +96,27 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             ScopeInterface::SCOPE_STORE,
             $store->getCode()
         );
-
         $website = $this->getWebsite('test');
         $customer = $this->getCustomer('customer.web@example.com', (int)$website->getId());
         $quote = $this->getQuoteById('0000032134');
         $session = $this->_objectManager->get(SessionQuote::class);
         $session->setQuoteId($quote->getId());
 
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $data = [
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'street' => ['Soborna 23'],
+            'city' => 'Testcity',
+            'country_id' => 'US',
+            'region' => 'Alabama',
+            'region_id' => 1
+        ];
         $this->getRequest()->setPostValue(
             [
-                'customer_id' => $customer->getId(),
+                'order' => ['billing_address' => $data],
+                'reset_shipping' => 1,
                 'collect_shipping_rates' => 1,
+                'customer_id' => $customer->getId(),
                 'store_id' => $store->getId(),
                 'json' => true
             ]
