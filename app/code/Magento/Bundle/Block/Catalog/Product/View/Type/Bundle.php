@@ -188,6 +188,10 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 $configValue = $preConfiguredValues->getData('bundle_option/' . $optionId);
                 if ($configValue) {
                     $defaultValues[$optionId] = $configValue;
+                    $configQty = $preConfiguredValues->getData('bundle_option_qty/' . $optionId);
+                    if ($configQty) {
+                        $options[$optionId]['selections'][$configValue]['qty'] = $configQty;
+                    }
                 }
             }
             $position++;

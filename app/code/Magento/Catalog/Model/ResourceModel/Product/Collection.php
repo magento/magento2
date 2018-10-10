@@ -1423,8 +1423,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 ['cu' => $this->getTable('catalog_url_rewrite_product_category')],
                 'u.url_rewrite_id=cu.url_rewrite_id'
             )->where('cu.category_id IN (?)', $this->_urlRewriteCategory);
+        } else {
+            $select->joinLeft(
+                ['cu' => $this->getTable('catalog_url_rewrite_product_category')],
+                'u.url_rewrite_id=cu.url_rewrite_id'
+            )->where('cu.url_rewrite_id IS NULL');
         }
-
+        
         // more priority is data with category id
         $urlRewrites = [];
 
