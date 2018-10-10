@@ -21,7 +21,8 @@ $productId = $block->getProduct()->getId();
                 "numberToShow": <?= /* @escapeNotVerified */ $block->getNumberSwatchesPerProduct(); ?>,
                 "jsonConfig": <?= /* @escapeNotVerified */ $block->getJsonConfig(); ?>,
                 "jsonSwatchConfig": <?= /* @escapeNotVerified */ $block->getJsonSwatchConfig(); ?>,
-                "mediaCallback": "<?= /* @escapeNotVerified */ $block->getMediaCallback() ?>"
+                "mediaCallback": "<?= /* @escapeNotVerified */ $block->getMediaCallback() ?>",
+                "jsonSwatchImageSizeConfig": <?php /* @noEscape */ echo $block->getJsonSwatchSizeConfig() ?>
             }
         }
     }
