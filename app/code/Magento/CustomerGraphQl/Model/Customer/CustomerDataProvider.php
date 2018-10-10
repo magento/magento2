@@ -5,11 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Resolver\Customer;
+namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -32,21 +33,21 @@ class CustomerDataProvider
     /**
      * @var SerializerInterface
      */
-    private $jsonSerializer;
+    private $serializer;
 
     /**
      * @param CustomerRepositoryInterface $customerRepository
      * @param ServiceOutputProcessor $serviceOutputProcessor
-     * @param SerializerInterface $jsonSerializer
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
         ServiceOutputProcessor $serviceOutputProcessor,
-        SerializerInterface $jsonSerializer
+        SerializerInterface $serializer
     ) {
         $this->customerRepository = $customerRepository;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
-        $this->jsonSerializer = $jsonSerializer;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -56,42 +57,44 @@ class CustomerDataProvider
      * @return array
      * @throws NoSuchEntityException|LocalizedException
      */
-    public function getCustomerById(int $customerId) : array
+    public function getCustomerById(int $customerId): array
     {
         try {
-            $customerObject = $this->customerRepository->getById($customerId);
+            $customer = $this->customerRepository->getById($customerId);
         } catch (NoSuchEntityException $e) {
-            // No error should be thrown, null result should be returned
-            return [];
+            throw new GraphQlNoSuchEntityException(
+                __('Customer id "%customer_id" does not exist.', ['customer_id' => $customerId]),
+                $e
+            );
         }
-        return $this->processCustomer($customerObject);
+        return $this->processCustomer($customer);
     }
 
     /**
      * Transform single customer data from object to in array format
      *
-     * @param CustomerInterface $customerObject
+     * @param CustomerInterface $customer
      * @return array
      */
-    private function processCustomer(CustomerInterface $customerObject) : array
+    private function processCustomer(CustomerInterface $customer): array
     {
-        $customer = $this->serviceOutputProcessor->process(
-            $customerObject,
+        $customerData = $this->serviceOutputProcessor->process(
+            $customer,
             CustomerRepositoryInterface::class,
             'get'
         );
-        if (isset($customer['extension_attributes'])) {
-            $customer = array_merge($customer, $customer['extension_attributes']);
+        if (isset($customerData['extension_attributes'])) {
+            $customerData = array_merge($customerData, $customerData['extension_attributes']);
         }
         $customAttributes = [];
-        if (isset($customer['custom_attributes'])) {
-            foreach ($customer['custom_attributes'] as $attribute) {
+        if (isset($customerData['custom_attributes'])) {
+            foreach ($customerData['custom_attributes'] as $attribute) {
                 $isArray = false;
                 if (is_array($attribute['value'])) {
                     $isArray = true;
                     foreach ($attribute['value'] as $attributeValue) {
                         if (is_array($attributeValue)) {
-                            $customAttributes[$attribute['attribute_code']] = $this->jsonSerializer->serialize(
+                            $customAttributes[$attribute['attribute_code']] = $this->serializer->serialize(
                                 $attribute['value']
                             );
                             continue;
@@ -106,8 +109,8 @@ class CustomerDataProvider
                 $customAttributes[$attribute['attribute_code']] = $attribute['value'];
             }
         }
-        $customer = array_merge($customer, $customAttributes);
+        $customerData = array_merge($customerData, $customAttributes);
 
-        return $customer;
+        return $customerData;
     }
 }
