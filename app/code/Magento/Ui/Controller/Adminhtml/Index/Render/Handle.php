@@ -23,14 +23,18 @@ class Handle extends AbstractAction implements HttpGetActionInterface
      */
     public function execute()
     {
+        $response = '';
         $handle = $this->_request->getParam('handle');
         $namespace = $this->_request->getParam('namespace');
         $buttons = $this->_request->getParam('buttons', false);
 
-        $this->_view->loadLayout(['default', $handle], true, true, false);
+        $component = $this->factory->create($namespace);
+        if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
+            $this->_view->loadLayout(['default', $handle], true, true, false);
 
-        $uiComponent = $this->_view->getLayout()->getBlock($namespace);
-        $response = $uiComponent instanceof UiComponent ? $uiComponent->toHtml() : '';
+            $uiComponent = $this->_view->getLayout()->getBlock($namespace);
+            $response = $uiComponent instanceof UiComponent ? $uiComponent->toHtml() : '';
+        }
 
         if ($buttons) {
             $actionsToolbar = $this->_view->getLayout()->getBlock(ActionPool::ACTIONS_PAGE_TOOLBAR);
@@ -38,5 +42,25 @@ class Handle extends AbstractAction implements HttpGetActionInterface
         }
 
         $this->_response->appendBody($response);
+    }
+
+    /**
+     * Optionally validate ACL resource of components with a DataSource/DataProvider
+     *
+     * @param mixed $dataProviderConfigData
+     * @return bool
+     */
+    private function validateAclResource($dataProviderConfigData)
+    {
+        if (isset($dataProviderConfigData['aclResource'])
+            && !$this->_authorization->isAllowed($dataProviderConfigData['aclResource'])
+        ) {
+            if (!$this->_request->isAjax()) {
+                $this->_redirect('admin/denied');
+            }
+            return false;
+        }
+
+        return true;
     }
 }
