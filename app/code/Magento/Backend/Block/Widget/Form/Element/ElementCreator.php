@@ -13,8 +13,7 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 /**
  * Class ElementCreator
  *
- * @deprecated 100.3.0 in favour of UI component implementation
- * @package Magento\Backend\Block\Widget\Form\Element
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 class ElementCreator
 {

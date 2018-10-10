@@ -46,7 +46,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeAction
      * @param array $data
-     * @param array|null $excludeFields
+     * @param array $excludeFields
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -55,11 +55,11 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeAction,
         array $data = [],
-        array $excludeFields = null
+        array $excludeFields = []
     ) {
         $this->_attributeAction = $attributeAction;
         $this->_productFactory = $productFactory;
-        $this->excludeFields = $excludeFields ?: [];
+        $this->excludeFields = $excludeFields;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
