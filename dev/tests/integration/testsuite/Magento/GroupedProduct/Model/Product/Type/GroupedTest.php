@@ -170,15 +170,14 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             count($expected),
             count($actual)
         );
-        /** @var array $element */
-        foreach ($expected as $number => $element) {
-            foreach ($element as $key => $value) {
-                self::assertEquals(
-                    $value,
-                    $actual[$number]->getData($key),
-                    "Failed asserting that value $key matches expected"
-                );
-            }
+        /** @var Product $product */
+        foreach ($actual as $product) {
+            $sku = $product->getSku();
+            self::assertEquals(
+                $expected[$sku],
+                $product->getCartQty(),
+                "Failed asserting that Product Cart Quantity matches expected"
+            );
         }
     }
 
@@ -201,14 +200,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 [
-                    [
-                        'sku' => 'virtual-product',
-                        'cart_qty' => 5,
-                    ],
-                    [
-                        'sku' => 'simple',
-                        'cart_qty' => 4,
-                    ],
+                    'virtual-product' => 5,
+                    'simple' => 4
                 ],
             ],
             'Out of stock product are shown #2' => [
@@ -221,10 +214,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 [
-                    [
-                        'sku' => 'virtual-product',
-                        'cart_qty' => 2, // This is a default quantity.
-                    ],
+                    'virtual-product' => 2, // This is a default quantity.
                 ],
             ],
             'Out of stock product are hidden #1' => [
@@ -238,14 +228,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 [
-                    [
-                        'sku' => 'virtual-product',
-                        'cart_qty' => 5,
-                    ],
-                    [
-                        'sku' => 'simple',
-                        'cart_qty' => 4,
-                    ],
+                    'virtual-product' => 5,
+                    'simple' => 4,
                 ],
             ],
             'Out of stock product are hidden #2' => [
@@ -258,10 +242,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 [
-                    [
-                        'sku' => 'virtual-product',
-                        'cart_qty' => 2, // This is a default quantity.
-                    ],
+                    'virtual-product' => 2, // This is a default quantity.
                 ],
             ],
         ];
