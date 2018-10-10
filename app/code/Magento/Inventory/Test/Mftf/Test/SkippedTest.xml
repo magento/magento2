@@ -30,6 +30,49 @@
         </annotations>
     </test>
 
+    <test name="AdminCreateOrderWithVirtualProductFromTestSourceWithBackordersTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="AdminStockDeletedFromGridWhenNoSalesChannelsAssignedTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="StorefrontLoggedInCustomerOrderedVirtualProductOnDefaultStockTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="AdminOrderCreatedWithSimpleProductViaTheAdminTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="AdminMassActionUnAssignAllProductSourcesFromSimpleProductTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="AdminPriorityOfSourcesChangedByDragAndDropTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
+
     <test name="EndToEndB2CGuestUserTest">
         <annotations>
             <skip>
