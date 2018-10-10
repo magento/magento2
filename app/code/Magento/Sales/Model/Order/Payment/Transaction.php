@@ -982,7 +982,9 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\TransactionExtensionInterface|null
      */
     public function getExtensionAttributes()
     {

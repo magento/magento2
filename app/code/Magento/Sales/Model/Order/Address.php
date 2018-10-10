@@ -716,7 +716,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes
+     *
+     * @return $this
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes)
     {

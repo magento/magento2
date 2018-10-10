@@ -1378,7 +1378,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeType()
     {
@@ -1386,7 +1387,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeTypeName()
     {
