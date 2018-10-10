@@ -13,6 +13,11 @@ use Magento\Newsletter\Model\ResourceModel\Subscriber;
 use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class CustomerPlugin
+ *
+ * @package Magento\Newsletter\Model\Plugin
+ */
 class CustomerPlugin
 {
     /**
