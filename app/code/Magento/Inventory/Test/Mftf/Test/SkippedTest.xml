@@ -86,6 +86,34 @@
             </skip>
         </annotations>
     </test>
+    <test name="AdminCreateOrderWithSimpleProductFromTestSourceWithBackordersTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="AdminUserApplyOnlyXLeftThresholdForSimpleProductOnTestSourceTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="BackordersEnabledOnProductPageAndAppliedToSimpleProductOnDefaultSourceTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="AdminConfigurableProductDisabledManageStockOnCustomStockTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1759"/>
+            </skip>
+        </annotations>
+    </test>
 
     <test name="EndToEndB2CGuestUserTest">
         <annotations>
