@@ -24,16 +24,16 @@ define([
 
         /** @inheritdoc */
         initialize: function () {
-            var steps;
+            var stepsValue;
 
             this._super();
             $(window).hashchange(_.bind(stepNavigator.handleHash, stepNavigator));
 
             if (!window.location.hash) {
-                steps = stepNavigator.steps();
+                stepsValue = stepNavigator.steps();
 
-                if (steps.length) {
-                    stepNavigator.setHash(steps.sort(stepNavigator.sortItems)[0].code);
+                if (stepsValue.length) {
+                    stepNavigator.setHash(stepsValue.sort(stepNavigator.sortItems)[0].code);
                 }
             }
 
