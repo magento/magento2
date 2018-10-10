@@ -131,7 +131,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Edit Url
+     * Retrieve edit url.
      *
      * @return void
      */
@@ -140,7 +140,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Delete Url
+     * Retrieve delete url.
      *
      * @return void
      */
@@ -149,7 +149,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Create Url
+     * Retrieve create url.
      *
      * @return void
      */
@@ -158,10 +158,10 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Get Renderer
+     * Retrieve block renderer.
      *
-     * @param BlockInterface|string $renderer
-     * @return BlockInterface
+     * @param string $renderer
+     * @return \Magento\Framework\View\Element\BlockInterface
      */
     public function getRenderer($renderer)
     {
@@ -221,7 +221,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Get Format
+     * Retrieve address format.
      *
      * @param string $code
      * @return Format|string
@@ -415,6 +415,25 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         if ($attributeMetadata) {
             return $attributeMetadata->isVisible();
         }
+        return false;
+    }
+
+    /**
+     * Retrieve attribute required
+     *
+     * @param string $code
+     * @return bool
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function isAttributeRequired($code)
+    {
+        $attributeMetadata = $this->_addressMetadataService->getAttributeMetadata($code);
+
+        if ($attributeMetadata) {
+            return $attributeMetadata->isRequired();
+        }
+
         return false;
     }
 }

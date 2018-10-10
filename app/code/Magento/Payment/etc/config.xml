@@ -13,6 +13,7 @@
                 <model>Magento\Payment\Model\Method\Free</model>
                 <order_status>pending</order_status>
                 <title>No Payment Information Required</title>
+                <payment_action>authorize</payment_action>
                 <allowspecific>0</allowspecific>
                 <sort_order>1</sort_order>
             </free>
