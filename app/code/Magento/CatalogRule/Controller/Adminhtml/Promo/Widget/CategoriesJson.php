@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,8 +8,12 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Widget;
 use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\Registry;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 
-class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget
+/**
+ * Categories json widget for catalog rule
+ */
+class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget implements HttpPostActionInterface
 {
     /**
      * Core registry
