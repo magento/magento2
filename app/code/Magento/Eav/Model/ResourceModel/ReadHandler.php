@@ -126,10 +126,10 @@ class ReadHandler implements AttributeInterface
                         $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
                         $this->getContextVariables($scope)
                     )->order('t.' . $scope->getIdentifier() . ' ASC');
+                    $attributeValues[] = $connection->fetchAll($select);
                 }
-                $attrTablesValues = $connection->fetchAll($select);
-                $attributeValues = array_merge($attributeValues, $attrTablesValues);
             }
+            $attributeValues = array_merge(...$attributeValues);
             foreach ($attributeValues as $attributeValue) {
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
                     $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
