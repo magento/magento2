@@ -83,6 +83,19 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     /**
      * {@inheritdoc}
      */
+    public function publicWithSelf($arg = false) : \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicWithSelf');
+        if (!$pluginInfo) {
+            return parent::publicWithSelf($arg);
+        } else {
+            return $this->___callPlugins('publicWithSelf', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicParentMethod');
