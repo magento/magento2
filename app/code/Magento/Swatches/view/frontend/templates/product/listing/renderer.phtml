@@ -22,7 +22,7 @@ $productId = $block->getProduct()->getId();
                 "jsonConfig": <?= /* @escapeNotVerified */ $block->getJsonConfig(); ?>,
                 "jsonSwatchConfig": <?= /* @escapeNotVerified */ $block->getJsonSwatchConfig(); ?>,
                 "mediaCallback": "<?= /* @escapeNotVerified */ $block->getMediaCallback() ?>",
-                "jsonSwatchImageSizeConfig": <?php /* @noEscape */ echo $block->getJsonSwatchSizeConfig() ?>
+                "jsonSwatchImageSizeConfig": <?= /* @noEscape */ $block->getJsonSwatchSizeConfig() ?>
             }
         }
     }
