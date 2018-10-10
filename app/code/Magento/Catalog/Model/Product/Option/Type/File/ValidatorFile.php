@@ -14,6 +14,8 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * Validator class. Represents logic for validation file given from product option
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValidatorFile extends Validator
@@ -70,6 +72,8 @@ class ValidatorFile extends Validator
     private $random;
 
     /**
+     * Constructor method
+     *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\File\Size $fileSize
@@ -96,6 +100,8 @@ class ValidatorFile extends Validator
     }
 
     /**
+     * Setter method for the product
+     *
      * @param Product $product
      * @return $this
      */
@@ -106,6 +112,8 @@ class ValidatorFile extends Validator
     }
 
     /**
+     * Validation method
+     *
      * @param \Magento\Framework\DataObject $processingParams
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return array
@@ -253,6 +261,8 @@ class ValidatorFile extends Validator
     }
 
     /**
+     * Validate contents length method
+     *
      * @return bool
      * @todo need correctly name
      */

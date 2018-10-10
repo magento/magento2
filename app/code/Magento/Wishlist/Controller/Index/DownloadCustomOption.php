@@ -11,6 +11,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class DownloadCustomOption. Represents request-flow logic for option's file download
+ */
 class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
@@ -26,6 +29,8 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
     private $json;
 
     /**
+     * Constructor method
+     *
      * @param Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory
      * @param Json|null $json
