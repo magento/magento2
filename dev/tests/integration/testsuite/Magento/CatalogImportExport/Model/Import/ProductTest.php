@@ -1568,15 +1568,20 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testImportWithoutUrlKeys()
     {
+        /**
+         * Products `simple1` and `simple2` are created by fixture so already
+         * have a URL Key, whereas `new-simple` is a new product so the import
+         * will generate it's URL Key from the name provided in the CSV.
+         */
         $products = [
-            'simple1' => 'simple-1',
-            'simple2' => 'simple-2',
-            'simple3' => 'simple-3'
+            'simple1'    => 'url-key',
+            'simple2'    => 'url-key2',
+            'new-simple' => 'new-simple',
         ];
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -2265,5 +2270,53 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
 
         $this->_model->importData();
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     */
+    public function testImportProductWithUpdateUrlKey()
+    {
+        $filesystem = $this->objectManager->create(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/product_for_update_url_key.csv',
+                'directory' => $directory,
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        /**
+         * @var $repository \Magento\Catalog\Model\ProductRepository
+         */
+        $repository = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $repository->get('simple');
+
+        $repUrlRewriteCol = $this->objectManager->create(
+            \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection::class
+        );
+        $collUrlRewrite = $repUrlRewriteCol->addFieldToSelect(['request_path'])
+            ->addFieldToFilter('entity_id', ['eq'=> $product->getEntityId()])
+            ->addFieldToFilter('entity_type', ['eq'=> 'product'])
+            ->load();
+
+        $this->assertCount(1, $collUrlRewrite);
+
+        $this->assertEquals(
+            sprintf('%s.html', $product->getUrlKey()),
+            $collUrlRewrite->getFirstItem()->getRequestPath()
+        );
     }
 }
