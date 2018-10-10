@@ -32,6 +32,6 @@ class FilterProductCustomAttribute
      */
     public function execute(array $attributes): array
     {
-        return array_diff($attributes, $this->blackList);
+        return array_diff_key($attributes, array_flip($this->blackList));
     }
 }
