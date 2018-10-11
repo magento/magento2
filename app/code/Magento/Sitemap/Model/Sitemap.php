@@ -751,9 +751,13 @@ class Sitemap extends AbstractExtensibleModel implements IdentityInterface, Site
     }
 
     /**
-     * {@inheritdoc}
+     * Get sitemap.xml URL according to all config options
+     *
+     * @param string $sitemapPath
+     * @param string $sitemapFileName
+     * @return string
      */
-    public function getSitemapUrl($sitemapPath, $sitemapFileName): ?string
+    public function getSitemapUrl($sitemapPath, $sitemapFileName)
     {
         return $this->_getStoreBaseDomain() . str_replace('//', '/', $sitemapPath . '/' . $sitemapFileName);
     }

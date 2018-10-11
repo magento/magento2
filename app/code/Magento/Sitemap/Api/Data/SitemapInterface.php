@@ -22,15 +22,6 @@ interface SitemapInterface extends \Magento\Framework\Api\ExtensionAttributesInt
     /**#@-*/
 
     /**
-     * Get sitemap.xml URL according to all config options
-     *
-     * @param string $sitemapPath
-     * @param string $sitemapFileName
-     * @return string
-     */
-    public function getSitemapUrl($sitemapPath, $sitemapFileName): ?string;
-
-    /**
      * Get sitemap type
      *
      * @return string|null
