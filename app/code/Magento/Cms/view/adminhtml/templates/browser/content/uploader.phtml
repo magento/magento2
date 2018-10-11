@@ -17,7 +17,7 @@ foreach ($filters as $media_type) {
     }, $media_type['files']));
 }
 
-$resizeConfig = ($block->getImageUploadConfigData()->getIsResizeEnabled())
+$resizeConfig = $block->getImageUploadConfigData()->getIsResizeEnabled()
     ? "{action: 'resize', maxWidth: "
         . $block->getImageUploadMaxWidth()
         . ", maxHeight: "

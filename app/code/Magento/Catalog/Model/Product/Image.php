@@ -45,7 +45,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Default quality value (for JPEG images only).
      *
      * @var int
-     * @deprecated
+     * @deprecated use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     protected $_quality = null;
 
@@ -220,7 +220,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param SerializerInterface $serializer
      * @param ParamsBuilder $paramsBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)1
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -305,7 +305,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $quality
      * @return $this
-     * @deprecated
+     * @deprecated use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     public function setQuality($quality)
     {
