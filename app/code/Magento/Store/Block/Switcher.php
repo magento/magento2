@@ -265,4 +265,24 @@ class Switcher extends \Magento\Framework\View\Element\Template
             $data
         );
     }
+
+    /**
+     * Returns target store redirect url.
+     *
+     * @param Store $store
+     * @return string
+     */
+    public function getTargetStoreRedirectUrl(Store $store)
+    {
+        return $this->getUrl(
+            'stores/store/redirect',
+            [
+                '___store' => $store->getCode(),
+                '___from_store' => $this->getCurrentStoreCode(),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl(
+                    $store->getCurrentUrl(false)
+                ),
+            ]
+        );
+    }
 }
