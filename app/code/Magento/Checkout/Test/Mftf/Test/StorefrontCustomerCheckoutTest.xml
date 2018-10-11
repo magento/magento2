@@ -199,7 +199,7 @@
             <stories value="Checkout flow if payment solutions are not available"/>
             <title value="Checkout via Customer Checkout with restricted countries for payment"/>
             <description value="Should be able to place an order as a Customer with restricted countries for payment."/>
-            <severity value="CRITICAL"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-42653"/>
             <group value="checkout"/>
         </annotations>
@@ -213,7 +213,7 @@
             <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 0" />
