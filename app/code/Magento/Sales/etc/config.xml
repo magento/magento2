@@ -19,6 +19,7 @@
                 <allow>1</allow>
             </reorder>
             <minimum_order>
+                <include_discount_amount>1</include_discount_amount>
                 <tax_including>1</tax_including>
             </minimum_order>
             <orders>

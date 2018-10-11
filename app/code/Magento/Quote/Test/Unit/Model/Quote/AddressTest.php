@@ -216,6 +216,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
 
@@ -240,6 +241,31 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+        ];
+
+        $this->quote->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $this->quote->expects($this->once())
+            ->method('getIsVirtual')
+            ->willReturn(false);
+
+        $this->scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->willReturnMap($scopeConfigValues);
+
+        $this->assertTrue($this->address->validateMinimumAmount());
+    }
+
+    public function testValidateMiniumumAmountWithoutDiscount()
+    {
+        $storeId = 1;
+        $scopeConfigValues = [
+            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, false],
             ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
 
@@ -263,6 +289,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
 
