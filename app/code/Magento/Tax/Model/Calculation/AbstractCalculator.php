@@ -426,7 +426,10 @@ abstract class AbstractCalculator
     }
 
     /**
-     * Given a store price that includes tax at the store rate, this function will back out the store's tax, and add in the customer's tax.  Returns this new price which is the customer's price including tax.
+     * Calculate price including tax.
+     *
+     * Given a store price that includes tax at the store rate, this function will back out the store's tax, and add in
+     * the customer's tax.  Returns this new price which is the customer's price including tax.
      *
      * @param float $storePriceInclTax
      * @param float $storeRate
