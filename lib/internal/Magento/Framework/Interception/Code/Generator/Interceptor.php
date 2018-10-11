@@ -195,9 +195,9 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         $returnTypeValue = null;
 
         if ($returnType) {
-            $returnTypeValue = ($returnType->getName() === 'self')
+            $returnTypeValue = ((string)$returnType === 'self')
                 ? $this->getSourceClassName()
-                : $returnType->getName();
+                : (string)$returnType;
         }
 
         return $returnTypeValue;
