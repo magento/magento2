@@ -43,12 +43,12 @@ class Identifier
     /**
      * Init mark(identifier) for sections
      *
-     * @param bool $forceUpdate
+     * @param bool $forceNewTimestamp
      * @return int
      */
-    public function initMark($forceUpdate)
+    public function initMark($forceNewTimestamp)
     {
-        if ($forceUpdate) {
+        if ($forceNewTimestamp) {
             $this->markId = time();
             return $this->markId;
         }
@@ -68,18 +68,18 @@ class Identifier
      *
      * @param array $sectionsData
      * @param null $sectionNames
-     * @param bool $updateIds
+     * @param bool $forceNewTimestamp
      * @return array
      */
-    public function markSections(array $sectionsData, $sectionNames = null, $updateIds = false)
+    public function markSections(array $sectionsData, $sectionNames = null, $forceNewTimestamp = false)
     {
         if (!$sectionNames) {
             $sectionNames = array_keys($sectionsData);
         }
-        $markId = $this->initMark($updateIds);
+        $markId = $this->initMark($forceNewTimestamp);
 
         foreach ($sectionNames as $name) {
-            if ($updateIds || !array_key_exists(self::SECTION_KEY, $sectionsData[$name])) {
+            if ($forceNewTimestamp || !array_key_exists(self::SECTION_KEY, $sectionsData[$name])) {
                 $sectionsData[$name][self::SECTION_KEY] = $markId;
             }
         }
