@@ -89,6 +89,11 @@
                     <label>Minimum Amount</label>
                     <comment>Subtotal after discount</comment>
                 </field>
+                <field id="include_discount_amount" translate="label" sortOrder="12" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Include Discount Amount</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Choosing yes will be used subtotal after discount, otherwise only subtotal will be used</comment>
+                </field>
                 <field id="tax_including" translate="label" sortOrder="15" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Include Tax to Amount</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
