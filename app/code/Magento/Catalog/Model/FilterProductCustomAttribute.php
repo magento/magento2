@@ -28,7 +28,7 @@ class FilterProductCustomAttribute
     /**
      * Delete custom attribute
      *
-     * @param array $attributes
+     * @param array $attributes set objects attributes @example ['attribute_code'=>'attribute_object']
      * @return array
      */
     public function execute(array $attributes): array

@@ -506,13 +506,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected function getCustomAttributesCodes()
     {
         if ($this->customAttributesCodes === null) {
-            $this->customAttributesCodes = array_keys($this->eavConfig->getEntityAttributes(
-                self::ENTITY,
-                $this
-            ));
-
-            $this->customAttributesCodes = $this->filterCustomAttribute->execute($this->customAttributesCodes);
-            $this->customAttributesCodes = array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES);
+            $this->customAttributesCodes = array_diff(
+                array_keys(
+                    $this->filterCustomAttribute->execute(
+                        $this->eavConfig->getEntityAttributes(
+                            self::ENTITY,
+                            $this
+                        )
+                    )
+                ), ProductInterface::ATTRIBUTES
+            );
         }
 
         return $this->customAttributesCodes;
