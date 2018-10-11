@@ -9,7 +9,7 @@ type Query {
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
      ): Products
-     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes")
+     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @cache(tag: "cat_p") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes")
     category (
         id: Int @doc(description: "Id of the category")
     ): CategoryTree
