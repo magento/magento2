@@ -34,7 +34,7 @@ class ConditionManager
     }
 
     /**
-     * Wrap query with parentheces.
+     * Wrap query with parentheses.
      *
      * @param string $query
      * @return string

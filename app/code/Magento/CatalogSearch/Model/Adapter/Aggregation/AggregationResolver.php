@@ -15,8 +15,7 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
 
 /**
- * @deprecated
- * @see \Magento\ElasticSearch
+ * Aggregation resolver.
  */
 class AggregationResolver implements AggregationResolverInterface
 {
@@ -79,7 +78,7 @@ class AggregationResolver implements AggregationResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(RequestInterface $request, array $documentIds)
     {

@@ -10,8 +10,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * @deprecated
- * @see \Magento\ElasticSearch
+ * Composite request checker.
  */
 class RequestCheckerComposite implements RequestCheckerInterface
 {
@@ -57,7 +56,7 @@ class RequestCheckerComposite implements RequestCheckerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isApplicable(RequestInterface $request)
     {

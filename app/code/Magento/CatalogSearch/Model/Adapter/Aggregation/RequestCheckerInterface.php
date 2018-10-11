@@ -9,9 +9,6 @@ use Magento\Framework\Search\RequestInterface;
 
 /**
  * RequestCheckerInterface provides the interface to work with query checkers.
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 interface RequestCheckerInterface
 {

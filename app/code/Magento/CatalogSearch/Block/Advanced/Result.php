@@ -18,8 +18,6 @@ use Magento\Framework\View\Element\Template\Context;
  *
  * @api
  * @since 100.0.2
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class Result extends Template
 {

@@ -22,9 +22,6 @@ use Magento\Framework\App\ResourceConnection;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class Full
 {

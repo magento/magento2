@@ -17,8 +17,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Request checker for catalog view.
  *
  * Checks catalog view query whether required to collect all attributes for entity.
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class CatalogView implements RequestCheckerInterface
 {
@@ -53,7 +51,7 @@ class CatalogView implements RequestCheckerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isApplicable(RequestInterface $request)
     {

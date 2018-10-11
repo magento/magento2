@@ -14,8 +14,6 @@ use Magento\Framework\EntityManager\MetadataPool;
  *
  * @api
  * @since 100.0.2
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

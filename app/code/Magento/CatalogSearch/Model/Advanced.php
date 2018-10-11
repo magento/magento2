@@ -43,8 +43,6 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class Advanced extends \Magento\Framework\Model\AbstractModel
 {
