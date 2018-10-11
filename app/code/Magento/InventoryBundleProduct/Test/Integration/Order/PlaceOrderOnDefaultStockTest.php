@@ -128,6 +128,8 @@ class PlaceOrderOnDefaultStockTest extends TestCase
 
     /**
      * @magentoConfigFixture current_store cataloginventory/item_options/backorders 1
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Product that you are trying to add is not available.
      */
     public function testPlaceOrderWithOutOfStockProductAndBackOrdersTurnedOn()
     {
@@ -138,15 +140,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
         $bundleProduct = $this->productRepository->get($bundleSku);
 
         $cart->addProduct($bundleProduct, $this->getBuyRequest($bundleProduct, $qty));
-
-        $this->cartRepository->save($cart);
-
-        $orderId = $this->cartManagement->placeOrder($cart->getId());
-
-        self::assertNotNull($orderId);
-
-        //cleanup
-        $this->deleteOrderById((int)$orderId);
     }
 
     /**
