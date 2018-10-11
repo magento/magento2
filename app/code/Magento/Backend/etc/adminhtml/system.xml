@@ -339,9 +339,9 @@
             <group id="upload_configuration" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Images Upload Configuration</label>
                 <field id="enable_resize" translate="label" type="select" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
-                    <label>Enable Front-end Resize</label>
+                    <label>Enable Frontend Resize</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Resize performed by javascript during file upload.</comment>
+                    <comment>Resize performed via javascript before file upload.</comment>
                 </field>
                 <field id="max_width" translate="label comment" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Maximum Width</label>

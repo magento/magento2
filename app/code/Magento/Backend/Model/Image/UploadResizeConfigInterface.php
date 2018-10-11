@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\Backend\Model\Image;
 
 /**
- * Interface ImageUploadConfigInterface
+ * Interface UploadResizeConfigInterface
  *
  * Used to retrieve configuration for frontend image uploader
  */
-interface ImageUploadConfigInterface
+interface UploadResizeConfigInterface
 {
     /**
      * Get maximal width value for resized image

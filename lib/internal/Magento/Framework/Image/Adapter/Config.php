@@ -66,7 +66,7 @@ class Config implements ConfigInterface, UploadConfigInterface
      *
      * @return int
      * @deprecated
-     * @see \Magento\Backend\Model\Image\ImageUploadConfigInterface::getMaxHeight()
+     * @see \Magento\Backend\Model\Image\UploadResizeConfigInterface::getMaxHeight()
      */
     public function getMaxWidth(): int
     {
@@ -78,7 +78,7 @@ class Config implements ConfigInterface, UploadConfigInterface
      *
      * @return int
      * @deprecated
-     * @see \Magento\Backend\Model\Image\ImageUploadConfigInterface::getMaxHeight()
+     * @see \Magento\Backend\Model\Image\UploadResizeConfigInterface::getMaxHeight()
      */
     public function getMaxHeight(): int
     {

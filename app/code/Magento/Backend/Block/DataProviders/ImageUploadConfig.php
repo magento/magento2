@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Backend\Block\DataProviders;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Magento\Backend\Model\Image\ImageUploadConfigInterface;
+use Magento\Backend\Model\Image\UploadResizeConfigInterface;
 
 /**
  * Provides additional data for image uploader
@@ -16,14 +16,14 @@ use Magento\Backend\Model\Image\ImageUploadConfigInterface;
 class ImageUploadConfig implements ArgumentInterface
 {
     /**
-     * @var ImageUploadConfigInterface
+     * @var UploadResizeConfigInterface
      */
     private $imageUploadConfig;
 
     /**
-     * @param ImageUploadConfigInterface $imageUploadConfig
+     * @param UploadResizeConfigInterface $imageUploadConfig
      */
-    public function __construct(ImageUploadConfigInterface $imageUploadConfig)
+    public function __construct(UploadResizeConfigInterface $imageUploadConfig)
     {
         $this->imageUploadConfig = $imageUploadConfig;
     }

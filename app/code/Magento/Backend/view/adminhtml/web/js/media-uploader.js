@@ -33,8 +33,7 @@ define([
          * @private
          */
         _create: function () {
-            var
-                self = this,
+            var self = this,
                 progressTmpl = mageTemplate('[data-template="uploader"]'),
                 isResizeEnabled = this.options.isResizeEnabled,
                 resizeConfiguration = {
@@ -43,7 +42,7 @@ define([
                     maxHeight: this.options.maxHeight
                 };
 
-            if (isResizeEnabled === 0) {
+            if (!isResizeEnabled) {
                 resizeConfiguration = {
                     action: 'resize'
                 };
@@ -64,8 +63,7 @@ define([
                  * @param {Object} data
                  */
                 add: function (e, data) {
-                    var
-                        fileSize,
+                    var fileSize,
                         tmpl;
 
                     $.each(data.files, function (index, file) {

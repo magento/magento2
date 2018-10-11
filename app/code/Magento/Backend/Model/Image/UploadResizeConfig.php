@@ -10,7 +10,7 @@ namespace Magento\Backend\Model\Image;
 /**
  * Image uploader config provider.
  */
-class ImageUploadConfig implements ImageUploadConfigInterface
+class UploadResizeConfig implements UploadResizeConfigInterface
 {
     /**
      * Config path for the maximal image width value

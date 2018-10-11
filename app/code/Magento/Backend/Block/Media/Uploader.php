@@ -10,7 +10,7 @@ namespace Magento\Backend\Block\Media;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Image\Adapter\UploadConfigInterface;
-use Magento\Backend\Model\Image\ImageUploadConfigInterface;
+use Magento\Backend\Model\Image\UploadResizeConfigInterface;
 
 /**
  * Adminhtml media library uploader
@@ -40,14 +40,14 @@ class Uploader extends \Magento\Backend\Block\Widget
     private $jsonEncoder;
 
     /**
-     * @var ImageUploadConfigInterface
+     * @var UploadResizeConfigInterface
      */
     private $imageUploadConfig;
 
     /**
      * @var UploadConfigInterface
      * @deprecated
-     * @see \Magento\Backend\Model\Image\ImageUploadConfigInterface
+     * @see \Magento\Backend\Model\Image\UploadResizeConfigInterface
      */
     private $imageConfig;
 
@@ -57,7 +57,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      * @param array $data
      * @param Json $jsonEncoder
      * @param UploadConfigInterface $imageConfig
-     * @param ImageUploadConfigInterface $imageUploadConfig
+     * @param UploadResizeConfigInterface $imageUploadConfig
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -65,14 +65,14 @@ class Uploader extends \Magento\Backend\Block\Widget
         array $data = [],
         Json $jsonEncoder = null,
         UploadConfigInterface $imageConfig = null,
-        ImageUploadConfigInterface $imageUploadConfig = null
+        UploadResizeConfigInterface $imageUploadConfig = null
     ) {
         $this->_fileSizeService = $fileSize;
         $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
         $this->imageConfig = $imageConfig
             ?: ObjectManager::getInstance()->get(UploadConfigInterface::class);
         $this->imageUploadConfig = $imageUploadConfig
-            ?: ObjectManager::getInstance()->get(ImageUploadConfigInterface::class);
+            ?: ObjectManager::getInstance()->get(UploadResizeConfigInterface::class);
         parent::__construct($context, $data);
     }
 
