@@ -8,7 +8,7 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
-        <plugin name="configurable_product_index" type="Magento\InventoryConfigurableProductIndexer\Plugin\InventoryIndexer\SourceItemIndexerPlugin"/>
+        <plugin name="configurable_product_index" type="Magento\InventoryConfigurableProductIndexer\Plugin\InventoryIndexer\SourceItemIndexerPlugin" sortOrder="10"/>
     </type>
     <type name="Magento\InventoryIndexer\Indexer\Stock\StockIndexer">
         <plugin name="configurable_product_index" type="Magento\InventoryConfigurableProductIndexer\Plugin\InventoryIndexer\StockIndexerPlugin"/>
