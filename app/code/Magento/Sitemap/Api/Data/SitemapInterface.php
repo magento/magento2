@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Sitemap\Api\Data;
 
-interface SitemapInterface extends SitemapExtensionInterface
+interface SitemapInterface extends \Magento\Framework\Api\ExtensionAttributesInterface
 {
 
     /**#@+
