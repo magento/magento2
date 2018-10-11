@@ -115,7 +115,7 @@ class SitemapRepository implements SitemapRepositoryInterface
     public function delete(SitemapInterface $sitemap): bool
     {
         try {
-            $this->sitemapResource->save($sitemap);
+            $this->sitemapResource->delete($sitemap);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(__('Failed to delete sitemap with id: %1', $sitemap->getId()));
         }
