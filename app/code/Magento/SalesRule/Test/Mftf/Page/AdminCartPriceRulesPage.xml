@@ -10,5 +10,6 @@
     <page name="AdminCartPriceRulesPage" url="sales_rule/promo_quote/" area="admin" module="Magento_SalesRule">
         <section name="AdminCartPriceRulesSection"/>
         <section name="AdminCartPriceRulesFormSection"/>
+        <section name="AdminCartPriceRuleDiscountSection"/>
     </page>
 </pages>

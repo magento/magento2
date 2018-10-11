@@ -168,6 +168,6 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      */
     protected function isNegative($value)
     {
-        return intval($value) < 0;
+        return (int)$value < 0;
     }
 }

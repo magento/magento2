@@ -179,7 +179,7 @@
             <expectedResult type="string">$1,500.00</expectedResult>
             <actualResult type="variable">grabTextFromSubtotalField4</actualResult>
         </assertEquals>
-        <grabTextFrom selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="grabTextFromCheckoutCartSummarySectionSubtotal1"/>
+        <grabTextFrom selector="{{StorefrontCheckoutCartSummarySection.subtotal}}" stepKey="grabTextFromCheckoutCartSummarySectionSubtotal1"/>
         <assertEquals message="Shopping cart summary section should contain subtotal $1,500" stepKey="assertSubtotalFieldFromCheckoutCartSummarySection1">
             <expectedResult type="string">$1,500.00</expectedResult>
             <actualResult type="variable">grabTextFromCheckoutCartSummarySectionSubtotal1</actualResult>
@@ -256,7 +256,7 @@
             <expectedResult type="string">$4,000.00</expectedResult>
             <actualResult type="variable">grabTextFromSubtotalField7</actualResult>
         </assertEquals>
-        <grabTextFrom selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="grabTextFromCheckoutCartSummarySectionSubtotal2"/>
+        <grabTextFrom selector="{{StorefrontCheckoutCartSummarySection.subtotal}}" stepKey="grabTextFromCheckoutCartSummarySectionSubtotal2"/>
         <assertEquals message="Shopping cart summary section should contain subtotal $4,000" stepKey="assertSubtotalFieldFromCheckoutCartSummarySection2">
             <expectedResult type="string">$4,000.00</expectedResult>
             <actualResult type="variable">grabTextFromCheckoutCartSummarySectionSubtotal2</actualResult>
