@@ -27,6 +27,7 @@ class FilterProductCustomAttribute
 
     /**
      * Delete custom attribute
+     *
      * @param array $attributes
      * @return array
      */
