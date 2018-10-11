@@ -349,12 +349,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     private $productEntityLinkField;
 
     /**
+     * Product constructor.
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
      * @param \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
@@ -363,10 +364,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
      * @param Product\Type\Factory $_typeFactory
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
-     * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+     * @param ProductEntity\LinkTypeProvider $linkTypeProvider
+     * @param RowCustomizerInterface $rowCustomizer
      * @param array $dateAttrCodes
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -695,7 +696,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
+     * Get header columns
+     *
+     * @return string[]
      */
     public function _getHeaderColumns()
     {
@@ -754,7 +757,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
+     * Get entity collection
+     *
+     * @param bool $resetCollection
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     protected function _getEntityCollection($resetCollection = false)
     {
@@ -861,7 +867,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
+     * Apply filter to collection and add not skipped attributes to select.
+     *
+     * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
+     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
      * @since 100.2.0
      */
     protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
@@ -923,8 +932,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Load products' data from the collection
-     * and filter it (if needed).
+     * Load products' data from the collection and filter it (if needed).
      *
      * @return array Keys are product IDs, values arrays with keys as store IDs
      *               and values as store-specific versions of Product entity.
@@ -1066,6 +1074,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Collect multi raw data from
+     *
      * @return array
      */
     protected function collectMultirawData()
@@ -1107,6 +1117,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Check the current data has multiselect value
+     *
      * @param \Magento\Catalog\Model\Product $item
      * @param int $storeId
      * @return bool
@@ -1119,6 +1131,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Collect multiselect values based on value
+     *
      * @param \Magento\Catalog\Model\Product $item
      * @param string $attrCode
      * @param int $storeId
@@ -1143,6 +1157,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Check attribute is valid
+     *
      * @param string $code
      * @param mixed $value
      * @return bool
@@ -1162,6 +1178,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Append multi row data
+     *
      * @param array $dataRow
      * @param array $multiRawData
      * @return array
@@ -1291,6 +1309,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Add multi row data to export
+     *
      * @deprecated 100.1.0
      * @param array $dataRow
      * @param array $multiRawData
@@ -1338,6 +1358,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Convert option row to cell string
+     *
      * @param array $option
      * @return string
      */
