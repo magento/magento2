@@ -282,6 +282,15 @@ class Sitemap extends AbstractExtensibleModel implements IdentityInterface, Site
         }
     }
 
+
+    /**
+     * Add a sitemap item to the array of sitemap items
+     *
+     * @param DataObject $sitemapItem
+     * @return $this
+     * @deprecated 100.2.0
+     * @see ItemProviderInterface
+     */
     public function addSitemapItem(DataObject $sitemapItem)
     {
         $this->_sitemapItems[] = $sitemapItem;
@@ -354,6 +363,12 @@ class Sitemap extends AbstractExtensibleModel implements IdentityInterface, Site
         ];
     }
 
+    /**
+     * Check sitemap file location and permissions
+     *
+     * @return \Magento\Framework\Model\AbstractModel
+     * @throws LocalizedException
+     */
     public function beforeSave()
     {
         $path = $this->getSitemapPath();
