@@ -93,7 +93,7 @@ class ImageUploader
         $baseTmpPath,
         $basePath,
         $allowedExtensions,
-        $allowedMimeTypes
+        $allowedMimeTypes = []
     ) {
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
