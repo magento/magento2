@@ -42,7 +42,11 @@ foreach ($files as $file) {
 
 if (!$settings->get('TESTS_PARALLEL_THREAD', 0)) {
     // Only delete modules if we are not using parallel executions
-    register_shutdown_function('deleteTestModules', $pathToCommittedTestModules, $pathToInstalledMagentoInstanceModules);
+    register_shutdown_function(
+        'deleteTestModules',
+        $pathToCommittedTestModules,
+        $pathToInstalledMagentoInstanceModules
+    );
 }
 
 /**
