@@ -5,7 +5,6 @@
  */
 namespace Magento\Developer\Console\Command;
 
-use Magento\Framework\App\State;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\View\Asset\Repository;
 use Symfony\Component\Console\Command\Command;
