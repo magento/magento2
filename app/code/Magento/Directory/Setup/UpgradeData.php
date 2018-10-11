@@ -47,7 +47,7 @@ class UpgradeData implements UpgradeDataInterface
             $this->addCountryRegions($setup, 'IN', $this->getDataForIndia());
         }
         if (version_compare($context->getVersion(), '2.0.3', '<')) {
-            $this->addCountryRegions($setup, $this->getDataForAustralia());
+            $this->addCountryRegions($setup, 'AU', $this->getDataForAustralia());
         }
     }
 
@@ -138,14 +138,14 @@ class UpgradeData implements UpgradeDataInterface
     private function getDataForAustralia()
     {
         return [
-            ['AU', 'ACT', 'Australian Capital Territory'],
-            ['AU', 'NSW', 'New South Wales'],
-            ['AU', 'VIC', 'Victoria'],
-            ['AU', 'QLD', 'Queensland'],
-            ['AU', 'SA',  'South Australia'],
-            ['AU', 'TAS', 'Tasmania'],
-            ['AU', 'WA',  'Western Australia'],
-            ['AU', 'NT',  'Northern Territory']
+            'ACT' => 'Australian Capital Territory',
+            'NSW' => 'New South Wales',
+            'VIC' => 'Victoria',
+            'QLD' => 'Queensland',
+            'SA' => 'South Australia',
+            'TAS' => 'Tasmania',
+            'WA' => 'Western Australia',
+            'NT' => 'Northern Territory'
         ];
     }
 
