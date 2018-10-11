@@ -90,17 +90,4 @@ class SitemapItem implements SitemapItemInterface
     {
         return $this->updatedAt;
     }
-
-    public function toArray()
-    {
-        return [
-            'url' => [
-                'loc' => $this->getUrl(),
-                'lastmod' => $this->getUpdatedAt(),
-                'changefreq' => $this->getChangeFrequency(),
-                'priority' => $this->getPriority(),
-//                'images' => $this->getImages(),
-            ]
-        ];
-    }
 }
