@@ -303,13 +303,7 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
         $imageId = 'test_image_id';
 
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $simpleOptionMock = $this->createMock(\Magento\Wishlist\Model\Item\Option::class);
         $simpleProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-
-        $productMock->expects($this->once())->method('getCustomOption')
-            ->with('simple_product')->willReturn($simpleOptionMock);
-
-        $simpleOptionMock->expects($this->once())->method('getProduct')->willReturn($simpleProductMock);
 
         $helperMock = $this->createMock(\Magento\Catalog\Helper\Image::class);
         $helperMock->expects($this->once())

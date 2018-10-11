@@ -59,7 +59,11 @@
 }
 
 .abs-field-no-label {
+    /**
+     * @codingStandardsIgnoreStart
+     */
     #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
+    //@codingStandardsIgnoreEnd
     margin-left: @_length;
 }
 
@@ -166,6 +170,13 @@
     .admin__control-text,
     .admin__control-textarea {
         width: 100%;
+        &.disabled {
+            background-color: #e9e9e9;
+            border-color: #adadad;
+            color: #303030;
+            cursor: not-allowed;
+            opacity: .5;
+        }
     }
 }
 
@@ -183,9 +194,12 @@
 
 .admin__field-label {
     color: @field-label__color;
-    cursor: pointer;
     margin: 0;
     text-align: right;
+
+    label {
+        cursor: pointer;
+    }
 
     + br {
         display: none;
@@ -207,7 +221,7 @@
             overflow: hidden;
         }
 
-        span {
+        label {
             display: inline-block;
             line-height: @field-label__line-height;
             vertical-align: middle;
@@ -225,7 +239,7 @@
 
     .required > &, // ToDo UI: change classes 'required' to '_required'.
     ._required > & {
-        > span {
+        > label {
             &:after {
                 color: @validation__color;
                 content: '*';
@@ -512,7 +526,7 @@
                 position: absolute;
                 top: 0;
 
-                span {
+                label {
                     &:before {
                         display: block;
                     }
@@ -527,7 +541,7 @@
         }
 
         & > .admin__field-label {
-            span {
+            label {
                 &:before {
                     display: none;
                 }

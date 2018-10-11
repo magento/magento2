@@ -11,5 +11,6 @@
     <section name="AdminMainActionsSection">
         <element name="save" type="button" selector="#save"/>
         <element name="delete" type="button" selector="#delete"/>
+        <element name="add" type="button" selector="#add" timeout="30"/>
     </section>
 </sections>

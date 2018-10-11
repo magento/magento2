@@ -648,7 +648,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
                     //If country actually has regions and requires you to
                     //select one then it must be selected.
                     $errors[] = __('%fieldName is a required field.', ['fieldName' => 'regionId']);
-                } elseif ($regionId && !in_array($regionId, $allowedRegions, true)) {
+                } elseif ($allowedRegions && $regionId && !in_array($regionId, $allowedRegions, true)) {
                     //If a region is selected then checking if it exists.
                     $errors[] = __(
                         'Invalid value of "%value" provided for the %fieldName field.',

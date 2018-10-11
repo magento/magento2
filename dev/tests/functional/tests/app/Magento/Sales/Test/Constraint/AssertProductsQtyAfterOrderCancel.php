@@ -52,7 +52,8 @@ class AssertProductsQtyAfterOrderCancel extends AbstractConstraint
         AssertProductForm $assertProductForm,
         AssertConfigurableProductForm $assertConfigurableProductForm
     ) {
-        for ($i = 0; $i < count($order->getEntityId()['products']); $i++) {
+        $productsCount = count($order->getEntityId()['products']);
+        for ($i = 0; $i < $productsCount; $i++) {
             $product = $order->getEntityId()['products'][$i];
             $productData = $product->getData();
             if ($product instanceof BundleProduct) {

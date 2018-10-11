@@ -21,7 +21,9 @@ class Preview extends \Magento\Email\Controller\Adminhtml\Email\Template
             $this->_view->renderLayout();
             $this->getResponse()->setHeader('Content-Security-Policy', "script-src 'none'");
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('An error occurred. The email template can not be opened for preview.'));
+            $this->messageManager->addErrorMessage(
+                __('An error occurred. The email template can not be opened for preview.')
+            );
             $this->_redirect('adminhtml/*/');
         }
     }

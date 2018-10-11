@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ApplyCartRuleOnStorefrontActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="couponCode" type="string"/>
+        </arguments>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
+        <waitForText userInput="You added {{product.name}} to your shopping cart." stepKey="waitForProductAddToShoppingCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutPage"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageIsOpened"/>
+        <click selector="{{AdminCartPriceRuleDiscountSection.discountTab}}" stepKey="clickToDiscountTab"/>
+        <fillField selector="{{AdminCartPriceRuleDiscountSection.couponInput}}" userInput="{{couponCode}}"
+                   stepKey="fillCouponCode"/>
+        <click selector="{{AdminCartPriceRuleDiscountSection.applyCodeBtn}}" stepKey="applyCode"/>
+        <waitForPageLoad stepKey="waitForApplyCode"/>
+    </actionGroup>
+</actionGroups>

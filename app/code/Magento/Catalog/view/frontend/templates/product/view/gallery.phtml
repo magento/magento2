@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Product media data template
  *
@@ -15,19 +13,19 @@
 <div class="gallery-placeholder _block-content-loading" data-gallery-role="gallery-placeholder">
     <div data-role="loader" class="loading-mask">
         <div class="loader">
-            <img src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-1.gif') ?>"
-                 alt="<?= /* @escapeNotVerified */ __('Loading...') ?>">
+            <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>"
+                 alt="<?= $block->escapeHtml(__('Loading...')) ?>">
         </div>
     </div>
 </div>
 <!--Fix for jumping content. Loader must be the same size as gallery.-->
 <script>
     var config = {
-            "width": <?= /* @escapeNotVerified */ $block->getImageAttribute('product_page_image_medium', 'width') ?>,
-            "thumbheight": <?php /* @escapeNotVerified */ echo $block->getImageAttribute('product_page_image_small', 'height')
-                        ?: $block->getImageAttribute('product_page_image_small', 'width'); ?>,
-            "navtype": "<?= /* @escapeNotVerified */ $block->getVar("gallery/navtype") ?>",
-            "height": <?= /* @escapeNotVerified */ $block->getImageAttribute('product_page_image_medium', 'height') ?>
+            "width": <?= $block->escapeHtml($block->getImageAttribute('product_page_image_medium', 'width')) ?>,
+            "thumbheight": <?= $block->escapeHtml($block->getImageAttribute('product_page_image_small', 'height')
+                        ?: $block->getImageAttribute('product_page_image_small', 'width')); ?>,
+            "navtype": "<?= $block->escapeHtml($block->getVar("gallery/navtype")) ?>",
+            "height": <?= $block->escapeHtml($block->getImageAttribute('product_page_image_medium', 'height')) ?>
         },
         thumbBarHeight = 0,
         loader = document.querySelectorAll('[data-gallery-role="gallery-placeholder"] [data-role="loader"]')[0];
@@ -43,70 +41,82 @@
         "[data-gallery-role=gallery-placeholder]": {
             "mage/gallery/gallery": {
                 "mixins":["magnifier/magnify"],
-                "magnifierOpts": <?= /* @escapeNotVerified */ $block->getMagnifier() ?>,
-                "data": <?= /* @escapeNotVerified */ $block->getGalleryImagesJson() ?>,
+                "magnifierOpts": <?= /* @noEscape */ $block->getMagnifier() ?>,
+                "data": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
                 "options": {
-                    "nav": "<?= /* @escapeNotVerified */ $block->getVar("gallery/nav") ?>",
-                    <?php if (($block->getVar("gallery/loop"))): ?>
-                        "loop": <?= /* @escapeNotVerified */ $block->getVar("gallery/loop") ?>,
+                    "nav": "<?= $block->escapeHtml($block->getVar("gallery/nav")) ?>",
+                    <?php if (($block->getVar("gallery/loop"))) : ?>
+                        "loop": <?= $block->escapeHtml($block->getVar("gallery/loop")) ?>,
                     <?php endif; ?>
-                    <?php if (($block->getVar("gallery/keyboard"))): ?>
-                        "keyboard": <?= /* @escapeNotVerified */ $block->getVar("gallery/keyboard") ?>,
+                    <?php if (($block->getVar("gallery/keyboard"))) : ?>
+                        "keyboard": <?= $block->escapeHtml($block->getVar("gallery/keyboard")) ?>,
                     <?php endif; ?>
-                    <?php if (($block->getVar("gallery/arrows"))): ?>
-                        "arrows": <?= /* @escapeNotVerified */ $block->getVar("gallery/arrows") ?>,
+                    <?php if (($block->getVar("gallery/arrows"))) : ?>
+                        "arrows": <?= $block->escapeHtml($block->getVar("gallery/arrows")) ?>,
                     <?php endif; ?>
-                    <?php if (($block->getVar("gallery/allowfullscreen"))): ?>
-                        "allowfullscreen": <?= /* @escapeNotVerified */ $block->getVar("gallery/allowfullscreen") ?>,
+                    <?php if (($block->getVar("gallery/allowfullscreen"))) : ?>
+                        "allowfullscreen": <?= $block->escapeHtml($block->getVar("gallery/allowfullscreen")) ?>,
                     <?php endif; ?>
-                    <?php if (($block->getVar("gallery/caption"))): ?>
-                        "showCaption": <?= /* @escapeNotVerified */ $block->getVar("gallery/caption") ?>,
+                    <?php if (is_bool($block->getVar("gallery/caption"))) : ?>
+                        "showCaption": <?= /* @noEscape */ $block->getVar("gallery/caption") ? 'true' : 'false'; ?>,
                     <?php endif; ?>
-                    "width": "<?= /* @escapeNotVerified */ $block->getImageAttribute('product_page_image_medium', 'width') ?>",
-                    "thumbwidth": "<?= /* @escapeNotVerified */ $block->getImageAttribute('product_page_image_small', 'width') ?>",
-                    <?php if ($block->getImageAttribute('product_page_image_small', 'height') || $block->getImageAttribute('product_page_image_small', 'width')): ?>
-                        "thumbheight": <?php /* @escapeNotVerified */ echo $block->getImageAttribute('product_page_image_small', 'height')
-                        ?: $block->getImageAttribute('product_page_image_small', 'width'); ?>,
+                    <?php
+                        $imgWidth = $block->getImageAttribute('product_page_image_medium', 'width');
+                        $thumbWidth = $block->getImageAttribute('product_page_image_small', 'width');
+                    ?>
+                        "width": "<?= $block->escapeHtml($imgWidth) ?>",
+                        "thumbwidth": "<?= $block->escapeHtml($thumbWidth) ?>",
+                    <?php
+                        $thumbHeight = $block->getImageAttribute('product_page_image_small', 'height')
+                            ?: $block->getImageAttribute('product_page_image_small', 'width');
+                    ?>
+                    <?php if ($thumbHeight) : ?>
+                        "thumbheight": <?= $block->escapeHtml($thumbHeight); ?>,
                     <?php endif; ?>
-                    <?php if (($block->getVar("gallery/thumbmargin"))): ?>
-                        "thumbmargin": <?= /* @noEscape */ (int)$block->getVar("gallery/thumbmargin"); ?>,
+                    <?php if (($block->getVar("gallery/thumbmargin"))) : ?>
+                        "thumbmargin": <?= (int)$block->getVar("gallery/thumbmargin"); ?>,
                     <?php endif; ?>
-                    <?php if ($block->getImageAttribute('product_page_image_medium', 'height') || $block->getImageAttribute('product_page_image_medium', 'width')): ?>
-                        "height": <?php /* @escapeNotVerified */ echo $block->getImageAttribute('product_page_image_medium', 'height')
-                        ?: $block->getImageAttribute('product_page_image_medium', 'width'); ?>,
+                    <?php
+                        $imgHeight = $block->getImageAttribute('product_page_image_medium', 'height')
+                            ?: $block->getImageAttribute('product_page_image_medium', 'width')
+                    ?>
+                    <?php if ($imgHeight) : ?>
+                        "height": <?= $block->escapeHtml($imgHeight); ?>,
                     <?php endif; ?>
-                    <?php if ($block->getVar("gallery/transition/duration")): ?>
-                        "transitionduration": <?= /* @escapeNotVerified */ $block->getVar("gallery/transition/duration") ?>,
+                    <?php if ($block->getVar("gallery/transition/duration")) : ?>
+                        "transitionduration": <?= $block->escapeHtml($block->getVar("gallery/transition/duration")) ?>,
                     <?php endif; ?>
-                    "transition": "<?= /* @escapeNotVerified */ $block->getVar("gallery/transition/effect") ?>",
-                    <?php if (($block->getVar("gallery/navarrows"))): ?>
-                        "navarrows": <?= /* @escapeNotVerified */ $block->getVar("gallery/navarrows") ?>,
+                    "transition": "<?= $block->escapeHtml($block->getVar("gallery/transition/effect")) ?>",
+                    <?php if (($block->getVar("gallery/navarrows"))) : ?>
+                        "navarrows": <?= $block->escapeHtml($block->getVar("gallery/navarrows")) ?>,
                     <?php endif; ?>
-                    "navtype": "<?= /* @escapeNotVerified */ $block->getVar("gallery/navtype") ?>",
-                    "navdir": "<?= /* @escapeNotVerified */ $block->getVar("gallery/navdir") ?>"
+                    "navtype": "<?= $block->escapeHtml($block->getVar("gallery/navtype")) ?>",
+                    "navdir": "<?= $block->escapeHtml($block->getVar("gallery/navdir")) ?>"
                 },
                 "fullscreen": {
-                    "nav": "<?= /* @escapeNotVerified */ $block->getVar("gallery/fullscreen/nav") ?>",
-                    <?php if ($block->getVar("gallery/fullscreen/loop")): ?>
-                        "loop": <?= /* @escapeNotVerified */ $block->getVar("gallery/fullscreen/loop") ?>,
+                    "nav": "<?= $block->escapeHtml($block->getVar("gallery/fullscreen/nav")) ?>",
+                    <?php if ($block->getVar("gallery/fullscreen/loop")) : ?>
+                        "loop": <?= $block->escapeHtml($block->getVar("gallery/fullscreen/loop")) ?>,
                     <?php endif; ?>
-                    "navdir": "<?= /* @escapeNotVerified */ $block->getVar("gallery/fullscreen/navdir") ?>",
-                    <?php if ($block->getVar("gallery/transition/navarrows")): ?>
-                        "navarrows": <?= /* @escapeNotVerified */ $block->getVar("gallery/fullscreen/navarrows") ?>,
+                    "navdir": "<?= $block->escapeHtml($block->getVar("gallery/fullscreen/navdir")) ?>",
+                    <?php if ($block->getVar("gallery/transition/navarrows")) : ?>
+                        "navarrows": <?= $block->escapeHtml($block->getVar("gallery/fullscreen/navarrows")) ?>,
                     <?php endif; ?>
-                    "navtype": "<?= /* @escapeNotVerified */ $block->getVar("gallery/fullscreen/navtype") ?>",
-                    <?php if ($block->getVar("gallery/fullscreen/arrows")): ?>
-                        "arrows": <?= /* @escapeNotVerified */ $block->getVar("gallery/fullscreen/arrows") ?>,
+                    "navtype": "<?= $block->escapeHtml($block->getVar("gallery/fullscreen/navtype")) ?>",
+                    <?php if ($block->getVar("gallery/fullscreen/arrows")) : ?>
+                        "arrows": <?= $block->escapeHtml($block->getVar("gallery/fullscreen/arrows")) ?>,
                     <?php endif; ?>
-                    <?php if ($block->getVar("gallery/fullscreen/caption")): ?>
-                        "showCaption": <?= /* @escapeNotVerified */ $block->getVar("gallery/fullscreen/caption") ?>,
+                    <?php if (is_bool($block->getVar("gallery/fullscreen/caption"))) : ?>
+                        <?php $showCaption = $block->getVar("gallery/fullscreen/caption") ? 'true' : 'false'; ?>
+                        "showCaption": <?= /* @noEscape */ $showCaption ?>,
                     <?php endif; ?>
-                    <?php if ($block->getVar("gallery/fullscreen/transition/duration")): ?>
-                        "transitionduration": <?= /* @escapeNotVerified */ $block->getVar("gallery/fullscreen/transition/duration") ?>,
+                    <?php if ($block->getVar("gallery/fullscreen/transition/duration")) : ?>
+                        "transitionduration": <?=
+                        $block->escapeHtml($block->getVar("gallery/fullscreen/transition/duration")) ?>,
                     <?php endif; ?>
-                    "transition": "<?= /* @escapeNotVerified */ $block->getVar("gallery/fullscreen/transition/effect") ?>"
+                    "transition": "<?= $block->escapeHtml($block->getVar("gallery/fullscreen/transition/effect")) ?>"
                 },
-                "breakpoints": <?= /* @escapeNotVerified */ $block->getBreakpoints() ?>
+                "breakpoints": <?= /* @noEscape */ $block->getBreakpoints() ?>
             }
         }
     }

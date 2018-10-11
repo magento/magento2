@@ -307,6 +307,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         $checkInStock = $this->_productInStock && !$this->stockConfiguration->isShowOutOfStock();
 
+        /** @var \Magento\Wishlist\Model\Item $item */
         foreach ($this as $item) {
             $product = $productCollection->getItemById($item->getProductId());
             if ($product) {
@@ -320,7 +321,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     $item->setPrice($product->getPrice());
                 }
             } else {
-                $item->isDeleted(true);
+                $this->removeItemByKey($item->getId());
             }
         }
 
@@ -478,7 +479,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         if (isset($constraints['to'])) {
             $firstDay = new \DateTime();
-            $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . (intval($constraints['to']) + 1) . ' day');
+            $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . ((int)$constraints['to'] + 1) . ' day');
             $filter['from'] = $firstDay;
         }
 

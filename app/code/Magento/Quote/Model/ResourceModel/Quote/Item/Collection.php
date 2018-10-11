@@ -230,7 +230,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         );
         $this->skipStockStatusFilter($productCollection);
         $productCollection->addOptionsToResult()->addStoreFilter()->addUrlRewrite();
-        $this->addTierPriceData($productCollection);
 
         $this->_eventManager->dispatch(
             'prepare_catalog_product_collection_prices',
@@ -302,27 +301,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Add tier prices to product collection.
-     *
-     * @param ProductCollection $productCollection
-     * @return void
-     */
-    private function addTierPriceData(ProductCollection $productCollection)
-    {
-        if (empty($this->_quote)) {
-            $productCollection->addTierPriceData();
-        } else {
-            $productCollection->addTierPriceDataByGroupId($this->_quote->getCustomerGroupId());
-        }
-    }
-
-    /**
      * Find and remove quote items with non existing products
      *
      * @return void
      */
     private function removeItemsWithAbsentProducts()
     {
+        if (count($this->_productIds) === 0) {
+            return;
+        }
+
         $productCollection = $this->_productCollectionFactory->create()->addIdFilter($this->_productIds);
         $existingProductsIds = $productCollection->getAllIds();
         $absentProductsIds = array_diff($this->_productIds, $existingProductsIds);

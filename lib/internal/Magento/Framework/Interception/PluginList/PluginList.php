@@ -268,7 +268,7 @@ class PluginList extends Scoped implements InterceptionPluginList
             $this->_inheritPlugins($type);
         }
         $key = $type . '_' . lcfirst($method) . '_' . $code;
-        return isset($this->_processed[$key]) ? $this->_processed[$key] : null;
+        return $this->_processed[$key] ?? null;
     }
 
     /**

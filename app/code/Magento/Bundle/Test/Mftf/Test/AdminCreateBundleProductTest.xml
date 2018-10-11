@@ -21,10 +21,10 @@
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="SimpleProduct" stepKey="createPreReqSimpleProduct1">
-            <requiredEntity createDataKey="createPreReqCategory"/>
+                <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
             <createData entity="SimpleProduct2" stepKey="createPreReqSimpleProduct2">
-            <requiredEntity createDataKey="createPreReqCategory"/>
+                <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
         </before>
         <after>
@@ -45,6 +45,8 @@
         <!--Step4. Fill in all data according to data set-->
         <actionGroup ref="CreateBundleProductForTwoSimpleProducts" stepKey="CreateBundleProductForTwoSimpleProducts">
             <argument name="bundleProduct" value="BundleProduct"/>
+            <argument name="simpleProductFirst" value="$$createPreReqSimpleProduct1$$"/>
+            <argument name="simpleProductSecond" value="$$createPreReqSimpleProduct2$$"/>
         </actionGroup>
 
         <!--Step5. Save product-->
