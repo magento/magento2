@@ -2879,12 +2879,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -5230,12 +5230,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -5615,12 +5615,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -5909,12 +5909,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -6101,12 +6101,12 @@ vars.put("product_sku", product.get("sku"));
               <boolProp name="HTTPArgument.use_equals">true</boolProp>
               <stringProp name="Argument.name">sections</stringProp>
             </elementProp>
-            <elementProp name="update_section_id" elementType="HTTPArgument">
+            <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
               <boolProp name="HTTPArgument.always_encode">true</boolProp>
               <stringProp name="Argument.value">false</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
               <boolProp name="HTTPArgument.use_equals">true</boolProp>
-              <stringProp name="Argument.name">update_section_id</stringProp>
+              <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
             </elementProp>
             <elementProp name="_" elementType="HTTPArgument">
               <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -6571,12 +6571,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -6768,12 +6768,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -7263,12 +7263,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -7648,12 +7648,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -8383,12 +8383,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -8657,12 +8657,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -9042,12 +9042,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -9717,12 +9717,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -9920,12 +9920,12 @@ vars.put("product_sku", product.get("sku"));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -10252,12 +10252,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -10576,12 +10576,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -10961,12 +10961,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -11158,12 +11158,12 @@ vars.put("item_id", vars.get("cart_items_qty_inputs_" + id));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -11498,12 +11498,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
