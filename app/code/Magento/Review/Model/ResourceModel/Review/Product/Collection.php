@@ -117,8 +117,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         ProductLimitationFactory $productLimitationFactory = null,
         MetadataPool $metadataPool = null
-    )
-    {
+    ) {
         $this->_ratingFactory = $ratingFactory;
         $this->_voteFactory = $voteFactory;
         parent::__construct(
