@@ -102,7 +102,7 @@ class ReadHandler implements AttributeInterface
 
         $attributeTables = [];
         $attributesMap = [];
-        $attributeValues = [];
+        $attributeValues = [[]];
 
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         foreach ($this->getAttributes($entityType) as $attribute) {
