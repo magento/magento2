@@ -32,7 +32,6 @@ class VaultCaptureDataBuilder implements BuilderInterface
         $this->subjectReader = $subjectReader;
     }
 
-
     /**
      * @inheritdoc
      */
