@@ -34,10 +34,10 @@ class ScopeCodeResolver
      * Resolve scope code
      *
      * @param string $scopeType
-     * @param string $scopeCode
+     * @param null|string $scopeCode
      * @return string
      */
-    public function resolve($scopeType, $scopeCode)
+    public function resolve($scopeType, $scopeCode = null)
     {
         if (isset($this->resolvedScopeCodes[$scopeType][$scopeCode])) {
             return $this->resolvedScopeCodes[$scopeType][$scopeCode];
@@ -53,6 +53,7 @@ class ScopeCodeResolver
 
         if ($resolverScopeCode instanceof \Magento\Framework\App\ScopeInterface) {
             $resolverScopeCode = $resolverScopeCode->getCode();
+            $scopeCode = $resolverScopeCode;
         }
 
         $this->resolvedScopeCodes[$scopeType][$scopeCode] = $resolverScopeCode;
