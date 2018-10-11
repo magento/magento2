@@ -3,8 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Helper;
 
+/**
+ * Sales admin helper.
+ */
 class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
@@ -148,11 +153,19 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             $links = [];
             $i = 1;
             $data = str_replace('%', '%%', $data);
-            $regexp = "/<a\s[^>]*href\s*?=\s*?([\"\']??)([^\" >]*?)\\1[^>]*>(.*)<\/a>/siU";
+            $regexp = "#(?J)<a"
+                ."(?:(?:\s+(?:(?:href\s*=\s*(['\"])(?<link>.*?)\\1\s*)|(?:\S+\s*=\s*(['\"])(.*?)\\3)\s*)*)|>)"
+                .">?(?:(?:(?<text>.*?)(?:<\/a\s*>?|(?=<\w))|(?<text>.*)))#si";
             while (preg_match($regexp, $data, $matches)) {
+                $text = '';
+                $url = '';
                 //Revert the sprintf escaping
-                $url = str_replace('%%', '%', $matches[2]);
-                $text = str_replace('%%', '%', $matches[3]);
+                if (!empty($matches['link'])) {
+                    $url = str_replace('%%', '%', $matches['link']);
+                }
+                if (!empty($matches['text'])) {
+                    $text = str_replace('%%', '%', $matches['text']);
+                }
                 //Check for an valid url
                 if ($url) {
                     $urlScheme = strtolower(parse_url($url, PHP_URL_SCHEME));

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework;
 
 /**
@@ -33,12 +34,22 @@ class Escaper
     private $allowedAttributes = ['id', 'class', 'href', 'target', 'title', 'style'];
 
     /**
+     * @var string
+     */
+    private static $xssFiltrationPattern =
+        '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:))|'
+        . '((\\\\x6A\\\\x61\\\\x76\\\\x61\\\\x73\\\\x63\\\\x72\\\\x69\\\\x70\\\\x74(\\\\x3a|:|%3A))|'
+        . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
+
+    /**
      * @var string[]
      */
     private $escapeAsUrlAttributes = ['href'];
 
     /**
-     * Escape string for HTML context. allowedTags will not be escaped, except the following: script, img, embed,
+     * Escape string for HTML context.
+     *
+     * AllowedTags will not be escaped, except the following: script, img, embed,
      * iframe, video, source, object, audio
      *
      * @param string|array $data
@@ -285,7 +296,6 @@ class Escaper
 
     /**
      * Escape xss in urls
-     * Remove `javascript:`, `vbscript:`, `data:` words from url
      *
      * @param string $data
      * @return string
@@ -293,15 +303,33 @@ class Escaper
      */
     public function escapeXssInUrl($data)
     {
-        $pattern = '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:))|'
-            . '((\\\\x6A\\\\x61\\\\x76\\\\x61\\\\x73\\\\x63\\\\x72\\\\x69\\\\x70\\\\x74(\\\\x3a|:|%3A))|'
-            . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
-        $result = preg_replace($pattern, ':', $data);
-        return htmlspecialchars($result, ENT_COMPAT | ENT_HTML5 | ENT_HTML401, 'UTF-8', false);
+        return htmlspecialchars(
+            $this->escapeScriptIdentifiers($data),
+            ENT_COMPAT | ENT_HTML5 | ENT_HTML401,
+            'UTF-8',
+            false
+        );
+    }
+
+    /**
+     * Remove `javascript:`, `vbscript:`, `data:` words from the string.
+     *
+     * @param string $data
+     * @return string
+     */
+    private function escapeScriptIdentifiers(string $data): string
+    {
+        $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $data) ?: '';
+        if (preg_match(self::$xssFiltrationPattern, $filteredData)) {
+            $filteredData = $this->escapeScriptIdentifiers($filteredData);
+        }
+
+        return $filteredData;
     }
 
     /**
      * Escape quotes inside html attributes
+     *
      * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)
      *
      * @param string $data
