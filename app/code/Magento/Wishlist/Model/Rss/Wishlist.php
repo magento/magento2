@@ -7,9 +7,11 @@
 namespace Magento\Wishlist\Model\Rss;
 
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Wishlist RSS model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Wishlist implements DataProviderInterface
@@ -70,6 +72,8 @@ class Wishlist implements DataProviderInterface
     protected $customerFactory;
 
     /**
+     * Wishlist constructor.
+     *
      * @param \Magento\Wishlist\Helper\Rss $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Wishlist $wishlistBlock
      * @param \Magento\Catalog\Helper\Output $outputHelper
@@ -114,9 +118,9 @@ class Wishlist implements DataProviderInterface
      */
     public function isAllowed()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             'rss/wishlist/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -124,6 +128,7 @@ class Wishlist implements DataProviderInterface
      * Get RSS feed items
      *
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRssData()
     {
@@ -191,6 +196,8 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
+     * GetCacheKey
+     *
      * @return string
      */
     public function getCacheKey()
@@ -199,6 +206,8 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
+     * Get Cache Lifetime
+     *
      * @return int
      */
     public function getCacheLifetime()
@@ -264,7 +273,7 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getFeeds()
     {
@@ -272,7 +281,7 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {
