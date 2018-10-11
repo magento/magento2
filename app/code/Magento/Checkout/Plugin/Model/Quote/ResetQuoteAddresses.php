@@ -27,11 +27,10 @@ class ResetQuoteAddresses
         if (empty($result->getAllVisibleItems())) {
             foreach ($result->getAllAddresses() as $address) {
                 $result->removeAddress($address->getId());
-
-                $extensionAttributes = $result->getExtensionAttributes();
-                if (!$result->isVirtual() && $extensionAttributes && $extensionAttributes->getShippingAssignments()) {
-                    $extensionAttributes->setShippingAssignments([]);
-                }
+            }
+            $extensionAttributes = $result->getExtensionAttributes();
+            if (!$result->isVirtual() && $extensionAttributes && $extensionAttributes->getShippingAssignments()) {
+                $extensionAttributes->setShippingAssignments([]);
             }
         }
 
