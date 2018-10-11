@@ -11,5 +11,6 @@
     <entity name="VisualSwatchAttribute" type="SwatchAttribute">
         <data key="default_label" unique="suffix">VisualSwatchAttr</data>
         <data key="input_type">Visual Swatch</data>
+        <data key="attribute_code" unique="suffix">visual_swatch</data>
     </entity>
 </entities>
