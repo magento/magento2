@@ -1150,6 +1150,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
             return true;
         }
 
+        $includeDiscount = $this->_scopeConfig->getValue(
+            'sales/minimum_order/include_discount_amount',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
         $amount = $this->_scopeConfig->getValue(
             'sales/minimum_order/amount',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -1160,9 +1165,18 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
-        $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;
 
-        return ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount);
+        if ($includeDiscount) {
+            $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;
+
+            $isMinimumReached = ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount);
+        } else {
+            $isMinimumReached = $taxInclude
+                ? ($this->getBaseSubtotalTotalInclTax() >= $amount)
+                : ($this->getBaseSubtotal() >= $amount);
+        }
+
+        return $isMinimumReached;
     }
 
     /**
