@@ -20,12 +20,12 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
 
 /**
  * Fulltext Collection
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * This collection should be refactored to not have dependencies on MySQL-specific implementation.
  *
  * @api
  * @since 100.0.2
- * @deprecated
- * @see \Magento\ElasticSearch
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
