@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="FreeShippingMethodsSettingConfig" type="free_shipping_config_state">
+        <requiredEntity type="active">active</requiredEntity>
+    </entity>
+    <entity name="active" type="active">
+        <data key="value">1</data>
+    </entity>
+
+    <!-- default configuration used to restore Magento config -->
+    <entity name="DefaultShippingMethodsConfig" type="free_shipping_config_state">
+        <requiredEntity type="active">DefaultFreeShipping</requiredEntity>
+    </entity>
+    <entity name="DefaultFreeShipping" type="active">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="DisableFreeShippingConfig" type="disable_free_shipping_config_state">
+        <requiredEntity type="disableFreeShipping">disableFreeShipping</requiredEntity>
+    </entity>
+    <entity name="disableFreeShipping" type="disableFreeShipping">
+        <data key="value">1</data>
+    </entity>
+</entities>

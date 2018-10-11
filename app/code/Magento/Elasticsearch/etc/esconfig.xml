@@ -16,7 +16,6 @@
         <fr_FR>french</fr_FR>
         <nl_NL>dutch</nl_NL>
         <pt_BR>portuguese</pt_BR>
-        <zh_Hans_CN>cjk</zh_Hans_CN>
     </stemmer>
     <stopwords_file>
         <default>stopwords.csv</default>
@@ -26,6 +25,5 @@
         <fr_FR>stopwords_fr_FR.csv</fr_FR>
         <nl_NL>stopwords_nl_NL.csv</nl_NL>
         <pt_BR>stopwords_pt_BR.csv</pt_BR>
-        <zh_Hans_CN>stopwords_zh_Hans_CN.csv</zh_Hans_CN>
     </stopwords_file>
 </config>

@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontMinicartSection">
         <element name="productCount" type="text" selector="//header//div[contains(@class, 'minicart-wrapper')]//a[contains(@class, 'showcart')]//span[@class='counter-number']"/>
         <element name="productLinkByName" type="button" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details']//a[contains(text(), '{{var1}}')]"  parameterized="true"/>
@@ -25,5 +25,7 @@
         <element name="miniCartSubtotalField" type="text" selector=".block-minicart .amount span.price"/>
         <element name="itemQuantity" type="input" selector="//a[text()='{{productName}}']/../..//input[contains(@class,'cart-item-qty')]" parameterized="true"/>
         <element name="itemQuantityUpdate" type="button" selector="//a[text()='{{productName}}']/../..//span[text()='Update']" parameterized="true"/>
+        <element name="itemDiscount" type="text" selector="//tr[@class='totals']//td[@class='amount']/span"/>
+        <element name="subtotal" type="text" selector="//tr[@class='totals sub']//td[@class='amount']/span"/>
     </section>
 </sections>

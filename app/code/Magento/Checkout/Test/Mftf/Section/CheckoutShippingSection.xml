@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutShippingSection">
         <element name="isShippingStep" type="text" selector="//*[@class='opc-progress-bar']/li[contains(@class, '_active') and span[contains(.,'Shipping')]]"/>
         <element name="shippingTab" type="text" selector="//li[contains(@class,'opc-progress-bar-item')]//*[text()='Shipping']" timeout="30"/>
@@ -31,6 +31,7 @@
         <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
         <element name="firstShippingMethod" type="radio" selector="//*[@id='checkout-shipping-method-load']//input[@class='radio']"/>
         <element name="defaultShipping" type="button" selector=".billing-address-details"/>
+        <element name="state" type="button" selector="//*[text()='Alabama']"/>
         <element name="stateInput" type="input" selector="input[name=region]"/>
     </section>
 </sections>

@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -16,7 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Customer\Controller\Adminhtml\Index
+class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpPostActionInterface
 {
     /**
      * @var EmailNotificationInterface
