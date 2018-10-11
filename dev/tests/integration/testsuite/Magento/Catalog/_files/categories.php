@@ -84,7 +84,7 @@ $category->setId(5)
 $category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(6)
-    ->setName('Category 2.1')
+    ->setName('Category 2')
     ->setParentId(2)
     ->setPath('1/2/6')
     ->setLevel(2)
