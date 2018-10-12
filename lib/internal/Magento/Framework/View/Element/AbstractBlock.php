@@ -952,7 +952,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function escapeUrl($string)
     {
-        return $this->_escaper->escapeUrl($string);
+        return $this->_escaper->escapeUrl((string)$string);
     }
 
     /**

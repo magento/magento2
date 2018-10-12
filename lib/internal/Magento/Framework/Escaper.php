@@ -58,6 +58,10 @@ class Escaper
      */
     public function escapeHtml($data, $allowedTags = null)
     {
+        if (!is_array($data)) {
+            $data = (string)$data;
+        }
+
         if (is_array($data)) {
             $result = [];
             foreach ($data as $item) {
@@ -208,7 +212,7 @@ class Escaper
         if ($escapeSingleQuote) {
             return $this->getEscaper()->escapeHtmlAttr((string) $string);
         }
-        return htmlspecialchars($string, ENT_COMPAT, 'UTF-8', false);
+        return htmlspecialchars((string)$string, ENT_COMPAT, 'UTF-8', false);
     }
 
     /**
@@ -289,7 +293,7 @@ class Escaper
                 $result[] = $this->escapeJsQuote($item, $quote);
             }
         } else {
-            $result = str_replace($quote, '\\' . $quote, $data);
+            $result = str_replace($quote, '\\' . $quote, (string)$data);
         }
         return $result;
     }
@@ -304,7 +308,7 @@ class Escaper
     public function escapeXssInUrl($data)
     {
         return htmlspecialchars(
-            $this->escapeScriptIdentifiers($data),
+            $this->escapeScriptIdentifiers((string)$data),
             ENT_COMPAT | ENT_HTML5 | ENT_HTML401,
             'UTF-8',
             false

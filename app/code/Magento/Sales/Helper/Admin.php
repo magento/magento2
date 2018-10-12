@@ -158,25 +158,10 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
                 .">?(?:(?:(?<text>.*?)(?:<\/a\s*>?|(?=<\w))|(?<text>.*)))#si";
             while (preg_match($regexp, $data, $matches)) {
                 $text = '';
-                $url = '';
-                //Revert the sprintf escaping
-                if (!empty($matches['link'])) {
-                    $url = str_replace('%%', '%', $matches['link']);
-                }
                 if (!empty($matches['text'])) {
                     $text = str_replace('%%', '%', $matches['text']);
                 }
-                //Check for an valid url
-                if ($url) {
-                    $urlScheme = strtolower(parse_url($url, PHP_URL_SCHEME));
-                    if ($urlScheme !== 'http' && $urlScheme !== 'https') {
-                        $url = null;
-                    }
-                }
-                //Use hash tag as fallback
-                if (!$url) {
-                    $url = '#';
-                }
+                $url = $this->filterUrl($matches['link'] ?? '');
                 //Recreate a minimalistic secure a tag
                 $links[] = sprintf(
                     '<a href="%s">%s</a>',
@@ -190,5 +175,28 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             return vsprintf($data, $links);
         }
         return $this->escaper->escapeHtml($data, $allowedTags);
+    }
+
+    /**
+     * Filter the URL for allowed protocols.
+     *
+     * @param string $url
+     * @return string
+     */
+    private function filterUrl(string $url): string
+    {
+        if ($url) {
+            //Revert the sprintf escaping
+            $url = str_replace('%%', '%', $url);
+            $urlScheme = parse_url($url, PHP_URL_SCHEME);
+            $urlScheme = $urlScheme ? strtolower($urlScheme) : '';
+            if ($urlScheme !== 'http' && $urlScheme !== 'https') {
+                $url = null;
+            }
+        } else {
+            $url = '#';
+        }
+
+        return $url;
     }
 }
