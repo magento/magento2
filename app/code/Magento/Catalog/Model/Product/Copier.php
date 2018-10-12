@@ -76,20 +76,14 @@ class Copier
         $duplicate->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
 
         $this->copyConstructor->build($product, $duplicate);
-        $isDuplicateSaved = false;
-        do {
-            $urlKey = $duplicate->getUrlKey();
-            $urlKey = preg_match('/(.*)-(\d+)$/', $urlKey, $matches)
-                ? $matches[1] . '-' . ($matches[2] + 1)
-                : $urlKey . '-1';
-            $duplicate->setUrlKey($urlKey);
-            try {
-                $duplicate->save();
-                $isDuplicateSaved = true;
-            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-            } catch (\Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException $e) {
-            }
-        } while (!$isDuplicateSaved);
+
+        $urlKey = $duplicate->getUrlKey();
+        $urlKey = preg_match('/(.*)-(\d+)$/', $urlKey, $matches)
+            ? $matches[1] . '-' . ($matches[2] + 1)
+            : $urlKey . '-1';
+        $duplicate->setUrlKey($urlKey);
+        $duplicate->save();
+
         $this->getOptionRepository()->duplicate($product, $duplicate);
         $product->getResource()->duplicate(
             $product->getData($metadata->getLinkField()),
