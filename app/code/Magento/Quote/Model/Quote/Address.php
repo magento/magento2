@@ -999,17 +999,24 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
         $request->setFreeMethodWeight($item ? 0 : $this->getFreeMethodWeight());
 
+        
+         // =======================================================
+
         /**
-         * Store and website identifiers specified from StoreManager
+         * Store and website identifiers need specify from quote
          */
-        $request->setStoreId($this->storeManager->getStore()->getId());
-        $request->setWebsiteId($this->storeManager->getWebsite()->getId());
+        $request->setStoreId($this->getQuote()->getStore()->getId());
+        $request->setWebsiteId($this->getQuote()->getStore()->getWebsiteId());
         $request->setFreeShipping($this->getFreeShipping());
         /**
          * Currencies need to convert in free shipping
          */
-        $request->setBaseCurrency($this->storeManager->getStore()->getBaseCurrency());
-        $request->setPackageCurrency($this->storeManager->getStore()->getCurrentCurrency());
+        $request->setBaseCurrency($this->getQuote()->getStore()->getBaseCurrency());
+        $request->setPackageCurrency($this->getQuote()->getStore()->getCurrentCurrency());
+
+        // =======================================================
+        
+        
         $request->setLimitCarrier($this->getLimitCarrier());
         $baseSubtotalInclTax = $this->getBaseSubtotalTotalInclTax();
         $request->setBaseSubtotalInclTax($baseSubtotalInclTax);
