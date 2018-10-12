@@ -87,7 +87,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implement
         $filterRequest = $this->getRequest()->getParam('filters', null);
         $status = (int) $this->getRequest()->getParam('status');
 
-        if (null !== $storeId && null !== $filterRequest) {
+        if (null === $storeId && null !== $filterRequest) {
             $storeId = (isset($filterRequest['store_id'])) ? (int) $filterRequest['store_id'] : 0;
         }
 
