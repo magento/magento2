@@ -29,6 +29,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
         </variation>
         <variation name="OnePageCheckoutUsingNonDefaultAddress" summary="Checkout as Customer using non default address" ticketId="MAGETWO-42602">
+            <data name="issue" xsi:type="string">MAGETWO-95660: Fix and Unskip MTF OnePageCheckoutTest</data>
             <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">customer_US_DE_UK</data>
