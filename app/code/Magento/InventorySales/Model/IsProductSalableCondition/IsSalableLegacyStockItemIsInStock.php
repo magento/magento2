@@ -70,9 +70,6 @@ class IsSalableLegacyStockItemIsInStock implements IsProductSalableInterface
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         $isInStock = (int)$stockItem->getIsInStock();
 
-        if (!$isInStock) {
-            return false;
-        }
-        return true;
+        return (bool)$isInStock;
     }
 }
