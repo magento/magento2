@@ -428,6 +428,7 @@ define([
             }
             events = $._data(this.overlay.get(0), 'events');
             events ? this.prevOverlayHandler = events.click[0].handler : false;
+            
         },
 
         /**
