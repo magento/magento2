@@ -62,10 +62,6 @@ class Sorting extends \Magento\Config\Model\Config\Structure\AbstractMapper
             $sortIndexB = (float)$elementB['sortOrder'];
         }
 
-        if ($sortIndexA == $sortIndexB) {
-            return 0;
-        }
-
-        return $sortIndexA < $sortIndexB ? -1 : 1;
+        return $sortIndexA <=> $sortIndexB;
     }
 }

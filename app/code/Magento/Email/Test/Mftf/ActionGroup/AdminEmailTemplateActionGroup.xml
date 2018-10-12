@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!--Create New Email Template -->
+    <actionGroup name="AdminCreateNewEmailTemplate">
+        <arguments>
+            <argument name="emailTemplate" defaultValue="EmailTemplate"/>
+        </arguments>
+        <!--Click "Add New Template" button-->
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="clickAddNewTemplateButton"/>
+        <waitForPageLoad stepKey="waitForNewEmailTemplatePageLoaded"/>
+        <!--Select value for "Template" drop-down menu in "Load default template" tab-->
+        <selectOption selector="{{AdminEmailTemplateEditSection.templateDropDown}}" userInput="Registry Update" stepKey="selectValueFromTemplateDropDown"/>
+        <!--Fill in required fields in "Template Information" tab and click "Save Template" button-->
+        <click selector="{{AdminEmailTemplateEditSection.loadTemplateButton}}" stepKey="clickLoadTemplateButton"/>
+        <waitForElementVisible selector="{{AdminEmailTemplateEditSection.templateNameField}}" stepKey="waitForTemplateNameFieldVisible"/>
+        <fillField selector="{{AdminEmailTemplateEditSection.templateNameField}}" userInput="{{emailTemplate.templateName}}" stepKey="fillTemplateNameField"/>
+        <fillField selector="{{AdminEmailTemplateEditSection.templateSubjectField}}" userInput="{{emailTemplate.templateSubject}}" stepKey="fillTemplateSubjectField"/>
+        <waitForPageLoad stepKey="waitForTemplateSaveButtonVisible"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveTemplateButton"/>
+        <waitForPageLoad stepKey="waitForNewTemplateCreated"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the email template." stepKey="seeSuccessMessageAfterSave"/>
+    </actionGroup>
+
+    <!--Delete Email Template-->
+    <actionGroup name="AdminDeleteEmailTemplate">
+        <arguments>
+            <argument name="emailTemplate" defaultValue="EmailTemplate"/>
+        </arguments>
+        <seeInCurrentUrl url="email_template/edit/id" stepKey="seeCreatedTemplateUrl"/>
+        <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickDeleteTemplateButton"/>
+        <acceptPopup stepKey="acceptDeletingTemplatePopUp"/>
+        <see userInput="You deleted the email template." stepKey="seeSuccessfulMessage"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickResetFilterButton"/>
+        <waitForElementNotVisible selector="{{AdminEmailTemplateGridSection.templateRowWithName(emailTemplate.templateName)}}" stepKey="waitForSearchFieldCleared"/>
+    </actionGroup>
+</actionGroups>
