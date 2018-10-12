@@ -199,15 +199,20 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
             /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
-
-        $price = '';
-        if ($priceRender) {
-            $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
-                $product,
-                $arguments
+        if (!$priceRender) {
+            $priceRender = $this->getLayout()->createBlock(
+                \Magento\Framework\Pricing\Render::class,
+                'product.price.render.default',
+                ['data' => ['price_render_handle' => 'catalog_product_prices']]
             );
         }
+
+        $price = $priceRender->render(
+            \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+            $product,
+            $arguments
+        );
+        
         return $price;
     }
 
@@ -392,7 +397,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Returns PriceCurrencyInterface instance
      *
      * @return PriceCurrencyInterface
-     *
      * @deprecated 100.2.0
      */
     private function getPriceCurrency()

@@ -167,6 +167,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
+     * Init model
+     *
      * @return void
      */
     protected function _construct()
@@ -362,6 +364,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * Retrieve apply to products array
+     *
      * Return empty array if applied to all products
      *
      * @return string[]
@@ -478,7 +481,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         $backendType = $this->getOrigData('backend_type');
         $frontendInput = $this->getOrigData('frontend_input');
 
-        if ($backendType == 'int' && $frontendInput == 'select') {
+        if ($backendType == 'int' && ($frontendInput == 'select' || $frontendInput == 'boolean')) {
             return true;
         } elseif ($backendType == 'varchar' && $frontendInput == 'multiselect') {
             return true;
@@ -507,8 +510,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
+     * @inheritdoc
      * @codeCoverageIgnoreStart
-     * {@inheritdoc}
      */
     public function getIsWysiwygEnabled()
     {
@@ -516,7 +519,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsHtmlAllowedOnFront()
     {
@@ -524,7 +527,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUsedForSortBy()
     {
@@ -532,7 +535,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsFilterable()
     {
@@ -540,7 +543,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsFilterableInSearch()
     {
@@ -548,7 +551,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsUsedInGrid()
     {
@@ -556,7 +559,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsVisibleInGrid()
     {
@@ -564,7 +567,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsFilterableInGrid()
     {
@@ -572,7 +575,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPosition()
     {
@@ -580,7 +583,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsSearchable()
     {
@@ -588,7 +591,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsVisibleInAdvancedSearch()
     {
@@ -596,7 +599,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsComparable()
     {
@@ -604,7 +607,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsUsedForPromoRules()
     {
@@ -612,7 +615,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsVisibleOnFront()
     {
@@ -620,7 +623,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUsedInProductListing()
     {
@@ -628,7 +631,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsVisible()
     {
@@ -638,7 +641,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     //@codeCoverageIgnoreEnd
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getScope()
     {
@@ -720,7 +723,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * Set apply to value for the element
      *
-     * @param string []|string
+     * @param string[]|string $applyTo
      * @return $this
      */
     public function setApplyTo($applyTo)
@@ -829,7 +832,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function afterDelete()
     {
