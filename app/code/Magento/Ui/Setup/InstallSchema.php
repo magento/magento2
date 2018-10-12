@@ -66,8 +66,19 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn('title', Table::TYPE_TEXT, 255, ['nullable' => true], 'Bookmark title')
             ->addColumn('config', Table::TYPE_TEXT, Table::MAX_TEXT_SIZE, ['nullable' => true], 'Bookmark config')
-            ->addColumn('created_at', Table::TYPE_DATETIME, null, ['nullable' => false], 'Bookmark created at')
-            ->addColumn('updated_at', Table::TYPE_DATETIME, null, ['nullable' => false], 'Bookmark updated at')
+            ->addColumn(
+                'created_at',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
+                'Bookmark created at'
+            )->addColumn(
+                'updated_at',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+                'Bookmark updated at'
+            )
             ->addIndex(
                 $setup->getIdxName(
                     'ui_bookmark',
