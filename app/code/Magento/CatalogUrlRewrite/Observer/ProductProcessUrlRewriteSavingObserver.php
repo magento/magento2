@@ -33,8 +33,8 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     private $productUrlPathGenerator;
 
     /**
-     * @param ProductUrlRewriteGenerator   $productUrlRewriteGenerator
-     * @param UrlPersistInterface          $urlPersist
+     * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
+     * @param UrlPersistInterface $urlPersist
      * @param ProductUrlPathGenerator|null $productUrlPathGenerator
      */
     public function __construct(
