@@ -17,7 +17,7 @@
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength" />
     <rule ref="rulesets/codesize.xml/ExcessiveParameterList" />
     <rule ref="rulesets/codesize.xml/ExcessivePublicCount" />
-    <rule ref="rulesets/codesize.xml/TooManyFields" />    
+    <rule ref="rulesets/codesize.xml/TooManyFields" />
     <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
         <properties>
             <property name="maximum" value="100" />
@@ -43,4 +43,7 @@
     <rule ref="rulesets/naming.xml/ShortMethodName" />
     <rule ref="rulesets/naming.xml/ConstantNamingConventions" />
     <rule ref="rulesets/naming.xml/BooleanGetMethodName" />
+
+    <!-- Magento Specific Rules -->
+    <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/RequestAwareBlockMethod" />
 </ruleset>
