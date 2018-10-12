@@ -414,6 +414,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
 
     /**
      * Gets the applied rule IDs for the order item.
+     * Rules are comma separated if there are more than one.
      *
      * @return string|null Applied rule IDs.
      */
