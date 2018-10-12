@@ -6,6 +6,7 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
@@ -14,7 +15,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Class DownloadCustomOption. Represents request-flow logic for option's file download
  */
-class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
+class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
