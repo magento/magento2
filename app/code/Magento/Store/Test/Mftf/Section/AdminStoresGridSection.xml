@@ -12,7 +12,6 @@
         <element name="createWebsite" type="button" selector="#add"/>
     </section>
     <section name="AdminStoresGridSection">
-        <element name="loadingMask" type="text" selector=".admin__data-grid-loading-mask[data-component*='notification_area.notification_area.columns']"/>
         <element name="storeGrpFilterTextField" type="input" selector="#storeGrid_filter_group_title"/>
         <element name="websiteFilterTextField" type="input" selector="#storeGrid_filter_website_title"/>
         <element name="storeFilterTextField" type="input" selector="#storeGrid_filter_store_title"/>
