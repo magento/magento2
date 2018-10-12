@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  *
  * Covers \Magento\Sales\Model\ValidatorResultMerger
  */
-class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
+class ModuleServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Testable Object
