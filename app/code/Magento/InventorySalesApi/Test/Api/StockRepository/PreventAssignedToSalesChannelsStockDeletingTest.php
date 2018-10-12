@@ -14,6 +14,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class PreventAssignedToSalesChannelsStockDeletingTest extends WebapiAbstract
 {
     /**
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_with_sales_channels.php
      * @throws \Exception
      */
