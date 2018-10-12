@@ -430,6 +430,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get pager encoded url.
+     *
      * @param array $params
      * @return string
      */
@@ -624,6 +626,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Check if limit is current used in toolbar.
+     *
      * @param int $limit
      * @return bool
      */
@@ -633,6 +637,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Pager number of items from which products started on current page.
+     *
      * @return int
      */
     public function getFirstNum()
@@ -642,6 +648,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Pager number of items products finished on current page.
+     *
      * @return int
      */
     public function getLastNum()
@@ -651,6 +659,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Total number of products in current category.
+     *
      * @return int
      */
     public function getTotalNum()
@@ -659,6 +669,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Check if current page is the first.
+     *
      * @return bool
      */
     public function isFirstPage()
@@ -667,6 +679,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return last page number.
+     *
      * @return int
      */
     public function getLastPageNum()

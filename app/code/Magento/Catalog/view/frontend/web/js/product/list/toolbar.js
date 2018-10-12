@@ -91,7 +91,7 @@ define([
                 baseUrl = urlPaths[0],
                 urlParams = urlPaths[1] ? urlPaths[1].split('&') : [],
                 paramData = {},
-                parameters, i;
+                parameters, i, form, params, key, input, formKey;
 
             for (i = 0; i < urlParams.length; i++) {
                 parameters = urlParams[i].split('=');
@@ -102,25 +102,25 @@ define([
             paramData[paramName] = paramValue;
 
             if (this.options.post) {
-                var form = document.createElement('form');
+                form = document.createElement('form');
+                params = [this.options.mode, this.options.direction, this.options.order, this.options.limit];
 
-                var params = [this.options.mode, this.options.direction, this.options.order, this.options.limit];
-                for (var key in paramData) {
-                    if (params.indexOf(key) !== -1) {
-                        var input = document.createElement('input');
+                for (key in paramData) {
+                    if (params.indexOf(key) !== -1) { //eslint-disable-line max-depth
+                        input = document.createElement('input');
                         input.name = key;
                         input.value = paramData[key];
                         form.appendChild(input);
                         delete paramData[key];
                     }
                 }
-                var formKey = document.createElement('input');
+                formKey = document.createElement('input');
                 formKey.name = 'form_key';
                 formKey.value = this.options.formKey;
                 form.appendChild(formKey);
 
                 paramData = $.param(paramData);
-                baseUrl = baseUrl + (paramData.length ? '?' + paramData : '');
+                baseUrl += paramData.length ? '?' + paramData : '';
 
                 form.action = baseUrl;
                 form.method = 'POST';
