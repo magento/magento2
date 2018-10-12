@@ -161,7 +161,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $address->setCustomerAddressId(null);
         }
 
-        if (!$billingAddress->getCustomerAddressId()) {
+        if ($billingAddress && !$billingAddress->getCustomerAddressId()) {
             $billingAddress->setCustomerAddressId(null);
         }
 
