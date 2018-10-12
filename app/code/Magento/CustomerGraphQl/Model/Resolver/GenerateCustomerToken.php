@@ -5,11 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Resolver\Customer\Account;
+namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -43,19 +44,19 @@ class GenerateCustomerToken implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        if (!isset($args['email'])) {
+            throw new GraphQlInputException(__('"email" value should be specified'));
+        }
+
+        if (!isset($args['password'])) {
+            throw new GraphQlInputException(__('"password" value should be specified'));
+        }
+
         try {
-            if (!isset($args['email'])) {
-                throw new GraphQlInputException(__('"email" value should be specified'));
-            }
-            if (!isset($args['password'])) {
-                throw new GraphQlInputException(__('"password" value should be specified'));
-            }
             $token = $this->customerTokenService->createCustomerAccessToken($args['email'], $args['password']);
             return ['token' => $token];
         } catch (AuthenticationException $e) {
-            throw new GraphQlAuthorizationException(
-                __($e->getMessage())
-            );
+            throw new GraphQlAuthenticationException(__($e->getMessage()), $e);
         }
     }
 }

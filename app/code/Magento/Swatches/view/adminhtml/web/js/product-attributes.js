@@ -46,7 +46,7 @@ define([
                 get tabsFront() {
                     return this.attrTabsFront.length ? this.attrTabsFront.closest('li') : $('#front_fieldset-wrapper');
                 },
-                selectFields: ['select', 'multiselect', 'price', 'swatch_text', 'swatch_visual'],
+                selectFields: ['boolean', 'select', 'multiselect', 'price', 'swatch_text', 'swatch_visual'],
 
                 /**
                  * @this {swatchProductAttributes}

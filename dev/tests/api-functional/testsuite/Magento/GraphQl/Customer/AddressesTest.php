@@ -14,16 +14,13 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 
-class CustomerAuthenticationTest extends GraphQlAbstract
+class AddressesTest extends GraphQlAbstract
 {
     /**
-     * Verify customers with valid credentials with a customer bearer token
-     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testRegisteredCustomerWithValidCredentials()
+    public function testGetCustomerWithAddresses()
     {
         $query
             = <<<QUERY
@@ -76,39 +73,6 @@ QUERY;
         );
         $this->assertCustomerFields($customer, $response['customer']);
         $this->assertCustomerAddressesFields($customer, $response);
-    }
-
-    /**
-     * Verify customer with valid credentials but without the bearer token
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testCustomerWithValidCredentialsWithoutToken()
-    {
-         $query
-           = <<<QUERY
-{
-  customer 
-  {
-    created_at
-    group_id
-    prefix
-    firstname
-    middlename
-    lastname
-    suffix
-    email
-    default_billing
-    default_shipping
-    id   
-   }
-}
-QUERY;
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: Current customer' . ' ' .
-           'does not have access to the resource "customer"');
-        $this->graphQlQuery($query);
     }
 
     /**
