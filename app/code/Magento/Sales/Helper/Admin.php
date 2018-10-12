@@ -193,7 +193,9 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             if ($urlScheme !== 'http' && $urlScheme !== 'https') {
                 $url = null;
             }
-        } else {
+        }
+
+        if (!$url) {
             $url = '#';
         }
 

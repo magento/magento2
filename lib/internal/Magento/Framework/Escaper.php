@@ -69,16 +69,7 @@ class Escaper
             }
         } elseif (strlen($data)) {
             if (is_array($allowedTags) && !empty($allowedTags)) {
-                $notAllowedTags = array_intersect(
-                    array_map('strtolower', $allowedTags),
-                    $this->notAllowedTags
-                );
-                if (!empty($notAllowedTags)) {
-                    $this->getLogger()->critical(
-                        'The following tag(s) are not allowed: ' . implode(', ', $notAllowedTags)
-                    );
-                    $allowedTags = array_diff($allowedTags, $this->notAllowedTags);
-                }
+                $allowedTags = $this->filterProhibitedTags($allowedTags);
                 $wrapperElementId = uniqid();
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
                 set_error_handler(
@@ -377,5 +368,28 @@ class Escaper
                 ->get(\Psr\Log\LoggerInterface::class);
         }
         return $this->logger;
+    }
+
+    /**
+     * Filter prohibited tags.
+     *
+     * @param array $allowedTags
+     * @return array
+     */
+    private function filterProhibitedTags(array $allowedTags): array
+    {
+        $notAllowedTags = array_intersect(
+            array_map('strtolower', $allowedTags),
+            $this->notAllowedTags
+        );
+
+        if (!empty($notAllowedTags)) {
+            $this->getLogger()->critical(
+                'The following tag(s) are not allowed: ' . implode(', ', $notAllowedTags)
+            );
+            $allowedTags = array_diff($allowedTags, $this->notAllowedTags);
+        }
+
+        return $allowedTags;
     }
 }
