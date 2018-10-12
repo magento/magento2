@@ -43,7 +43,6 @@ class IsSalableLegacyStockItemIsInStock implements IsProductSalableForRequestedQ
         ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory,
         ProductSalableResultInterfaceFactory $productSalableResultFactory,
         IsSalableLegacyStockItem $isSalableLegacyStockItemIsInStock
-
     ) {
         $this->productSalabilityErrorFactory = $productSalabilityErrorFactory;
         $this->productSalableResultFactory = $productSalableResultFactory;
