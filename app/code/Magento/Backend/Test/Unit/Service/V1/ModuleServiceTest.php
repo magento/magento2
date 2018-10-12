@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Backend\Test\Unit\Model;
+namespace Magento\Backend\Test\Unit\Service\V1;
 
 use Magento\Backend\Service\V1\ModuleService;
 use Magento\Framework\Module\ModuleListInterface;
