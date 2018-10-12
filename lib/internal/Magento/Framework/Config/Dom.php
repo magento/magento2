@@ -192,18 +192,18 @@ class Dom
                 /* skip the case when the matched node has children, otherwise they get overridden */
                 if (!$matchedNode->hasChildNodes()
                     || $this->_isTextNode($matchedNode)
-                    || $this->_isCdataNode($matchedNode)
+                    || $this->isCdataNode($matchedNode)
                 ) {
                     $matchedNode->nodeValue = $node->childNodes->item(0)->nodeValue;
                 }
-            } elseif ($this->_isCdataNode($node) && $this->_isTextNode($matchedNode)) {
+            } elseif ($this->isCdataNode($node) && $this->_isTextNode($matchedNode)) {
                 /* Replace text node with CDATA section */
-                if ($this->_findCdataSection($node)) {
-                    $matchedNode->nodeValue = $this->_findCdataSection($node)->nodeValue;
+                if ($this->findCdataSection($node)) {
+                    $matchedNode->nodeValue = $this->findCdataSection($node)->nodeValue;
                 }
-            } elseif ($this->_isCdataNode($node) && $this->_isCdataNode($matchedNode)) {
+            } elseif ($this->isCdataNode($node) && $this->isCdataNode($matchedNode)) {
                 /* Replace CDATA with new one */
-                $this->_replaceCdataNode($matchedNode, $node);
+                $this->replaceCdataNode($matchedNode, $node);
             } else {
                 /* recursive merge for all child nodes */
                 foreach ($node->childNodes as $childNode) {
@@ -237,7 +237,7 @@ class Dom
      * @param \DOMNode $node
      * @return bool
      */
-    protected function _isCdataNode($node)
+    private function isCdataNode($node)
     {
         // If every child node of current is NOT \DOMElement
         // It is arbitrary combination of text nodes and CDATA sections.
@@ -256,7 +256,7 @@ class Dom
      * @param \DOMNode $node
      * @return \DOMCdataSection|null
      */
-    protected function _findCdataSection($node)
+    private function findCdataSection($node)
     {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof \DOMCdataSection) {
@@ -271,10 +271,10 @@ class Dom
      * @param \DOMNode $oldNode
      * @param \DOMNode $newNode
      */
-    protected function _replaceCdataNode($oldNode, $newNode)
+    private function replaceCdataNode($oldNode, $newNode)
     {
-        $oldCdata = $this->_findCdataSection($oldNode);
-        $newCdata = $this->_findCdataSection($newNode);
+        $oldCdata = $this->findCdataSection($oldNode);
+        $newCdata = $this->findCdataSection($newNode);
 
         if ($oldCdata && $newCdata) {
             $oldCdata->nodeValue = $newCdata->nodeValue;
