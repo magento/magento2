@@ -187,27 +187,28 @@ class Sitemap extends AbstractExtensibleModel implements IdentityInterface, Site
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Model\Context                        $context
-     * @param \Magento\Framework\Registry                             $registry
-     * @param ExtensionAttributesFactory                              $extensionFactory
-     * @param AttributeValueFactory                                   $customAttributeFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null      $resourceCollection
-     * @param \Magento\Framework\Escaper                              $escaper
-     * @param \Magento\Sitemap\Helper\Data                            $sitemapData
-     * @param \Magento\Framework\Filesystem                           $filesystem
-     * @param ResourceModel\Catalog\CategoryFactory                   $categoryFactory
-     * @param ResourceModel\Catalog\ProductFactory                    $productFactory
-     * @param ResourceModel\Cms\PageFactory                           $cmsFactory
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime             $modelDate
-     * @param \Magento\Store\Model\StoreManagerInterface              $storeManager
-     * @param \Magento\Framework\App\RequestInterface                 $request
-     * @param \Magento\Framework\Stdlib\DateTime                      $dateTime
-     * @param array                                                   $data
-     * @param DocumentRoot|null                                       $documentRoot
-     * @param ItemProviderInterface|null                              $itemProvider
-     * @param SitemapConfigReaderInterface|null                       $configReader
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Sitemap\Helper\Data $sitemapData
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param ResourceModel\Catalog\CategoryFactory $categoryFactory
+     * @param ResourceModel\Catalog\ProductFactory $productFactory
+     * @param ResourceModel\Cms\PageFactory $cmsFactory
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $modelDate
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     * @param DocumentRoot|null $documentRoot
+     * @param ItemProviderInterface|null $itemProvider
+     * @param SitemapConfigReaderInterface|null $configReader
      * @param \Magento\Sitemap\Model\SitemapItemInterfaceFactory|null $sitemapItemFactory
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory|null $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory|null $customAttributeFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -215,8 +216,6 @@ class Sitemap extends AbstractExtensibleModel implements IdentityInterface, Site
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        ExtensionAttributesFactory $extensionFactory,
-        AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Escaper $escaper,
         \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\Framework\Filesystem $filesystem,
@@ -233,8 +232,9 @@ class Sitemap extends AbstractExtensibleModel implements IdentityInterface, Site
         \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null,
         ItemProviderInterface $itemProvider = null,
         SitemapConfigReaderInterface $configReader = null,
-        \Magento\Sitemap\Model\SitemapItemInterfaceFactory $sitemapItemFactory = null
-
+        \Magento\Sitemap\Model\SitemapItemInterfaceFactory $sitemapItemFactory = null,
+        ExtensionAttributesFactory $extensionFactory = null,
+        AttributeValueFactory $customAttributeFactory = null
 ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
@@ -252,6 +252,8 @@ class Sitemap extends AbstractExtensibleModel implements IdentityInterface, Site
         $this->sitemapItemFactory = $sitemapItemFactory ?: ObjectManager::getInstance()->get(
             \Magento\Sitemap\Model\SitemapItemInterfaceFactory::class
         );
+        $extensionFactory = $extensionFactory ?: ObjectManager::getInstance()->get(ExtensionAttributesFactory::class);
+        $customAttributeFactory = $customAttributeFactory ?: ObjectManager::getInstance()->get(AttributeValueFactory::class);
         parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $resource,
             $resourceCollection, $data);
     }
