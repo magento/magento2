@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductLink\Link;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
@@ -28,19 +27,6 @@ class ProductLinks implements ResolverInterface
     private $linkTypes = ['related', 'upsell', 'crosssell'];
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
-     * @param ValueFactory $valueFactory
-     */
-    public function __construct(ValueFactory $valueFactory)
-    {
-        $this->valueFactory = $valueFactory;
-    }
-
-    /**
      * Format product links data to conform to GraphQL schema
      *
      * {@inheritdoc}
@@ -51,12 +37,9 @@ class ProductLinks implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new GraphQlInputException(__('"model" value should be specified'));
         }
 
         /** @var Product $product */
@@ -73,10 +56,6 @@ class ProductLinks implements ResolverInterface
             }
         }
 
-        $result = function () use ($links) {
-            return $links;
-        };
-
-        return $this->valueFactory->create($result);
+        return $links;
     }
 }

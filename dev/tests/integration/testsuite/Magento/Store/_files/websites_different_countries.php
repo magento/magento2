@@ -56,7 +56,7 @@ $configResource->saveConfig(
 //Allowed countries for second website
 $configResource->saveConfig(
     'general/country/allow',
-    'ES',
+    'ES,US,UK,DE',
     \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
     $websiteId
 );

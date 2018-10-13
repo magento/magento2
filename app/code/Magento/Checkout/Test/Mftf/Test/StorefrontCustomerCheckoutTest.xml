@@ -85,12 +85,13 @@
     </test>
     <test name="StorefrontCustomerCheckoutTestWithMultipleAddressesAndTaxRates">
         <annotations>
+            <features value="Checkout"/>
+            <stories value="Customer checkout"/>
             <title value="Customer Checkout with multiple addresses and tax rates"/>
             <description value="Should be able to place an order as a customer with multiple addresses and tax rates."/>
             <testCaseId value="MAGETWO-93109"/>
-            <skip>
-                <issueId value="MQE-1187" />
-            </skip>
+            <severity value="AVERAGE"/>
+            <group value="checkout"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
@@ -180,6 +181,8 @@
 
         <click stepKey="changeShippingAddress" selector="{{CheckoutShippingMethodsSection.shipHereButton}}"/>
         <waitForElementNotVisible stepKey="waitForShippingMethodLoaderNotVisible" selector="{{CheckoutShippingMethodsSection.shippingMethodLoader}}" time="30"/>
+        <waitForElementVisible stepKey="waitForShippingMethodRadioToBeVisible" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" time="30"/>
+        <waitForPageLoad stepKey="waitForPageLoad23"/>
         <click stepKey="selectFirstShippingMethod2" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="waitForShippingMethodSelect2" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
         <click stepKey="clickNextOnShippingMethodLoad2" selector="{{CheckoutShippingMethodsSection.next}}" />

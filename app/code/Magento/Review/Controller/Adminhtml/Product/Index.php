@@ -5,10 +5,11 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Index extends ProductController
+class Index extends ProductController implements HttpGetActionInterface
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface
