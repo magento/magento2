@@ -610,16 +610,17 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->setStatus($status);
 
+        $storeId = $customerData->getStoreId();
+        if ($customerData->getStoreId() == 0) {
+            $storeId = $this->_storeManager->getWebsite($customerData->getWebsiteId())->getDefaultStore()->getId();
+        }
+
         if (!$this->getId()) {
-            $storeId = $customerData->getStoreId();
-            if ($customerData->getStoreId() == 0) {
-                $storeId = $this->_storeManager->getWebsite($customerData->getWebsiteId())->getDefaultStore()->getId();
-            }
             $this->setStoreId($storeId)
                 ->setCustomerId($customerData->getId())
                 ->setEmail($customerData->getEmail());
         } else {
-            $this->setStoreId($customerData->getStoreId())
+            $this->setStoreId($storeId)
                 ->setEmail($customerData->getEmail());
         }
 
