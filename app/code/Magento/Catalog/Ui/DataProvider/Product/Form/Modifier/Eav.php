@@ -290,7 +290,7 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -401,7 +401,7 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -532,7 +532,7 @@ class Eav extends AbstractModifier
     /**
      * Loads attributes for specified groups at once
      *
-     * @param AttributeGroupInterface[] ...$groups
+     * @param AttributeGroupInterface[] $groups
      * @return @return ProductAttributeInterface[]
      */
     private function loadAttributesForGroups(array $groups)
@@ -707,7 +707,8 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * Returns attribute default value, based on db setting or setting in the system configuration
+     * Returns attribute default value, based on db setting or setting in the system configuration.
+     *
      * @param ProductAttributeInterface $attribute
      * @return null|string
      */
@@ -742,6 +743,8 @@ class Eav extends AbstractModifier
     }
 
     /**
+     * Adds 'use default value' checkbox.
+     *
      * @param ProductAttributeInterface $attribute
      * @param array $meta
      * @return array
@@ -890,7 +893,7 @@ class Eav extends AbstractModifier
     {
         $valueMap = $this->formElementMapper->getMappings();
 
-        return isset($valueMap[$value]) ? $valueMap[$value] : $value;
+        return $valueMap[$value] ?? $value;
     }
 
     /**
@@ -944,6 +947,9 @@ class Eav extends AbstractModifier
         $attributeCode = $attribute->getAttributeCode();
         /** @var Product $product */
         $product = $this->locator->getProduct();
+        if ($product->isLockedAttribute($attributeCode)) {
+            return false;
+        }
 
         if (isset($this->canDisplayUseDefault[$attributeCode])) {
             return $this->canDisplayUseDefault[$attributeCode];

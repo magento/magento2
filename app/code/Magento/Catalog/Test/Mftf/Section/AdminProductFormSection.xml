@@ -23,6 +23,7 @@
         <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
         <element name="productNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
+        <element name="productTaxClass" type="select" selector="//*[@name='product[tax_class_id]']"/>
         <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
@@ -47,6 +48,7 @@
         <element name="setProductAsNewFrom" type="input" selector="input[name='product[news_from_date]']"/>
         <element name="setProductAsNewTo" type="input" selector="input[name='product[news_to_date]']"/>
         <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
@@ -116,7 +118,7 @@
         <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first" />
         <element name="UploadImage" type="file" selector=".fileupload" />
         <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
-        <element name="InsertFile" type="text" selector="#insert_files"/>
+        <element name="InsertFile" type="text" selector="#insert_files" timeout="30"/>
         <element name="CreateFolder" type="button" selector="#new_folder" />
         <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
         <element name="CancelBtn" type="button" selector="#cancel" />

@@ -541,6 +541,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Not add store ids to items
+     *
+     * @return $this
+     */
+    protected function prepareStoreId()
+    {
+        return $this;
+    }
+
+    /**
      * Add store data
      *
      * @return void
