@@ -160,6 +160,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const URL_KEY = 'url_key';
 
     /**
+    * SKU max length
+    */
+    const DB_MAX_SKU_LENGTH = 65;
+
+    /**
      * Attribute cache
      *
      * @var array
