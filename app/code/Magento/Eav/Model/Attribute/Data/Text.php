@@ -67,7 +67,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             $value = $this->getEntity()->getDataUsingMethod($attribute->getAttributeCode());
         }
 
-        if (!$attribute->isRequired() && empty($value)) {
+        if (!$attribute->getIsRequired() && empty($value)) {
             return true;
         }
 
