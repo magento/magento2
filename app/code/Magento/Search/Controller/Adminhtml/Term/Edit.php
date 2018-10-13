@@ -43,7 +43,7 @@ class Edit extends TermController
         if ($id) {
             $model->load($id);
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This search no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This search no longer exists.'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
                 $resultRedirect->setPath('search/*');

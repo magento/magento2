@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem\Glob;
 
 /**
  * Class File
+ *
  * @package Magento\Framework\Filesystem\Driver
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -405,7 +406,14 @@ class File implements DriverInterface
                 $this->deleteFile($entity->getPathname());
             }
         }
-        $result = @rmdir($this->getScheme() . $path);
+
+        $fullPath = $this->getScheme() . $path;
+        if (is_link($fullPath)) {
+            $result = @unlink($fullPath);
+        } else {
+            $result = @rmdir($fullPath);
+        }
+
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -836,6 +844,8 @@ class File implements DriverInterface
     }
 
     /**
+     * Returns an absolute path for the given one.
+     *
      * @param string $basePath
      * @param string $path
      * @param string|null $scheme
@@ -872,7 +882,8 @@ class File implements DriverInterface
     }
 
     /**
-     * Fixes path separator
+     * Fixes path separator.
+     *
      * Utility method.
      *
      * @param string $path
