@@ -44,6 +44,23 @@ class ResetPasswordTest extends \Magento\TestFramework\TestCase\AbstractBackendC
     }
 
     /**
+     * Checks reset password functionality cannot be performed with GET request
+     *
+     * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
+     * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testResetPasswordWithGet()
+    {
+        $this->passwordResetRequestEventCreate(
+            \Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST
+        );
+        $this->getRequest()->setPostValue(['customer_id' => '1'])->setMethod(HttpRequest::METHOD_GET);
+        $this->dispatch('backend/customer/index/resetPassword');
+        $this->assertEquals('noroute', $this->getRequest()->getControllerName());
+    }
+
+    /**
      * Checks reset password functionality with default restrictive min time between
      * password reset requests and customer reset request event.
      * Admin is not affected by this security check, so reset password email must be sent.

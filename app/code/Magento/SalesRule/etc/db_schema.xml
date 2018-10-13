@@ -199,7 +199,7 @@
             <column name="attribute_id"/>
         </index>
     </table>
-    <table name="salesrule_coupon_aggregated" resource="default" engine="innodb" comment="Coupon Aggregated">
+    <table name="salesrule_coupon_aggregated" resource="sales" engine="innodb" comment="Coupon Aggregated">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
         <column xsi:type="date" name="period" nullable="false" comment="Period"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
@@ -240,7 +240,7 @@
             <column name="rule_name"/>
         </index>
     </table>
-    <table name="salesrule_coupon_aggregated_updated" resource="default" engine="innodb"
+    <table name="salesrule_coupon_aggregated_updated" resource="sales" engine="innodb"
            comment="Salesrule Coupon Aggregated Updated">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
         <column xsi:type="date" name="period" nullable="false" comment="Period"/>

@@ -15,7 +15,6 @@ use Magento\Widget\Block\BlockInterface;
 /**
  * Catalog Products List widget block
  *
- * Class ProductsList
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements BlockInterface, IdentityInterface
@@ -131,7 +130,9 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * @inheritdoc
+     * Internal constructor, that is called from real constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -212,7 +213,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             $product,
             $arguments
         );
-        
+
         return $price;
     }
 
@@ -255,7 +256,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * Returns conditions
+     * Get conditions
      *
      * @return \Magento\Rule\Model\Condition\Combine
      */
@@ -394,7 +395,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * Returns PriceCurrencyInterface instance
+     * Get currency of product
      *
      * @return PriceCurrencyInterface
      * @deprecated 100.2.0
