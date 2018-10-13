@@ -61,7 +61,7 @@ class SourceSelectionResult extends AbstractExtensibleModel implements SourceSel
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
             $extensionAttributes = $this->extensionAttributesFactory->create(
-                SourceSelectionResultExtensionInterface::class
+                SourceSelectionResultInterface::class
             );
             $this->setExtensionAttributes($extensionAttributes);
         }

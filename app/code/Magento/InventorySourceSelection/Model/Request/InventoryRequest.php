@@ -98,9 +98,7 @@ class InventoryRequest extends AbstractExtensibleModel implements InventoryReque
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
-            $extensionAttributes = $this->extensionAttributesFactory->create(
-                InventoryRequestExtensionInterface::class
-            );
+            $extensionAttributes = $this->extensionAttributesFactory->create(InventoryRequestInterface::class);
             $this->setExtensionAttributes($extensionAttributes);
         }
         return $extensionAttributes;

@@ -75,9 +75,7 @@ class ItemRequest extends AbstractExtensibleModel implements ItemRequestInterfac
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
-            $extensionAttributes = $this->extensionAttributesFactory->create(
-                ItemRequestExtensionInterface::class
-            );
+            $extensionAttributes = $this->extensionAttributesFactory->create(ItemRequestInterface::class);
             $this->setExtensionAttributes($extensionAttributes);
         }
         return $extensionAttributes;

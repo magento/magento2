@@ -75,7 +75,7 @@ class SourceSelectionAlgorithm extends AbstractExtensibleModel implements Source
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
             $extensionAttributes = $this->extensionAttributesFactory->create(
-                SourceSelectionAlgorithmExtensionInterface::class
+                SourceSelectionAlgorithmInterface::class
             );
             $this->setExtensionAttributes($extensionAttributes);
         }

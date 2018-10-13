@@ -90,7 +90,7 @@ class SourceSelectionItem extends AbstractExtensibleModel implements SourceSelec
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
             $extensionAttributes = $this->extensionAttributesFactory->create(
-                SourceSelectionItemExtensionInterface::class
+                SourceSelectionItemInterface::class
             );
             $this->setExtensionAttributes($extensionAttributes);
         }
