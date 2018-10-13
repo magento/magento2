@@ -463,7 +463,6 @@ class Helper
     private function convertSpecialFromDateStringToObject($productData)
     {
         if (isset($productData['special_from_date']) && $productData['special_from_date'] != '') {
-            $productData['special_from_date'] =  $this->dateFilter->filter($productData['special_from_date']);
             $productData['special_from_date'] = new \DateTime($productData['special_from_date']);
         }
 
