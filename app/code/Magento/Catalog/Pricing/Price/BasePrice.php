@@ -30,7 +30,13 @@ class BasePrice extends AbstractPrice
             $this->value = false;
             foreach ($this->priceInfo->getPrices() as $price) {
                 if ($price instanceof BasePriceProviderInterface && $price->getValue() !== false) {
-                    $this->value = min($price->getValue(), $this->value ?: $price->getValue());
+                    if ($price instanceof \Magento\Catalog\Pricing\Price\SpecialPrice) {
+                        $this->value =  $price->getValue();
+                        break;
+                    } else {
+                        $this->value = min($price->getValue(), $this->value ?: $price->getValue());
+                    }
+                    
                 }
             }
         }
