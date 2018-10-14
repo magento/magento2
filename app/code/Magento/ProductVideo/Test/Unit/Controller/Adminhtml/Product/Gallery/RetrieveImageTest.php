@@ -146,7 +146,6 @@ class RetrieveImageTest extends \PHPUnit\Framework\TestCase
         $readInterface->expects($this->any())->method('getAbsolutePath')->willReturn('');
         $this->abstractAdapter->expects($this->any())->method('validateUploadFile')->willReturn('true');
         $this->validatorMock->expects($this->once())->method('isValid')->with('jpg')->willReturn('true');
-        $this->filesystemMock->expects($this->once())->method('getDirectoryWrite')->willReturn($writeInterface);
         $this->curlMock->expects($this->once())->method('read')->willReturn('testimage');
 
         $this->image->execute();
