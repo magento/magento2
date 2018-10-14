@@ -121,16 +121,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Retrieve the Url for customer reviews.
-     *
-     * @return string
-     */
-    public function getReviewsUrl()
-    {
-        return $this->_urlBuilder->getUrl('review/customer/index', ['_secure' => true]);
-    }
-
-    /**
      * Retrieve the Url for managing customer wishlist.
      *
      * @return string

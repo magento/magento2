@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Controller\Adminhtml\Index;
+namespace Magento\Review\Controller\Adminhtml\Customer;
 
+// was previously customer/index/productReviews
 class ProductReviews extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

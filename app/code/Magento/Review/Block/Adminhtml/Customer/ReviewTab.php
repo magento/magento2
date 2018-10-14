@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Review\Block\Adminhtml;
+namespace Magento\Review\Block\Adminhtml\Customer;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Customer\Controller\RegistryConstants;
@@ -67,6 +67,6 @@ class ReviewTab extends TabWrapper
      */
     public function getTabUrl()
     {
-        return $this->getUrl('customer/*/productReviews', ['_current' => true]);
+        return $this->getUrl('review/customer/productReviews', ['_current' => true]);
     }
 }
