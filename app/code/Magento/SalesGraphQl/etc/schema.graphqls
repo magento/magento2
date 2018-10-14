@@ -1,0 +1,19 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    customerOrders: Orders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @doc(description: "List of customer orders")
+}
+
+type Order @doc(description: "Order mapping fields") {
+    id: Int
+    increment_id: String
+    created_at: String
+    grant_total: Float
+    state: String
+    status: String
+}
+
+type Orders {
+    items: [Order] @doc(description: "Array of orders")
+}
