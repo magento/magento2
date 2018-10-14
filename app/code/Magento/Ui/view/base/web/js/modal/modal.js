@@ -415,9 +415,7 @@ define([
          * Creates overlay, append it to wrapper, set previous click event on overlay.
          */
         _createOverlay: function () {
-            var events,
-                outerClickHandler = this.options.outerClickHandler || this.closeModal;
-
+            var events;
             this.overlay = $('.' + this.options.overlayClass);
 
             if (!this.overlay.length) {
