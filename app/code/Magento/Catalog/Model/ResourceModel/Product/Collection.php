@@ -476,8 +476,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Retrieve is flat enabled flag
-     * Return always false if magento run admin
+     * Retrieve is flat enabled. Return always false if magento run admin.
      *
      * @return bool
      */
@@ -505,8 +504,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Standard resource collection initialization
-     * Needed for child classes
+     * Standard resource collection initialization. Needed for child classes.
      *
      * @param string $model
      * @param string $entityModel
@@ -545,8 +543,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Retrieve collection empty item
-     * Redeclared for specifying id field name without getting resource model inside model
+     * Get collection empty item. Redeclared for specifying id field name without getting resource model inside model.
      *
      * @return \Magento\Framework\DataObject
      */
@@ -632,8 +629,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Add attribute to entities in collection
-     * If $attribute=='*' select all attributes
+     * Add attribute to entities in collection. If $attribute=='*' select all attributes.
      *
      * @param array|string|integer|\Magento\Framework\App\Config\Element $attribute
      * @param bool|string $joinType
@@ -669,8 +665,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Processing collection items after loading
-     * Adding url rewrites, minimal prices, final prices, tax percents
+     * Processing collection items after loading. Adding url rewrites, minimal prices, final prices, tax percents.
      *
      * @return $this
      */
@@ -681,9 +676,27 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         $this->_prepareUrlDataObject();
+        $this->prepareStoreId();
 
         if (count($this)) {
             $this->_eventManager->dispatch('catalog_product_collection_load_after', ['collection' => $this]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add Store ID to products from collection.
+     *
+     * @return $this
+     */
+    protected function prepareStoreId()
+    {
+        if ($this->getStoreId() !== null) {
+            /** @var $item \Magento\Catalog\Model\Product */
+            foreach ($this->_items as $item) {
+                $item->setStoreId($this->getStoreId());
+            }
         }
 
         return $this;
@@ -755,8 +768,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Adding product website names to result collection
-     * Add for each product websites information
+     * Adding product website names to result collection. Add for each product websites information.
      *
      * @return $this
      */
@@ -767,7 +779,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -818,14 +830,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         foreach ($this as $product) {
             if (isset($productWebsites[$product->getId()])) {
                 $product->setData('websites', $productWebsites[$product->getId()]);
+                $product->setData('website_ids', $productWebsites[$product->getId()]);
             }
         }
         return $this;
     }
 
     /**
-     * Add store availability filter. Include availability product
-     * for store website
+     * Add store availability filter. Include availability product for store website.
      *
      * @param null|string|bool|int|Store $store
      * @return $this
@@ -1114,7 +1126,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Get SQL for get record count
      *
-     * @param null $select
+     * @param \Magento\Framework\DB\Select $select
      * @param bool $resetLeftJoins
      * @return \Magento\Framework\DB\Select
      */
@@ -1356,8 +1368,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Add URL rewrites data to product
-     * If collection loadded - run processing else set flag
+     * Add URL rewrites data to product. If collection loadded - run processing else set flag.
      *
      * @param int|string $categoryId
      * @return $this
@@ -1580,7 +1591,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
@@ -2342,7 +2354,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * Retrieve Media gallery resource.
+     *
      * @deprecated 101.0.1
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
      */
     private function getMediaGalleryResource()
