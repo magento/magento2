@@ -98,8 +98,7 @@ class Review extends AbstractAction
     {
         if (is_array($requestData)) {
             return !empty($requestData['nonce']) && !empty($requestData['details']);
-        } else {
-            return false;
         }
+        return false;
     }
 }
