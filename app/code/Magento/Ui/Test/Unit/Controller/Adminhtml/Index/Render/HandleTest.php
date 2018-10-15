@@ -8,6 +8,9 @@ namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Index\Render;
 use Magento\Ui\Controller\Adminhtml\Index\Render\Handle;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class HandleTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -102,7 +105,8 @@ class HandleTest extends \PHPUnit\Framework\TestCase
         $this->dataProviderMock->expects($this->once())
             ->method('getConfigData')
             ->willReturn([]);
-        $this->controller = new Handle($this->contextMock, $this->uiFactoryMock);
+        $contextMock = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextFactory::class);
+        $this->controller = new Handle($this->contextMock, $this->uiFactoryMock, $contextMock);
     }
 
     public function testExecuteNoButtons()
@@ -132,7 +136,7 @@ class HandleTest extends \PHPUnit\Framework\TestCase
             ->with(['default', $result], true, true, false);
 
         $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
-        $this->viewMock->expects($this->exactly(2))->method('getLayout')->willReturn($layoutMock);
+        $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
 
         $layoutMock->expects($this->exactly(2))->method('getBlock');
 

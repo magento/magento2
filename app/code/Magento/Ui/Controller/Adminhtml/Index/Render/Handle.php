@@ -10,12 +10,37 @@ use Magento\Framework\View\Element\Template;
 use Magento\Ui\Component\Control\ActionPool;
 use Magento\Ui\Component\Wrapper\UiComponent;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponent\ContextFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Handle
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Handle extends AbstractAction implements HttpGetActionInterface
 {
+    /**
+     * @var ContextFactory
+     */
+    private $contextFactory;
+
+    /**
+     * @param Context $context
+     * @param UiComponentFactory $factory
+     * @param ContextFactory|null $contextFactory
+     */
+    public function __construct(
+        Context $context,
+        UiComponentFactory $factory,
+        ContextFactory $contextFactory = null
+    ) {
+        parent::__construct($context, $factory);
+        $this->contextFactory = $contextFactory
+            ?: ObjectManager::getInstance()->get(ContextFactory::class);
+    }
+
     /**
      * Render UI component by namespace in handle context
      *
@@ -27,17 +52,23 @@ class Handle extends AbstractAction implements HttpGetActionInterface
         $handle = $this->_request->getParam('handle');
         $namespace = $this->_request->getParam('namespace');
         $buttons = $this->_request->getParam('buttons', false);
+        $this->_view->loadLayout(['default', $handle], true, true, false);
+        $layout = $this->_view->getLayout();
+        $context = $this->contextFactory->create(
+            [
+                'namespace' => $namespace,
+                'pageLayout' => $layout
+            ]
+        );
 
-        $component = $this->factory->create($namespace);
+        $component = $this->factory->create($namespace, null, ['context' => $context]);
         if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
-            $this->_view->loadLayout(['default', $handle], true, true, false);
-
-            $uiComponent = $this->_view->getLayout()->getBlock($namespace);
+            $uiComponent = $layout->getBlock($namespace);
             $response = $uiComponent instanceof UiComponent ? $uiComponent->toHtml() : '';
         }
 
         if ($buttons) {
-            $actionsToolbar = $this->_view->getLayout()->getBlock(ActionPool::ACTIONS_PAGE_TOOLBAR);
+            $actionsToolbar = $layout->getBlock(ActionPool::ACTIONS_PAGE_TOOLBAR);
             $response .= $actionsToolbar instanceof Template ? $actionsToolbar->toHtml() : '';
         }
 
