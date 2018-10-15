@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventorySourceSelection\Model\Request;
 
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestExtensionInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * @inheritdoc
  */
-class ItemRequest implements ItemRequestInterface
+class ItemRequest extends AbstractExtensibleModel implements ItemRequestInterface
 {
     /**
      * @var string
@@ -64,5 +66,26 @@ class ItemRequest implements ItemRequestInterface
     public function setQty(float $qty): void
     {
         $this->qty = $qty;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(ItemRequestInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(ItemRequestExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }
