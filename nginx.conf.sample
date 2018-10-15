@@ -161,7 +161,7 @@ location /media/import/ {
 }
 
 # PHP entry point for main application
-location ~ (index|get|static|report|404|503|health_check)\.php$ {
+location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check)\.php$ {
     try_files $uri =404;
     fastcgi_pass   fastcgi_backend;
     fastcgi_buffers 1024 4k;
