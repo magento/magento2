@@ -416,6 +416,7 @@ define([
          */
         _createOverlay: function () {
             var events;
+            
             this.overlay = $('.' + this.options.overlayClass);
 
             if (!this.overlay.length) {
