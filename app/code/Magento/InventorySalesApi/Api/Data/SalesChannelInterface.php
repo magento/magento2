@@ -63,8 +63,6 @@ interface SalesChannelInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface|null
      */
     public function getExtensionAttributes(): ?SalesChannelExtensionInterface;
