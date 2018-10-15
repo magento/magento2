@@ -106,6 +106,11 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     public function save(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
+        $attribute->setEntityTypeId(
+            $this->eavConfig
+                ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
+                ->getId()
+        );
         if ($attribute->getAttributeId()) {
             $existingModel = $this->get($attribute->getAttributeCode());
 
@@ -143,11 +148,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             );
             $attribute->setBackendModel(
                 $this->productHelper->getAttributeBackendModelByInputType($attribute->getFrontendInput())
-            );
-            $attribute->setEntityTypeId(
-                $this->eavConfig
-                    ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
-                    ->getId()
             );
             $attribute->setIsUserDefined(1);
         }
