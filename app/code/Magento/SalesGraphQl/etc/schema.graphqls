@@ -2,18 +2,17 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customerOrders: Orders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @doc(description: "List of customer orders")
+    customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @doc(description: "List of customer orders")
 }
 
-type Order @doc(description: "Order mapping fields") {
+type CustomerOrder @doc(description: "Order mapping fields") {
     id: Int
     increment_id: String
     created_at: String
-    grant_total: Float
-    state: String
+    grand_total: Float
     status: String
 }
 
-type Orders {
-    items: [Order] @doc(description: "Array of orders")
+type CustomerOrders {
+    items: [CustomerOrder] @doc(description: "Array of orders")
 }

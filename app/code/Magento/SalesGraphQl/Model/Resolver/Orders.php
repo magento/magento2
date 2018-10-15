@@ -68,15 +68,13 @@ class Orders implements ResolverInterface
 		$orders = $this->collectionFactory->create($customerId);
 		$items = [];
 
-		// @TODO Add shipping & billing address in response
-		// @TODO Add order currency object in response
 		/** @var \Magento\Sales\Model\Order $order */
 		foreach ($orders as $order) {
 			$items[] = [
 				'id' => $order->getId(),
 				'increment_id' => $order->getIncrementId(),
 				'created_at' => $order->getCreatedAt(),
-				'grant_total' => $order->getGrandTotal(),
+				'grand_total' => $order->getGrandTotal(),
 				'state' => $order->getState(),
 				'status' => $order->getStatus()
 			];
