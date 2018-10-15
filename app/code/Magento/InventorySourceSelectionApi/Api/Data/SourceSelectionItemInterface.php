@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Represents source selection result for the specific source and SKU
  *
  * @api
  */
-interface SourceSelectionItemInterface
+interface SourceSelectionItemInterface extends ExtensibleDataInterface
 {
     /**
      * Get source code
@@ -41,4 +43,21 @@ interface SourceSelectionItemInterface
      * @return float
      */
     public function getQtyAvailable(): float;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * Null for return is specified for proper work SOAP requests parser
+     *
+     * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(SourceSelectionItemExtensionInterface $extensionAttributes);
 }
