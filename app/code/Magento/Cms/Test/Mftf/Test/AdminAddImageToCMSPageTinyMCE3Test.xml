@@ -21,26 +21,13 @@
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
-            <comment userInput="Choose TinyMCE3 as the default editor" stepKey="chooseTinyMCE3AsEditor"/>
-            <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox1" />
-            <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue2"/>
-            <waitForElementVisible selector="{{ContentManagementSection.Switcher}}" stepKey="waitForSwitcherDropdown1" />
-            <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 3" stepKey="switchToVersion3" />
-            <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions1" />
-            <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig1" />
+            <!-- Choose TinyMCE3 as the default WYSIWYG editor-->
+            <actionGroup ref="SwitchToTinyMCE3" stepKey="switchToTinyMCE3"/>
         </before>
         <after>
+            <!-- Switch WYSIWYG editor to TinyMCE4-->
             <comment userInput="Reset editor as TinyMCE4" stepKey="chooseTinyMCE4AsEditor"/>
-            <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToConfigurationPage" />
-            <waitForPageLoad stepKey="waitForConfigPageToReload"/>
-            <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
-            <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox2" />
-
-            <waitForElementVisible selector="{{ContentManagementSection.Switcher}}" stepKey="waitForSwitcherDropdown3" />
-            <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 4" stepKey="switchToVersion4" />
-            <checkOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="checkUseSystemValue2"/>
-            <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions2" />
-            <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig2" />
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4"/>
             <actionGroup ref="logout" stepKey="logOut"/>
         </after>
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
@@ -52,7 +39,8 @@
         <comment userInput="Click Insert image button" stepKey="clickImageButton"/>
         <click selector="{{TinyMCESection.InsertImageBtnTinyMCE3}}" stepKey="clickInsertImage" />
         <waitForPageLoad stepKey="waitForiFrameToLoad" />
-        <comment userInput="switching to iFrame" stepKey="iFramecomment"/>
+        <!-- Switch to the Edit/Insert Image iFrame -->
+        <comment userInput="Switching to iFrame" stepKey="insertImageiFrame"/>
         <executeJS function="document.querySelector('.clearlooks2 iframe').setAttribute('name', 'insert-image');" stepKey="makeIFrameInteractable"/>
         <switchToIFrame selector="insert-image" stepKey="switchToIFrame"/>
         <click selector="{{MediaGallerySection.browseForImage}}" stepKey="clickBrowse"/>
@@ -65,11 +53,12 @@
             <argument name="Image" value="ImageUpload"/>
         </actionGroup>
         <actionGroup ref="saveImage" stepKey="insertImage"/>
+        <!-- Switching back to the Edit/Insert Image iFrame-->
         <comment userInput="switching back to iFrame" stepKey="switchBackToIFrame"/>
         <executeJS function="document.querySelector('.clearlooks2 iframe').setAttribute('name', 'insert-image');" stepKey="makeIFrameInteractable2"/>
         <switchToIFrame selector="insert-image" stepKey="switchToIFrame2"/>
         <waitForElementVisible selector="{{MediaGallerySection.insertBtn}}" stepKey="waitForInsertBtnOnIFrame" />
-        <fillField selector="{{MediaGallerySection.ImageDescription}}" userInput="{{ImageUpload.content}}" stepKey="fillImageDescription" />
+        <fillField selector="{{MediaGallerySection.ImageDescriptionTinyMCE3}}" userInput="{{ImageUpload.content}}" stepKey="fillImageDescription" />
         <click selector="{{MediaGallerySection.insertBtn}}" stepKey="clickInsertBtn" />
         <waitForPageLoad stepKey="wait3"/>
         <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
