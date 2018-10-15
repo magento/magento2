@@ -15,7 +15,7 @@ namespace Magento\Widget\Block\Adminhtml;
 class Widget extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -51,6 +51,5 @@ require(['mage/adminhtml/wysiwyg/widget'], function() {
     );
 });
 EOJS;
-
     }
 }
