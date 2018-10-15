@@ -27,11 +27,9 @@ interface ProductSalabilityErrorInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?ProductSalabilityErrorExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -39,5 +37,5 @@ interface ProductSalabilityErrorInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(ProductSalabilityErrorExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(ProductSalabilityErrorExtensionInterface $extensionAttributes): void;
 }

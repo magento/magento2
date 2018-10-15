@@ -70,7 +70,7 @@ class SourceSelectionAlgorithm extends AbstractExtensibleModel implements Source
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?SourceSelectionAlgorithmExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -85,7 +85,7 @@ class SourceSelectionAlgorithm extends AbstractExtensibleModel implements Source
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(SourceSelectionAlgorithmExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(SourceSelectionAlgorithmExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

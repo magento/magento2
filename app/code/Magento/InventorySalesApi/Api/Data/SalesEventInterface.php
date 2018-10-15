@@ -32,20 +32,27 @@ interface SalesEventInterface extends ExtensibleDataInterface
     const OBJECT_TYPE_ORDER = 'order';
     /**#@-*/
 
+    /**
+     * @return string
+     */
     public function getType(): string;
 
+    /**
+     * @return string
+     */
     public function getObjectType(): string;
 
+    /**
+     * @return string
+     */
     public function getObjectId(): string;
 
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?SalesEventExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -53,5 +60,5 @@ interface SalesEventInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SalesEventExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(SalesEventExtensionInterface $extensionAttributes): void;
 }

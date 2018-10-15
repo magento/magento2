@@ -31,5 +31,5 @@ interface AppendReservationsInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(array $reservations);
+    public function execute(array $reservations): void;
 }
