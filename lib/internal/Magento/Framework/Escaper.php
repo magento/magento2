@@ -374,7 +374,7 @@ class Escaper
      * Filter prohibited tags.
      *
      * @param string[] $allowedTags
-     * @return array
+     * @return string[]
      */
     private function filterProhibitedTags(array $allowedTags): array
     {
