@@ -40,16 +40,15 @@ class OrdersTest extends GraphQlAbstract
 	    $query =
 		    <<<QUERY
 query {
-	customerOrders {
-		items {
-			id
-			increment_id
-			created_at
-		    grant_total
-		    state
-		    status
-		}
+  customerOrders {
+    items {
+	  id
+	  increment_id
+	  created_at
+	  grand_total
+	  status
 	}
+  }
 }
 QUERY;
 
@@ -61,31 +60,26 @@ QUERY;
 	    $expectedData = [
 		    [
 			    'increment_id' => '100000002',
-			    'state' => \Magento\Sales\Model\Order::STATE_NEW,
 			    'status' => 'processing',
 			    'grand_total' => 120.00
 		    ],
 		    [
 			    'increment_id' => '100000003',
-			    'state' => \Magento\Sales\Model\Order::STATE_PROCESSING,
 			    'status' => 'processing',
 			    'grand_total' => 130.00
 		    ],
 		    [
 			    'increment_id' => '100000004',
-			    'state' => \Magento\Sales\Model\Order::STATE_PROCESSING,
 			    'status' => 'closed',
 			    'grand_total' => 140.00
 		    ],
 		    [
 			    'increment_id' => '100000005',
-			    'state' => \Magento\Sales\Model\Order::STATE_COMPLETE,
 			    'status' => 'complete',
 			    'grand_total' => 150.00
 		    ],
 		    [
 			    'increment_id' => '100000006',
-			    'state' => \Magento\Sales\Model\Order::STATE_COMPLETE,
 			    'status' => 'complete',
 			    'grand_total' => 160.00
 		    ]
@@ -96,7 +90,6 @@ QUERY;
 	    foreach ($expectedData as $key => $data) {
 		    $this->assertEquals($data['increment_id'], $actualData[$key]['increment_id']);
 		    $this->assertEquals($data['grand_total'], $actualData[$key]['grand_total']);
-		    $this->assertEquals($data['state'], $actualData[$key]['state']);
 		    $this->assertEquals($data['status'], $actualData[$key]['status']);
 	    }
     }

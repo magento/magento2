@@ -15,15 +15,10 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccountInterface;
 
 /**
- * {@inheritdoc}
+ * Class Orders
  */
 class Orders implements ResolverInterface
 {
-	/**
-	 * @var UserContextInterface
-	 */
-	private $userContext;
-
 	/**
 	 * @var CollectionFactoryInterface
 	 */
@@ -36,15 +31,13 @@ class Orders implements ResolverInterface
 
 	/**
 	 * Orders constructor.
-	 * @param UserContextInterface $userContext
 	 * @param CollectionFactoryInterface $collectionFactory
+	 * @param CheckCustomerAccountInterface $checkCustomerAccount
 	 */
 	public function __construct(
-		UserContextInterface $userContext,
 		CollectionFactoryInterface $collectionFactory,
 		CheckCustomerAccountInterface $checkCustomerAccount
 	) {
-		$this->userContext = $userContext;
 		$this->collectionFactory = $collectionFactory;
 		$this->checkCustomerAccount = $checkCustomerAccount;
 
@@ -55,18 +48,17 @@ class Orders implements ResolverInterface
 	 */
 	public function resolve(
 		Field $field,
-        $context,
-        ResolveInfo $info,
-        array $value = null,
-        array $args = null
+		$context,
+		ResolveInfo $info,
+		array $value = null,
+		array $args = null
 	) {
+		$customerId = $context->getUserId();
 
-		$customerId = $this->userContext->getUserId();
+		$this->checkCustomerAccount->execute($customerId, $context->getUserType());
 
-		$this->checkCustomerAccount->execute($customerId, $this->userContext->getUserType());
-
-		$orders = $this->collectionFactory->create($customerId);
 		$items = [];
+		$orders = $this->collectionFactory->create($customerId);
 
 		/** @var \Magento\Sales\Model\Order $order */
 		foreach ($orders as $order) {
@@ -75,7 +67,6 @@ class Orders implements ResolverInterface
 				'increment_id' => $order->getIncrementId(),
 				'created_at' => $order->getCreatedAt(),
 				'grand_total' => $order->getGrandTotal(),
-				'state' => $order->getState(),
 				'status' => $order->getStatus()
 			];
 		}
