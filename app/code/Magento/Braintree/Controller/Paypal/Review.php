@@ -91,11 +91,15 @@ class Review extends AbstractAction
     }
 
     /**
-     * @param array $requestData
-     * @return boolean
+     * @param $requestData
+     * @return bool
      */
-    private function validateRequestData(array $requestData)
+    private function validateRequestData($requestData)
     {
-        return !empty($requestData['nonce']) && !empty($requestData['details']);
+        if (is_array($requestData)) {
+            return !empty($requestData['nonce']) && !empty($requestData['details']);
+        } else {
+            return false;
+        }
     }
 }
