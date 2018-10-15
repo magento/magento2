@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesApi\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Represents the sales event that brings to appending reservations.
  *
  * @api
  */
-interface SalesEventInterface
+interface SalesEventInterface extends ExtensibleDataInterface
 {
     /**#@+
      * Constants for event types
@@ -37,8 +39,19 @@ interface SalesEventInterface
     public function getObjectId(): string;
 
     /**
-     * Convert this object to an associative array whose keys represent object properties.
-     * This method is used to facilitate object serialization.
+     * Retrieve existing extension attributes object
+     *
+     * Null for return is specified for proper work SOAP requests parser
+     *
+     * @return \Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface|null
      */
-    public function toArray(): array;
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(SalesEventExtensionInterface $extensionAttributes);
 }
