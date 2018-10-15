@@ -580,8 +580,8 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Gets the applied rule IDs for the order.
-     * Rules are comma separated if there are more than one.
      *
+     * Rules are comma separated if there are more than one.
      * @return string|null Applied rule IDs.
      */
     public function getAppliedRuleIds();
