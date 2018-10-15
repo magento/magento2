@@ -21,6 +21,21 @@ define([
         },
 
         /**
+         * Initializes observable properties of instance
+         *
+         * @returns {Abstract} Chainable.
+         */
+        initObservable: function () {
+            this._super();
+
+            this.value.equalityComparer = function(a, b) {
+                return (!a && !b) || (a == b);
+            };
+
+            return this;
+        },
+
+        /**
          * @param {String} value
          */
         update: function (value) {
