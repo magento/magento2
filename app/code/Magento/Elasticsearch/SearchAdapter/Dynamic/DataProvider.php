@@ -217,7 +217,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $queryResult = $this->connectionManager->getConnection()
             ->query($query);
         foreach ($queryResult['aggregations']['prices']['buckets'] as $bucket) {
-            $key = intval($bucket['key'] / $range + 1);
+            $key = (int)($bucket['key'] / $range + 1);
             $result[$key] = $bucket['doc_count'];
         }
 
