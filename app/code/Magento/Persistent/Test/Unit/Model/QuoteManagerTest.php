@@ -282,7 +282,7 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->model->convertCustomerCartToGuest();
     }
-E
+
     public function testConvertCustomerCartToGuestWithEmptyQuote()
     {
         $this->checkoutSessionMock->expects($this->once())
