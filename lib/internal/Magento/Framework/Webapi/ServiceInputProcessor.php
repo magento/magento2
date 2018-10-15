@@ -20,6 +20,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
 use Zend\Code\Reflection\ClassReflection;
 
 /**
@@ -73,6 +74,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $config;
 
     /**
+     * @var PreprocessorInterface[]
+     */
+    private $customAttributePreprocessors;
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -82,6 +88,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param MethodsMap $methodsMap
      * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
      * @param ConfigInterface $config
+     * @param array $customAttributePreprocessors
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -90,7 +97,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         MethodsMap $methodsMap,
         ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
-        ConfigInterface $config = null
+        ConfigInterface $config = null,
+        array $customAttributePreprocessors = []
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
@@ -101,6 +109,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ServiceTypeToEntityTypeMap::class);
         $this->config = $config
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->customAttributePreprocessors = $customAttributePreprocessors;
     }
 
     /**
@@ -289,12 +298,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
 
         foreach ($customAttributesValueArray as $key => $customAttribute) {
+            $this->runCustomAttributePreprocessors($key, $customAttribute);
             if (!is_array($customAttribute)) {
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
-
             list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
-
             $entityType = $this->serviceTypeToEntityTypeMap->getEntityType($dataObjectClassName);
             if ($entityType) {
                 $type = $this->customAttributeTypeLocator->getType(
@@ -329,6 +337,22 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Prepare attribute value by loaded attribute preprocessors
+     *
+     * @param string $key
+     * @param mixed $customAttribute
+     * @return bool
+     */
+    private function runCustomAttributePreprocessors($key, &$customAttribute)
+    {
+        foreach ($this->customAttributePreprocessors as $attributePreprocessor) {
+            if ($attributePreprocessor->shouldBePrepared($key, $customAttribute)) {
+                $attributePreprocessor->prepare($key, $customAttribute);
+            }
+        }
     }
 
     /**
