@@ -101,6 +101,40 @@ class Data extends \Magento\Framework\View\Element\Template
         );
         return !empty($destinations) ? explode(',', $destinations) : [];
     }
+    
+    /**
+     * @deprecated
+     * @return string
+     */
+    public function getRegionHtmlSelect()
+    {
+        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
+        $cacheKey = 'DIRECTORY_REGION_SELECT_STORE' . $this->_storeManager->getStore()->getId();
+        $cache = $this->_configCacheType->load($cacheKey);
+        if ($cache) {
+            $options = $this->getSerializer()->unserialize($cache);
+        } else {
+            $options = $this->getRegionCollection()->toOptionArray();
+            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
+        }
+        $html = $this->getLayout()->createBlock(
+            \Magento\Framework\View\Element\Html\Select::class
+        )->setName(
+            'region'
+        )->setTitle(
+            __('State/Province')
+        )->setId(
+            'state'
+        )->setClass(
+            'required-entry validate-state'
+        )->setValue(
+            intval($this->getRegionId())
+        )->setOptions(
+            $options
+        )->getHtml();
+        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
+        return $html;
+    }
 
     /**
      * @param null|string $defValue
@@ -160,12 +194,19 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @param null|string $defValue
+     * @param string $name
+     * @param string $id
+     * @param string $title
      * @return string
      */
-    public function getRegionHtmlSelect()
+    public function getRegionSelect($value = null, $name = 'region', $htmlId = 'state', $title = 'State/Province')
     {
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         $cacheKey = 'DIRECTORY_REGION_SELECT_STORE' . $this->_storeManager->getStore()->getId();
+        if ($value === null) {
+            $value = $this->getRegionId();
+        }
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
             $options = $this->getSerializer()->unserialize($cache);
@@ -176,15 +217,15 @@ class Data extends \Magento\Framework\View\Element\Template
         $html = $this->getLayout()->createBlock(
             \Magento\Framework\View\Element\Html\Select::class
         )->setName(
-            'region'
+            $name
         )->setTitle(
-            __('State/Province')
+            __($title)
         )->setId(
-            'state'
+            $htmlId
         )->setClass(
             'required-entry validate-state'
         )->setValue(
-            intval($this->getRegionId())
+            intval($value)
         )->setOptions(
             $options
         )->getHtml();
