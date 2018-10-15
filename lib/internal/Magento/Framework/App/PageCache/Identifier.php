@@ -53,6 +53,8 @@ class Identifier
         $data = [
             $this->request->isSecure(),
             $this->request->getUriString(),
+            $this->request->getServerValue(StoreManager::PARAM_RUN_TYPE),
+            $this->request->getServerValue(StoreManager::PARAM_RUN_CODE),
             $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
                 ?: $this->context->getVaryString()
         ];
