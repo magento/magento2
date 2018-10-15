@@ -248,7 +248,13 @@ class AfterImportDataObserver implements ObserverInterface
             }
         }
 
-        $this->categoryCache[$rowData['entity_id']] = $this->import->getProductCategories($rowData['sku']);
+        // If no categories are provided get the actual categories for product to prevent loss of existing rewrites
+        $productCategoryCache = $this->import->getProductCategories($rowData['sku']);
+        if (!isset($rowData['categories']) && !$productCategoryCache) {
+            $productCategoryCache = $product->getCategoryIds();
+        }
+
+        $this->categoryCache[$rowData['entity_id']] = $productCategoryCache;
         $this->websiteCache[$rowData['entity_id']] = $this->import->getProductWebsites($rowData['sku']);
         foreach ($this->websiteCache[$rowData['entity_id']] as $websiteId) {
             if (!isset($this->websitesToStoreIds[$websiteId])) {
