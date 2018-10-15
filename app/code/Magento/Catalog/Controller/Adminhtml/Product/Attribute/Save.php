@@ -222,13 +222,13 @@ class Save extends Attribute
                 $data['backend_model'] = $this->productHelper->getAttributeBackendModelByInputType(
                     $data['frontend_input']
                 );
-
-                if ($model->getIsUserDefined() === null) {
-                    $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
-                }
             }
 
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
+
+            if ($model->getIsUserDefined() === null || $model->getIsUserDefined() != 0) {
+                $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
+            }
 
             $defaultValueField = $model->getDefaultValueByInput($data['frontend_input']);
             if ($defaultValueField) {
@@ -327,8 +327,7 @@ class Save extends Attribute
             $serializedOptions = json_decode($data['serialized_options'], JSON_OBJECT_AS_ARRAY);
             foreach ($serializedOptions as $serializedOption) {
                 $option = [];
-                $serializedOptionWithParsedAmpersand = str_replace('&', '%26', $serializedOption);
-                parse_str($serializedOptionWithParsedAmpersand, $option);
+                parse_str($this->escapeSpecialChars($serializedOption), $option);
                 $data = array_replace_recursive($data, $option);
             }
         }
@@ -354,6 +353,18 @@ class Save extends Attribute
         }
 
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath($path, $params);
+    }
+
+    /**
+     * @param string $value
+     * @return string
+     */
+    private function escapeSpecialChars($value)
+    {
+        $valueArray = explode("=", $value);
+        $valueArray[1] = isset($valueArray[1])? urlencode($valueArray[1]):'';
+        $finalValue = implode("=", $valueArray);
+        return $finalValue;
     }
 
     /**
