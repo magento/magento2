@@ -14,6 +14,7 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
+ * Updates status for a batch of products.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
