@@ -9,8 +9,10 @@ namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
 
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\InventorySalesApi\Api\Data\ProductSalableResultExtensionInterface;
 
-class ProductSalableResult implements ProductSalableResultInterface
+class ProductSalableResult extends AbstractExtensibleModel implements ProductSalableResultInterface
 {
     /**
      * @var ProductSalabilityErrorInterface[]
@@ -39,5 +41,26 @@ class ProductSalableResult implements ProductSalableResultInterface
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(ProductSalableResultInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(ProductSalableResultExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

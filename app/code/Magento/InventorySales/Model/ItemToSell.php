@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model;
 
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\InventorySalesApi\Api\Data\ItemToSellExtensionInterface;
 
 /**
  * @inheritdoc
  */
-class ItemToSell implements ItemToSellInterface
+class ItemToSell extends AbstractExtensibleModel implements ItemToSellInterface
 {
     /**
      * @var string
@@ -64,5 +66,26 @@ class ItemToSell implements ItemToSellInterface
     public function setQuantity(float $qty)
     {
         $this->qty = $qty;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(ItemToSellInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(ItemToSellExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }
