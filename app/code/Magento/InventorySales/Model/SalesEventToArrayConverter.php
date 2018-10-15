@@ -12,12 +12,15 @@ use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 /**
  * @inheritdoc
  */
-class SalesEventToArrayConverter implements SalesEventToArrayConverterInterface
+class SalesEventToArrayConverter
 {
     /**
-     * @inheritdoc
+     * Converts sales event data to array structure, which can be serialized to JSON
+     *
+     * @param SalesEventInterface $salesEvent
+     * @return array
      */
-    public function convert(SalesEventInterface $salesEvent): array
+    public function execute(SalesEventInterface $salesEvent): array
     {
         return [
             'event_type' => $salesEvent->getType(),

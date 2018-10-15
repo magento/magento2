@@ -17,6 +17,7 @@ use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
+use Magento\InventorySales\Model\SalesEventToArrayConverter;
 
 /**
  * @inheritdoc
@@ -54,7 +55,7 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
     private $serializer;
 
     /**
-     * @var SalesEventToArrayConverterInterface
+     * @var SalesEventToArrayConverter
      */
     private $salesEventToArrayConverter;
 
@@ -65,7 +66,7 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param SerializerInterface $serializer
-     * @param SalesEventToArrayConverterInterface $salesEventToArrayConverter
+     * @param SalesEventToArrayConverter $salesEventToArrayConverter
      */
     public function __construct(
         ReservationBuilderInterface $reservationBuilder,
@@ -74,7 +75,7 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
         GetProductTypesBySkusInterface $getProductTypesBySkus,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         SerializerInterface $serializer,
-        SalesEventToArrayConverterInterface $salesEventToArrayConverter
+        SalesEventToArrayConverter $salesEventToArrayConverter
     ) {
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
@@ -114,7 +115,7 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
                     ->setSku($item->getSku())
                     ->setQuantity((float)$item->getQuantity())
                     ->setStockId($stockId)
-                    ->setMetadata($this->serializer->serialize($this->salesEventToArrayConverter->convert($salesEvent)))
+                    ->setMetadata($this->serializer->serialize($this->salesEventToArrayConverter->execute($salesEvent)))
                     ->build();
             }
         }
