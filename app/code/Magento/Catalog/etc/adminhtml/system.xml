@@ -206,7 +206,7 @@
                 <label>Images Upload Configuration</label>
                 <field id="jpeg_quality" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Quality</label>
-                    <validate>validate-greater-than-zero validate-number required-entry digits-range-1-100</validate>
+                    <validate>validate-greater-than-zero validate-digits validate-range required-entry digits-range-1-100</validate>
                     <comment>Jpeg quality for resized images 1-100%.</comment>
                 </field>
             </group>
