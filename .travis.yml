@@ -25,14 +25,14 @@ env:
     - NODE_JS_VERSION=8
     - MAGENTO_HOST_NAME="magento2.travis"
   matrix:
-    - TEST_SUITE=unit
-    - TEST_SUITE=static
-    - TEST_SUITE=js GRUNT_COMMAND=spec
-    - TEST_SUITE=js GRUNT_COMMAND=static
-    - TEST_SUITE=integration INTEGRATION_INDEX=1
-    - TEST_SUITE=integration INTEGRATION_INDEX=2
-    - TEST_SUITE=integration INTEGRATION_INDEX=3
-    - TEST_SUITE=functional
+#    - TEST_SUITE=unit
+#    - TEST_SUITE=static
+#    - TEST_SUITE=js GRUNT_COMMAND=spec
+#    - TEST_SUITE=js GRUNT_COMMAND=static
+#    - TEST_SUITE=integration INTEGRATION_INDEX=1
+#    - TEST_SUITE=integration INTEGRATION_INDEX=2
+#    - TEST_SUITE=integration INTEGRATION_INDEX=3
+#    - TEST_SUITE=functional
     - TEST_SUITE=api-functional
 matrix:
   exclude:
@@ -44,6 +44,8 @@ matrix:
       env: TEST_SUITE=js GRUNT_COMMAND=static
     - php: 7.1
       env: TEST_SUITE=functional
+    - php: 7.1
+      env: TEST_SUITE=api-functional
 cache:
   apt: true
   directories:
@@ -62,6 +64,6 @@ script:
 
   # The scripts for grunt/phpunit type tests
   - if [ $TEST_SUITE == "functional" ]; then dev/tests/functional/vendor/phpunit/phpunit/phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
-  - if [ $TEST_SUITE != "functional" ] && [ $TEST_SUITE != "js" ]; then phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
-  #- if [ $TEST_SUITE == "api-functional" ]; then phpunit -c dev/tests/$TEST_SUITE/phpunit_graphql.xml.dist; fi
+  - if [ $TEST_SUITE != "functional" ] && [ $TEST_SUITE != "js"] && [ $TEST_SUITE != "api" ]; then phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
   - if [ $TEST_SUITE == "js" ]; then grunt $GRUNT_COMMAND; fi
+  - if [ $TEST_SUITE == "api-functional" ]; then phpunit -c dev/tests/api-functional; fi
