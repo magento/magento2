@@ -60,7 +60,7 @@ class Review extends AbstractAction
         try {
             $this->validateQuote($quote);
 
-            if ($this->validateRequestData($requestData)) {
+            if ($requestData && $this->validateRequestData($requestData)) {
                 $this->quoteUpdater->execute(
                     $requestData['nonce'],
                     $requestData['details'],
@@ -91,14 +91,11 @@ class Review extends AbstractAction
     }
 
     /**
-     * @param $requestData
-     * @return bool
+     * @param array $requestData
+     * @return boolean
      */
-    private function validateRequestData($requestData)
+    private function validateRequestData(array $requestData)
     {
-        if (is_array($requestData)) {
-            return !empty($requestData['nonce']) && !empty($requestData['details']);
-        }
-        return false;
+        return !empty($requestData['nonce']) && !empty($requestData['details']);
     }
 }
