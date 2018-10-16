@@ -19,8 +19,10 @@
     <!-- Guest checkout filling shipping section -->
     <actionGroup name="GuestCheckoutFillingShippingSectionActionGroup">
         <arguments>
-            <argument name="customerVar"/>
-            <argument name="customerAddressVar"/>
+            <argument name="customerVar" defaultValue="CustomerEntityOne"/>
+            <argument name="customerAddressVar" defaultValue="CustomerAddressSimple"/>
+            <!--First available shipping method will be selected if value is not passed for shippingMethod-->
+            <argument name="shippingMethod" defaultValue="" type="string"/>
         </arguments>
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
@@ -31,7 +33,7 @@
         <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
-        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="selectShippingMethod"/>
         <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
@@ -154,6 +156,7 @@
         <conditionalClick selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="openShippingDetails"/>
         <see selector="{{CheckoutCartSummarySection.countryParameterized('placeNumber')}}" userInput="{{country}}" stepKey="seeCountry"/>
     </actionGroup>
+
     <actionGroup name="StorefrontSignOutActionGroup">
         <click selector="{{StoreFrontSignOutSection.customerAccount}}" stepKey="clickCustomerButton"/>
         <click selector="{{StoreFrontSignOutSection.signOut}}" stepKey="clickToSignOut"/>
@@ -161,4 +164,10 @@
         <see userInput="You are signed out" stepKey="signOut"/>
     </actionGroup>
 
+    <!--Click Place Order button-->
+    <actionGroup name="ClickPlaceOrderActionGroup">
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </actionGroup>
 </actionGroups>

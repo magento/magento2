@@ -24,4 +24,18 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
         <waitForText userInput="{{quantity}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
     </actionGroup>
+
+    <!-- Add Bundle Product to Cart from the category page -->
+    <actionGroup name="StorefrontAddBundleProductFromCategoryToCartActionGroup">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductTitleByName(productName)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(productName)}}" stepKey="openProductPage"/>
+        <waitForPageLoad time="30" stepKey="waitForBundleProductPageLoad"/>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddBundleProductToCart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productCount}}" stepKey="waitProductCount"/>
+        <see userInput="You added {{productName}} to your shopping cart." selector="{{StorefrontMessagesSection.success}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
 </actionGroups>
