@@ -3,13 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Captcha\Model\Customer\Plugin;
 
 use Magento\Captcha\Helper\Data as CaptchaHelper;
-use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Customer\Controller\Ajax\Login;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Session\SessionManagerInterface;
 
+/**
+ * The plugin for ajax login controller.
+ */
 class AjaxLogin
 {
     /**
@@ -61,14 +67,14 @@ class AjaxLogin
     }
 
     /**
-     * @param \Magento\Customer\Controller\Ajax\Login $subject
+     * Validates captcha during request execution.
+     *
+     * @param Login $subject
      * @param \Closure $proceed
      * @return $this
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function aroundExecute(
-        \Magento\Customer\Controller\Ajax\Login $subject,
+        Login $subject,
         \Closure $proceed
     ) {
         $captchaFormIdField = 'captcha_form_id';
@@ -93,24 +99,28 @@ class AjaxLogin
         foreach ($this->formIds as $formId) {
             if ($formId === $loginFormId) {
                 $captchaModel = $this->helper->getCaptcha($formId);
+
                 if ($captchaModel->isRequired($username)) {
-                    $captchaModel->logAttempt($username);
                     if (!$captchaModel->isCorrect($captchaString)) {
                         $this->sessionManager->setUsername($username);
+                        $captchaModel->logAttempt($username);
                         return $this->returnJsonError(__('Incorrect CAPTCHA'));
                     }
                 }
+
+                $captchaModel->logAttempt($username);
             }
         }
         return $proceed();
     }
 
     /**
+     * Gets Json response.
      *
      * @param \Magento\Framework\Phrase $phrase
-     * @return \Magento\Framework\Controller\Result\Json
+     * @return Json
      */
-    private function returnJsonError(\Magento\Framework\Phrase $phrase): \Magento\Framework\Controller\Result\Json
+    private function returnJsonError(\Magento\Framework\Phrase $phrase): Json
     {
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData(['errors' => true, 'message' => $phrase]);
