@@ -43,4 +43,14 @@
         <data key="attribute_set_id">4</data>
         <data key="visibility">4</data>
     </entity>
+    <entity name="DownloadableMsiProduct" type="product">
+        <data key="name" unique="suffix">Downloadable MSI Product </data>
+        <data key="sku" unique="suffix">Downloadable-MSI-Product-</data>
+        <data key="type_id">virtual</data>
+        <data key="price">100</data>
+        <data key="quantity">100</data>
+        <data key="urlKey" unique="suffix">Downloadable-MSI-Product-</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+    </entity>
 </entities>
