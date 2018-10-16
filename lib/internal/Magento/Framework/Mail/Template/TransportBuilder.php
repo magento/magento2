@@ -181,7 +181,7 @@ class TransportBuilder
      * new function setFromByStore introduced to allow setting of from address
      * based on store.
      * @see setFromByStore()
-     * 
+     *
      * @param string|array $from
      * @return $this
      */
