@@ -23,7 +23,7 @@
     </entity>
     <entity name="ConfigurableMsiProduct" type="product">
         <data key="name" unique="suffix">Configurable MSI Product </data>
-        <data key="sku" unique="suffix">Configurable_MSI_Product_</data>
+        <data key="sku" unique="suffix">Configurable-MSI-Product-</data>
         <data key="type_id">configurable</data>
         <data key="price">100</data>
         <data key="quantity">100</data>
