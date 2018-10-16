@@ -406,6 +406,15 @@ define([
                     return;
                 }
 
+                if ($widget.options.enableControlLabel) {
+                    firstSpan = document.createElement('span');
+                    secondSpan = document.createElement('span');
+                    firstSpan.setAttribute('id', controlLabelId);
+                    firstSpan.setAttribute('class', classes.attributeLabelClass);
+                    firstSpan.textContent = item.label;
+                    secondSpan.setAttribute('class', classes.attributeSelectedOptionLabelClass);
+                }
+
                 if ($widget.inProductList) {
                     $widget.productForm.append(input);
                     input = '';
