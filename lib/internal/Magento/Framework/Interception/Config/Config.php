@@ -79,6 +79,16 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     private $serializer;
 
     /**
+     * @var \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem
+     */
+    private $configWriter;
+
+    /**
+     * @var \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled
+     */
+    private $compiledLoader;
+
+    /**
      * Config constructor
      *
      * @param \Magento\Framework\Config\ReaderInterface $reader
@@ -89,6 +99,8 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions
      * @param string $cacheId
      * @param SerializerInterface|null $serializer
+     * @param \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem $configWriter
+     * @param \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled $compiledLoader
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $reader,
@@ -98,7 +110,9 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         \Magento\Framework\Interception\ObjectManager\ConfigInterface $omConfig,
         \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         $cacheId = 'interception',
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem $configWriter = null,
+        \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled $compiledLoader = null
     ) {
         $this->_omConfig = $omConfig;
         $this->_relations = $relations;
@@ -109,11 +123,15 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         $this->_scopeList = $scopeList;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Serialize::class);
-        $intercepted = $this->_cache->load($this->_cacheId);
+        $this->configWriter = $configWriter ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem::class);
+        $this->compiledLoader = $compiledLoader ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class);
+        $intercepted = $this->loadIntercepted();
         if ($intercepted !== false) {
-            $this->_intercepted = $this->serializer->unserialize($intercepted);
+            $this->_intercepted = $intercepted;
         } else {
-            $this->initialize($this->_classDefinitions->getClasses());
+            $this->initializeUncompiled($this->_classDefinitions->getClasses());
         }
     }
 
@@ -125,24 +143,9 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      */
     public function initialize($classDefinitions = [])
     {
-        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$this->_cacheId]);
-        $config = [];
-        foreach ($this->_scopeList->getAllScopes() as $scope) {
-            $config = array_replace_recursive($config, $this->_reader->read($scope));
-        }
-        unset($config['preferences']);
-        foreach ($config as $typeName => $typeConfig) {
-            if (!empty($typeConfig['plugins'])) {
-                $this->_intercepted[ltrim($typeName, '\\')] = true;
-            }
-        }
-        foreach ($config as $typeName => $typeConfig) {
-            $this->hasPlugins($typeName);
-        }
-        foreach ($classDefinitions as $class) {
-            $this->hasPlugins($class);
-        }
-        $this->_cache->save($this->serializer->serialize($this->_intercepted), $this->_cacheId);
+        $this->generateIntercepted($classDefinitions);
+
+        $this->configWriter->write($this->_cacheId, $this->_intercepted);
     }
 
     /**
@@ -187,5 +190,69 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
             return $this->_intercepted[$type];
         }
         return $this->_inheritInterception($type);
+    }
+
+    /**
+     * Write interception config to cache
+     *
+     * @param array $classDefinitions
+     */
+    private function initializeUncompiled($classDefinitions = [])
+    {
+        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$this->_cacheId]);
+
+        $this->generateIntercepted($classDefinitions);
+
+        $this->_cache->save($this->serializer->serialize($this->_intercepted), $this->_cacheId);
+    }
+
+    /**
+     * Generate intercepted array to store in compiled metadata or frontend cache
+     *
+     * @param $classDefinitions
+     */
+    private function generateIntercepted($classDefinitions)
+    {
+        $config = [];
+        foreach ($this->_scopeList->getAllScopes() as $scope) {
+            $config = array_replace_recursive($config, $this->_reader->read($scope));
+        }
+        unset($config['preferences']);
+        foreach ($config as $typeName => $typeConfig) {
+            if (!empty($typeConfig['plugins'])) {
+                $this->_intercepted[ltrim($typeName, '\\')] = true;
+            }
+        }
+        foreach ($config as $typeName => $typeConfig) {
+            $this->hasPlugins($typeName);
+        }
+        foreach ($classDefinitions as $class) {
+            $this->hasPlugins($class);
+        }
+    }
+
+    /**
+     * Load the interception config from cache
+     *
+     * @return array|false
+     */
+    private function loadIntercepted()
+    {
+        if ($this->isCompiled()) {
+            return $this->compiledLoader->load($this->_cacheId);
+        }
+
+        $intercepted = $this->_cache->load($this->_cacheId);
+        return $intercepted ? $this->serializer->unserialize($intercepted) : false;
+    }
+
+    /**
+     * Check for the compiled config with the generated metadata
+     *
+     * @return bool
+     */
+    private function isCompiled()
+    {
+        return file_exists(\Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::getFilePath($this->_cacheId));
     }
 }
