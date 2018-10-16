@@ -31,7 +31,7 @@ class SourceItemsSaveWithoutLegacySynchronization implements SourceItemsSaveInte
     /**
      * @inheritdoc
      */
-    public function execute(array $sourceItems)
+    public function execute(array $sourceItems): void
     {
         $this->sourceItemsSaveHandler->execute($sourceItems);
     }

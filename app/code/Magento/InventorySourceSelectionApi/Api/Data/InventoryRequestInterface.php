@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Request products in a given Qty and StockId
  *
  * @api
  */
-interface InventoryRequestInterface
+interface InventoryRequestInterface extends ExtensibleDataInterface
 {
     /**
      * Get Stock Id
@@ -43,4 +45,19 @@ interface InventoryRequestInterface
      * @return void
      */
     public function setItems(array $items): void;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * @return \Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?InventoryRequestExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(InventoryRequestExtensionInterface $extensionAttributes): void;
 }

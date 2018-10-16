@@ -31,7 +31,7 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      *
      * @return int|null
      */
-    public function getStockId();
+    public function getStockId(): ?int;
 
     /**
      * Set stock id
@@ -39,14 +39,14 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      * @param int|null $stockId
      * @return void
      */
-    public function setStockId($stockId);
+    public function setStockId(?int $stockId): void;
 
     /**
      * Get source code of the link
      *
      * @return string|null
      */
-    public function getSourceCode();
+    public function getSourceCode(): ?string;
 
     /**
      * Set source code of the link
@@ -55,14 +55,14 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      *
      * @return void
      */
-    public function setSourceCode($sourceCode);
+    public function setSourceCode(?string $sourceCode): void;
 
     /**
      * Get priority of the link
      *
      * @return int|null
      */
-    public function getPriority();
+    public function getPriority(): ?int;
 
     /**
      * Set priority of the link
@@ -71,7 +71,7 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      *
      * @return void
      */
-    public function setPriority($priority);
+    public function setPriority(?int $priority): void;
 
     /**
      * Retrieve existing extension attributes object
@@ -80,7 +80,7 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      *
      * @return \Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?StockSourceLinkExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -88,5 +88,5 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(StockSourceLinkExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(StockSourceLinkExtensionInterface $extensionAttributes): void;
 }

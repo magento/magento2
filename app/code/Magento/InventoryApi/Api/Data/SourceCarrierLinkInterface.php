@@ -31,7 +31,7 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      *
      * @return string|null
      */
-    public function getCarrierCode();
+    public function getCarrierCode(): ?string;
 
     /**
      * Set carrier code
@@ -39,14 +39,14 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      * @param string|null $carrierCode
      * @return void
      */
-    public function setCarrierCode($carrierCode);
+    public function setCarrierCode(?string $carrierCode): void;
 
     /**
      * Get position
      *
      * @return int|null
      */
-    public function getPosition();
+    public function getPosition(): ?int;
 
     /**
      * Set position
@@ -54,7 +54,7 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      * @param int|null $position
      * @return void
      */
-    public function setPosition($position);
+    public function setPosition(?int $position): void;
 
     /**
      * Retrieve existing extension attributes object
@@ -63,7 +63,7 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      *
      * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?SourceCarrierLinkExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -71,5 +71,5 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SourceCarrierLinkExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(SourceCarrierLinkExtensionInterface $extensionAttributes): void;
 }

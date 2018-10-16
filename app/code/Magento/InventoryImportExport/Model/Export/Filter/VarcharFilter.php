@@ -21,7 +21,7 @@ class VarcharFilter implements FilterProcessorInterface
      * @param array|string $value
      * @return void
      */
-    public function process(Collection $collection, $columnName, $value)
+    public function process(Collection $collection, string $columnName, $value): void
     {
         $collection->addFieldToFilter($columnName, ['like' => '%' . $value . '%']);
     }
