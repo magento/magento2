@@ -135,7 +135,7 @@ class DbStorage extends AbstractStorage
                                   OptionProvider::PERMANENT];
 
                 // If request path matches the DB value or it's redirect - we can return result from DB
-                $canReturnResultFromDb
+                $canReturnDbResult
                     = ($resultFromDb[UrlRewrite::REQUEST_PATH] === $requestPath
                     || in_array(
                         (int)$resultFromDb[UrlRewrite::REDIRECT_TYPE],
@@ -143,7 +143,7 @@ class DbStorage extends AbstractStorage
                     ));
 
                 // Otherwise return 301 redirect to request path from DB results
-                $result = $canReturnResultFromDb
+                $result = $canReturnDbResult
                     ? $resultFromDb
                     : [
                         UrlRewrite::ENTITY_TYPE      => 'custom',
