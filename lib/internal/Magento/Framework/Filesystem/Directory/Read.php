@@ -138,6 +138,7 @@ class Read implements ReadInterface
         foreach ($files as $file) {
             $result[] = $this->getRelativePath($file);
         }
+
         return $result;
     }
 
@@ -158,6 +159,7 @@ class Read implements ReadInterface
             $result[] = $this->getRelativePath($file);
         }
         sort($result);
+
         return $result;
     }
 
@@ -183,6 +185,7 @@ class Read implements ReadInterface
         foreach ($files as $file) {
             $result[] = $this->getRelativePath($file);
         }
+
         return $result;
     }
 
@@ -259,8 +262,8 @@ class Read implements ReadInterface
         $this->validatePath($path);
 
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
-        return $this->driver->fileGetContents($absolutePath, $flag, $context);
 
+        return $this->driver->fileGetContents($absolutePath, $flag, $context);
     }
 
     /**

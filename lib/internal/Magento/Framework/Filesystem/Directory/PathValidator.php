@@ -40,7 +40,7 @@ class PathValidator implements PathValidatorInterface
         $absolutePath = false
     ) {
         $realDirectoryPath = $this->driver->getRealPathSafety($directoryPath);
-        if ($realDirectoryPath[-1] !== DIRECTORY_SEPARATOR) {
+        if (substr($realDirectoryPath, -1) !== DIRECTORY_SEPARATOR) {
             $realDirectoryPath .= DIRECTORY_SEPARATOR;
         }
         if (!$absolutePath) {
