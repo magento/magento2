@@ -25,7 +25,7 @@ interface SourceCarrierLinkManagementInterface
      * @param SourceInterface $source
      * @return void
      */
-    public function saveCarrierLinksBySource(SourceInterface $source);
+    public function saveCarrierLinksBySource(SourceInterface $source): void;
 
     /**
      * Load carrier links by source and set its to source object
@@ -33,5 +33,5 @@ interface SourceCarrierLinkManagementInterface
      * @param SourceInterface $source
      * @return void
      */
-    public function loadCarrierLinksBySource(SourceInterface $source);
+    public function loadCarrierLinksBySource(SourceInterface $source): void;
 }

@@ -49,11 +49,9 @@ interface ItemRequestInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventorySourceSelectionApi\Api\Data\ItemRequestExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?ItemRequestExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -61,5 +59,5 @@ interface ItemRequestInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySourceSelectionApi\Api\Data\ItemRequestExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(ItemRequestExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(ItemRequestExtensionInterface $extensionAttributes): void;
 }

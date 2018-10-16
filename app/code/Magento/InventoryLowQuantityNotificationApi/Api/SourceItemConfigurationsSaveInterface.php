@@ -21,5 +21,5 @@ interface SourceItemConfigurationsSaveInterface
      *      $sourceItemConfigurations
      * @return void
      */
-    public function execute(array $sourceItemConfigurations);
+    public function execute(array $sourceItemConfigurations): void;
 }

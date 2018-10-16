@@ -25,5 +25,5 @@ interface SourceItemsDeleteInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(array $sourceItems);
+    public function execute(array $sourceItems): void;
 }

@@ -44,7 +44,7 @@ class AppendReservations implements AppendReservationsInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $reservations)
+    public function execute(array $reservations): void
     {
         if (empty($reservations)) {
             throw new InputException(__('Input data is empty'));

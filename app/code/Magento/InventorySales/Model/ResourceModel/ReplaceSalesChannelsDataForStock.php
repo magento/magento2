@@ -36,7 +36,7 @@ class ReplaceSalesChannelsDataForStock implements ReplaceSalesChannelsForStockIn
     /**
      * @inheritdoc
      */
-    public function execute(array $salesChannels, int $stockId)
+    public function execute(array $salesChannels, int $stockId): void
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('inventory_stock_sales_channel');

@@ -94,7 +94,7 @@ class InventoryRequest extends AbstractExtensibleModel implements InventoryReque
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?InventoryRequestExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -107,7 +107,7 @@ class InventoryRequest extends AbstractExtensibleModel implements InventoryReque
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(InventoryRequestExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(InventoryRequestExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }
