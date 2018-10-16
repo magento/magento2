@@ -407,17 +407,20 @@ define([
          *   - associated_product_ids_serialized.
          */
         serializeData: function () {
-            this.source.data['configurable-matrix-serialized'] =
-                JSON.stringify(this.source.data['configurable-matrix']);
-            if ($(this.errorSelector).length===0) {
-                delete this.source.data['configurable-matrix'];
+            if (this.source.data['configurable-matrix']) {
+                this.source.data['configurable-matrix-serialized'] =
+                    JSON.stringify(this.source.data['configurable-matrix']);
+                if ($(this.errorSelector).length===0) {
+                    delete this.source.data['configurable-matrix'];
+                }
             }
 
-
-            this.source.data['associated_product_ids_serialized'] =
-                JSON.stringify(this.source.data['associated_product_ids']);
-            if ($(this.errorSelector).length===0) {
-                delete this.source.data['associated_product_ids'];
+            if (this.source.data['associated_product_ids']) {
+                this.source.data['associated_product_ids_serialized'] =
+                    JSON.stringify(this.source.data['associated_product_ids']);
+                if ($(this.errorSelector).length===0) {
+                    delete this.source.data['associated_product_ids'];
+                }
             }
         },
 
