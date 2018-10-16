@@ -78,7 +78,7 @@ class StockRepository implements StockRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function deleteById(int $stockId)
+    public function deleteById(int $stockId): void
     {
         $this->commandDeleteById->execute($stockId);
     }

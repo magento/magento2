@@ -29,11 +29,9 @@ interface SourceSelectionResultInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?SourceSelectionResultExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -41,5 +39,5 @@ interface SourceSelectionResultInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SourceSelectionResultExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(SourceSelectionResultExtensionInterface $extensionAttributes): void;
 }

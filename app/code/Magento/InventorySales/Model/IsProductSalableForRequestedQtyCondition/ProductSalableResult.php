@@ -46,7 +46,7 @@ class ProductSalableResult extends AbstractExtensibleModel implements ProductSal
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?ProductSalableResultExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -59,7 +59,7 @@ class ProductSalableResult extends AbstractExtensibleModel implements ProductSal
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(ProductSalableResultExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(ProductSalableResultExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

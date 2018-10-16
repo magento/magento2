@@ -54,7 +54,7 @@ class SaveStockItemConfiguration implements SaveStockItemConfigurationInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(string $sku, int $stockId, StockItemConfigurationInterface $stockItemConfiguration)
+    public function execute(string $sku, int $stockId, StockItemConfigurationInterface $stockItemConfiguration): void
     {
         $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
 

@@ -22,7 +22,7 @@ interface IndexStructureInterface
      * @throws \Magento\Framework\Exception\StateException
      * @return void
      */
-    public function create(IndexName $indexName, string $connectionName);
+    public function create(IndexName $indexName, string $connectionName): void;
 
     /**
      * Delete the given Index
@@ -31,7 +31,7 @@ interface IndexStructureInterface
      * @param string $connectionName
      * @return void
      */
-    public function delete(IndexName $indexName, string $connectionName);
+    public function delete(IndexName $indexName, string $connectionName): void;
 
     /**
      * Checks whether the Index exits
