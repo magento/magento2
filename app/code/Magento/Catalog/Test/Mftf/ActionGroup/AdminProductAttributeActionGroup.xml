@@ -14,7 +14,10 @@
         </arguments>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <click selector="{{AdminProductAttributeGridSection.AttributeCode(ProductAttribute.attribute_code)}}" stepKey="navigateToAttributeEditPage1" />
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}"
+                   userInput="{{ProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
+        <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
         <waitForPageLoad stepKey="waitForPageLoad2" />
     </actionGroup>
     <actionGroup name="navigateToEditProductAttribute">

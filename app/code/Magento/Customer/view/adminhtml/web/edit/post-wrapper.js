@@ -44,4 +44,12 @@ define([
 
         return false;
     });
+
+    $('#resetPassword').click(function () {
+        var url = $('#resetPassword').data('url');
+
+        getForm(url).appendTo('body').submit();
+
+        return false;
+    });
 });
