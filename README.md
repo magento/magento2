@@ -1,17 +1,16 @@
 [![Build Status](https://travis-ci.org/magento/magento2.svg?branch=2.3-develop)](https://travis-ci.org/magento/magento2)
 [![Open Source Helpers](https://www.codetriage.com/magento/magento2/badges/users.svg)](https://www.codetriage.com/magento/magento2)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.png)](https://crowdin.com/project/magento-2)
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.svg)](https://crowdin.com/project/magento-2)
 <h2>Welcome</h2>
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting-edge, feature-rich eCommerce solution that gets results.
 
 ## Magento system requirements
-[Magento system requirements](http://devdocs.magento.com/guides/v2.3/install-gde/system-requirements2.html)
+[Magento system requirements](http://devdocs.magento.com/guides/v2.3/install-gde/system-requirements2.html).
 
 ## Install Magento
-To install Magento, see either:
 
-*	[Installation guide](http://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html)
+*	[Installation guide](http://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
 
 <h2>Contributing to the Magento 2 code base</h2>
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
@@ -52,7 +51,7 @@ Stay up-to-date on the latest security news and patches for Magento by signing u
 
 <h2>License</h2>
 
-Each Magento source file included in this distribution is licensed under OSL 3.0 or the Magento Enterprise Edition (MEE) license
+Each Magento source file included in this distribution is licensed under OSL 3.0 or the Magento Enterprise Edition (MEE) license.
 
 http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 Please see LICENSE.txt for the full text of the OSL 3.0 license or contact license@magentocommerce.com for a copy.
