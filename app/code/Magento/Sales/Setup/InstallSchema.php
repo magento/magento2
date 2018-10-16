@@ -2007,7 +2007,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'last_trans_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Last Trans Id'
         )->addColumn(
