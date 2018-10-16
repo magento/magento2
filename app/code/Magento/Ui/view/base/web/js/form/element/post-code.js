@@ -28,8 +28,8 @@ define([
         initObservable: function () {
             this._super();
 
-            this.value.equalityComparer = function(a, b) {
-                return (!a && !b) || (a == b);
+            this.value.equalityComparer = function (oldValue, newValue) {
+                return !oldValue && !newValue || oldValue === newValue;
             };
 
             return this;
