@@ -494,7 +494,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function rotate($angle)
     {
-        $angle = (int) $angle;
+        $angle = (int)$angle;
         $this->getImageProcessor()->rotate($angle);
         return $this;
     }
