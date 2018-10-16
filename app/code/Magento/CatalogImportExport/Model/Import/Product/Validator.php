@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\Validator\AbstractValidator;
+use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 
 /**
  * Class Validator
@@ -70,7 +71,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if ($type == 'text') {
             $valid = $this->string->strlen($val) < Product::DB_MAX_TEXT_LENGTH;
         } else if ($attrCode == Product::COL_SKU) {
-            $valid = $this->string->strlen($val) < Product::DB_MAX_SKU_LENGTH;
+            $valid = $this->string->strlen($val) < SKU::SKU_MAX_LENGTH;
         } else {
             $valid = $this->string->strlen($val) < Product::DB_MAX_VARCHAR_LENGTH;
         }
