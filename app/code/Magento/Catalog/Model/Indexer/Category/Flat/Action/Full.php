@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
 
+use Magento\Framework\App\ResourceConnection;
+
+/**
+ * Class for full reindex flat categories
+ */
 class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 {
     /**
@@ -18,6 +23,28 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * @var bool
      */
     protected $allowTableChanges = true;
+
+    /**
+     * @var \Magento\Catalog\Helper\Product\Flat\Indexer
+     */
+    private $indexer;
+
+    /**
+     * @param ResourceConnection $resource
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Catalog\Helper\Product\Flat\Indexer $indexer
+     */
+    public function __construct(
+        ResourceConnection $resource,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Catalog\Helper\Product\Flat\Indexer $indexer = null
+    ) {
+        $this->indexer  = $indexer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
+        parent::__construct($resource, $storeManager, $resourceHelper);
+    }
 
     /**
      * Add suffix to table name to show it is old
@@ -92,6 +119,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 
     /**
      * Create table and add attributes as fields for specified store.
+     *
      * This routine assumes that DDL operations are allowed
      *
      * @param int $store
@@ -109,6 +137,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 
     /**
      * Create category flat tables and add attributes as fields.
+     *
      * Tables are created only if DDL operations are allowed
      *
      * @param \Magento\Store\Model\Store[] $stores if empty, create tables for all stores of the application
@@ -182,7 +211,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         $stores = $this->storeManager->getStores();
         $this->populateFlatTables($stores);
         $this->switchTables($stores);
-
+        $this->indexer->deleteAbandonedStoreCategoryFlatTables();
         $this->allowTableChanges = true;
 
         return $this;
