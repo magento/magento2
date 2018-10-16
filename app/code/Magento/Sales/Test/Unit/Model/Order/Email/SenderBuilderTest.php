@@ -76,7 +76,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
                 'setTemplateIdentifier',
                 'setTemplateOptions',
                 'setTemplateVars',
-                'setFrom',
+                'setFromByStore',
             ]
         );
 
@@ -103,8 +103,8 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('getEmailIdentity')
             ->will($this->returnValue($emailIdentity));
         $this->transportBuilder->expects($this->once())
-            ->method('setFrom')
-            ->with($this->equalTo($emailIdentity));
+            ->method('setFromByStore')
+            ->with($this->equalTo($emailIdentity), 1);
 
         $this->identityContainerMock->expects($this->once())
             ->method('getEmailCopyTo')
@@ -146,7 +146,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(1);
         $this->transportBuilder->expects($this->once())
-            ->method('setFrom')
+            ->method('setFromByStore')
             ->with($identity, 1);
         $this->transportBuilder->expects($this->once())
             ->method('addTo')
@@ -176,7 +176,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('addTo')
             ->with($this->equalTo('example@mail.com'));
         $this->transportBuilder->expects($this->once())
-            ->method('setFrom')
+            ->method('setFromByStore')
             ->with($identity, 1);
         $this->identityContainerMock->expects($this->once())
             ->method('getStore')

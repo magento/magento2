@@ -172,12 +172,27 @@ class TransportBuilder
 
     /**
      * Set mail from address
+     * 
+     * @deprecated Use setFromByStore
+     *
+     * @param string|array $from
+     * @return $this
+     */
+    public function setFrom($from)
+    {
+        $result = $this->_senderResolver->resolve($from);
+        $this->message->setFrom($result['email'], $result['name']);
+        return $this;
+    }
+
+    /**
+     * Set mail from address by store
      *
      * @param string|array $from
      * @param string|int $store
      * @return $this
      */
-    public function setFrom($from, $store = null)
+    public function setFromByStore($from, $store = null)
     {
         $result = $this->_senderResolver->resolve($from, $store);
         $this->message->setFrom($result['email'], $result['name']);
