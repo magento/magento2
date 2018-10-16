@@ -14,6 +14,7 @@ class Image extends \Magento\Eav\Model\Attribute\Data\File
 {
     /**
      * Validate file by attribute validate rules
+     *
      * Return array of errors
      *
      * @param array $value

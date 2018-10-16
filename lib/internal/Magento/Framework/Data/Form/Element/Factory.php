@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Form element Factory
+ */
 class Factory
 {
     /**

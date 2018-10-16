@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Backend config model
+ *
  * Used to save configuration
  *
  * @author     Magento Core Team <core@magentocommerce.com>
@@ -122,6 +123,7 @@ class Config extends \Magento\Framework\DataObject
 
     /**
      * Save config section
+     *
      * Require set: section, website, store and groups
      *
      * @throws \Exception
@@ -505,6 +507,7 @@ class Config extends \Magento\Framework\DataObject
 
     /**
      * Get scope name and scopeId
+     *
      * @todo refactor to scope resolver
      * @return void
      */
