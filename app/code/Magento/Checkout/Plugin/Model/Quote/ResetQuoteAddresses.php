@@ -15,10 +15,11 @@ use Magento\Quote\Model\Quote;
 class ResetQuoteAddresses
 {
     /**
+     * Clears the quote addresses when all the items are removed from the cart
+     *
      * @param Quote $quote
      * @param Quote $result
      * @param mixed $itemId
-     *
      * @return Quote
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
