@@ -42,7 +42,7 @@ class Delete implements DeleteSourceItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $sourceCode, string $sku)
+    public function execute(string $sourceCode, string $sku): void
     {
         try {
             $this->deleteResourceModel->execute($sourceCode, $sku);
