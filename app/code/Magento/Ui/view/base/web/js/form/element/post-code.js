@@ -28,6 +28,11 @@ define([
         initObservable: function () {
             this._super();
 
+            /**
+             * equalityComparer function
+             *
+             * @returns boolean.
+             */
             this.value.equalityComparer = function (oldValue, newValue) {
                 return !oldValue && !newValue || oldValue === newValue;
             };
