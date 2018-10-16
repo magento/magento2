@@ -10,7 +10,7 @@
 <?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Date */ ?>
 <?php $_option = $block->getOption() ?>
 <?php $_optionId = $_option->getId() ?>
-<?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
+<?php $class = $_option->getIsRequire() ? ' required' : ''; ?>
 <div class="field date<?= /* @escapeNotVerified */ $class ?>"
     data-mage-init='{"priceOptionDate":{"fromSelector":"#product_addtocart_form"}}'>
     <fieldset class="fieldset fieldset-product-options-inner<?= /* @escapeNotVerified */ $class ?>">
@@ -44,15 +44,6 @@
                        value=""
                        data-validate="{'validate-optional-datetime':<?= /* @escapeNotVerified */ $_optionId ?>}"/>
             <?php endif; ?>
-            <script type="text/x-magento-init">
-            {
-                "#product_addtocart_form": {
-                    "validation": {
-                        "ignore": ":hidden:not(input[name^='validate_datetime_'])"
-                    }
-                }
-            }
-        </script>
         </div>
     </fieldset>
 
