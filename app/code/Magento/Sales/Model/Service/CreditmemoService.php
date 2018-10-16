@@ -177,8 +177,8 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
                 $creditmemo->getOrder(),
                 !$offlineRequested
             );
-            $this->getOrderRepository()->save($order);
             $this->creditmemoRepository->save($creditmemo);
+            $this->getOrderRepository()->save($order);
             $connection->commit();
         } catch (\Exception $e) {
             $connection->rollBack();

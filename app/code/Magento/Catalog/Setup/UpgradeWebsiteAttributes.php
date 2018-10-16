@@ -148,6 +148,20 @@ class UpgradeWebsiteAttributes
      */
     private function fetchAttributeValues(ModuleDataSetupInterface $setup, $tableName)
     {
+        $multipleStoresInWebsite = array_values(
+            array_reduce(
+                array_filter($this->getGroupedStoreViews($setup), function ($storeViews) {
+                    return is_array($storeViews) && count($storeViews) > 1;
+                }),
+                'array_merge',
+                []
+            )
+        );
+
+        if (count($multipleStoresInWebsite) < 1) {
+            return [];
+        }
+
         $connection = $setup->getConnection();
         $batchSelectIterator = $this->batchQueryGenerator->generate(
             'value_id',
@@ -158,27 +172,18 @@ class UpgradeWebsiteAttributes
                     '*'
                 )
                 ->join(
-                    [
-                        'cea' => $setup->getTable('catalog_eav_attribute'),
-                    ],
+                    ['cea' => $setup->getTable('catalog_eav_attribute')],
                     'cpei.attribute_id = cea.attribute_id',
                     ''
                 )
                 ->join(
-                    [
-                        'st' => $setup->getTable('store'),
-                    ],
+                    ['st' => $setup->getTable('store')],
                     'st.store_id = cpei.store_id',
                     'st.website_id'
                 )
-                ->where(
-                    'cea.is_global = ?',
-                    self::ATTRIBUTE_WEBSITE
-                )
-                ->where(
-                    'cpei.store_id <> ?',
-                    self::GLOBAL_STORE_VIEW_ID
-                )
+                ->where('cea.is_global = ?', self::ATTRIBUTE_WEBSITE)
+                ->where('cpei.store_id IN (?)', $multipleStoresInWebsite),
+            1000
         );
 
         foreach ($batchSelectIterator as $select) {
@@ -201,17 +206,15 @@ class UpgradeWebsiteAttributes
             ->select()
             ->from(
                 $setup->getTable('store'),
-                '*'
-            );
+                ['store_id', 'website_id']
+            )->where('store_id <> ?', self::GLOBAL_STORE_VIEW_ID);
 
-        $storeViews = $connection->fetchAll($query);
+        $storeViews = $connection->fetchPairs($query);
 
         $this->groupedStoreViews = [];
 
-        foreach ($storeViews as $storeView) {
-            if ($storeView['store_id'] != 0) {
-                $this->groupedStoreViews[$storeView['website_id']][] = $storeView['store_id'];
-            }
+        foreach ($storeViews as $storeId => $websiteId) {
+            $this->groupedStoreViews[$websiteId][] = $storeId;
         }
 
         return $this->groupedStoreViews;

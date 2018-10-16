@@ -246,7 +246,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         }
 
         if ($this->getIsActive() !== null) {
-            $data['is_active'] = intval($this->getIsActive());
+            $data['is_active'] = (int)$this->getIsActive();
         }
 
         $this->addData($data);

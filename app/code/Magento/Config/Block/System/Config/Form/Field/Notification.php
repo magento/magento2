@@ -44,6 +44,6 @@ class Notification extends \Magento\Config\Block\System\Config\Form\Field
         $format = $this->_localeDate->getDateTimeFormat(
             \IntlDateFormatter::MEDIUM
         );
-        return $this->dateTimeFormatter->formatObject($this->_localeDate->date(intval($element->getValue())), $format);
+        return $this->dateTimeFormatter->formatObject($this->_localeDate->date((int)$element->getValue()), $format);
     }
 }
