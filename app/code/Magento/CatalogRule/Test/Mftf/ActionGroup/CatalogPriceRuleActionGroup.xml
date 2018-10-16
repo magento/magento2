@@ -59,14 +59,12 @@
     <!--Add Catalog Rule Condition With product SKU-->
     <actionGroup name="newCatalogPriceRuleByUIWithConditionIsSKU" extends="CreateCatalogPriceRule">
         <arguments>
-            <argument name="productSku"/>
+            <argument name="productSku" type="string"/>
         </arguments>
         <click selector="{{AdminCatalogPriceRuleSection.conditionsTab}}" after="discardSubsequentRules" stepKey="openConditionsTab"/>
-        <waitForPageLoad after="openConditionsTab" stepKey="waitForConditionTabOpened"/>
-        <click selector="{{AdminCatalogPriceRuleConditionsSection.newCondition}}" after="waitForConditionTabOpened" stepKey="addNewCondition"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.newCondition}}" after="openConditionsTab" stepKey="addNewCondition"/>
         <selectOption selector="{{AdminCatalogPriceRuleConditionsSection.conditionSelect('1')}}" userInput="Magento\CatalogRule\Model\Rule\Condition\Product|sku" after="addNewCondition" stepKey="selectTypeCondition"/>
-        <waitForPageLoad after="selectTypeCondition" stepKey="waitForConditionChosed"/>
-        <click selector="{{AdminCatalogPriceRuleConditionsSection.targetEllipsis('1')}}" after="waitForConditionChosed" stepKey="clickEllipsis"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.targetEllipsis('1')}}" after="selectTypeCondition" stepKey="clickEllipsis"/>
         <fillField selector="{{AdminCatalogPriceRuleConditionsSection.targetInput('1', '1')}}" userInput="{{productSku}}" after="clickEllipsis" stepKey="fillProductSku"/>
         <click selector="{{AdminCatalogPriceRuleConditionsSection.applyButton('1', '1')}}" after="fillProductSku" stepKey="clickApply"/>
     </actionGroup>

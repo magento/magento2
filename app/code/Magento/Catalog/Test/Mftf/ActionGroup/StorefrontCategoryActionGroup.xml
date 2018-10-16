@@ -46,6 +46,5 @@
         </arguments>
         <!-- Go to storefront category page -->
         <amOnPage url="{{StorefrontCategoryPage.url(category)}}?product_list_mode={{mode}}&amp;product_list_order={{sortBy}}&amp;product_list_dir={{sort}}" stepKey="onCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

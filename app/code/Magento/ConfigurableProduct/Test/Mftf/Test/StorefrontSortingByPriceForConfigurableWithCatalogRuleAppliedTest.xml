@@ -89,10 +89,10 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--SKU Product Attribute is enabled for Promo Rule Conditions-->
             <actionGroup ref="navigateToEditProductAttribute" stepKey="navigateToSkuProductAttribute">
-                <argument name="ProductAttribute" value="sku"/>
+                <argument name="attributeLabel" value="sku"/>
             </actionGroup>
             <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToYes">
-                <argument name="option" value="Yes"/>
+                <argument name="useForRule" value="Yes"/>
             </actionGroup>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
@@ -110,11 +110,9 @@
 
             <!--SKU Product Attribute is disable for Promo Rule Conditions-->
             <actionGroup ref="navigateToEditProductAttribute" stepKey="navigateToSkuProductAttribute">
-                <argument name="ProductAttribute" value="sku"/>
+                <argument name="attributeLabel" value="sku"/>
             </actionGroup>
-            <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToNo">
-                <argument name="option" value="No"/>
-            </actionGroup>
+            <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToNo"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
@@ -125,13 +123,13 @@
             <argument name="sortBy" value="price"/>
             <argument name="sort" value="desc"/>
         </actionGroup>
-        <see selector="{{StorefrontCategoryMainSection.lineProductName('1')}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProduct"/>
-        <see selector="{{StorefrontCategoryMainSection.lineProductName('2')}}" userInput="$$createSimpleProduct2.name$$" stepKey="seeSimpleProductTwo"/>
-        <see selector="{{StorefrontCategoryMainSection.lineProductName('3')}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryPageProductName('1')}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProduct"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryPageProductName('2')}}" userInput="$$createSimpleProduct2.name$$" stepKey="seeSimpleProductTwo"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryPageProductName('3')}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct"/>
 
         <!--Create and apply catalog price rule-->
         <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsSKU" stepKey="createCatalogPriceRule">
-            <argument name="catalogRule" value="CatalogRuleByPercentWith96Amount" />
+            <argument name="catalogRule" value="CatalogRule96PercentDiscount" />
             <argument name="productSku" value="$$createConfigChildProduct3.sku$$" />
         </actionGroup>
         <click selector="{{AdminCatalogPriceRuleGridSection.applyRulesButton}}" stepKey="clickApplyRules"/>
@@ -146,13 +144,13 @@
             <argument name="sortBy" value="price"/>
             <argument name="sort" value="desc"/>
         </actionGroup>
-        <see selector="{{StorefrontCategoryMainSection.lineProductName('1')}}" userInput="$$createSimpleProduct2.name$$" stepKey="seeSimpleProductTwo2"/>
-        <see selector="{{StorefrontCategoryMainSection.lineProductName('2')}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct2"/>
-        <see selector="{{StorefrontCategoryMainSection.lineProductName('3')}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProduct2"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryPageProductName('1')}}" userInput="$$createSimpleProduct2.name$$" stepKey="seeSimpleProductTwo2"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryPageProductName('2')}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct2"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryPageProductName('3')}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProduct2"/>
 
         <!-- Delete the rule -->
         <actionGroup ref="RemoveCatalogPriceRule" stepKey="deletePriceRule">
-            <argument name="ruleName" value="CatalogRuleByPercentWith96Amount.name" />
+            <argument name="ruleName" value="CatalogRule96PercentDiscount.name" />
         </actionGroup>
     </test>
 </tests>
