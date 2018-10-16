@@ -293,6 +293,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
                 [
                     'getIsVirtual',
                     'getPayment',
+                    'getExtensionAttributes',
                     'setMayEditShippingAddress',
                     'setMayEditShippingMethod',
                     'collectTotals',
