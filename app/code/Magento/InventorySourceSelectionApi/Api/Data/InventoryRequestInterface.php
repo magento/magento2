@@ -49,11 +49,9 @@ interface InventoryRequestInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?InventoryRequestExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -61,5 +59,5 @@ interface InventoryRequestInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(InventoryRequestExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(InventoryRequestExtensionInterface $extensionAttributes): void;
 }

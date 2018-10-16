@@ -19,5 +19,5 @@ interface DeleteSourceItemConfigurationInterface
      * @param string $sku
      * @return void
      */
-    public function execute(string $sourceCode, string $sku);
+    public function execute(string $sourceCode, string $sku): void;
 }

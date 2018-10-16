@@ -85,7 +85,7 @@ class SourceSelectionItem extends AbstractExtensibleModel implements SourceSelec
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?SourceSelectionItemExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -100,7 +100,7 @@ class SourceSelectionItem extends AbstractExtensibleModel implements SourceSelec
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(SourceSelectionItemExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(SourceSelectionItemExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

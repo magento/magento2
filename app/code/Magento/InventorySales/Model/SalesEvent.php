@@ -70,7 +70,7 @@ class SalesEvent extends AbstractExtensibleModel implements SalesEventInterface
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?SalesEventExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -83,7 +83,7 @@ class SalesEvent extends AbstractExtensibleModel implements SalesEventInterface
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(SalesEventExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(SalesEventExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

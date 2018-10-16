@@ -71,7 +71,7 @@ class ItemRequest extends AbstractExtensibleModel implements ItemRequestInterfac
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?ItemRequestExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -84,7 +84,7 @@ class ItemRequest extends AbstractExtensibleModel implements ItemRequestInterfac
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(ItemRequestExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(ItemRequestExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }
