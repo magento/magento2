@@ -240,6 +240,16 @@
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.flatRateOption}}" stepKey="waitForShippingOptions"/>
         <selectOption selector="{{AdminOrderFormPaymentSection.flatRateOption}}" userInput="flatrate_flatrate" stepKey="checkFlatRate"/>
     </actionGroup>
+
+    <!--Select free shipping method-->
+    <actionGroup name="orderSelectFreeShipping">
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
+        <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="waitForShippingOptions"/>
+        <selectOption selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" userInput="freeshipping_freeshipping" stepKey="checkFreeShipping"/>
+    </actionGroup>
+
     <!--Check that customer information is correct in order-->
     <actionGroup name="verifyBasicOrderInformation">
         <arguments>
