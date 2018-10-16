@@ -48,7 +48,7 @@ class ProductSalabilityError extends AbstractExtensibleModel implements ProductS
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?ProductSalabilityErrorExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -61,7 +61,7 @@ class ProductSalabilityError extends AbstractExtensibleModel implements ProductS
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(ProductSalabilityErrorExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(ProductSalabilityErrorExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

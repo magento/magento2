@@ -31,22 +31,20 @@ interface ItemToSellInterface extends ExtensibleDataInterface
      * @param string $sku
      * @return void
      */
-    public function setSku(string $sku);
+    public function setSku(string $sku): void;
 
     /**
      * @param float $qty
      * @return void
      */
-    public function setQuantity(float $qty);
+    public function setQuantity(float $qty): void;
 
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventorySalesApi\Api\Data\ItemToSellExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?ItemToSellExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -54,5 +52,5 @@ interface ItemToSellInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySalesApi\Api\Data\ItemToSellExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(ItemToSellExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(ItemToSellExtensionInterface $extensionAttributes): void;
 }

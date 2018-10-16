@@ -55,7 +55,7 @@ class ItemToSell extends AbstractExtensibleModel implements ItemToSellInterface
     /**
      * @inheritdoc
      */
-    public function setSku(string $sku)
+    public function setSku(string $sku): void
     {
         $this->sku = $sku;
     }
@@ -63,7 +63,7 @@ class ItemToSell extends AbstractExtensibleModel implements ItemToSellInterface
     /**
      * @inheritdoc
      */
-    public function setQuantity(float $qty)
+    public function setQuantity(float $qty): void
     {
         $this->qty = $qty;
     }
@@ -71,7 +71,7 @@ class ItemToSell extends AbstractExtensibleModel implements ItemToSellInterface
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?ItemToSellExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -84,7 +84,7 @@ class ItemToSell extends AbstractExtensibleModel implements ItemToSellInterface
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(ItemToSellExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(ItemToSellExtensionInterface $extensionAttributes): void
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

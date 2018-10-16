@@ -19,5 +19,5 @@ interface IndexTableSwitcherInterface
      * @param string $connectionName
      * @return void
      */
-    public function switch(IndexName $indexName, string $connectionName);
+    public function switch(IndexName $indexName, string $connectionName): void;
 }
