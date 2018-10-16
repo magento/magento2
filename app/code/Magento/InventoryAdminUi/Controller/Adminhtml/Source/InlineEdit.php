@@ -67,6 +67,7 @@ class InlineEdit extends Action
             foreach ($requestData as $itemData) {
                 try {
                     $sourceCode = $itemData[SourceInterface::SOURCE_CODE];
+                    $itemData = $this->prepareDataForSave($itemData);
                     $source = $this->sourceRepository->get($sourceCode);
                     $this->dataObjectHelper->populateWithArray($source, $itemData, SourceInterface::class);
                     $this->sourceRepository->save($source);
@@ -104,5 +105,21 @@ class InlineEdit extends Action
         ]);
 
         return $resultJson;
+    }
+
+    /**
+     * Set null to not required fields if field is empty.
+     *
+     * @param array $sourceData
+     * @return array
+     */
+    private function prepareDataForSave(array $sourceData): array
+    {
+        $sourceData['region_id'] = ($sourceData['region_id'] ?? '') ?: null;
+        $sourceData['region'] = ($sourceData['region'] ?? '') ?: null;
+        $sourceData['latitude'] = ($sourceData['latitude'] ?? '') ?: null;
+        $sourceData['longitude'] = ($sourceData['longitude'] ?? '') ?: null;
+
+        return $sourceData;
     }
 }
