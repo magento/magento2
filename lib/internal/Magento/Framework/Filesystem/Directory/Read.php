@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Filesystem\Directory;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 
 class Read implements ReadInterface
@@ -31,20 +32,50 @@ class Read implements ReadInterface
     protected $driver;
 
     /**
+     * @var PathValidatorInterface
+     */
+    private $pathValidator;
+
+    /**
      * Constructor. Set properties.
      *
      * @param \Magento\Framework\Filesystem\File\ReadFactory $fileFactory
      * @param \Magento\Framework\Filesystem\DriverInterface $driver
      * @param string $path
+     * @param PathValidator|null $pathValidator
      */
     public function __construct(
         \Magento\Framework\Filesystem\File\ReadFactory $fileFactory,
         \Magento\Framework\Filesystem\DriverInterface $driver,
-        $path
+        $path,
+        PathValidatorInterface $pathValidator = null
     ) {
         $this->fileFactory = $fileFactory;
         $this->driver = $driver;
         $this->setPath($path);
+        $this->pathValidator = $pathValidator;
+    }
+
+    /**
+     * @param string|null $path
+     * @param string|null $scheme
+     * @param bool $absolutePath
+     *
+     * @return void
+     */
+    protected function validatePath(
+        $path,
+        $scheme = null,
+        $absolutePath = false
+    ) {
+        if ($path && $this->pathValidator) {
+            $this->pathValidator->validate(
+                $this->path,
+                $path,
+                $scheme,
+                $absolutePath
+            );
+        }
     }
 
     /**
@@ -70,6 +101,8 @@ class Read implements ReadInterface
      */
     public function getAbsolutePath($path = null, $scheme = null)
     {
+        $this->validatePath($path, $scheme);
+
         return $this->driver->getAbsolutePath($this->path, $path, $scheme);
     }
 
@@ -81,6 +114,12 @@ class Read implements ReadInterface
      */
     public function getRelativePath($path = null)
     {
+        $this->validatePath(
+            $path,
+            null,
+            $path && $path[0] === DIRECTORY_SEPARATOR
+        );
+
         return $this->driver->getRelativePath($this->path, $path);
     }
 
@@ -92,6 +131,8 @@ class Read implements ReadInterface
      */
     public function read($path = null)
     {
+        $this->validatePath($path);
+
         $files = $this->driver->readDirectory($this->driver->getAbsolutePath($this->path, $path));
         $result = [];
         foreach ($files as $file) {
@@ -108,6 +149,8 @@ class Read implements ReadInterface
      */
     public function readRecursively($path = null)
     {
+        $this->validatePath($path);
+
         $result = [];
         $paths = $this->driver->readDirectoryRecursively($this->driver->getAbsolutePath($this->path, $path));
         /** @var \FilesystemIterator $file */
@@ -127,6 +170,8 @@ class Read implements ReadInterface
      */
     public function search($pattern, $path = null)
     {
+        $this->validatePath($path);
+
         if ($path) {
             $absolutePath = $this->driver->getAbsolutePath($this->path, $this->getRelativePath($path));
         } else {
@@ -150,6 +195,8 @@ class Read implements ReadInterface
      */
     public function isExist($path = null)
     {
+        $this->validatePath($path);
+
         return $this->driver->isExists($this->driver->getAbsolutePath($this->path, $path));
     }
 
@@ -162,6 +209,8 @@ class Read implements ReadInterface
      */
     public function stat($path)
     {
+        $this->validatePath($path);
+
         return $this->driver->stat($this->driver->getAbsolutePath($this->path, $path));
     }
 
@@ -174,6 +223,8 @@ class Read implements ReadInterface
      */
     public function isReadable($path = null)
     {
+        $this->validatePath($path);
+
         return $this->driver->isReadable($this->driver->getAbsolutePath($this->path, $path));
     }
 
@@ -186,6 +237,8 @@ class Read implements ReadInterface
      */
     public function openFile($path)
     {
+        $this->validatePath($path);
+
         return $this->fileFactory->create(
             $this->driver->getAbsolutePath($this->path, $path),
             $this->driver
@@ -203,6 +256,8 @@ class Read implements ReadInterface
      */
     public function readFile($path, $flag = null, $context = null)
     {
+        $this->validatePath($path);
+
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         return $this->driver->fileGetContents($absolutePath, $flag, $context);
 
@@ -216,6 +271,8 @@ class Read implements ReadInterface
      */
     public function isFile($path)
     {
+        $this->validatePath($path);
+
         return $this->driver->isFile($this->driver->getAbsolutePath($this->path, $path));
     }
 
@@ -227,6 +284,8 @@ class Read implements ReadInterface
      */
     public function isDirectory($path = null)
     {
+        $this->validatePath($path);
+
         return $this->driver->isDirectory($this->driver->getAbsolutePath($this->path, $path));
     }
 }
