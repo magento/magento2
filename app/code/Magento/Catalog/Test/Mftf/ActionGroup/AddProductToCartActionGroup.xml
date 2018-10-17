@@ -22,9 +22,7 @@
             <argument name="productName"/>
         </arguments>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAdding"/>
         <waitForElementNotVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAdded"/>
         <waitForElementNotVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAddToCart}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAddToCart"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
