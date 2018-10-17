@@ -16,7 +16,7 @@ class SourceRegionDataProcessor
      * @param array $data
      * @return array
      */
-    public function process(array $data): array
+    public function execute(array $data): array
     {
         if (!isset($data['region_id']) || '' === $data['region_id']) {
             $data['region_id'] = null;
