@@ -52,15 +52,19 @@ class Zip extends AbstractArchive implements ArchiveInterface
     public function unpack($source, $destination)
     {
         $zip = new \ZipArchive();
-        $zip->open($source);
-        $filename = $this->filterRelativePaths($zip->getNameIndex(0) ?: '');
-        if ($filename) {
-            $zip->extractTo(dirname($destination), $filename);
-            rename(dirname($destination).'/'.$filename, $destination);
+        if ($zip->open($source) === true) {
+            $filename = $this->filterRelativePaths($zip->getNameIndex(0) ?: '');
+            if ($filename) {
+                $zip->extractTo(dirname($destination), $filename);
+                rename(dirname($destination).'/'.$filename, $destination);
+            } else {
+                $destination = '';
+            }
+            $zip->close();
         } else {
             $destination = '';
         }
-        $zip->close();
+
         return $destination;
     }
 

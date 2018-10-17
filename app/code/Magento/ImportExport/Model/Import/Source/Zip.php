@@ -25,13 +25,14 @@ class Zip extends Csv
         $options
     ) {
         $zip = new \Magento\Framework\Archive\Zip();
-        $file = $zip->unpack(
-            $directory->getRelativePath($file),
-            $directory->getRelativePath(preg_replace('/\.zip$/i', '.csv', $file))
+        $csvFile = $zip->unpack(
+            $file,
+            preg_replace('/\.zip$/i', '.csv', $file)
         );
-        if (!$file) {
+        if (!$csvFile) {
             throw new ValidatorException(__('Sorry, but the data is invalid or the file is not uploaded.'));
         }
-        parent::__construct($file, $directory, $options);
+        $directory->delete($directory->getRelativePath($file));
+        parent::__construct($csvFile, $directory, $options);
     }
 }
