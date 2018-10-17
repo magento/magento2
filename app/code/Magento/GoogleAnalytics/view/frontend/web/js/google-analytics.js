@@ -48,6 +48,10 @@ define([
             // Process page info
             ga('create', config.pageTrackingData.accountId, 'auto');
 
+            if (config.pageTrackingData.optimizeContainerId) {
+                ga('require', config.pageTrackingData.optimizeContainerId);
+            }
+
             if (config.pageTrackingData.isAnonymizedIpActive) {
                 ga('set', 'anonymizeIp', true);
             }

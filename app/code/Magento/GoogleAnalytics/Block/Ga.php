@@ -7,6 +7,7 @@
 namespace Magento\GoogleAnalytics\Block;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\GoogleAnalytics\Helper\Data;
 
 /**
  * GoogleAnalytics Page Block
@@ -156,6 +157,16 @@ class Ga extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Google Optimize container ID, Example: GTM-XXXXXX
+     *
+     * @return string
+     */
+    public function getOptimizeContainerId()
+    {
+        return (string)$this->getConfig(Data::XML_PATH_OPTIMIZE_CONTAINER_ID);
+    }
+
+    /**
      * Render GA tracking scripts
      *
      * @return string
@@ -206,7 +217,8 @@ class Ga extends \Magento\Framework\View\Element\Template
         return [
             'optPageUrl' => $this->getOptPageUrl(),
             'isAnonymizedIpActive' => $this->_googleAnalyticsData->isAnonymizedIpActive(),
-            'accountId' => $this->escapeHtmlAttr($accountId, false)
+            'accountId' => $this->escapeHtmlAttr($accountId, false),
+            'optimizeContainerId' => $this->escapeHtmlAttr($this->getOptimizeContainerId(), false),
         ];
     }
 

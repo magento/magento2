@@ -9,6 +9,15 @@
 ?>
 <?php /** @var $block \Magento\GoogleAnalytics\Block\Ga */ ?>
 <?php $accountId = $block->getConfig(\Magento\GoogleAnalytics\Helper\Data::XML_PATH_ACCOUNT) ?>
+<?php if ($block->getOptimizeContainerId()): ?>
+    <!-- Page hiding snippet (recommended)  -->
+    <style>.async-hide { opacity: 0 !important}</style>
+    <script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
+    h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+    (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+    })(window,document.documentElement,'async-hide','dataLayer',4000,
+    {'<?= $block->escapeHtmlAttr($block->getOptimizeContainerId(), true)?>':true});</script>
+<?php endif; ?>
 <!-- BEGIN GOOGLE ANALYTICS CODE -->
 <script type="text/x-magento-init">
 {

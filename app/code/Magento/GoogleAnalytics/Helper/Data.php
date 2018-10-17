@@ -5,8 +5,8 @@
  */
 namespace Magento\GoogleAnalytics\Helper;
 
-use Magento\Store\Model\Store;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * GoogleAnalytics data helper
@@ -22,6 +22,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_ACTIVE = 'google/analytics/active';
 
     const XML_PATH_ACCOUNT = 'google/analytics/account';
+
+    const XML_PATH_OPTIMIZE_CONTAINER_ID = 'google/analytics/optimize_container_id';
 
     const XML_PATH_ANONYMIZE = 'google/analytics/anonymize';
 
