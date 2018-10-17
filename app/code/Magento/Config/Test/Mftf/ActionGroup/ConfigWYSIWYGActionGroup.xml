@@ -21,6 +21,7 @@
     </actionGroup>
     <actionGroup name="SwitchToTinyMCE3">
     <comment userInput="Choose TinyMCE3 as the default editor" stepKey="chooseTinyMCE3AsEditor"/>
+    <conditionalClick stepKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
     <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox2" />
     <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue2"/>
     <waitForElementVisible selector="{{ContentManagementSection.Switcher}}" stepKey="waitForSwitcherDropdown2" />

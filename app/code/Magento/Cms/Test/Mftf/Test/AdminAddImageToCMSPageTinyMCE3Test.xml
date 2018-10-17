@@ -19,7 +19,7 @@
             <testCaseId value="MAGETWO-95725"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <!-- Choose TinyMCE3 as the default WYSIWYG editor-->
             <actionGroup ref="SwitchToTinyMCE3" stepKey="switchToTinyMCE3"/>
