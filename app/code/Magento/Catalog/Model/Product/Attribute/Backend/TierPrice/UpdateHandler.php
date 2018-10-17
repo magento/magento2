@@ -138,12 +138,12 @@ class UpdateHandler implements ExtensionInterface
      * Check whether price has percentage value.
      *
      * @param array $priceRow
-     * @return int|null
+     * @return float|null
      */
     private function getPercentage(array $priceRow): ?int
     {
         return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
-            ? (int)$priceRow['percentage_value']
+            ? (float)$priceRow['percentage_value']
             : null;
     }
 
