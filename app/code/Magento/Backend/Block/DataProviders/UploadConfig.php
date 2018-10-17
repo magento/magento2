@@ -34,6 +34,6 @@ class UploadConfig implements ArgumentInterface
      */
     public function getIsResizeEnabled(): int
     {
-        return (int) $this->config->getValue('system/upload_configuration/enable_resize');
+        return (int)$this->config->getValue('system/upload_configuration/enable_resize');
     }
 }
