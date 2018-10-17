@@ -757,7 +757,7 @@ define([
             function (value) {
                 return utils.isEmptyNoTrim(value) || /^[a-z]+[a-z0-9_]+$/.test(value);
             },
-            $.mage.__('Please use only letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.')//eslint-disable-line max-len
+            $.mage.__('Please use only lowercase letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.')//eslint-disable-line max-len
         ],
         'validate-alphanum': [
             function (value) {
