@@ -49,7 +49,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
 
     public function testSchemaCorrectlyIdentifiesWihoutEventHandle()
     {
-        $xmlString = <?xml version="1.0"?><config></config>;
+        $xmlString = '<?xml version="1.0"?><config></config>';
         $actualResult = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
 
         $this->assertEmpty($actualResult);
