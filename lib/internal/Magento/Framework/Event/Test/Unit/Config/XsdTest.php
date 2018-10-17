@@ -47,6 +47,14 @@ class XsdTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($actualResult);
     }
 
+    public function testSchemaCorrectlyIdentifiesWihoutEventHandle()
+    {
+        $xmlString = <?xml version="1.0"?><config></config>;
+        $actualResult = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
+
+        $this->assertEmpty($actualResult);
+    }
+
     /**
      * Data provider with invalid xml array according to events.xsd
      */
