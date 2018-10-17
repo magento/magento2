@@ -57,9 +57,6 @@ define([
                 '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate',
                 'isUseDefault': 'toggleUseDefault'
             },
-            ignoreTmpls: {
-                value: true
-            },
 
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
