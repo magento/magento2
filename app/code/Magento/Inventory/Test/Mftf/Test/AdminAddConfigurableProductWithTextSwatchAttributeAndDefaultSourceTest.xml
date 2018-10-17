@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddConfigurableProductWithTextSwatchAttributeAndDefaultSourceTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
@@ -96,11 +96,10 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku1"/>
         <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="clickOnAssignSources2"/>
 
-        <conditionalClick selector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" dependentSelector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" visible="true" stepKey="clickClearFilters2"/>
-        <waitForPageLoad stepKey="waitForPageLoad" time="5"/>
+        <conditionalClick selector="(//*[contains(@class, '_show')]//*[contains(@class, 'action-clear')])[1]" dependentSelector="(//*[contains(@class, 'admin__data-grid-filters-current _show')])[1]" visible="true" stepKey="clickClearFilters2"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad"/>
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
         <fillField userInput="$$createSource1.source[source_code]$$" selector="{{AdminManageSourcesGridFilterControls.code}}" stepKey="fillCodeField2"/>
-        <fillField userInput="" selector="{{AdminManageSourcesGridFilterControls.name}}" stepKey="fillNameField"/>
 
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>
 
@@ -136,6 +135,5 @@
         <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProduct">
             <argument name="product" value="ConfigurableMsiProduct"/>
         </actionGroup>
-
     </test>
 </tests>
