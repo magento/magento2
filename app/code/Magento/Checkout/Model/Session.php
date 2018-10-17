@@ -42,6 +42,15 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $_loadInactive = false;
 
     /**
+     * A flag to track when the quote is being loaded and attached to the session object.
+     *
+     * Used in trigger_recollect infinite loop detection.
+     *
+     * @var bool
+     */
+    protected $_isLoading = false;
+
+    /**
      * Loaded order instance
      *
      * @var \Magento\Sales\Model\Order
@@ -210,6 +219,10 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_eventManager->dispatch('custom_quote_process', ['checkout_session' => $this]);
 
         if ($this->_quote === null) {
+            if ($this->_isLoading) {
+                throw new \LogicException("Infinite loop detected, review the trace for the looping path");
+            }
+            $this->_isLoading = true;
             $quote = $this->quoteFactory->create();
             if ($this->getQuoteId()) {
                 try {
@@ -262,6 +275,7 @@ class Session extends \Magento\Framework\Session\SessionManager
 
             $quote->setStore($this->_storeManager->getStore());
             $this->_quote = $quote;
+            $this->_isLoading = false;
         }
 
         if (!$this->isQuoteMasked() && !$this->_customerSession->isLoggedIn() && $this->getQuoteId()) {
