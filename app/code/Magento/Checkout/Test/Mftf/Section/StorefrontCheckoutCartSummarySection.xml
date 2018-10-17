@@ -17,7 +17,6 @@
         <element name="estimateShippingAndTax" type="text" selector="#block-shipping-heading" timeout="5"/>
         <element name="flatRateShippingMethod" type="radio" selector="#s_method_flatrate_flatrate" timeout="30"/>
         <element name="itemDiscount" type="text" selector="tr[class='totals'] td.amount > span"/>
-        <element name="subtotal" type="text" selector="tr.totals.sub td.amount > span"/>
         <element name="countryParameterized" type="select" selector="select[name='country_id'] > option:nth-child({{var}})" timeout="10" parameterized="true"/>
         <element name="shippingHeading" type="button" selector="#block-shipping-heading"/>
         <element name="blockSummary" type="button" selector="#block-summary"/>
