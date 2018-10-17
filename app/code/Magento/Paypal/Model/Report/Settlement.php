@@ -237,6 +237,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Goes to specified host/path and fetches reports from there.
+     *
      * Save reports to database.
      *
      * @param \Magento\Framework\Filesystem\Io\Sftp $connection
@@ -517,6 +518,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Iterate through website configurations and collect all SFTP configurations
+     *
      * Filter config values if necessary
      *
      * @param bool $automaticMode Whether to skip settings with disabled Automatic Fetching or not

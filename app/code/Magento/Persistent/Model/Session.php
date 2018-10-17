@@ -197,6 +197,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Serialize info for Resource Model to save
+     *
      * For new model check and set available cookie key
      *
      * @return $this

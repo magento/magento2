@@ -7,6 +7,8 @@
 namespace Magento\Wishlist\Helper;
 
 /**
+ * Wishlist rss helper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api

@@ -15,6 +15,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Represents product info in json
+ */
 class JsonProductInfo extends ProductController implements HttpGetActionInterface
 {
     /**
@@ -41,6 +44,8 @@ class JsonProductInfo extends ProductController implements HttpGetActionInterfac
     }
 
     /**
+     * Execute controller
+     *
      * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()

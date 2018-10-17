@@ -161,7 +161,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -289,7 +289,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($email, $websiteId = null)
     {
@@ -298,7 +298,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getById($customerId)
     {
@@ -307,7 +307,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -347,7 +347,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(CustomerInterface $customer)
     {
@@ -355,7 +355,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($customerId)
     {
