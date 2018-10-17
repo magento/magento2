@@ -31,7 +31,6 @@ class UploadConfigTest extends \PHPUnit\Framework\TestCase
         $this->config = $this->getMockBuilder(ScopeConfig::class)
             ->setMethods(['getValue'])
             ->getMockForAbstractClass();
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->uploadConfig =  $this->objectManagerHelper->getObject(
             UploadConfig::class,
