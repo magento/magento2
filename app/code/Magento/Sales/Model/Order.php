@@ -2152,6 +2152,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Return applied_rule_ids
      *
+     * Rules are comma separated if there are more than one.
      * @return string|null
      */
     public function getAppliedRuleIds()
