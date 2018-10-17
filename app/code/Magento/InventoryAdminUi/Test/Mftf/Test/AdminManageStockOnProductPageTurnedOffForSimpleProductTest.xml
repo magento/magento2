@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminManageStockOnProductPageTurnedOffForSimpleProductTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Configuration-Catalog-Products-Simple product"/>
             <title value="Manage Stock on Product page turned off for Simple Product in admin"/>
             <description value="You should be able to turn off Manage Stock option on Product page."/>
-            <testCaseId value="957"/>
+            <testCaseId value="MSI-957"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -28,7 +27,6 @@
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
-
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceList"/>

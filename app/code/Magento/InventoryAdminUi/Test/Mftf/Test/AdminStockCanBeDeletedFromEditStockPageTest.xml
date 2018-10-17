@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminStockCanBeDeletedFromEditStockPageTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Delete Stock"/>
             <title value="Delete Stock From Edit Stock Page"/>
             <description value="You should be able to Delete a Stock from the Edit Stock page."/>
-            <testCaseId value="949"/>
+            <testCaseId value="MSI-949"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
