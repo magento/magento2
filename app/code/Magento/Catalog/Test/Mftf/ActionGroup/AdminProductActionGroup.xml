@@ -132,7 +132,7 @@
     <!--Switch to New Store view-->
     <actionGroup name="SwitchToTheNewStoreView">
         <arguments>
-            <argument name="storeViewName" type="string"/>
+            <argument name="storeViewName"/>
         </arguments>
         <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToUp"/>
         <waitForElementVisible selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="waitForElementBecomeVisible"/>
