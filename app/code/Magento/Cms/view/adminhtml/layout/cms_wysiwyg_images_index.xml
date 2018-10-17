@@ -14,5 +14,6 @@
                     <argument name="image_upload_config_data" xsi:type="object">Magento\Backend\Block\DataProviders\UploadConfig</argument>
                 </arguments>
             </block>
+        </block>
     </container>
 </layout>
