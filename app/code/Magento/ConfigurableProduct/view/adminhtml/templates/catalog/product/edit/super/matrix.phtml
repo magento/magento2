@@ -256,7 +256,8 @@ $currencySymbol = $block->getCurrencySymbol();
                         "productAttributes": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
                         "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
                         "currencySymbol": "<?= /* @noEscape */ $currencySymbol ?>",
-                        "configurableProductGrid": "configurableProductGrid"
+                        "configurableProductGrid": "configurableProductGrid",
+                        "errorSelector":".admin__field-error"
                     }
                 }
             }
