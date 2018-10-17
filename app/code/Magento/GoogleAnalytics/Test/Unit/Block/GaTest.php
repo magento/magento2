@@ -216,8 +216,9 @@ class GaTest extends \PHPUnit\Framework\TestCase
             'optimizeContainerId' => $containerId
         ];
         $this->gaBlock->setData('page_name', $pageName);
-        $this->googleAnalyticsDataMock->expects($this->once())
-            ->method('isAnonymizedIpActive')->willReturn(true);
+        $this->scopeConfigMock->expects($this->once())->method('getValue')
+            ->with(Data::XML_PATH_OPTIMIZE_CONTAINER_ID, ScopeInterface::SCOPE_STORE)
+            ->willReturn($containerId);
 
         $this->googleAnalyticsDataMock->expects($this->once())
             ->method('isAnonymizedIpActive')->willReturn(true);
