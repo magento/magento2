@@ -14,6 +14,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\User\Api\Data\UserInterface;
 use Magento\User\Model\Spi\NotificationExceptionInterface;
 use Magento\User\Model\Spi\NotificatorInterface;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Admin user model
@@ -139,6 +140,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     private $notificator;
 
     /**
+     * @deprecated
+     */
+    private $deploymentConfig;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\User\Helper\Data $userData
@@ -153,6 +159,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param Json $serializer
+     * @param DeploymentConfig|null $deploymentConfig
      * @param NotificatorInterface|null $notificator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -171,6 +178,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         Json $serializer = null,
+        DeploymentConfig $deploymentConfig = null,
         ?NotificatorInterface $notificator = null
     ) {
         $this->_encryptor = $encryptor;
@@ -184,6 +192,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $this->validationRules = $validationRules;
         $this->serializer = $serializer
             ?: ObjectManager::getInstance()->get(Json::class);
+        $this->deploymentConfig = $deploymentConfig
+            ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->notificator = $notificator
             ?: ObjectManager::getInstance()->get(NotificatorInterface::class);
     }
@@ -217,7 +227,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 '_encryptor',
                 '_transportBuilder',
                 '_storeManager',
-                '_validatorBeforeSave'
+                '_validatorBeforeSave',
+                'validationRules',
+                'serializer',
+                'deploymentConfig',
+                'notificator'
             ]
         );
     }
@@ -241,6 +255,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $this->_encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
         $this->_transportBuilder = $objectManager->get(\Magento\Framework\Mail\Template\TransportBuilder::class);
         $this->_storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->validationRules = $objectManager->get(UserValidationRules::class);
+        $this->deploymentConfig = $objectManager->get(DeploymentConfig::class);
+        $this->notificator = $objectManager->get(NotificatorInterface::class);
     }
 
     /**
