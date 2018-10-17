@@ -133,7 +133,7 @@ class Image extends File
 
         $maxImageHeight = ArrayObjectSearch::getArrayElementByName(
             $rules,
-            'max_image_heght'
+            'max_image_height'
         );
         if ($maxImageHeight !== null) {
             if ($maxImageHeight < $imageProp[1]) {
