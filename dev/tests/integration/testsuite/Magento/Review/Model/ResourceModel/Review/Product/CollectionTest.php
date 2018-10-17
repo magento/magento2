@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Review\Model\ResourceModel\Review\Product;
 
+/**
+ * Tests some functionality of the Product Review collection
+ */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
