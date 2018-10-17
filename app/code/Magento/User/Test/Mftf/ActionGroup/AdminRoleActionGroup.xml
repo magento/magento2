@@ -7,7 +7,6 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-
     <actionGroup name="GoToUserRoles">
         <click selector="#menu-magento-backend-system" stepKey="clickOnSystemIcon"/>
         <waitForPageLoad stepKey="waitForSystemsPageToOpen"/>
@@ -28,7 +27,11 @@
         <fillField stepKey="setPassword" selector="{{AdminCreateRoleSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
         <click selector="{{AdminCreateRoleSection.roleResources}}" stepKey="clickToOpenRoleResources"/>
         <waitForPageLoad stepKey="waitForRoleResourcePage" time="5"/>
-        <click stepKey="checkSales" selector="//a[text()='Sales']"/>
+        <click selector="{{AdminCreateRoleSection.roleResource}}" stepKey="clickToExpandResourceAccess"/>
+        <click selector="{{AdminCreateRoleSection.resourceValue(scope)}}" stepKey="clickToSelectResourceAccess"/>
+        <click selector="{{AdminCreateRoleSection.roleScope}}" stepKey="clickToExpandScopeAccess"/>
+        <click selector="{{AdminCreateRoleSection.scopeValue(resource)}}" stepKey="clickToSelectScopeAccess"/>
+        <click selector="{{AdminCreateRoleSection.website(websites)}}" stepKey="clickToSelectWebsite"/>
         <click selector="{{AdminCreateRoleSection.save}}" stepKey="clickToSaveRole"/>
         <waitForPageLoad stepKey="waitForPageLoad" time="10"/>
         <see userInput="You saved the role." stepKey="seeSuccessMessage" />

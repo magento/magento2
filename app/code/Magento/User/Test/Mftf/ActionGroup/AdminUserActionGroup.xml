@@ -42,8 +42,8 @@
 
     <!--Delete User-->
     <actionGroup name="AdminDeleteUserActionGroup">
-
         <click stepKey="clickOnUser" selector="{{AdminDeleteUserSection.theUser}}"/>
+        <waitForPageLoad stepKey="waitForUserPageToLoad"/>
         <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click stepKey="clickToDeleteUser" selector="{{AdminDeleteUserSection.delete}}"/>
@@ -52,5 +52,4 @@
         <waitForPageLoad stepKey="waitForPageLoad" time="10"/>
         <see userInput="You deleted the user." stepKey="seeSuccessMessage" />
     </actionGroup>
-
 </actionGroups>
