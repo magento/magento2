@@ -43,4 +43,8 @@
     <entity name="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" type="stock">
         <data key="name" unique="suffix">Special Stock </data>
     </entity>
+    <!-- Please don't use this entity in your tests otherwise AdminSelectDeselectManipulationsInManageStocksGridTest will fail -->
+    <entity name="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" type="stock">
+        <data key="name" unique="suffix">Unique Stock </data>
+    </entity>
 </entities>
