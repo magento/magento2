@@ -19,6 +19,7 @@ use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\InventoryAdminUi\Model\Source\SourceCoordinatesDataProcessor;
 
 /**
  * InlineEdit Controller
@@ -41,18 +42,26 @@ class InlineEdit extends Action implements HttpPostActionInterface
     private $sourceRepository;
 
     /**
+     * @var SourceCoordinatesDataProcessor
+     */
+    private $sourceCoordinatesDataProcessor;
+
+    /**
      * @param Context $context
      * @param DataObjectHelper $dataObjectHelper
      * @param SourceRepositoryInterface $sourceRepository
+     * @param SourceCoordinatesDataProcessor $sourceCoordinatesDataProcessor
      */
     public function __construct(
         Context $context,
         DataObjectHelper $dataObjectHelper,
-        SourceRepositoryInterface $sourceRepository
+        SourceRepositoryInterface $sourceRepository,
+        SourceCoordinatesDataProcessor $sourceCoordinatesDataProcessor
     ) {
         parent::__construct($context);
         $this->dataObjectHelper = $dataObjectHelper;
         $this->sourceRepository = $sourceRepository;
+        $this->sourceCoordinatesDataProcessor = $sourceCoordinatesDataProcessor;
     }
 
     /**
@@ -68,7 +77,7 @@ class InlineEdit extends Action implements HttpPostActionInterface
             foreach ($requestData as $itemData) {
                 try {
                     $sourceCode = $itemData[SourceInterface::SOURCE_CODE];
-                    $itemData = $this->prepareDataForSave($itemData);
+                    $itemData = $this->sourceCoordinatesDataProcessor->execute($itemData);
                     $source = $this->sourceRepository->get($sourceCode);
                     $this->dataObjectHelper->populateWithArray($source, $itemData, SourceInterface::class);
                     $this->sourceRepository->save($source);
@@ -106,24 +115,5 @@ class InlineEdit extends Action implements HttpPostActionInterface
         ]);
 
         return $resultJson;
-    }
-
-    /**
-     * Set null to not required fields if field is empty.
-     *
-     * @param array $sourceData
-     * @return array
-     */
-    private function prepareDataForSave(array $sourceData): array
-    {
-        if (!isset($sourceData['latitude']) || '' === $sourceData['latitude']) {
-            $sourceData['latitude'] = null;
-        }
-
-        if (!isset($sourceData['longitude']) || '' === $sourceData['longitude']) {
-            $sourceData['longitude'] = null;
-        }
-
-        return $sourceData;
     }
 }
