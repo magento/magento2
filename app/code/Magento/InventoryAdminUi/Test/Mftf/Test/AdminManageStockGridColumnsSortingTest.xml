@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminManageStockGridColumnsSortingTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Columns sorting order changed by Admin user"/>
             <title value="Columns sorting order changed in Manage Stocks grid by Admin user"/>
             <description value="You should be able to Change Columns Sorting Order in Manage Stock grid."/>
-            <testCaseId value="935"/>
+            <testCaseId value="MSI-935"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="sort_order_test"/>

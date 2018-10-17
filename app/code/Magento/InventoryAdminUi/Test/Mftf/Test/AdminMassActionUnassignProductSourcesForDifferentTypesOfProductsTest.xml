@@ -7,18 +7,18 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMassActionUnassignProductSourcesForDifferentTypesOfProductsTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Unassign source to products"/>
             <title value="Admin user apply to different types of products mass action 'Unassign product sources' on Products grid to unassign all assigned sources"/>
             <description value="You should be able to unassign sources from different types of products via mass action"/>
-            <testCaseId value="1497"/>
+            <testCaseId value="MSI-1497"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
+
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="BasicMsiStock1" stepKey="customStock"/>
@@ -135,7 +135,6 @@
             <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
         </before>
-
         <after>
             <comment userInput="Delete all products after test" stepKey="deleteAllProductsViaGridAfterTestComment"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnTheProductGridPageForDeleteDownloadableProduct"/>
