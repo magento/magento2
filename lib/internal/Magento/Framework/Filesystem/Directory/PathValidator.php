@@ -56,7 +56,7 @@ class PathValidator implements PathValidatorInterface
         }
 
         if (mb_strpos($actualPath, $realDirectoryPath) !== 0
-            && $path .DIRECTORY_SEPARATOR !== $realDirectoryPath
+            && $path . DIRECTORY_SEPARATOR !== $realDirectoryPath
         ) {
             throw new ValidatorException(
                 new Phrase(
