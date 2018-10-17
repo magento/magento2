@@ -65,6 +65,7 @@ class Text extends AbstractElement
             'placeholder',
             'data-form-part',
             'data-role',
+            'data-validation-params',
             'data-action'
         ];
     }
