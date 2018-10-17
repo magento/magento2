@@ -91,9 +91,7 @@
             <actionGroup ref="navigateToEditProductAttribute" stepKey="navigateToSkuProductAttribute">
                 <argument name="attributeLabel" value="sku"/>
             </actionGroup>
-            <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToYes">
-                <argument name="useForRule" value="Yes"/>
-            </actionGroup>
+            <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToYes"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
@@ -112,7 +110,9 @@
             <actionGroup ref="navigateToEditProductAttribute" stepKey="navigateToSkuProductAttribute">
                 <argument name="attributeLabel" value="sku"/>
             </actionGroup>
-            <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToNo"/>
+            <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToNo">
+                <argument name="useForPromoRule" value="No"/>
+            </actionGroup>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 

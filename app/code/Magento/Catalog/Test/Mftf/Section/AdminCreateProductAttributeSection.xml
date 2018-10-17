@@ -13,7 +13,7 @@
         <element name="Save" type="button" selector="#save"/>
     </section>
     <section name="StorefrontPropertiesSection">
-        <element name="storefrontPropertiesTab" selector="#product_attribute_tabs_front" type="button"/>
+        <element name="storefrontPropertiesTab" selector="#product_attribute_tabs_front" type="button" timeout="30"/>
         <element name="useForPromoRuleConditions" type="select" selector="#is_used_for_promo_rules"/>
     </section>
 </sections>
