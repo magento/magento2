@@ -129,6 +129,7 @@ case $TEST_SUITE in
         sed -e "s?basic?travis_acceptance?g" --in-place ./phpunit.xml
         cp ./.htaccess.sample ./.htaccess
         cd ./utils
+        php -f generate/moduleSequence.php
         php -f mtf troubleshooting:check-all
 
         cd ../../..

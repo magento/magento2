@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminRemoveProductWeeeAttributeOptionTest">
         <annotations>
             <features value="Weee attribute options can be removed in product page"/>
@@ -53,6 +53,7 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <!--  Step 2: Remove weee attribute options  -->
+        <scrollTo stepKey="scrollToProductDetails" selector="[data-index='product-details']" x="0" y="-80" />
         <click selector="{{AdminProductAddFPTValueSection.removeRowByIndex('$$createProductFPTAttribute.attribute_code$$','1')}}" stepKey="removeAttributeOption"/>
         <actionGroup ref="SaveProductOnProductPageOnAdmin" stepKey="saveProduct"/>
         <!--  Assert weee attribute options are empty -->
