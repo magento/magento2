@@ -9,7 +9,6 @@ namespace Magento\Backend\Block\DataProviders;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-
 /**
  * Provides additional data for image uploader
  */
