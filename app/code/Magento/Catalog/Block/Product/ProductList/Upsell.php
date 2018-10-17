@@ -227,11 +227,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
         if ($type == '') {
             return $this->_itemLimits;
         }
-        if (isset($this->_itemLimits[$type])) {
-            return $this->_itemLimits[$type];
-        } else {
-            return 0;
-        }
+        return $this->_itemLimits[$type] ?? 0;
     }
 
     /**

@@ -154,7 +154,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
                 continue;
             }
 
-            $state = isset($tax['state']) ? $tax['state'] : '0';
+            $state = $tax['state'] ?? '0';
 
             $data = [];
             $data['website_id'] = $tax['website_id'];

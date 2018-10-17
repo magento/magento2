@@ -61,7 +61,7 @@ class PayflowProAddCcData extends AbstractDataAssignObserver
     {
         $r = [];
         foreach ($this->ccKeys as $key) {
-            $r[$key] = isset($ccData[$key]) ? $ccData[$key] : null;
+            $r[$key] = $ccData[$key] ?? null;
         }
 
         return $r;

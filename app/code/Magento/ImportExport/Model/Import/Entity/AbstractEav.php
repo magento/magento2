@@ -107,9 +107,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
         parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $errorAggregator, $data);
 
         $this->_storeManager = $storeManager;
-        $this->_attributeCollection = isset(
-            $data['attribute_collection']
-        ) ? $data['attribute_collection'] : $collectionFactory->create(
+        $this->_attributeCollection = $data['attribute_collection'] ?? $collectionFactory->create(
             static::ATTRIBUTE_COLLECTION_NAME
         );
 

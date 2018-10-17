@@ -144,7 +144,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
     protected function _getFrontendClass($element)
     {
         $group = $element->getGroup();
-        $cssClass = isset($group['fieldset_css']) ? $group['fieldset_css'] : '';
+        $cssClass = $group['fieldset_css'] ?? '';
         return 'section-config' . (empty($cssClass) ? '' : ' ' . $cssClass);
     }
 

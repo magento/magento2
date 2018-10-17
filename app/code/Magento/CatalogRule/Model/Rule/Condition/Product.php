@@ -78,7 +78,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             return $this;
         }
 
-        $value = isset($productValues[$storeId]) ? $productValues[$storeId] : $productValues[$defaultStoreId];
+        $value = $productValues[$storeId] ?? $productValues[$defaultStoreId];
 
         $value = $this->_prepareDatetimeValue($value, $model);
         $value = $this->_prepareMultiselectValue($value, $model);

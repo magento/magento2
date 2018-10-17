@@ -94,7 +94,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
                     continue;
                 }
                 $optionSelections = is_array($optionSelections) ? $optionSelections : [$optionSelections];
-                $optionQty = isset($bundleOptionsQty[$optionId]) ? $bundleOptionsQty[$optionId] : 1;
+                $optionQty = $bundleOptionsQty[$optionId] ?? 1;
 
                 /** @var BundleOptionInterface $productOption */
                 $productOption = $this->bundleOptionFactory->create();

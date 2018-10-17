@@ -314,7 +314,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
 
         $this->authorizationMock->expects($this->exactly($authCallCount))
             ->method('isAllowed')
-            ->with(isset($dataProviderConfig['aclResource']) ? $dataProviderConfig['aclResource'] : null)
+            ->with($dataProviderConfig['aclResource'] ?? null)
             ->willReturn($isAllowed);
 
         $this->uiComponentMock->expects($this->any())

@@ -227,7 +227,7 @@ class DeployPackage
             $option = isset(InputValidator::$fileExtensionOptionMap[$ext])
                 ? InputValidator::$fileExtensionOptionMap[$ext]
                 : null;
-            return $option ? (isset($options[$option]) ? $options[$option] : false) : false;
+            return $option ? ($options[$option] ?? false) : false;
         }
         return false;
     }

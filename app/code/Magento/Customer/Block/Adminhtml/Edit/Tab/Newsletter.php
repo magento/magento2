@@ -197,7 +197,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
     {
         $data = $this->_backendSession->getCustomerFormData();
         if (!empty($data)) {
-            $dataCustomerId = isset($data['customer']['entity_id']) ? $data['customer']['entity_id'] : null;
+            $dataCustomerId = $data['customer']['entity_id'] ?? null;
             if (isset($data['subscription']) && $dataCustomerId == $customerId) {
                 $form->getElement('subscription')->setIsChecked($data['subscription']);
             }

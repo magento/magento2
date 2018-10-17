@@ -81,7 +81,7 @@ class ActionPool implements ActionPoolInterface
      */
     public function add($key, array $data, UiComponentInterface $component)
     {
-        $data['id'] = isset($data['id']) ? $data['id'] : $key;
+        $data['id'] = $data['id'] ?? $key;
 
         $toolbar = $this->getToolbar();
         if ($toolbar !== false) {

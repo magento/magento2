@@ -83,7 +83,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         $object = $this->_objectFactory->create(['data' => $this->getRequest()->getPostValue()]);
         $requestData = $object->getData($scope);
         foreach ($additionalAttributes as $attributeCode) {
-            $formData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
+            $formData[$attributeCode] = $requestData[$attributeCode] ?? false;
         }
 
         // Unset unused attributes
@@ -208,8 +208,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                 );
                 $addresses = [];
                 foreach ($addressesData as $addressData) {
-                    $region = isset($addressData['region']) ? $addressData['region'] : null;
-                    $regionId = isset($addressData['region_id']) ? $addressData['region_id'] : null;
+                    $region = $addressData['region'] ?? null;
+                    $regionId = $addressData['region_id'] ?? null;
                     $addressData['region'] = [
                         'region' => $region,
                         'region_id' => $regionId,
@@ -375,9 +375,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     {
         $originalRequestData = $this->getRequest()->getPostValue(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
-        $customerId = isset($originalRequestData['entity_id'])
-            ? $originalRequestData['entity_id']
-            : null;
+        $customerId = $originalRequestData['entity_id']
+            ?? null;
 
         return $customerId;
     }

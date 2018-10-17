@@ -312,12 +312,8 @@ class Address extends AbstractCustomer
             $data
         );
 
-        $this->_entityTable = isset(
-            $data['entity_table']
-        ) ? $data['entity_table'] : $addressFactory->create()->getResource()->getEntityTable();
-        $this->_regionCollection = isset(
-            $data['region_collection']
-        ) ? $data['region_collection'] : $regionColFactory->create();
+        $this->_entityTable = $data['entity_table'] ?? $addressFactory->create()->getResource()->getEntityTable();
+        $this->_regionCollection = $data['region_collection'] ?? $regionColFactory->create();
 
         $this->addMessageTemplate(self::ERROR_ADDRESS_ID_IS_EMPTY, __('Customer address id column is not specified'));
         $this->addMessageTemplate(

@@ -130,7 +130,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
                     $this->updateBookmark(
                         $bookmark,
                         $identifier,
-                        isset($data['label']) ? $data['label'] : '',
+                        $data['label'] ?? '',
                         $jsonData
                     );
                     $this->updateCurrentBookmark($identifier);

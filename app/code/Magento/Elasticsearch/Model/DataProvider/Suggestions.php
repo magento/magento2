@@ -106,7 +106,7 @@ class Suggestions implements SuggestedQueriesInterface
             foreach ($this->getSuggestions($query) as $suggestion) {
                 $count = null;
                 if ($isResultsCountEnabled) {
-                    $count = isset($suggestion['freq']) ? $suggestion['freq'] : null;
+                    $count = $suggestion['freq'] ?? null;
                 }
                 $result[] = $this->queryResultFactory->create(
                     [

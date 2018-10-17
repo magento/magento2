@@ -178,7 +178,7 @@ class Storage extends AbstractModel
                 $model = $this->_fileFactory->create();
                 break;
             case self::STORAGE_MEDIA_DATABASE:
-                $connection = isset($params['connection']) ? $params['connection'] : null;
+                $connection = $params['connection'] ?? null;
                 $model = $this->_databaseFactory->create(['connectionName' => $connection]);
                 break;
             default:
@@ -208,7 +208,7 @@ class Storage extends AbstractModel
     {
         if (is_array($storage) && isset($storage['type'])) {
             $storageDest = (int)$storage['type'];
-            $connection = isset($storage['connection']) ? $storage['connection'] : null;
+            $connection = $storage['connection'] ?? null;
             $helper = $this->_coreFileStorage;
 
             // if unable to sync to internal storage from itself

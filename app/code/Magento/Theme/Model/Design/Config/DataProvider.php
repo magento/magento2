@@ -116,7 +116,7 @@ class DataProvider extends AbstractDataProvider
         $scope = $request['scope'];
         $scopeCode = $this->getScopeCodeResolver()->resolve(
             $scope,
-            isset($request['scope_id']) ? $request['scope_id'] : null
+            $request['scope_id'] ?? null
         );
 
         foreach ($meta['other_settings']['children'] as $settingGroupName => &$settingGroup) {

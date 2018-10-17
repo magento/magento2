@@ -380,7 +380,7 @@ class Price
             if (isset($price['percentage_value'])) {
                 $tierPrice->getExtensionAttributes()->setPercentageValue($price['percentage_value']);
             }
-            $websiteId = isset($price['website_id']) ? $price['website_id'] : $this->getWebsiteForPriceScope();
+            $websiteId = $price['website_id'] ?? $this->getWebsiteForPriceScope();
             $tierPrice->getExtensionAttributes()->setWebsiteId($websiteId);
             $prices[] = $tierPrice;
         }

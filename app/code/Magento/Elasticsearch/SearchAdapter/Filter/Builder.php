@@ -106,9 +106,9 @@ class Builder implements BuilderInterface
 
         $queries = [
             'bool' => array_merge(
-                isset($must['bool']) ? $must['bool'] : [],
-                isset($should['bool']) ? $should['bool'] : [],
-                isset($mustNot['bool']) ? $mustNot['bool'] : []
+                $must['bool'] ?? [],
+                $should['bool'] ?? [],
+                $mustNot['bool'] ?? []
             ),
         ];
 
@@ -127,7 +127,7 @@ class Builder implements BuilderInterface
             $filterQuery = $this->processFilter($filter, $conditionType);
             if (isset($filterQuery['bool'][$conditionType])) {
                 $queries['bool'][$conditionType] = array_merge(
-                    isset($queries['bool'][$conditionType]) ? $queries['bool'][$conditionType] : [],
+                    $queries['bool'][$conditionType] ?? [],
                     $filterQuery['bool'][$conditionType]
                 );
             }

@@ -84,7 +84,7 @@ class LinkTypeProvider implements \Magento\Catalog\Api\ProductLinkTypeListInterf
     {
         $output = [];
         $types = $this->getLinkTypes();
-        $typeId = isset($types[$type]) ? $types[$type] : null;
+        $typeId = $types[$type] ?? null;
 
         /** @var \Magento\Catalog\Model\Product\Link $link */
         $link = $this->linkFactory->create(['data' => ['link_type_id' => $typeId]]);

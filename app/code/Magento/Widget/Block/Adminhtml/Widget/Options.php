@@ -154,7 +154,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         ];
 
         if ($values = $this->getWidgetValues()) {
-            $data['value'] = isset($values[$fieldName]) ? $values[$fieldName] : '';
+            $data['value'] = $values[$fieldName] ?? '';
         } else {
             $data['value'] = $parameter->getValue();
         }

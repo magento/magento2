@@ -334,9 +334,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                 $value = $attribute->getDataUsingMethod($origName);
                 $meta[$code][$metaName] = $value;
                 if ('frontend_input' === $origName) {
-                    $meta[$code]['formElement'] = isset($this->formElement[$value])
-                        ? $this->formElement[$value]
-                        : $value;
+                    $meta[$code]['formElement'] = $this->formElement[$value] ?? $value;
                 }
                 if ($attribute->usesSource()) {
                     $meta[$code]['options'] = $attribute->getSource()->getAllOptions();

@@ -78,7 +78,7 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
     {
         $orderId = $this->getRequest()->getParam('order_id');
         $invoiceData = $this->getRequest()->getParam('invoice', []);
-        $invoiceItems = isset($invoiceData['items']) ? $invoiceData['items'] : [];
+        $invoiceItems = $invoiceData['items'] ?? [];
 
         try {
             /** @var \Magento\Sales\Model\Order $order */

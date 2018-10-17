@@ -2026,7 +2026,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             foreach ($optionValueParams as $nameAndValue) {
                 $nameAndValue = explode('=', $nameAndValue);
                 if (!empty($nameAndValue)) {
-                    $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
+                    $value = $nameAndValue[1] ?? '';
                     $value = trim($value);
                     $fieldName = trim($nameAndValue[0]);
                     if ($value && ($fieldName == 'name')) {

@@ -471,7 +471,7 @@ class Data
     private function setCachedSwatches(array $optionIds, array $swatches)
     {
         foreach ($optionIds as $optionId) {
-            $this->swatchesCache[$optionId] = isset($swatches[$optionId]) ? $swatches[$optionId] : null;
+            $this->swatchesCache[$optionId] = $swatches[$optionId] ?? null;
         }
     }
 

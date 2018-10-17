@@ -162,7 +162,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
         $submitRouteData = $this->getData('submit_route_data');
         if ($submitRouteData) {
             $route = $submitRouteData['route'];
-            $params = isset($submitRouteData['params']) ? $submitRouteData['params'] : [];
+            $params = $submitRouteData['params'] ?? [];
             $submitUrl = $this->getUrl($route, array_merge($params, $additional));
         } else {
             $submitUrl = $this->getAddToCartUrl($product, $additional);

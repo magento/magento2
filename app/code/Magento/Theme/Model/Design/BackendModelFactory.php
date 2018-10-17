@@ -68,9 +68,8 @@ class BackendModelFactory extends ValueFactory
             ]
         );
 
-        $backendType = isset($data['config']['backend_model'])
-            ? $data['config']['backend_model']
-            : $this->_instanceName;
+        $backendType = $data['config']['backend_model']
+            ?? $this->_instanceName;
 
         /** @var Value $backendModel */
         $backendModel = $this->getNewBackendModel($backendType, $backendModelData);

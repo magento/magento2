@@ -109,7 +109,7 @@ class Search
             $products = array_filter($ids);
         } else {
             foreach ($paginatedProducts as $product) {
-                $productId = isset($product['entity_id']) ? $product['entity_id'] : $product[$idField];
+                $productId = $product['entity_id'] ?? $product[$idField];
                 if (in_array($productId, $searchIds)) {
                     $products[] = $product;
                 }

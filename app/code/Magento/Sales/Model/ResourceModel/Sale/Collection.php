@@ -194,7 +194,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         foreach ($data as $v) {
             $storeObject = new \Magento\Framework\DataObject($v);
             $storeId = $v['store_id'];
-            $storeName = isset($stores[$storeId]) ? $stores[$storeId] : null;
+            $storeName = $stores[$storeId] ?? null;
             $storeObject->setStoreName(
                 $storeName
             )->setWebsiteId(

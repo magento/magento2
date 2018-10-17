@@ -67,9 +67,8 @@ class FilterModifier
                     __('Condition type "%1" is not allowed', $conditionType)
                 );
             }
-            $value = isset($filterModifier[$filterName]['value'])
-                ? $filterModifier[$filterName]['value']
-                : null;
+            $value = $filterModifier[$filterName]['value']
+                ?? null;
             $filter = $this->filterBuilder->setConditionType($conditionType)
                 ->setField($filterName)
                 ->setValue($value)

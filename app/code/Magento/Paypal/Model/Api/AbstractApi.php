@@ -559,7 +559,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
 
         $i = 0;
         foreach ($keys as $key) {
-            $to[$key] = isset($street[$i]) ? $street[$i] : '';
+            $to[$key] = $street[$i] ?? '';
             $i++;
         }
     }

@@ -66,7 +66,7 @@ class CreditmemoFactory
     {
         $totalQty = 0;
         $creditmemo = $this->convertor->toCreditmemo($order);
-        $qtyList = isset($data['qtys']) ? $data['qtys'] : [];
+        $qtyList = $data['qtys'] ?? [];
 
         foreach ($order->getAllItems() as $orderItem) {
             if (!$this->canRefundItem($orderItem, $qtyList)) {
@@ -98,7 +98,7 @@ class CreditmemoFactory
     {
         $order = $invoice->getOrder();
         $totalQty = 0;
-        $qtyList = isset($data['qtys']) ? $data['qtys'] : [];
+        $qtyList = $data['qtys'] ?? [];
         $creditmemo = $this->convertor->toCreditmemo($order);
         $creditmemo->setInvoice($invoice);
 

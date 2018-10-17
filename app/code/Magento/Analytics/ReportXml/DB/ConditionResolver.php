@@ -76,7 +76,7 @@ class ConditionResolver
     private function getValue($condition, $referencedEntity)
     {
         $value = null;
-        $argument = isset($condition['_value']) ? $condition['_value'] : null;
+        $argument = $condition['_value'] ?? null;
         if (!isset($condition['type'])) {
             $condition['type'] = 'value';
         }

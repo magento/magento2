@@ -508,7 +508,7 @@ class Multishipping extends \Magento\Framework\DataObject
     {
         $qty = isset($data['qty']) ? (int)$data['qty'] : 1;
         //$qty       = $qty > 0 ? $qty : 1;
-        $addressId = isset($data['address']) ? $data['address'] : false;
+        $addressId = $data['address'] ?? false;
         $quoteItem = $this->getQuote()->getItemById($quoteItemId);
 
         if ($addressId && $quoteItem) {

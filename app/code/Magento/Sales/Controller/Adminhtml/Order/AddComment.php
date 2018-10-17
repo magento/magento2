@@ -36,8 +36,8 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
                     );
                 }
 
-                $notify = isset($data['is_customer_notified']) ? $data['is_customer_notified'] : false;
-                $visible = isset($data['is_visible_on_front']) ? $data['is_visible_on_front'] : false;
+                $notify = $data['is_customer_notified'] ?? false;
+                $visible = $data['is_visible_on_front'] ?? false;
 
                 $history = $order->addStatusHistoryComment($data['comment'], $data['status']);
                 $history->setIsVisibleOnFront($visible);

@@ -221,10 +221,10 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     public function loadArray($arr)
     {
         $this->setType($arr['type']);
-        $this->setAttribute(isset($arr['attribute']) ? $arr['attribute'] : false);
-        $this->setOperator(isset($arr['operator']) ? $arr['operator'] : false);
-        $this->setValue(isset($arr['value']) ? $arr['value'] : false);
-        $this->setIsValueParsed(isset($arr['is_value_parsed']) ? $arr['is_value_parsed'] : false);
+        $this->setAttribute($arr['attribute'] ?? false);
+        $this->setOperator($arr['operator'] ?? false);
+        $this->setValue($arr['value'] ?? false);
+        $this->setIsValueParsed($arr['is_value_parsed'] ?? false);
         return $this;
     }
 

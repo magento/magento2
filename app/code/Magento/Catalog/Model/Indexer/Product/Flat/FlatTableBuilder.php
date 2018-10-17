@@ -168,16 +168,16 @@ class FlatTableBuilder
             $this->_getTemporaryTableName($this->_productIndexerHelper->getFlatTableName($storeId))
         );
         foreach ($columns as $fieldName => $fieldProp) {
-            $columnLength = isset($fieldProp['length']) ? $fieldProp['length'] : null;
+            $columnLength = $fieldProp['length'] ?? null;
 
             $columnDefinition = [
                 'nullable' => isset($fieldProp['nullable']) ? (bool)$fieldProp['nullable'] : false,
                 'unsigned' => isset($fieldProp['unsigned']) ? (bool)$fieldProp['unsigned'] : false,
-                'default' => isset($fieldProp['default']) ? $fieldProp['default'] : false,
+                'default' => $fieldProp['default'] ?? false,
                 'primary' => false,
             ];
 
-            $columnComment = isset($fieldProp['comment']) ? $fieldProp['comment'] : $fieldName;
+            $columnComment = $fieldProp['comment'] ?? $fieldName;
 
             if ($fieldName == 'created_at') {
                 $columnDefinition['nullable'] = true;

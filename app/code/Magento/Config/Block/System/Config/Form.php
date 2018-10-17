@@ -810,9 +810,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $scopeCode = $this->getStringScopeCode();
 
         if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $data = new DataObject(isset($appConfig[$scope]) ? $appConfig[$scope] : []);
+            $data = new DataObject($appConfig[$scope] ?? []);
         } else {
-            $data = new DataObject(isset($appConfig[$scope][$scopeCode]) ? $appConfig[$scope][$scopeCode] : []);
+            $data = new DataObject($appConfig[$scope][$scopeCode] ?? []);
         }
         return $data->getData($path);
     }

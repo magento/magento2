@@ -57,10 +57,10 @@ class PathProcessor
         $stores = $this->storeManager->getStores(false, true);
         if (isset($stores[$storeCode])) {
             $this->storeManager->setCurrentStore($storeCode);
-            $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
+            $path = '/' . ($pathParts[1] ?? '');
         } elseif ($storeCode === self::ALL_STORE_CODE) {
             $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
-            $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
+            $path = '/' . ($pathParts[1] ?? '');
         } else {
             $path = '/' . implode('/', $pathParts);
         }

@@ -235,7 +235,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/fedex/debug' => 1,
         ];
 
-        return isset($pathMap[$path]) ? $pathMap[$path] : null;
+        return $pathMap[$path] ?? null;
     }
 
     /**

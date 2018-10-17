@@ -113,7 +113,7 @@ class Match implements QueryInterface
                     $condition => [
                         $resolvedField => [
                             'query' => $value,
-                            'boost' => isset($match['boost']) ? $match['boost'] : 1,
+                            'boost' => $match['boost'] ?? 1,
                         ],
                     ],
                 ],

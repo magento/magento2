@@ -401,7 +401,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
             } else {
                 if ($element['_elementType'] === 'field' && isset($element['label'])) {
                     $structurePath = (isset($element['path']) ? $element['path'] . '/' : '') . $element['id'];
-                    $configPath = isset($element['config_path']) ? $element['config_path'] : $structurePath;
+                    $configPath = $element['config_path'] ?? $structurePath;
 
                     if (!isset($result[$configPath])) {
                         $result[$configPath] = [];

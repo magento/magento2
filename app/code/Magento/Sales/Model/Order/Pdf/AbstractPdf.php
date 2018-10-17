@@ -974,7 +974,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 );
             }
             $lines = $itemsProp['lines'];
-            $height = isset($itemsProp['height']) ? $itemsProp['height'] : 10;
+            $height = $itemsProp['height'] ?? 10;
 
             if (empty($itemsProp['shift'])) {
                 $shift = 0;

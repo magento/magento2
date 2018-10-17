@@ -55,7 +55,7 @@ class DataMapperResolver implements DataMapperInterface
         $storeId,
         $context = []
     ) {
-        $entityType = isset($context['entityType']) ? $context['entityType'] : Config::ELASTICSEARCH_TYPE_DEFAULT;
+        $entityType = $context['entityType'] ?? Config::ELASTICSEARCH_TYPE_DEFAULT;
         return $this->getEntity($entityType)->map($entityId, $entityIndexData, $storeId, $context);
     }
 

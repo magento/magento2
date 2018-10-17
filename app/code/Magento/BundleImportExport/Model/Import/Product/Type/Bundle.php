@@ -265,9 +265,9 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $populatedOption = [
             'option_id' => null,
             'parent_id' => $entityId,
-            'required' => isset($option['required']) ? $option['required'] : 1,
+            'required' => $option['required'] ?? 1,
             'position' => ($index === null ? 0 : $index),
-            'type' => isset($option['type']) ? $option['type'] : 'select',
+            'type' => $option['type'] ?? 'select',
         ];
         if (isset($option['option_id'])) {
             $populatedOption['option_id'] = $option['option_id'];

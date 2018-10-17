@@ -54,7 +54,7 @@ class PurgeCacheTest extends \PHPUnit\Framework\TestCase
     {
         $uris = [];
         foreach ($hosts as $host) {
-            $port = isset($host['port']) ? $host['port'] : \Magento\PageCache\Model\Cache\Server::DEFAULT_PORT;
+            $port = $host['port'] ?? \Magento\PageCache\Model\Cache\Server::DEFAULT_PORT;
             $uris[] = UriFactory::factory('')->setHost($host['host'])
                 ->setPort($port)
                 ->setScheme('http');

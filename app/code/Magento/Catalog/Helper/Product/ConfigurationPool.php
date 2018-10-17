@@ -65,9 +65,6 @@ class ConfigurationPool
      */
     public function getByProductType($productType)
     {
-        if (!isset($this->instancesByType[$productType])) {
-            return $this->instancesByType['default'];
-        }
-        return $this->instancesByType[$productType];
+        return $this->instancesByType[$productType] ?? $this->instancesByType['default'];
     }
 }

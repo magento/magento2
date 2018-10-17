@@ -126,9 +126,7 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
                 ];
 
                 // draw options value
-                $printValue = isset(
-                    $option['print_value']
-                ) ? $option['print_value'] : $this->filterManager->stripTags(
+                $printValue = $option['print_value'] ?? $this->filterManager->stripTags(
                     $option['value']
                 );
                 $lines[][] = ['text' => $this->string->split($printValue, 30, true, true), 'feed' => 40];

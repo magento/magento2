@@ -159,7 +159,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
         }
         $attributes = $this->_prepareOptionAttributes($option, $title, $classes, $disabled);
         $html = $this->_getAttributesString($attributes);
-        $html .= $this->getUiId(isset($option['id']) ? $option['id'] : 'item' . '-' . $key);
+        $html .= $this->getUiId($option['id'] ?? 'item' . '-' . $key);
 
         return $html;
     }
@@ -206,8 +206,8 @@ class SplitButton extends \Magento\Backend\Block\Widget
             'id' => isset($option['id']) ? $this->getId() . '-' . $option['id'] : '',
             'title' => $title,
             'class' => join(' ', $classes),
-            'onclick' => isset($option['onclick']) ? $option['onclick'] : '',
-            'style' => isset($option['style']) ? $option['style'] : '',
+            'onclick' => $option['onclick'] ?? '',
+            'style' => $option['style'] ?? '',
             'disabled' => $disabled,
         ];
 

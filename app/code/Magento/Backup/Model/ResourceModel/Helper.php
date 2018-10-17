@@ -153,8 +153,8 @@ class Helper extends \Magento\Framework\DB\Helper
                     $connection->quoteIdentifier($match[2]),
                     $connection->quoteIdentifier($match[3]),
                     $connection->quoteIdentifier($match[4]),
-                    isset($match[5]) ? $match[5] : '',
-                    isset($match[7]) ? $match[7] : ''
+                    $match[5] ?? '',
+                    $match[7] ?? ''
                 );
             }
         }

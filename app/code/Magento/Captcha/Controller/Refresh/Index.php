@@ -52,7 +52,7 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpPostActi
             if ($content) {
                 $params = $this->serializer->unserialize($content);
             }
-            $formId = isset($params['formId']) ? $params['formId'] : null;
+            $formId = $params['formId'] ?? null;
         }
         $captchaModel = $this->captchaHelper->getCaptcha($formId);
         $captchaModel->generate();

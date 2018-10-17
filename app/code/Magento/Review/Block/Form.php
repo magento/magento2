@@ -109,7 +109,7 @@ class Form extends \Magento\Framework\View\Element\Template
         $this->httpContext = $httpContext;
         $this->customerUrl = $customerUrl;
         parent::__construct($context, $data);
-        $this->jsLayout = isset($data['jsLayout']) ? $data['jsLayout'] : [];
+        $this->jsLayout = $data['jsLayout'] ?? [];
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }

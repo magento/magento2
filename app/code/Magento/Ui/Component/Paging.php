@@ -102,7 +102,7 @@ class Paging extends AbstractComponent
     protected function getOffset($paging)
     {
         $defaultPage = $this->getData('config/current') ?: 1;
-        return (int) (isset($paging['current']) ? $paging['current'] : $defaultPage);
+        return (int) ($paging['current'] ?? $defaultPage);
     }
 
     /**
@@ -114,6 +114,6 @@ class Paging extends AbstractComponent
     protected function getSize($paging)
     {
         $defaultLimit = $this->getData('config/pageSize') ?: 20;
-        return (int) (isset($paging['pageSize']) ? $paging['pageSize'] : $defaultLimit);
+        return (int) ($paging['pageSize'] ?? $defaultLimit);
     }
 }

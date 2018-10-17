@@ -68,7 +68,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
                 'max_package_weight' => 10,
                 'showmethod'         => 1,
             ];
-            return isset($configData[$key]) ? $configData[$key] : 0;
+            return $configData[$key] ?? 0;
         }));
 
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);

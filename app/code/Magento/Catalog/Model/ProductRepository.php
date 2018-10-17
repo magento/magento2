@@ -411,9 +411,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $imageFileUri = $this->getMediaGalleryProcessor()->addImage(
             $product,
             $tmpFilePath,
-            isset($newEntry['types']) ? $newEntry['types'] : [],
+            $newEntry['types'] ?? [],
             true,
-            isset($newEntry['disabled']) ? $newEntry['disabled'] : true
+            $newEntry['disabled'] ?? true
         );
         // Update additional fields that are still empty after addImage call
         $this->getMediaGalleryProcessor()->updateImage(

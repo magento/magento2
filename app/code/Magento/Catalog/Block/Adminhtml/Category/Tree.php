@@ -277,7 +277,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     public function getTree($parenNodeCategory = null)
     {
         $rootArray = $this->_getNodeJson($this->getRoot($parenNodeCategory));
-        $tree = isset($rootArray['children']) ? $rootArray['children'] : [];
+        $tree = $rootArray['children'] ?? [];
         return $tree;
     }
 
@@ -288,7 +288,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     public function getTreeJson($parenNodeCategory = null)
     {
         $rootArray = $this->_getNodeJson($this->getRoot($parenNodeCategory));
-        $json = $this->_jsonEncoder->encode(isset($rootArray['children']) ? $rootArray['children'] : []);
+        $json = $this->_jsonEncoder->encode($rootArray['children'] ?? []);
         return $json;
     }
 

@@ -206,9 +206,8 @@ class VariationHandler
             $postData['stock_data']['is_in_stock'] = $stockStatus['is_in_stock'];
         }
         $postData = $this->processMediaGallery($product, $postData);
-        $postData['status'] = isset($postData['status'])
-            ? $postData['status']
-            : \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
+        $postData['status'] = $postData['status']
+            ?? \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
         $product->addData(
             $postData
         )->setWebsiteIds(

@@ -107,7 +107,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
                 $result['key'] = $data['key'];
             }
             $result['controller_action_name'] = $data['controller_action_name'];
-            $result['is_secure'] = isset($data['is_secure']) ? $data['is_secure'] : false;
+            $result['is_secure'] = $data['is_secure'] ?? false;
             $params['redirect'] = $helper->getRedirectIframeUrl($result);
         }
 

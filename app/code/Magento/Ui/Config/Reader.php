@@ -168,9 +168,8 @@ class Reader implements ReaderInterface
             $component['children'][$name] = $this->mergeDefinition($child, $definitions);
         }
         if (isset($component['uiComponentType'])) {
-            $definition = isset($definitions[$component['uiComponentType']])
-                ? $definitions[$component['uiComponentType']]
-                : [];
+            $definition = $definitions[$component['uiComponentType']]
+                ?? [];
             $component = array_replace_recursive($definition, $component);
             unset($component['uiComponentType']);
         }

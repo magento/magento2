@@ -985,11 +985,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         );
 
         $data = $this->getConnection()->fetchRow($select);
-        if (isset($data[$fieldAlias])) {
-            return $data[$fieldAlias];
-        }
 
-        return null;
+        return $data[$fieldAlias] ?? null;
     }
 
     /**
@@ -2224,7 +2221,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
         foreach ($this->getItems() as $item) {
             $productId = $item->getData($this->getLinkField());
-            $this->getBackend()->setPriceData($item, isset($tierPrices[$productId]) ? $tierPrices[$productId] : []);
+            $this->getBackend()->setPriceData($item, $tierPrices[$productId] ?? []);
         }
     }
 

@@ -250,7 +250,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/usps/mode' => 0,
         ];
 
-        return isset($pathMap[$path]) ? $pathMap[$path] : null;
+        return $pathMap[$path] ?? null;
     }
 
     /**

@@ -124,7 +124,7 @@ class Builder
             $collection->getSelect()->joinLeft(
                 [$alias => $collection->getResource()->getTable($joinTable['name'])],
                 $joinTable['condition'],
-                isset($joinTable['columns']) ? $joinTable['columns'] : '*'
+                $joinTable['columns'] ?? '*'
             );
         }
 

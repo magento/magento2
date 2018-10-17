@@ -1687,7 +1687,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             'attribute_set_id' => $this->skuProcessor->getNewSku($rowSku)['attr_set_id'],
                             'type_id' => $this->skuProcessor->getNewSku($rowSku)['type_id'],
                             'sku' => $rowSku,
-                            'has_options' => isset($rowData['has_options']) ? $rowData['has_options'] : 0,
+                            'has_options' => $rowData['has_options'] ?? 0,
                             'created_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
                             'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
                         ];
@@ -1825,12 +1825,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 }
                                 $mediaGallery[$storeId][$rowSku][$uploadedFile] = [
                                     'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                    'label' => isset($rowLabels[$column][$columnImageKey])
-                                        ? $rowLabels[$column][$columnImageKey]
-                                        : '',
+                                    'label' => $rowLabels[$column][$columnImageKey]
+                                        ?? '',
                                     'position' => ++$position,
-                                    'disabled' => isset($imageHiddenStates[$columnImage])
-                                        ? $imageHiddenStates[$columnImage] : '0',
+                                    'disabled' => $imageHiddenStates[$columnImage] ?? '0',
                                     'value' => $uploadedFile,
                                 ];
                             }

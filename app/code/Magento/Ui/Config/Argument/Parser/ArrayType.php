@@ -31,7 +31,7 @@ class ArrayType implements ParserInterface
      */
     public function parse(array $data, \DOMNode $node)
     {
-        $items = isset($data['item']) ? $data['item'] : [];
+        $items = $data['item'] ?? [];
         if (!is_array($items)) {
             throw new \InvalidArgumentException('Array items are expected.');
         }

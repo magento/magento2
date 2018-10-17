@@ -42,7 +42,7 @@ class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorIn
         if (!isset($args['path'])) {
             throw new \InvalidArgumentException('Not all required parameters passed');
         }
-        $this->_urlModel = isset($args['urlModel']) ? $args['urlModel'] : $backendUrl;
+        $this->_urlModel = $args['urlModel'] ?? $backendUrl;
         $this->_path = (string)$args['path'];
         if (isset($args['params'])) {
             $this->_params = (array)$args['params'];

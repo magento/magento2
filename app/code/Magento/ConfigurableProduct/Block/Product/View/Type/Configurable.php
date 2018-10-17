@@ -234,7 +234,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
             'images' => $this->getOptionImages(),
-            'index' => isset($options['index']) ? $options['index'] : [],
+            'index' => $options['index'] ?? [],
         ];
 
         if ($currentProduct->hasPreconfiguredValues() && !empty($attributesData['defaultValues'])) {

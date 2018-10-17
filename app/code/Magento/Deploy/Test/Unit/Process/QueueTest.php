@@ -97,7 +97,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $packages = $this->queue->getPackages();
         $this->assertEquals(
             $package,
-            isset($packages['path']['package']) ? $packages['path']['package'] : null
+            $packages['path']['package'] ?? null
         );
     }
 

@@ -274,7 +274,7 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
             'carriers/ups/allowed_methods' => $this->allowed_methods,
         ];
 
-        return isset($pathMap[$path]) ? $pathMap[$path] : null;
+        return $pathMap[$path] ?? null;
     }
 
     /**

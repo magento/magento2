@@ -140,7 +140,7 @@ class SplitButton extends Button
     public function getOptionAttributesHtml($key, $option)
     {
         $disabled = !empty($option['disabled']) ? 'disabled' : '';
-        $title = isset($option['title']) ? $option['title'] : $option['label'];
+        $title = $option['title'] ?? $option['label'];
         $classes = ['item'];
 
         if (!empty($option['default'])) {
@@ -153,7 +153,7 @@ class SplitButton extends Button
 
         $attributes = $this->prepareOptionAttributes($option, $title, $classes, $disabled);
         $html = $this->attributesToHtml($attributes);
-        $html .= $this->getUiId(isset($option['id']) ? $option['id'] : 'item' . '-' . $key);
+        $html .= $this->getUiId($option['id'] ?? 'item' . '-' . $key);
 
         return $html;
     }
@@ -174,8 +174,8 @@ class SplitButton extends Button
             'id' => isset($option['id']) ? $this->getId() . '-' . $option['id'] : '',
             'title' => $title,
             'class' => join(' ', $classes),
-            'onclick' => isset($option['onclick']) ? $option['onclick'] : '',
-            'style' => isset($option['style']) ? $option['style'] : '',
+            'onclick' => $option['onclick'] ?? '',
+            'style' => $option['style'] ?? '',
             'disabled' => $disabled,
         ];
 

@@ -251,7 +251,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
                     foreach ($group as $store) {
                         if (isset($store['copy_from'])) {
                             $copyFrom = $store['copy_from'];
-                            $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
+                            $copyTo = $store['copy_to'] ?? 0;
                             if ($copyTo) {
                                 $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
                                     ->setStoreId($copyFrom)

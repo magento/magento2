@@ -321,8 +321,8 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private function getCsvFile($filePath)
     {
         $pathInfo = pathinfo($filePath);
-        $dirName = isset($pathInfo['dirname']) ? $pathInfo['dirname'] : '';
-        $fileName = isset($pathInfo['basename']) ? $pathInfo['basename'] : '';
+        $dirName = $pathInfo['dirname'] ?? '';
+        $fileName = $pathInfo['basename'] ?? '';
 
         $directoryRead = $this->filesystem->getDirectoryReadByPath($dirName);
 

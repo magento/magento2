@@ -390,8 +390,8 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
         $attributeCode = $data['code'];
         $attributeParams = [
             'type' => $data['type'],
-            'options' => isset($data['options']) ? $data['options'] : null,
-            'is_unique' => isset($data['is_unique']) ? $data['is_unique'] : null,
+            'options' => $data['options'] ?? null,
+            'is_unique' => $data['is_unique'] ?? null,
         ];
 
         $rowData = [$attributeCode => $data['valid_value']];

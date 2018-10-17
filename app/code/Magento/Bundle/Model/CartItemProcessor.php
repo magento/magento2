@@ -90,7 +90,7 @@ class CartItemProcessor implements CartItemProcessorInterface
                     continue;
                 }
                 $optionSelections = is_array($optionSelections) ? $optionSelections : [$optionSelections];
-                $optionQty = isset($bundleOptionsQty[$optionId]) ? $bundleOptionsQty[$optionId] : 1;
+                $optionQty = $bundleOptionsQty[$optionId] ?? 1;
 
                 /** @var \Magento\Bundle\Api\Data\BundleOptionInterface $productOption */
                 $productOption = $this->bundleOptionFactory->create();

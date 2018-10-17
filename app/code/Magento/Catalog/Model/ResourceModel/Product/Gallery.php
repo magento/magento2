@@ -404,7 +404,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $data = [
                 'attribute_id' => $attributeId,
-                'value' => isset($newFiles[$row['value_id']]) ? $newFiles[$row['value_id']] : $row['value'],
+                'value' => $newFiles[$row['value_id']] ?? $row['value'],
             ];
 
             $valueIdMap[$row['value_id']] = $this->insertGallery($data);

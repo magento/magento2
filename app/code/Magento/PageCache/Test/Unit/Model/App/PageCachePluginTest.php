@@ -30,7 +30,7 @@ class PageCachePluginTest extends \PHPUnit\Framework\TestCase
     {
         $initTags = ['tag', 'otherTag'];
         $result = $this->plugin->beforeSave($this->subjectMock, 'data', 'identifier', $initTags);
-        $tags = isset($result[2]) ? $result[2] : null;
+        $tags = $result[2] ?? null;
         $expectedTags = array_merge($initTags, [Type::CACHE_TAG]);
         $this->assertNotNull($tags);
         foreach ($expectedTags as $expected) {

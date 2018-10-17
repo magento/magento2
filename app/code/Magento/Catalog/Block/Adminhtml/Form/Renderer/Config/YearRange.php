@@ -30,8 +30,8 @@ class YearRange extends Field
             $values = [];
         }
 
-        $from = $element->setValue(isset($values[0]) ? $values[0] : null)->getElementHtml();
-        $to = $element->setValue(isset($values[1]) ? $values[1] : null)->getElementHtml();
+        $from = $element->setValue($values[0] ?? null)->getElementHtml();
+        $to = $element->setValue($values[1] ?? null)->getElementHtml();
         return '<label class="label"><span>' . __('from') . '</span></label>'
         . $from .
         '<label class="label"><span>' . __('to') . '</span></label>'

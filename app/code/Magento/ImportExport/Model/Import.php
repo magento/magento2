@@ -635,7 +635,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $behaviourData = [];
         $entities = $this->_importConfig->getEntities();
         foreach ($entities as $entityCode => $entityData) {
-            $behaviorClassName = isset($entityData['behaviorModel']) ? $entityData['behaviorModel'] : null;
+            $behaviorClassName = $entityData['behaviorModel'] ?? null;
             if ($behaviorClassName && class_exists($behaviorClassName)) {
                 /** @var $behavior \Magento\ImportExport\Model\Source\Import\AbstractBehavior */
                 $behavior = $this->_behaviorFactory->create($behaviorClassName);

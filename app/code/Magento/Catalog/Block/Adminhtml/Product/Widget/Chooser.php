@@ -114,7 +114,7 @@ class Chooser extends Extended
             if (isset($value[0]) && isset($value[1]) && $value[0] == 'product') {
                 $productId = $value[1];
             }
-            $categoryId = isset($value[2]) ? $value[2] : false;
+            $categoryId = $value[2] ?? false;
             $label = '';
             if ($categoryId) {
                 $label = $this->_resourceCategory->getAttributeRawValue(

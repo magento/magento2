@@ -70,7 +70,7 @@ class Validator
             // Check if template body has a reference to the same config path
             if (preg_match_all(Template::CONSTRUCTION_TEMPLATE_PATTERN, $text, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
-                    $configPath = isset($construction[2]) ? $construction[2] : '';
+                    $configPath = $construction[2] ?? '';
                     $params = $this->getParameters($configPath);
                     if (isset($params['config_path']) && $params['config_path'] == $data['config_path']) {
                         throw new LocalizedException(

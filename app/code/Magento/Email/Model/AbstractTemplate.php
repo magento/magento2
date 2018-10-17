@@ -196,8 +196,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         array $data = []
     ) {
         $this->design = $design;
-        $this->area = isset($data['area']) ? $data['area'] : null;
-        $this->store = isset($data['store']) ? $data['store'] : null;
+        $this->area = $data['area'] ?? null;
+        $this->store = $data['store'] ?? null;
         $this->appEmulation = $appEmulation;
         $this->storeManager = $storeManager;
         $this->assetRepo = $assetRepo;

@@ -551,7 +551,7 @@ class Filter extends \Magento\Framework\Filter\Template
             $params['_direct'] = $params['direct_url'];
             unset($params['direct_url']);
         } else {
-            $path = isset($params['url']) ? $params['url'] : '';
+            $path = $params['url'] ?? '';
             unset($params['url']);
         }
 
@@ -832,7 +832,7 @@ class Filter extends \Magento\Framework\Filter\Template
         }
 
         $params = $this->getParameters($construction[2]);
-        $file = isset($params['file']) ? $params['file'] : null;
+        $file = $params['file'] ?? null;
         if (!$file) {
             // Return CSS comment for debugging purposes
             return '/* ' . __('"file" parameter must be specified') . ' */';

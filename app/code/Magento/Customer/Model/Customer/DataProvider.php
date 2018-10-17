@@ -246,7 +246,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         $data = $this->getSession()->getCustomerFormData();
         if (!empty($data)) {
-            $customerId = isset($data['customer']['entity_id']) ? $data['customer']['entity_id'] : null;
+            $customerId = $data['customer']['entity_id'] ?? null;
             $this->loadedData[$customerId] = $data;
             $this->getSession()->unsCustomerFormData();
         }
@@ -294,9 +294,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     ) {
         $attributeCode = $attribute->getAttributeCode();
 
-        $file = isset($customerData[$attributeCode])
-            ? $customerData[$attributeCode]
-            : '';
+        $file = $customerData[$attributeCode]
+            ?? '';
 
         /** @var FileProcessor $fileProcessor */
         $fileProcessor = $this->getFileProcessorFactory()->create([
@@ -313,7 +312,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 [
                     'file' => $file,
                     'size' => isset($stat) ? $stat['size'] : 0,
-                    'url' => isset($viewUrl) ? $viewUrl : '',
+                    'url' => $viewUrl ?? '',
                     'name' => basename($file),
                     'type' => $fileProcessor->getMimeType($file),
                 ],
@@ -529,7 +528,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     private function getMetadataValue($config, $name, $default = null)
     {
-        $value = isset($config[$name]) ? $config[$name] : $default;
+        $value = $config[$name] ?? $default;
         return $value;
     }
 

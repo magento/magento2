@@ -131,7 +131,7 @@ abstract class AbstractAction
     {
         if (empty($this->_indexers)) {
             foreach ($this->_catalogProductType->getTypesByPriority() as $typeId => $typeInfo) {
-                $indexerClassName = isset($typeInfo['stock_indexer']) ? $typeInfo['stock_indexer'] : '';
+                $indexerClassName = $typeInfo['stock_indexer'] ?? '';
 
                 $indexer = $this->_indexerFactory->create($indexerClassName)
                     ->setTypeId($typeId)

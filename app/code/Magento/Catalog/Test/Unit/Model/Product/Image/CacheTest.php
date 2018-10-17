@@ -226,8 +226,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         return [
             'id' => $imageId,
             'type' => $imageData[$imageId]['type'],
-            'width' => isset($imageData[$imageId]['width']) ? $imageData[$imageId]['width'] : null,
-            'height' => isset($imageData[$imageId]['height']) ? $imageData[$imageId]['height'] : null,
+            'width' => $imageData[$imageId]['width'] ?? null,
+            'height' => $imageData[$imageId]['height'] ?? null,
         ];
     }
 }
