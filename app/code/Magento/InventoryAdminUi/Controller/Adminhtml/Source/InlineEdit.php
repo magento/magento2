@@ -115,10 +115,13 @@ class InlineEdit extends Action
      */
     private function prepareDataForSave(array $sourceData): array
     {
-        $sourceData['region_id'] = ($sourceData['region_id'] ?? '') ?: null;
-        $sourceData['region'] = ($sourceData['region'] ?? '') ?: null;
-        $sourceData['latitude'] = ($sourceData['latitude'] ?? '') ?: null;
-        $sourceData['longitude'] = ($sourceData['longitude'] ?? '') ?: null;
+        if (!isset($sourceData['latitude']) || '' === $sourceData['latitude']) {
+            $sourceData['latitude'] = null;
+        }
+
+        if (!isset($sourceData['longitude']) || '' === $sourceData['longitude']) {
+            $sourceData['longitude'] = null;
+        }
 
         return $sourceData;
     }
