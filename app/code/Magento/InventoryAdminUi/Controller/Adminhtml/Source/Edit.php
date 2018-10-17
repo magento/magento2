@@ -16,11 +16,12 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Edit Controller
  */
-class Edit extends Action
+class Edit extends Action implements HttpGetActionInterface
 {
     /**
      * @see _isAllowed()
