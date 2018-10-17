@@ -9,6 +9,9 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 use Magento\Catalog\Model\ResourceModel\Category as ResourceCategory;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Catalog search indexer plugin for catalog category.
+ */
 class Category extends AbstractPlugin
 {
     /**
@@ -26,6 +29,8 @@ class Category extends AbstractPlugin
     }
 
     /**
+     * Reindex catalog search.
+     *
      * @param ResourceCategory $resourceCategory
      * @param \Closure $proceed
      * @param AbstractModel $category

@@ -12,6 +12,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\UrlFactory;
 
+/**
+ * Advanced search result.
+ */
 class Result extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
@@ -46,7 +49,7 @@ class Result extends \Magento\Framework\App\Action\Action implements HttpGetActi
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @inheritdoc
      */
     public function execute()
     {

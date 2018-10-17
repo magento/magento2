@@ -295,8 +295,7 @@ class Query extends AbstractModel implements QueryInterface
     }
 
     /**
-     * @return string
-     * @codeCoverageIgnore
+     * @inheritdoc
      */
     public function getQueryText()
     {
@@ -304,6 +303,8 @@ class Query extends AbstractModel implements QueryInterface
     }
 
     /**
+     * Check if query maximum length exceeded.
+     *
      * @return bool
      * @codeCoverageIgnore
      */
@@ -313,6 +314,8 @@ class Query extends AbstractModel implements QueryInterface
     }
 
     /**
+     * Check if minimum query length reached.
+     *
      * @return bool
      * @codeCoverageIgnore
      * @since 100.1.0

@@ -207,6 +207,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get attribute code.
+     *
      * @param string $attributeCode
      * @return string
      */
@@ -266,6 +268,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get search.
+     *
      * @return \Magento\Search\Api\SearchInterface
      */
     private function getSearch()
@@ -278,6 +282,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get search criteria builder.
+     *
      * @return SearchCriteriaBuilder
      */
     private function getSearchCriteriaBuilder()
@@ -290,6 +296,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get fielter builder.
+     *
      * @return FilterBuilder
      */
     private function getFilterBuilder()

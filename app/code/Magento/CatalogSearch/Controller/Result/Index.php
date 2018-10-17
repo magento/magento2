@@ -15,6 +15,9 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\PopularSearchTerms;
 
+/**
+ * Search result.
+ */
 class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
