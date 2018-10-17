@@ -6,6 +6,7 @@
 
 namespace Magento\GoogleAnalytics\Test\Unit\Block;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
@@ -15,6 +16,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +30,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Ga | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $gaBlock;
+    private $gaBlock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -41,7 +43,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
     private $salesOrderCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $storeManagerMock;
 
@@ -55,6 +57,11 @@ class GaTest extends \PHPUnit\Framework\TestCase
      */
     private $googleAnalyticsDataMock;
 
+    /**
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -64,12 +71,13 @@ class GaTest extends \PHPUnit\Framework\TestCase
             ->method('getEscaper')
             ->willReturn($objectManager->getObject(Escaper::class));
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
+
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
 
         $this->storeMock = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
+        $contextMock->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
         $this->salesOrderCollectionMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
@@ -178,14 +186,42 @@ class GaTest extends \PHPUnit\Framework\TestCase
     {
         $pageName = '/page/name';
         $accountId = 100;
+        $containerId = 'GTM-TEST12';
         $expectedResult = [
             'optPageUrl' => ", '" . $pageName . "'",
             'isAnonymizedIpActive' => true,
-            'accountId' => $accountId
+            'accountId' => $accountId,
+            'optimizeContainerId' => $containerId
         ];
         $this->gaBlock->setData('page_name', $pageName);
-        $this->googleAnalyticsDataMock->expects($this->once())->method('isAnonymizedIpActive')->willReturn(true);
+        $this->scopeConfigMock->expects($this->once())->method('getValue')
+            ->with(Data::XML_PATH_OPTIMIZE_CONTAINER_ID, ScopeInterface::SCOPE_STORE)
+            ->willReturn($containerId);
+
+        $this->googleAnalyticsDataMock->expects($this->once())
+            ->method('isAnonymizedIpActive')->willReturn(true);
         
+        $this->assertEquals($expectedResult, $this->gaBlock->getPageTrackingData($accountId));
+    }
+
+    public function testGetPageTrackingDataWithoutGoogleOptimize()
+    {
+        $pageName = '/page/name';
+        $accountId = 100;
+        $containerId = '';
+        $expectedResult = [
+            'optPageUrl' => ", '" . $pageName . "'",
+            'isAnonymizedIpActive' => true,
+            'accountId' => $accountId,
+            'optimizeContainerId' => $containerId
+        ];
+        $this->gaBlock->setData('page_name', $pageName);
+        $this->googleAnalyticsDataMock->expects($this->once())
+            ->method('isAnonymizedIpActive')->willReturn(true);
+
+        $this->googleAnalyticsDataMock->expects($this->once())
+            ->method('isAnonymizedIpActive')->willReturn(true);
+
         $this->assertEquals($expectedResult, $this->gaBlock->getPageTrackingData($accountId));
     }
 
