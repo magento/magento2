@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminConfigurableProductAssignSourcesSlideOut">
         <element name="done" type="button" selector=".product_form_product_form_assign_sources_configurable_modal .action-primary" timeout="5"/>
         <element name="assignSources" type="button" selector="(//button/span[contains(text(), 'Assign Sources')])[2]" timeout="5"/>

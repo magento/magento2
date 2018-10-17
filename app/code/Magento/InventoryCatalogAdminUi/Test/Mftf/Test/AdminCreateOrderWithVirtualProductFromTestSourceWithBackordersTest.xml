@@ -7,18 +7,18 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateOrderWithVirtualProductFromTestSourceWithBackordersTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Sales-Backorder"/>
             <title value="Admin user set negative 'Out-of-Stock Threshold' in combination with backorders for virtual product on Test source"/>
             <description value="You should be able to create order from Test Source with backorders in combination with negative out of stock threshold."/>
-            <testCaseId value="1476"/>
+            <testCaseId value="MSI-1476"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
+
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="_minimalSource" stepKey="customSource"/>
@@ -69,7 +69,6 @@
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose"/>
             <waitForPageLoad time="30" stepKey="waitProductWillSave"/>
         </before>
-
         <after>
             <comment userInput="Disable source, as it can brake single source mode tests." stepKey="disableCustomSourceComment"/>
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
