@@ -113,7 +113,7 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
-     * {@inheritdoc}
+     * Processing object after save data
      *
      * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
@@ -129,7 +129,7 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
-     * {@inheritdoc}
+     * Processing object after delete data
      *
      * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
