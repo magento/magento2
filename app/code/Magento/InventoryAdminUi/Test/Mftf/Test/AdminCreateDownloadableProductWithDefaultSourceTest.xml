@@ -30,6 +30,19 @@
             <createData entity="FullSource1" stepKey="createSource1"/>
 
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <!-- Assign Sales Channel to Default Stock -->
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByKeyword">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}"
+                   stepKey="clickOnEditForDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website"
+                          stepKey="selectWebsiteAsSalesChannel"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
