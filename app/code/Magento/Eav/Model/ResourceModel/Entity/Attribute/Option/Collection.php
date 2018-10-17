@@ -78,7 +78,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setAttributeFilter($setId)
     {
-        return $this->addFieldToFilter('attribute_id', $setId);
+        return $this->addFieldToFilter('main_table.attribute_id', $setId);
     }
 
     /**

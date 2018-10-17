@@ -23,7 +23,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @var string
      */
-    protected $_template = 'customer/view.phtml';
+    protected $_template = 'Magento_Review::customer/view.phtml';
 
     /**
      * Catalog product model

@@ -19,7 +19,7 @@ class AssertApiInfoTitleOnPage extends AbstractConstraint
      *
      * @var string
      */
-    protected $titleSelector = '.info_title';
+    protected $titleSelector = '.title';
 
     /**
      * Assert API info title on swagger page

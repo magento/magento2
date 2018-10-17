@@ -287,7 +287,7 @@ class Bundle
      */
     protected function fillContent($parts, $context)
     {
-        $index = count($this->content) > 0 ? count($this->content) - 1 : 0 ;
+        $index = count($this->content) > 0 ? count($this->content) - 1 : 0;
         foreach ($parts as $part) {
             if (!isset($this->content[$index])) {
                 $this->content[$index] = '';

@@ -15,5 +15,5 @@ class Form extends \Magento\Payment\Block\Form
     /**
      * @var string
      */
-    protected $_template = 'hss/info.phtml';
+    protected $_template = 'Magento_Paypal::hss/info.phtml';
 }

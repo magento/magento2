@@ -120,6 +120,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $dataObjectHelper;
 
     /**
+     * @var FrontendLabelFactory
+     */
+    private $frontendLabelFactory;
+
+    /**
      * Serializer Instance.
      *
      * @var Json
@@ -157,6 +162,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param FrontendLabelFactory|null $frontendLabelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
      */
@@ -175,7 +181,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        FrontendLabelFactory $frontendLabelFactory = null
     ) {
         parent::__construct(
             $context,
@@ -194,6 +201,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->optionDataFactory = $optionDataFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->frontendLabelFactory = $frontendLabelFactory
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(FrontendLabelFactory::class);
     }
 
     /**
@@ -585,9 +594,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         if (empty($this->_source)) {
             if (!$this->getSourceModel()) {
-                $this->setSourceModel($this->_getDefaultSourceModel());
+                $this->_source = $this->_getDefaultSourceModel();
+            } else {
+                $this->_source = $this->getSourceModel();
             }
-            $source = $this->_universalFactory->create($this->getSourceModel());
+            $source = $this->_universalFactory->create($this->_source);
             if (!$source) {
                 throw new LocalizedException(
                     __(
@@ -1048,7 +1059,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getIsUnique()
     {
-        return $this->getData(self::IS_UNIQUE);
+        return $this->_getData(self::IS_UNIQUE);
     }
 
     /**
@@ -1067,7 +1078,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getFrontendClass()
     {
-        return $this->getData(self::FRONTEND_CLASS);
+        return $this->_getData(self::FRONTEND_CLASS);
     }
 
     /**
@@ -1086,7 +1097,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getFrontendInput()
     {
-        return $this->getData(self::FRONTEND_INPUT);
+        return $this->_getData(self::FRONTEND_INPUT);
     }
 
     /**
@@ -1102,7 +1113,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getIsRequired()
     {
-        return $this->getData(self::IS_REQUIRED);
+        return $this->_getData(self::IS_REQUIRED);
     }
 
     /**
@@ -1120,7 +1131,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getOptions()
     {
-        $options = $this->getData(self::OPTIONS);
+        $options = $this->_getData(self::OPTIONS);
         if (!$options) {
             $options = $this->usesSource() ? $this->getSource()->getAllOptions() : [];
         }
@@ -1201,7 +1212,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getDefaultFrontendLabel()
     {
-        return $this->getData(self::FRONTEND_LABEL);
+        return $this->_getData(self::FRONTEND_LABEL);
     }
 
     /**
@@ -1220,7 +1231,20 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getFrontendLabels()
     {
-        return $this->getData(self::FRONTEND_LABELS);
+        if ($this->getData(self::FRONTEND_LABELS) == null) {
+            $attributeId = $this->getAttributeId();
+            $storeLabels = $this->_getResource()->getStoreLabelsByAttributeId($attributeId);
+
+            $resultFrontedLabels = [];
+            foreach ($storeLabels as $i => $label) {
+                $frontendLabel = $this->frontendLabelFactory->create();
+                $frontendLabel->setStoreId($i);
+                $frontendLabel->setLabel($label);
+                $resultFrontedLabels[] = $frontendLabel;
+            }
+            $this->setData(self::FRONTEND_LABELS, $resultFrontedLabels);
+        }
+        return $this->_getData(self::FRONTEND_LABELS);
     }
 
     /**
@@ -1239,7 +1263,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getNote()
     {
-        return $this->getData(self::NOTE);
+        return $this->_getData(self::NOTE);
     }
 
     /**
@@ -1258,7 +1282,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getSourceModel()
     {
-        return $this->getData(self::SOURCE_MODEL);
+        return $this->_getData(self::SOURCE_MODEL);
     }
 
     /**
@@ -1279,7 +1303,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getValidationRules()
     {
-        $rules = $this->getData(self::VALIDATE_RULES);
+        $rules = $this->_getData(self::VALIDATE_RULES);
         if (is_array($rules)) {
             return $rules;
         } elseif (!empty($rules)) {

@@ -341,7 +341,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 if ($isStrictProcessMode && !$subProduct->getQty()) {
                     return __('Please specify the quantity of product(s).')->render();
                 }
-                $productsInfo[$subProduct->getId()] = intval($subProduct->getQty());
+                $productsInfo[$subProduct->getId()] = (int)$subProduct->getQty();
             }
         }
 

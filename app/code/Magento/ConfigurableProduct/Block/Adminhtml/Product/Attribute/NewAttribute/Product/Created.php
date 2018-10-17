@@ -16,7 +16,7 @@ class Created extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/attribute/new/created.phtml';
+    protected $_template = 'Magento_ConfigurableProduct::catalog/product/attribute/new/created.phtml';
 
     /**
      * Core registry

@@ -56,6 +56,9 @@ class CouponManagement implements CouponManagementInterface
         if (!$quote->getItemsCount()) {
             throw new NoSuchEntityException(__('Cart %1 doesn\'t contain products', $cartId));
         }
+        if (!$quote->getStoreId()) {
+            throw new NoSuchEntityException(__('Cart isn\'t assigned to correct store'));
+        }
         $quote->getShippingAddress()->setCollectShippingRates(true);
 
         try {

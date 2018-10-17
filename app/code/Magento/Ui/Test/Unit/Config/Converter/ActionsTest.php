@@ -61,6 +61,9 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->converter->convert($actions));
     }
 
+    /**
+     * @return array
+     */
     public function convertDataProvider()
     {
         return [

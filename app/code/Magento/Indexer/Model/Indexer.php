@@ -413,16 +413,11 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
                 $state->setStatus(StateInterface::STATUS_VALID);
                 $state->save();
                 $this->getView()->resume();
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
                 $this->getView()->resume();
                 throw $exception;
-            } catch (\Error $error) {
-                $state->setStatus(StateInterface::STATUS_INVALID);
-                $state->save();
-                $this->getView()->resume();
-                throw $error;
             }
         }
     }

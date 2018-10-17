@@ -136,7 +136,7 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
         $infoMock->expects($this->once())->method('getMethodInstance')->will($this->returnValue($methodMock));
         $this->block->setInfo($infoMock);
 
-        $fakeBlock = new \StdClass();
+        $fakeBlock = new \stdClass();
         $this->layout->expects(
             $this->any()
         )->method(

@@ -72,7 +72,7 @@ class DefaultProcessor implements ConfigSetProcessorInterface
             throw new CouldNotSaveException(
                 __(
                     'The value you set has already been locked. To change the value, use the --%1 option.',
-                    ConfigSetCommand::OPTION_LOCK
+                    ConfigSetCommand::OPTION_LOCK_ENV
                 )
             );
         }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateNewGroupInAttributeSetActionGroup">
+        <arguments>
+            <argument name="groupName" type="string" defaultValue="TestGroupName"/>
+        </arguments>
+        <click selector="{{AdminProductAttributeSetSection.addNewGroupBtn}}" stepKey="clickAddNewGroup"/>
+        <waitForElementVisible selector="{{AdminPromptModalSection.promptField}}" stepKey="waitModalWindow"/>
+        <fillField selector="{{AdminPromptModalSection.promptField}}" userInput="{{groupName}}" stepKey="fillNewGroupName"/>
+        <click selector="{{AdminPromptModalSection.modalOk}}" stepKey="clickOkInModal"/>
+    </actionGroup>
+</actionGroups>

@@ -22,6 +22,9 @@ class MultiSelectTest extends AbstractElementTest
         return MultiSelect::class;
     }
 
+    /**
+     * @return mixed|void
+     */
     public function testGetComponentName()
     {
         $this->contextMock->expects($this->never())->method('getProcessor');

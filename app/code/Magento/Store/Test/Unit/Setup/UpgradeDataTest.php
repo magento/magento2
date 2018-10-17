@@ -102,6 +102,9 @@ class UpgradeDataTest extends \PHPUnit\Framework\TestCase
         $this->model->upgrade($this->setupMock, $this->contextMock);
     }
 
+    /**
+     * @return array
+     */
     public function upgradeDataProvider()
     {
         return [

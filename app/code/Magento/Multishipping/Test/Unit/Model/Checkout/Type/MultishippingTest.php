@@ -10,7 +10,9 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressSearchResultsInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\Data\Address;
+use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderDefault;
+use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderFactory;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
@@ -50,6 +52,7 @@ use Magento\Directory\Model\AllowedCountries;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class MultishippingTest extends \PHPUnit\Framework\TestCase
 {
@@ -123,24 +126,69 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      */
     private $scopeConfigMock;
 
+    /**
+     * @var OrderFactory|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataObjectHelperMock;
+
+    /**
+     * @var ToOrder|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $toOrderMock;
+
+    /**
+     * @var ToOrderAddress|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $toOrderAddressMock;
+
+    /**
+     * @var ToOrderPayment|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $toOrderPaymentMock;
+
+    /**
+     * @var PriceCurrencyInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $priceMock;
+
+    /**
+     * @var ToOrderItem|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $toOrderItemMock;
+
+    /**
+     * @var PlaceOrderFactory|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $placeOrderFactoryMock;
+
+    /**
+     * @var Generic|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sessionMock;
+
     protected function setUp()
     {
         $this->checkoutSessionMock = $this->createSimpleMock(Session::class);
         $this->customerSessionMock = $this->createSimpleMock(CustomerSession::class);
-        $orderFactoryMock = $this->createSimpleMock(OrderFactory::class);
+        $this->orderFactoryMock = $this->createSimpleMock(OrderFactory::class);
         $eventManagerMock = $this->createSimpleMock(ManagerInterface::class);
         $this->scopeConfigMock = $this->createSimpleMock(ScopeConfigInterface::class);
-        $sessionMock = $this->createSimpleMock(Generic::class);
+        $this->sessionMock = $this->createSimpleMock(Generic::class);
         $addressFactoryMock = $this->createSimpleMock(AddressFactory::class);
-        $toOrderMock = $this->createSimpleMock(ToOrder::class);
-        $toOrderAddressMock = $this->createSimpleMock(ToOrderAddress::class);
-        $toOrderPaymentMock = $this->createSimpleMock(ToOrderPayment::class);
-        $toOrderItemMock = $this->createSimpleMock(ToOrderItem::class);
+        $this->toOrderMock = $this->createSimpleMock(ToOrder::class);
+        $this->toOrderAddressMock = $this->createSimpleMock(ToOrderAddress::class);
+        $this->toOrderPaymentMock = $this->createSimpleMock(ToOrderPayment::class);
+        $this->toOrderItemMock = $this->createSimpleMock(ToOrderItem::class);
         $storeManagerMock = $this->createSimpleMock(StoreManagerInterface::class);
         $paymentSpecMock = $this->createSimpleMock(SpecificationInterface::class);
         $this->helperMock = $this->createSimpleMock(Data::class);
         $orderSenderMock = $this->createSimpleMock(OrderSender::class);
-        $priceMock = $this->createSimpleMock(PriceCurrencyInterface::class);
+        $this->priceMock = $this->createSimpleMock(PriceCurrencyInterface::class);
         $this->quoteRepositoryMock = $this->createSimpleMock(CartRepositoryInterface::class);
         $this->filterBuilderMock = $this->createSimpleMock(FilterBuilder::class);
         $this->searchCriteriaBuilderMock = $this->createSimpleMock(SearchCriteriaBuilder::class);
@@ -164,32 +212,44 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $allowedCountryReaderMock->method('getAllowedCountries')
             ->willReturn(['EN'=>'EN']);
+        $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['mergeDataObjects'])
+            ->getMock();
+        $this->placeOrderFactoryMock = $this->getMockBuilder(PlaceOrderFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $logger = $this->createSimpleMock(\Psr\Log\LoggerInterface::class);
 
         $this->model = new Multishipping(
             $this->checkoutSessionMock,
             $this->customerSessionMock,
-            $orderFactoryMock,
+            $this->orderFactoryMock,
             $this->addressRepositoryMock,
             $eventManagerMock,
             $this->scopeConfigMock,
-            $sessionMock,
+            $this->sessionMock,
             $addressFactoryMock,
-            $toOrderMock,
-            $toOrderAddressMock,
-            $toOrderPaymentMock,
-            $toOrderItemMock,
+            $this->toOrderMock,
+            $this->toOrderAddressMock,
+            $this->toOrderPaymentMock,
+            $this->toOrderItemMock,
             $storeManagerMock,
             $paymentSpecMock,
             $this->helperMock,
             $orderSenderMock,
-            $priceMock,
+            $this->priceMock,
             $this->quoteRepositoryMock,
             $this->searchCriteriaBuilderMock,
             $this->filterBuilderMock,
             $this->totalsCollectorMock,
             $data,
             $this->cartExtensionFactoryMock,
-            $allowedCountryReaderMock
+            $allowedCountryReaderMock,
+            $this->placeOrderFactoryMock,
+            $logger,
+            $this->dataObjectHelperMock
         );
 
         $this->shippingAssignmentProcessorMock = $this->createSimpleMock(ShippingAssignmentProcessor::class);
@@ -367,6 +427,255 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->model->setShippingMethods($methodsArray);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateOrders()
+    {
+        $addressTotal = 5;
+        $productType = \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE;
+        $infoBuyRequest = [
+            'info_buyRequest' => [
+                'product' => '1',
+                'qty' => 1,
+            ],
+        ];
+        $quoteItemId = 1;
+        $paymentProviderCode = 'checkmo';
+
+        $simpleProductTypeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\Simple::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getOrderOptions'])
+            ->getMock();
+        $productMock = $this->getProductMock($simpleProductTypeMock);
+        $simpleProductTypeMock->method('getOrderOptions')->with($productMock)->willReturn($infoBuyRequest);
+
+        $quoteItemMock = $this->getQuoteItemMock($productType, $productMock);
+        $quoteAddressItemMock = $this->getQuoteAddressItemMock($quoteItemMock, $productType, $infoBuyRequest);
+        list($shippingAddressMock, $billingAddressMock) =
+            $this->getQuoteAddressesMock($quoteAddressItemMock, $addressTotal);
+        $this->setQuoteMockData($paymentProviderCode, $shippingAddressMock, $billingAddressMock);
+
+        $orderAddressMock = $this->createSimpleMock(\Magento\Sales\Api\Data\OrderAddressInterface::class);
+        $orderPaymentMock = $this->createSimpleMock(\Magento\Sales\Api\Data\OrderPaymentInterface::class);
+        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getQuoteItemId'])
+            ->getMock();
+        $orderItemMock->method('getQuoteItemId')->willReturn($quoteItemId);
+        $orderMock = $this->getOrderMock($orderAddressMock, $orderPaymentMock, $orderItemMock);
+
+        $this->orderFactoryMock->expects($this->once())->method('create')->willReturn($orderMock);
+        $this->dataObjectHelperMock->expects($this->once())->method('mergeDataObjects')
+            ->with(
+                \Magento\Sales\Api\Data\OrderInterface::class,
+                $orderMock,
+                $orderMock
+            )->willReturnSelf();
+        $this->priceMock->expects($this->once())->method('round')->with($addressTotal)->willReturn($addressTotal);
+
+        $this->toOrderMock
+            ->expects($this->once())
+            ->method('convert')
+            ->with($shippingAddressMock)
+            ->willReturn($orderMock);
+        $this->toOrderAddressMock->expects($this->exactly(2))->method('convert')
+            ->withConsecutive(
+                [$billingAddressMock, []],
+                [$shippingAddressMock, []]
+            )->willReturn($orderAddressMock);
+        $this->toOrderPaymentMock->method('convert')->willReturn($orderPaymentMock);
+        $this->toOrderItemMock->method('convert')->with($quoteAddressItemMock)->willReturn($orderItemMock);
+
+        $placeOrderServiceMock = $this->getMockBuilder(PlaceOrderDefault::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['place'])
+            ->getMock();
+        $placeOrderServiceMock->method('place')->with([$orderMock])->willReturn([]);
+        $this->placeOrderFactoryMock->method('create')->with($paymentProviderCode)->willReturn($placeOrderServiceMock);
+        $this->quoteRepositoryMock->method('save')->with($this->quoteMock);
+
+        $this->model->createOrders();
+    }
+
+    /**
+     * @param string $paymentProviderCode
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getPaymentMock(string $paymentProviderCode): PHPUnit_Framework_MockObject_MockObject
+    {
+        $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isAvailable'])
+            ->getMockForAbstractClass();
+        $abstractMethod->method('isAvailable')->willReturn(true);
+
+        $paymentMock = $this->getMockBuilder(Payment::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getMethodInstance', 'getMethod'])
+            ->getMock();
+        $paymentMock->method('getMethodInstance')->willReturn($abstractMethod);
+        $paymentMock->method('getMethod')->willReturn($paymentProviderCode);
+
+        return $paymentMock;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product\Type\Simple|PHPUnit_Framework_MockObject_MockObject $simpleProductTypeMock
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getProductMock($simpleProductTypeMock): PHPUnit_Framework_MockObject_MockObject
+    {
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getTypeInstance'])
+            ->getMock();
+        $productMock->method('getTypeInstance')->willReturn($simpleProductTypeMock);
+
+        return $productMock;
+    }
+
+    /**
+     * @param string $productType
+     * @param \Magento\Catalog\Model\Product|PHPUnit_Framework_MockObject_MockObject $productMock
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getQuoteItemMock($productType, $productMock): PHPUnit_Framework_MockObject_MockObject
+    {
+        $quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProductType', 'getProduct'])
+            ->getMock();
+        $quoteItemMock->method('getProductType')->willReturn($productType);
+        $quoteItemMock->method('getProduct')->willReturn($productMock);
+
+        return $quoteItemMock;
+    }
+
+    /**
+     * @param \Magento\Quote\Model\Quote\Item|PHPUnit_Framework_MockObject_MockObject $quoteItemMock
+     * @param string $productType
+     * @param array $infoBuyRequest
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getQuoteAddressItemMock(
+        $quoteItemMock,
+        string $productType,
+        array $infoBuyRequest
+    ): PHPUnit_Framework_MockObject_MockObject {
+        $quoteAddressItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Item::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getQuoteItem', 'setProductType', 'setProductOptions', 'getParentItem'])
+            ->getMock();
+        $quoteAddressItemMock->method('getQuoteItem')->willReturn($quoteItemMock);
+        $quoteAddressItemMock->method('setProductType')->with($productType)->willReturnSelf();
+        $quoteAddressItemMock->method('setProductOptions')->willReturn($infoBuyRequest);
+        $quoteAddressItemMock->method('getParentItem')->willReturn(false);
+
+        return $quoteAddressItemMock;
+    }
+
+    /**
+     * @param \Magento\Quote\Model\Quote\Address\Item|PHPUnit_Framework_MockObject_MockObject $quoteAddressItemMock
+     * @param int $addressTotal
+     * @return array
+     */
+    private function getQuoteAddressesMock($quoteAddressItemMock, int $addressTotal): array
+    {
+        $shippingAddressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'validate',
+                    'getShippingMethod',
+                    'getShippingRateByCode',
+                    'getCountryId',
+                    'getAddressType',
+                    'getGrandTotal',
+                    'getAllItems',
+                ]
+            )->getMock();
+        $shippingAddressMock->method('validate')->willReturn(true);
+        $shippingAddressMock->method('getShippingMethod')->willReturn('carrier');
+        $shippingAddressMock->method('getShippingRateByCode')->willReturn('code');
+        $shippingAddressMock->method('getCountryId')->willReturn('EN');
+        $shippingAddressMock->method('getAllItems')->willReturn([$quoteAddressItemMock]);
+        $shippingAddressMock->method('getAddressType')->willReturn('shipping');
+        $shippingAddressMock->method('getGrandTotal')->willReturn($addressTotal);
+
+        $billingAddressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validate'])
+            ->getMock();
+        $billingAddressMock->method('validate')->willReturn(true);
+
+        return [$shippingAddressMock, $billingAddressMock];
+    }
+
+    /**
+     * @param string $paymentProviderCode
+     * @param Address|PHPUnit_Framework_MockObject_MockObject $shippingAddressMock
+     * @param Address|PHPUnit_Framework_MockObject_MockObject $billingAddressMock
+     */
+    private function setQuoteMockData(string $paymentProviderCode, $shippingAddressMock, $billingAddressMock)
+    {
+        $quoteId = 1;
+        $paymentMock = $this->getPaymentMock($paymentProviderCode);
+        $this->quoteMock->method('getPayment')
+            ->willReturn($paymentMock);
+        $this->quoteMock->method('getAllShippingAddresses')
+            ->willReturn([$shippingAddressMock]);
+        $this->quoteMock->method('getBillingAddress')
+            ->willReturn($billingAddressMock);
+        $this->quoteMock->method('hasVirtualItems')
+            ->willReturn(false);
+        $this->quoteMock->expects($this->once())->method('reserveOrderId')->willReturnSelf();
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
+        $this->quoteMock->method('getId')->willReturn($quoteId);
+        $this->quoteMock->method('setIsActive')->with(false)->willReturnSelf();
+    }
+
+    /**
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface|PHPUnit_Framework_MockObject_MockObject $orderAddressMock
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface|PHPUnit_Framework_MockObject_MockObject $orderPaymentMock
+     * @param \Magento\Sales\Model\Order\Item|PHPUnit_Framework_MockObject_MockObject $orderItemMock
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getOrderMock(
+        $orderAddressMock,
+        $orderPaymentMock,
+        $orderItemMock
+    ): PHPUnit_Framework_MockObject_MockObject {
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'setQuote',
+                    'setBillingAddress',
+                    'setShippingAddress',
+                    'setPayment',
+                    'addItem',
+                    'getIncrementId',
+                    'getId',
+                    'getCanSendNewEmailFlag',
+                    'getItems',
+                    'setShippingMethod',
+                ]
+            )->getMock();
+        $orderMock->method('setQuote')->with($this->quoteMock);
+        $orderMock->method('setBillingAddress')->with($orderAddressMock)->willReturnSelf();
+        $orderMock->method('setShippingAddress')->with($orderAddressMock)->willReturnSelf();
+        $orderMock->expects($this->once())->method('setShippingMethod')->with('carrier')->willReturnSelf();
+        $orderMock->method('setPayment')->with($orderPaymentMock)->willReturnSelf();
+        $orderMock->method('addItem')->with($orderItemMock)->willReturnSelf();
+        $orderMock->method('getIncrementId')->willReturn('1');
+        $orderMock->method('getId')->willReturn('1');
+        $orderMock->method('getCanSendNewEmailFlag')->willReturn(false);
+        $orderMock->method('getItems')->willReturn([$orderItemMock]);
+
+        return $orderMock;
     }
 
     /**

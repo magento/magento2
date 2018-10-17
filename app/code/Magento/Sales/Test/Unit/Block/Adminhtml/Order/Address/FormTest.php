@@ -3,8 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Address;
+
+use Magento\Customer\Model\Metadata\Form as CustomerForm;
+use Magento\Customer\Model\Metadata\FormFactory as CustomerFormFactory;
+use Magento\Directory\Model\ResourceModel\Country\Collection;
+use Magento\Framework\Data\Form as DataForm;
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\Data\Form\Element\Select;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Block\Adminhtml\Order\Address\Form;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Backend\Model\Session\Quote as QuoteSession;
+use Magento\Sales\Model\AdminOrder\Create;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -12,79 +29,112 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Address;
 class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Order\Address\Form
+     * @var Form
      */
     private $addressBlock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
-    private $formFactoryMock;
+    private $formFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
-    private $customerFormFactoryMock;
+    private $customerFormFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
-    private $coreRegistryMock;
+    private $coreRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $countriesCollection;
 
+    /**
+     * @var Create|MockObject
+     */
+    private $orderCreate;
+
+    /**
+     * @var QuoteSession|MockObject
+     */
+    private $sessionQuote;
+
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->formFactoryMock = $this->createMock(\Magento\Framework\Data\FormFactory::class);
-        $this->customerFormFactoryMock = $this->createMock(\Magento\Customer\Model\Metadata\FormFactory::class);
-        $this->coreRegistryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->formFactory = $this->createMock(FormFactory::class);
+        $this->customerFormFactory = $this->createMock(CustomerFormFactory::class);
+        $this->coreRegistry = $this->createMock(Registry::class);
         $this->countriesCollection = $this->createMock(
-            \Magento\Directory\Model\ResourceModel\Country\Collection::class
+            Collection::class
         );
+        $this->sessionQuote = $this->getMockBuilder(QuoteSession::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getStoreId', 'getStore'])
+            ->getMock();
+        $this->orderCreate = $this->getMockBuilder(Create::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderCreate->method('getSession')
+            ->willReturn($this->sessionQuote);
 
         $this->addressBlock = $objectManager->getObject(
-            \Magento\Sales\Block\Adminhtml\Order\Address\Form::class,
+            Form::class,
             [
-                '_formFactory' => $this->formFactoryMock,
-                '_customerFormFactory' => $this->customerFormFactoryMock,
-                '_coreRegistry' => $this->coreRegistryMock,
+                '_formFactory' => $this->formFactory,
+                '_customerFormFactory' => $this->customerFormFactory,
+                '_coreRegistry' => $this->coreRegistry,
                 'countriesCollection' => $this->countriesCollection,
+                'sessionQuote' => $this->sessionQuote,
+                '_orderCreate' => $this->orderCreate
             ]
         );
     }
 
     public function testGetForm()
     {
-        $formMock = $this->createMock(\Magento\Framework\Data\Form::class);
-        $fieldsetMock = $this->createMock(\Magento\Framework\Data\Form\Element\Fieldset::class);
-        $addressFormMock = $this->createMock(\Magento\Customer\Model\Metadata\Form::class);
-        $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
-        $selectMock = $this->createMock(\Magento\Framework\Data\Form\Element\Select::class);
-        $orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $storeId = 5;
+        $form = $this->createMock(DataForm::class);
+        $fieldset = $this->createMock(Fieldset::class);
+        $addressForm = $this->createMock(CustomerForm::class);
+        $address = $this->createMock(Address::class);
+        $select = $this->createMock(Select::class);
+        $order = $this->createMock(Order::class);
 
-        $this->formFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($formMock);
-        $formMock->expects($this->atLeastOnce())->method('addFieldset')->willReturn($fieldsetMock);
-        $this->customerFormFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($addressFormMock);
-        $addressFormMock->expects($this->atLeastOnce())->method('getAttributes')->willReturn([]);
-        $this->coreRegistryMock->expects($this->atLeastOnce())->method('registry')->willReturn($addressMock);
-        $formMock->expects($this->atLeastOnce())->method('getElement')->willReturnOnConsecutiveCalls(
-            $selectMock,
-            $selectMock,
-            $selectMock,
-            $selectMock,
-            $selectMock,
-            $selectMock,
-            $selectMock,
-            null
-        );
-        $addressMock->expects($this->once())->method('getOrder')->willReturn($orderMock);
-        $orderMock->expects($this->once())->method('getStoreId')->willReturn(5);
-        $this->countriesCollection->expects($this->atLeastOnce())->method('loadByStore')
+        $this->formFactory->method('create')
+            ->willReturn($form);
+        $form->method('addFieldset')
+            ->willReturn($fieldset);
+        $this->customerFormFactory->method('create')
+            ->willReturn($addressForm);
+        $addressForm->method('getAttributes')
+            ->willReturn([]);
+        $this->coreRegistry->method('registry')
+            ->willReturn($address);
+        $form->method('getElement')
+            ->willReturnOnConsecutiveCalls(
+                $select,
+                $select,
+                $select,
+                $select,
+                $select,
+                $select,
+                $select,
+                null
+            );
+        $address->method('getOrder')
+            ->willReturn($order);
+        $order->method('getStoreId')
+            ->willReturn($storeId);
+        $this->sessionQuote->method('getStoreId')
+            ->willReturn($storeId);
+        $this->countriesCollection->method('loadByStore')
+            ->with($storeId)
             ->willReturn($this->countriesCollection);
 
         $this->addressBlock->getForm();

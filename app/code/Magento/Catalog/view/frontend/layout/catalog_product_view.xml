@@ -28,6 +28,13 @@
                 <argument name="add_attribute" xsi:type="string">itemscope itemtype="http://schema.org/Product"</argument>
             </arguments>
         </referenceBlock>
+
+        <referenceBlock name="breadcrumbs" template="Magento_Catalog::product/breadcrumbs.phtml">
+            <arguments>
+                <argument name="viewModel" xsi:type="object">Magento\Catalog\ViewModel\Product\Breadcrumbs</argument>
+            </arguments>
+        </referenceBlock>
+
         <referenceContainer name="content">
             <container name="product.info.main" htmlTag="div" htmlClass="product-info-main" before="-">
                 <container name="product.info.price" label="Product info auxiliary container" htmlTag="div" htmlClass="product-info-price">
@@ -130,7 +137,7 @@
                 </block>
             </container>
             <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.details" template="Magento_Catalog::product/view/details.phtml" after="product.info.media">
-                <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description" template="Magento_Catalog::product/view/attribute.phtml" group="detailed_info">
+                <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description" as="description" template="Magento_Catalog::product/view/attribute.phtml" group="detailed_info">
                     <arguments>
                         <argument name="at_call" xsi:type="string">getDescription</argument>
                         <argument name="at_code" xsi:type="string">description</argument>

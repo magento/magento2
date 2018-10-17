@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="CheckTierPricingOfProductsTest">
+        <annotations>
+            <features value="Shopping Cart"/>
+            <stories value="MAGETWO-88254 - [Magento Cloud] 'Tier Pricing' of Products changes to 'Price' (without discount) after Updated Items and Quantities in the Order of B2B Store View."/>
+            <title value="Checking 'Tier Pricing' of Products and 'Price' (without discount) in the Order of B2B Store View"/>
+            <description value="Checking 'Tier Pricing' of Products and 'Price' (without discount) in the Order of B2B Store View"/>
+            <testCaseId value="MAGETWO-95117"/>
+            <severity value="CRITICAL"/>
+            <group value="tierPrice"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct1">
+                <field key="price">123.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct2">
+                <field key="price">123.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct3">
+                <field key="price">123.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct4">
+                <field key="price">123.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!--Login as admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+            <argument name="newWebsiteName" value="{{SecondWebsite.name}}"/>
+            <argument name="websiteCode" value="{{SecondWebsite.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStoreGroup">
+            <argument name="website" value="{{SecondWebsite.name}}"/>
+            <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+            <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+            <argument name="storeGroup" value="SecondStoreGroupUnique"/>
+            <argument name="customStore" value="SecondStoreUnique"/>
+        </actionGroup>
+
+        <!--Set Configuration-->
+        <createData entity="CatalogPriceScopeWebsite" stepKey="setPriceScopePerWebsite"/>
+
+        <!--Set advanced pricing for all 4 products-->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct1">
+            <argument name="product" value="$$createProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProduct1ForEdit">
+            <argument name="product" value="$$createProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="ProductSetWebsite" stepKey="setWebsiteForProduct1">
+            <argument name="website" value="SecondWebsite"/>
+        </actionGroup>
+        <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct1">
+            <argument name="website" value="SecondWebsite"/>
+        </actionGroup>
+
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct2">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProduct2ForEdit">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="ProductSetWebsite" stepKey="setWebsiteForProduct2">
+            <argument name="website" value="SecondWebsite"/>
+        </actionGroup>
+        <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct2">
+            <argument name="website" value="SecondWebsite"/>
+        </actionGroup>
+
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct3">
+            <argument name="product" value="$$createProduct3$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProduct3ForEdit">
+            <argument name="product" value="$$createProduct3$$"/>
+        </actionGroup>
+        <actionGroup ref="ProductSetWebsite" stepKey="setWebsiteForProduct3">
+            <argument name="website" value="SecondWebsite"/>
+        </actionGroup>
+        <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct3">
+            <argument name="website" value="SecondWebsite"/>
+        </actionGroup>
+
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct4">
+            <argument name="product" value="$$createProduct4$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProduct4ForEdit">
+            <argument name="product" value="$$createProduct4$$"/>
+        </actionGroup>
+        <actionGroup ref="ProductSetWebsite" stepKey="setWebsiteForProduct4">
+            <argument name="website" value="SecondWebsite"/>
+        </actionGroup>
+        <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct4">
+            <argument name="website" value="SecondWebsite"/>
+        </actionGroup>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductsIndexPageToLoad"/>
+        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetProductsGrid"/>
+
+        <!--Edit customer info-->
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerFrom">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="openCustomerAccountInformationSection"/>
+        <waitForPageLoad stepKey="waitCustomerAccountInformationSectionOpened"/>
+        <selectOption selector="{{AdminCustomerAccountInformationSection.group}}" userInput="Retailer" stepKey="setCustomerGroup"/>
+        <selectOption selector="{{AdminCustomerAccountInformationSection.storeView}}" userInput="{{SecondStoreUnique.name}}" stepKey="selectCustomerStore"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCustomer"/>
+        <waitForPageLoad stepKey="waitForCustomerPageLoadAfterSave"/>
+        <see userInput="You saved the customer." stepKey="checkCustomerIsSaved"/>
+
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomersIndex"/>
+        <waitForPageLoad stepKey="waitForCustomersIndexPageToLoad"/>
+        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetCustomersGrid"/>
+
+        <!--Create Cart Price Rule-->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="openCartPriceRulesGrid"/>
+        <waitForPageLoad stepKey="waitForCartPriceRulesGrid"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <waitForPageLoad stepKey="waitForNewCartPriceRulePageIsLoaded"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="ship" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{SecondWebsite.name}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="Retailer" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="ship" stepKey="setCode"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCustomer}}" userInput="0" stepKey="setUserPerCustomer"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="0" stepKey="setUserPerCoupon"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.priority}}" userInput="0" stepKey="setPriority"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="For shipment with matching items" stepKey="selectFreeShippingType"/>
+        <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="clickSaveAndContinueButton"/>
+        <waitForPageLoad stepKey="waitForCartPriceRuleSaved"/>
+        <see userInput="You saved the rule." stepKey="checkRuleSaved"/>
+
+        <!--Create new order-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="startToCreateNewOrder">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <click selector="{{AdminOrderFormSelectWebsiteSection.website(SecondStoreUnique.name)}}" stepKey="selectStore"/>
+        <waitForPageLoad stepKey="waitForPageOpened"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <click  selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProduct"/>
+        <waitForPageLoad stepKey="waitForProductsOpened"/>
+        <!--TEST CASE #1-->
+        <!--Add 3 products to order with specified quantity-->
+        <click selector="{{AdminOrderFormItemsSection.selectProduct($$createProduct1.name$$)}}" stepKey="selectProduct1"/>
+        <fillField selector="{{AdminOrderFormItemsSection.setQuantity($$createProduct1.name$$)}}" userInput="10" stepKey="addProductQuantity1"/>
+
+        <click selector="{{AdminOrderFormItemsSection.selectProduct($$createProduct2.name$$)}}" stepKey="selectProduct2"/>
+        <fillField selector="{{AdminOrderFormItemsSection.setQuantity($$createProduct2.name$$)}}" userInput="10" stepKey="addProductQuantity2"/>
+
+        <click selector="{{AdminOrderFormItemsSection.selectProduct($$createProduct3.name$$)}}" stepKey="selectProduct3"/>
+        <fillField selector="{{AdminOrderFormItemsSection.setQuantity($$createProduct3.name$$)}}" userInput="10" stepKey="addProductQuantity3"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="addProductsToOrder"/>
+        <waitForLoadingMaskToDisappear stepKey="wait"/>
+        <!--Verify tier price values-->
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct1.name$$)}}" stepKey="checkProductPrice1"/>
+        <assertEquals stepKey="verifyPrice1">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice1</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct2.name$$)}}" stepKey="checkProductPrice2"/>
+        <assertEquals stepKey="verifyPrice2">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice2</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct3.name$$)}}" stepKey="checkProductPrice3"/>
+        <assertEquals stepKey="verifyPrice3">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice3</actualResult>
+        </assertEquals>
+
+        <!--Edit order and verify values-->
+        <waitForPageLoad stepKey="waitForPageLoaded2"/>
+        <click selector="{{AdminOrderFormItemsSection.customPrice($$createProduct1.name$$)}}" stepKey="clickOnCustomPrice"/>
+        <fillField selector="{{AdminOrderFormItemsSection.customQuantity($$createProduct1.name$$)}}" userInput="5" stepKey="clickOnQuantity"/>
+        <waitForLoadingMaskToDisappear stepKey="wait1"/>
+        <click selector="{{AdminOrderFormItemsSection.update}}" stepKey="clickToUpdate"/>
+        <waitForLoadingMaskToDisappear stepKey="wait2"/>
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct1.name$$)}}" stepKey="checkProductPrice4"/>
+        <assertEquals stepKey="verifyPrice4">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice2}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice4</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct2.name$$)}}" stepKey="checkProductPrice5"/>
+        <assertEquals stepKey="verifyPrice5">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice5</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct3.name$$)}}" stepKey="checkProductPrice6"/>
+        <assertEquals stepKey="verifyPrice6">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice3</actualResult>
+        </assertEquals>
+
+        <!--Remove products from order-->
+        <selectOption selector="{{AdminOrderFormItemsSection.removeItems($$createProduct1.name$$)}}" userInput="Remove" stepKey="clickToRemove1"/>
+        <selectOption selector="{{AdminOrderFormItemsSection.removeItems($$createProduct2.name$$)}}" userInput="Remove" stepKey="clickToRemove2"/>
+        <selectOption selector="{{AdminOrderFormItemsSection.removeItems($$createProduct3.name$$)}}" userInput="Remove" stepKey="clickToRemove3"/>
+        <waitForLoadingMaskToDisappear stepKey="wait3"/>
+        <click selector="{{AdminOrderFormItemsSection.update}}" stepKey="clickToUpdate1"/>
+        <waitForPageLoad stepKey="waitProductsDeleted"/>
+
+        <!--TEST CASE #2-->
+        <!--Add 3 products to order with specified quantity-->
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProduct1"/>
+        <click selector="{{AdminOrderFormItemsSection.selectProduct($$createProduct1.name$$)}}" stepKey="selectProduct5"/>
+        <fillField selector="{{AdminOrderFormItemsSection.setQuantity($$createProduct1.name$$)}}" userInput="10" stepKey="addProductQuantity5"/>
+
+        <click selector="{{AdminOrderFormItemsSection.selectProduct($$createProduct2.name$$)}}" stepKey="selectProduct6"/>
+        <fillField selector="{{AdminOrderFormItemsSection.setQuantity($$createProduct2.name$$)}}" userInput="10" stepKey="addProductQuantity6"/>
+
+        <click selector="{{AdminOrderFormItemsSection.selectProduct($$createProduct3.name$$)}}" stepKey="selectProduct7"/>
+        <fillField selector="{{AdminOrderFormItemsSection.setQuantity($$createProduct3.name$$)}}" userInput="10" stepKey="addProductQuantity7"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="addProductsToOrder1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitProductsAddedToOrder"/>
+        <!--Verify tier price values-->
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct1.name$$)}}" stepKey="checkProductPrice7"/>
+        <assertEquals stepKey="verifyPrice7">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice7</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct2.name$$)}}" stepKey="checkProductPrice8"/>
+        <assertEquals stepKey="verifyPrice8">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice8</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct3.name$$)}}" stepKey="checkProductPrice9"/>
+        <assertEquals stepKey="verifyPrice9">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice9</actualResult>
+        </assertEquals>
+
+        <!--Add one more product and verify values-->
+        <waitForPageLoad stepKey="waitForAllBlocksOnPageLoaded"/>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddcreateProduct2"/>
+        <waitForLoadingMaskToDisappear stepKey="wait8"/>
+        <click selector="{{AdminOrderFormItemsSection.selectProduct($$createProduct4.name$$)}}" stepKey="selectProduct8"/>
+        <fillField selector="{{AdminOrderFormItemsSection.setQuantity($$createProduct4.name$$)}}" userInput="10" stepKey="addProductQuantity9"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="addProductsToOrder2"/>
+        <waitForLoadingMaskToDisappear stepKey="wait9"/>
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct4.name$$)}}" stepKey="checkProductPrice10"/>
+        <assertEquals stepKey="verifyPrice10">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice10</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct1.name$$)}}" stepKey="checkProductPrice11"/>
+        <assertEquals stepKey="verifyPrice11">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice11</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct2.name$$)}}" stepKey="checkProductPrice12"/>
+        <assertEquals stepKey="verifyPrice12">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice12</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct3.name$$)}}" stepKey="checkProductPrice13"/>
+        <assertEquals stepKey="verifyPrice13">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice13</actualResult>
+        </assertEquals>
+
+        <selectOption selector="{{AdminOrderFormItemsSection.removeItems($$createProduct1.name$$)}}" userInput="Remove" stepKey="clickToRemove4"/>
+        <selectOption selector="{{AdminOrderFormItemsSection.removeItems($$createProduct2.name$$)}}" userInput="Remove" stepKey="clickToRemove5"/>
+        <selectOption selector="{{AdminOrderFormItemsSection.removeItems($$createProduct3.name$$)}}" userInput="Remove" stepKey="clickToRemove6"/>
+        <waitForLoadingMaskToDisappear stepKey="wait4"/>
+        <click selector="{{AdminOrderFormItemsSection.update}}" stepKey="clickToUpdate2"/>
+        <waitForLoadingMaskToDisappear stepKey="wait10"/>
+
+        <!--TEST CASE #3-->
+        <waitForPageLoad stepKey="WaitProductsDeleted1"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProduct4" />
+        <click selector="{{AdminOrderFormItemsSection.selectProduct($$createProduct1.name$$)}}" stepKey="selectProduct9"/>
+        <fillField selector="{{AdminOrderFormItemsSection.setQuantity($$createProduct1.name$$)}}" userInput="10" stepKey="addProductQuantity10"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="addProductsToOrder3"/>
+        <waitForLoadingMaskToDisappear stepKey="wait11"/>
+        <fillField selector="{{AdminOrderFormItemsSection.applyCoupon}}" userInput="ship" stepKey="addCouponCode"/>
+        <waitForLoadingMaskToDisappear stepKey="wait5"/>
+        <click selector="{{AdminOrderFormItemsSection.update}}" stepKey="clickToUpdate3"/>
+        <waitForLoadingMaskToDisappear stepKey="wait12"/>
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct1.name$$)}}" stepKey="checkProductPrice14"/>
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct4.name$$)}}" stepKey="checkProductPrice15"/>
+        <assertEquals stepKey="verifyPrice14">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice14</actualResult>
+        </assertEquals>
+        <assertEquals stepKey="verifyPrice15">
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice15</actualResult>
+        </assertEquals>
+
+        <after>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="createProduct4" stepKey="deleteProduct4"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <createData entity="DefaultConfigCatalogPrice" stepKey="resetPriceScopeConfiguration"/>
+
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="{{SecondWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="ship"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

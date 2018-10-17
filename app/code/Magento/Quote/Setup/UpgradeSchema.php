@@ -26,7 +26,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $setup->getConnection(self::$connectionName)->addIndex(
                 $setup->getTable('quote_id_mask', self::$connectionName),
@@ -34,7 +33,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ['masked_id']
             );
         }
-
         if (version_compare($context->getVersion(), '2.0.2', '<')) {
             $setup->getConnection(self::$connectionName)->changeColumn(
                 $setup->getTable('quote_address', self::$connectionName),
@@ -101,25 +99,51 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
         }
         if (version_compare($context->getVersion(), '2.0.7', '<')) {
-            $connection = $setup->getConnection(self::$connectionName);
-            $connection->modifyColumn(
-                $setup->getTable('quote_address', self::$connectionName),
-                'telephone',
-                ['type' => Table::TYPE_TEXT, 'length' => 255]
-            )->modifyColumn(
-                $setup->getTable('quote_address', self::$connectionName),
-                'fax',
-                ['type' => Table::TYPE_TEXT, 'length' => 255]
-            )->modifyColumn(
-                $setup->getTable('quote_address', self::$connectionName),
-                'region',
-                ['type' => Table::TYPE_TEXT, 'length' => 255]
-            )->modifyColumn(
-                $setup->getTable('quote_address', self::$connectionName),
-                'city',
-                ['type' => Table::TYPE_TEXT, 'length' => 255]
-            );
+            $this->expandQuoteAddressFields($setup);
+        }
+        if (version_compare($context->getVersion(), '2.0.8', '<')) {
+            $this->expandRemoteIpField($setup);
         }
         $setup->endSetup();
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function expandRemoteIpField(SchemaSetupInterface $setup)
+    {
+        $connection = $setup->getConnection(self::$connectionName);
+        $connection->modifyColumn(
+            $setup->getTable('quote', self::$connectionName),
+            'remote_ip',
+            ['type' => Table::TYPE_TEXT, 'length' => 45]
+        );
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function expandQuoteAddressFields(SchemaSetupInterface $setup)
+    {
+        $connection = $setup->getConnection(self::$connectionName);
+        $connection->modifyColumn(
+            $setup->getTable('quote_address', self::$connectionName),
+            'telephone',
+            ['type' => Table::TYPE_TEXT, 'length' => 255]
+        )->modifyColumn(
+            $setup->getTable('quote_address', self::$connectionName),
+            'fax',
+            ['type' => Table::TYPE_TEXT, 'length' => 255]
+        )->modifyColumn(
+            $setup->getTable('quote_address', self::$connectionName),
+            'region',
+            ['type' => Table::TYPE_TEXT, 'length' => 255]
+        )->modifyColumn(
+            $setup->getTable('quote_address', self::$connectionName),
+            'city',
+            ['type' => Table::TYPE_TEXT, 'length' => 255]
+        );
     }
 }

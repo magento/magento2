@@ -37,7 +37,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateNoArgs()
     {
-        $this->assertInstanceOf('StdClass', $this->factory->create(\StdClass::class));
+        $this->assertInstanceOf('StdClass', $this->factory->create(\stdClass::class));
     }
 
     /**

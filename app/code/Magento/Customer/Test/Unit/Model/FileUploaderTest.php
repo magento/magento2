@@ -140,7 +140,7 @@ class FileUploaderTest extends \PHPUnit\Framework\TestCase
             'name' => $resultFileName,
             'file' => $resultFileName,
             'path' => $resultFilePath,
-            'tmp_name' => $resultFilePath . $resultFileName,
+            'tmp_name' => ltrim($resultFileName, '/'),
             'url' => $resultFileUrl,
         ];
 

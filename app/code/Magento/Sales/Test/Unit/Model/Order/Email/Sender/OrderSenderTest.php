@@ -53,10 +53,11 @@ class OrderSenderTest extends AbstractSenderTest
      * @param int $configValue
      * @param bool|null $forceSyncMode
      * @param bool|null $emailSendingResult
-     * @dataProvider sendDataProvider
+     * @param $senderSendException
      * @return void
+     * @dataProvider sendDataProvider
      */
-    public function testSend($configValue, $forceSyncMode, $emailSendingResult)
+    public function testSend($configValue, $forceSyncMode, $emailSendingResult, $senderSendException)
     {
         $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
@@ -110,19 +111,23 @@ class OrderSenderTest extends AbstractSenderTest
 
                 $this->senderMock->expects($this->once())->method('send');
 
-                $this->senderMock->expects($this->once())->method('sendCopyTo');
+                if ($senderSendException) {
+                    $this->checkSenderSendExceptionCase();
+                } else {
+                    $this->senderMock->expects($this->once())->method('sendCopyTo');
 
-                $this->orderMock->expects($this->once())
-                    ->method('setEmailSent')
-                    ->with(true);
+                    $this->orderMock->expects($this->once())
+                        ->method('setEmailSent')
+                        ->with(true);
 
-                $this->orderResourceMock->expects($this->once())
-                    ->method('saveAttribute')
-                    ->with($this->orderMock, ['send_email', 'email_sent']);
+                    $this->orderResourceMock->expects($this->once())
+                        ->method('saveAttribute')
+                        ->with($this->orderMock, ['send_email', 'email_sent']);
 
-                $this->assertTrue(
-                    $this->sender->send($this->orderMock)
-                );
+                    $this->assertTrue(
+                        $this->sender->send($this->orderMock)
+                    );
+                }
             } else {
                 $this->orderResourceMock->expects($this->once())
                     ->method('saveAttribute')
@@ -147,18 +152,41 @@ class OrderSenderTest extends AbstractSenderTest
     }
 
     /**
+     * Methods check case when method "send" in "senderMock" throw exception.
+     *
+     * @return void
+     */
+    protected function checkSenderSendExceptionCase()
+    {
+        $this->senderMock->expects($this->once())
+            ->method('send')
+            ->willThrowException(new \Exception('exception'));
+
+        $this->orderResourceMock->expects($this->once())
+            ->method('saveAttribute')
+            ->with($this->orderMock, 'send_email');
+
+        $this->assertFalse(
+            $this->sender->send($this->orderMock)
+        );
+    }
+
+    /**
      * @return array
      */
     public function sendDataProvider()
     {
         return [
-            [0, 0, true],
-            [0, 0, true],
-            [0, 0, false],
-            [0, 0, false],
-            [0, 1, true],
-            [0, 1, true],
-            [1, null, null, null]
+            [0, 0, true, false],
+            [0, 0, true, false],
+            [0, 0, true, true],
+            [0, 0, false, false],
+            [0, 0, false, false],
+            [0, 0, false, true],
+            [0, 1, true, false],
+            [0, 1, true, false],
+            [0, 1, true, false],
+            [1, null, null, false]
         ];
     }
 

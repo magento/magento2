@@ -16,7 +16,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection as CreditmemoCollection;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
-use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ImportCollection;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Collection as PaymentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as ShipmentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as TrackCollection;
@@ -1008,8 +1008,24 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param string $comment
      * @param bool|string $status
      * @return OrderStatusHistoryInterface
+     * @deprecated
+     * @see addCommentToStatusHistory
      */
     public function addStatusHistoryComment($comment, $status = false)
+    {
+        return $this->addCommentToStatusHistory($comment, $status, false);
+    }
+    
+    /**
+     * Add a comment to order status history
+     * Different or default status may be specified
+     *
+     * @param string $comment
+     * @param bool|string $status
+     * @param bool $isVisibleOnFront
+     * @return OrderStatusHistoryInterface
+     */
+    public function addCommentToStatusHistory($comment, $status = false, $isVisibleOnFront = false)
     {
         if (false === $status) {
             $status = $this->getStatus();
@@ -1024,6 +1040,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $comment
         )->setEntityName(
             $this->entityType
+        )->setIsVisibleOnFront(
+            $isVisibleOnFront
         );
         $this->addStatusHistory($history);
         return $history;
@@ -1254,7 +1272,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @param array $filterByTypes
      * @param bool $nonChildrenOnly
-     * @return ImportCollection
+     * @return ItemCollection
      */
     public function getItemsCollection($filterByTypes = [], $nonChildrenOnly = false)
     {
@@ -1279,7 +1297,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get random items collection without related children
      *
      * @param int $limit
-     * @return ImportCollection
+     * @return ItemCollection
      */
     public function getParentItemsRandomCollection($limit = 1)
     {
@@ -1291,7 +1309,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      *
      * @param int $limit
      * @param bool $nonChildrenOnly
-     * @return ImportCollection
+     * @return ItemCollection
      */
     protected function _getItemsRandomCollection($limit, $nonChildrenOnly = false)
     {
@@ -1769,7 +1787,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasInvoices()
     {
-        return $this->getInvoiceCollection()->count();
+        return (bool)$this->getInvoiceCollection()->count();
     }
 
     /**
@@ -1779,7 +1797,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasShipments()
     {
-        return $this->getShipmentsCollection()->count();
+        return (bool)$this->getShipmentsCollection()->count();
     }
 
     /**
@@ -1789,7 +1807,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasCreditmemos()
     {
-        return $this->getCreditmemosCollection()->count();
+        return (bool)$this->getCreditmemosCollection()->count();
     }
 
     /**

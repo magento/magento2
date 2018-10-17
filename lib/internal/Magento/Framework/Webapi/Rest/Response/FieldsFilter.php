@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Webapi\Rest\Response;
 
+use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 
 /**
@@ -106,9 +108,9 @@ class FieldsFilter
             }
             switch ($filterString[$position]) {
                 case '[':
-                    array_push($parent, $currentElement);
+                    $parent[] = $currentElement;
                     // push current field in stack and initialize current
-                    array_push($stack, $current);
+                    $stack[] = $current;
                     $current = [];
                     break;
 
@@ -178,10 +180,47 @@ class FieldsFilter
         //If the field in array2 (filter) is not present in array1 (response) it will be removed after intersect
         $arrayIntersect = array_intersect_key($array1, $array2);
         foreach ($arrayIntersect as $key => &$value) {
+            if ($key == AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY
+                && is_array($array2[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY])
+            ) {
+                $value = $this->filterCustomAttributes(
+                    $value,
+                    $array2[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY]
+                );
+                continue;
+            }
             if (is_array($value) && is_array($array2[$key])) {
                 $value = $this->applyFilter($value, $array2[$key]);
             }
         }
         return $arrayIntersect;
+    }
+
+    /**
+     * Filter for custom attributes.
+     *
+     * @param array $item
+     * @param array $filter
+     * @return array
+     */
+    private function filterCustomAttributes(array $item, array $filter) : array
+    {
+        $fieldResult = [];
+        foreach ($item as $key => $field) {
+            $filterKeys = array_keys($filter);
+            if (in_array($field[AttributeInterface::ATTRIBUTE_CODE], $filterKeys)) {
+                $fieldResult[$key][AttributeInterface::ATTRIBUTE_CODE] = $field[AttributeInterface::ATTRIBUTE_CODE];
+                $fieldResult[$key][AttributeInterface::VALUE] = $field[AttributeInterface::VALUE];
+            } else {
+                if (isset($filter[AttributeInterface::ATTRIBUTE_CODE])) {
+                    $fieldResult[$key][AttributeInterface::ATTRIBUTE_CODE] = $field[AttributeInterface::ATTRIBUTE_CODE];
+                }
+                if (isset($filter[AttributeInterface::VALUE])) {
+                    $fieldResult[$key][AttributeInterface::VALUE] = $field[AttributeInterface::VALUE];
+                }
+            }
+        }
+
+        return $fieldResult;
     }
 }
