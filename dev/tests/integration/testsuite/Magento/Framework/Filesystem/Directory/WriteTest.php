@@ -64,6 +64,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testCreateOutside()
     {
         $exceptions = 0;
@@ -83,6 +86,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -111,6 +115,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         return [['subdir'], ['subdir/subsubdir']];
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteOutside()
     {
         $exceptions = 0;
@@ -130,6 +137,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -164,6 +172,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         return [['newDir1', 0777, 'first_name.txt', 'second_name.txt']];
     }
 
+    /**
+     * @return void
+     */
     public function testRenameOutside()
     {
         $exceptions = 0;
@@ -186,6 +197,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -255,6 +267,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testCopyOutside()
     {
         $exceptions = 0;
@@ -286,6 +301,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(4, $exceptions);
     }
 
@@ -335,6 +351,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($directory->changePermissions('test_directory', 0644));
     }
 
+    /**
+     * @return void
+     */
     public function testChangePermissionsOutside()
     {
         $exceptions = 0;
@@ -354,6 +373,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -370,6 +390,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($directory->changePermissionsRecursively('test_directory', 0777, 0644));
     }
 
+    /**
+     * @return void
+     */
     public function testChangePermissionsRecursivelyOutside()
     {
         $exceptions = 0;
@@ -389,6 +412,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -422,6 +446,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testTouchOutside()
     {
         $exceptions = 0;
@@ -441,6 +468,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -507,6 +535,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testOpenFileOutside()
     {
         $exceptions = 0;
@@ -526,6 +557,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -573,6 +605,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         return [['file1', '123', '456'], ['folder1/file1', '123', '456']];
     }
 
+    /**
+     * @return void
+     */
     public function testWriteFileOutside()
     {
         $exceptions = 0;
@@ -592,6 +627,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 

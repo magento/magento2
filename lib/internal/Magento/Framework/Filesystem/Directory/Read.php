@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Filesystem\Directory;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 
 class Read implements ReadInterface
@@ -64,7 +63,7 @@ class Read implements ReadInterface
      * @return void
      */
     protected function validatePath(
-        $path,
+        $path = null,
         $scheme = null,
         $absolutePath = false
     ) {

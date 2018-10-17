@@ -35,6 +35,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('_files/foo/bar', $dir->getAbsolutePath('bar'));
     }
 
+    /**
+     * @return void
+     */
     public function testGetAbsolutePathOutside()
     {
         $exceptions = 0;
@@ -54,6 +57,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -68,6 +72,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $dir->getRelativePath(__DIR__ . '/../_files/foo/bar'));
     }
 
+    /**
+     * @return void
+     */
     public function testGetRelativePathOutside()
     {
         $exceptions = 0;
@@ -92,6 +99,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(4, $exceptions);
     }
 
@@ -126,6 +134,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testReadOutside()
     {
         $exceptions = 0;
@@ -145,6 +156,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -179,6 +191,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testSearchOutside()
     {
         $exceptions = 0;
@@ -198,6 +213,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -225,6 +241,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         return [['foo', 'bar', true], ['foo', 'bar/baz/', true], ['foo', 'bar/notexists', false]];
     }
 
+    /**
+     * @return void
+     */
     public function testIsExistOutside()
     {
         $exceptions = 0;
@@ -244,6 +263,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -288,6 +308,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         return [['foo', 'bar'], ['foo', 'file_three.txt']];
     }
 
+    /**
+     * @return void
+     */
     public function testStatOutside()
     {
         $exceptions = 0;
@@ -307,6 +330,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -324,6 +348,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($readable, $dir->isReadable($path));
     }
 
+    /**
+     * @return void
+     */
     public function testIsReadableOutside()
     {
         $exceptions = 0;
@@ -343,6 +370,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -358,6 +386,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isFile, $this->getDirectoryInstance('foo')->isFile($path));
     }
 
+    /**
+     * @return void
+     */
     public function testIsFileOutside()
     {
         $exceptions = 0;
@@ -377,6 +408,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -392,6 +424,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isDirectory, $this->getDirectoryInstance('foo')->isDirectory($path));
     }
 
+    /**
+     * @return void
+     */
     public function testIsDirectoryOutside()
     {
         $exceptions = 0;
@@ -411,6 +446,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -454,6 +490,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($file instanceof \Magento\Framework\Filesystem\File\ReadInterface);
     }
 
+    /**
+     * @return void
+     */
     public function testOpenFileOutside()
     {
         $exceptions = 0;
@@ -473,6 +512,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -500,11 +540,14 @@ class ReadTest extends \PHPUnit_Framework_TestCase
             ['popup.csv', 'var myData = 5;'],
             [
                 'data.csv',
-                '"field1", "field2"' . PHP_EOL . '"field3", "field4"' . PHP_EOL
-            ]
+                '"field1", "field2"' . PHP_EOL . '"field3", "field4"' . PHP_EOL,
+            ],
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testReadFileOutside()
     {
         $exceptions = 0;
@@ -524,6 +567,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 
@@ -557,6 +601,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return void
+     */
     public function testReadRecursivelyOutside()
     {
         $exceptions = 0;
@@ -576,6 +623,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
+
         $this->assertEquals(3, $exceptions);
     }
 }
