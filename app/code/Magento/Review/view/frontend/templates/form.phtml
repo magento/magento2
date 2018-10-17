@@ -25,24 +25,24 @@
                 <div class="nested" id="product-review-table">
                     <?php foreach ($block->getRatings() as $_rating): ?>
                         <div class="field choice review-field-rating">
-                            <label class="label" id="<?= $block->escapeHtml($_rating->getRatingCode()) ?>_rating_label"><span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span></label>
+                            <label class="label" id="<?= $block->escapeHtml(str_replace(' ', '_', $_rating->getRatingCode())) ?>_rating_label"><span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span></label>
                             <div class="control review-control-vote">
                             <?php $options = $_rating->getOptions();?>
                             <?php $iterator = 1; foreach ($options as $_option): ?>
                                 <input
                                     type="radio"
                                     name="ratings[<?= $block->escapeHtmlAttr($_rating->getId()) ?>]"
-                                    id="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>"
+                                    id="<?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>"
                                     value="<?= $block->escapeHtmlAttr($_option->getId()) ?>"
                                     class="radio"
                                     data-validate="{ 'rating-required':true}"
-                                    aria-labelledby="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_rating_label <?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label" />
+                                    aria-labelledby="<?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_rating_label <?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label" />
                                 <label
                                     class="rating-<?= $block->escapeHtmlAttr($iterator) ?>"
-                                    for="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>"
-                                    title="<?= $block->escapeHtmlAttr(__('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star')) ?>"
-                                    id="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label">
-                                    <span><?= $block->escapeHtml(__('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star')) ?></span>
+                                    for="<?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>"
+                                    title="<?= $block->escapeHtmlAttr(__('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))) ?>"
+                                    id="<?= $block->escapeHtmlAttr(str_replace(' ', '_', $_rating->getRatingCode())) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label">
+                                    <span><?= $block->escapeHtml(__('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))) ?></span>
                                 </label>
                             <?php $iterator++; ?>
                             <?php endforeach; ?>

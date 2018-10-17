@@ -44,9 +44,9 @@ class CircularDependencyTest extends \PHPUnit\Framework\TestCase
             $moduleName = str_replace('/', '_', $moduleName[1]);
             $config = simplexml_load_file($configFile);
             $result = $config->xpath("/config/module/depends/module") ?: [];
-            while (list(, $node) = each($result)) {
+            foreach ($result as $node) {
                 /** @var \SimpleXMLElement $node */
-                $this->moduleDependencies[$moduleName][] = (string)$node['name'];
+                $this->moduleDependencies[$moduleName][] = (string) $node['name'];
             }
         }
     }

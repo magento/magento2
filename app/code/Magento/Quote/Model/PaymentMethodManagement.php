@@ -51,36 +51,35 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->get($cartId);
-
+        $quote->setTotalsCollectedFlag(false);
         $method->setChecks([
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
         ]);
-        $payment = $quote->getPayment();
-
-        $data = $method->getData();
-        $payment->importData($data);
 
         if ($quote->isVirtual()) {
-            $quote->getBillingAddress()->setPaymentMethod($payment->getMethod());
+            $address = $quote->getBillingAddress();
         } else {
+            $address = $quote->getShippingAddress();
             // check if shipping address is set
-            if ($quote->getShippingAddress()->getCountryId() === null) {
+            if ($address->getCountryId() === null) {
                 throw new InvalidTransitionException(__('Shipping address is not set'));
             }
-            $quote->getShippingAddress()->setPaymentMethod($payment->getMethod());
+            $address->setCollectShippingRates(true);
         }
-        if (!$quote->isVirtual() && $quote->getShippingAddress()) {
-            $quote->getShippingAddress()->setCollectShippingRates(true);
-        }
+
+        $paymentData = $method->getData();
+        $payment = $quote->getPayment();
+        $payment->importData($paymentData);
+        $address->setPaymentMethod($payment->getMethod());
 
         if (!$this->zeroTotalValidator->isApplicable($payment->getMethodInstance(), $quote)) {
             throw new InvalidTransitionException(__('The requested Payment Method is not available.'));
         }
 
-        $quote->setTotalsCollectedFlag(false)->collectTotals()->save();
+        $quote->save();
         return $quote->getPayment()->getId();
     }
 

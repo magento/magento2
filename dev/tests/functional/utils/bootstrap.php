@@ -16,6 +16,3 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $objectManager = \Magento\Mtf\ObjectManagerFactory::getObjectManager();
 \Magento\Mtf\ObjectManagerFactory::configure($objectManager);
-
-$magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
-$magentoObjectManager = $magentoObjectManagerFactory->create($_SERVER);

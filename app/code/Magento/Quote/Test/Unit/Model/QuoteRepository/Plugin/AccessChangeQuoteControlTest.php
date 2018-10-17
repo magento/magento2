@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Quote\Test\Unit\Model\QuoteRepository\Plugin;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Quote\Model\ChangeQuoteControl;
 use Magento\Quote\Model\QuoteRepository\Plugin\AccessChangeQuoteControl;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -34,6 +36,11 @@ class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
      */
     private $quoteRepositoryMock;
 
+    /**
+     * @var ChangeQuoteControl|MockObject
+     */
+    private $changeQuoteControlMock;
+
     protected function setUp()
     {
         $this->userContextMock = $this->getMockBuilder(UserContextInterface::class)
@@ -50,15 +57,19 @@ class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->changeQuoteControlMock = $this->getMockBuilder(ChangeQuoteControl::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManagerHelper = new ObjectManager($this);
         $this->accessChangeQuoteControl = $objectManagerHelper->getObject(
             AccessChangeQuoteControl::class,
-            ['userContext' => $this->userContextMock]
+            ['changeQuoteControl' => $this->changeQuoteControlMock]
         );
     }
 
     /**
-     * User with role Customer and customer_id much with context user_id.
+     * User with role Customer and customer_id matches context user_id.
      */
     public function testBeforeSaveForCustomer()
     {
@@ -67,6 +78,9 @@ class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
 
         $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
+
+        $this->changeQuoteControlMock->method('isAllowed')
+            ->willReturn(true);
 
         $result = $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
 
@@ -81,10 +95,14 @@ class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSaveException()
     {
-        $this->userContextMock->method('getUserType')
-            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->quoteMock->method('getCustomerId')
             ->willReturn(2);
+
+        $this->userContextMock->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
+
+        $this->changeQuoteControlMock->method('isAllowed')
+            ->willReturn(false);
 
         $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
     }
@@ -99,6 +117,9 @@ class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
 
         $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_ADMIN);
+
+        $this->changeQuoteControlMock->method('isAllowed')
+            ->willReturn(true);
 
         $result = $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
 
@@ -115,6 +136,9 @@ class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
 
         $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);
+
+        $this->changeQuoteControlMock->method('isAllowed')
+            ->willReturn(true);
 
         $result = $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
 
@@ -135,6 +159,9 @@ class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
         $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);
 
+        $this->changeQuoteControlMock->method('isAllowed')
+            ->willReturn(false);
+
         $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
     }
 
@@ -151,6 +178,9 @@ class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
 
         $this->userContextMock->method('getUserType')
             ->willReturn(10);
+
+        $this->changeQuoteControlMock->method('isAllowed')
+            ->willReturn(false);
 
         $this->accessChangeQuoteControl->beforeSave($this->quoteRepositoryMock, $this->quoteMock);
     }

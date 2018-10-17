@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Mview\View;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Phrase;
 
 class Changelog implements ChangelogInterface
@@ -121,7 +120,7 @@ class Changelog implements ChangelogInterface
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
-        $this->connection->delete($changelogTableName, ['version_id <= ?' => (int)$versionId]);
+        $this->connection->delete($changelogTableName, ['version_id < ?' => (int)$versionId]);
 
         return true;
     }

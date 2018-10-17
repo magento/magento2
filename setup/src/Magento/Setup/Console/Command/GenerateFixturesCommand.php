@@ -133,6 +133,7 @@ class GenerateFixturesCommand extends Command
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -156,6 +157,10 @@ class GenerateFixturesCommand extends Command
         }
     }
 
+    /**
+     * @param \Magento\Setup\Fixtures\Fixture $fixture
+     * @param OutputInterface $output
+     */
     private function executeFixture(\Magento\Setup\Fixtures\Fixture $fixture, OutputInterface $output)
     {
         $output->write('<info>' . $fixture->getActionTitle() . '... </info>');

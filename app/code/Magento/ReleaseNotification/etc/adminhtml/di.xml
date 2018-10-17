@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="uiComponentConfigFactory" type="Magento\Framework\Config\DataInterfaceFactory">
+        <arguments>
+            <argument xsi:type="string" name="instanceName">Magento\Ui\Config\Data</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ReleaseNotification\Model\Condition\CanViewNotification">
+        <arguments>
+            <argument name="configFactory" xsi:type="object">uiComponentConfigFactory</argument>
+        </arguments>
+    </type>
+</config>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductCheckUnsupportedFileActionGroup">
+        <arguments>
+            <argument name="filename" type="string"/>
+        </arguments>
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="{{filename}}" stepKey="attachImage"/>
+        <waitForPageLoad stepKey="waitForUploadImage"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="We don't recognize or support this file extension type." stepKey="seeErrorMessage"/>
+        <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModal"/>
+    </actionGroup>
+</actionGroups>

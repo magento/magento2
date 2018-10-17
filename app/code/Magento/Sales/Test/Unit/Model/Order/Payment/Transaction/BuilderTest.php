@@ -257,6 +257,9 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($isPaymentTransactionClosed);
     }
 
+    /**
+     * @return array
+     */
     public function createDataProvider()
     {
         return [

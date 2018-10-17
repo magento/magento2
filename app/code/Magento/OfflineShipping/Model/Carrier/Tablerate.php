@@ -60,6 +60,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory
      * @param \Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory $tablerateFactory
      * @param array $data
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(
@@ -128,8 +129,10 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                             $freeQty += $item->getQty() * ($child->getQty() - $freeShipping);
                         }
                     }
-                } elseif ($item->getFreeShipping()) {
-                    $freeShipping = is_numeric($item->getFreeShipping()) ? $item->getFreeShipping() : 0;
+                } elseif ($item->getFreeShipping() || $item->getAddress()->getFreeShipping()) {
+                    $freeShipping = $item->getFreeShipping() ?
+                        $item->getFreeShipping() : $item->getAddress()->getFreeShipping();
+                    $freeShipping = is_numeric($freeShipping) ? $freeShipping : 0;
                     $freeQty += $item->getQty() - $freeShipping;
                     $freePackageValue += $item->getBaseRowTotal();
                 }

@@ -427,6 +427,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
                 if (isset($this->_lineItemTotalExportMap[$key])) {
                     // !empty($total)
                     $privateKey = $this->_lineItemTotalExportMap[$key];
+                    $total = round($total, 2);
                     $request[$privateKey] = $this->formatPrice($total);
                 }
             }
@@ -577,11 +578,11 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Paypal note: The value for quantity must be a positive integer. Null, zero, or negative numbers are not allowed.
      *
      * @param float|string|int $value
-     * @return string
+     * @return int
      */
     protected function _filterQty($value)
     {
-        return intval($value);
+        return (int)$value;
     }
 
     /**

@@ -6,36 +6,65 @@
 namespace Magento\CustomerImportExport\Test\Unit\Model\ResourceModel\Import\Customer;
 
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
 
 class StorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Storage
      */
-    protected $_model;
+    private $_model;
 
     /**
-     * @var string
+     * @var CollectionByPagesIterator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_entityTable = 'test';
+    private $iteratorMock;
 
     /**
-     * @var array
+     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_expectedFields = ['entity_id', 'website_id', 'email'];
+    private $collectionMock;
 
     protected function setUp()
     {
-        $this->_model = new \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage(
-            $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class)
-                ->disableOriginalConstructor()
-                ->getMock(),
-            $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class)
-                ->disableOriginalConstructor()
-                ->getMock(),
-            $this->_getModelDependencies()
+        $this->iteratorMock = $this->createMock(
+            CollectionByPagesIterator::class
         );
-        $this->_model->load();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|CollectionByPagesIteratorFactory $iteratorFactoryMock */
+        $iteratorFactoryMock = $this->createMock(
+            CollectionByPagesIteratorFactory::class
+        );
+        $iteratorFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->iteratorMock);
+        $this->collectionMock = $this->createMock(Collection::class);
+        /** @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject $collectionFactoryMock */
+        $collectionFactoryMock = $this->createMock(
+            CollectionFactory::class
+        );
+        $collectionFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->collectionMock);
+        /** @var \PHPUnit_Framework_MockObject_MockObject $selectMock */
+        $selectMock = $this->createMock(Select::class);
+        $selectMock->expects($this->any())
+            ->method('getPart')
+            ->with(Select::FROM)
+            ->willReturn(['e' => []]);
+        $this->collectionMock->expects($this->any())
+            ->method('getSelect')
+            ->willReturn($selectMock);
+
+        $this->_model = new Storage(
+            $collectionFactoryMock,
+            $iteratorFactoryMock,
+            []
+        );
     }
 
     protected function tearDown()
@@ -43,104 +72,44 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         unset($this->_model);
     }
 
-    /**
-     * Retrieve all necessary objects mocks which used inside customer storage
-     *
-     * @return array
-     */
-    protected function _getModelDependencies()
-    {
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['from'])
-            ->getMock();
-        $select->expects($this->any())->method('from')->will($this->returnCallback([$this, 'validateFrom']));
-        $customerCollection = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'removeAttributeToSelect', 'getResource', 'getSelect'])
-            ->getMock();
-
-        $resourceStub = new \Magento\Framework\DataObject();
-        $resourceStub->setEntityTable($this->_entityTable);
-        $customerCollection->expects($this->once())->method('getResource')->will($this->returnValue($resourceStub));
-
-        $customerCollection->expects($this->once())->method('getSelect')->will($this->returnValue($select));
-
-        $byPagesIterator = $this->createPartialMock(\stdClass::class, ['iterate']);
-        $byPagesIterator->expects($this->once())
-            ->method('iterate')
-            ->will($this->returnCallback([$this, 'iterate']));
-
-        return [
-            'customer_collection' => $customerCollection,
-            'collection_by_pages_iterator' => $byPagesIterator,
-            'page_size' => 10
-        ];
-    }
-
-    /**
-     * Iterate stub
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
-     * @param \Magento\Framework\Data\Collection $collection
-     * @param int $pageSize
-     * @param array $callbacks
-     */
-    public function iterate(\Magento\Framework\Data\Collection $collection, $pageSize, array $callbacks)
-    {
-        foreach ($collection as $customer) {
-            foreach ($callbacks as $callback) {
-                call_user_func($callback, $customer);
-            }
-        }
-    }
-
-    /**
-     * @param string $tableName
-     * @param array $fields
-     */
-    public function validateFrom($tableName, $fields)
-    {
-        $this->assertEquals($this->_entityTable, $tableName);
-        $this->assertEquals($this->_expectedFields, $fields);
-    }
-
-    public function testLoad()
-    {
-        $this->assertAttributeEquals(true, '_isCollectionLoaded', $this->_model);
-    }
-
-    public function testAddCustomer()
-    {
-        $propertyName = '_customerIds';
-        $customer = $this->_addCustomerToStorage();
-
-        $this->assertAttributeCount(1, $propertyName, $this->_model);
-
-        $expectedCustomerData = [$customer->getWebsiteId() => $customer->getId()];
-        $this->assertAttributeContains($expectedCustomerData, $propertyName, $this->_model);
-    }
-
     public function testGetCustomerId()
     {
-        $customer = $this->_addCustomerToStorage();
+        $existingEmail = 'test@magento.com';
+        $existingWebsiteId = 0;
+        $existingId = 1;
+        $nonExistingEmail = 'test1@magento.com';
+        $nonExistingWebsiteId = 2;
+
+        $this->iteratorMock->expects($this->at(0))
+            ->method('iterate')
+            ->willReturnCallback(
+                function (...$args) use (
+                    $existingId,
+                    $existingEmail,
+                    $existingWebsiteId
+                ) {
+                    /** @var callable $callable */
+                    foreach ($args[2] as $callable) {
+                        $callable(
+                            new DataObject([
+                                'id' => $existingId,
+                                'email' => $existingEmail,
+                                'website_id' => $existingWebsiteId,
+                            ])
+                        );
+                    }
+                }
+            );
 
         $this->assertEquals(
-            $customer->getId(),
-            $this->_model->getCustomerId($customer->getEmail(), $customer->getWebsiteId())
+            $existingId,
+            $this->_model->getCustomerId($existingEmail, $existingWebsiteId)
         );
-        $this->assertFalse($this->_model->getCustomerId('new@test.com', $customer->getWebsiteId()));
-    }
-
-    /**
-     * @return \Magento\Framework\DataObject
-     */
-    protected function _addCustomerToStorage()
-    {
-        $customer = new \Magento\Framework\DataObject(['id' => 1, 'website_id' => 1, 'email' => 'test@test.com']);
-        $this->_model->addCustomer($customer);
-
-        return $customer;
+        $this->assertFalse(
+            $this->_model->getCustomerId(
+                $nonExistingEmail,
+                $nonExistingWebsiteId
+            )
+        );
     }
 }

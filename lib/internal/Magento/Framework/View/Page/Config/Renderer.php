@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Page\Config;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\View\Page\Config;
 
@@ -21,7 +23,7 @@ class Renderer implements RendererInterface
     protected $assetTypeOrder = ['css', 'ico', 'js'];
 
     /**
-     * @var \Magento\Framework\View\Page\Config
+     * @var Config
      */
     protected $pageConfig;
 
@@ -51,7 +53,7 @@ class Renderer implements RendererInterface
     protected $urlBuilder;
 
     /**
-     * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @param Config $pageConfig
      * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
@@ -131,15 +133,35 @@ class Renderer implements RendererInterface
     /**
      * @param string $name
      * @param string $content
-     * @return mixed
+     * @return string
      */
     protected function processMetadataContent($name, $content)
     {
-        $method = 'get' . $this->string->upperCaseWords($name, '_', '');
-        if (method_exists($this->pageConfig, $method)) {
-            $content = $this->pageConfig->$method();
+        switch ($name) {
+            case Config::META_DESCRIPTION:
+                return $this->pageConfig->getDescription();
+
+            case Config::META_CONTENT_TYPE:
+                return $this->pageConfig->getContentType();
+
+            case Config::META_MEDIA_TYPE:
+                return $this->pageConfig->getMediaType();
+
+            case Config::META_CHARSET:
+                return $this->pageConfig->getCharset();
+
+            case Config::META_KEYWORDS:
+                return $this->pageConfig->getKeywords();
+
+            case Config::META_ROBOTS:
+                return $this->pageConfig->getRobots();
+
+            case Config::META_TITLE:
+                return $this->pageConfig->getMetaTitle();
+
+            default:
+                return $content;
         }
-        return $content;
     }
 
     /**
@@ -153,19 +175,19 @@ class Renderer implements RendererInterface
         }
 
         switch ($name) {
-            case 'charset':
+            case Config::META_CHARSET:
                 $metadataTemplate = '<meta charset="%content"/>' . "\n";
                 break;
 
-            case 'content_type':
+            case Config::META_CONTENT_TYPE:
                 $metadataTemplate = '<meta http-equiv="Content-Type" content="%content"/>' . "\n";
                 break;
 
-            case 'x_ua_compatible':
+            case Config::META_X_UI_COMPATIBLE:
                 $metadataTemplate = '<meta http-equiv="X-UA-Compatible" content="%content"/>' . "\n";
                 break;
 
-            case 'media_type':
+            case Config::META_MEDIA_TYPE:
                 $metadataTemplate = false;
                 break;
 
@@ -352,7 +374,7 @@ class Renderer implements RendererInterface
                 );
                 $result .= sprintf($template, $asset->getUrl());
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->logger->critical($e);
             $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
         }

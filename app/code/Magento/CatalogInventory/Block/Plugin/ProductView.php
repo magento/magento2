@@ -39,8 +39,8 @@ class ProductView
 
         $params = [];
         $params['minAllowed']  = (float)$stockItem->getMinSaleQty();
-        if ($stockItem->getQtyMaxAllowed()) {
-            $params['maxAllowed'] = $stockItem->getQtyMaxAllowed();
+        if ($stockItem->getMaxSaleQty()) {
+            $params['maxAllowed'] = (float)$stockItem->getMaxSaleQty();
         }
         if ($stockItem->getQtyIncrements() > 0) {
             $params['qtyIncrements'] = (float)$stockItem->getQtyIncrements();

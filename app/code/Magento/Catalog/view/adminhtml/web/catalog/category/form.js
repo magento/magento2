@@ -14,6 +14,7 @@ define([
             options: {
                 categoryIdSelector: 'input[name="id"]',
                 categoryPathSelector: 'input[name="path"]',
+                categoryParentSelector: 'input[name="parent"]',
                 refreshUrl: config.refreshUrl
             },
 
@@ -45,6 +46,7 @@ define([
                 } else {
                     $(this.options.categoryIdSelector).val(data.id).change();
                     $(this.options.categoryPathSelector).val(data.path).change();
+                    $(this.options.categoryParentSelector).val(data.parentId).change();
                 }
             }
         };

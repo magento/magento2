@@ -14,7 +14,7 @@ class Link extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'rss/order/grid/link.phtml';
+    protected $_template = 'Magento_Sales::rss/order/grid/link.phtml';
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface

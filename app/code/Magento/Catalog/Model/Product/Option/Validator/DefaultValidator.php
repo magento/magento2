@@ -106,7 +106,9 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
         if ($storeId > \Magento\Store\Model\Store::DEFAULT_STORE_ID && $title === null) {
             return true;
         }
-        if ($this->isEmpty($title)) {
+
+        // checking whether title is null and is empty string
+        if ($title === null || $title === '') {
             return false;
         }
 
@@ -132,7 +134,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      */
     protected function validateOptionValue(Option $option)
     {
-        return $this->isInRange($option->getPriceType(), $this->priceTypes) && !$this->isNegative($option->getPrice());
+        return $this->isInRange($option->getPriceType(), $this->priceTypes);
     }
 
     /**
@@ -166,6 +168,6 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      */
     protected function isNegative($value)
     {
-        return intval($value) < 0;
+        return (int)$value < 0;
     }
 }

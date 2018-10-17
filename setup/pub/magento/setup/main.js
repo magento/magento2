@@ -93,10 +93,6 @@ main.controller('navigationController',
             return str.indexOf(suffix, str.length - suffix.length) !== -1;
         };
 
-        $scope.goToStart = function() {
-            $scope.goToAction($state.current.type);
-        };
-
         $scope.goToBackup = function() {
             $state.go('root.create-backup-uninstall');
         };

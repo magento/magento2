@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\EntityManager;
 
-use Magento\Framework\Model\AbstractModel;
-
 /**
  * Class AbstractModelHydrator
  */

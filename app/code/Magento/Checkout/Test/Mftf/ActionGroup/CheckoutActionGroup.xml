@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!-- Checkout select Check/Money Order payment -->
+    <actionGroup name="CheckoutSelectCheckMoneyOrderPaymentActionGroup">
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" visible="true" stepKey="clickCheckMoneyOrderPayment"/>
+    </actionGroup>
+
+    <!-- Checkout place order -->
+    <actionGroup name="CheckoutPlaceOrderActionGroup">
+        <arguments>
+            <argument name="orderNumberMessage"/>
+            <argument name="emailYouMessage"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{orderNumberMessage}}" stepKey="seeOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{emailYouMessage}}" stepKey="seeEmailYou"/>
+    </actionGroup>
+
+    <!-- Logged in user checkout filling shipping section -->
+    <actionGroup name="LoggedInUserCheckoutFillingShippingSectionActionGroup">
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+        <waitForElementVisible selector="{{CheckoutShippingSection.firstName}}" stepKey="waitForFirstNameFieldAppears" time="30"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{customerAddressVar.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{customerAddressVar.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{customerAddressVar.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="waitForSelectFirstShippingMethodAppears"/>
+        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+
+    <!--Verify country options in checkout top destination section-->
+    <actionGroup name="VerifyTopDestinationsCountry">
+        <arguments>
+            <argument name="country" type="string"/>
+            <argument name="placeNumber"/>
+        </arguments>
+        <waitForElement selector="{{StorefrontCheckoutCartSummarySection.blockSummary}}" stepKey="waitBlockSummaryLoaded"/>
+        <conditionalClick selector="{{StorefrontCheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{StorefrontCheckoutCartSummarySection.country}}" visible="false" stepKey="openShippingDetails"/>
+        <see selector="{{StorefrontCheckoutCartSummarySection.countryParameterized('placeNumber')}}" userInput="{{country}}" stepKey="seeCountry"/>
+    </actionGroup>
+</actionGroups>

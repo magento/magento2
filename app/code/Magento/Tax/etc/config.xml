@@ -20,7 +20,6 @@
                 <based_on>shipping</based_on>
                 <price_includes_tax>0</price_includes_tax>
                 <shipping_includes_tax>0</shipping_includes_tax>
-                <discount_tax>0</discount_tax>
                 <apply_tax_on>0</apply_tax_on>
             </calculation>
             <defaults>

@@ -11,6 +11,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Subscriber model
@@ -130,6 +132,16 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     protected $inlineTranslation;
 
     /**
+     * @var CustomerInterfaceFactory
+     */
+    private $customerFactory;
+
+    /**
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -146,6 +158,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param DateTime|null $dateTime
+     * @param CustomerInterfaceFactory|null $customerFactory
+     * @param DataObjectHelper|null $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -162,7 +176,9 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        DateTime $dateTime = null
+        DateTime $dateTime = null,
+        CustomerInterfaceFactory $customerFactory = null,
+        DataObjectHelper $dataObjectHelper = null
     ) {
         $this->_newsletterData = $newsletterData;
         $this->_scopeConfig = $scopeConfig;
@@ -173,6 +189,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
         $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(DateTime::class);
+        $this->customerFactory = $customerFactory ?: ObjectManager::getInstance()->get(CustomerInterfaceFactory::class);
+        $this->dataObjectHelper = $dataObjectHelper ?: ObjectManager::getInstance()->get(DataObjectHelper::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -346,7 +364,17 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     public function loadByEmail($subscriberEmail)
     {
-        $this->addData($this->getResource()->loadByEmail($subscriberEmail));
+        $storeId = $this->_storeManager->getStore()->getId();
+        $customerData = ['store_id' => $storeId, 'email'=> $subscriberEmail];
+
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        $customer = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $customerData,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        $this->addData($this->getResource()->loadByCustomerData($customer));
         return $this;
     }
 
@@ -419,7 +447,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             self::XML_PATH_CONFIRMATION_FLAG,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) == 1 ? true : false;
-        $isOwnSubscribes = false;
 
         $isSubscribeOwnEmail = $this->_customerSession->isLoggedIn()
             && $this->_customerSession->getCustomerDataObject()->getEmail() == $email;
@@ -428,13 +455,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             || $this->getStatus() == self::STATUS_NOT_ACTIVE
         ) {
             if ($isConfirmNeed === true) {
-                // if user subscribes own login email - confirmation is not needed
-                $isOwnSubscribes = $isSubscribeOwnEmail;
-                if ($isOwnSubscribes == true) {
-                    $this->setStatus(self::STATUS_SUBSCRIBED);
-                } else {
-                    $this->setStatus(self::STATUS_NOT_ACTIVE);
-                }
+                $this->setStatus(self::STATUS_NOT_ACTIVE);
             } else {
                 $this->setStatus(self::STATUS_SUBSCRIBED);
             }
@@ -460,9 +481,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         try {
             /* Save model before sending out email */
             $this->save();
-            if ($isConfirmNeed === true
-                && $isOwnSubscribes === false
-            ) {
+            if ($isConfirmNeed === true) {
                 $this->sendConfirmationRequestEmail();
             } else {
                 $this->sendConfirmationSuccessEmail();
@@ -568,7 +587,9 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             ) {
                 $status = self::STATUS_UNCONFIRMED;
             } elseif ($isConfirmNeed) {
-                $status = self::STATUS_NOT_ACTIVE;
+                if ($this->getStatus() != self::STATUS_SUBSCRIBED) {
+                    $status = self::STATUS_NOT_ACTIVE;
+                }
             }
         } elseif (($this->getStatus() == self::STATUS_UNCONFIRMED) && ($customerData->getConfirmation() === null)) {
             $status = self::STATUS_SUBSCRIBED;

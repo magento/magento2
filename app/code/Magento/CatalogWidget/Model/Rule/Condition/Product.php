@@ -9,6 +9,7 @@
  */
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ProductCategoryList;
 
 /**
@@ -82,12 +83,17 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function loadAttributeOptions()
     {
         $productAttributes = $this->_productResource->loadAllAttributes()->getAttributesByCode();
+        $productAttributes = array_filter(
+            $productAttributes,
+            function ($attribute) {
+                return $attribute->getFrontendLabel() &&
+                    $attribute->getFrontendInput() !== 'text' &&
+                    $attribute->getAttributeCode() !== ProductInterface::STATUS;
+            }
+        );
 
         $attributes = [];
         foreach ($productAttributes as $attribute) {
-            if (!$attribute->getFrontendLabel() || $attribute->getFrontendInput() == 'text') {
-                continue;
-            }
             $attributes[$attribute->getAttributeCode()] = $attribute->getFrontendLabel();
         }
 
@@ -119,8 +125,21 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $attribute = $this->getAttributeObject();
 
         if ($collection->isEnabledFlat()) {
-            $alias = array_keys($collection->getSelect()->getPart('from'))[0];
-            $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.' . $attribute->getAttributeCode();
+            if ($this->isEnabledInFlat($attribute)) {
+                $alias = array_keys($collection->getSelect()->getPart('from'))[0];
+                $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.' . $attribute->getAttributeCode();
+            } else {
+                $alias = 'at_' . $attribute->getAttributeCode();
+                if (!in_array($alias, array_keys($collection->getSelect()->getPart('from')))) {
+                    $collection->joinAttribute(
+                        $attribute->getAttributeCode(),
+                        'catalog_product/'.$attribute->getAttributeCode(),
+                        'entity_id'
+                    );
+                }
+
+                $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.value';
+            }
             return $this;
         }
 
@@ -150,8 +169,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
     ) {
-        $storeId =  $this->storeManager->getStore()->getId();
-
         switch ($attribute->getBackendType()) {
             case 'decimal':
             case 'datetime':
@@ -160,10 +177,15 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $collection->addAttributeToSelect($attribute->getAttributeCode(), 'inner');
                 break;
             default:
-                $alias = 'at_' . md5($this->getId()) . $attribute->getAttributeCode();
+                $alias = 'at_' . sha1($this->getId()) . $attribute->getAttributeCode();
+
+                $connection = $this->_productResource->getConnection();
+                $storeId = $connection->getIfNullSql($alias . '.store_id', $this->storeManager->getStore()->getId());
+                $linkField = $attribute->getEntity()->getLinkField();
+
                 $collection->getSelect()->join(
-                    [$alias => $collection->getTable('catalog_product_index_eav')],
-                    "($alias.entity_id = e.entity_id) AND ($alias.store_id = $storeId)" .
+                    [$alias => $collection->getTable('catalog_product_entity_varchar')],
+                    "($alias.$linkField = e.$linkField) AND ($alias.store_id = $storeId)" .
                     " AND ($alias.attribute_id = {$attribute->getId()})",
                     []
                 );
@@ -235,5 +257,16 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function collectValidatedAttributes($productCollection)
     {
         return $this->addToCollection($productCollection);
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $attribute
+     * @return bool
+     */
+    private function isEnabledInFlat(\Magento\Framework\DataObject $attribute): bool
+    {
+        return $attribute->getData('backend_type') === 'static'
+            || (int) $attribute->getData('used_in_product_listing') === 1
+            || (int) $attribute->getData('used_for_sort_by') === 1;
     }
 }

@@ -783,34 +783,6 @@
                         "dev/tests/functional/.gitignore"
                     ],
                     [
-                        "dev/tests/js/JsTestDriver/run_js_tests.php",
-                        "dev/tests/js/JsTestDriver/run_js_tests.php"
-                    ],
-                    [
-                        "dev/tests/js/JsTestDriver/jsTestDriverOrder.php",
-                        "dev/tests/js/JsTestDriver/jsTestDriverOrder.php"
-                    ],
-                    [
-                        "dev/tests/js/JsTestDriver/jsTestDriver.php.dist",
-                        "dev/tests/js/JsTestDriver/jsTestDriver.php.dist"
-                    ],
-                    [
-                        "dev/tests/js/JsTestDriver/framework",
-                        "dev/tests/js/JsTestDriver/framework"
-                    ],
-                    [
-                        "dev/tests/js/JsTestDriver/testsuite/lib",
-                        "dev/tests/js/JsTestDriver/testsuite/lib"
-                    ],
-                    [
-                        "dev/tests/js/JsTestDriver/testsuite/mage",
-                        "dev/tests/js/JsTestDriver/testsuite/mage"
-                    ],
-                    [
-                        "dev/tests/js/JsTestDriver/.gitignore",
-                        "dev/tests/js/JsTestDriver/.gitignore"
-                    ],
-                    [
                         "dev/tests/js/jasmine",
                         "dev/tests/js/jasmine"
                     ],

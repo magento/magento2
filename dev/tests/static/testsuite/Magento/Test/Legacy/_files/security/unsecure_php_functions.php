@@ -39,7 +39,9 @@ return [
     ],
     'md5' => [
         'replacement' => '',
-        'exclude' => []
+        'exclude' => [
+            ['type' => 'library', 'name' => 'magento/framework', 'path' => 'App/Utility/Files.php'],
+        ],
     ],
     'srand' => [
         'replacement' => '',
