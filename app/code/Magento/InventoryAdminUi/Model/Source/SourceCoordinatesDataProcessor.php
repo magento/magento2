@@ -16,7 +16,7 @@ class SourceCoordinatesDataProcessor
      * @param array $data
      * @return array
      */
-    public function process(array $data): array
+    public function execute(array $data): array
     {
         if (!isset($data['latitude']) || '' === $data['latitude']) {
             $data['latitude'] = null;

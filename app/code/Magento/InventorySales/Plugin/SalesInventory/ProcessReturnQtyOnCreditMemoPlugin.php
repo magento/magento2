@@ -128,7 +128,7 @@ class ProcessReturnQtyOnCreditMemoPlugin
 
         $productType = $this->getProductTypesBySkus->execute(
             [$sku]
-        )[$sku] ?: $typeId;
+        )[$sku] ?? $typeId;
 
         return $this->isSourceItemManagementAllowedForProductType->execute($productType);
     }
