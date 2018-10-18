@@ -113,6 +113,8 @@ class Validator
     }
 
     /**
+     * Set template validation results for filename
+     *
      * @param string $filename
      * @return void
      */
@@ -141,10 +143,9 @@ class Validator
      * Checks if the filename is out of Magento's root installation.
      *
      * @param string $filename
-     *
      * @return bool
      */
-    protected function isOutsourceFile($filename)
+    private function isOutsourceFile($filename)
     {
         $isOutsourceFile = strpos($filename, $this->getRootDirectory()->getAbsolutePath());
         return !($isOutsourceFile === 0);
