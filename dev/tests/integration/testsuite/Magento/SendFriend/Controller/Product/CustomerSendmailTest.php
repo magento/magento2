@@ -1,10 +1,9 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: roman
- * Date: 10/18/18
- * Time: 11:46 AM
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\SendFriend\Controller\Product;
 
