@@ -30,7 +30,7 @@ interface StockInterface extends ExtensibleDataInterface
      *
      * @return int|null
      */
-    public function getStockId();
+    public function getStockId(): ?int;
 
     /**
      * Set stock id
@@ -38,14 +38,14 @@ interface StockInterface extends ExtensibleDataInterface
      * @param int|null $stockId
      * @return void
      */
-    public function setStockId($stockId);
+    public function setStockId(?int $stockId): void;
 
     /**
      * Get stock name
      *
      * @return string|null
      */
-    public function getName();
+    public function getName(): ?string;
 
     /**
      * Set stock name
@@ -53,7 +53,7 @@ interface StockInterface extends ExtensibleDataInterface
      * @param string|null $name
      * @return void
      */
-    public function setName($name);
+    public function setName(?string $name): void;
 
     /**
      * Retrieve existing extension attributes object
@@ -62,7 +62,7 @@ interface StockInterface extends ExtensibleDataInterface
      *
      * @return \Magento\InventoryApi\Api\Data\StockExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?StockExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -70,5 +70,5 @@ interface StockInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\StockExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(StockExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(StockExtensionInterface $extensionAttributes): void;
 }

@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventorySourceSelection\Model;
 
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmExtensionInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * @inheritdoc
  */
-class SourceSelectionAlgorithm implements SourceSelectionAlgorithmInterface
+class SourceSelectionAlgorithm extends AbstractExtensibleModel implements SourceSelectionAlgorithmInterface
 {
     /**
      * @var string
@@ -63,5 +65,28 @@ class SourceSelectionAlgorithm implements SourceSelectionAlgorithmInterface
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes(): ?SourceSelectionAlgorithmExtensionInterface
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(
+                SourceSelectionAlgorithmInterface::class
+            );
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(SourceSelectionAlgorithmExtensionInterface $extensionAttributes): void
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

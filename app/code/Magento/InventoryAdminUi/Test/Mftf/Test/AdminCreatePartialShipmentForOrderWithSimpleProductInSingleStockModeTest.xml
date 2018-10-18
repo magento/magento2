@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreatePartialShipmentForOrderWithSimpleProductInSingleStockModeTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Sales-Shipments"/>
             <title value="Admin user created partial shipment for order placed from Main website with Simple product in Single Stock mode"/>
             <description value="You should be able to create partial shipment in Single Stock mode."/>
-            <testCaseId value="1145"/>
+            <testCaseId value="MSI-1145"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>
@@ -38,7 +37,6 @@
                                         stepKey="searchAndSelectCategory"/>
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
         </before>
-
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
