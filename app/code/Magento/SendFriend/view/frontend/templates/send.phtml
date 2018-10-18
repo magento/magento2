@@ -90,7 +90,7 @@
 
     <fieldset class="fieldset recipients">
         <?= $block->getBlockHtml('formkey') ?>
-        <legend class="legend"><span><?= $block->escapeHtml(__('Invitee')) ?></span></legend>
+        <legend class="legend"><span><?= $block->escapeHtml(__('Invite')) ?></span></legend>
         <br />
         <div id="recipients-options"></div>
         <?php if ($block->getMaxRecipients()): ?>
@@ -102,12 +102,13 @@
             <div class="secondary">
             <?php if (1 < $block->getMaxRecipients()): ?>
                 <button type="button" id="add-recipient-button" class="action add">
-                    <span><?= $block->escapeHtml(__('Add Invitee')) ?></span></button>
+                    <span><?= $block->escapeHtml(__('Add Invite')) ?></span></button>
             <?php endif; ?>
             </div>
         </div>
         <?= $block->getChildHtml('form_additional_info') ?>
     </fieldset>
+    <?= $block->getChildHtml('captcha'); ?>
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit"
