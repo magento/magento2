@@ -8,6 +8,7 @@ namespace Magento\ImportExport\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
@@ -169,6 +170,16 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_filesystem;
 
     /**
+     * @var History
+     */
+    private $importHistoryModel;
+
+    /**
+     * @var DateTime
+     */
+    private $localeDate;
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -182,7 +193,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param Source\Import\Behavior\Factory $behaviorFactory
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param History $importHistoryModel
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime
+     * @param DateTime $localeDate
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -200,7 +211,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\ImportExport\Model\History $importHistoryModel,
-        \Magento\Framework\Stdlib\DateTime\DateTime $localeDate,
+        DateTime $localeDate,
         array $data = []
     ) {
         $this->_importExportData = $importExportData;
