@@ -320,7 +320,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->clientMock->expects($this->once())
             ->method('query')
-            ->with($this->callback(function($query) {
+            ->with($this->callback(function ($query) {
                 // Assert the interval is queried as a float. See MAGETWO-95471
                 return $query['body']['aggregations']['prices']['histogram']['interval'] === 10.0;
             }))

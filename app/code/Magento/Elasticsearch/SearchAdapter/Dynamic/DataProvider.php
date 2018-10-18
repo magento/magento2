@@ -9,6 +9,8 @@ use Magento\Elasticsearch\SearchAdapter\QueryAwareInterface;
 use Magento\Elasticsearch\SearchAdapter\QueryContainer;
 
 /**
+ * Provides data for search using ElasticSearch
+ *
  * @api
  * @since 100.1.0
  */
@@ -120,7 +122,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getRange()
@@ -129,7 +131,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getAggregations(\Magento\Framework\Search\Dynamic\EntityStorage $entityStorage)
@@ -168,7 +170,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getInterval(
@@ -191,7 +193,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getAggregation(
@@ -225,7 +227,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function prepareData($range, array $dbRanges)
