@@ -104,7 +104,7 @@ class AjaxLogin
                     if (!$captchaModel->isCorrect($captchaString)) {
                         $this->sessionManager->setUsername($username);
                         $captchaModel->logAttempt($username);
-                        return $this->returnJsonError(__('Incorrect CAPTCHA'));
+                        return $this->returnJsonError(__('Incorrect CAPTCHA'), true);
                     }
                 }
 
@@ -118,11 +118,12 @@ class AjaxLogin
      * Gets Json response.
      *
      * @param \Magento\Framework\Phrase $phrase
+     * @param bool $isCaptchaRequired
      * @return Json
      */
-    private function returnJsonError(\Magento\Framework\Phrase $phrase): Json
+    private function returnJsonError(\Magento\Framework\Phrase $phrase, bool $isCaptchaRequired = false): Json
     {
         $resultJson = $this->resultJsonFactory->create();
-        return $resultJson->setData(['errors' => true, 'message' => $phrase]);
+        return $resultJson->setData(['errors' => true, 'message' => $phrase, 'captcha' => $isCaptchaRequired]);
     }
 }

@@ -4,11 +4,12 @@
  */
 
 define([
+        'underscore',
         'Magento_Captcha/js/view/checkout/defaultCaptcha',
         'Magento_Captcha/js/model/captchaList',
         'Magento_Customer/js/action/login'
     ],
-    function (defaultCaptcha, captchaList, loginAction) {
+    function (_, defaultCaptcha, captchaList, loginAction) {
         'use strict';
 
         return defaultCaptcha.extend({
@@ -25,11 +26,11 @@ define([
                     this.setCurrentCaptcha(currentCaptcha);
 
                     loginAction.registerLoginCallback(function (loginData, response) {
-                        if (!response.errors) {
+                        if (!loginData['captcha_form_id'] || loginData['captcha_form_id'] !== self.formId) {
                             return;
                         }
 
-                        if (!loginData['captcha_form_id'] || loginData['captcha_form_id'] !== self.formId) {
+                        if (_.isUndefined(response) || !response.errors) {
                             return;
                         }
 
