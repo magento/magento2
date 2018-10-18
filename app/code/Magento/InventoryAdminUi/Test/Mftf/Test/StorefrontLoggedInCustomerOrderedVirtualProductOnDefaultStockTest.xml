@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontLoggedInCustomerOrderedVirtualProductOnDefaultStockTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Virtual Product"/>
             <title value="Logged customer place order with virtual product on default stock"/>
             <description value="Customer should be able to place order with virtual product on default stock."/>
-            <testCaseId value="1298"/>
+            <testCaseId value="MSI-1298"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -58,7 +57,6 @@
 
             <createData entity="VirtualProduct" stepKey="product"/>
         </before>
-
         <after>
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
 

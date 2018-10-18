@@ -55,8 +55,8 @@ class SourceHydrator
      */
     public function hydrate(SourceInterface $source, array $data): SourceInterface
     {
-        $data['general'] = $this->sourceRegionDataProcessor->process($data['general']);
-        $data['general'] = $this->sourceCoordinatesDataProcessor->process($data['general']);
+        $data['general'] = $this->sourceRegionDataProcessor->execute($data['general']);
+        $data['general'] = $this->sourceCoordinatesDataProcessor->execute($data['general']);
 
         $this->dataObjectHelper->populateWithArray($source, $data['general'], SourceInterface::class);
 

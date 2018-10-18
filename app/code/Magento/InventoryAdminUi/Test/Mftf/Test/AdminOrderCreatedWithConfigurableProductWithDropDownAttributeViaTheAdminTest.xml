@@ -7,22 +7,22 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminOrderCreatedForGuestCustomerWithConfigurableProductWithDropDownAttributeViaTheAdminTest">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderCreatedWithConfigurableProductWithDropDownAttributeViaTheAdminTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Order"/>
             <title value="Create an Order with a Configurable Product with Drop Down Attributes via the Admin."/>
             <description value="You should be able to place an Order using a Configurable Product with Drop Down Attributes that is assigned to a Source with a Stock."/>
-            <testCaseId value="1313"/>
+            <testCaseId value="MSI-1313"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
         </annotations>
-
+        
         <before>
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
-
             <createData entity="MsiCustomer1" stepKey="createCustomer1"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
             <createData entity="FullSource1" stepKey="createSource1"/>
@@ -155,16 +155,16 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
 
         <click selector=".admin__field-shipping-same-as-billing label" stepKey="clickOnSameAsBillingAddress1"/>
-        <waitForPageLoad stepKey="waitForPageLoad13"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad13"/>
 
         <click selector="#order-shipping-method-summary a" stepKey="clickOnGetShippingMethodsAndRates1"/>
-        <waitForPageLoad stepKey="waitForPageLoad14"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad14"/>
 
         <click selector=".admin__order-shipment-methods-options-list li label" stepKey="clickOnFixedShippingRate1"/>
-        <waitForPageLoad stepKey="waitForPageLoad15"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad15"/>
 
         <click selector=".order-totals-actions .save" stepKey="clickOnSubmitOrder1"/>
-        <waitForPageLoad stepKey="waitForPageLoad16"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad16"/>
 
         <seeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessage1"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage2"/>

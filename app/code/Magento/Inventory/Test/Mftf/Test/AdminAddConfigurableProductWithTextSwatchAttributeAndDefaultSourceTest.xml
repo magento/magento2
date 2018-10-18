@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddConfigurableProductWithTextSwatchAttributeAndDefaultSourceTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Configurable Product"/>
             <title value="Create a Configurable Product with a text swatch attribute"/>
             <description value="You should be able to create a Configurable Product that is assigned to the Default Source with a text swatch attribute."/>
