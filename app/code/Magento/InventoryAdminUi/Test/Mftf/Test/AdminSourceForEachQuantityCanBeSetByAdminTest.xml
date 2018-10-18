@@ -85,7 +85,7 @@
         <click selector="{{AdminGridRow.editByValue($$simpleProduct1.product[name]$$)}}" stepKey="clickOnEditForTheProduct1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
-        <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="uncheckUseDefaultForNotifyQuantity1"/>
+        <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="uncheckUseDefaultValueCheckbox1"/>
         <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="2" stepKey="fillSourceNotifyQuantity1"/>
         <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('1')}}" stepKey="uncheckUseDefaultForNotifyQuantity2"/>
         <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('1')}}" userInput="5" stepKey="fillSourceNotifyQuantity2"/>
