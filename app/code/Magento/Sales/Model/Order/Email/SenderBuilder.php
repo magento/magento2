@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model\Order\Email;
 
 use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Mail\Template\TransportBuilderByStore;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
 use Magento\Sales\Model\Order\Email\Container\Template;
 
@@ -30,14 +31,18 @@ class SenderBuilder
     protected $transportBuilder;
 
     /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      * @param Template $templateContainer
      * @param IdentityInterface $identityContainer
      * @param TransportBuilder $transportBuilder
+     * @param TransportBuilderByStore $transportBuilderByStore
      */
     public function __construct(
         Template $templateContainer,
         IdentityInterface $identityContainer,
-        TransportBuilder $transportBuilder
+        TransportBuilder $transportBuilder,
+        TransportBuilderByStore $transportBuilderByStore = null
     ) {
         $this->templateContainer = $templateContainer;
         $this->identityContainer = $identityContainer;
