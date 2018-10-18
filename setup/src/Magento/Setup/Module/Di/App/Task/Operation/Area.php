@@ -28,7 +28,7 @@ class Area implements OperationInterface
     private $configReader;
 
     /**
-     * @var Config\WriterInterface
+     * @var \Magento\Framework\App\ObjectManager\ConfigWriterInterface
      */
     private $configWriter;
 
@@ -46,7 +46,7 @@ class Area implements OperationInterface
      * @param App\AreaList $areaList
      * @param \Magento\Setup\Module\Di\Code\Reader\Decorator\Area $areaInstancesNamesList
      * @param Config\Reader $configReader
-     * @param Config\WriterInterface $configWriter
+     * @param \Magento\Framework\App\ObjectManager\ConfigWriterInterface $configWriter
      * @param \Magento\Setup\Module\Di\Compiler\Config\ModificationChain $modificationChain
      * @param array $data
      */
@@ -54,7 +54,7 @@ class Area implements OperationInterface
         App\AreaList $areaList,
         \Magento\Setup\Module\Di\Code\Reader\Decorator\Area $areaInstancesNamesList,
         Config\Reader $configReader,
-        Config\WriterInterface $configWriter,
+        \Magento\Framework\App\ObjectManager\ConfigWriterInterface $configWriter,
         Config\ModificationChain $modificationChain,
         $data = []
     ) {

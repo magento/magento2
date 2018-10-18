@@ -79,7 +79,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     private $serializer;
 
     /**
-     * @var \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem
+     * @var \Magento\Framework\App\ObjectManager\ConfigWriterInterface
      */
     private $configWriter;
 
@@ -99,7 +99,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions
      * @param string $cacheId
      * @param SerializerInterface|null $serializer
-     * @param \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem $configWriter
+     * @param \Magento\Framework\App\ObjectManager\ConfigWriterInterface $configWriter
      * @param \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled $compiledLoader
      */
     public function __construct(
@@ -111,7 +111,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         $cacheId = 'interception',
         SerializerInterface $serializer = null,
-        \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem $configWriter = null,
+        \Magento\Framework\App\ObjectManager\ConfigWriterInterface $configWriter = null,
         \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled $compiledLoader = null
     ) {
         $this->_omConfig = $omConfig;
@@ -124,7 +124,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Serialize::class);
         $this->configWriter = $configWriter ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem::class);
+            ->get(\Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem::class);
         $this->compiledLoader = $compiledLoader ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class);
         $intercepted = $this->loadIntercepted();

@@ -1,20 +1,20 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Module\Di\Compiler\Config\Writer;
+declare(strict_types=1);
+
+namespace Magento\Framework\App\ObjectManager\ConfigWriter;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
+use Magento\Framework\App\ObjectManager\ConfigWriterInterface;
 
 /**
- * @deprecated Moved to Framework to allow broader reuse
- * @see \Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem
+ * @inheritdoc
  */
-class Filesystem implements WriterInterface
+class Filesystem implements ConfigWriterInterface
 {
     /**
      * @var DirectoryList
@@ -22,12 +22,11 @@ class Filesystem implements WriterInterface
     private $directoryList;
 
     /**
-     * Constructor
-     *
      * @param DirectoryList $directoryList
      */
-    public function __construct(DirectoryList $directoryList)
-    {
+    public function __construct(
+        DirectoryList $directoryList
+    ) {
         $this->directoryList = $directoryList;
     }
 
@@ -38,7 +37,7 @@ class Filesystem implements WriterInterface
      * @param array $config
      * @return void
      */
-    public function write($key, array $config)
+    public function write(string $key, array $config)
     {
         $this->initialize();
         $configuration = sprintf('<?php return %s;', var_export($config, true));
