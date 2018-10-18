@@ -12,10 +12,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
-use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
-use Magento\InventoryConfiguration\Model\GetStockItemConfiguration;
-use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
 use Magento\InventoryReservationsApi\Model\CleanupReservationsInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -28,6 +24,10 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/default_stock_bundle_products.php
+ * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
+ * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
  */
 class PlaceOrderOnDefaultStockTest extends TestCase
 {
@@ -77,21 +77,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     private $orderManagement;
 
     /**
-     * @var GetStockItemConfigurationInterface
-     */
-    private $getStockItemConfiguration;
-
-    /**
-     * @var SaveStockItemConfigurationInterface
-     */
-    private $saveStockItemConfiguration;
-
-    /**
-     * @var DefaultStockProviderInterface
-     */
-    private $defaultStockProvider;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -105,18 +90,8 @@ class PlaceOrderOnDefaultStockTest extends TestCase
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
         $this->orderManagement = Bootstrap::getObjectManager()->get(OrderManagementInterface::class);
-        $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
-        $this->getStockItemConfiguration = Bootstrap::getObjectManager()
-            ->get(GetStockItemConfigurationInterface::class);
-        $this->saveStockItemConfiguration = Bootstrap::getObjectManager()
-            ->get(SaveStockItemConfigurationInterface::class);
     }
 
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/default_stock_bundle_products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     */
     public function testPlaceOrderWithInStockProduct()
     {
         $bundleSku = 'bundle-product-in-stock';
@@ -137,9 +112,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/default_stock_bundle_products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Product that you are trying to add is not available.
      */
@@ -155,9 +127,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/default_stock_bundle_products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/item_options/backorders 1
      */
     public function testPlaceOrderWithOutOfStockProductAndBackOrdersTurnedOn()
@@ -165,11 +134,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
         $bundleSku = 'bundle-product-out-of-stock';
         $qty = 3;
         $cart = $this->getCart();
-        $defaultStockId = $this->defaultStockProvider->getId();
-        $stockItemConfiguration = $this->getStockItemConfiguration->execute($bundleSku, $defaultStockId);
-        $stockItemConfiguration->setMinQty(1);
-        $stockItemConfiguration->setUseConfigMinQty(false);
-        $this->saveStockItemConfiguration->execute($bundleSku, $defaultStockId, $stockItemConfiguration);
 
         $bundleProduct = $this->productRepository->get($bundleSku);
 
@@ -186,9 +150,6 @@ class PlaceOrderOnDefaultStockTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleProduct/Test/_files/default_stock_bundle_products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/item_options/manage_stock 0
      */
     public function testPlaceOrderWithOutOfStockProductAndManageStockTurnedOff()
