@@ -10,6 +10,9 @@ use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultContro
 use Magento\Framework\Controller\ResultFactory;
 use Magento\ImportExport\Model\Import;
 
+/**
+ * Controller responsible for initiating the import process
+ */
 class Start extends ImportResultController implements HttpPostActionInterface
 {
     /**
