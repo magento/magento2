@@ -71,7 +71,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if ($type == 'text') {
             $valid = $this->string->strlen($val) < Product::DB_MAX_TEXT_LENGTH;
         } else if ($attrCode == Product::COL_SKU) {
-            $valid = $this->string->strlen($val) < SKU::SKU_MAX_LENGTH;
+            $valid = $this->string->strlen($val) <= SKU::SKU_MAX_LENGTH;
         } else {
             $valid = $this->string->strlen($val) < Product::DB_MAX_VARCHAR_LENGTH;
         }
