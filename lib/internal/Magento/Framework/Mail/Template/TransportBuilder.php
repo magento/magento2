@@ -187,7 +187,7 @@ class TransportBuilder
      */
     public function setFrom($from)
     {
-        return($this->setFromByStore($from));
+        return $this->setFromByStore($from, null);
     }
 
     /**
