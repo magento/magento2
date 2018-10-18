@@ -8,6 +8,10 @@ namespace Magento\Framework\App\Config;
 /**
  * Config data model
  *
+ * This model is temporarily marked as API since {@see \Magento\Framework\App\Config\ValueInterface} doesn't fit
+ * developers' needs of extensibility. In 2.4 we are going to introduce a new iterface which should cover all needs
+ * and deprecate the mentioned together with the model
+ *
  * @method string getScope()
  * @method \Magento\Framework\App\Config\ValueInterface setScope(string $value)
  * @method int getScopeId()
@@ -16,6 +20,8 @@ namespace Magento\Framework\App\Config;
  * @method \Magento\Framework\App\Config\ValueInterface setPath(string $value)
  * @method string getValue()
  * @method \Magento\Framework\App\Config\ValueInterface setValue(string $value)
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
