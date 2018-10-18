@@ -142,6 +142,17 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 
+    <!--Select Product In Websites-->
+    <actionGroup name="SelectProductInWebsitesActionGroup">
+        <arguments>
+            <argument name="website" type="string"/>
+        </arguments>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickToOpenProductInWebsite"/>
+        <waitForPageLoad stepKey="waitForPageOpened"/>
+        <checkOption selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
+    </actionGroup>
+
     <!--Remove product image-->
     <actionGroup name="RemoveProductImage">
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
