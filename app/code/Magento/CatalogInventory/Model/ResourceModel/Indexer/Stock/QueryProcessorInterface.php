@@ -12,8 +12,9 @@ use Magento\Framework\DB\Select;
  * @api
  * @since 100.1.0
  *
- * @deprecated CatalogInventory will be replaced by Multi-Source Inventory (MSI)
- *             see https://devdocs.magento.com/guides/v2.3/rest/modules/inventory/inventory.html
+ * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
 interface QueryProcessorInterface
 {
