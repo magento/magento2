@@ -35,6 +35,7 @@ class LoadIsInStockPlugin
      * @param string $sku
      * @param int $stockId
      * @return StockItemConfigurationInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
         GetStockItemConfigurationInterface $subject,

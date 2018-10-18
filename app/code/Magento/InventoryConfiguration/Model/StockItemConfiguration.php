@@ -20,6 +20,7 @@ use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface;
 
 /**
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @inheritdoc
  */
 class StockItemConfiguration extends AbstractExtensibleModel implements StockItemConfigurationInterface
