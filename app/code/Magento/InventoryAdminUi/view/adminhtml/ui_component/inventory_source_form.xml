@@ -58,6 +58,9 @@
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Code</label>
+                <imports>
+                    <link name="disabled">${ $.provider }:data.general.disable_source_code</link>
+                </imports>
             </settings>
         </field>
         <field name="name" formElement="input" sortOrder="20">

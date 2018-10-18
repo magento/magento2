@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddRemoveStockColumnsTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add/Remove Grid Columns"/>
             <title value="Add/Remove Stock Grid Columns"/>
             <description value="You should be able to toggle Columns on/off in the Stock Grid."/>
-            <testCaseId value="620"/>
+            <testCaseId value="MSI-620"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

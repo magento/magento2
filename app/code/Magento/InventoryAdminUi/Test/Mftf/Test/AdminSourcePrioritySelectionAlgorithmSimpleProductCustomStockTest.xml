@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminSourcePrioritySelectionAlgorithmSimpleProductCustomStockTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Source Selection Algorithm by source priority with simple product on custom stock."/>
             <title value="Source Selection Algorithm by source priority with simple product on custom stock."/>
             <description value="Check, 'Source Selection Algorithm' by source priority select corrects source for simple product on custom stock."/>
-            <testCaseId value="1126"/>
+            <testCaseId value="MSI-1126"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -64,7 +63,6 @@
             <magentoCLI command="indexer:reindex" stepKey="performReindexAfterStockSave"/>
             <magentoCLI command="cache:flush" stepKey="cleanCacheAfterStockSave"/>
         </before>
-
         <after>
             <comment userInput="Disable sources, as they can brake single source mode tests." stepKey="disableSourcesComment"/>
             <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceList"/>
