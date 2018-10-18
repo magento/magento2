@@ -72,7 +72,7 @@
         <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName($$createProduct.name$$)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" visible="false" stepKey="exposeProductOptions"/>
 
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
-
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
 
         <!-- Place Order -->
