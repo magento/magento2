@@ -8,43 +8,34 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Helper\ImageFactory as CatalogImageHelperFactory;
+use Magento\Catalog\Model\Product\ImageFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Return product image paths by image type.
+ * Returns product's image data
  */
 class ProductImage implements ResolverInterface
 {
     /**
-     * @var CatalogImageHelperFactory
+     * Product image factory
+     *
+     * @var ImageFactory
      */
-    private $catalogImageHelperFactory;
+    private $productImageFactory;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @param CatalogImageHelperFactory $catalogImageHelperFactory
-     * @param StoreManagerInterface $storeManager
+     * @param ImageFactory $productImageFactory
      */
     public function __construct(
-        CatalogImageHelperFactory $catalogImageHelperFactory,
-        StoreManagerInterface $storeManager
+        ImageFactory $productImageFactory
     ) {
-        $this->catalogImageHelperFactory = $catalogImageHelperFactory;
-        $this->storeManager = $storeManager;
+        $this->productImageFactory = $productImageFactory;
     }
 
     /**
-     * Get product's image by type.
-     *
      * @inheritdoc
      */
     public function resolve(
@@ -53,30 +44,26 @@ class ProductImage implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) {
+    ): array {
         if (!isset($value['model'])) {
-            throw new GraphQlInputException(__('"model" value should be specified'));
+            throw new LocalizedException(__('"model" value should be specified'));
         }
         /** @var Product $product */
         $product = $value['model'];
         $imageType = $field->getName();
 
-        /** @var \Magento\Catalog\Helper\Image $catalogImageHelper */
-        $catalogImageHelper = $this->catalogImageHelperFactory->create();
+        $imagePath = $product->getData($imageType);
+        $imageLabel = $product->getData($imageType . '_' . 'label') ?? $product->getName();
 
-        /** @var \Magento\Catalog\Helper\Image $image */
-        $image = $catalogImageHelper->init(
-            $product,
-            'product_' . $imageType,
-            ['type' => $imageType]
-        );
+        $image = $this->productImageFactory->create();
+        $image->setDestinationSubdir($imageType)
+            ->setBaseFile($imagePath);
+        $imageUrl = $image->getUrl();
 
-        $imageData = [
-            'url'   => $image->getUrl(),
-            'path'  => $product->getData($imageType),
-            'label' => $image->getLabel()
+        return [
+            'url' => $imageUrl,
+            'path' => $imagePath,
+            'label' => $imageLabel,
         ];
-
-        return $imageData;
     }
 }
