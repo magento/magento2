@@ -102,7 +102,7 @@ class ReadHandler implements AttributeInterface
 
         $attributeTables = [];
         $attributesMap = [];
-        $attributeValues = [[]];
+        $attributeValues = [];
 
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         foreach ($this->getAttributes($entityType) as $attribute) {
@@ -126,8 +126,8 @@ class ReadHandler implements AttributeInterface
                         $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
                         $this->getContextVariables($scope)
                     )->order('t.' . $scope->getIdentifier() . ' ASC');
-                    $attributeValues[] = $connection->fetchAll($select);
                 }
+                $attributeValues[] = $connection->fetchAll($select);
             }
             $attributeValues = array_merge(...$attributeValues);
             foreach ($attributeValues as $attributeValue) {
@@ -136,7 +136,7 @@ class ReadHandler implements AttributeInterface
                 } else {
                     $this->logger->warning(
                         "Attempt to load value of nonexistent EAV attribute '{$attributeValue['attribute_id']}' 
-                    for entity type '$entityType'."
+                        for entity type '$entityType'."
                     );
                 }
             }
