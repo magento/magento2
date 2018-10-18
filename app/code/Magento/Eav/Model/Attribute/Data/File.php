@@ -120,8 +120,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
     }
 
     /**
-     * Validate file by attribute validate rules
-     * Return array of errors
+     * Validate file by attribute validate rules and return array of errors
      *
      * @param array $value
      * @return string[]
@@ -180,7 +179,8 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
             $dir = $this->_directory->getAbsolutePath($this->getAttribute()->getEntityType()->getEntityTypeCode());
             $fileData = [
                 'size' => filesize($dir . $value),
-                'name' => $value
+                'name' => $value,
+                'tmp_name' => $dir . $value
             ];
         }
 
