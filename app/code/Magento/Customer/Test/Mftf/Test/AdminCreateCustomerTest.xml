@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateCustomerTest">
         <annotations>
             <features value="Customer Creation"/>
@@ -19,6 +19,9 @@
             <group value="customer"/>
             <group value="create"/>
         </annotations>
+        <before>
+            <magentoCLI command="indexer:reindex customer_grid" stepKey="reindexCustomerGrid"/>
+        </before>
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
