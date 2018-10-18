@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurationApi\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * @api
  */
-interface StockItemConfigurationInterface
+interface StockItemConfigurationInterface extends ExtensibleDataInterface
 {
     const BACKORDERS_NO = 0;
     const BACKORDERS_YES_NONOTIFY = 1;
@@ -55,7 +57,6 @@ interface StockItemConfigurationInterface
     const USE_CONFIG_MANAGE_STOCK = 'use_config_manage_stock';
     const MANAGE_STOCK = 'manage_stock';
 
-    const IS_IN_STOCK = 'is_in_stock';
     const LOW_STOCK_DATE = 'low_stock_date';
     const IS_DECIMAL_DIVIDED = 'is_decimal_divided';
     const STOCK_STATUS_CHANGED_AUTO = 'stock_status_changed_auto';
@@ -293,4 +294,21 @@ interface StockItemConfigurationInterface
      * @return float
      */
     public function getStockThresholdQty(): float;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * Null for return is specified for proper work SOAP requests parser
+     *
+     * @return \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?StockItemConfigurationExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(StockItemConfigurationExtensionInterface $extensionAttributes): void;
 }

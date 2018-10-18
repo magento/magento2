@@ -54,9 +54,9 @@
     <type name="Magento\InventorySales\Model\IsProductSalableCondition\IsProductSalableConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">
-                <item name="legacy_stock_item_is_in_stock" xsi:type="array">
+                <item name="stock_item_is_in_stock" xsi:type="array">
                     <item name="required" xsi:type="boolean">true</item>
-                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsSalableLegacyStockItemIsInStock</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsSalableStockItemIsInStock</item>
                 </item>
                 <item name="back_order" xsi:type="array">
                     <item name="sort_order" xsi:type="number">10</item>
@@ -82,10 +82,6 @@
                 <item name="is_correct_qty" xsi:type="array">
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsCorrectQtyCondition</item>
-                </item>
-                <item name="is_in_stock_legacy_stock_item" xsi:type="array">
-                    <item name="required" xsi:type="boolean">true</item>
-                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsSalableLegacyStockItemIsInStock</item>
                 </item>
                 <item name="back_order" xsi:type="array">
                     <item name="sort_order" xsi:type="number">10</item>
@@ -166,5 +162,10 @@
                 <item name="sales_channels" xsi:type="object">Magento\InventorySales\Model\Stock\Validator\SalesChannelsValidator</item>
             </argument>
         </arguments>
+    </type>
+    <!-- StockItemConfiguration -->
+    <type name="Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface">
+        <plugin name="load_stock_item_is_in_stock"
+                type="Magento\InventorySales\Plugin\InventoryConfiguration\LoadIsInStockPlugin"/>
     </type>
 </config>

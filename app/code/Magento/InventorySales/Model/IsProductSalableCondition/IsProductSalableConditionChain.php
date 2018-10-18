@@ -71,7 +71,7 @@ class IsProductSalableConditionChain implements IsProductSalableInterface
             }
 
             if (empty($condition['required']) && empty($condition['sort_order'])) {
-                throw new LocalizedException(__('Parameter "sort_order" must be present.'));
+                throw new LocalizedException(__('Parameter "sort_order" must be present for unrequired conditions.'));
             }
 
             if (!$condition['object'] instanceof IsProductSalableInterface) {

@@ -9,4 +9,7 @@
     <extension_attributes for="Magento\InventoryApi\Api\Data\StockInterface">
         <attribute code="sales_channels" type="Magento\InventorySalesApi\Api\Data\SalesChannelInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\InventoryApi\Api\Data\StockInterface">
+        <attribute code="is_in_stock" type="boolean" />
+    </extension_attributes>
 </config>
