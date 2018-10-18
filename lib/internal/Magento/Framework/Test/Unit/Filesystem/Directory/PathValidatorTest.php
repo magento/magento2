@@ -79,7 +79,7 @@ class PathValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\ValidatorException
-     * @expectedExceptionMessageRegExp /^Path ".+/static/testFile.txt" cannot be used with directory ".+/pub/static/"$/
+     * @expectedExceptionMessageRegExp #^Path ".+/static/testFile.txt" cannot be used with directory ".+/pub/static/"$#
      */
     public function testValidateWithWrongPath()
     {
