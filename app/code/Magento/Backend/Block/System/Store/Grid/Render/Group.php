@@ -14,7 +14,7 @@ namespace Magento\Backend\Block\System\Store\Grid\Render;
 class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function render(\Magento\Framework\DataObject $row)
     {
