@@ -172,8 +172,17 @@ class Cart extends Block
     public function braintreePaypalCheckout()
     {
         $currentWindow = $this->browser->getCurrentWindow();
+        // Button can be enabled/disabled few times.
+        sleep(2);
+
+        $windowsCount = count($this->browser->getWindowHandles());
         $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
             ->click();
+        $browser = $this->browser;
+        $this->browser->waitUntil(function () use ($browser, $windowsCount) {
+            return count($browser->getWindowHandles()) === ($windowsCount + 1) ? true: null;
+        });
+
         return $currentWindow;
     }
 

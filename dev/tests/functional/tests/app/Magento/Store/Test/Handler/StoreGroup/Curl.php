@@ -72,7 +72,7 @@ class Curl extends AbstractCurl implements StoreGroupInterface
             throw new \Exception('Cannot find store group id');
         }
 
-        return intval($match[1]);
+        return (int)$match[1];
     }
 
     /**

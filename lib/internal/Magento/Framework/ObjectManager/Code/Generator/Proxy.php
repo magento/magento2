@@ -165,6 +165,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => $parameters,
             'body' => $this->_getMethodBody($method->getName(), $parameterNames),
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
+            'returnType' => $method->getReturnType(),
         ];
 
         return $methodInfo;

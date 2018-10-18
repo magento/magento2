@@ -212,6 +212,12 @@
                 <item name="gif" xsi:type="string">gif</item>
                 <item name="png" xsi:type="string">png</item>
             </argument>
+            <argument name="allowedMimeTypes" xsi:type="array">
+                <item name="jpg" xsi:type="string">image/jpg</item>
+                <item name="jpeg" xsi:type="string">image/jpeg</item>
+                <item name="gif" xsi:type="string">image/gif</item>
+                <item name="png" xsi:type="string">image/png</item>
+            </argument>
         </arguments>
     </virtualType>
     <type name="Magento\Catalog\Controller\Adminhtml\Category\Image\Upload">
@@ -550,7 +556,6 @@
             <argument name="commands" xsi:type="array">
                 <item name="imagesResizeCommand" xsi:type="object">Magento\Catalog\Console\Command\ImagesResizeCommand</item>
                 <item name="productAttributesCleanUp" xsi:type="object">Magento\Catalog\Console\Command\ProductAttributesCleanUp</item>
-                <item name="setPriceDimensionsMode" xsi:type="object">Magento\Catalog\Console\Command\PriceIndexerDimensionsModeSetCommand</item>
             </argument>
         </arguments>
     </type>
@@ -1130,4 +1135,18 @@
             <argument name="productType" xsi:type="string">virtual</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand">
+        <arguments>
+            <argument name="dimensionSwitchers" xsi:type="array">
+                <item name="catalog_product_price" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Indexer\Console\Command\IndexerShowDimensionsModeCommand">
+        <arguments>
+            <argument name="indexers" xsi:type="array">
+                <item name="catalog_product_price" xsi:type="string">catalog_product_price</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
