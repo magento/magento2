@@ -9,7 +9,8 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-customer": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-captcha": "*"
     },
     "type": "magento2-module",
     "license": [
