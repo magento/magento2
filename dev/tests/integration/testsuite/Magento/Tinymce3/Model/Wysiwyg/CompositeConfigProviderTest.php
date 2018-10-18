@@ -22,6 +22,7 @@ class CompositeConfigProviderTest extends \PHPUnit\Framework\TestCase
      * @return void
      *
      * @magentoConfigFixture default/cms/wysiwyg/editor Magento_Tinymce3/tinymce3Adapter
+     * @magentoAppIsolation enabled
      */
     public function testTestModuleEnabledModuleIsAbleToModifyConfig()
     {
