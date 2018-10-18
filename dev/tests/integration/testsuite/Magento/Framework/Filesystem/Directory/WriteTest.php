@@ -65,29 +65,17 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $path
+     *
      * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
      */
-    public function testCreateOutside()
+    public function testCreateOutside(string $path)
     {
-        $exceptions = 0;
         $dir = $this->getDirectoryInstance('newDir1', 0777);
-        try {
-            $dir->create('../../outsideDir');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->create('//./..///../outsideDir');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->create('\..\..\outsideDir');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
 
-        $this->assertEquals(3, $exceptions);
+        $dir->create($path);
     }
 
     /**
