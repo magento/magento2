@@ -11,6 +11,9 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
  * CatalogInventory Stock source model
  * @api
  * @since 100.0.2
+ *
+ * @deprecated CatalogInventory will be replaced by Multi-Source Inventory (MSI)
+ *             see https://devdocs.magento.com/guides/v2.3/rest/modules/inventory/inventory.html
  */
 class Stock extends AbstractSource
 {

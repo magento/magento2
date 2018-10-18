@@ -25,6 +25,9 @@ use Magento\Quote\Model\Quote\Item;
  * @api
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated CatalogInventory will be replaced by Multi-Source Inventory (MSI)
+ *             see https://devdocs.magento.com/guides/v2.3/rest/modules/inventory/inventory.html
  */
 class QuantityValidator
 {

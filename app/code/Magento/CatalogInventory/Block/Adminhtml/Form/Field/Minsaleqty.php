@@ -10,6 +10,9 @@ namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
  *
  * @api
  * @since 100.0.2
+ *
+ * @deprecated CatalogInventory will be replaced by Multi-Source Inventory (MSI)
+ *             see https://devdocs.magento.com/guides/v2.3/rest/modules/inventory/inventory.html
  */
 class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {

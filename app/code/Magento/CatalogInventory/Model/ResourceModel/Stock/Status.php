@@ -13,6 +13,9 @@ use Magento\Framework\App\ObjectManager;
  * CatalogInventory Stock Status per website Resource Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ *
+ * @deprecated CatalogInventory will be replaced by Multi-Source Inventory (MSI)
+ *             see https://devdocs.magento.com/guides/v2.3/rest/modules/inventory/inventory.html
  */
 class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

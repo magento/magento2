@@ -11,6 +11,9 @@ namespace Magento\CatalogInventory\Block\Stockqty;
  *
  * @api
  * @since 100.0.2
+ *
+ * @deprecated CatalogInventory will be replaced by Multi-Source Inventory (MSI)
+ *             see https://devdocs.magento.com/guides/v2.3/rest/modules/inventory/inventory.html
  */
 class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\DataObject\IdentityInterface
 {
