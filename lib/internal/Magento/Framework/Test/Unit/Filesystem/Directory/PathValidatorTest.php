@@ -12,7 +12,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 /**
  * Test for Magento\Framework\Filesystem\Directory\PathValidator class.
  */
-class PathValidatorTest extends \PHPUnit_Framework_TestCase
+class PathValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DriverInterface|\PHPUnit_Framework_MockObject_MockObject
