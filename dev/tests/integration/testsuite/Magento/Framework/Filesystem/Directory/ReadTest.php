@@ -46,7 +46,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $dir = $this->getDirectoryInstance('foo');
 
-        $dir->getAbsolutePath($path);
+        $dir->getAbsolutePath($path . '/ReadTest.php');
     }
 
     /**
@@ -55,9 +55,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function pathDataProvider()
     {
         return [
-            ['../../Directory/ReadTest.php'],
-            ['//./..///../Directory/ReadTest.php'],
-            ['\..\..\Directory\ReadTest.php'],
+            ['../../Directory'],
+            ['//./..///../Directory'],
+            ['\..\..\Directory'],
         ];
     }
 
@@ -83,7 +83,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $dir = $this->getDirectoryInstance('foo');
 
-        $dir->getRelativePath(__DIR__ . $path);
+        $dir->getRelativePath(__DIR__ . $path . '/ReadTest.php');
     }
 
     /**
@@ -128,7 +128,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $dir = $this->getDirectoryInstance('foo');
 
-        $dir->read($path);
+        $dir->read($path . '/ReadTest.php');
     }
 
     /**
@@ -173,7 +173,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $dir = $this->getDirectoryInstance('foo');
 
-        $dir->search('/*/*.txt', $path);
+        $dir->search('/*/*.txt', $path . '/ReadTest.php');
     }
 
     /**
@@ -211,7 +211,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $dir = $this->getDirectoryInstance('foo');
 
-        $dir->isExist($path);
+        $dir->isExist($path . '/ReadTest.php');
     }
 
     /**
@@ -294,7 +294,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $dir = $this->getDirectoryInstance('foo');
 
-        $dir->isReadable($path);
+        $dir->isReadable($path . '/ReadTest.php');
     }
 
     /**
@@ -320,7 +320,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $dir = $this->getDirectoryInstance('foo');
 
-        $dir->isFile($path);
+        $dir->isFile($path . '/ReadTest.php');
     }
 
     /**
@@ -346,7 +346,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $dir = $this->getDirectoryInstance('foo');
 
-        $dir->isDirectory($path);
+        $dir->isDirectory($path . '/ReadTest.php');
     }
 
     /**
@@ -400,7 +400,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $dir = $this->getDirectoryInstance('foo');
 
-        $dir->openFile($path);
+        $dir->openFile($path . '/ReadTest.php');
     }
 
     /**
@@ -443,7 +443,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $dir = $this->getDirectoryInstance('foo');
 
-        $dir->readFile($path);
+        $dir->readFile($path . '/ReadTest.php');
     }
 
     /**
