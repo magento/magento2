@@ -90,8 +90,6 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
             ->get(\Magento\Framework\Filesystem::class);
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $directory */
         $directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        if ($directory->isExist('import')) {
-            $directory->delete('import');
-        }
+        $directory->delete('import');
     }
 }

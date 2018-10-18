@@ -6,6 +6,8 @@
 namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Filesystem\File\ReadFactoryInterface;
 
 class Read implements ReadInterface
 {
@@ -41,7 +43,7 @@ class Read implements ReadInterface
      * @param \Magento\Framework\Filesystem\File\ReadFactory $fileFactory
      * @param \Magento\Framework\Filesystem\DriverInterface $driver
      * @param string $path
-     * @param PathValidator|null $pathValidator
+     * @param PathValidatorInterface|null $pathValidator
      */
     public function __construct(
         \Magento\Framework\Filesystem\File\ReadFactory $fileFactory,
@@ -61,6 +63,7 @@ class Read implements ReadInterface
      * @param bool $absolutePath
      *
      * @return void
+     * @throws ValidatorException
      */
     protected function validatePath(
         $path = null,
@@ -97,6 +100,7 @@ class Read implements ReadInterface
      * @param string $path
      * @param string $scheme
      * @return string
+     * @throws ValidatorException
      */
     public function getAbsolutePath($path = null, $scheme = null)
     {
@@ -110,6 +114,7 @@ class Read implements ReadInterface
      *
      * @param string $path
      * @return string
+     * @throws ValidatorException
      */
     public function getRelativePath($path = null)
     {
@@ -127,6 +132,7 @@ class Read implements ReadInterface
      *
      * @param string|null $path
      * @return string[]
+     * @throws ValidatorException
      */
     public function read($path = null)
     {
@@ -146,6 +152,7 @@ class Read implements ReadInterface
      *
      * @param null $path
      * @return string[]
+     * @throws ValidatorException
      */
     public function readRecursively($path = null)
     {
@@ -168,6 +175,7 @@ class Read implements ReadInterface
      * @param string $pattern
      * @param string $path [optional]
      * @return string[]
+     * @throws ValidatorException
      */
     public function search($pattern, $path = null)
     {
@@ -194,6 +202,7 @@ class Read implements ReadInterface
      * @param string $path [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws ValidatorException
      */
     public function isExist($path = null)
     {
@@ -208,6 +217,7 @@ class Read implements ReadInterface
      * @param string $path
      * @return array
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws ValidatorException
      */
     public function stat($path)
     {
@@ -222,6 +232,7 @@ class Read implements ReadInterface
      * @param string $path [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws ValidatorException
      */
     public function isReadable($path = null)
     {
@@ -236,6 +247,7 @@ class Read implements ReadInterface
      * @param string $path
      *
      * @return \Magento\Framework\Filesystem\File\ReadInterface
+     * @throws ValidatorException
      */
     public function openFile($path)
     {
@@ -255,6 +267,7 @@ class Read implements ReadInterface
      * @param resource|null $context
      * @return string
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function readFile($path, $flag = null, $context = null)
     {
@@ -270,6 +283,7 @@ class Read implements ReadInterface
      *
      * @param string $path
      * @return bool
+     * @throws ValidatorException
      */
     public function isFile($path)
     {
@@ -283,6 +297,7 @@ class Read implements ReadInterface
      *
      * @param string $path [optional]
      * @return bool
+     * @throws ValidatorException
      */
     public function isDirectory($path = null)
     {
