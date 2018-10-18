@@ -141,7 +141,7 @@ QUERY;
           available_sort_by
           level
         }
-        image { url, path }
+        image { url, path, label }
         image_label
         meta_description
         meta_keyword
@@ -225,14 +225,12 @@ QUERY;
         }
         short_description
         sku
-        small_image { url, path }
-        small_image_label
+        small_image { url, path, label }
+        thumbnail { url, path, label }
         special_from_date
         special_price
         special_to_date
         swatch_image
-        thumbnail { url, path }
-        thumbnail_label
         tier_price
         tier_prices {
           customer_group_id

@@ -205,14 +205,12 @@ class ProductViewTest extends GraphQlAbstract
             }
             short_description
             sku
-            small_image { url, path }
-            small_image_label
+            small_image{ url, path, label }
+            thumbnail { url, path, label }
             special_from_date
             special_price
             special_to_date
-            swatch_image
-            thumbnail { url, path }
-            thumbnail_label
+            swatch_image            
             tier_price
             tier_prices
             {
@@ -453,14 +451,12 @@ QUERY;
             }
             short_description
             sku
-            small_image
-            small_image_label
+            small_image { url, path, label }
             special_from_date
             special_price
             special_to_date
             swatch_image
-            thumbnail
-            thumbnail_label
+            thumbnail { url, path, label }
             tier_price
             tier_prices
             {
@@ -484,7 +480,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        
+
         /**
          * @var ProductRepositoryInterface $productRepository
          */
