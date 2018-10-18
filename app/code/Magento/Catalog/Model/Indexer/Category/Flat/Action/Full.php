@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
 
-use Magento\Framework\App\ResourceConnection;
-
 /**
  * Class for full reindex flat categories
  */
@@ -23,28 +21,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * @var bool
      */
     protected $allowTableChanges = true;
-
-    /**
-     * @var \Magento\Catalog\Helper\Product\Flat\Indexer
-     */
-    private $indexer;
-
-    /**
-     * @param ResourceConnection $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
-     * @param \Magento\Catalog\Helper\Product\Flat\Indexer $indexer
-     */
-    public function __construct(
-        ResourceConnection $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Catalog\Helper\Product\Flat\Indexer $indexer = null
-    ) {
-        $this->indexer  = $indexer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
-        parent::__construct($resource, $storeManager, $resourceHelper);
-    }
 
     /**
      * Add suffix to table name to show it is old
@@ -197,6 +173,43 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     }
 
     /**
+     * Retrieve all actual Catalog Product Flat Table names
+     *
+     * @return string[]
+     */
+    private function getActualStoreTablesForCategoryFlat(): array
+    {
+        $actualStoreTables = [];
+        foreach ($this->storeManager->getStores() as $store) {
+            $actualStoreTables[] = sprintf(
+                '%s_store_%s',
+                $this->connection->getTableName('catalog_category_flat'), $store->getId()
+            );
+        }
+
+        return $actualStoreTables;
+    }
+
+    /**
+     * Delete all category flat tables for not existing stores
+     *
+     * @return void
+     */
+    private function deleteAbandonedStoreCategoryFlatTables(): void
+    {
+        $existentTables = $this->connection->getTables(
+            $this->connection->getTableName('catalog_category_flat_store_%')
+        );
+        $actualStoreTables = $this->getActualStoreTablesForCategoryFlat();
+
+        $tablesToDelete = array_diff($existentTables, $actualStoreTables);
+
+        foreach ($tablesToDelete as $table) {
+            $this->connection->dropTable($table);
+        }
+    }
+
+    /**
      * Transactional rebuild flat data from eav
      *
      * @return Full
@@ -211,7 +224,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         $stores = $this->storeManager->getStores();
         $this->populateFlatTables($stores);
         $this->switchTables($stores);
-        $this->indexer->deleteAbandonedStoreCategoryFlatTables();
+        $this->deleteAbandonedStoreCategoryFlatTables();
         $this->allowTableChanges = true;
 
         return $this;

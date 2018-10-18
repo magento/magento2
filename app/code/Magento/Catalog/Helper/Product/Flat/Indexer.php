@@ -467,17 +467,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieve Catalog Product Flat Table name
-     *
-     * @param int $storeId
-     * @return string
-     */
-    private function getCategoryFlatTableName(int $storeId): string
-    {
-        return sprintf('%s_store_%s', $this->getTable('catalog_category_flat'), $storeId);
-    }
-
-    /**
      * Retrieve loaded attribute by code
      *
      * @param string $attributeCode
@@ -518,27 +507,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
         $actualStoreTables = [];
         foreach ($this->_storeManager->getStores() as $store) {
             $actualStoreTables[] = $this->getFlatTableName($store->getId());
-        }
-
-        $tablesToDelete = array_diff($existentTables, $actualStoreTables);
-
-        foreach ($tablesToDelete as $table) {
-            $connection->dropTable($table);
-        }
-    }
-
-    /**
-     * Delete all category flat tables for not existing stores
-     *
-     * @return void
-     */
-    public function deleteAbandonedStoreCategoryFlatTables()
-    {
-        $connection = $this->_resource->getConnection();
-        $existentTables = $connection->getTables($connection->getTableName('catalog_category_flat_store_%'));
-        $actualStoreTables = [];
-        foreach ($this->_storeManager->getStores() as $store) {
-            $actualStoreTables[] = $this->getCategoryFlatTableName($store->getId());
         }
 
         $tablesToDelete = array_diff($existentTables, $actualStoreTables);
