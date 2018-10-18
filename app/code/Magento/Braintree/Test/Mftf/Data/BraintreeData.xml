@@ -128,7 +128,7 @@
         <data key="firstName">John</data>
         <data key="lastName">Smith</data>
         <data key="password">admin123</data>
-        <data key="email">mail@mail.com</data>
+        <data key="email" unique="prefix">mail@mail.com</data>
     </entity>
 
     <entity name="PaymentAndShippingInfo" type="data">
