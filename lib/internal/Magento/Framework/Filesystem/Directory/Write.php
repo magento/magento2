@@ -6,6 +6,8 @@
 namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Filesystem\File\WriteFactoryInterface;
 
 class Write extends Read implements WriteInterface
 {
@@ -79,6 +81,7 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function create($path = null)
     {
@@ -99,6 +102,7 @@ class Write extends Read implements WriteInterface
      * @param WriteInterface $targetDirectory
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function renameFile($path, $newPath, WriteInterface $targetDirectory = null)
     {
@@ -122,6 +126,7 @@ class Write extends Read implements WriteInterface
      * @param WriteInterface $targetDirectory
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function copyFile($path, $destination, WriteInterface $targetDirectory = null)
     {
@@ -146,6 +151,7 @@ class Write extends Read implements WriteInterface
      * @param WriteInterface $targetDirectory [optional]
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws ValidatorException
      */
     public function createSymlink($path, $destination, WriteInterface $targetDirectory = null)
     {
@@ -167,6 +173,7 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function delete($path = null)
     {
@@ -191,6 +198,7 @@ class Write extends Read implements WriteInterface
      * @param int $permissions
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function changePermissions($path, $permissions)
     {
@@ -208,6 +216,7 @@ class Write extends Read implements WriteInterface
      * @param int $filePermissions
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function changePermissionsRecursively($path, $dirPermissions, $filePermissions)
     {
@@ -224,6 +233,7 @@ class Write extends Read implements WriteInterface
      * @param int|null $modificationTime
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function touch($path, $modificationTime = null)
     {
@@ -241,6 +251,7 @@ class Write extends Read implements WriteInterface
      * @param null $path
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws ValidatorException
      */
     public function isWritable($path = null)
     {
@@ -256,6 +267,7 @@ class Write extends Read implements WriteInterface
      * @param string $mode
      * @return \Magento\Framework\Filesystem\File\WriteInterface
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws ValidatorException
      */
     public function openFile($path, $mode = 'w')
     {

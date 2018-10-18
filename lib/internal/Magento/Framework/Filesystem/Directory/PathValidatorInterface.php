@@ -19,7 +19,7 @@ interface PathValidatorInterface
      * @param string $directoryPath
      * @param string $path
      * @param string|null $scheme
-     * @param bool $absolutePath Is given path an absolute path?
+     * @param bool $absolutePath
      * @throws ValidatorException
      *
      * @return void

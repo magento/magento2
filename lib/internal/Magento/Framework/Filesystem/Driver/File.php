@@ -946,7 +946,7 @@ class File implements DriverInterface
 
         //Removing redundant directory separators.
         $path = preg_replace(
-            '/\\' .DIRECTORY_SEPARATOR .'\\' .DIRECTORY_SEPARATOR .'+/',
+            '/\\' . DIRECTORY_SEPARATOR .'\\' . DIRECTORY_SEPARATOR .'+/',
             DIRECTORY_SEPARATOR,
             $path
         );
