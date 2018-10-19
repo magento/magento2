@@ -108,7 +108,7 @@ class GraphQl implements FrontControllerInterface
         try {
             /** @var Http $request */
             $this->requestProcessor->processHeaders($request);
-            //\Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class)->critical($request->getContent());
+
             $data = $this->jsonSerializer->unserialize($request->getContent());
 
             $query = isset($data['query']) ? $data['query'] : '';
