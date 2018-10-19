@@ -119,7 +119,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName)
     {
         $destDir = 'var/dest/dir';
-        $expectedRelativeFilePath = $this->uploader->getTmpDir() . '/' . $expectedFileName;
+        $expectedRelativeFilePath = $expectedFileName;
         $this->directoryMock->expects($this->once())->method('isWritable')->with($destDir)->willReturn(true);
         $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($destDir)
@@ -155,7 +155,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     {
         $destDir = 'var/dest/dir';
         $fileName = 'test_uploader_file';
-        $expectedRelativeFilePath = $this->uploader->getTmpDir() . '/' . $fileName;
+        $expectedRelativeFilePath = $fileName;
         $this->directoryMock->expects($this->once())->method('isWritable')->with($destDir)->willReturn(true);
         $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($destDir)
