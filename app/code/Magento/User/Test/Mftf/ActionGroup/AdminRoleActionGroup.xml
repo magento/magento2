@@ -18,7 +18,7 @@
     <actionGroup name="AdminCreateRole">
         <arguments>
             <argument name="role" type="string" defaultValue=""/>
-            <argument name="scope" type="string" defaultValue="Custom"/>
+            <argument name="resource" type="string" defaultValue="All"/>
         </arguments>
         <click selector="{{AdminCreateRoleSection.create}}" stepKey="clickToAddNewRole"/>
         <fillField selector="{{AdminCreateRoleSection.name}}" userInput="{{role.name}}" stepKey="setRoleName"/>
