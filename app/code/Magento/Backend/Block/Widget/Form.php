@@ -3,7 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Widget;
+
+use Magento\Backend\Block\Widget\Form\Element\ElementCreator;
+use Magento\Framework\App\ObjectManager;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Data\Form as DataForm;
+use Magento\Backend\Block\Widget\Form\Renderer\Element;
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element as FieldsetElement;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\AbstractForm;
 
 /**
  * Backend form widget
@@ -18,7 +30,7 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * Form Object
      *
-     * @var \Magento\Framework\Data\Form
+     * @var DataForm
      */
     protected $_form;
 
@@ -28,12 +40,24 @@ class Form extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Backend::widget/form.phtml';
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @var ElementCreator
+     * /
+    private $creator;
+
+    /**
+     * Constructs form
+     *
+     * @param Context $context
      * @param array $data
+     * @param ElementCreator|null $creator
      */
-    public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
-    {
+    public function __construct(
+        Context $context,
+        array $data = [],
+        ElementCreator $creator = null
+    ) {
         parent::__construct($context, $data);
+        $this->creator = $creator ?: ObjectManager::getInstance()->get(ElementCreator::class);
     }
 
     /**
@@ -58,21 +82,21 @@ class Form extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        \Magento\Framework\Data\Form::setElementRenderer(
+        DataForm::setElementRenderer(
             $this->getLayout()->createBlock(
-                \Magento\Backend\Block\Widget\Form\Renderer\Element::class,
+                Element::class,
                 $this->getNameInLayout() . '_element'
             )
         );
-        \Magento\Framework\Data\Form::setFieldsetRenderer(
+        DataForm::setFieldsetRenderer(
             $this->getLayout()->createBlock(
-                \Magento\Backend\Block\Widget\Form\Renderer\Fieldset::class,
+                Fieldset::class,
                 $this->getNameInLayout() . '_fieldset'
             )
         );
-        \Magento\Framework\Data\Form::setFieldsetElementRenderer(
+        DataForm::setFieldsetElementRenderer(
             $this->getLayout()->createBlock(
-                \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element::class,
+                FieldsetElement::class,
                 $this->getNameInLayout() . '_fieldset_element'
             )
         );
@@ -83,7 +107,7 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * Get form object
      *
-     * @return \Magento\Framework\Data\Form
+     * @return DataForm
      */
     public function getForm()
     {
@@ -106,10 +130,10 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * Set form object
      *
-     * @param \Magento\Framework\Data\Form $form
+     * @param DataForm $form
      * @return $this
      */
-    public function setForm(\Magento\Framework\Data\Form $form)
+    public function setForm(DataForm $form)
     {
         $this->_form = $form;
         $this->_form->setParent($this);
@@ -148,6 +172,7 @@ class Form extends \Magento\Backend\Block\Widget
 
     /**
      * Initialize form fields values
+     *
      * Method will be called after prepareForm and can be used for field values initialization
      *
      * @return $this
@@ -169,36 +194,15 @@ class Form extends \Magento\Backend\Block\Widget
     {
         $this->_addElementTypes($fieldset);
         foreach ($attributes as $attribute) {
-            /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            /* @var $attribute Attribute */
             if (!$this->_isAttributeVisible($attribute)) {
                 continue;
             }
-            if (($inputType = $attribute->getFrontend()->getInputType()) && !in_array(
-                $attribute->getAttributeCode(),
-                $exclude
-            ) && ('media_image' != $inputType || $attribute->getAttributeCode() == 'image')
+            if (($inputType = $attribute->getFrontend()->getInputType())
+                && !in_array($attribute->getAttributeCode(), $exclude)
+                && ('media_image' !== $inputType || $attribute->getAttributeCode() == 'image')
             ) {
-                $fieldType = $inputType;
-                $rendererClass = $attribute->getFrontend()->getInputRendererClass();
-                if (!empty($rendererClass)) {
-                    $fieldType = $inputType . '_' . $attribute->getAttributeCode();
-                    $fieldset->addType($fieldType, $rendererClass);
-                }
-
-                $element = $fieldset->addField(
-                    $attribute->getAttributeCode(),
-                    $fieldType,
-                    [
-                        'name' => $attribute->getAttributeCode(),
-                        'label' => $attribute->getFrontend()->getLocalizedLabel(),
-                        'class' => $attribute->getFrontend()->getClass(),
-                        'required' => $attribute->getIsRequired(),
-                        'note' => $attribute->getNote()
-                    ]
-                )->setEntityAttribute(
-                    $attribute
-                );
-
+                $element = $this->creator->create($fieldset, $attribute);
                 $element->setAfterElementHtml($this->_getAdditionalElementHtml($element));
 
                 $this->_applyTypeSpecificConfig($inputType, $element, $attribute);
@@ -209,10 +213,10 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * Check whether attribute is visible
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @return bool
      */
-    protected function _isAttributeVisible(\Magento\Eav\Model\Entity\Attribute $attribute)
+    protected function _isAttributeVisible(Attribute $attribute)
     {
         return !(!$attribute || $attribute->hasIsVisible() && !$attribute->getIsVisible());
     }
@@ -221,11 +225,11 @@ class Form extends \Magento\Backend\Block\Widget
      * Apply configuration specific for different element type
      *
      * @param string $inputType
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param AbstractElement $element
+     * @param Attribute $attribute
      * @return void
      */
-    protected function _applyTypeSpecificConfig($inputType, $element, \Magento\Eav\Model\Entity\Attribute $attribute)
+    protected function _applyTypeSpecificConfig($inputType, $element, Attribute $attribute)
     {
         switch ($inputType) {
             case 'select':
@@ -249,10 +253,10 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * Add new element type
      *
-     * @param \Magento\Framework\Data\Form\AbstractForm $baseElement
+     * @param AbstractForm $baseElement
      * @return void
      */
-    protected function _addElementTypes(\Magento\Framework\Data\Form\AbstractForm $baseElement)
+    protected function _addElementTypes(AbstractForm $baseElement)
     {
         $types = $this->_getAdditionalElementTypes();
         foreach ($types as $code => $className) {
@@ -273,7 +277,7 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * Render additional element
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
