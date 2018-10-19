@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Plugin\InventoryConfiguration;
+namespace Magento\InventoryCatalog\Plugin\InventoryConfigurationApi\GetStockItemConfiguration;
 
 use Magento\InventoryConfiguration\Model\GetLegacyStockItem;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;

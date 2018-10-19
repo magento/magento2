@@ -14,8 +14,7 @@
         "magento/module-inventory-source-deduction-api": "*",
         "magento/module-sales-inventory": "*",
         "magento/module-store": "*",
-        "magento/module-sales": "*",
-        "magento/module-inventory-configuration": "*"
+        "magento/module-sales": "*"
     },
     "suggest": {
         "magento/module-inventory-catalog": "*"

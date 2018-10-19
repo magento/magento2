@@ -166,6 +166,6 @@
     <!-- StockItemConfiguration -->
     <type name="Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface">
         <plugin name="load_stock_item_is_in_stock"
-                type="Magento\InventorySales\Plugin\InventoryConfiguration\LoadIsInStockPlugin"/>
+                type="Magento\InventoryCatalog\Plugin\InventoryConfigurationApi\GetStockItemConfiguration\LoadIsInStockPlugin"/>
     </type>
 </config>
