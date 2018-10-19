@@ -95,7 +95,7 @@ class ForeignKey implements DbDefinitionProcessorInterface
                     'column' => $match[2],
                     'referenceTable' => $match[5],
                     'referenceColumn' => $match[6],
-                    'onDelete' => isset($match[7]) ? $match[8] : ''
+                    'onDelete' => isset($match[7]) ? $match[8] : 'NO ACTION'
                 ];
             }
         }
