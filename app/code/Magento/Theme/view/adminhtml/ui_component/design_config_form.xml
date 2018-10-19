@@ -234,6 +234,20 @@
                     <dataScope>footer_copyright</dataScope>
                 </settings>
             </field>
+            <field name="footer_report_bugs" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <label translate="true">Display Report Bugs Link</label>
+                    <dataScope>footer_report_bugs</dataScope>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
         </fieldset>
         <fieldset name="search_engine_robots" sortOrder="120">
             <settings>

@@ -5,12 +5,9 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="AdminMainActionsSection">
-        <element name="save" type="button" selector="#save" timeout="30"/>
-        <element name="delete" type="button" selector="#delete"/>
-        <element name="add" type="button" selector="#add" timeout="30"/>
+    <section name="StorefrontCustomerAddressesSection">
+        <element name="addressesList" type="text" selector=".block-addresses-list" />
     </section>
 </sections>
