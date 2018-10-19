@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Product;
+namespace Magento\CatalogGraphQl\Model\Resolver\Product\ProductImage;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\LocalizedException;
@@ -14,9 +14,9 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * Returns product's image data
+ * Returns product's image path
  */
-class ProductImage implements ResolverInterface
+class Path implements ResolverInterface
 {
     /**
      * @inheritdoc
@@ -27,18 +27,19 @@ class ProductImage implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): array {
+    ) {
+        if (!isset($value['image_type'])) {
+            throw new LocalizedException(__('"image_type" value should be specified'));
+        }
+
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
         /** @var Product $product */
         $product = $value['model'];
-        $imageType = $field->getName();
 
-        return [
-            'model' => $product,
-            'image_type' => $imageType,
-        ];
+        $imagePath = $product->getData($value['image_type']);
+        return $imagePath;
     }
 }
