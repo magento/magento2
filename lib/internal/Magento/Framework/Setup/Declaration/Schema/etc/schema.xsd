@@ -55,7 +55,7 @@
             <xs:element name="constraint" />
             <xs:element name="index" type="index" />
         </xs:choice>
-        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="resource" type="resourceType" />
         <xs:attribute name="engine" type="engineType" />
         <xs:attribute name="comment" type="xs:string" />
