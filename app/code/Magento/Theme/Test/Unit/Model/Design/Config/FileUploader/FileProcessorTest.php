@@ -140,6 +140,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
                 'size' => '234234',
                 'type' => 'image/jpg',
                 'name' => 'file.jpg',
+                'path' => 'abs/path',
             ]);
         $this->assertEquals(
             [

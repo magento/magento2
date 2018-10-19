@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
 use Magento\Quote\Model\Quote;
@@ -188,7 +189,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->method('addExceptionMessage')
             ->with(
                 self::isInstanceOf('\InvalidArgumentException'),
-                'We can\'t initialize checkout.'
+                'Checkout failed to initialize. Verify and try again.'
             );
 
         $this->resultFactoryMock->expects(self::once())
@@ -235,7 +236,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->method('addExceptionMessage')
             ->with(
                 self::isInstanceOf(\Magento\Framework\Exception\LocalizedException::class),
-                'We can\'t initialize checkout.'
+                'Checkout failed to initialize. Verify and try again.'
             );
 
         $this->resultFactoryMock->expects(self::once())

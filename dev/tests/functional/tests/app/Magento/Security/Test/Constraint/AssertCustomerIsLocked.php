@@ -15,7 +15,7 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
 class AssertCustomerIsLocked extends AbstractConstraint
 {
     const CUSTOMER_LOCKED_MESSAGE =
-        'You did not sign in correctly or your account is temporarily disabled.';
+        'The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.';
 
     /**
      * Assert that customer locked message is present on customer login page.
@@ -26,7 +26,7 @@ class AssertCustomerIsLocked extends AbstractConstraint
     public function processAssert(
         CustomerAccountLogin $customerLogin
     ) {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::CUSTOMER_LOCKED_MESSAGE,
             $customerLogin->getMessages()->getErrorMessage(),
             'Wrong message is displayed.'

@@ -1,13 +1,15 @@
 {
     "name": "magento/language-zh_hans_cn",
     "description": "Chinese (China) language",
-    "version": "100.3.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "magento/framework": "100.3.*"
+        "magento/framework": "*"
     },
     "type": "magento2-language",
     "autoload": {

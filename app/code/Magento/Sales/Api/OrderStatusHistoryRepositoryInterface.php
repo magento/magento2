@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Api;
 
 /**
@@ -23,7 +21,8 @@ interface OrderStatusHistoryRepositoryInterface
      * Lists order status history comments that match specified search criteria.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
-     * @return \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface Order status history search result interface.
+     * @return \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface Order status history
+     * search result interface.
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 

@@ -9,7 +9,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Customer\Model\Address;
 use Magento\Tax\Model\Config;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Creditmemo;
@@ -23,7 +22,6 @@ use Magento\Framework\App\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  * @api
  * @since 100.0.2
  */
@@ -576,7 +574,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *  )
      * )
      *
-     * @param  \Magento\Sales\Model\Order|\Magento\Sales\Model\Order\Invoice|\Magento\Sales\Model\Order\Creditmemo $source
+     * @param  \Magento\Sales\Model\Order|\Magento\Sales\Model\Order\Invoice
+     * |\Magento\Sales\Model\Order\Creditmemo $source
      * @return array
      */
     public function getCalculatedTaxes($source)
@@ -734,7 +733,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $orderItemId = $orderItem->getId();
             $orderItemTax = $orderItem->getTaxAmount();
             $itemTax = $item->getTaxAmount();
-            if (!$itemTax || !floatval($orderItemTax)) {
+            if (!$itemTax || !(float)$orderItemTax) {
                 continue;
             }
             //An invoiced item or credit memo item can have a different qty than its order item qty
@@ -762,7 +761,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $shippingTaxAmount = $salesItem->getShippingTaxAmount();
         $originalShippingTaxAmount = $order->getShippingTaxAmount();
         if ($shippingTaxAmount && $originalShippingTaxAmount &&
-            $shippingTaxAmount != 0 && floatval($originalShippingTaxAmount)
+            $shippingTaxAmount != 0 && (float)$originalShippingTaxAmount
         ) {
             //An invoice or credit memo can have a different qty than its order
             $shippingRatio = $shippingTaxAmount / $originalShippingTaxAmount;

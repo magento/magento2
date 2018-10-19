@@ -3,18 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Store\Model\Store;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Downloadable\Model\Link;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
@@ -100,7 +106,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $expectedMessage = 'Requested product doesn\'t exist';
+        $expectedMessage = "The product that was requested doesn't exist. Verify the product and try again.";
 
         try {
             $this->_webApiCall($serviceInfo, ['sku' => $invalidSku]);
@@ -136,6 +142,80 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Load website by website code
+     *
+     * @param $websiteCode
+     * @return Website
+     */
+    private function loadWebsiteByCode($websiteCode)
+    {
+        $websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepository::class);
+        try {
+            $website = $websiteRepository->get($websiteCode);
+        } catch (NoSuchEntityException $e) {
+            $this->fail("Couldn`t load website: {$websiteCode}");
+        }
+
+        return $website;
+    }
+
+    /**
+     * Test for check that 2 same product create and url_key save.
+     *
+     * @return void
+     */
+    public function testSaveTwoSameProduct()
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $product1 = [
+            'product' => [
+                'attribute_set_id' => 4,
+                'name' =>  "Test API 1",
+                'price' =>  254.13,
+                'sku' => '1234'
+            ]
+        ];
+        $product2 = [
+            'product' => [
+                'attribute_set_id' => 4,
+                'name' =>  "Test API 1",
+                'price' =>  254.13,
+                'sku' => '1235'
+            ]
+        ];
+
+        $product1 = $this->_webApiCall($serviceInfo, $product1);
+        $response = $this->_webApiCall($serviceInfo, $product2);
+
+        $index = null;
+        foreach ($response['custom_attributes'] as $key => $customAttribute) {
+            if ($customAttribute['attribute_code'] == 'url_key') {
+                $index = $key;
+                break;
+            }
+        }
+
+        $this->assertArrayHasKey(ProductInterface::SKU, $response);
+
+        $expectedResult = $product1['custom_attributes'][$index]['value'] . '-1';
+        $this->assertEquals($expectedResult, $response['custom_attributes'][$index]['value']);
+
+        $this->deleteProduct('1234');
+        $this->deleteProduct('1235');
+    }
+
+    /**
      * Test removing association between product and website 1
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
      */
@@ -143,12 +223,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
         /** @var Website $website */
-        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Website::class);
-        $website->load('second_website', 'code');
-
-        if (!$website->getId()) {
-            $this->fail("Couldn`t load website");
-        }
+        $website = $this->loadWebsiteByCode('second_website');
 
         $websitesData = [
             'website_ids' => [
@@ -170,13 +245,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testDeleteAllWebsiteAssociations()
     {
         $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
-        /** @var Website $website */
-        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Website::class);
-        $website->load('second_website', 'code');
-
-        if (!$website->getId()) {
-            $this->fail("Couldn`t load website");
-        }
 
         $websitesData = [
             'website_ids' => []
@@ -197,14 +265,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productBuilder = $this->getSimpleProductData();
         $productBuilder[ProductInterface::SKU] = 'test-test-sku';
         $productBuilder[ProductInterface::TYPE_ID] = 'simple';
-
         /** @var Website $website */
-        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Website::class);
-        $website->load('test_website', 'code');
+        $website = $this->loadWebsiteByCode('test_website');
 
-        if (!$website->getId()) {
-            $this->fail("Couldn`t load website");
-        }
         $websitesData = [
             'website_ids' => [
                 1,
@@ -216,6 +279,84 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
             $websitesData["website_ids"]
+        );
+        $this->deleteProduct($productBuilder[ProductInterface::SKU]);
+    }
+
+    /**
+     * Add product associated with website that is not associated with default store
+     *
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     */
+    public function testCreateWithNonDefaultStoreWebsite()
+    {
+        $productBuilder = $this->getSimpleProductData();
+        $productBuilder[ProductInterface::SKU] = 'test-sku-second-site-123';
+        $productBuilder[ProductInterface::TYPE_ID] = 'simple';
+        /** @var Website $website */
+        $website = $this->loadWebsiteByCode('test');
+
+        $websitesData = [
+            'website_ids' => [
+                $website->getId(),
+            ]
+        ];
+        $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
+        $response = $this->saveProduct($productBuilder);
+        $this->assertEquals(
+            $websitesData["website_ids"],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]
+        );
+        $this->deleteProduct($productBuilder[ProductInterface::SKU]);
+    }
+
+    /**
+     * Update product to be associated with website that is not associated with default store
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     */
+    public function testUpdateWithNonDefaultStoreWebsite()
+    {
+        $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
+        /** @var Website $website */
+        $website = $this->loadWebsiteByCode('test');
+
+        $this->assertNotContains(Store::SCOPE_DEFAULT, $website->getStoreCodes());
+
+        $websitesData = [
+            'website_ids' => [
+                $website->getId(),
+            ]
+        ];
+        $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
+        $response = $this->updateProduct($productBuilder);
+        $this->assertEquals(
+            $websitesData["website_ids"],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]
+        );
+    }
+
+    /**
+     * Update product without specifying websites
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     */
+    public function testUpdateWithoutWebsiteIds()
+    {
+        $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
+        $originalProduct = $this->getProduct($productBuilder[ProductInterface::SKU]);
+        $newName = 'Updated Product';
+
+        $productBuilder[ProductInterface::NAME] = $newName;
+        $response = $this->updateProduct($productBuilder);
+        $this->assertEquals(
+            $newName,
+            $response[ProductInterface::NAME]
+        );
+        $this->assertEquals(
+            $originalProduct[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]
         );
     }
 
@@ -291,7 +432,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $this->_markTestAsRestOnly("In case of SOAP type casting is handled by PHP SoapServer, no need to test it");
         $expectedMessage = 'Error occurred during "price" processing. '
-            . 'Invalid type for value: "invalid_format". Expected Type: "float".';
+            . 'The "invalid_format" value\'s type is invalid. The "float" type was expected. Verify and try again.';
 
         try {
             $this->saveProduct(['name' => 'simple', 'price' => 'invalid_format', 'sku' => 'simple']);
@@ -313,7 +454,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $sku = $fixtureProduct[ProductInterface::SKU];
         $this->saveProduct($fixtureProduct);
-        $this->expectException('Exception', 'Requested product doesn\'t exist');
+        $this->expectException('Exception');
+        $this->expectExceptionMessage(
+            "The product that was requested doesn't exist. Verify the product and try again."
+        );
 
         // Delete all with 'all' store code
         $this->deleteProduct($sku);
@@ -612,11 +756,45 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Update product with extension attributes.
+     *
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     */
+    public function testUpdateWithExtensionAttributes(): void
+    {
+        $sku = 'downloadable-product';
+        $linksKey = 'downloadable_product_links';
+        $productData = [
+            ProductInterface::NAME => 'Downloadable (updated)',
+            ProductInterface::SKU => $sku,
+        ];
+        $response = $this->updateProduct($productData);
+
+        self::assertArrayHasKey(ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY, $response);
+        self::assertArrayHasKey($linksKey, $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+        self::assertCount(1, $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY][$linksKey]);
+
+        $linkData = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY][$linksKey][0];
+
+        self::assertArrayHasKey(Link::KEY_LINK_URL, $linkData);
+        self::assertEquals('http://example.com/downloadable.txt', $linkData[Link::KEY_LINK_URL]);
+    }
+
+    /**
      * @param array $product
      * @return array|bool|float|int|string
      */
     protected function updateProduct($product)
     {
+        if (isset($product['custom_attributes'])) {
+            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
+                    && !is_array($product['custom_attributes'][$i]['value'])
+                ) {
+                    $product['custom_attributes'][$i]['value'] = [""];
+                }
+            }
+        }
         $sku = $product[ProductInterface::SKU];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
             $product[ProductInterface::SKU] = null;
@@ -693,6 +871,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue(count($response['items']) > 0);
 
         $this->assertNotNull($response['items'][0]['sku']);
+        $this->assertNotNull($response['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']);
         $this->assertEquals('simple', $response['items'][0]['sku']);
 
         $index = null;
@@ -709,13 +888,51 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testGetListWithAdditionalParams()
+    {
+        $this->_markTestAsRestOnly();
+        $searchCriteria = [
+            'searchCriteria' => [
+                'current_page' => 1,
+                'page_size' => 2,
+            ],
+        ];
+        $additionalParams = urlencode('items[id,custom_attributes[description]]');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria) . '&fields=' .
+                    $additionalParams,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ]
+        ];
+
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        $this->assertArrayHasKey('items', $response);
+        $this->assertTrue(count($response['items']) > 0);
+
+        $indexDescription = null;
+        foreach ($response['items'][0]['custom_attributes'] as $key => $customAttribute) {
+            if ($customAttribute['attribute_code'] == 'description') {
+                $indexDescription = $key;
+            }
+        }
+
+        $this->assertNotNull($response['items'][0]['custom_attributes'][$indexDescription]['attribute_code']);
+        $this->assertNotNull($response['items'][0]['custom_attributes'][$indexDescription]['value']);
+        $this->assertTrue(count($response['items'][0]['custom_attributes']) == 1);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
      * @return void
      */
     public function testGetListWithFilteringByWebsite()
     {
-        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Website::class);
-        $website->load('test', 'code');
+        $website = $this->loadWebsiteByCode('test');
         $searchCriteria = [
             'searchCriteria' => [
                 'filter_groups' => [
@@ -752,6 +969,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue(count($response['items']) == 1);
         $this->assertTrue(isset($response['items'][0]['sku']));
         $this->assertEquals('simple-2', $response['items'][0]['sku']);
+        $this->assertNotNull($response['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']);
     }
 
     /**
@@ -898,6 +1116,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(3, $searchResult['total_count']);
         $this->assertEquals(1, count($searchResult['items']));
         $this->assertEquals('search_product_4', $searchResult['items'][0][ProductInterface::SKU]);
+        $this->assertNotNull(
+            $searchResult['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']
+        );
     }
 
     /**
@@ -986,6 +1207,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     protected function saveProduct($product, $storeCode = null)
     {
+        if (isset($product['custom_attributes'])) {
+            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
+                    && !is_array($product['custom_attributes'][$i]['value'])
+                ) {
+                    $product['custom_attributes'][$i]['value'] = [""];
+                }
+            }
+        }
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -314,7 +312,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
                 return $error;
             } else {
                 /*
-                 * The admin set not to show the shipping module if the delivery country is not within specific countries
+                 * The admin set not to show the shipping module if the delivery country
+                 * is not within specific countries
                  */
                 return false;
             }
@@ -330,9 +329,22 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @return $this|bool|\Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
+    public function processAdditionalValidation(\Magento\Framework\DataObject $request)
     {
         return $this;
+    }
+
+    /**
+     * Processing additional validation to check is carrier applicable.
+     *
+     * @param \Magento\Framework\DataObject $request
+     * @return $this|bool|\Magento\Framework\DataObject
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
+    {
+        return $this->processAdditionalValidation($request);
     }
 
     /**
@@ -395,6 +407,9 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      */
     protected function _updateFreeMethodQuote($request)
     {
+        if (!$request->getFreeShipping()) {
+            return;
+        }
         if ($request->getFreeMethodWeight() == $request->getPackageWeight() || !$request->hasFreeMethodWeight()) {
             return;
         }
@@ -436,12 +451,18 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
                     }
                 }
             }
+        } else {
+            /**
+             * if we can apply free shipping for all order we should force price
+             * to $0.00 for shipping with out sending second request to carrier
+             */
+            $price = 0;
         }
 
         /**
          * if we did not get our free shipping method in response we must use its old price
          */
-        if (!is_null($price)) {
+        if ($price !== null) {
             $this->_result->getRateById($freeRateId)->setPrice($price);
         }
     }
@@ -454,7 +475,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      */
     public function getFinalPriceWithHandlingFee($cost)
     {
-        $handlingFee = $this->getConfigData('handling_fee');
+        $handlingFee = (float)$this->getConfigData('handling_fee');
         $handlingType = $this->getConfigData('handling_type');
         if (!$handlingType) {
             $handlingType = self::HANDLING_TYPE_FIXED;

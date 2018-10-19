@@ -33,7 +33,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'inline.phtml';
+    protected $_template = 'Magento_GiftMessage::inline.phtml';
 
     /**
      * Gift message message
@@ -278,12 +278,21 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @deprecated Misspelled method
+     * @see getItemsHasMessages
+     */
+    public function getItemsHasMesssages()
+    {
+        return $this->getItemsHasMessages();
+    }
+
+    /**
      * Check if items has messages
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getItemsHasMesssages()
+    public function getItemsHasMessages()
     {
         foreach ($this->getItems() as $item) {
             if ($item->getGiftMessageId()) {
@@ -362,9 +371,6 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function getImage($product, $imageId, $attributes = [])
     {
-        return $this->imageBuilder->setProduct($product)
-            ->setImageId($imageId)
-            ->setAttributes($attributes)
-            ->create();
+        return $this->imageBuilder->create($product, $imageId, $attributes);
     }
 }

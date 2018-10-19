@@ -9,8 +9,7 @@ use Magento\Sales\Model\Order\Item;
 
 /**
  * @api
- *
- * Interface OrderedProductAvailabilityCheckerInterface
+ * @since 100.2.0
  */
 interface OrderedProductAvailabilityCheckerInterface
 {
@@ -20,6 +19,7 @@ interface OrderedProductAvailabilityCheckerInterface
      *
      * @param Item $item
      * @return bool
+     * @since 100.2.0
      */
     public function isAvailable(Item $item);
 }

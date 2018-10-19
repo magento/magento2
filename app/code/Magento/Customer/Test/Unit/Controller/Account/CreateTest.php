@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
 class CreateTest extends \PHPUnit\Framework\TestCase
@@ -67,7 +65,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->redirectResultMock = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
 
-        $this->redirectFactoryMock = $this->createPartialMock(\Magento\Framework\Controller\Result\RedirectFactory::class, ['create']);
+        $this->redirectFactoryMock = $this->createPartialMock(
+            \Magento\Framework\Controller\Result\RedirectFactory::class,
+            ['create']
+        );
 
         $this->resultPageMock = $this->createMock(\Magento\Framework\View\Result\Page::class);
         $this->pageFactoryMock = $this->createMock(\Magento\Framework\View\Result\PageFactory::class);

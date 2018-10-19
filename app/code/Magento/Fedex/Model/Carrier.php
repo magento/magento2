@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Fedex\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Webapi\Soap\ClientFactory;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
@@ -19,7 +19,6 @@ use Magento\Shipping\Model\Rate\Result;
 /**
  * Fedex shipping implementation
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -146,6 +145,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     private $serializer;
 
     /**
+     * @var ClientFactory
+     */
+    private $soapClientFactory;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -166,7 +170,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param array $data
      * @param Json|null $serializer
-     *
+     * @param ClientFactory|null $soapClientFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -189,7 +193,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Framework\Module\Dir\Reader $configReader,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+        ClientFactory $soapClientFactory = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -216,6 +221,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->_rateServiceWsdl = $wsdlBasePath . 'RateService_v10.wsdl';
         $this->_trackServiceWsdl = $wsdlBasePath . 'TrackService_v' . self::$trackServiceVersion . '.wsdl';
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->soapClientFactory = $soapClientFactory ?: ObjectManager::getInstance()->get(ClientFactory::class);
     }
 
     /**
@@ -227,7 +233,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function _createSoapClient($wsdl, $trace = false)
     {
-        $client = new \SoapClient($wsdl, ['trace' => $trace]);
+        $client = $this->soapClientFactory->create($wsdl, ['trace' => $trace]);
         $client->__setLocation(
             $this->getConfigFlag(
                 'sandbox_mode'
@@ -641,7 +647,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
 
-            if (is_null($amount)) {
+            if ($amount === null) {
                 $amount = (string)$rate->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount;
             }
         }
@@ -718,7 +724,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {
-            $debugData = ['request' => $request];
+            $debugData = ['request' => $this->filterDebugData($request)];
             try {
                 $url = $this->getConfigData('gateway_url');
                 if (!$url) {
@@ -733,7 +739,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $responseBody = curl_exec($ch);
                 curl_close($ch);
 
-                $debugData['result'] = $responseBody;
+                $debugData['result'] = $this->filterDebugData($responseBody);
                 $this->_setCachedQuotes($request, $responseBody);
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
@@ -1073,7 +1079,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         ];
         $requestString = $this->serializer->serialize($trackRequest);
         $response = $this->_getCachedQuotes($requestString);
-        $debugData = ['request' => $trackRequest];
+        $debugData = ['request' => $this->filterDebugData($trackRequest)];
         if ($response === null) {
             try {
                 $client = $this->_createTrackSoapClient();
@@ -1135,7 +1141,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         // no available tracking details
         if (!$counter) {
             $this->appendTrackingError(
-                $trackingValue, __('For some reason we can\'t retrieve tracking info right now.')
+                $trackingValue,
+                __('For some reason we can\'t retrieve tracking info right now.')
             );
         }
     }
@@ -1264,7 +1271,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $countriesOfManufacture[] = $product->getCountryOfManufacture();
         }
 
-        $paymentType = $request->getIsReturn() ? 'RECIPIENT' : 'SENDER';
+        $paymentType = $this->getPaymentType($request);
         $optionType = $request->getShippingMethod() == self::RATE_REQUEST_SMARTPOST
             ? 'SERVICE_DEFAULT' : $packageParams->getDeliveryConfirmation();
         $requestClient = [
@@ -1399,6 +1406,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $result = new \Magento\Framework\DataObject();
         $client = $this->_createShipSoapClient();
         $requestClient = $this->_formShipmentRequest($request);
+        $debugData['request'] = $this->filterDebugData($requestClient);
         $response = $client->processShipment($requestClient);
 
         if ($response->HighestSeverity != 'FAILURE' && $response->HighestSeverity != 'ERROR') {
@@ -1408,13 +1416,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             );
             $result->setShippingLabelContent($shippingLabelContent);
             $result->setTrackingNumber($trackingNumber);
-            $debugData = ['request' => $client->__getLastRequest(), 'result' => $client->__getLastResponse()];
+            $debugData['result'] = $client->__getLastResponse();
             $this->_debug($debugData);
         } else {
-            $debugData = [
-                'request' => $client->__getLastRequest(),
-                'result' => ['error' => '', 'code' => '', 'xml' => $client->__getLastResponse()],
-            ];
+            $debugData['result'] = ['error' => '', 'code' => '', 'xml' => $client->__getLastResponse()];
             if (is_array($response->Notifications)) {
                 foreach ($response->Notifications as $notification) {
                     $debugData['result']['code'] .= $notification->Code . '; ';
@@ -1751,5 +1756,19 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         return false;
+    }
+
+    /**
+     * Defines payment type by request.
+     * Two values are available: RECIPIENT or SENDER.
+     *
+     * @param DataObject $request
+     * @return string
+     */
+    private function getPaymentType(DataObject $request): string
+    {
+        return $request->getIsReturn() && $request->getShippingMethod() !== self::RATE_REQUEST_SMARTPOST
+            ? 'RECIPIENT'
+            : 'SENDER';
     }
 }

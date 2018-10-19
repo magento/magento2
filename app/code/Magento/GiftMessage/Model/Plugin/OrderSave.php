@@ -74,7 +74,7 @@ class OrderSave
                 $this->giftMessageOrderRepository->save($order->getEntityId(), $giftMessage);
             } catch (\Exception $e) {
                 throw new CouldNotSaveException(
-                    __('Could not add gift message to order: "%1"', $e->getMessage()),
+                    __('The gift message couldn\'t be added to the "%1" order.', $e->getMessage()),
                     $e
                 );
             }
@@ -109,7 +109,7 @@ class OrderSave
                         );
                     } catch (\Exception $e) {
                         throw new CouldNotSaveException(
-                            __('Could not add gift message to order\'s item: "%1"', $e->getMessage()),
+                            __('The gift message couldn\'t be added to the "%1" order item.', $e->getMessage()),
                             $e
                         );
                     }

@@ -1,0 +1,38 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+}
+
+type Mutation {
+    placeholderMutation: String @doc(description: "Mutation type cannot be declared without fields. The placeholder will be removed when at least one mutation field is declared.")
+}
+
+input FilterTypeInput @doc(description: "FilterTypeInput specifies which action will be performed in a query ") {
+    eq: String @doc(description: "Equals")
+    finset: [String] @doc(description: "Find in set. The value can contain a set of comma-separated values")
+    from: String @doc(description: "From. Must be used with 'to'")
+    gt: String @doc(description: "Greater than")
+    gteq: String @doc(description: "Greater than or equal to")
+    in: [String] @doc(description: "In. The value can contain a set of comma-separated values")
+    like: String @doc(description: "Like. The specified value can contain % (percent signs) to allow matching of 0 or more characters")
+    lt: String @doc(description: "Less than")
+    lteq: String @doc(description: "Less than or equal to")
+    moreq: String @doc(description: "More than or equal to")
+    neq: String @doc(description: "Not equal to")
+    notnull: String @doc(description: "Not null")
+    null: String @doc(description: "Is null")
+    to: String@doc(description: "To. Must be used with 'from'")
+    nin: [String] @doc(description: "Not in. The value can contain a set of comma-separated values")
+}
+
+type SearchResultPageInfo @doc(description: "SearchResultPageInfo provides navigation for the query response") {
+    page_size: Int @doc(description: "Specifies the maximum number of items to return")
+    current_page: Int @doc(description: "Specifies which page of results to return")
+    total_pages: Int @doc(description: "Total pages")
+}
+
+enum SortEnum @doc(description: "This enumeration indicates whether to return results in ascending or descending order") {
+    ASC
+    DESC
+}

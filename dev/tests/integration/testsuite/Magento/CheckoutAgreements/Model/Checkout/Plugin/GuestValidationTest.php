@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
 
 /**
@@ -142,7 +143,10 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             $this->assertNotNull($orderId);
         } catch (\Magento\Framework\Exception\CouldNotSaveException $e) {
             $this->assertEquals(
-                __('Please agree to all the terms and conditions before placing the order.'),
+                __(
+                    "The order wasn't placed. "
+                    . "First, agree to the terms and conditions, then try placing your order again."
+                ),
                 $e->getMessage()
             );
         }

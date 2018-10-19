@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Test\Unit\Model\Config;
 
 use Magento\Config\Model\Config\PathValidator;
@@ -55,7 +56,7 @@ class PathValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\ValidatorException
-     * @expectedExceptionMessage The "test/test/test" path does not exist
+     * @expectedExceptionMessage The "test/test/test" path doesn't exist. Verify and try again.
      */
     public function testValidateWithException()
     {

@@ -132,34 +132,5 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleFreeShippingIsApplied" />
         </variation>
-        <variation name="CreateSalesRuleEntityTestVariation17">
-            <data name="address/data/country_id" xsi:type="string">United States</data>
-            <data name="address/data/region_id" xsi:type="string">California</data>
-            <data name="address/data/postcode" xsi:type="string">95814</data>
-            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
-            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-            <data name="salesRule/data/name" xsi:type="string">Cart Price Rule2 %isolation%</data>
-            <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
-            <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
-            <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
-            <data name="salesRule/data/coupon_type" xsi:type="string">Auto</data>
-            <data name="salesRule/data/simple_action" xsi:type="string">Fixed amount discount</data>
-            <data name="salesRule/data/discount_amount" xsi:type="string">35</data>
-            <data name="salesRule/data/apply_to_shipping" xsi:type="string">No</data>
-            <data name="salesRule/data/simple_free_shipping" xsi:type="string">No</data>
-            <data name="salesRule/data/store_labels/0" xsi:type="string">Coupon code+fixed amount discount</data>
-            <data name="salesRuleEdit/data/qty" xsi:type="string">1</data>
-            <data name="productForSalesRule1/dataset" xsi:type="string">simple_for_salesrule_1</data>
-            <data name="productQuantity/productForSalesRule1" xsi:type="string">2</data>
-            <data name="cartPrice/sub_total" xsi:type="string">200.00</data>
-            <data name="cartPrice/grand_total" xsi:type="string">140.00</data>
-            <data name="cartPrice/discount" xsi:type="string">70.00</data>
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
-            <data name="issue" xsi:type="string">MAGETWO-65554: [FT] Magento\SalesRule\Test\TestCase\CreateSalesRuleEntityTest fails on CI</data>
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
-        </variation>
     </testCase>
 </config>

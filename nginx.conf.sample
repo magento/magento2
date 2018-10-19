@@ -3,7 +3,6 @@
 #    # use tcp connection
 #    # server  127.0.0.1:9000;
 #    # or socket
-#    server   unix:/var/run/php5-fpm.sock;
 #    server   unix:/var/run/php/php7.0-fpm.sock;
 # }
 # server {
@@ -41,7 +40,7 @@ location ~* ^/setup($|/) {
         fastcgi_pass   fastcgi_backend;
 
         fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
-        fastcgi_param  PHP_VALUE "memory_limit=768M \n max_execution_time=600";
+        fastcgi_param  PHP_VALUE "memory_limit=756M \n max_execution_time=600";
         fastcgi_read_timeout 600s;
         fastcgi_connect_timeout 600s;
 
@@ -100,10 +99,10 @@ location /static/ {
 
     # Remove signature of the static files that is used to overcome the browser cache
     location ~ ^/static/version {
-        rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
+        rewrite ^/static/(version[^/]+/)?(.*)$ /static/$2 last;
     }
 
-    location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
+    location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|json)$ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
         expires +1y;
@@ -162,13 +161,13 @@ location /media/import/ {
 }
 
 # PHP entry point for main application
-location ~ (index|get|static|report|404|503)\.php$ {
+location ~ (index|get|static|report|404|503|health_check)\.php$ {
     try_files $uri =404;
     fastcgi_pass   fastcgi_backend;
     fastcgi_buffers 1024 4k;
 
     fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
-    fastcgi_param  PHP_VALUE "memory_limit=768M \n max_execution_time=18000";
+    fastcgi_param  PHP_VALUE "memory_limit=756M \n max_execution_time=18000";
     fastcgi_read_timeout 600s;
     fastcgi_connect_timeout 600s;
 

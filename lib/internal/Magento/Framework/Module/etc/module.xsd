@@ -43,7 +43,7 @@
             </xs:element>
         </xs:all>
         <xs:attribute name="name" type="moduleName" use="required" />
-        <xs:attribute name="setup_version" type="setupVersion" use="required" />
+        <xs:attribute name="setup_version" type="setupVersion" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="moduleSequence">

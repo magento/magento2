@@ -6,7 +6,7 @@
 namespace Magento\Braintree\Gateway\Response;
 
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**

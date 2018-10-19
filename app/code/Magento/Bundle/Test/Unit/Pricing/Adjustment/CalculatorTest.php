@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Test\Unit\Pricing\Adjustment;
 
 use Magento\Bundle\Model\ResourceModel\Selection\Collection;
@@ -110,7 +108,8 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             \Magento\Bundle\Pricing\Adjustment\SelectionPriceListProviderInterface::class
         )->getMock();
 
-        $this->model = (new ObjectManager($this))->getObject(\Magento\Bundle\Pricing\Adjustment\Calculator::class,
+        $this->model = (new ObjectManager($this))->getObject(
+            \Magento\Bundle\Pricing\Adjustment\Calculator::class,
             [
                 'calculator' => $this->baseCalculator,
                 'amountFactory' => $this->amountFactory,
@@ -577,7 +576,8 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
 
         $result = $calculatorMock->getOptionsAmount(
             $this->saleableItem,
-            $exclude, $searchMin,
+            $exclude,
+            $searchMin,
             $amount,
             $useRegularPrice
         );
@@ -585,6 +585,9 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $result, 'Incorrect result');
     }
 
+    /**
+     * @return array
+     */
     public function getOptionsAmountDataProvider()
     {
         return [

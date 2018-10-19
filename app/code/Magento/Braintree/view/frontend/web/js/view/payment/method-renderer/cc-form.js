@@ -79,6 +79,7 @@ define(
                      */
                     onError: function (response) {
                         braintree.showError($t('Payment ' + this.getTitle() + ' can\'t be initialized'));
+                        this.isPlaceOrderActionAllowed(true);
                         throw response.message;
                     },
 
@@ -271,7 +272,6 @@ define(
                 billingCountryId = billingAddress.countryId;
 
                 if (billingCountryId && validator.getCountrySpecificCardTypes(billingCountryId)) {
-
                     return validator.collectTypes(
                         availableTypes, validator.getCountrySpecificCardTypes(billingCountryId)
                     );

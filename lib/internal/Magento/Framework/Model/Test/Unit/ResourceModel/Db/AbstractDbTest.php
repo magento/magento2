@@ -163,6 +163,9 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->_model->getMainTable());
     }
 
+    /**
+     * @return array
+     */
     public function getTableDataProvider()
     {
         return [
@@ -217,6 +220,9 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->getChecksum($checksum));
     }
 
+    /**
+     * @return array
+     */
     public function getChecksumProvider()
     {
         return [
@@ -295,6 +301,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
             ->method('getConnection')
             ->will($this->returnValue($connectionInterfaceMock));
 
+        $abstractModelMock->expects($this->atLeastOnce())->method('getId')->willReturn(1);
         $abstractModelMock->expects($this->once())->method('getData')->willReturn(['data' => 'value']);
         $connectionMock = $this->createMock(AdapterInterface::class);
         $this->transactionManagerMock->expects($this->once())
@@ -399,6 +406,9 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->hasDataChanged($abstractModelMock));
     }
 
+    /**
+     * @return array
+     */
     public function hasDataChangedDataProvider()
     {
         return [

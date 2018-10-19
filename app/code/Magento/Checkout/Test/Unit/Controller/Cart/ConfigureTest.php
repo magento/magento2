@@ -198,7 +198,7 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
         $quoteItemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
         $productMock->expects($this->once())->method('getId')->willReturn($productIdInQuota);
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->willReturn('');
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -23,6 +24,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      * @deprecated 100.2.0 please use instead \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory
+     * @see $attributeCollectionFactory
      */
     protected $attributeCollection;
 
@@ -97,19 +99,24 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
         try {
             $attributeSet = $this->setRepository->get($attributeSetId);
         } catch (NoSuchEntityException $ex) {
-            throw new NoSuchEntityException(__('AttributeSet with id "%1" does not exist.', $attributeSetId));
+            throw new NoSuchEntityException(
+                __(
+                    'The AttributeSet with a "%1" ID doesn\'t exist. Verify the attributeSet and try again.',
+                    $attributeSetId
+                )
+            );
         }
 
         $setEntityType = $this->entityTypeFactory->create()->getEntityType($attributeSet->getEntityTypeId());
         if ($setEntityType->getEntityTypeCode() != $entityTypeCode) {
-            throw new InputException(__('Wrong attribute set id provided'));
+            throw new InputException(__('The attribute set ID is incorrect. Verify the ID and try again.'));
         }
 
         //Check if group exists. If not - expected exception
         $attributeGroup = $this->groupRepository->get($attributeGroupId);
 
         if ($attributeGroup->getAttributeSetId() != $attributeSetId) {
-            throw new InputException(__('Attribute group does not belong to attribute set'));
+            throw new InputException(__('The attribute group doesn\'t belong to the attribute set.'));
         }
 
         /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
@@ -134,7 +141,9 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
         try {
             $attributeSet = $this->setRepository->get($attributeSetId);
         } catch (NoSuchEntityException $e) {
-            throw new NoSuchEntityException(__('Attribute set not found: %1', $attributeSetId));
+            throw new NoSuchEntityException(
+                __('The "%1" attribute set wasn\'t found. Verify and try again.', $attributeSetId)
+            );
         }
         $setEntityType = $this->entityTypeFactory->create()->getEntityType($attributeSet->getEntityTypeId());
 
@@ -147,11 +156,15 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
 
         if (!$attribute->getEntityAttributeId()) {
             throw new InputException(
-                __('Attribute "%1" not found in attribute set %2.', $attributeCode, $attributeSetId)
+                __(
+                    'The "%1" attribute wasn\'t found in the "%2" attribute set. Enter the attribute and try again.',
+                    $attributeCode,
+                    $attributeSetId
+                )
             );
         }
         if (!$attribute->getIsUserDefined()) {
-            throw new StateException(__('System attribute can not be deleted'));
+            throw new StateException(__("The system attribute can't be deleted."));
         }
         $attribute->deleteEntity();
         return true;

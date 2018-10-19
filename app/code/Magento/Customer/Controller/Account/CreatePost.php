@@ -5,13 +5,20 @@
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Helper\Address;
@@ -27,11 +34,14 @@ use Magento\Framework\Escaper;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Customer\Controller\AbstractAccount;
 
 /**
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreatePost extends \Magento\Customer\Controller\AbstractAccount
+class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
@@ -119,6 +129,11 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     private $cookieMetadataManager;
 
     /**
+     * @var Validator
+     */
+    private $formKeyValidator;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
@@ -137,6 +152,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerExtractor $customerExtractor
      * @param DataObjectHelper $dataObjectHelper
      * @param AccountRedirect $accountRedirect
+     * @param Validator $formKeyValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -158,7 +174,8 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         Escaper $escaper,
         CustomerExtractor $customerExtractor,
         DataObjectHelper $dataObjectHelper,
-        AccountRedirect $accountRedirect
+        AccountRedirect $accountRedirect,
+        Validator $formKeyValidator = null
     ) {
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
@@ -177,6 +194,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->urlModel = $urlFactory->create();
         $this->dataObjectHelper = $dataObjectHelper;
         $this->accountRedirect = $accountRedirect;
+        $this->formKeyValidator = $formKeyValidator ?: ObjectManager::getInstance()->get(Validator::class);
         parent::__construct($context);
     }
 
@@ -189,7 +207,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     private function getCookieManager()
     {
         if (!$this->cookieMetadataManager) {
-            $this->cookieMetadataManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            $this->cookieMetadataManager = ObjectManager::getInstance()->get(
                 \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class
             );
         }
@@ -205,7 +223,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     private function getCookieMetadataFactory()
     {
         if (!$this->cookieMetadataFactory) {
-            $this->cookieMetadataFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            $this->cookieMetadataFactory = ObjectManager::getInstance()->get(
                 \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
             );
         }
@@ -263,6 +281,31 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $url = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
+        $resultRedirect->setUrl($this->_redirect->error($url));
+
+        return new InvalidRequestException(
+            $resultRedirect,
+            [new Phrase('Invalid Form Key. Please refresh the page.')]
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return null;
+    }
+
+    /**
      * Create customer account action
      *
      * @return void
@@ -271,17 +314,19 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($this->session->isLoggedIn() || !$this->registration->isAllowed()) {
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
 
-        if (!$this->getRequest()->isPost()) {
+        if (!$this->getRequest()->isPost()
+            || !$this->formKeyValidator->validate($this->getRequest())
+        ) {
             $url = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
-            $resultRedirect->setUrl($this->_redirect->error($url));
-            return $resultRedirect;
+            return $this->resultRedirectFactory->create()
+                ->setUrl($this->_redirect->error($url));
         }
 
         $this->session->regenerateId();
@@ -364,8 +409,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 
         $this->session->setCustomerFormData($this->getRequest()->getPostValue());
         $defaultUrl = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
-        $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
-        return $resultRedirect;
+        return $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
     }
 
     /**

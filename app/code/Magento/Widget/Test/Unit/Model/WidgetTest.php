@@ -168,7 +168,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             'show_pager' => '1',
             'products_per_page' => '5',
             'products_count' => '10',
-            'template' => 'product/widget/content/grid.phtml',
+            'template' => 'Magento_CatalogWidget::product/widget/content/grid.phtml',
             'conditions' => $conditions
         ];
 
@@ -181,9 +181,16 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
                 ['1', false, '1'],
                 ['5', false, '5'],
                 ['10', false, '10'],
-                ['product/widget/content/grid.phtml', false, 'product/widget/content/grid.phtml'],
+                ['Magento_CatalogWidget::product/widget/content/grid.phtml',
+                 false,
+                 'Magento_CatalogWidget::product/widget/content/grid.phtml'
+                ],
                 ['encoded-conditions-string', false, 'encoded-conditions-string'],
             ]);
+
+        $this->dataStorageMock->expects($this->once())
+            ->method('get')
+            ->willReturn([]);
 
         $result = $this->widget->getWidgetDeclaration(
             \Magento\CatalogWidget\Block\Product\ProductsList::class,
@@ -192,7 +199,8 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
         $this->assertContains('title="my &quot;widget&quot;"', $result);
         $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
-        $this->assertContains('page_var_name="pasdf"}}', $result);
+        $this->assertContains('page_var_name="pasdf"', $result);
+        $this->assertContains('type_name=""}}', $result);
     }
 
     public function testGetWidgetDeclarationWithZeroValueParam()
@@ -221,7 +229,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             'show_pager' => '1',
             'products_per_page' => '5',
             'products_count' => '0',
-            'template' => 'product/widget/content/grid.phtml',
+            'template' => 'Magento_CatalogWidget::product/widget/content/grid.phtml',
             'conditions' => $conditions
         ];
 
@@ -230,12 +238,17 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             ->with($conditions)
             ->willReturn('encoded-conditions-string');
 
+        $this->dataStorageMock->expects($this->once())
+            ->method('get')
+            ->willReturn([]);
+
         $result = $this->widget->getWidgetDeclaration(
             \Magento\CatalogWidget\Block\Product\ProductsList::class,
             $params
         );
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
-        $this->assertContains('page_var_name="pasdf"}}', $result);
+        $this->assertContains('page_var_name="pasdf"', $result);
+        $this->assertContains('type_name=""}}', $result);
         $this->assertContains('products_count=""', $result);
     }
 }

@@ -9,11 +9,20 @@ namespace Magento\Catalog\Block\Product;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Config\Element;
+use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\Url\Helper\Data;
 
 /**
  * Product list
@@ -40,17 +49,17 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Catalog layer
      *
-     * @var \Magento\Catalog\Model\Layer
+     * @var Layer
      */
     protected $_catalogLayer;
 
     /**
-     * @var \Magento\Framework\Data\Helper\PostHelper
+     * @var PostHelper
      */
     protected $_postDataHelper;
 
     /**
-     * @var \Magento\Framework\Url\Helper\Data
+     * @var Data
      */
     protected $urlHelper;
 
@@ -61,18 +70,18 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
     /**
      * @param Context $context
-     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
+     * @param PostHelper $postDataHelper
+     * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param Data $urlHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
-        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
+        Context $context,
+        PostHelper $postDataHelper,
+        Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
-        \Magento\Framework\Url\Helper\Data $urlHelper,
+        Data $urlHelper,
         array $data = []
     ) {
         $this->_catalogLayer = $layerResolver->get();
@@ -113,7 +122,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Get catalog layer model
      *
-     * @return \Magento\Catalog\Model\Layer
+     * @return Layer
      */
     public function getLayer()
     {
@@ -137,7 +146,35 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getMode()
     {
-        return $this->getChildBlock('toolbar')->getCurrentMode();
+        if ($this->getChildBlock('toolbar')) {
+            return $this->getChildBlock('toolbar')->getCurrentMode();
+        }
+
+        return $this->getDefaultListingMode();
+    }
+
+    /**
+     * Get listing mode for products if toolbar is removed from layout.
+     * Use the general configuration for product list mode from config path catalog/frontend/list_mode as default value
+     * or mode data from block declaration from layout.
+     *
+     * @return string
+     */
+    private function getDefaultListingMode()
+    {
+        // default Toolbar when the toolbar layout is not used
+        $defaultToolbar = $this->getToolbarBlock();
+        $availableModes = $defaultToolbar->getModes();
+
+        // layout config mode
+        $mode = $this->getData('mode');
+
+        if (!$mode || !isset($availableModes[$mode])) {
+            // default config mode
+            $mode = $defaultToolbar->getCurrentMode();
+        }
+
+        return $mode;
     }
 
     /**
@@ -148,28 +185,60 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected function _beforeToHtml()
     {
         $collection = $this->_getProductCollection();
-        $this->configureToolbar($this->getToolbarBlock(), $collection);
+
+        $this->addToolbarBlock($collection);
+
         $collection->load();
 
         return parent::_beforeToHtml();
     }
 
     /**
-     * Retrieve Toolbar block
+     * Add toolbar block from product listing layout
+     *
+     * @param Collection $collection
+     */
+    private function addToolbarBlock(Collection $collection)
+    {
+        $toolbarLayout = $this->getToolbarFromLayout();
+
+        if ($toolbarLayout) {
+            $this->configureToolbar($toolbarLayout, $collection);
+        }
+    }
+
+    /**
+     * Retrieve Toolbar block from layout or a default Toolbar
      *
      * @return Toolbar
      */
     public function getToolbarBlock()
     {
-        $blockName = $this->getToolbarBlockName();
-        if ($blockName) {
-            $block = $this->getLayout()->getBlock($blockName);
-            if ($block) {
-                return $block;
-            }
+        $block = $this->getToolbarFromLayout();
+
+        if (!$block) {
+            $block = $this->getLayout()->createBlock($this->_defaultToolbarBlock, uniqid(microtime()));
         }
-        $block = $this->getLayout()->createBlock($this->_defaultToolbarBlock, uniqid(microtime()));
+
         return $block;
+    }
+
+    /**
+     * Get toolbar block from layout
+     *
+     * @return bool|Toolbar
+     */
+    private function getToolbarFromLayout()
+    {
+        $blockName = $this->getToolbarBlockName();
+
+        $toolbarLayout = false;
+
+        if ($blockName) {
+            $toolbarLayout = $this->getLayout()->getBlock($blockName);
+        }
+
+        return $toolbarLayout;
     }
 
     /**
@@ -203,7 +272,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * @param array|string|integer|\Magento\Framework\App\Config\Element $code
+     * @param array|string|integer| Element $code
      * @return $this
      */
     public function addAttribute($code)
@@ -223,7 +292,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Retrieve Catalog Config object
      *
-     * @return \Magento\Catalog\Model\Config
+     * @return Config
      */
     protected function _getConfig()
     {
@@ -233,8 +302,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Prepare Sort By fields from Category Data
      *
-     * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Catalog\Block\Product\ListProduct
+     * @param Category $category
+     * @return $this
      */
     public function prepareSortableFieldsByCategory($category)
     {
@@ -265,51 +334,59 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     public function getIdentities()
     {
         $identities = [];
-        foreach ($this->_getProductCollection() as $item) {
-            $identities = array_merge($identities, $item->getIdentities());
-        }
+
         $category = $this->getLayer()->getCurrentCategory();
         if ($category) {
             $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId();
         }
+
+        //Check if category page shows only static block (No products)
+        if ($category->getData('display_mode') == Category::DM_PAGE) {
+            return $identities;
+        }
+
+        foreach ($this->_getProductCollection() as $item) {
+            $identities = array_merge($identities, $item->getIdentities());
+        }
+
         return $identities;
     }
 
     /**
      * Get post parameters
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
+     * @param Product $product
+     * @return array
      */
-    public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
+    public function getAddToCartPostParams(Product $product)
     {
         $url = $this->getAddToCartUrl($product);
         return [
             'action' => $url,
             'data' => [
                 'product' => $product->getEntityId(),
-                \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl($url),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl($url),
             ]
         ];
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return string
      */
-    public function getProductPrice(\Magento\Catalog\Model\Product $product)
+    public function getProductPrice(Product $product)
     {
         $priceRender = $this->getPriceRender();
 
         $price = '';
         if ($priceRender) {
             $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                FinalPrice::PRICE_CODE,
                 $product,
                 [
                     'include_container' => true,
                     'display_minimal_price' => true,
-                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                    'zone' => Render::ZONE_ITEM_LIST,
                     'list_category_page' => true
                 ]
             );
@@ -322,7 +399,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Specifies that price rendering should be done for the list of products
      * i.e. rendering happens in the scope of product list, but not single product
      *
-     * @return \Magento\Framework\Pricing\Render
+     * @return Render
      */
     protected function getPriceRender()
     {
@@ -348,7 +425,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     private function initializeProductCollection()
     {
         $layer = $this->getLayer();
-        /* @var $layer \Magento\Catalog\Model\Layer */
+        /* @var $layer Layer */
         if ($this->getShowRootCategory()) {
             $this->setCategoryId($this->_storeManager->getStore()->getRootCategoryId());
         }
@@ -387,8 +464,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             $layer->setCurrentCategory($origCategory);
         }
 
-        $toolbar = $this->getToolbarBlock();
-        $this->configureToolbar($toolbar, $collection);
+        $this->addToolbarBlock($collection);
 
         $this->_eventManager->dispatch(
             'catalog_block_product_list_collection',

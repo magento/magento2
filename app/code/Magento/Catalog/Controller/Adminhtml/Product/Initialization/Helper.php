@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeDefaultValueFilter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
+use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 
 /**
  * @api
@@ -80,9 +85,14 @@ class Helper
     private $dateTimeFilter;
 
     /**
-     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
+     * @var LinkTypeProvider
      */
     private $linkTypeProvider;
+
+    /**
+     * @var AttributeFilter
+     */
+    private $attributeFilter;
 
     /**
      * Constructor
@@ -93,10 +103,11 @@ class Helper
      * @param ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory|null $customOptionFactory
-     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|null $productLinkFactory
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface|null $productRepository
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider|null $linkTypeProvider
+     * @param CustomOptionFactory|null $customOptionFactory
+     * @param ProductLinkFactory|null $productLinkFactory
+     * @param ProductRepositoryInterface|null $productRepository
+     * @param LinkTypeProvider|null $linkTypeProvider
+     * @param AttributeFilter|null $attributeFilter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -106,10 +117,11 @@ class Helper
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory = null,
-        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository = null,
-        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider = null
+        CustomOptionFactory $customOptionFactory = null,
+        ProductLinkFactory $productLinkFactory = null,
+        ProductRepositoryInterface $productRepository = null,
+        LinkTypeProvider $linkTypeProvider = null,
+        AttributeFilter $attributeFilter = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -117,14 +129,13 @@ class Helper
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
-        $this->customOptionFactory = $customOptionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
-        $this->productLinkFactory = $productLinkFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
-        $this->productRepository = $productRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        $this->linkTypeProvider = $linkTypeProvider ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->customOptionFactory = $customOptionFactory ?: $objectManager->get(CustomOptionFactory::class);
+        $this->productLinkFactory = $productLinkFactory ?: $objectManager->get(ProductLinkFactory::class);
+        $this->productRepository = $productRepository ?: $objectManager->get(ProductRepositoryInterface::class);
+        $this->linkTypeProvider = $linkTypeProvider ?: $objectManager->get(LinkTypeProvider::class);
+        $this->attributeFilter = $attributeFilter ?: $objectManager->get(AttributeFilter::class);
     }
 
     /**
@@ -140,8 +151,7 @@ class Helper
      */
     public function initializeFromData(\Magento\Catalog\Model\Product $product, array $productData)
     {
-        unset($productData['custom_attributes']);
-        unset($productData['extension_attributes']);
+        unset($productData['custom_attributes'], $productData['extension_attributes']);
 
         if ($productData) {
             $stockData = isset($productData['stock_data']) ? $productData['stock_data'] : [];
@@ -149,6 +159,7 @@ class Helper
         }
 
         $productData = $this->normalize($productData);
+        $productData = $this->convertSpecialFromDateStringToObject($productData);
 
         if (!empty($productData['is_downloadable'])) {
             $productData['product_has_weight'] = 0;
@@ -187,25 +198,13 @@ class Helper
             $productOptions = [];
         }
         $productData['tier_price'] = isset($productData['tier_price']) ? $productData['tier_price'] : [];
+
+        $useDefaults = (array)$this->request->getPost('use_default', []);
+        $productData = $this->attributeFilter->prepareProductAttributes($product, $productData, $useDefaults);
         $product->addData($productData);
 
         if ($wasLockedMedia) {
             $product->lockAttribute('media');
-        }
-
-        /**
-         * Check "Use Default Value" checkboxes values
-         */
-        $useDefaults = (array)$this->request->getPost('use_default', []);
-
-        foreach ($useDefaults as $attributeCode => $useDefaultState) {
-            if ($useDefaultState) {
-                $product->setData($attributeCode, null);
-                // UI component sends value even if field is disabled, so 'Use Config Settings' must be reset to false
-                if ($product->hasData('use_config_' . $attributeCode)) {
-                    $product->setData('use_config_' . $attributeCode, false);
-                }
-            }
         }
 
         $product = $this->setProductLinks($product);
@@ -453,5 +452,20 @@ class Helper
         }
 
         return $product->setOptions($customOptions);
+    }
+
+    /**
+     * Convert string date presentation into object
+     *
+     * @param array $productData
+     * @return array
+     */
+    private function convertSpecialFromDateStringToObject($productData)
+    {
+        if (isset($productData['special_from_date']) && $productData['special_from_date'] != '') {
+            $productData['special_from_date'] = new \DateTime($productData['special_from_date']);
+        }
+
+        return $productData;
     }
 }

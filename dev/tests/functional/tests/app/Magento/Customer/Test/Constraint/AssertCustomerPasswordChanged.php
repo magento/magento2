@@ -52,7 +52,7 @@ class AssertCustomerPasswordChanged extends AbstractConstraint
             ['customer' => $customer]
         )->run();
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $customerAccountIndex->getAccountMenuBlock()->isVisible(),
             'Customer Account Dashboard is not visible.'
         );

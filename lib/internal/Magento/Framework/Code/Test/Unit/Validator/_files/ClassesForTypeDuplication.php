@@ -5,10 +5,9 @@
  */
 
 /**
- * @codingStandardsIgnoreFile
  * Coding Standards have to be ignored in this file, as it is just a data source for tests.
+ * @codingStandardsIgnoreStart
  */
-
 namespace TypeDuplication;
 
 interface ArgumentInterface

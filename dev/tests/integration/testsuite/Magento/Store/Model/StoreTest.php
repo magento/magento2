@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\Bootstrap;
@@ -292,7 +290,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             'sort_order' => 0,
             'is_active' => 1,
         ]);
-        $crud = new \Magento\TestFramework\Entity($this->model, ['name' => 'new name'], \Magento\Store\Model\Store::class);
+        $crud = new \Magento\TestFramework\Entity(
+            $this->model,
+            ['name' => 'new name'],
+            \Magento\Store\Model\Store::class
+        );
         $crud->testCrud();
     }
 

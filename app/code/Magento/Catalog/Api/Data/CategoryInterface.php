@@ -14,6 +14,37 @@ namespace Magento\Catalog\Api\Data;
  */
 interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
+    /**#@+
+     * Constants defined for keys of  data array
+     */
+    const KEY_PARENT_ID = 'parent_id';
+    const KEY_NAME = 'name';
+    const KEY_IS_ACTIVE = 'is_active';
+    const KEY_POSITION = 'position';
+    const KEY_LEVEL = 'level';
+    const KEY_UPDATED_AT = 'updated_at';
+    const KEY_CREATED_AT = 'created_at';
+    const KEY_PATH = 'path';
+    const KEY_AVAILABLE_SORT_BY = 'available_sort_by';
+    const KEY_INCLUDE_IN_MENU = 'include_in_menu';
+    const KEY_PRODUCT_COUNT = 'product_count';
+    const KEY_CHILDREN_DATA = 'children_data';
+
+    const ATTRIBUTES = [
+        'id',
+        self::KEY_PARENT_ID,
+        self::KEY_NAME,
+        self::KEY_IS_ACTIVE,
+        self::KEY_POSITION,
+        self::KEY_LEVEL,
+        self::KEY_UPDATED_AT,
+        self::KEY_CREATED_AT,
+        self::KEY_AVAILABLE_SORT_BY,
+        self::KEY_INCLUDE_IN_MENU,
+        self::KEY_CHILDREN_DATA,
+    ];
+    /**#@-*/
+
     /**
      * @return int|null
      */

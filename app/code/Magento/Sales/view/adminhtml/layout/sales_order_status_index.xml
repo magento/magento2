@@ -27,13 +27,13 @@
                             </argument>
                             <argument name="filter_visibility" xsi:type="string">1</argument>
                         </arguments>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="label">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales_order_status.grid.columnSet.label" as="label">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Status</argument>
                                 <argument name="index" xsi:type="string">label</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="status">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales_order_status.grid.columnSet.status" as="status">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Status Code</argument>
                                 <argument name="index" xsi:type="string">status</argument>
@@ -42,7 +42,7 @@
                                 <argument name="width" xsi:type="string">200</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="is_default">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales_order_status.grid.columnSet.is_default" as="is_default">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Default Status</argument>
                                 <argument name="index" xsi:type="string">is_default</argument>
@@ -62,7 +62,7 @@
                                 </argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="visible_on_front">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales_order_status.grid.columnSet.visible_on_front" as="visible_on_front">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Visible On Storefront</argument>
                                 <argument name="index" xsi:type="string">visible_on_front</argument>
@@ -82,14 +82,14 @@
                                 </argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Sales\Block\Status\Grid\Column\State" as="state">
+                        <block class="Magento\Sales\Block\Status\Grid\Column\State" name="sales_order_status.grid.columnSet.state" as="state">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">State Code and Title</argument>
                                 <argument name="index" xsi:type="string">state</argument>
                                 <argument name="type" xsi:type="string">text</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Sales\Block\Status\Grid\Column\Unassign" as="unassign">
+                        <block class="Magento\Sales\Block\Status\Grid\Column\Unassign" name="sales_order_status.grid.columnSet.unassign" as="unassign">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Action</argument>
                                 <argument name="index" xsi:type="string">unassign</argument>

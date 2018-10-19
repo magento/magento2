@@ -30,6 +30,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ProductVideo\Controller\Adminhtml\Product\Gallery\RetrieveImage">
+        <arguments>
+            <argument name="fileDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\View\Xsd\Media\TypeDataExtractorPool">
         <arguments>
             <argument name="extractors" xsi:type="array">

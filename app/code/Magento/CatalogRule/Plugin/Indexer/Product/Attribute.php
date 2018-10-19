@@ -103,7 +103,7 @@ class Attribute
 
         if ($disabledRulesCount) {
             $this->ruleProductProcessor->markIndexerAsInvalid();
-            $this->messageManager->addWarning(
+            $this->messageManager->addWarningMessage(
                 __(
                     'You disabled %1 Catalog Price Rules based on "%2" attribute.',
                     $disabledRulesCount,

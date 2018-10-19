@@ -13,7 +13,7 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\Filesystem\Glob;
 
 /**
- * A helper to gather specific kind of files in Magento application
+ * A helper to gather specific kind of files in Magento application.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -162,7 +162,8 @@ class Files
     {
         $result = [];
         foreach ($files as $file) {
-            $result[$file] = [$file];
+            $key = str_replace(BP . '/', '', $file);
+            $result[$key] = [$file];
         }
         return $result;
     }
@@ -391,7 +392,7 @@ class Files
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
             $files = [];
             foreach ($configXmlPaths as $xmlPath) {
-                $files = array_merge($files, glob($xmlPath));
+                $files = array_merge($files, glob($xmlPath, GLOB_NOSORT));
             }
             self::$_cache[$cacheKey] = $files;
         }
@@ -471,6 +472,14 @@ class Files
                 $files,
                 $this->getFilesSubset(
                     $this->componentRegistrar->getPaths(ComponentRegistrar::THEME),
+                    $fileNamePattern,
+                    []
+                )
+            );
+            $files = array_merge(
+                $files,
+                $this->getFilesSubset(
+                    $this->componentRegistrar->getPaths(ComponentRegistrar::SETUP),
                     $fileNamePattern,
                     []
                 )
@@ -555,6 +564,29 @@ class Files
     public function getPageLayoutFiles($incomingParams = [], $asDataSet = true)
     {
         return $this->getLayoutXmlFiles('page_layout', $incomingParams, $asDataSet);
+    }
+
+    /**
+     * Returns list of UI Component files, used by Magento application
+     *
+     * An incoming array can contain the following items
+     * array (
+     *     'namespace'      => 'namespace_name',
+     *     'module'         => 'module_name',
+     *     'area'           => 'area_name',
+     *     'theme'          => 'theme_name',
+     *     'include_code'   => true|false,
+     *     'include_design' => true|false,
+     *     'with_metainfo'  => true|false,
+     * )
+     *
+     * @param array $incomingParams
+     * @param bool $asDataSet
+     * @return array
+     */
+    public function getUiComponentXmlFiles($incomingParams = [], $asDataSet = true)
+    {
+        return $this->getLayoutXmlFiles('ui_component', $incomingParams, $asDataSet);
     }
 
     /**
@@ -1099,6 +1131,37 @@ class Files
     }
 
     /**
+     * Returns list of db_schema files, used by Magento application.
+     *
+     * @param string $fileNamePattern
+     * @param array $excludedFileNames
+     * @param bool $asDataSet
+     * @return array
+     * @codingStandardsIgnoreStart
+     */
+    public function getDbSchemaFiles(
+        $fileNamePattern = 'db_schema.xml',
+        $excludedFileNames = [],
+        $asDataSet = true
+    ) {
+        $cacheKey = __METHOD__ . '|' . $this->serializer->serialize([$fileNamePattern, $excludedFileNames, $asDataSet]);
+        if (!isset(self::$_cache[$cacheKey])) {
+            $files = $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
+            $files = array_filter(
+                $files,
+                function ($file) use ($excludedFileNames) {
+                    return !in_array(basename($file), $excludedFileNames);
+                }
+            );
+            self::$_cache[$cacheKey] = $files;
+        }
+        if ($asDataSet) {
+            return self::composeDataSets(self::$_cache[$cacheKey]);
+        }
+        return self::$_cache[$cacheKey];
+    }
+
+    /**
      * Collect templates from themes
      *
      * @param bool $withMetaInfo
@@ -1323,6 +1386,7 @@ class Files
         $directories = [
             '/dev/tools',
             '/dev/tests/api-functional/framework',
+            '/dev/tests/setup-integration/framework',
             '/dev/tests/integration/framework',
             '/dev/tests/integration/framework/tests/unit/testsuite',
             '/dev/tests/integration/testsuite',

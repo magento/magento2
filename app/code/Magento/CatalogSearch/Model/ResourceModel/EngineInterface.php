@@ -6,6 +6,9 @@
 
 /**
  * CatalogSearch Index Engine Interface
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel;
 
@@ -19,11 +22,17 @@ interface EngineInterface
 
     /**
      * Scope identifier
+     *
+     * @deprecated since using engine resolver
+     * @see \Magento\Framework\Search\EngineResolverInterface
      */
     const SCOPE_IDENTIFIER = 'scope';
 
     /**
      * Configuration path by which current indexer handler stored
+     *
+     * @deprecated since using engine resolver
+     * @see \Magento\Framework\Search\EngineResolverInterface
      */
     const CONFIG_ENGINE_PATH = 'catalog/search/engine';
 
@@ -55,7 +64,7 @@ interface EngineInterface
      *
      * @param array $index
      * @param string $separator
-     * @return string
+     * @return array
      */
     public function prepareEntityIndex($index, $separator = ' ');
 }

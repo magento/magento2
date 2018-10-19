@@ -63,7 +63,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     }
 
     /**
-     * Get proper SOAP client instance that is initialized with with WSDL corresponding to requested service interface.
+     * Get proper SOAP client instance that is initialized with WSDL corresponding to requested service interface.
      *
      * @param string $serviceInfo PHP service interface name, should include version if present
      * @param string|null $storeCode

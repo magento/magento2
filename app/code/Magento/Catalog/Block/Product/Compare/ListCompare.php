@@ -214,6 +214,22 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
+     * Check if any of the products has a value set for the attribute
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @return bool
+     */
+    public function hasAttributeValueForProducts($attribute)
+    {
+        foreach ($this->getItems() as $item) {
+            if ($item->hasData($attribute->getAttributeCode())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Retrieve Print URL
      *
      * @return string

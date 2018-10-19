@@ -6,7 +6,9 @@
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle\Selection;
 
-class Grid extends \Magento\Backend\App\Action
+use Magento\Catalog\Controller\Adminhtml\Product;
+
+class Grid extends Product
 {
     /**
      * @return mixed

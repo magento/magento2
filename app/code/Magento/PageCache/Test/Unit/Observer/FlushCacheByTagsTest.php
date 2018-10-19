@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\PageCache\Test\Unit\Observer;
 
 class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
@@ -83,6 +81,9 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($result);
     }
 
+    /**
+     * @return array
+     */
     public function flushCacheByTagsDataProvider()
     {
         return [

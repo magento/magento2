@@ -52,10 +52,16 @@
                 <forbidden_extensions>php,exe</forbidden_extensions>
             </custom_options>
         </catalog>
+        <indexer>
+            <catalog_product_price>
+                <dimensions_mode>none</dimensions_mode>
+            </catalog_product_price>
+        </indexer>
         <system>
             <media_storage_configuration>
                 <allowed_resources>
                     <tmp_images_folder>tmp</tmp_images_folder>
+                    <catalog_product_images>media/catalog/product/cache/</catalog_product_images>
                     <catalog_images_folder>catalog</catalog_images_folder>
                     <product_custom_options_fodler>custom_options</product_custom_options_fodler>
                 </allowed_resources>

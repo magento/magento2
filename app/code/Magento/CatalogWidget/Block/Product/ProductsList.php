@@ -14,7 +14,7 @@ use Magento\Widget\Block\BlockInterface;
 
 /**
  * Catalog Products List widget block
- * Class ProductsList
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements BlockInterface, IdentityInterface
@@ -130,7 +130,9 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * {@inheritdoc}
+     * Internal constructor, that is called from real constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -160,19 +162,21 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
         return [
             'CATALOG_PRODUCTS_LIST_WIDGET',
-            $this->getPriceCurrency()->getCurrencySymbol(),
+            $this->getPriceCurrency()->getCurrency()->getCode(),
             $this->_storeManager->getStore()->getId(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),
-            intval($this->getRequest()->getParam($this->getData('page_var_name'), 1)),
+            (int) $this->getRequest()->getParam($this->getData('page_var_name'), 1),
             $this->getProductsPerPage(),
             $conditions,
-            $this->json->serialize($this->getRequest()->getParams())
+            $this->json->serialize($this->getRequest()->getParams()),
+            $this->getTemplate(),
+            $this->getTitle()
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getProductPriceHtml(
@@ -196,20 +200,25 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
             /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
-
-        $price = '';
-        if ($priceRender) {
-            $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
-                $product,
-                $arguments
+        if (!$priceRender) {
+            $priceRender = $this->getLayout()->createBlock(
+                \Magento\Framework\Pricing\Render::class,
+                'product.price.render.default',
+                ['data' => ['price_render_handle' => 'catalog_product_prices']]
             );
         }
+
+        $price = $priceRender->render(
+            \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+            $product,
+            $arguments
+        );
+
         return $price;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _beforeToHtml()
     {
@@ -247,6 +256,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
+     * Get conditions
+     *
      * @return \Magento\Rule\Model\Condition\Combine
      */
     protected function getConditions()
@@ -257,6 +268,14 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
         if ($conditions) {
             $conditions = $this->conditionsHelper->decode($conditions);
+        }
+
+        foreach ($conditions as $key => $condition) {
+            if (!empty($condition['attribute'])
+                && in_array($condition['attribute'], ['special_from_date', 'special_to_date'])
+            ) {
+                $conditions[$key]['value'] = date('Y-m-d H:i:s', strtotime($condition['value']));
+            }
         }
 
         $this->rule->loadPost(['conditions' => $conditions]);
@@ -376,8 +395,9 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * @return PriceCurrencyInterface
+     * Get currency of product
      *
+     * @return PriceCurrencyInterface
      * @deprecated 100.2.0
      */
     private function getPriceCurrency()

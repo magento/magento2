@@ -15,6 +15,8 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      * @covers \Magento\PageCache\Block\System\Config\Form\Field\Export::_getElementHtml
      * @covers \Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish5::getVarnishVersion
      * @covers \Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish4::getVarnishVersion
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      */
     public function testExportButtons()
     {

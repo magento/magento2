@@ -29,7 +29,6 @@ use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
- * @codingStandardsIgnoreFile
  */
 class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -42,6 +41,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     const TYPE_INDEX = 'sitemap';
 
     const TYPE_URL = 'url';
+
+    /**
+     * Last mode date min value
+     */
+    const LAST_MOD_MIN_VAL = '0000-01-01 00:00:00';
 
     /**
      * Real file path
@@ -177,6 +181,13 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @var \Magento\Sitemap\Model\SitemapItemInterfaceFactory
      */
     private $sitemapItemFactory;
+
+    /**
+     * Last mode min timestamp value
+     *
+     * @var int
+     */
+    private $lastModMinTsVal;
 
     /**
      * Initialize dependencies.
@@ -331,7 +342,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $mappedItems = $this->mapToSitemapItem();
         $this->_sitemapItems = array_merge($sitemapItems, $mappedItems);
 
-
         $this->_tags = [
             self::TYPE_INDEX => [
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
@@ -391,7 +401,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         if (!preg_match('#^[a-zA-Z0-9_\.]+$#', $this->getSitemapFilename())) {
             throw new LocalizedException(
                 __(
-                    'Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.'
+                    'Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename.'
+                    . ' No spaces or other characters are allowed.'
                 )
             );
         }
@@ -635,7 +646,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getCurrentSitemapFilename($index)
     {
-        return self::INDEX_FILE_PREFIX . '-' . $this->getStoreId() . '-' . $index . '.xml';
+        return str_replace('.xml', '', $this->getSitemapFilename()) . '-' . $this->getStoreId() . '-' . $index . '.xml';
     }
 
     /**
@@ -695,7 +706,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getFormattedLastmodDate($date)
     {
-        return date('c', strtotime($date));
+        if ($this->lastModMinTsVal === null) {
+            $this->lastModMinTsVal = strtotime(self::LAST_MOD_MIN_VAL);
+        }
+        $timestamp = max(strtotime($date), $this->lastModMinTsVal);
+        return date('c', $timestamp);
     }
 
     /**

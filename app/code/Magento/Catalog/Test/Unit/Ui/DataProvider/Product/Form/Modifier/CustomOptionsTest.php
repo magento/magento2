@@ -154,7 +154,37 @@ class CustomOptionsTest extends AbstractModifierTest
             ->method('getAll')
             ->willReturn([]);
 
-        $this->assertArrayHasKey(CustomOptions::GROUP_CUSTOM_OPTIONS_NAME, $this->getModel()->modifyMeta([]));
+        $meta = $this->getModel()->modifyMeta([]);
+
+        $this->assertArrayHasKey(CustomOptions::GROUP_CUSTOM_OPTIONS_NAME, $meta);
+
+        $buttonAdd = $meta['custom_options']['children']['container_header']['children']['button_add'];
+        $buttonAddTargetName = $buttonAdd['arguments']['data']['config']['actions'][0]['targetName'];
+        $expectedTargetName = '${ $.ns }.${ $.ns }.' . CustomOptions::GROUP_CUSTOM_OPTIONS_NAME
+            . '.' . CustomOptions::GRID_OPTIONS_NAME;
+
+        $this->assertEquals($expectedTargetName, $buttonAddTargetName);
+    }
+
+    /**
+     * Tests if Compatible File Extensions is required when Option Type "File" is selected in Customizable Options.
+     */
+    public function testFileExtensionRequired()
+    {
+        $this->productOptionsConfigMock->expects($this->once())
+            ->method('getAll')
+            ->willReturn([]);
+
+        $meta = $this->getModel()->modifyMeta([]);
+
+        $config = $meta['custom_options']['children']['options']['children']['record']['children']['container_option']
+        ['children']['container_type_static']['children']['file_extension']['arguments']['data']['config'];
+
+        $scope = $config['dataScope'];
+        $required = $config['validation']['required-entry'];
+
+        $this->assertEquals(CustomOptions::FIELD_FILE_EXTENSION_NAME, $scope);
+        $this->assertTrue($required);
     }
 
     /**

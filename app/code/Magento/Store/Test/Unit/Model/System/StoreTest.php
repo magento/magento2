@@ -104,6 +104,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getStoresStructureDataProvider()
     {
         $websiteName = 'website';
@@ -207,6 +210,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getStoreValuesForFormDataProvider()
     {
         $websiteName = 'website';

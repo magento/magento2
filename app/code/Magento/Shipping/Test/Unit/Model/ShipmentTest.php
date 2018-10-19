@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Shipping\Test\Unit\Model;
 
 use \Magento\Sales\Api\OrderRepositoryInterface;
@@ -35,13 +33,20 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             'context' => $this->createMock(\Magento\Framework\Model\Context::class),
             'registry' => $this->createMock(\Magento\Framework\Registry::class),
             'localeDate' => $this->createMock(
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class),
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
+            ),
             'dateTime' => $this->createMock(\Magento\Framework\Stdlib\DateTime::class),
             'orderRepository' => $this->orderRepository,
-            'shipmentItemCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory::class),
-            'trackCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory::class),
+            'shipmentItemCollectionFactory' => $this->createMock(
+                \Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory::class
+            ),
+            'trackCollectionFactory' => $this->createMock(
+                \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory::class
+            ),
             'commentFactory' => $this->createMock(\Magento\Sales\Model\Order\Shipment\CommentFactory::class),
-            'commentCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory::class),
+            'commentCollectionFactory' => $this->createMock(
+                \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory::class
+            ),
         ];
         $this->shipment = $objectManagerHelper->getObject(
             \Magento\Sales\Model\Order\Shipment::class,
@@ -54,7 +59,10 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $orderId = 100000041;
         $this->shipment->setOrderId($orderId);
         $entityName = 'shipment';
-        $order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['load', 'setHistoryEntityName', '__wakeUp']);
+        $order = $this->createPartialMock(
+            \Magento\Sales\Model\Order::class,
+            ['load', 'setHistoryEntityName', '__wakeUp']
+        );
         $this->shipment->setOrderId($orderId);
         $order->expects($this->atLeastOnce())
             ->method('setHistoryEntityName')

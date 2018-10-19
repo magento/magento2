@@ -28,7 +28,7 @@
                         </argument>
                         <argument name="empty_text" xsi:type="string" translate="true">No Templates Found</argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="template_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.email.template.grid.columnSet.template_id" as="template_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID</argument>
                             <argument name="index" xsi:type="string">template_id</argument>
@@ -36,13 +36,13 @@
                             <argument name="header_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="code">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.email.template.grid.columnSet.code" as="code">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Template</argument>
                             <argument name="index" xsi:type="string">template_code</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="added_at">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.email.template.grid.columnSet.added_at" as="added_at">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Added</argument>
                             <argument name="index" xsi:type="string">added_at</argument>
@@ -52,7 +52,7 @@
                             <argument name="header_css_class" xsi:type="string">col-date</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="modified_at">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.email.template.grid.columnSet.modified_at" as="modified_at">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Updated</argument>
                             <argument name="index" xsi:type="string">modified_at</argument>
@@ -62,13 +62,13 @@
                             <argument name="header_css_class" xsi:type="string">col-date</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="subject">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.email.template.grid.columnSet.subject" as="subject">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Subject</argument>
                             <argument name="index" xsi:type="string">template_subject</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="type">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.email.template.grid.columnSet.type" as="type">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Template Type</argument>
                             <argument name="index" xsi:type="string">template_type</argument>
@@ -76,7 +76,7 @@
                             <argument name="renderer" xsi:type="string">Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="action">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.email.template.grid.columnSet.action" as="action">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Action</argument>
                             <argument name="index" xsi:type="string">template_id</argument>

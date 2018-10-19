@@ -145,8 +145,27 @@ class FeedTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('Sat, 6 Sep 2014 16:46:11 UTC'));
         if ($callInbox) {
             $this->inboxFactory->expects($this->once())->method('create')
-                ->will(($this->returnValue($this->inboxModel)));
-            $this->inboxModel->expects($this->once())->method('parse')->will($this->returnSelf());
+                ->will($this->returnValue($this->inboxModel));
+            $this->inboxModel->expects($this->once())
+                ->method('parse')
+                ->with(
+                    $this->callback(
+                        function ($data) {
+                            $fieldsToCheck = ['title', 'description', 'url'];
+                            return array_reduce(
+                                $fieldsToCheck,
+                                function ($initialValue, $item) use ($data) {
+                                    $haystack = $data[0][$item] ?? false;
+                                    return $haystack
+                                        ? $initialValue && !strpos($haystack, '<') && !strpos($haystack, '>')
+                                        : true;
+                                },
+                                true
+                            );
+                        }
+                    )
+                )
+                ->will($this->returnSelf());
         } else {
             $this->inboxFactory->expects($this->never())->method('create');
             $this->inboxModel->expects($this->never())->method('parse');
@@ -196,7 +215,27 @@ class FeedTest extends \PHPUnit\Framework\TestCase
                                 </item>
                             </channel>
                         </rss>'
-            ]
+            ],
+            [
+                true,
+                // @codingStandardsIgnoreStart
+                'HEADER
+
+                <?xml version="1.0" encoding="utf-8" ?>
+                        <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+                            <channel>
+                                <title>MagentoCommerce</title>
+                                <item>
+                                    <title><![CDATA[<script>alert("Hello!");</script>Test Title]]></title>
+                                    <link><![CDATA[http://magento.com/feed_url<script>alert("Hello!");</script>]]></link>
+                                    <severity>4</severity>
+                                    <description><![CDATA[Test <script>alert("Hello!");</script>Description]]></description>
+                                    <pubDate>Tue, 20 Jun 2017 13:14:47 UTC</pubDate>
+                                </item>
+                            </channel>
+                        </rss>'
+                // @codingStandardsIgnoreEnd
+            ],
         ];
     }
 }

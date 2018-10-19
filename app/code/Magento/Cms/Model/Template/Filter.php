@@ -37,7 +37,7 @@ class Filter extends \Magento\Email\Model\Template\Filter
      */
     public function mediaDirective($construction)
     {
-        $params = $this->getParameters($construction[2]);
+        $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
         return $this->_storeManager->getStore()->getBaseMediaDir() . '/' . $params['url'];
     }
 }

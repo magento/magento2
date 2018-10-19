@@ -63,10 +63,10 @@ class AssertAttributeSetOnProductForm extends AbstractConstraint
 
         $formData = $productEdit->getProductForm()->getData($productSimple);
         $formAttributeSet = $formData['attribute_set_id'];
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $attributeSet->getAttributeSetName(),
             $formAttributeSet,
-            'Attribute Set not found on Product form.'
+            'The attribute set wasn\'t found on product form.'
             . "\nExpected: " . $attributeSet->getAttributeSetName()
             . "\nActual: " . $formAttributeSet
         );
@@ -74,7 +74,7 @@ class AssertAttributeSetOnProductForm extends AbstractConstraint
         if ($attributeSetOriginal === null) {
             $productEdit->getProductForm()->openSection('product-details');
 
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $productEdit->getProductForm()->checkAttributeLabel($productAttribute),
                 "Product Attribute is absent on Product form."
             );

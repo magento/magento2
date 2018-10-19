@@ -200,6 +200,7 @@ class Samples extends AbstractModifier
             'componentType' => Container::NAME,
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
+            'showLabel' => false,
             'label' => __('Title'),
             'dataScope' => '',
         ];
@@ -226,6 +227,7 @@ class Samples extends AbstractModifier
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('File'),
+            'showLabel' => false,
             'dataScope' => '',
         ];
         $sampleType['arguments']['data']['config'] = [

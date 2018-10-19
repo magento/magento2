@@ -47,7 +47,7 @@ $product->setTypeId(
 )->setStatus(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
 )->setStockData(
-    ['qty' => 100, 'is_in_stock' => 1]
+    ['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1]
 )->setName(
     'Simple Product FPT'
 )->setSku(

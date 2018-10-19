@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Tests for \Magento\Framework\Data\Form\Field\Image
  */
@@ -74,7 +72,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'showInWebsite' => '1',
                 'showInStore' => '1',
                 'label' => null,
-                'backend_model' => \Magento\BackendModelConfig\Backend\Image::class,
+                'backend_model' => \Magento\Config\Model\Config\Backend\Image::class,
                 'upload_dir' => [
                     'config' => 'system/filesystem/media',
                     'scope_info' => '1',
@@ -87,7 +85,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 ],
                 '_elementType' => 'field',
                 'path' => 'catalog/placeholder',
-            ]);
+            ]
+        );
 
         $expectedHtmlId = $this->testData['html_id_prefix']
             . $this->testData['html_id']

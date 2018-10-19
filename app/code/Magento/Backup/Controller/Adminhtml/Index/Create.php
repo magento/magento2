@@ -12,14 +12,14 @@ use Magento\Framework\Filesystem;
 class Create extends \Magento\Backup\Controller\Adminhtml\Index
 {
     /**
-     * Create backup action
+     * Create backup action.
      *
      * @return void|\Magento\Backend\App\Action
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
-        if (!$this->getRequest()->isAjax()) {
+        if (!$this->isRequestAllowed()) {
             return $this->_redirect('*/*/index');
         }
 
@@ -82,7 +82,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
 
             $backupManager->create();
 
-            $this->messageManager->addSuccess($successMessage);
+            $this->messageManager->addSuccessMessage($successMessage);
 
             $response->setRedirectUrl($this->getUrl('*/*/index'));
         } catch (\Magento\Framework\Backup\Exception\NotEnoughFreeSpace $e) {
@@ -105,5 +105,15 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
         }
 
         $this->getResponse()->representJson($response->toJson());
+    }
+
+    /**
+     * Check if request is allowed.
+     *
+     * @return bool
+     */
+    private function isRequestAllowed()
+    {
+        return $this->getRequest()->isAjax() && $this->getRequest()->isPost();
     }
 }

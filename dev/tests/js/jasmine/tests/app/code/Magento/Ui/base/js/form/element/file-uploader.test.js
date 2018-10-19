@@ -7,28 +7,65 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/form/element/file-uploader'
-], function ($, FileUploader) {
+    'squire'
+], function ($, Squire) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/file-uploader', function () {
-        var component;
+        var injector = new Squire(),
+            mocks = {
+                'Magento_Ui/js/lib/core/events': {
+                    on: jasmine.createSpy()
+                },
+                'Magento_Ui/js/lib/registry/registry': {
+                    /** Method stub. */
+                    get: function () {
+                        return {
+                            get: jasmine.createSpy(),
+                            set: jasmine.createSpy()
+                        };
+                    },
+                    create: jasmine.createSpy(),
+                    set: jasmine.createSpy(),
+                    async: jasmine.createSpy()
+                },
+                '/mage/utils/wrapper': jasmine.createSpy()
+            },
+            component,
+            dataScope = 'dataScope',
+            originalJQuery = jQuery.fn;
 
-        beforeEach(function () {
-            component = new FileUploader({
-                dataScope: 'abstract'
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Ui/js/form/element/file-uploader',
+                'knockoutjs/knockout-es5'
+            ], function (Constr) {
+                component = new Constr({
+                    provider: 'provName',
+                    name: '',
+                    index: '',
+                    dataScope: dataScope
+                });
+
+                done();
             });
+        });
+
+        afterEach(function () {
+            jQuery.fn = originalJQuery;
         });
 
         describe('initUploader method', function () {
             it('creates instance of file uploader', function () {
                 var elem = document.createElement('input');
 
-                spyOn($.fn, 'fileupload');
+                spyOn(jQuery.fn, 'fileupload');
 
                 component.initUploader(elem);
 
-                expect($.fn.fileupload).toHaveBeenCalled();
+                expect(jQuery.fn.fileupload).toHaveBeenCalled();
+
             });
         });
 
@@ -235,29 +272,77 @@ define([
 
         describe('onFileUploaded handler', function () {
             it('calls addFile method if upload was successful', function () {
+                spyOn(component, 'aggregateError');
                 spyOn(component, 'addFile');
 
                 component.onFileUploaded({}, {
+                    files: [{
+                        name: 'hello.jpg'
+                    }],
                     result: {
                         error: false
                     }
                 });
 
+                expect(component.aggregateError).not.toHaveBeenCalled();
                 expect(component.addFile).toHaveBeenCalled();
             });
 
-            it('calls notifyError method if upload resulted in error', function () {
-                spyOn(component, 'notifyError');
-                spyOn(component, 'addFile');
+            it('should call uploaderConfig.stop when number of errors is equal to number of files', function () {
+                var fakeEvent = {
+                        target: document.createElement('input')
+                    },
+                    file = {
+                        name: 'hello.jpg'
+                    },
+                    data = {
+                        files: [file],
+                        originalFiles: [file]
+                    };
 
-                component.onFileUploaded({}, {
-                    result: {
-                        error: true
-                    }
+                spyOn(component, 'isFileAllowed').and.callFake(function (fileArg) {
+                    expect(fileArg).toBe(file);
+
+                    return {
+                        passed: false,
+                        message: 'Not awesome enough'
+                    };
+                });
+                component.initUploader();
+                spyOn(component.uploaderConfig, 'done');
+                spyOn(component.uploaderConfig, 'stop');
+                component.onBeforeFileUpload(fakeEvent, data);
+                expect(component.uploaderConfig.stop).toHaveBeenCalled();
+            });
+            it('should not call uploaderConfig.stop when number of errors is unequal to number of files', function () {
+                var fakeEvent = {
+                        target: document.createElement('input')
+                    },
+                    file = {
+                        name: 'hello.jpg'
+                    },
+                    otherFileInQueue = {
+                        name: 'world.png'
+                    },
+                    data = {
+                        files: [file],
+                        originalFiles: [file, otherFileInQueue]
+                    };
+
+                component.initUploader();
+                spyOn(component.uploaderConfig, 'done');
+                spyOn(component.uploaderConfig, 'stop');
+                spyOn(component, 'isFileAllowed').and.callFake(function (fileArg) {
+                    expect(fileArg).toBe(file);
+
+                    return {
+                        passed: false,
+                        message: 'Not awesome enough'
+                    };
                 });
 
-                expect(component.notifyError).toHaveBeenCalled();
-                expect(component.addFile).not.toHaveBeenCalled();
+                component.onBeforeFileUpload(fakeEvent, data);
+                expect(component.uploaderConfig.stop).not.toHaveBeenCalled();
             });
         });
 
@@ -270,6 +355,19 @@ define([
                 component.onElementRender(input);
 
                 expect(component.initUploader).toHaveBeenCalledWith(input);
+            });
+        });
+
+        describe('aggregateError method', function () {
+            it('should append onto aggregatedErrors array when called', function () {
+                spyOn(component.aggregatedErrors, 'push');
+
+                component.aggregateError('blah.jpg', 'File is too awesome');
+
+                expect(component.aggregatedErrors.push).toHaveBeenCalledWith({
+                    filename: 'blah.jpg',
+                    message: 'File is too awesome'
+                });
             });
         });
     });

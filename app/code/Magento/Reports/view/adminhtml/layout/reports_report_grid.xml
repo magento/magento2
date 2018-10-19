@@ -46,7 +46,7 @@
                         <argument name="empty_text" xsi:type="string" translate="true">We can't find records for this period.</argument>
                         <argument name="empty_cell_label" xsi:type="string" translate="true">We can't find records for this period.</argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="period">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.report.grid.columnSet.period" as="period">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Interval</argument>
                             <argument name="sortable" xsi:type="string">0</argument>

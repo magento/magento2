@@ -31,6 +31,8 @@ define([
             this.options.cache.label = $(this.options.passwordStrengthMeterLabelSelector, this.element);
 
             // We need to look outside the module for backward compatibility, since someone can already use the module.
+            // @todo Narrow this selector in 2.3 so it doesn't accidentally finds the email field from the
+            // newsletter email field or any other "email" field.
             this.options.cache.email = $(this.options.formSelector).find(this.options.emailSelector);
             this._bind();
         },
@@ -74,7 +76,9 @@ define([
                     'password-not-equal-to-user-name': this.options.cache.email.val()
                 });
 
-                if (password.toLowerCase() === this.options.cache.email.val().toLowerCase()) {
+                // We should only perform this check in case there is an email field on screen
+                if (this.options.cache.email.length &&
+                    password.toLowerCase() === this.options.cache.email.val().toLowerCase()) {
                     displayScore = 1;
                 } else {
                     isValid = $.validator.validateSingleElement(this.options.cache.input);

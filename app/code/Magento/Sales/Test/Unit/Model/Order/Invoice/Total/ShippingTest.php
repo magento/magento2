@@ -31,7 +31,6 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     public function testCollectWithNoOrZeroPrevInvoice(array $prevInvoicesData, $orderShipping, $expectedShipping)
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $invoice = $this->createInvoiceStub($prevInvoicesData, $orderShipping);
         $invoice->expects($this->exactly(2))
             ->method('setShippingAmount')
@@ -61,7 +60,6 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
 
     public function testCollectWithPreviousInvoice()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $orderShipping = 10.00;
         $prevInvoicesData = [['shipping_amount' => '10.000']];
         $invoice = $this->createInvoiceStub($prevInvoicesData, $orderShipping);
@@ -136,7 +134,10 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             $arguments['data'] = $oneInvoiceData;
             $arguments = $objectManagerHelper->getConstructArguments($className, $arguments);
             /** @var $prevInvoice \Magento\Sales\Model\Order\Invoice */
-            $prevInvoice = $this->getMockBuilder($className)->setMethods(['_init'])->setConstructorArgs($arguments);
+            $prevInvoice = $this->getMockBuilder($className)
+                ->setMethods(['_init'])
+                ->setConstructorArgs($arguments)
+                ->getMock();
             $result->addItem($prevInvoice);
         }
         return $result;

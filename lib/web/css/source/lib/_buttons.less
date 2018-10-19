@@ -266,8 +266,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        cursor: not-allowed;
-        pointer-events: none; // Disabling of clicks
+        pointer-events: none; // Disabling of all pointer events
         .lib-css(opacity, @button__disabled__opacity);
     }
 }
@@ -277,6 +276,9 @@
 //  ---------------------------------------------
 
 .lib-button-primary(
+    @_button-font-family: @button-primary__font-family,
+    @_button-font-size: @button-primary__font-size,
+    @_button-font-weight: @button-primary__font-weight,
     @_button-line-height: @button-primary__line-height,
     @_button-width: @button-primary__width,
     @_button-margin: @button-primary__margin,
@@ -300,6 +302,9 @@
     @_button-gradient-direction: @button-primary__gradient-direction
 ) {
     .lib-button(
+        @_button-font-family: @_button-font-family,
+        @_button-font-size: @_button-font-size,
+        @_button-font-weight: @_button-font-weight,
         @_button-line-height: @_button-line-height,
         @_button-width: @_button-width,
         @_button-margin: @_button-margin,

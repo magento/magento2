@@ -36,10 +36,10 @@
             </group>
             <group id="recently_products" translate="label" type="text" sortOrder="350" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Recently Viewed/Compared Products</label>
-                <field id="recently_viewed_lifetime" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="recently_viewed_lifetime" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Lifetime of products in Recently Viewed Widget</label>
                 </field>
-                <field id="recently_compared_lifetime" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="recently_compared_lifetime" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Lifetime of products in Recently Compared Widget</label>
                 </field>
                 <field id="synchronize_with_backend" translate="label" type="select" showInDefault="1" canRestore="1">
@@ -85,16 +85,12 @@
                 </field>
                 <field id="default_sort_by" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Product Listing Sort by</label>
+                    <comment>Applies to category pages</comment>
                     <source_model>Magento\Catalog\Model\Config\Source\ListSort</source_model>
                 </field>
                 <field id="list_allow_all" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow All Products per Page</label>
                     <comment>Whether to show "All" option in the "Show X Per Page" dropdown</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="parse_url_directives" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Allow Dynamic Media URLs in Products and Categories</label>
-                    <comment>E.g. {{media url="path/to/image.jpg"}} {{skin url="path/to/picture.gif"}}. Dynamic directives parsing impacts catalog performance.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
@@ -103,7 +99,6 @@
                 <clone_fields>1</clone_fields>
                 <clone_model>Magento\Catalog\Model\Config\CatalogClone\Media\Image</clone_model>
                 <field id="placeholder" type="image" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label></label>
                     <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
                     <upload_dir config="system/filesystem/media" scope_info="1">catalog/product/placeholder</upload_dir>
                     <base_url type="media" scope_info="1">catalog/product/placeholder</base_url>
@@ -163,8 +158,8 @@
         <section id="cms">
             <group id="wysiwyg">
                 <field id="use_static_urls_in_catalog" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Use Static URLs for Media Content in WYSIWYG for Catalog</label>
-                    <comment>This applies only to catalog products and categories. Media content will be inserted into the editor as a static URL. Media content is not updated if the system configuration base URL changes.</comment>
+                    <label>Use Static URLs for Media Content in WYSIWYG</label>
+                    <comment>Media content will be inserted into the editor as a static URL. Media content is not updated if the system configuration base URL changes.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
@@ -183,6 +178,19 @@
                 <field id="category" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Top Level Category</label>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="web">
+            <group id="default_layouts" translate="label" type="text" sortOrder="35" showInDefault="1">
+                <label>Default Layouts</label>
+                <field id="default_product_layout" translate="label" type="select" sortOrder="10" showInDefault="1">
+                    <label>Default Product Layout</label>
+                    <source_model>Magento\Catalog\Model\Config\Source\LayoutList</source_model>
+                </field>
+                <field id="default_category_layout" translate="label" type="select" sortOrder="20" showInDefault="1">
+                    <label>Default Category Layout</label>
+                    <source_model>Magento\Catalog\Model\Config\Source\LayoutList</source_model>
                 </field>
             </group>
         </section>

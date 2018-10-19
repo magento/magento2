@@ -21,13 +21,13 @@
                 <merge_files>0</merge_files>
                 <minify_files>0</minify_files>
                 <minify_exclude>
-                    /tiny_mce/
+                    <tiny_mce>/tiny_mce/</tiny_mce>
                 </minify_exclude>
             </js>
             <css>
                 <minify_files>0</minify_files>
                 <minify_exclude>
-                    /tiny_mce/
+                    <tiny_mce>/tiny_mce/</tiny_mce>
                 </minify_exclude>
             </css>
             <image>
@@ -115,6 +115,10 @@
             <file>
                 <protected_extensions>
                     <php>php</php>
+                    <php3>php3</php3>
+                    <php4>php4</php4>
+                    <php5>php5</php5>
+                    <php7>php7</php7>
                     <htaccess>htaccess</htaccess>
                     <jsp>jsp</jsp>
                     <pl>pl</pl>

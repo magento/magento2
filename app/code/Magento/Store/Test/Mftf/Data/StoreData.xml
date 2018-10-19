@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultStore" type="store">
+        <data key="name">Default Store View</data>
+        <data key="code">default</data>
+        <data key="is_active">1</data>
+    </entity>
+    <entity name="customStore" type="store">
+        <!--data key="group_id">customStoreGroup.id</data-->
+        <data key="name" unique="suffix">store</data>
+        <data key="code" unique="suffix">store</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="customStoreEN" type="store">
+        <data key="name">EN</data>
+        <data key="code">en</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="customStoreFR" type="store">
+        <data key="name">FR</data>
+        <data key="code">fr</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">group</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="staticStore" type="store">
+        <!--data key="group_id">customStoreGroup.id</data-->
+        <data key="name">Second Store View</data>
+        <data key="code">store123</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="staticSecondStore" extends="staticStore">
+        <data key="name">Store View</data>
+        <data key="code">store2</data>
+    </entity>
+</entities>

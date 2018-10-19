@@ -47,8 +47,8 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
     private $productData = [
         ProductInterface::TYPE_ID => Type::TYPE_SIMPLE,
         'website_ids' => [1],
-        ProductInterface::NAME => 'Simple',
-        ProductInterface::SKU => 'simple',
+        ProductInterface::NAME => 'simpleByStockItemTest',
+        ProductInterface::SKU => 'simpleByStockItemTest',
         ProductInterface::PRICE => 100,
         ProductInterface::EXTENSION_ATTRIBUTES_KEY => [],
     ];
@@ -88,7 +88,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectHelper->populateWithArray($product, $productData, ProductInterface::class);
         $product->save();
 
-        $this->stockItemDataChecker->checkStockItemData('simple', $this->stockItemData);
+        $this->stockItemDataChecker->checkStockItemData('simpleByStockItemTest', $this->stockItemData);
     }
 
     /**
@@ -107,6 +107,6 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
         $product->getExtensionAttributes()->setStockItem($stockItem);
         $product->save();
 
-        $this->stockItemDataChecker->checkStockItemData('simple', $this->stockItemData);
+        $this->stockItemDataChecker->checkStockItemData('simpleByStockItemTest', $this->stockItemData);
     }
 }

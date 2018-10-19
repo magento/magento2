@@ -76,7 +76,7 @@
             <data name="isVaultPresent" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">payflowpro</data>
             <data name="paymentInfo" xsi:type="array">
-                <item name="AVS Street Match" xsi:type="string">#Y: Yes. Matched Address and five-didgit ZIP</item>
+                <item name="AVS Street Match" xsi:type="string">#Y: Yes. Matched Address and five-digit ZIP</item>
             </data>
             <data name="status" xsi:type="string">Processing</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
@@ -113,7 +113,7 @@
             <data name="payment/method" xsi:type="string">payflowpro</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="paymentInfo" xsi:type="array">
-                <item name="AVS zip" xsi:type="string">#Y: Yes. Matched Address and five-didgit ZIP</item>
+                <item name="AVS zip" xsi:type="string">#Y: Yes. Matched Address and five-digit ZIP</item>
             </data>
             <data name="configData" xsi:type="string">payflowpro, payflowpro_use_avs_zip</data>
             <data name="status" xsi:type="string">Processing</data>

@@ -80,7 +80,7 @@ class Js extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Get store object of curently edited product
+     * Get store object of currently edited product
      *
      * @return \Magento\Store\Model\Store
      */

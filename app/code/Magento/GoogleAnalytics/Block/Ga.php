@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\GoogleAnalytics\Block;
 
 use Magento\Framework\App\ObjectManager;
@@ -130,8 +128,8 @@ class Ga extends \Magento\Framework\View\Element\Template
                         'price': '%s',
                         'quantity': %s
                     });",
-                    $this->escapeJs($item->getSku()),
-                    $this->escapeJs($item->getName()),
+                    $this->escapeJsQuote($item->getSku()),
+                    $this->escapeJsQuote($item->getName()),
                     $item->getPrice(),
                     $item->getQtyOrdered()
                 );
@@ -146,7 +144,7 @@ class Ga extends \Magento\Framework\View\Element\Template
                     'shipping': '%s'
                 });",
                 $order->getIncrementId(),
-                $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
+                $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
                 $order->getGrandTotal(),
                 $order->getTaxAmount(),
                 $order->getShippingAmount()
@@ -236,15 +234,15 @@ class Ga extends \Magento\Framework\View\Element\Template
         foreach ($collection as $order) {
             foreach ($order->getAllVisibleItems() as $item) {
                 $result['products'][] = [
-                    'id' => $this->escapeJs($item->getSku()),
-                    'name' =>  $this->escapeJs($item->getName()),
+                    'id' => $this->escapeJsQuote($item->getSku()),
+                    'name' =>  $this->escapeJsQuote($item->getName()),
                     'price' => $item->getPrice(),
                     'quantity' => $item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
                 'id' =>  $order->getIncrementId(),
-                'affiliation' => $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
+                'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
                 'revenue' => $order->getGrandTotal(),
                 'tax' => $order->getTaxAmount(),
                 'shipping' => $order->getShippingAmount(),

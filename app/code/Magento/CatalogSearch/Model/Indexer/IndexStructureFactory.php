@@ -5,14 +5,15 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 
 /**
  * @api
  * @since 100.1.0
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class IndexStructureFactory
 {
@@ -31,37 +32,26 @@ class IndexStructureFactory
      * @since 100.1.0
      */
     protected $structures = null;
-
     /**
-     * @var ScopeConfigInterface
+     * @var EngineResolverInterface
      */
-    private $scopeConfig;
-
-    /**
-     * Configuration path by which current indexer handler stored
-     *
-     * @var string
-     */
-    private $configPath;
+    private $engineResolver;
 
     /**
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param ScopeConfigInterface $scopeConfig
-     * @param string $configPath
+     * @param EngineResolverInterface $engineResolver
      * @param string[] $structures
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ScopeConfigInterface $scopeConfig,
-        $configPath,
+        EngineResolverInterface $engineResolver,
         array $structures = []
     ) {
         $this->objectManager = $objectManager;
-        $this->scopeConfig = $scopeConfig;
-        $this->configPath = $configPath;
         $this->structures = $structures;
+        $this->engineResolver = $engineResolver;
     }
 
     /**
@@ -73,7 +63,7 @@ class IndexStructureFactory
      */
     public function create(array $data = [])
     {
-        $currentStructure = $this->scopeConfig->getValue($this->configPath, ScopeInterface::SCOPE_STORE);
+        $currentStructure = $this->engineResolver->getCurrentSearchEngine();
         if (!isset($this->structures[$currentStructure])) {
             throw new \LogicException(
                 'There is no such index structure: ' . $currentStructure
@@ -83,7 +73,7 @@ class IndexStructureFactory
 
         if (!$indexStructure instanceof IndexStructureInterface) {
             throw new \InvalidArgumentException(
-                $indexStructure . ' doesn\'t implement \Magento\Framework\Indexer\IndexStructureInterface'
+                $currentStructure . ' index structure doesn\'t implement '. IndexStructureInterface::class
             );
         }
 

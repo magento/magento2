@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Integration\Model\Integration;
@@ -149,7 +150,7 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage Integration with name 'Integration Name' exists.
+     * @expectedExceptionMessage The integration with name "Integration Name" exists.
      */
     public function testCreateIntegrationAlreadyExistsException()
     {
@@ -244,7 +245,7 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage Integration with name 'Another Integration Name' exists.
+     * @expectedExceptionMessage The integration with name "Another Integration Name" exists.
      */
     public function testUpdateException()
     {
@@ -297,7 +298,7 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage Integration with ID '1' does not exist.
+     * @expectedExceptionMessage The integration with ID "1" doesn't exist.
      */
     public function testGetException()
     {
@@ -385,7 +386,7 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage Integration with ID '1' does not exist.
+     * @expectedExceptionMessage The integration with ID "1" doesn't exist.
      */
     public function testDeleteException()
     {

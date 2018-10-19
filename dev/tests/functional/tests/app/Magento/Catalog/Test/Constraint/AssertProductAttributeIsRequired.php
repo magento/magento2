@@ -51,7 +51,7 @@ class AssertProductAttributeIsRequired extends AbstractConstraint
             ? $validationErrors[$attribute->getFrontendLabel()]
             : '';
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::REQUIRE_MESSAGE,
             $actualMessage,
             'JS error notice on product edit page is not equal to expected.'

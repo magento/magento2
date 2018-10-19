@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Element;
 
 use Magento\Framework\View\Element\AbstractBlock;
@@ -222,9 +220,9 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
      * @param string|bool $cacheLifetime
      * @param string|bool $dataFromCache
      * @param string $dataForSaveCache
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsDispatchEvent
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsCacheLoad
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsCacheSave
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsDispatchEvent
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsCacheLoad
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsCacheSave
      * @param string $expectedResult
      * @return void
      * @dataProvider getCacheLifetimeDataProvider
@@ -292,9 +290,9 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
                 'dataFromCache' => 'dataFromCache',
                 'dataForSaveCache' => '',
                 'expectsDispatchEvent' => $this->exactly(2),
-                'expectsCacheLoad' => $this->once(),
+                'expectsCacheLoad' => $this->never(),
                 'expectsCacheSave' => $this->never(),
-                'expectedResult' => 'dataFromCache',
+                'expectedResult' => '',
             ],
             [
                 'cacheLifetime' => 120,

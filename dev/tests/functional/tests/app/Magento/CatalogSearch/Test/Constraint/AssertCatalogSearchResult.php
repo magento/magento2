@@ -34,7 +34,7 @@ class AssertCatalogSearchResult extends AbstractConstraint
             $isProductVisible = $resultPage->getListProductBlock()->getProductItem($product)->isVisible();
         } while (!$isProductVisible && $resultPage->getBottomToolbar()->nextPage());
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $isProductVisible,
             "A product with name '" . $product->getName() . "' was not found."
         );

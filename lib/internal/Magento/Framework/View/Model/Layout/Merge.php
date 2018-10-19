@@ -9,6 +9,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
+use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 use Magento\Framework\View\Model\Layout\Update\Validator;
 
 /**
@@ -104,6 +105,13 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private $appState;
 
     /**
+     * Cache keys to be able to generate different cache id for same handles
+     *
+     * @var LayoutCacheKeyInterface
+     */
+    private $layoutCacheKey;
+
+    /**
      * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $cache;
@@ -165,9 +173,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\View\Model\Layout\Update\Validator $validator
      * @param \Psr\Log\LoggerInterface $logger
-     * @param ReadFactory $readFactory,
+     * @param ReadFactory $readFactory ,
      * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
      * @param string $cacheSuffix
+     * @param LayoutCacheKeyInterface $layoutCacheKey
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -181,7 +190,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Psr\Log\LoggerInterface $logger,
         ReadFactory $readFactory,
         \Magento\Framework\View\Design\ThemeInterface $theme = null,
-        $cacheSuffix = ''
+        $cacheSuffix = '',
+        LayoutCacheKeyInterface $layoutCacheKey = null
     ) {
         $this->theme = $theme ?: $design->getDesignTheme();
         $this->scope = $scopeResolver->getScope();
@@ -193,6 +203,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $this->logger = $logger;
         $this->readFactory = $readFactory;
         $this->cacheSuffix = $cacheSuffix;
+        $this->layoutCacheKey = $layoutCacheKey
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
     }
 
     /**
@@ -431,6 +443,9 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         if ($result) {
             $this->addUpdate($result);
             $this->pageLayout = $this->_loadCache($cacheIdPageLayout);
+            foreach ($this->getHandles() as $handle) {
+                $this->allHandles[$handle] = $this->handleProcessed;
+            }
             return $this;
         }
 
@@ -660,7 +675,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             $result = $this->_loadXmlString($result);
         } else {
             $result = $this->_loadFileLayoutUpdatesXml();
-            $this->_saveCache($result->asXml(), $cacheId);
+            $this->_saveCache($result->asXML(), $cacheId);
         }
         $this->layoutUpdatesCache = $result;
         return $result;
@@ -715,7 +730,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $updateFiles = array_merge($updateFiles, $this->pageLayoutFileSource->getFiles($theme, '*.xml'));
         $useErrors = libxml_use_internal_errors(true);
         foreach ($updateFiles as $file) {
-            /** @var $fileReader \Magento\Framework\Filesystem\File\Read   */
+            /** @var $fileReader \Magento\Framework\Filesystem\File\Read */
             $fileReader = $this->readFactory->create($file->getFilename(), DriverPool::FILE);
             $fileStr = $fileReader->readAll($file->getName());
             $fileStr = $this->_substitutePlaceholders($fileStr);
@@ -799,7 +814,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected function _getPhysicalTheme(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
         $result = $theme;
-        while ($result->getId() && !$result->isPhysical()) {
+        while ($result !== null && $result->getId() && !$result->isPhysical()) {
             $result = $result->getParentTheme();
         }
         if (!$result) {
@@ -914,6 +929,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     public function getCacheId()
     {
-        return $this->generateCacheId(md5(implode('|', $this->getHandles())));
+        $layoutCacheKeys = $this->layoutCacheKey->getCacheKeys();
+        return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $layoutCacheKeys))));
     }
 }

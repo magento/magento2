@@ -7,6 +7,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <container name="root">
-        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created" template="Magento_ConfigurableProduct::catalog/product/attribute/new/created.phtml" as="product.attribute.created" />
+        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created" template="Magento_ConfigurableProduct::catalog/product/attribute/new/created.phtml" name="root.configurable_product_attribute_created" as="product.attribute.created" />
     </container>
 </layout>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SetTaxClassForShipping">
+        <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{SalesConfigSection.TaxClassesTab}}" dependentSelector="{{SalesConfigSection.CheckIfTaxClassesTabExpand}}" visible="true" stepKey="expandTaxClassesTab"/>
+        <waitForElementVisible selector="{{SalesConfigSection.ShippingTaxClass}}" stepKey="seeShippingTaxClass"/>
+        <uncheckOption selector="{{SalesConfigSection.EnableTaxClassForShipping}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{SalesConfigSection.ShippingTaxClass}}" userInput="Taxable Goods" stepKey="setShippingTaxClass"/>
+        <click selector="{{SalesConfigSection.TaxClassesTab}}" stepKey="collapseTaxClassesTab"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+    </actionGroup>
+    <actionGroup name="ResetTaxClassForShipping">
+        <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxConfigPagetoReset"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <conditionalClick selector="{{SalesConfigSection.TaxClassesTab}}" dependentSelector="{{SalesConfigSection.CheckIfTaxClassesTabExpand}}" visible="true" stepKey="openTaxClassTab"/>
+        <waitForElementVisible selector="{{SalesConfigSection.ShippingTaxClass}}" stepKey="seeShippingTaxClass2"/>
+        <selectOption selector="{{SalesConfigSection.ShippingTaxClass}}" userInput="None" stepKey="resetShippingTaxClass"/>
+        <checkOption selector="{{SalesConfigSection.EnableTaxClassForShipping}}" stepKey="useSystemValue"/>
+        <click selector="{{SalesConfigSection.TaxClassesTab}}" stepKey="collapseTaxClassesTab"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration"/>
+    </actionGroup>
+    </actionGroups>

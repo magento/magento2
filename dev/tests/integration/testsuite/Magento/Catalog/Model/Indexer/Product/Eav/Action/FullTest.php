@@ -5,15 +5,30 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Eav\Action;
 
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Full reindex Test
  */
-class FullTest extends \PHPUnit\Framework\TestCase
+class FullTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\Processor
      */
     protected $_processor;
+
+    public static function setUpBeforeClass()
+    {
+        $db = Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
 
     protected function setUp()
     {
@@ -23,6 +38,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
@@ -35,6 +51,11 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $attr->setIsFilterable(1)->save();
 
         $this->assertTrue($attr->isIndexable());
+
+        $priceIndexerProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Catalog\Model\Indexer\Product\Price\Processor::class
+        );
+        $priceIndexerProcessor->reindexAll();
 
         $this->_processor->reindexAll();
 
@@ -60,5 +81,13 @@ class FullTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals('Short description', $product->getShortDescription());
             $this->assertEquals(1, $product->getWeight());
         }
+    }
+
+    /**
+     * teardown
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 }

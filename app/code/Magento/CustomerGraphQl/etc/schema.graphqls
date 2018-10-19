@@ -1,0 +1,75 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer") @doc(description: "The customer query returns information about a customer account")
+}
+
+type Mutation {
+    generateCustomerToken(email: String!, password: String!): CustomerToken @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\GenerateCustomerToken") @doc(description:"Retrieve Customer token")
+    changeCustomerPassword(currentPassword: String!, newPassword: String!): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ChangePassword") @doc(description:"Changes password for logged in customer")
+    updateCustomer (input: UpdateCustomerInput): UpdateCustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Update customer personal information")
+    revokeCustomerToken: Boolean @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RevokeCustomerToken") @doc(description:"Revoke Customer token")
+}
+
+type CustomerToken {
+    token: String @doc(description: "The customer token")
+}
+
+input UpdateCustomerInput {
+    firstname: String
+    lastname: String
+    email: String
+    password: String
+    is_subscribed: Boolean
+}
+
+type UpdateCustomerOutput {
+    customer: Customer!
+}
+
+type Customer @doc(description: "Customer defines the customer name and address and other details") {
+    created_at: String @doc(description: "Timestamp indicating when the account was created")
+    group_id: Int @doc(description: "The group assigned to the user. Default values are 0 (Not logged in), 1 (General), 2 (Wholesale), and 3 (Retailer)")
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    firstname: String @doc(description: "The customer's first name")
+    middlename: String @doc(description: "The customer's middle name")
+    lastname: String @doc(description: "The customer's family name")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III")
+    email: String @doc(description: "The customer's email address. Required")
+    default_billing: String @doc(description: "The ID assigned to the billing address")
+    default_shipping: String @doc(description: "The ID assigned to the shipping address")
+    dob: String @doc(description: "The customer's date of birth")
+    taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
+    id: Int @doc(description: "The ID assigned to the customer")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
+    addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses")
+}
+
+type CustomerAddress @doc(description: "CustomerAddress contains detailed information about a customer's billing and shipping addresses"){
+    id: Int @doc(description: "The ID assigned to the address object")
+    customer_id: Int @doc(description: "The customer ID")
+    region: CustomerAddressRegion @doc(description: "An object containing the region name, region code, and region ID")
+    region_id: Int @doc(description: "A number that uniquely identifies the state, province, or other area")
+    country_id: String @doc(description: "The customer's country")
+    street: [String] @doc(description: "An array of strings that define the street number and name")
+    company: String @doc(description: "The customer's company")
+    telephone: String @doc(description: "The telephone number")
+    fax: String @doc(description: "The fax number")
+    postcode: String @doc(description: "The customer's ZIP or postal code")
+    city: String @doc(description: "The city or town")
+    firstname: String @doc(description: "The first name of the person associated with the shipping/billing address")
+    lastname: String @doc(description: "The family name of the person associated with the shipping/billing address")
+    middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address")
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III")
+    vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
+    default_shipping: Boolean @doc(description: "Indicates whether the address is the default shipping address")
+    default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address")
+}
+
+type CustomerAddressRegion @doc(description: "CustomerAddressRegion defines the customer's state or province") {
+    region_code: String @doc(description: "The address region code")
+    region: String @doc(description: "The state or province name")
+    region_id: Int @doc(description: "Uniquely identifies the region")
+}

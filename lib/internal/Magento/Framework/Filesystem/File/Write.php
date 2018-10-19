@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\File;
 
 use Magento\Framework\Filesystem\DriverInterface;
@@ -33,7 +34,9 @@ class Write extends Read implements WriteInterface
     {
         $fileExists = $this->driver->isExists($this->path);
         if (!$fileExists && preg_match('/r/', $this->mode)) {
-            throw new FileSystemException(new \Magento\Framework\Phrase('The file "%1" doesn\'t exist', [$this->path]));
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase('The "%1" file doesn\'t exist.', [$this->path])
+            );
         } elseif ($fileExists && preg_match('/x/', $this->mode)) {
             throw new FileSystemException(new \Magento\Framework\Phrase('The file "%1" already exists', [$this->path]));
         }
@@ -100,7 +103,7 @@ class Write extends Read implements WriteInterface
      * @param int $lockMode
      * @return bool
      */
-    public function lock($lockMode = LOCK_EX)
+    public function lock($lockMode = \LOCK_EX)
     {
         return $this->driver->fileLock($this->resource, $lockMode);
     }

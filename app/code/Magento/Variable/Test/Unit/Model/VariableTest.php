@@ -6,22 +6,38 @@
 namespace Magento\Variable\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Variable\Model\ResourceModel\Variable\Collection;
 
 class VariableTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \Magento\Variable\Model\Variable */
+    /**
+     * @var  \Magento\Variable\Model\Variable
+     */
     private $model;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $escaperMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Variable\Model\ResourceModel\Variable|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $resourceMock;
 
-    /** @var  \Magento\Framework\Phrase */
+    /**
+     * @var \Magento\Variable\Model\ResourceModel\Variable\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceCollectionMock;
+
+    /**
+     * @var  \Magento\Framework\Phrase
+     */
     private $validationFailedPhrase;
 
-    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /**
+     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
     private $objectManager;
 
     protected function setUp()
@@ -33,11 +49,15 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->resourceCollectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $this->objectManager->getObject(
             \Magento\Variable\Model\Variable::class,
             [
                 'escaper' => $this->escaperMock,
-                'resource' => $this->resourceMock
+                'resource' => $this->resourceMock,
+                'resourceCollection' => $this->resourceCollectionMock,
             ]
         );
         $this->validationFailedPhrase = __('Validation has failed.');
@@ -101,58 +121,51 @@ class VariableTest extends \PHPUnit\Framework\TestCase
     public function testGetVariablesOptionArrayNoGroup()
     {
         $origOptions = [
-            ['value' => 'VAL', 'label' => 'LBL']
+            ['value' => 'VAL', 'label' => 'LBL'],
         ];
 
         $transformedOptions = [
-            ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
+            ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')],
         ];
 
-        $collectionMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionMock->expects($this->any())
+        $this->resourceCollectionMock->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
-        $mockVariable = $this->getMockBuilder(\Magento\Variable\Model\Variable::class)
-            ->setMethods(['getCollection'])
-            ->setConstructorArgs($this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class))
-            ->getMock();
-        $mockVariable->expects($this->any())
-            ->method('getCollection')
-            ->willReturn($collectionMock);
-        $this->assertEquals($transformedOptions, $mockVariable->getVariablesOptionArray());
+        $this->escaperMock->expects($this->once())
+            ->method('escapeHtml')
+            ->with($origOptions[0]['label'])
+            ->willReturn($origOptions[0]['label']);
+        $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray());
     }
 
     public function testGetVariablesOptionArrayWithGroup()
     {
         $origOptions = [
-            ['value' => 'VAL', 'label' => 'LBL']
+            ['value' => 'VAL', 'label' => 'LBL'],
         ];
 
         $transformedOptions = [
-            'label' => __('Custom Variables'),
-            'value' => [
-                ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
-            ]
+            [
+                'label' => __('Custom Variables'),
+                'value' => [
+                    ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')],
+                ],
+            ],
         ];
 
-        $collectionMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionMock->expects($this->any())
+        $this->resourceCollectionMock->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
-        $mockVariable = $this->getMockBuilder(\Magento\Variable\Model\Variable::class)
-            ->setMethods(['getCollection'])
-            ->setConstructorArgs($this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class))
-            ->getMock();
-        $mockVariable->expects($this->any())
-            ->method('getCollection')
-            ->willReturn($collectionMock);
-        $this->assertEquals($transformedOptions, $mockVariable->getVariablesOptionArray(true));
+        $this->escaperMock->expects($this->atLeastOnce())
+            ->method('escapeHtml')
+            ->with($origOptions[0]['label'])
+            ->willReturn($origOptions[0]['label']);
+        $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray(true));
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         $variable = [
@@ -161,15 +174,18 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         return [
             'Empty Variable' => [[], null, true],
             'IDs match' => [$variable, 'matching_id', true],
-            'IDs do not match' => [$variable, 'non_matching_id', __('Variable Code must be unique.')]
+            'IDs do not match' => [$variable, 'non_matching_id', __('Variable Code must be unique.')],
         ];
     }
 
+    /**
+     * @return array
+     */
     public function validateMissingInfoDataProvider()
     {
         return [
             'Missing code' => ['', 'some-name'],
-            'Missing name' => ['some-code', '']
+            'Missing name' => ['some-code', ''],
         ];
     }
 }

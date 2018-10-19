@@ -71,7 +71,7 @@ class Interceptions implements \Magento\Setup\Module\Di\Code\Reader\ClassesScann
             try {
                 // validate all classes except classes in generated/code dir
                 $generatedCodeDir = DirectoryList::getDefaultConfig()[DirectoryList::GENERATED_CODE];
-                if (!strpos($path, $generatedCodeDir[DirectoryList::PATH])) {
+                if (strpos($path, $generatedCodeDir[DirectoryList::PATH]) === false) {
                     $this->validator->validate($className);
                 }
                 $nameList[] = $className;

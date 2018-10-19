@@ -23,25 +23,39 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $agreementsRepositoryMock;
+    protected $escaperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $escaperMock;
+    private $checkoutAgreementsListMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $agreementsFilterMock;
 
     protected function setUp()
     {
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->agreementsRepositoryMock = $this->createMock(
+        $agreementsRepositoryMock = $this->createMock(
             \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface::class
         );
         $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
 
+        $this->checkoutAgreementsListMock = $this->createMock(
+            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
+        );
+        $this->agreementsFilterMock = $this->createMock(
+            \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter::class
+        );
+
         $this->model = new \Magento\CheckoutAgreements\Model\AgreementsConfigProvider(
             $this->scopeConfigMock,
-            $this->agreementsRepositoryMock,
-            $this->escaperMock
+            $agreementsRepositoryMock,
+            $this->escaperMock,
+            $this->checkoutAgreementsListMock,
+            $this->agreementsFilterMock
         );
     }
 
@@ -71,7 +85,14 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $agreement = $this->createMock(\Magento\CheckoutAgreements\Api\Data\AgreementInterface::class);
-        $this->agreementsRepositoryMock->expects($this->any())->method('getList')->willReturn([$agreement]);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->agreementsFilterMock->expects($this->once())
+            ->method('buildSearchCriteria')
+            ->willReturn($searchCriteriaMock);
+        $this->checkoutAgreementsListMock->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteriaMock)
+            ->willReturn([$agreement]);
 
         $agreement->expects($this->once())->method('getIsHtml')->willReturn(true);
         $agreement->expects($this->once())->method('getContent')->willReturn($content);
@@ -109,7 +130,15 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $agreement = $this->createMock(\Magento\CheckoutAgreements\Api\Data\AgreementInterface::class);
-        $this->agreementsRepositoryMock->expects($this->any())->method('getList')->willReturn([$agreement]);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->agreementsFilterMock->expects($this->once())
+            ->method('buildSearchCriteria')
+            ->willReturn($searchCriteriaMock);
+        $this->checkoutAgreementsListMock->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteriaMock)
+            ->willReturn([$agreement]);
+
         $this->escaperMock->expects($this->once())->method('escapeHtml')->with($content)->willReturn($escapedContent);
 
         $agreement->expects($this->once())->method('getIsHtml')->willReturn(false);

@@ -12,8 +12,6 @@ use Magento\Catalog\Api\CategoryManagementInterface;
 
 /**
  * Class ReportCountsTest
- *
- * @codingStandardsIgnoreFile
  */
 class ReportCountsTest extends \PHPUnit\Framework\TestCase
 {
@@ -53,7 +51,8 @@ class ReportCountsTest extends \PHPUnit\Framework\TestCase
     protected $countsModelMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory
+     * |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $countsCollectionFactoryMock;
 

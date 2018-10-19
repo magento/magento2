@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Product\Type;
@@ -65,9 +63,14 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
         $this->entityFactoryMock = $this->createPartialMock(\Magento\Eav\Model\EntityFactory::class, ['create']);
-        $this->attributeSetFactory = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute\SetFactory::class, ['create']);
+        $this->attributeSetFactory = $this->createPartialMock(
+            \Magento\Eav\Model\Entity\Attribute\SetFactory::class,
+            ['create']
+        );
         $this->stockConfiguration = $this->createMock(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
-        $this->configurableProduct = $this->createMock(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class);
+        $this->configurableProduct = $this->createMock(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class
+        );
 
         $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getMediaGallery']);
 

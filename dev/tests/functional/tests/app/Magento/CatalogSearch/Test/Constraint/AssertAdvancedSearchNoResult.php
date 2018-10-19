@@ -27,7 +27,7 @@ class AssertAdvancedSearchNoResult extends AbstractConstraint
      */
     public function processAssert(AdvancedResult $resultPage)
     {
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $resultPage->getSearchResultBlock()->isVisibleMessages(self::ERROR_MESSAGE),
             "The error message '" . self::ERROR_MESSAGE . "' is not visible."
         );

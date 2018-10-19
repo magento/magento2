@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 
 /**
@@ -93,7 +91,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     public function showSingle()
     {
-        if (is_null($this->_showSingle)) {
+        if ($this->_showSingle === null) {
             $option = $this->getOption();
             $selections = $option->getSelections();
 
@@ -165,6 +163,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param \Magento\Bundle\Model\Option $option
      * @param mixed $selectionId
      * @return void
+     * @since 100.2.0
      */
     protected function assignSelection(\Magento\Bundle\Model\Option $option, $selectionId)
     {
@@ -190,9 +189,8 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
             return in_array($selection->getSelectionId(), $selectedOptions);
         } elseif ($selectedOptions == 'None') {
             return false;
-        } else {
-            return $selection->getIsDefault() && $selection->isSaleable();
         }
+        return $selection->getIsDefault() && $selection->isSaleable();
     }
 
     /**
@@ -237,7 +235,11 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     public function getSelectionQtyTitlePrice($selection, $includeContainer = true)
     {
         $this->setFormatProduct($selection);
-        $priceTitle = '<span class="product-name">' . $selection->getSelectionQty() * 1 . ' x ' . $this->escapeHtml($selection->getName()) . '</span>';
+        $priceTitle = '<span class="product-name">'
+            . $selection->getSelectionQty() * 1
+            . ' x '
+            . $this->escapeHtml($selection->getName())
+            . '</span>';
 
         $priceTitle .= ' &nbsp; ' . ($includeContainer ? '<span class="price-notice">' : '') . '+' .
             $this->renderPriceString($selection, $includeContainer) . ($includeContainer ? '</span>' : '');

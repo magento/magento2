@@ -71,7 +71,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function _construct()
     {
@@ -79,6 +79,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set cron expression.
+     *
      * @param string $expr
      * @return $this
      * @throws \Magento\Framework\Exception\CronException
@@ -95,7 +97,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Checks the observer's cron expression against time
+     * Checks the observer's cron expression against time.
      *
      * Supports $this->setCronExpr('* 0-5,10-59/5 2-10,15-25 january-june/2 mon-fri')
      *
@@ -125,6 +127,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Match cron expression.
+     *
      * @param string $expr
      * @param int $num
      * @return bool
@@ -191,6 +195,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get number of a month.
+     *
      * @param int|string $value
      * @return bool|int|string
      */

@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\PageCache\Test\Unit\Controller\Block;
 
 /**
@@ -40,6 +38,11 @@ class EsiTest extends \PHPUnit\Framework\TestCase
     protected $layoutMock;
 
     /**
+     * @var \Magento\Framework\View\Layout\LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutCacheKeyMock;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\InlineInterface
      */
     protected $translateInline;
@@ -51,6 +54,10 @@ class EsiTest extends \PHPUnit\Framework\TestCase
     {
         $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()->getMock();
+
+        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(
+            \Magento\Framework\View\Layout\LayoutCacheKeyInterface::class
+        );
 
         $contextMock =
             $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
@@ -76,7 +83,8 @@ class EsiTest extends \PHPUnit\Framework\TestCase
                 'context' => $contextMock,
                 'translateInline' => $this->translateInline,
                 'jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Json(),
-                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json()
+                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json(),
+                'layoutCacheKey' => $this->layoutCacheKeyMock
             ]
         );
     }
@@ -104,6 +112,11 @@ class EsiTest extends \PHPUnit\Framework\TestCase
 
         $this->viewMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->layoutMock));
 
+        $this->layoutMock->expects($this->never())
+            ->method('getUpdate');
+        $this->layoutCacheKeyMock->expects($this->atLeastOnce())
+            ->method('addCacheKeys');
+
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with($this->equalTo($block))
@@ -130,6 +143,9 @@ class EsiTest extends \PHPUnit\Framework\TestCase
         $this->action->execute();
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [

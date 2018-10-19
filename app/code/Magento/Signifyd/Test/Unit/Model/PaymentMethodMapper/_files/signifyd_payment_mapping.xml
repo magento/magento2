@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Signifyd:etc/payment_mapping.xsd">
+    <payment_method_list>
+        <payment_method>
+            <magento_code>payment_method_1</magento_code>
+            <signifyd_code>PAYMENT_CARD</signifyd_code>
+        </payment_method>
+        <payment_method>
+            <magento_code>payment_method_2</magento_code>
+            <signifyd_code>PAYPAL_ACCOUNT</signifyd_code>
+        </payment_method>
+        <payment_method>
+            <magento_code>payment_method_3</magento_code>
+            <signifyd_code>CHECK</signifyd_code>
+        </payment_method>
+        <payment_method>
+            <magento_code>payment_method_4</magento_code>
+            <signifyd_code>CASH</signifyd_code>
+        </payment_method>
+        <payment_method>
+            <magento_code>payment_method_5</magento_code>
+            <signifyd_code>FREE</signifyd_code>
+        </payment_method>
+    </payment_method_list>
+</config>

@@ -81,6 +81,7 @@
     <zip countryCode="CA">
         <codes>
             <code id="pattern_1" active="true" example="A1B 2C3">^[a-zA-z]{1}[0-9]{1}[a-zA-z]{1}\s[0-9]{1}[a-zA-z]{1}[0-9]{1}$</code>
+            <code id="pattern_2" active="true" example="A1B2C3">^[a-zA-z]{1}[0-9]{1}[a-zA-z]{1}[0-9]{1}[a-zA-z]{1}[0-9]{1}$</code>
         </codes>
     </zip>
     <zip countryCode="IC">
@@ -195,7 +196,7 @@
     </zip>
     <zip countryCode="IL">
         <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+            <code id="pattern_1" active="true" example="6687865">^[0-9]{7}$</code>
         </codes>
     </zip>
     <zip countryCode="IT">
@@ -206,7 +207,7 @@
     <zip countryCode="JP">
         <codes>
             <code id="pattern_1" active="true" example="123-4567">^[0-9]{3}-[0-9]{4}$</code>
-            <code id="pattern_2" active="true" example="123">^[0-9]{3}$</code>
+            <code id="pattern_2" active="true" example="1234567">^[0-9]{7}$</code>
         </codes>
     </zip>
     <zip countryCode="JE">
@@ -319,7 +320,7 @@
     </zip>
     <zip countryCode="NL">
         <codes>
-            <code id="pattern_1" active="true" example="1234 AB">^[0-9]{4}\s?[a-zA-Z]{2}$</code>
+            <code id="pattern_1" active="true" example="1234 AB/1234AB">^[1-9][0-9]{3}\s?[a-zA-Z]{2}$</code>
         </codes>
     </zip>
     <zip countryCode="NO">

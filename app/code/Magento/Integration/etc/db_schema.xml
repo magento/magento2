@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="oauth_consumer" resource="default" engine="innodb" comment="OAuth Consumers">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="0"
+                comment="Updated At"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Name of consumer"/>
+        <column xsi:type="varchar" name="key" nullable="false" length="32" comment="Key code"/>
+        <column xsi:type="varchar" name="secret" nullable="false" length="32" comment="Secret code"/>
+        <column xsi:type="text" name="callback_url" nullable="true" comment="Callback URL"/>
+        <column xsi:type="text" name="rejected_callback_url" nullable="false" comment="Rejected callback URL"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="unique" name="OAUTH_CONSUMER_KEY">
+            <column name="key"/>
+        </constraint>
+        <constraint xsi:type="unique" name="OAUTH_CONSUMER_SECRET">
+            <column name="secret"/>
+        </constraint>
+        <index name="OAUTH_CONSUMER_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
+        <index name="OAUTH_CONSUMER_UPDATED_AT" indexType="btree">
+            <column name="updated_at"/>
+        </index>
+    </table>
+    <table name="oauth_token" resource="default" engine="innodb" comment="OAuth Tokens">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="consumer_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Oauth Consumer ID"/>
+        <column xsi:type="int" name="admin_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Admin user ID"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Customer user ID"/>
+        <column xsi:type="varchar" name="type" nullable="false" length="16" comment="Token Type"/>
+        <column xsi:type="varchar" name="token" nullable="false" length="32" comment="Token"/>
+        <column xsi:type="varchar" name="secret" nullable="false" length="32" comment="Token Secret"/>
+        <column xsi:type="varchar" name="verifier" nullable="true" length="32" comment="Token Verifier"/>
+        <column xsi:type="text" name="callback_url" nullable="false" comment="Token Callback URL"/>
+        <column xsi:type="smallint" name="revoked" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Is Token revoked"/>
+        <column xsi:type="smallint" name="authorized" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Is Token authorized"/>
+        <column xsi:type="int" name="user_type" padding="11" unsigned="false" nullable="true" identity="false"
+                comment="User type"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Token creation timestamp"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="OAUTH_TOKEN_ADMIN_ID_ADMIN_USER_USER_ID" table="oauth_token"
+                    column="admin_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="OAUTH_TOKEN_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="oauth_token"
+                    column="consumer_id" referenceTable="oauth_consumer" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="OAUTH_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="oauth_token"
+                    column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="unique" name="OAUTH_TOKEN_TOKEN">
+            <column name="token"/>
+        </constraint>
+        <index name="OAUTH_TOKEN_CONSUMER_ID" indexType="btree">
+            <column name="consumer_id"/>
+        </index>
+    </table>
+    <table name="oauth_nonce" resource="default" engine="innodb" comment="OAuth Nonce">
+        <column xsi:type="varchar" name="nonce" nullable="false" length="32" comment="Nonce String"/>
+        <column xsi:type="int" name="timestamp" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Nonce Timestamp"/>
+        <column xsi:type="int" name="consumer_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Consumer ID"/>
+        <constraint xsi:type="foreign" name="OAUTH_NONCE_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="oauth_nonce"
+                    column="consumer_id" referenceTable="oauth_consumer" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="unique" name="OAUTH_NONCE_NONCE_CONSUMER_ID">
+            <column name="nonce"/>
+            <column name="consumer_id"/>
+        </constraint>
+        <index name="OAUTH_NONCE_TIMESTAMP" indexType="btree">
+            <column name="timestamp"/>
+        </index>
+    </table>
+    <table name="integration" resource="default" engine="innodb" comment="integration">
+        <column xsi:type="int" name="integration_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Integration ID"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255"
+                comment="Integration name is displayed in the admin interface"/>
+        <column xsi:type="varchar" name="email" nullable="false" length="255"
+                comment="Email address of the contact person"/>
+        <column xsi:type="varchar" name="endpoint" nullable="true" length="255"
+                comment="Endpoint for posting consumer credentials"/>
+        <column xsi:type="smallint" name="status" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Integration status"/>
+        <column xsi:type="int" name="consumer_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Oauth consumer"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+                comment="Update Time"/>
+        <column xsi:type="smallint" name="setup_type" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Integration type - manual or config file"/>
+        <column xsi:type="varchar" name="identity_link_url" nullable="true" length="255"
+                comment="Identity linking Url"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="integration_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="INTEGRATION_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="integration"
+                    column="consumer_id" referenceTable="oauth_consumer" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="unique" name="INTEGRATION_NAME">
+            <column name="name"/>
+        </constraint>
+        <constraint xsi:type="unique" name="INTEGRATION_CONSUMER_ID">
+            <column name="consumer_id"/>
+        </constraint>
+    </table>
+    <table name="oauth_token_request_log" resource="default" engine="innodb"
+           comment="Log of token request authentication failures.">
+        <column xsi:type="int" name="log_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Log Id"/>
+        <column xsi:type="varchar" name="user_name" nullable="false" length="255"
+                comment="Customer email or admin login"/>
+        <column xsi:type="smallint" name="user_type" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="User type (admin or customer)"/>
+        <column xsi:type="smallint" name="failures_count" padding="5" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Number of failed authentication attempts in a row"/>
+        <column xsi:type="timestamp" name="lock_expires_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
+                comment="Lock expiration time"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="log_id"/>
+        </constraint>
+        <constraint xsi:type="unique" name="OAUTH_TOKEN_REQUEST_LOG_USER_NAME_USER_TYPE">
+            <column name="user_name"/>
+            <column name="user_type"/>
+        </constraint>
+    </table>
+</schema>

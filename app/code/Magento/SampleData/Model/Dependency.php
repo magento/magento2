@@ -12,7 +12,7 @@ use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Config\Composer\Package;
 use Magento\Framework\Config\Composer\PackageFactory;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterfaceFactory;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 /**
  * Sample Data dependency
@@ -40,7 +40,7 @@ class Dependency
     private $componentRegistrar;
 
     /**
-     * @var ReadInterfaceFactory
+     * @var ReadFactory
      */
     private $directoryReadFactory;
 
@@ -51,7 +51,7 @@ class Dependency
      * @param Filesystem $filesystem @deprecated 2.3.0 $directoryReadFactory is used instead
      * @param PackageFactory $packageFactory
      * @param ComponentRegistrarInterface $componentRegistrar
-     * @param Filesystem\Directory\ReadInterfaceFactory|null $directoryReadFactory
+     * @param Filesystem\Directory\ReadFactory|null $directoryReadFactory
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -59,13 +59,13 @@ class Dependency
         Filesystem $filesystem,
         PackageFactory $packageFactory,
         ComponentRegistrarInterface $componentRegistrar,
-        \Magento\Framework\Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory = null
+        \Magento\Framework\Filesystem\Directory\ReadFactory $directoryReadFactory = null
     ) {
         $this->composerInformation = $composerInformation;
         $this->packageFactory = $packageFactory;
         $this->componentRegistrar = $componentRegistrar;
         $this->directoryReadFactory = $directoryReadFactory ?:
-            ObjectManager::getInstance()->get(ReadInterfaceFactory::class);
+            ObjectManager::getInstance()->get(ReadFactory::class);
     }
 
     /**
@@ -81,7 +81,7 @@ class Dependency
         $suggests = array_merge($suggests, $this->getSuggestsFromModules());
         foreach ($suggests as $name => $version) {
             if (strpos($version, self::SAMPLE_DATA_SUGGEST) === 0) {
-                $installExtensions[$name] = substr($version, strlen(self::SAMPLE_DATA_SUGGEST));
+                $installExtensions[$name] = trim(substr($version, strlen(self::SAMPLE_DATA_SUGGEST)));
             }
         }
         return $installExtensions;
@@ -123,7 +123,7 @@ class Dependency
          */
         foreach ([$moduleDir, $moduleDir . DIRECTORY_SEPARATOR . '..'] as $dir) {
             /** @var Filesystem\Directory\ReadInterface $directory */
-            $directory = $this->directoryReadFactory->create(['path' => $dir]);
+            $directory = $this->directoryReadFactory->create($dir);
             if ($directory->isExist('composer.json') && $directory->isReadable('composer.json')) {
                 /** @var Package $package */
                 return $this->packageFactory->create(['json' => json_decode($directory->readFile('composer.json'))]);

@@ -9,7 +9,7 @@
     <system>
         <section id="checkout">
             <group id="cart">
-                <field id="configurable_product_image" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="configurable_product_image" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Configurable Product Image</label>
                     <source_model>Magento\Catalog\Model\Config\Source\Product\Thumbnail</source_model>
                 </field>

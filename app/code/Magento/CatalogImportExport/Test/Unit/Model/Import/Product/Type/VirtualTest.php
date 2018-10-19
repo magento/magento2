@@ -13,8 +13,10 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareAttributesWithDefaultValueForSave()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
-        $virtualModelMock = $this->createMock(\Magento\CatalogImportExport\Model\Import\Product\Type\Virtual::class);
+        $virtualModelMock = $this->createPartialMock(
+            \Magento\CatalogImportExport\Model\Import\Product\Type\Virtual::class,
+            []
+        );
 
         $this->setPropertyValue(
             $virtualModelMock,
@@ -64,7 +66,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
         ];
 
         $result = $virtualModelMock->prepareAttributesWithDefaultValueForSave($rowData);
-        $this->assertEquals($result, $expectedResult);
+        $this->assertEquals($expectedResult, $result);
     }
 
     /**

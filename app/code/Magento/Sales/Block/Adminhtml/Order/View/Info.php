@@ -10,8 +10,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order\Address;
 
 /**
- * Order history block
- * Class Info
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -227,7 +225,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
                 $label = __('Edit');
             }
             $url = $this->getUrl('sales/order/address', ['address_id' => $address->getId()]);
-            return '<a href="' . $url . '">' . $label . '</a>';
+            return '<a href="' . $this->escapeUrl($url) . '">' . $this->escapeHtml($label) . '</a>';
         }
 
         return '';

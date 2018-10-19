@@ -6,7 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -38,7 +40,11 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
 
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
-            return $resultJson->setData(['id' => $categoryId, 'path' => $category->getPath()]);
+            return $resultJson->setData([
+                'id' => $categoryId,
+                'path' => $category->getPath(),
+                'parentId' => $category->getParentId(),
+            ]);
         }
     }
 }

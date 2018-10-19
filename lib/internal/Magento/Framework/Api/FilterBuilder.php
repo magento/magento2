@@ -29,7 +29,7 @@ class FilterBuilder extends AbstractSimpleObjectBuilder
     /**
      * Set value
      *
-     * @param string $value
+     * @param string|array $value
      * @return $this
      */
     public function setValue($value)

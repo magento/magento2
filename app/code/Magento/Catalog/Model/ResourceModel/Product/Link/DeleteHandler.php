@@ -72,8 +72,8 @@ class DeleteHandler
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());
         $product = $this->productRepository->get($entity->getSku());
         $linkTypesToId = $this->linkTypeProvider->getLinkTypes();
-        $prodyctHydrator = $this->metadataPool->getHydrator(ProductInterface::class);
-        $productData = $prodyctHydrator->extract($product);
+        $productHydrator = $this->metadataPool->getHydrator(ProductInterface::class);
+        $productData = $productHydrator->extract($product);
         $linkId = $this->linkResource->getProductLinkId(
             $productData[$this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()],
             $linkedProduct->getId(),
@@ -93,7 +93,9 @@ class DeleteHandler
         try {
             $this->linkResource->deleteProductLink($linkId);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__('Invalid data provided for linked products'));
+            throw new CouldNotDeleteException(
+                __('The linked products data is invalid. Verify the data and try again.')
+            );
         }
     }
 }

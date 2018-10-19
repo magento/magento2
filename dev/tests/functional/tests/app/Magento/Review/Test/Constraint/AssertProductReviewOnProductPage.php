@@ -42,7 +42,7 @@ class AssertProductReviewOnProductPage extends AbstractConstraint
         $reviewBlock = $catalogProductView->getCustomerReviewBlock();
         $catalogProductView->getViewBlock()->selectTab('Reviews');
 
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             sprintf("You're reviewing:\n%s", $product->getName()),
             $catalogProductView->getReviewFormBlock()->getLegend()->getText()
         );
@@ -54,7 +54,7 @@ class AssertProductReviewOnProductPage extends AbstractConstraint
             }
         }
 
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             $errors,
             'The Review contains the following errors:' . PHP_EOL . implode(PHP_EOL, $errors)
         );

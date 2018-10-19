@@ -63,6 +63,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
         if ($cartItem->getProductOption()
+            && $cartItem->getProductOption()->getExtensionAttributes()
             && $cartItem->getProductOption()->getExtensionAttributes()->getDownloadableOption()
         ) {
             $downloadableLinks = $cartItem->getProductOption()->getExtensionAttributes()->getDownloadableOption()

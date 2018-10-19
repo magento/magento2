@@ -75,6 +75,13 @@
             <argument name="addressConfig" xsi:type="object">Magento\Customer\Model\Address\Config\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Http\Context">
+        <arguments>
+            <argument name="default" xsi:type="array">
+                <item name="customer_group" xsi:type="const">Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Customer\Model\Config\Share">
         <arguments>
             <argument name="customerResource" xsi:type="object">Magento\Customer\Model\ResourceModel\Customer\Proxy</argument>
@@ -145,15 +152,28 @@
     </type>
     <preference for="Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface"
                 type="Magento\Customer\CustomerData\JsLayoutDataProviderPool"/>
-    <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
+    <type name="Magento\Framework\Webapi\ServiceTypeToEntityTypeMap">
         <arguments>
-            <argument name="serviceEntityTypeMap" xsi:type="array">
+            <argument name="serviceTypeToEntityTypeMap" xsi:type="array">
                 <item name="Magento\Customer\Api\Data\CustomerInterface" xsi:type="const">Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER</item>
+                <item name="Magento\Customer\Api\Data\AddressInterface" xsi:type="const">Magento\Customer\Api\AddressMetadataInterface::ENTITY_TYPE_ADDRESS</item>
             </argument>
-            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\TypeLocator\ComplexType">
+        <arguments>
+            <argument name="backendModelToAttributeTypeMap" xsi:type="array">
                 <item name="Magento\Customer\Api\Data\CustomerInterface" xsi:type="array">
                     <item name="Magento\Eav\Model\Attribute\Data\Image" xsi:type="string">Magento\Framework\Api\Data\ImageContentInterface</item>
                 </item>
+                <item name="Magento\Customer\Model\Customer\Attribute\Backend\Website" xsi:type="string">int</item>
+                <item name="Magento\Customer\Model\Customer\Attribute\Backend\Store" xsi:type="string">int</item>
+                <item name="Magento\Customer\Model\Attribute\Backend\Data\Boolean" xsi:type="string">boolean</item>
+                <item name="Magento\Customer\Model\Customer\Attribute\Backend\Password" xsi:type="string">string</item>
+                <item name="Magento\Customer\Model\Customer\Attribute\Backend\Billing" xsi:type="string">Magento\Customer\Api\Data\AddressInterface</item>
+                <item name="Magento\Customer\Model\Customer\Attribute\Backend\Shipping" xsi:type="string">Magento\Customer\Api\Data\AddressInterface</item>
+                <item name="Magento\Eav\Model\Entity\Attribute\Backend\Datetime" xsi:type="string">string</item>
+                <item name="Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region" xsi:type="string">Magento\Customer\Api\Data\RegionInterface</item>
             </argument>
         </arguments>
     </type>
@@ -202,6 +222,7 @@
             <argument name="collections" xsi:type="array">
                 <item name="customer_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Grid\Collection</item>
                 <item name="customer_online_grid_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Online\Grid\Collection</item>
+                <item name="customer_group_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Group\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -323,6 +344,9 @@
     <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
     </type>
+    <type name="Magento\PageCache\Observer\FlushFormKey">
+        <plugin name="customerFlushFormKey" type="Magento\Customer\Model\Plugin\CustomerFlushFormKey"/>
+    </type>
     <type name="Magento\Customer\Model\Customer\NotificationStorage">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Customer\Model\Cache\Type\Notification</argument>
@@ -337,9 +361,9 @@
     <virtualType name="Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
-                <item name="code" xsi:type="string">customer_group_code</item>
-                <item name="id" xsi:type="string">customer_group_id</item>
-                <item name="tax_class_name" xsi:type="string">class_name</item>
+                <item name="code" xsi:type="string">main_table.customer_group_code</item>
+                <item name="id" xsi:type="string">main_table.customer_group_id</item>
+                <item name="tax_class_name" xsi:type="string">tax_class_table.class_name</item>
             </argument>
         </arguments>
     </virtualType>
@@ -347,9 +371,9 @@
     <virtualType name="Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupSortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor">
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
-                <item name="code" xsi:type="string">customer_group_code</item>
-                <item name="id" xsi:type="string">customer_group_id</item>
-                <item name="tax_class_name" xsi:type="string">class_name</item>
+                <item name="code" xsi:type="string">main_table.customer_group_code</item>
+                <item name="id" xsi:type="string">main_table.customer_group_id</item>
+                <item name="tax_class_name" xsi:type="string">tax_class_table.class_name</item>
             </argument>
             <argument name="defaultOrders" xsi:type="array">
                 <item name="id" xsi:type="string">ASC</item>
@@ -404,4 +428,28 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\AccountManagement">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Framework\Session\SessionManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Address\CompositeValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="general" xsi:type="object">Magento\Customer\Model\Address\Validator\General</item>
+                <item name="country" xsi:type="object">Magento\Customer\Model\Address\Validator\Country</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\Group\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">customer_group</argument>
+            <argument name="eventPrefix" xsi:type="string">customer_group_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">customer_group_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Group</argument>
+        </arguments>
+    </type>
+    <preference
+            for="Magento\Customer\Api\AccountDelegationInterface"
+            type="Magento\Customer\Model\Delegation\AccountDelegation" />
 </config>

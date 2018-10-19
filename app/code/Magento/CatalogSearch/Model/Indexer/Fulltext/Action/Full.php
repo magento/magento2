@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
@@ -21,6 +22,9 @@ use Magento\Framework\App\ResourceConnection;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Full
 {
@@ -198,6 +202,13 @@ class Full
     private $dataProvider;
 
     /**
+     * Batch size for searchable product ids
+     *
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -218,6 +229,7 @@ class Full
      * @param \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\IndexIteratorFactory $indexIteratorFactory
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param DataProvider $dataProvider
+     * @param int $batchSize
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -240,7 +252,8 @@ class Full
         \Magento\Framework\Indexer\ConfigInterface $indexerConfig,
         \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\IndexIteratorFactory $indexIteratorFactory,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        DataProvider $dataProvider = null
+        DataProvider $dataProvider = null,
+        $batchSize = 500
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -264,6 +277,7 @@ class Full
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->dataProvider = $dataProvider ?: ObjectManager::getInstance()->get(DataProvider::class);
+        $this->batchSize = $batchSize;
     }
 
     /**
@@ -297,27 +311,30 @@ class Full
     /**
      * Get parents IDs of product IDs to be re-indexed
      *
+     * @deprecated as it not used in the class anymore and duplicates another API method
+     * @see \Magento\CatalogSearch\Model\ResourceModel\Fulltext::getRelationsByChild()
+     *
      * @param int[] $entityIds
      * @return int[]
+     * @throws \Exception
      */
     protected function getProductIdsFromParents(array $entityIds)
     {
-        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $fieldForParent = $metadata->getLinkField();
+        $connection = $this->connection;
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
-        $select = $this->connection
+        $select = $connection
             ->select()
             ->from(['relation' => $this->getTable('catalog_product_relation')], [])
             ->distinct(true)
             ->where('child_id IN (?)', $entityIds)
-            ->where('parent_id NOT IN (?)', $entityIds)
             ->join(
                 ['cpe' => $this->getTable('catalog_product_entity')],
-                'relation.parent_id = cpe.' . $fieldForParent,
+                'relation.parent_id = cpe.' . $linkField,
                 ['cpe.entity_id']
             );
-        return $this->connection->fetchCol($select);
+
+        return $connection->fetchCol($select);
     }
 
     /**
@@ -335,7 +352,7 @@ class Full
     public function rebuildStoreIndex($storeId, $productIds = null)
     {
         if ($productIds !== null) {
-            $productIds = array_unique(array_merge($productIds, $this->getProductIdsFromParents($productIds)));
+            $productIds = array_unique($productIds);
         }
 
         // prepare searchable attributes
@@ -354,7 +371,7 @@ class Full
 
         $lastProductId = 0;
         $products = $this->dataProvider
-            ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId);
+            ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $this->batchSize);
         while (count($products) > 0) {
             $productsIds = array_column($products, 'entity_id');
             $relatedProducts = $this->getRelatedProducts($products);
@@ -364,12 +381,6 @@ class Full
 
             foreach ($products as $productData) {
                 $lastProductId = $productData['entity_id'];
-
-                if (!$this->isProductVisible($productData['entity_id'], $productsAttributes) ||
-                    !$this->isProductEnabled($productData['entity_id'], $productsAttributes)
-                ) {
-                    continue;
-                }
 
                 $productIndex = [$productData['entity_id'] => $productsAttributes[$productData['entity_id']]];
                 if (isset($relatedProducts[$productData['entity_id']])) {
@@ -388,7 +399,7 @@ class Full
                 yield $productData['entity_id'] => $index;
             }
             $products = $this->dataProvider
-                ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId);
+                ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $this->batchSize);
         };
     }
 
@@ -413,25 +424,6 @@ class Full
     }
 
     /**
-     * Performs check that product is visible on Store Front
-     *
-     * Check that product is visible on Store Front using visibility attribute
-     * and allowed visibility values.
-     *
-     * @param int $productId
-     * @param array $productsAttributes
-     * @return bool
-     */
-    private function isProductVisible($productId, array $productsAttributes)
-    {
-        $visibility = $this->dataProvider->getSearchableAttribute('visibility');
-        $allowedVisibility = $this->engine->getAllowedVisibility();
-        return isset($productsAttributes[$productId]) &&
-            isset($productsAttributes[$productId][$visibility->getId()]) &&
-            in_array($productsAttributes[$productId][$visibility->getId()], $allowedVisibility);
-    }
-
-    /**
      * Performs check that product is enabled on Store Front
      *
      * Check that product is enabled on Store Front using status attribute
@@ -445,8 +437,7 @@ class Full
     {
         $status = $this->dataProvider->getSearchableAttribute('status');
         $allowedStatuses = $this->catalogProductStatus->getVisibleStatusIds();
-        return isset($productsAttributes[$productId]) &&
-            isset($productsAttributes[$productId][$status->getId()]) &&
+        return isset($productsAttributes[$productId][$status->getId()]) &&
             in_array($productsAttributes[$productId][$status->getId()], $allowedStatuses);
     }
 

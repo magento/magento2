@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\PageCache\Test\Unit\Model\Layout;
 
 /**
@@ -45,7 +43,10 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
     {
         $this->layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
-        $this->messageSessionMock = $this->createPartialMock(\Magento\Framework\Message\Session::class, ['clearStorage']);
+        $this->messageSessionMock = $this->createPartialMock(
+            \Magento\Framework\Message\Session::class,
+            ['clearStorage']
+        );
         $this->depersonalizeCheckerMock = $this->createMock(\Magento\PageCache\Model\DepersonalizeChecker::class);
         $this->plugin = new \Magento\PageCache\Model\Layout\DepersonalizePlugin(
             $this->depersonalizeCheckerMock,

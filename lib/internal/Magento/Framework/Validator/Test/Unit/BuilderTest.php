@@ -341,7 +341,8 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructorConfigValidation(array $options, $exception, $exceptionMessage)
     {
-        $this->expectException($exception, $exceptionMessage);
+        $this->expectException($exception);
+        $this->expectExceptionMessage($exceptionMessage);
         if (array_key_exists('method', $options)) {
             $options = ['methods' => [$options]];
         }
@@ -362,7 +363,8 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddConfigurationConfigValidation(array $options, $exception, $exceptionMessage)
     {
-        $this->expectException($exception, $exceptionMessage);
+        $this->expectException($exception);
+        $this->expectExceptionMessage($exceptionMessage);
 
         $constraints = [
             ['alias' => 'alias', 'class' => 'Some\Validator\Class', 'options' => null, 'type' => 'entity'],
@@ -411,10 +413,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateValidatorInvalidInstance()
     {
-        $this->expectException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Constraint class "StdClass" must implement \Magento\Framework\Validator\ValidatorInterface'
         );
+        
         $builder = $this->_objectManager->getObject(
             \Magento\Framework\Validator\Builder::class,
             [

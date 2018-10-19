@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -70,7 +68,10 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAddressShippingMethod()
     {
-        $addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getShippingMethod', '__wakeup']);
+        $addressMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['getShippingMethod', '__wakeup']
+        );
         $addressMock->expects($this->once())
             ->method('getShippingMethod')->will($this->returnValue('expected shipping method'));
         $this->assertEquals('expected shipping method', $this->model->getAddressShippingMethod($addressMock));
@@ -78,7 +79,10 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
 
     public function testGetShippingRates()
     {
-        $addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getGroupedAllShippingRates', '__wakeup']);
+        $addressMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['getGroupedAllShippingRates', '__wakeup']
+        );
 
         $addressMock->expects($this->once())
             ->method('getGroupedAllShippingRates')->will($this->returnValue(['expected array']));

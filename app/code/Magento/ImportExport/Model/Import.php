@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ImportExport\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -80,6 +78,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     const FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR = '_import_multiple_value_separator';
 
     /**
+     * Import empty attribute value constant.
+     */
+    const FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '_import_empty_attribute_value_constant';
+
+    /**
      * Allow multiple values wrapping in double quotes for additional attributes.
      */
     const FIELDS_ENCLOSURE = 'fields_enclosure';
@@ -90,6 +93,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * default delimiter for several values in one cell as default for FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR
      */
     const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
+
+    /**
+     * default empty attribute value constant
+     */
+    const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';
 
     /**#@+
      * Import constants
@@ -234,7 +242,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'The entity adapter object must be an instance of %1 or %2.', \Magento\ImportExport\Model\Import\Entity\AbstractEntity::class, \Magento\ImportExport\Model\Import\AbstractEntity::class
+                            'The entity adapter object must be an instance of %1 or %2.',
+                            \Magento\ImportExport\Model\Import\Entity\AbstractEntity::class,
+                            \Magento\ImportExport\Model\Import\AbstractEntity::class
                         )
                     );
                 }
@@ -567,7 +577,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 ProcessingError::ERROR_LEVEL_CRITICAL,
                 null,
                 null,
-                null,
                 $e->getMessage()
             );
         }
@@ -685,7 +694,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 try {
                     $result = $this->_getEntityAdapter()->isNeedToLogInHistory();
                 } catch (\Exception $e) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity model'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Please enter a correct entity model')
+                    );
                 }
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity model'));
@@ -714,7 +725,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 $sourceFileRelative = $this->_varDirectory->getRelativePath(self::IMPORT_DIR . $fileName);
             } elseif (isset($result['name'])) {
                 $fileName = $result['name'];
-            } elseif (!is_null($extension)) {
+            } elseif ($extension !== null) {
                 $fileName = $entity . $extension;
             } else {
                 $fileName = basename($sourceFileRelative);

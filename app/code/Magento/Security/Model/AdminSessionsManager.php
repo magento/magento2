@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Security\Model;
 
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
@@ -67,6 +68,14 @@ class AdminSessionsManager
     private $remoteAddress;
 
     /**
+     * Max lifetime for session prolong to be valid (sec)
+     *
+     * Means that after session was prolonged
+     * all other prolongs will be ignored within this period
+     */
+    private $maxIntervalBetweenConsecutiveProlongs = 60;
+
+    /**
      * @param ConfigInterface $securityConfig
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param AdminSessionInfoFactory $adminSessionInfoFactory
@@ -124,11 +133,16 @@ class AdminSessionsManager
      */
     public function processProlong()
     {
-        $this->getCurrentSession()->setData(
-            'updated_at',
-            $this->authSession->getUpdatedAt()
-        );
-        $this->getCurrentSession()->save();
+        if ($this->lastProlongIsOldEnough()) {
+            $this->getCurrentSession()->setData(
+                'updated_at',
+                date(
+                    \Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT,
+                    $this->authSession->getUpdatedAt()
+                )
+            );
+            $this->getCurrentSession()->save();
+        }
 
         return $this;
     }
@@ -192,7 +206,7 @@ class AdminSessionsManager
                 break;
             case self::LOGOUT_REASON_USER_LOCKED:
                 $reasonMessage = __(
-                    'Your account is temporarily disabled.'
+                    'Your account is temporarily disabled. Please try again later.'
                 );
                 break;
             default:
@@ -297,5 +311,46 @@ class AdminSessionsManager
     protected function createAdminSessionInfoCollection()
     {
         return $this->adminSessionInfoCollectionFactory->create();
+    }
+
+    /**
+     * Calculates diff between now and last session updated_at
+     * and decides whether new prolong must be triggered or not
+     *
+     * This is done to limit amount of session prolongs and updates to database
+     * within some period of time - X
+     * X - is calculated in getIntervalBetweenConsecutiveProlongs()
+     *
+     * @see getIntervalBetweenConsecutiveProlongs()
+     * @return bool
+     */
+    private function lastProlongIsOldEnough()
+    {
+        $lastProlongTimestamp = strtotime($this->getCurrentSession()->getUpdatedAt());
+        $nowTimestamp = $this->authSession->getUpdatedAt();
+
+        $diff = $nowTimestamp - $lastProlongTimestamp;
+
+        return (float) $diff > $this->getIntervalBetweenConsecutiveProlongs();
+    }
+
+    /**
+     * Calculates lifetime for session prolong to be valid
+     *
+     * Calculation is based on admin session lifetime
+     * Calculated result is in seconds and is in the interval
+     * between 1 (including) and MAX_INTERVAL_BETWEEN_CONSECUTIVE_PROLONGS (including)
+     *
+     * @return float
+     */
+    private function getIntervalBetweenConsecutiveProlongs()
+    {
+        return (float) max(
+            1,
+            min(
+                4 * log((float)$this->securityConfig->getAdminSessionLifetime()),
+                $this->maxIntervalBetweenConsecutiveProlongs
+            )
+        );
     }
 }

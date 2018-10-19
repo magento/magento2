@@ -50,12 +50,12 @@ class AssertSuccessMessage extends AbstractConstraint
                 $message = '';
         }
 
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             $message,
             $setupWizard->getSuccessMessage()->getUpdaterStatus(),
             'Success message is incorrect.'
         );
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             $extension->getExtensionName(),
             $setupWizard->getSuccessMessage()->getUpdaterStatus(),
             'Extension name is incorrect.'

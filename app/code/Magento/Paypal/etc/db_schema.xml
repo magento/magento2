@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="paypal_billing_agreement" resource="default" engine="innodb" comment="Sales Billing Agreement">
+        <column xsi:type="int" name="agreement_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Agreement Id"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Customer Id"/>
+        <column xsi:type="varchar" name="method_code" nullable="false" length="32" comment="Method Code"/>
+        <column xsi:type="varchar" name="reference_id" nullable="false" length="32" comment="Reference Id"/>
+        <column xsi:type="varchar" name="status" nullable="false" length="20" comment="Status"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Updated At"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+                comment="Store Id"/>
+        <column xsi:type="varchar" name="agreement_label" nullable="true" length="255" comment="Agreement Label"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="agreement_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="PAYPAL_BILLING_AGREEMENT_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="paypal_billing_agreement" column="customer_id" referenceTable="customer_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="PAYPAL_BILLING_AGREEMENT_STORE_ID_STORE_STORE_ID"
+                    table="paypal_billing_agreement" column="store_id" referenceTable="store" referenceColumn="store_id"
+                    onDelete="SET NULL"/>
+        <index name="PAYPAL_BILLING_AGREEMENT_CUSTOMER_ID" indexType="btree">
+            <column name="customer_id"/>
+        </index>
+        <index name="PAYPAL_BILLING_AGREEMENT_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="paypal_billing_agreement_order" resource="default" engine="innodb"
+           comment="Sales Billing Agreement Order">
+        <column xsi:type="int" name="agreement_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Agreement Id"/>
+        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Order Id"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="agreement_id"/>
+            <column name="order_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="PAYPAL_BILLING_AGRT_ORDER_AGRT_ID_PAYPAL_BILLING_AGRT_AGRT_ID"
+                    table="paypal_billing_agreement_order" column="agreement_id"
+                    referenceTable="paypal_billing_agreement" referenceColumn="agreement_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="PAYPAL_BILLING_AGREEMENT_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ID"
+                    table="paypal_billing_agreement_order" column="order_id" referenceTable="sales_order"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index name="PAYPAL_BILLING_AGREEMENT_ORDER_ORDER_ID" indexType="btree">
+            <column name="order_id"/>
+        </index>
+    </table>
+    <table name="paypal_settlement_report" resource="default" engine="innodb" comment="Paypal Settlement Report Table">
+        <column xsi:type="int" name="report_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Report Id"/>
+        <column xsi:type="date" name="report_date" comment="Report Date"/>
+        <column xsi:type="varchar" name="account_id" nullable="true" length="64" comment="Account Id"/>
+        <column xsi:type="varchar" name="filename" nullable="true" length="24" comment="Filename"/>
+        <column xsi:type="timestamp" name="last_modified" on_update="false" nullable="true" comment="Last Modified"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="report_id"/>
+        </constraint>
+        <constraint xsi:type="unique" name="PAYPAL_SETTLEMENT_REPORT_REPORT_DATE_ACCOUNT_ID">
+            <column name="report_date"/>
+            <column name="account_id"/>
+        </constraint>
+    </table>
+    <table name="paypal_settlement_report_row" resource="default" engine="innodb"
+           comment="Paypal Settlement Report Row Table">
+        <column xsi:type="int" name="row_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Row Id"/>
+        <column xsi:type="int" name="report_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Report Id"/>
+        <column xsi:type="varchar" name="transaction_id" nullable="true" length="19" comment="Transaction Id"/>
+        <column xsi:type="varchar" name="invoice_id" nullable="true" length="127" comment="Invoice Id"/>
+        <column xsi:type="varchar" name="paypal_reference_id" nullable="true" length="19"
+                comment="Paypal Reference Id"/>
+        <column xsi:type="varchar" name="paypal_reference_id_type" nullable="true" length="3"
+                comment="Paypal Reference Id Type"/>
+        <column xsi:type="varchar" name="transaction_event_code" nullable="true" length="5"
+                comment="Transaction Event Code"/>
+        <column xsi:type="timestamp" name="transaction_initiation_date" on_update="false" nullable="true"
+                comment="Transaction Initiation Date"/>
+        <column xsi:type="timestamp" name="transaction_completion_date" on_update="false" nullable="true"
+                comment="Transaction Completion Date"/>
+        <column xsi:type="varchar" name="transaction_debit_or_credit" nullable="false" length="2" default="CR"
+                comment="Transaction Debit Or Credit"/>
+        <column xsi:type="decimal" name="gross_transaction_amount" scale="6" precision="20" unsigned="false"
+                nullable="false" default="0" comment="Gross Transaction Amount"/>
+        <column xsi:type="varchar" name="gross_transaction_currency" nullable="true" length="3"
+                comment="Gross Transaction Currency"/>
+        <column xsi:type="varchar" name="fee_debit_or_credit" nullable="true" length="2" comment="Fee Debit Or Credit"/>
+        <column xsi:type="decimal" name="fee_amount" scale="6" precision="20" unsigned="false" nullable="false"
+                default="0" comment="Fee Amount"/>
+        <column xsi:type="varchar" name="fee_currency" nullable="true" length="3" comment="Fee Currency"/>
+        <column xsi:type="varchar" name="custom_field" nullable="true" length="255" comment="Custom Field"/>
+        <column xsi:type="varchar" name="consumer_id" nullable="true" length="127" comment="Consumer Id"/>
+        <column xsi:type="varchar" name="payment_tracking_id" nullable="true" length="255"
+                comment="Payment Tracking ID"/>
+        <column xsi:type="varchar" name="store_id" nullable="true" length="50" comment="Store ID"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="row_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="FK_E183E488F593E0DE10C6EBFFEBAC9B55" table="paypal_settlement_report_row"
+                    column="report_id" referenceTable="paypal_settlement_report" referenceColumn="report_id"
+                    onDelete="CASCADE"/>
+        <index name="PAYPAL_SETTLEMENT_REPORT_ROW_REPORT_ID" indexType="btree">
+            <column name="report_id"/>
+        </index>
+    </table>
+    <table name="paypal_cert" resource="default" engine="innodb" comment="Paypal Certificate Table">
+        <column xsi:type="smallint" name="cert_id" padding="5" unsigned="true" nullable="false" identity="true"
+                comment="Cert Id"/>
+        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Website Id"/>
+        <column xsi:type="text" name="content" nullable="true" comment="Content"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Updated At"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="cert_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="PAYPAL_CERT_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID" table="paypal_cert"
+                    column="website_id" referenceTable="store_website" referenceColumn="website_id" onDelete="CASCADE"/>
+        <index name="PAYPAL_CERT_WEBSITE_ID" indexType="btree">
+            <column name="website_id"/>
+        </index>
+    </table>
+    <table name="paypal_payment_transaction" resource="default" engine="innodb"
+           comment="PayPal Payflow Link Payment Transaction">
+        <column xsi:type="int" name="transaction_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="txn_id" nullable="true" length="100" comment="Txn Id"/>
+        <column xsi:type="blob" name="additional_information" nullable="true" comment="Additional Information"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="transaction_id"/>
+        </constraint>
+        <constraint xsi:type="unique" name="PAYPAL_PAYMENT_TRANSACTION_TXN_ID">
+            <column name="txn_id"/>
+        </constraint>
+    </table>
+    <table name="quote_payment" resource="checkout" comment="Sales Flat Quote Payment">
+        <column xsi:type="varchar" name="paypal_payer_id" nullable="true" length="255" comment="Paypal Payer Id"/>
+        <column xsi:type="varchar" name="paypal_payer_status" nullable="true" length="255"
+                comment="Paypal Payer Status"/>
+        <column xsi:type="varchar" name="paypal_correlation_id" nullable="true" length="255"
+                comment="Paypal Correlation Id"/>
+    </table>
+    <table name="sales_order" resource="sales" comment="Sales Flat Order">
+        <column xsi:type="int" name="paypal_ipn_customer_notified" padding="11" unsigned="false" nullable="true"
+                identity="false" default="0" comment="Paypal Ipn Customer Notified"/>
+    </table>
+</schema>

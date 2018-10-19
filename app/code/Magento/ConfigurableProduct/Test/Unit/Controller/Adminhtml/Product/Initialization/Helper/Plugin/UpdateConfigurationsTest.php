@@ -153,7 +153,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap(
                 [
                     ['store', 0, 0],
-                    ['configurable-matrix-serialized', '[]', json_encode($configurableMatrix)]
+                    ['configurable-matrix-serialized', "[]", json_encode($configurableMatrix)]
                 ]
             );
         $this->variationHandlerMock->expects(static::once())
@@ -209,5 +209,31 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                 ->willReturnSelf();
         }
         return $productMock;
+    }
+
+    /**
+     * Test for no exceptions if configurable matrix is empty string.
+     */
+    public function testAfterInitializeEmptyMatrix()
+    {
+        $productMock = $this->getProductMock();
+
+        $this->requestMock->expects(static::any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['store', 0, 0],
+                    ['configurable-matrix-serialized', null, ''],
+                ]
+            );
+
+        $this->variationHandlerMock->expects(static::once())
+            ->method('duplicateImagesForVariations')
+            ->with([])
+            ->willReturn([]);
+
+        $this->updateConfigurations->afterInitialize($this->subjectMock, $productMock);
+
+        $this->assertEmpty($productMock->getData());
     }
 }

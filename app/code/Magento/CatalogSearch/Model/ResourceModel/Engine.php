@@ -7,6 +7,9 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
 
 /**
  * CatalogSearch Fulltext Index Engine resource model
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Engine implements EngineInterface
 {
@@ -71,6 +74,13 @@ class Engine implements EngineInterface
     }
 
     /**
+     * Is attribute filterable as term cache
+     *
+     * @var array
+     */
+    private $termFilterableAttributeAttributeCache = [];
+
+    /**
      * Is Attribute Filterable as Term
      *
      * @param \Magento\Catalog\Model\Entity\Attribute $attribute
@@ -78,10 +88,16 @@ class Engine implements EngineInterface
      */
     private function isTermFilterableAttribute($attribute)
     {
-        return ($attribute->getIsVisibleInAdvancedSearch()
-            || $attribute->getIsFilterable()
-            || $attribute->getIsFilterableInSearch())
-        && in_array($attribute->getFrontendInput(), ['select', 'multiselect']);
+        $attributeId = $attribute->getAttributeId();
+        if (!isset($this->termFilterableAttributeAttributeCache[$attributeId])) {
+            $this->termFilterableAttributeAttributeCache[$attributeId] =
+                in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
+                && ($attribute->getIsVisibleInAdvancedSearch()
+                    || $attribute->getIsFilterable()
+                    || $attribute->getIsFilterableInSearch());
+        }
+
+        return $this->termFilterableAttributeAttributeCache[$attributeId];
     }
 
     /**
@@ -107,7 +123,7 @@ class Engine implements EngineInterface
      *
      * @param array $index
      * @param string $separator
-     * @return string
+     * @return array
      */
     public function prepareEntityIndex($index, $separator = ' ')
     {

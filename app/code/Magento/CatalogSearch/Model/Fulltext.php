@@ -21,6 +21,9 @@ use Magento\Search\Model\QueryFactory;
  * @method \Magento\CatalogSearch\Model\Fulltext setStoreId(int $value)
  * @method string getDataIndex()
  * @method \Magento\CatalogSearch\Model\Fulltext setDataIndex(string $value)
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Fulltext extends \Magento\Framework\Model\AbstractModel
 {
@@ -73,6 +76,8 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
      * Reset search results cache
      *
      * @return $this
+     * @deprecated Not used anymore
+     * @see \Magento\CatalogSearch\Model\ResourceModel\Fulltext::resetSearchResultsByStore
      */
     public function resetSearchResults()
     {

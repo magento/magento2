@@ -166,7 +166,7 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -226,7 +226,7 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -348,7 +348,8 @@ class CustomOptions extends AbstractModifier
                                 'sortOrder' => 20,
                                 'actions' => [
                                     [
-                                        'targetName' => 'ns = ${ $.ns }, index = ' . static::GRID_OPTIONS_NAME,
+                                        'targetName' => '${ $.ns }.${ $.ns }.' . static::GROUP_CUSTOM_OPTIONS_NAME
+                                            . '.' . static::GRID_OPTIONS_NAME,
                                         'actionName' => 'processingAddChild',
                                     ]
                                 ]
@@ -603,6 +604,8 @@ class CustomOptions extends AbstractModifier
                         'showLabel' => false,
                         'additionalClasses' => 'admin__field-group-columns admin__control-group-equal',
                         'sortOrder' => $sortOrder,
+                        'fieldTemplate' => 'Magento_Catalog/form/field',
+                        'visible' => false,
                     ],
                 ],
             ],
@@ -677,7 +680,7 @@ class CustomOptions extends AbstractModifier
                             10,
                             $this->locator->getProduct()->getStoreId() ? $options : []
                         ),
-                        static::FIELD_PRICE_NAME => $this->getPriceFieldConfig(20),
+                        static::FIELD_PRICE_NAME => $this->getPriceFieldConfigForSelectType(20),
                         static::FIELD_PRICE_TYPE_NAME => $this->getPriceTypeFieldConfig(30, ['fit' => true]),
                         static::FIELD_SKU_NAME => $this->getSkuFieldConfig(40),
                         static::FIELD_SORT_ORDER_NAME => $this->getPositionFieldConfig(50),
@@ -912,18 +915,34 @@ class CustomOptions extends AbstractModifier
                     'config' => [
                         'label' => __('Price'),
                         'componentType' => Field::NAME,
+                        'component' => 'Magento_Catalog/js/components/custom-options-component',
                         'formElement' => Input::NAME,
                         'dataScope' => static::FIELD_PRICE_NAME,
                         'dataType' => Number::NAME,
                         'addbefore' => $this->getCurrencySymbol(),
+                        'addbeforePool' => $this->productOptionsPrice->prefixesToOptionArray(),
                         'sortOrder' => $sortOrder,
                         'validation' => [
-                            'validate-zero-or-greater' => true
+                            'validate-number' => true
                         ],
                     ],
                 ],
             ],
         ];
+    }
+
+    /**
+     * Get config for "Price" field for select type.
+     *
+     * @param int $sortOrder
+     * @return array
+     */
+    private function getPriceFieldConfigForSelectType(int $sortOrder)
+    {
+        $priceFieldConfig = $this->getPriceFieldConfig($sortOrder);
+        $priceFieldConfig['arguments']['data']['config']['template'] = 'Magento_Catalog/form/field';
+
+        return $priceFieldConfig;
     }
 
     /**
@@ -942,12 +961,16 @@ class CustomOptions extends AbstractModifier
                     'data' => [
                         'config' => [
                             'label' => __('Price Type'),
+                            'component' => 'Magento_Catalog/js/components/custom-options-price-type',
                             'componentType' => Field::NAME,
                             'formElement' => Select::NAME,
                             'dataScope' => static::FIELD_PRICE_TYPE_NAME,
                             'dataType' => Text::NAME,
                             'sortOrder' => $sortOrder,
                             'options' => $this->productOptionsPrice->toOptionArray(),
+                            'imports' => [
+                                'priceIndex' => self::FIELD_PRICE_NAME,
+                            ],
                         ],
                     ],
                 ],
@@ -1023,11 +1046,15 @@ class CustomOptions extends AbstractModifier
                 'data' => [
                     'config' => [
                         'label' => __('Compatible File Extensions'),
+                        'notice' => __('Enter separated extensions, like: png, jpg, gif.'),
                         'componentType' => Field::NAME,
                         'formElement' => Input::NAME,
                         'dataScope' => static::FIELD_FILE_EXTENSION_NAME,
                         'dataType' => Text::NAME,
                         'sortOrder' => $sortOrder,
+                        'validation' => [
+                            'required-entry' => true,
+                        ],
                     ],
                 ],
             ],
@@ -1050,6 +1077,7 @@ class CustomOptions extends AbstractModifier
                         'label' => __('Maximum Image Size'),
                         'notice' => __('Please leave blank if it is not an image.'),
                         'addafter' => __('px.'),
+                        'component' => 'Magento_Catalog/js/components/custom-options-component',
                         'componentType' => Field::NAME,
                         'formElement' => Input::NAME,
                         'dataScope' => static::FIELD_IMAGE_SIZE_X_NAME,
@@ -1079,6 +1107,7 @@ class CustomOptions extends AbstractModifier
                     'config' => [
                         'label' => ' ',
                         'addafter' => __('px.'),
+                        'component' => 'Magento_Catalog/js/components/custom-options-component',
                         'componentType' => Field::NAME,
                         'formElement' => Input::NAME,
                         'dataScope' => static::FIELD_IMAGE_SIZE_Y_NAME,

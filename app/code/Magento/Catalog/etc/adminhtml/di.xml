@@ -78,6 +78,11 @@
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
         <plugin name="invalidate_pagecache_after_attribute_save" type="Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save" />
     </type>
+    <virtualType name="\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory" type="\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">\Magento\Catalog\Ui\DataProvider\Product\ProductCollection</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider">
         <arguments>
             <argument name="addFieldStrategies" xsi:type="array">
@@ -86,6 +91,8 @@
             <argument name="addFilterStrategies" xsi:type="array">
                 <item name="store_id" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddStoreFieldToCollection</item>
             </argument>
+            <argument name="collectionFactory" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory</argument>
+            <argument name="modifiersPool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
@@ -143,6 +150,10 @@
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Attributes</item>
                     <item name="sortOrder" xsi:type="number">120</item>
                 </item>
+                <item name="alerts" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Alerts</item>
+                    <item name="sortOrder" xsi:type="number">130</item>
+                </item>
                 <item name="advanced-pricing-tier-price-type" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice</item>
                     <item name="sortOrder" xsi:type="number">150</item>
@@ -155,6 +166,7 @@
             <argument name="pool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool</argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool"/>
     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions">
         <arguments>
             <argument name="scopeName" xsi:type="string">product_form.product_form</argument>
@@ -178,6 +190,46 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
         <arguments>
             <argument name="scopeOverriddenValue" xsi:type="object">Magento\Catalog\Model\Attribute\ScopeOverriddenValue</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Api\AttributeSetRepositoryInterface">
+        <plugin name="remove_products" type="Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts"/>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav\CompositeConfigProcessor">
+        <arguments>
+            <argument name="eavWysiwygDataProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav\WysiwygConfigDataProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Ui\Component\Form\Field\Category\PageLayout" type="Magento\Ui\Component\Form\Field\DefaultValue">
+        <arguments>
+            <argument name="path" xsi:type="string">web/default_layouts/default_category_layout</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Ui\Model\UrlInput\LinksConfigProvider">
+        <arguments>
+            <argument name="linksConfiguration" xsi:type="array">
+                <item name="product" xsi:type="string">Magento\Catalog\Ui\Component\UrlInput\Product</item>
+                <item name="category" xsi:type="string">Magento\Catalog\Ui\Component\UrlInput\Category</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ProductLink\Search">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddSearchKeyConditionToCollection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Attributes">
+        <arguments>
+            <argument name="excludeFields" xsi:type="array">
+                <item name="0" xsi:type="string">category_ids</item>
+                <item name="1" xsi:type="string">gallery</item>
+                <item name="2" xsi:type="string">image</item>
+                <item name="3" xsi:type="string">media_gallery</item>
+                <item name="4" xsi:type="string">quantity_and_stock_status</item>
+                <item name="5" xsi:type="string">tier_price</item>
+            </argument>
         </arguments>
     </type>
 </config>

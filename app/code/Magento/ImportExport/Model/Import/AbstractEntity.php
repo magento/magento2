@@ -691,8 +691,9 @@ abstract class AbstractEntity
                 break;
             case 'select':
             case 'multiselect':
+            case 'boolean':
                 $valid = true;
-                foreach (explode($multiSeparator, strtolower($rowData[$attributeCode])) as $value) {
+                foreach (explode($multiSeparator, mb_strtolower($rowData[$attributeCode])) as $value) {
                     $valid = isset($attributeParams['options'][$value]);
                     if (!$valid) {
                         break;

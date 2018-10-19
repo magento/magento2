@@ -208,5 +208,16 @@
             <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUnique" />
         </variation>
+        <variation name="CreateProductAttributeEntityTestVariation10" summary="Create custom dropdown attribute with single quotation in option">
+            <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
+            <data name="productAttribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
+            <data name="productAttribute/data/frontend_input" xsi:type="string">Dropdown</data>
+            <data name="productAttribute/data/options/dataset" xsi:type="string">option_with_single_quotation</data>
+            <data name="productAttribute/data/is_required" xsi:type="string">Yes</data>
+            <data name="productAttribute/data/attribute_code" xsi:type="string">attr_dropdown_%isolation%</data>
+            <data name="productAttribute/data/is_global" xsi:type="string">Global</data>
+            <data name="productAttribute/data/is_unique" xsi:type="string">No</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+        </variation>
     </testCase>
 </config>

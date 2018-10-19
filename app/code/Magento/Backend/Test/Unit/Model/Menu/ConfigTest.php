@@ -96,7 +96,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->menuMock, $this->model->getMenu());
     }
 
-    public function testGetMenuWithNotCachedObjectBuidlsObject()
+    public function testGetMenuWithNotCachedObjectBuildsObject()
     {
         $this->cacheInstanceMock->expects(
             $this->at(0)
@@ -140,6 +140,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->model->getMenu();
     }
 
+    /**
+     * @return array
+     */
     public function getMenuExceptionLoggedDataProvider()
     {
         return [

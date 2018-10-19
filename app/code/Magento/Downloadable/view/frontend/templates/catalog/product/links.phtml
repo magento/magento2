@@ -13,9 +13,9 @@
     <?php $_links = $block->getLinks(); ?>
     <?php $_linksLength = 0; ?>
     <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
-    <legend class="legend links-title"><span><?= /* @escapeNotVerified */ $block->getLinksTitle() ?></span></legend><br>
+    <legend class="legend links-title"><span><?= $block->escapeHtml($block->getLinksTitle()) ?></span></legend><br>
     <div class="field downloads<?php if ($_isRequired) echo ' required' ?><?php if (!$_linksPurchasedSeparately) echo ' downloads-no-separately' ?>">
-        <label class="label"><span><?= /* @escapeNotVerified */ $block->getLinksTitle() ?></span></label>
+        <label class="label"><span><?= $block->escapeHtml($block->getLinksTitle()) ?></span></label>
         <div class="control" id="downloadable-links-list"
              data-mage-init='{"downloadable":{
                  "linkElement":"input:checkbox[value]",
@@ -37,7 +37,7 @@
                         <span><?= $block->escapeHtml($_link->getTitle()) ?></span>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
                             <a class="sample link"
-                               href="<?= /* @escapeNotVerified */ $block->getLinkSampleUrl($_link) ?>" <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
+                               href="<?= $block->escapeUrl($block->getLinkSampleUrl($_link)) ?>" <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
                                 <?= /* @escapeNotVerified */ __('sample') ?>
                             </a>
                         <?php endif; ?>

@@ -91,14 +91,26 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
     public function dateIncludeTimeDataProvider()
     {
         return [
-            'Parse date without time' => [
+            'Parse d/m/y date without time' => [
                 '19/05/2017', // date
                 'ar_KW', // locale
                 false, // include time
                 1495170000 // expected timestamp
             ],
-            'Parse date with time' => [
-                '05/19/2017 00:01 am', // date
+            'Parse d/m/y date with time' => [
+                '19/05/2017 00:01 صباحاً', // datetime (00:01 am)
+                'ar_KW', // locale
+                true, // include time
+                1495170060 // expected timestamp
+            ],
+            'Parse m/d/y date without time' => [
+                '05/19/2017', // date
+                'en_US', // locale
+                false, // include time
+                1495170000 // expected timestamp
+            ],
+            'Parse m/d/y date with time' => [
+                '05/19/2017 00:01 am', // datetime
                 'en_US', // locale
                 true, // include time
                 1495170060 // expected timestamp

@@ -27,7 +27,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="report_date">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.report_date" as="report_date">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Report Date</argument>
                             <argument name="index" xsi:type="string">report_date</argument>
@@ -36,7 +36,7 @@
                             <argument name="column_css_class" xsi:type="string">col-date</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="account_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.account_id" as="account_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Merchant Account</argument>
                             <argument name="index" xsi:type="string">account_id</argument>
@@ -44,7 +44,7 @@
                             <argument name="column_css_class" xsi:type="string">col-merchant</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="transaction_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.transaction_id" as="transaction_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Transaction ID</argument>
                             <argument name="index" xsi:type="string">transaction_id</argument>
@@ -52,7 +52,7 @@
                             <argument name="column_css_class" xsi:type="string">col-transaction</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="invoice_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.invoice_id" as="invoice_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Invoice ID</argument>
                             <argument name="index" xsi:type="string">invoice_id</argument>
@@ -60,7 +60,7 @@
                             <argument name="column_css_class" xsi:type="string">col-invoice</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="paypal_reference_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.paypal_reference_id" as="paypal_reference_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">PayPal Reference ID</argument>
                             <argument name="index" xsi:type="string">paypal_reference_id</argument>
@@ -68,7 +68,7 @@
                             <argument name="column_css_class" xsi:type="string">col-reference</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="transaction_event_code">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.transaction_event_code" as="transaction_event_code">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Event</argument>
                             <argument name="index" xsi:type="string">transaction_event_code</argument>
@@ -78,7 +78,7 @@
                             <argument name="column_css_class" xsi:type="string">ol-event</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="transaction_initiation_date">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.transaction_initiation_date" as="transaction_initiation_date">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Start Date</argument>
                             <argument name="index" xsi:type="string">transaction_initiation_date</argument>
@@ -87,7 +87,7 @@
                             <argument name="column_css_class" xsi:type="string">col-initiation</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="transaction_completion_date">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.transaction_completion_date" as="transaction_completion_date">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Finish Date</argument>
                             <argument name="index" xsi:type="string">transaction_completion_date</argument>
@@ -96,7 +96,7 @@
                             <argument name="column_css_class" xsi:type="string">col-completion</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="gross_transaction_amount">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.gross_transaction_amount" as="gross_transaction_amount">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Gross Amount</argument>
                             <argument name="index" xsi:type="string">gross_transaction_amount</argument>
@@ -106,7 +106,7 @@
                             <argument name="column_css_class" xsi:type="string">col-amount</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="fee_amount">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="paypal.report.grid.columnSet.fee_amount" as="fee_amount">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Fee Amount</argument>
                             <argument name="index" xsi:type="string">fee_amount</argument>

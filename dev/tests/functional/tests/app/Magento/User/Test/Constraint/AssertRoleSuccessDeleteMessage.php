@@ -25,7 +25,7 @@ class AssertRoleSuccessDeleteMessage extends AbstractConstraint
     public function processAssert(UserRoleIndex $rolePage)
     {
         $successMessage = $rolePage->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $successMessage,
             'Wrong success message is displayed.'

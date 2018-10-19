@@ -1,0 +1,329 @@
+{
+    "quote": {
+        "column": {
+            "entity_id": true,
+            "store_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "converted_at": true,
+            "is_active": true,
+            "is_virtual": true,
+            "is_multi_shipping": true,
+            "items_count": true,
+            "items_qty": true,
+            "orig_order_id": true,
+            "store_to_base_rate": true,
+            "store_to_quote_rate": true,
+            "base_currency_code": true,
+            "store_currency_code": true,
+            "quote_currency_code": true,
+            "grand_total": true,
+            "base_grand_total": true,
+            "checkout_method": true,
+            "customer_id": true,
+            "customer_tax_class_id": true,
+            "customer_group_id": true,
+            "customer_email": true,
+            "customer_prefix": true,
+            "customer_firstname": true,
+            "customer_middlename": true,
+            "customer_lastname": true,
+            "customer_suffix": true,
+            "customer_dob": true,
+            "customer_note": true,
+            "customer_note_notify": true,
+            "customer_is_guest": true,
+            "remote_ip": true,
+            "applied_rule_ids": true,
+            "reserved_order_id": true,
+            "password_hash": true,
+            "coupon_code": true,
+            "global_currency_code": true,
+            "base_to_global_rate": true,
+            "base_to_quote_rate": true,
+            "customer_taxvat": true,
+            "customer_gender": true,
+            "subtotal": true,
+            "base_subtotal": true,
+            "subtotal_with_discount": true,
+            "base_subtotal_with_discount": true,
+            "is_changed": true,
+            "trigger_recollect": true,
+            "ext_shipping_info": true
+        },
+        "index": {
+            "QUOTE_CUSTOMER_ID_STORE_ID_IS_ACTIVE": true,
+            "QUOTE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "QUOTE_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "quote_address": {
+        "column": {
+            "address_id": true,
+            "quote_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "customer_id": true,
+            "save_in_address_book": true,
+            "customer_address_id": true,
+            "address_type": true,
+            "email": true,
+            "prefix": true,
+            "firstname": true,
+            "middlename": true,
+            "lastname": true,
+            "suffix": true,
+            "company": true,
+            "street": true,
+            "city": true,
+            "region": true,
+            "region_id": true,
+            "postcode": true,
+            "country_id": true,
+            "telephone": true,
+            "fax": true,
+            "same_as_billing": true,
+            "collect_shipping_rates": true,
+            "shipping_method": true,
+            "shipping_description": true,
+            "weight": true,
+            "subtotal": true,
+            "base_subtotal": true,
+            "subtotal_with_discount": true,
+            "base_subtotal_with_discount": true,
+            "tax_amount": true,
+            "base_tax_amount": true,
+            "shipping_amount": true,
+            "base_shipping_amount": true,
+            "shipping_tax_amount": true,
+            "base_shipping_tax_amount": true,
+            "discount_amount": true,
+            "base_discount_amount": true,
+            "grand_total": true,
+            "base_grand_total": true,
+            "customer_notes": true,
+            "applied_taxes": true,
+            "discount_description": true,
+            "shipping_discount_amount": true,
+            "base_shipping_discount_amount": true,
+            "subtotal_incl_tax": true,
+            "base_subtotal_total_incl_tax": true,
+            "discount_tax_compensation_amount": true,
+            "base_discount_tax_compensation_amount": true,
+            "shipping_discount_tax_compensation_amount": true,
+            "base_shipping_discount_tax_compensation_amnt": true,
+            "shipping_incl_tax": true,
+            "base_shipping_incl_tax": true,
+            "vat_id": true,
+            "vat_is_valid": true,
+            "vat_request_id": true,
+            "vat_request_date": true,
+            "vat_request_success": true
+        },
+        "index": {
+            "QUOTE_ADDRESS_QUOTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "QUOTE_ADDRESS_QUOTE_ID_QUOTE_ENTITY_ID": true
+        }
+    },
+    "quote_item": {
+        "column": {
+            "item_id": true,
+            "quote_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "product_id": true,
+            "store_id": true,
+            "parent_item_id": true,
+            "is_virtual": true,
+            "sku": true,
+            "name": true,
+            "description": true,
+            "applied_rule_ids": true,
+            "additional_data": true,
+            "is_qty_decimal": true,
+            "no_discount": true,
+            "weight": true,
+            "qty": true,
+            "price": true,
+            "base_price": true,
+            "custom_price": true,
+            "discount_percent": true,
+            "discount_amount": true,
+            "base_discount_amount": true,
+            "tax_percent": true,
+            "tax_amount": true,
+            "base_tax_amount": true,
+            "row_total": true,
+            "base_row_total": true,
+            "row_total_with_discount": true,
+            "row_weight": true,
+            "product_type": true,
+            "base_tax_before_discount": true,
+            "tax_before_discount": true,
+            "original_custom_price": true,
+            "redirect_url": true,
+            "base_cost": true,
+            "price_incl_tax": true,
+            "base_price_incl_tax": true,
+            "row_total_incl_tax": true,
+            "base_row_total_incl_tax": true,
+            "discount_tax_compensation_amount": true,
+            "base_discount_tax_compensation_amount": true
+        },
+        "index": {
+            "QUOTE_ITEM_PARENT_ITEM_ID": true,
+            "QUOTE_ITEM_PRODUCT_ID": true,
+            "QUOTE_ITEM_QUOTE_ID": true,
+            "QUOTE_ITEM_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "QUOTE_ITEM_PARENT_ITEM_ID_QUOTE_ITEM_ITEM_ID": true,
+            "QUOTE_ITEM_QUOTE_ID_QUOTE_ENTITY_ID": true,
+            "QUOTE_ITEM_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "quote_address_item": {
+        "column": {
+            "address_item_id": true,
+            "parent_item_id": true,
+            "quote_address_id": true,
+            "quote_item_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "applied_rule_ids": true,
+            "additional_data": true,
+            "weight": true,
+            "qty": true,
+            "discount_amount": true,
+            "tax_amount": true,
+            "row_total": true,
+            "base_row_total": true,
+            "row_total_with_discount": true,
+            "base_discount_amount": true,
+            "base_tax_amount": true,
+            "row_weight": true,
+            "product_id": true,
+            "super_product_id": true,
+            "parent_product_id": true,
+            "sku": true,
+            "image": true,
+            "name": true,
+            "description": true,
+            "is_qty_decimal": true,
+            "price": true,
+            "discount_percent": true,
+            "no_discount": true,
+            "tax_percent": true,
+            "base_price": true,
+            "base_cost": true,
+            "price_incl_tax": true,
+            "base_price_incl_tax": true,
+            "row_total_incl_tax": true,
+            "base_row_total_incl_tax": true,
+            "discount_tax_compensation_amount": true,
+            "base_discount_tax_compensation_amount": true
+        },
+        "index": {
+            "QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID": true,
+            "QUOTE_ADDRESS_ITEM_PARENT_ITEM_ID": true,
+            "QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID_QUOTE_ADDRESS_ADDRESS_ID": true,
+            "QUOTE_ADDR_ITEM_PARENT_ITEM_ID_QUOTE_ADDR_ITEM_ADDR_ITEM_ID": true,
+            "QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID_QUOTE_ITEM_ITEM_ID": true
+        }
+    },
+    "quote_item_option": {
+        "column": {
+            "option_id": true,
+            "item_id": true,
+            "product_id": true,
+            "code": true,
+            "value": true
+        },
+        "index": {
+            "QUOTE_ITEM_OPTION_ITEM_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "QUOTE_ITEM_OPTION_ITEM_ID_QUOTE_ITEM_ITEM_ID": true
+        }
+    },
+    "quote_payment": {
+        "column": {
+            "payment_id": true,
+            "quote_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "method": true,
+            "cc_type": true,
+            "cc_number_enc": true,
+            "cc_last_4": true,
+            "cc_cid_enc": true,
+            "cc_owner": true,
+            "cc_exp_month": true,
+            "cc_exp_year": true,
+            "cc_ss_owner": true,
+            "cc_ss_start_month": true,
+            "cc_ss_start_year": true,
+            "po_number": true,
+            "additional_data": true,
+            "cc_ss_issue": true,
+            "additional_information": true
+        },
+        "index": {
+            "QUOTE_PAYMENT_QUOTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "QUOTE_PAYMENT_QUOTE_ID_QUOTE_ENTITY_ID": true
+        }
+    },
+    "quote_shipping_rate": {
+        "column": {
+            "rate_id": true,
+            "address_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "carrier": true,
+            "carrier_title": true,
+            "code": true,
+            "method": true,
+            "method_description": true,
+            "price": true,
+            "error_message": true,
+            "method_title": true
+        },
+        "index": {
+            "QUOTE_SHIPPING_RATE_ADDRESS_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "QUOTE_SHIPPING_RATE_ADDRESS_ID_QUOTE_ADDRESS_ADDRESS_ID": true
+        }
+    },
+    "quote_id_mask": {
+        "column": {
+            "entity_id": true,
+            "quote_id": true,
+            "masked_id": true
+        },
+        "index": {
+            "QUOTE_ID_MASK_QUOTE_ID": true,
+            "QUOTE_ID_MASK_MASKED_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "QUOTE_ID_MASK_QUOTE_ID_QUOTE_ENTITY_ID": true
+        }
+    }
+}

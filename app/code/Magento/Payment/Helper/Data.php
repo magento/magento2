@@ -151,15 +151,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         @uasort(
             $res,
             function (MethodInterface $a, MethodInterface $b) {
-                if ((int)$a->getConfigData('sort_order') < (int)$b->getConfigData('sort_order')) {
-                    return -1;
-                }
-
-                if ((int)$a->getConfigData('sort_order') > (int)$b->getConfigData('sort_order')) {
-                    return 1;
-                }
-
-                return 0;
+                return (int)$a->getConfigData('sort_order') <=> (int)$b->getConfigData('sort_order');
             }
         );
 
@@ -293,6 +285,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             foreach ($methods as $code => $title) {
                 if (isset($groups[$code])) {
                     $labelValues[$code]['label'] = $title;
+                    if (!isset($labelValues[$code]['value'])) {
+                        $labelValues[$code]['value'] = null;
+                    }
                 } elseif (isset($groupRelations[$code])) {
                     unset($labelValues[$code]);
                     $labelValues[$groupRelations[$code]]['value'][$code] = ['value' => $code, 'label' => $title];

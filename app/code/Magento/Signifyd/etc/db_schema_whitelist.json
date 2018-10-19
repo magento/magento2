@@ -1,0 +1,28 @@
+{
+    "signifyd_case": {
+        "column": {
+            "entity_id": true,
+            "order_id": true,
+            "case_id": true,
+            "guarantee_eligible": true,
+            "guarantee_disposition": true,
+            "status": true,
+            "score": true,
+            "associated_team": true,
+            "review_disposition": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SIGNIFYD_CASE_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
+            "SIGNIFYD_CASE_ORDER_ID": true,
+            "SIGNIFYD_CASE_CASE_ID": true
+        }
+    },
+    "sales_order_grid": {
+        "column": {
+            "signifyd_guarantee_status": true
+        }
+    }
+}

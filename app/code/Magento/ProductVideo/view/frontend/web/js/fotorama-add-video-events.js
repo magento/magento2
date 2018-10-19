@@ -34,7 +34,8 @@ define([
         var id,
             type,
             ampersandPosition,
-            vimeoRegex;
+            vimeoRegex,
+            useYoutubeNocookie = false;
 
         /**
          * Get youtube ID
@@ -68,9 +69,13 @@ define([
                 id = _getYoutubeId(id);
                 type = 'youtube';
             }
-        } else if (href.host.match(/youtube\.com|youtu\.be/)) {
+        } else if (href.host.match(/youtube\.com|youtu\.be|youtube-nocookie.com/)) {
             id = href.pathname.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
             type = 'youtube';
+
+            if (href.host.match(/youtube-nocookie.com/)) {
+                useYoutubeNocookie = true;
+            }
         } else if (href.host.match(/vimeo\.com/)) {
             type = 'vimeo';
             vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.|player\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
@@ -85,7 +90,7 @@ define([
         }
 
         return id ? {
-            id: id, type: type, s: href.search.replace(/^\?/, '')
+            id: id, type: type, s: href.search.replace(/^\?/, ''), useYoutubeNocookie: useYoutubeNocookie
         } : false;
     }
 
@@ -173,10 +178,10 @@ define([
          */
         clearEvents: function () {
             this.fotoramaItem.off(
-                'fotorama:show ' +
-                'fotorama:showend ' +
-                'fotorama:fullscreenenter ' +
-                'fotorama:fullscreenexit'
+                'fotorama:show.' + this.PV +
+                ' fotorama:showend.' + this.PV +
+                ' fotorama:fullscreenenter.' + this.PV +
+                ' fotorama:fullscreenexit.' + this.PV
             );
         },
 
@@ -205,7 +210,7 @@ define([
                 if (options.dataMergeStrategy === 'prepend') {
                     this.options.videoData = [].concat(
                         this.options.optionsVideoData[options.selectedOption],
-                        this.options.videoData
+                        this.defaultVideoData
                     );
                 } else {
                     this.options.videoData = this.options.optionsVideoData[options.selectedOption];
@@ -230,11 +235,11 @@ define([
          * @private
          */
         _listenForFullscreen: function () {
-            this.fotoramaItem.on('fotorama:fullscreenenter', $.proxy(function () {
+            this.fotoramaItem.on('fotorama:fullscreenenter.' + this.PV, $.proxy(function () {
                 this.isFullscreen = true;
             }, this));
 
-            this.fotoramaItem.on('fotorama:fullscreenexit', $.proxy(function () {
+            this.fotoramaItem.on('fotorama:fullscreenexit.' + this.PV, $.proxy(function () {
                 this.isFullscreen = false;
                 this._hideVideoArrows();
             }, this));
@@ -281,6 +286,7 @@ define([
                     tmpVideoData.id = dataUrl.id;
                     tmpVideoData.provider = dataUrl.type;
                     tmpVideoData.videoUrl = tmpInputData.videoUrl;
+                    tmpVideoData.useYoutubeNocookie = dataUrl.useYoutubeNocookie;
                 }
 
                 videoData.push(tmpVideoData);
@@ -442,7 +448,7 @@ define([
                 scriptTag = document.getElementsByTagName('script')[0];
 
             element.async = true;
-            element.src = 'https://secure-a.vimeocdn.com/js/froogaloop2.min.js';
+            element.src = 'https://f.vimeocdn.com/js/froogaloop2.min.js';
 
             /**
              * Vimeo js framework on load callback.
@@ -466,7 +472,7 @@ define([
                 t;
 
             if (!fotorama.activeFrame.$navThumbFrame) {
-                this.fotoramaItem.on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
+                this.fotoramaItem.on('fotorama:showend.' + this.PV, $.proxy(function (evt, fotoramaData) {
                     $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
                 }, this));
 
@@ -484,7 +490,7 @@ define([
                 this._checkForVideo(e, fotorama, t + 1);
             }
 
-            this.fotoramaItem.on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
+            this.fotoramaItem.on('fotorama:showend.' + this.PV, $.proxy(function (evt, fotoramaData) {
                 $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
             }, this));
         },
@@ -526,15 +532,15 @@ define([
          * @private
          */
         _attachFotoramaEvents: function () {
-            this.fotoramaItem.on('fotorama:showend', $.proxy(function (e, fotorama) {
+            this.fotoramaItem.on('fotorama:showend.' + this.PV, $.proxy(function (e, fotorama) {
                 this._startPrepareForPlayer(e, fotorama);
             }, this));
 
-            this.fotoramaItem.on('fotorama:show', $.proxy(function (e, fotorama) {
+            this.fotoramaItem.on('fotorama:show.' + this.PV, $.proxy(function (e, fotorama) {
                 this._unloadVideoPlayer(fotorama.activeFrame.$stageFrame.parent(), fotorama, true);
             }, this));
 
-            this.fotoramaItem.on('fotorama:fullscreenexit', $.proxy(function (e, fotorama) {
+            this.fotoramaItem.on('fotorama:fullscreenexit.' + this.PV, $.proxy(function (e, fotorama) {
                 fotorama.activeFrame.$stageFrame.find('.' + this.PV).remove();
                 this._startPrepareForPlayer(e, fotorama);
             }, this));
@@ -629,6 +635,8 @@ define([
                 videoData.provider +
                 '" data-code="' +
                 videoData.id +
+                '"  data-youtubenocookie="' +
+                videoData.useYoutubeNocookie +
                 '" data-width="100%" data-height="100%"></div>'
             );
         },

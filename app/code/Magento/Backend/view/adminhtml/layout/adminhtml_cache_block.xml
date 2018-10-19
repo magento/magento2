@@ -42,7 +42,7 @@
                     <arguments>
                         <argument name="filter_visibility" xsi:type="string">0</argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="cache_type">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.cache.grid.columnSet.cache_type" as="cache_type">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Cache Type</argument>
                             <argument name="index" xsi:type="string">cache_type</argument>
@@ -53,7 +53,7 @@
                             <argument name="translate" xsi:type="boolean">true</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="description">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.cache.grid.columnSet.description" as="description">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Description</argument>
                             <argument name="index" xsi:type="string">description</argument>
@@ -63,7 +63,7 @@
                             <argument name="translate" xsi:type="boolean">true</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="tags">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.cache.grid.columnSet.tags" as="tags">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Tags</argument>
                             <argument name="index" xsi:type="string">tags</argument>
@@ -73,7 +73,7 @@
                             <argument name="sortable" xsi:type="string">0</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Cache\Grid\Column\Statuses" as="status">
+                    <block class="Magento\Backend\Block\Cache\Grid\Column\Statuses" name="adminhtml.cache.grid.columnSet.status" as="status">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Status</argument>
                             <argument name="index" xsi:type="string">status</argument>

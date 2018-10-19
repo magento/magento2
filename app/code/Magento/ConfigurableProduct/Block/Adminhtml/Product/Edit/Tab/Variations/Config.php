@@ -18,7 +18,7 @@ class Config extends Widget implements TabInterface
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit/super/config.phtml';
+    protected $_template = 'Magento_ConfigurableProduct::catalog/product/edit/super/config.phtml';
 
     /**
      * Core registry

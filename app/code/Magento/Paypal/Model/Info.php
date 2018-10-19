@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model;
 
 /**
@@ -456,13 +454,15 @@ class Info
                 return __('The payment is pending while it is being reviewed by PayPal for risk.');
             case 'unilateral':
                 return __(
-                    'The payment is pending because it was made to an email address that is not yet registered or confirmed.'
+                    'The payment is pending because it was made to an email address that '
+                    . 'is not yet registered or confirmed.'
                 );
             case 'verify':
                 return __('The merchant account is not yet verified.');
             case 'upgrade':
                 return __(
-                    'The payment was made via credit card. In order to receive funds merchant must upgrade account to Business or Premier status.'
+                    'The payment was made via credit card.'
+                    . ' In order to receive funds merchant must upgrade account to Business or Premier status.'
                 );
             case 'none':
                 // break is intentionally omitted
@@ -489,10 +489,12 @@ class Info
                 'A reversal has occurred on this transaction due to your customer triggering a money-back guarantee.'
             ),
             'buyer-complaint' => __(
-                'A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'
+                'A reversal has occurred on this transaction due to a'
+                . ' complaint about the transaction from your customer.'
             ),
             'buyer_complaint' => __(
-                'A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'
+                'A reversal has occurred on this transaction due to a'
+                . ' complaint about the transaction from your customer.'
             ),
             'refund' => __(
                 'A reversal has occurred on this transaction because you have given the customer a refund.'
@@ -503,11 +505,13 @@ class Info
             'chargeback_reimbursement' => __('Reimbursement for a chargeback.'),
             'chargeback_settlement' => __('Settlement of a chargeback.'),
             'unauthorized_spoof' => __(
-                'A reversal has occurred on this transaction because of a customer dispute suspecting unauthorized spoof.'
+                'A reversal has occurred on this transaction because of a'
+                . ' customer dispute suspecting unauthorized spoof.'
             ),
             'non_receipt' => __('Buyer claims that he did not receive goods or service.'),
             'not_as_described' => __(
-                'Buyer claims that the goods or service received differ from merchant’s description of the goods or service.'
+                'Buyer claims that the goods or service received differ from'
+                . ' merchant’s description of the goods or service.'
             ),
             'unauthorized' => __('Buyer claims that he/she did not authorize transaction.'),
             'adjustment_reimburse' => __('A case that has been resolved and close requires a reimbursement.'),

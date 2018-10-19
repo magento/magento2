@@ -99,7 +99,9 @@ Back,Back
 "Email Template","Email Template"
 "Email template chosen based on theme fallback when ""Default"" option is selected.","Email template chosen based on theme fallback when ""Default"" option is selected."
 "Max Emails Allowed to be Sent","Max Emails Allowed to be Sent"
+"10 by default. Max - 10000","10 by default. Max - 10000"
 "Email Text Length Limit","Email Text Length Limit"
+"255 by default","255 by default"
 "General Options","General Options"
 Enabled,Enabled
 "My Wish List Link","My Wish List Link"
@@ -116,3 +118,4 @@ Action,Action
 Configure,Configure
 Delete,Delete
 "Product Details and Comment","Product Details and Comment"
+"You must login or register to add items to your wishlist.","You must login or register to add items to your wishlist."

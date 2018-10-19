@@ -47,7 +47,7 @@ class AssertShippingPriceWithCustomCurrency extends AbstractConstraint
             ['products' => [$product]]
         )->run();
         $testStepFactory->create(\Magento\Checkout\Test\TestStep\ProceedToCheckoutStep::class)->run();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $shippingAmount,
             $checkoutOnepage->getShippingMethodBlock()->getShippingMethodAmount($shipping),
             'Shipping amount is not correct in the checkout page.'

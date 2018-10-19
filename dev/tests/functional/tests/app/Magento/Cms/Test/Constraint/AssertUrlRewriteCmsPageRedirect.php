@@ -41,7 +41,7 @@ class AssertUrlRewriteCmsPageRedirect extends AbstractConstraint
             ? $urlRewrite->getRequestPath()
             : $cmsPage->getTitle();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $_ENV['app_frontend_url'] . $url,
             $browser->getUrl(),
             'URL rewrite CMS Page redirect false.'

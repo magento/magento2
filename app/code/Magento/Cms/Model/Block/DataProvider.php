@@ -7,11 +7,12 @@ namespace Magento\Cms\Model\Block;
 
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * Class DataProvider
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 {
     /**
      * @var \Magento\Cms\Model\ResourceModel\Block\Collection
@@ -38,6 +39,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
+     * @param PoolInterface|null $pool
      */
     public function __construct(
         $name,
@@ -46,11 +48,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CollectionFactory $blockCollectionFactory,
         DataPersistorInterface $dataPersistor,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        PoolInterface $pool = null
     ) {
         $this->collection = $blockCollectionFactory->create();
         $this->dataPersistor = $dataPersistor;
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
     }
 
     /**

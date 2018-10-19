@@ -34,7 +34,7 @@ class AssertProductInGrid extends AbstractConstraint
         $this->product = $product;
         $productIndex->open();
         $productIndex->getProductGrid()->resetFilter();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $productIndex->getProductGrid()->isRowVisible($this->prepareFilter()),
             'Product \'' . $this->product->getName() . '\' is absent in Products grid.'
         );

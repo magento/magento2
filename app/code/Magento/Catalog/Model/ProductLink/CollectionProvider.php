@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\ProductLink;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Provides a collection of linked product items (crosssells, related, upsells, ...)
+ */
 class CollectionProvider
 {
     /**
@@ -42,27 +45,25 @@ class CollectionProvider
     public function getCollection(\Magento\Catalog\Model\Product $product, $type)
     {
         if (!isset($this->providers[$type])) {
-            throw new NoSuchEntityException(__('Collection provider is not registered'));
+            throw new NoSuchEntityException(__("The collection provider isn't registered."));
         }
 
         $products = $this->providers[$type]->getLinkedProducts($product);
         $converter = $this->converterPool->getConverter($type);
-        $output = [];
         $sorterItems = [];
         foreach ($products as $item) {
-            $output[$item->getId()] = $converter->convert($item);
+            $itemId = $item->getId();
+            $sorterItems[$itemId] = $converter->convert($item);
+            $sorterItems[$itemId]['position'] = $sorterItems[$itemId]['position'] ?? 0;
         }
 
-        foreach ($output as $item) {
-            $itemPosition = $item['position'];
-            if (!isset($sorterItems[$itemPosition])) {
-                $sorterItems[$itemPosition] = $item;
-            } else {
-                $newPosition = $itemPosition + 1;
-                $sorterItems[$newPosition] = $item;
-            }
-        }
-        ksort($sorterItems);
+        usort($sorterItems, function ($itemA, $itemB) {
+            $posA = intval($itemA['position']);
+            $posB = intval($itemB['position']);
+
+            return $posA <=> $posB;
+        });
+
         return $sorterItems;
     }
 }

@@ -11,10 +11,11 @@ define([
     'underscore',
     './utils',
     'moment',
+    'tinycolor',
     'jquery/validate',
     'jquery/ui',
     'mage/translate'
-], function ($, _, utils, moment) {
+], function ($, _, utils, moment, tinycolor) {
     'use strict';
 
     /**
@@ -72,61 +73,67 @@ define([
         ],
         'max-words': [
             function (value, params) {
-                return utils.stripHtml(value).match(/\b\w+\b/g).length < params;
+                return utils.isEmpty(value) || utils.stripHtml(value).match(/\b\w+\b/g).length < params;
             },
             $.mage.__('Please enter {0} words or less.')
         ],
         'min-words': [
             function (value, params) {
-                return utils.stripHtml(value).match(/\b\w+\b/g).length >= params;
+                return utils.isEmpty(value) || utils.stripHtml(value).match(/\b\w+\b/g).length >= params;
             },
             $.mage.__('Please enter at least {0} words.')
         ],
         'range-words': [
             function (value, params) {
-                return utils.stripHtml(value).match(/\b\w+\b/g).length >= params[0] &&
-                    value.match(/bw+b/g).length < params[1];
+                var match = utils.stripHtml(value).match(/\b\w+\b/g) || [];
+
+                return utils.isEmpty(value) || match.length >= params[0] &&
+                    match.length <= params[1];
             },
             $.mage.__('Please enter between {0} and {1} words.')
         ],
         'letters-with-basic-punc': [
             function (value) {
-                return /^[a-z\-.,()\u0027\u0022\s]+$/i.test(value);
+                return utils.isEmpty(value) || /^[a-z\-.,()\u0027\u0022\s]+$/i.test(value);
             },
             $.mage.__('Letters or punctuation only please')
         ],
         'alphanumeric': [
             function (value) {
-                return /^\w+$/i.test(value);
+                return utils.isEmpty(value) || /^\w+$/i.test(value);
             },
             $.mage.__('Letters, numbers, spaces or underscores only please')
         ],
         'letters-only': [
             function (value) {
-                return /^[a-z]+$/i.test(value);
+                return utils.isEmpty(value) || /^[a-z]+$/i.test(value);
             },
             $.mage.__('Letters only please')
         ],
         'no-whitespace': [
             function (value) {
-                return /^\S+$/i.test(value);
+                return utils.isEmpty(value) || /^\S+$/i.test(value);
             },
             $.mage.__('No white space please')
         ],
         'zip-range': [
             function (value) {
-                return /^90[2-5]-\d{2}-\d{4}$/.test(value);
+                return utils.isEmpty(value) || /^90[2-5]-\d{2}-\d{4}$/.test(value);
             },
             $.mage.__('Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx')
         ],
         'integer': [
             function (value) {
-                return /^-?\d+$/.test(value);
+                return utils.isEmpty(value) || /^-?\d+$/.test(value);
             },
             $.mage.__('A positive or negative non-decimal number please')
         ],
         'vinUS': [
             function (value) {
+                if (utils.isEmpty(value)) {
+                    return true;
+                }
+
                 if (value.length !== 17) {
                     return false;
                 }
@@ -212,13 +219,13 @@ define([
         ],
         'time': [
             function (value) {
-                return /^([01]\d|2[0-3])(:[0-5]\d){0,2}$/.test(value);
+                return utils.isEmpty(value) || /^([01]\d|2[0-3])(:[0-5]\d){0,2}$/.test(value);
             },
             $.mage.__('Please enter a valid time, between 00:00 and 23:59')
         ],
         'time12h': [
             function (value) {
-                return /^((0?[1-9]|1[012])(:[0-5]\d){0,2}(\ [AP]M))$/i.test(value);
+                return utils.isEmpty(value) || /^((0?[1-9]|1[012])(:[0-5]\d){0,2}(\s[AP]M))$/i.test(value);
             },
             $.mage.__('Please enter a valid time, between 00:00 am and 12:00 pm')
         ],
@@ -226,43 +233,49 @@ define([
             function (value) {
                 value = value.replace(/\s+/g, '');
 
-                return value.length > 9 && value.match(/^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
+                return utils.isEmpty(value) || value.length > 9 &&
+                    value.match(/^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
             },
             $.mage.__('Please specify a valid phone number')
         ],
         'phoneUK': [
             function (value) {
-                return value.length > 9 && value.match(/^(\(?(0|\+44)[1-9]{1}\d{1,4}?\)?\s?\d{3,4}\s?\d{3,4})$/);
+                return utils.isEmpty(value) || value.length > 9 &&
+                    value.match(/^(\(?(0|\+44)[1-9]{1}\d{1,4}?\)?\s?\d{3,4}\s?\d{3,4})$/);
             },
             $.mage.__('Please specify a valid phone number')
         ],
         'mobileUK': [
             function (value) {
-                return value.length > 9 && value.match(/^((0|\+44)7\d{3}\s?\d{6})$/);
+                return utils.isEmpty(value) || value.length > 9 && value.match(/^((0|\+44)7\d{3}\s?\d{6})$/);
             },
             $.mage.__('Please specify a valid mobile number')
         ],
         'stripped-min-length': [
             function (value, param) {
-                return $(value).text().length >= param;
+                return _.isUndefined(value) || value.length === 0 || utils.stripHtml(value).length >= param;
             },
             $.mage.__('Please enter at least {0} characters')
         ],
         'email2': [
             function (value) {
-                return /^((([a-z]|\d|[!#\$%&\u0027\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&\u0027\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\u0022)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\u0022)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)*(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(value);//eslint-disable-line max-len
+                return utils.isEmpty(value) || /^((([a-z]|\d|[!#\$%&\u0027\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&\u0027\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\u0022)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\u0022)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)*(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(value);//eslint-disable-line max-len
             },
             $.validator.messages.email
         ],
         'url2': [
             function (value) {
-                return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&\u0027\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)*(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&\u0027\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&\u0027\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&\u0027\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&\u0027\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);//eslint-disable-line max-len
+                return utils.isEmpty(value) || /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&\u0027\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)*(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&\u0027\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&\u0027\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&\u0027\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&\u0027\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);//eslint-disable-line max-len
             },
             $.validator.messages.url
         ],
         'credit-card-types': [
             function (value, param) {
                 var validTypes;
+
+                if (utils.isEmpty(value)) {
+                    return true;
+                }
 
                 if (/[^0-9-]+/.test(value)) {
                     return false;
@@ -348,19 +361,19 @@ define([
         ],
         'ipv4': [
             function (value) {
-                return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/i.test(value);//eslint-disable-line max-len
+                return utils.isEmpty(value) || /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/i.test(value);//eslint-disable-line max-len
             },
             $.mage.__('Please enter a valid IP v4 address.')
         ],
         'ipv6': [
             function (value) {
-                return /^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$/i.test(value);//eslint-disable-line max-len
+                return utils.isEmpty(value) || /^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$/i.test(value);//eslint-disable-line max-len
             },
             $.mage.__('Please enter a valid IP v6 address.')
         ],
         'pattern': [
             function (value, param) {
-                return param.test(value);
+                return utils.isEmpty(value) || new RegExp(param).test(value);
             },
             $.mage.__('Invalid format.')
         ],
@@ -633,7 +646,7 @@ define([
         'validate-number': [
             function (value) {
                 return utils.isEmptyNoTrim(value) ||
-                    !isNaN(utils.parseNumber(value)) && /^\s*-?\d*(\.\d*)?\s*$/.test(value);
+                    !isNaN(utils.parseNumber(value)) && /^\s*-?\d*(,\d*)*(\.\d*)?\s*$/.test(value);
             },
             $.mage.__('Please enter a valid number in this field.')
         ],
@@ -752,6 +765,12 @@ define([
             },
             $.mage.__('Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.')//eslint-disable-line max-len
         ],
+        'validate-not-number-first': [
+            function (value) {
+                return utils.isEmptyNoTrim(value) || /^[^0-9-\.].*$/.test(value.trim());
+            },
+            $.mage.__('First character must be letter.')
+        ],
         'validate-date': [
             function (value, params, additionalParams) {
                 var test = moment(value, additionalParams.dateFormat);
@@ -836,7 +855,7 @@ define([
                     return validateCreditCard(value);
                 }
 
-                return false;
+                return true;
             },
             $.mage.__('Please enter a valid credit card number.')
         ],
@@ -877,9 +896,13 @@ define([
         ],
         'validate-per-page-value-list': [
             function (value) {
-                var isValid = !utils.isEmpty(value),
+                var isValid = utils.isEmpty(value),
                     values = value.split(','),
                     i;
+
+                if (isValid) {
+                    return true;
+                }
 
                 for (i = 0; i < values.length; i++) {
                     if (!/^[0-9]+$/.test(values[i])) {
@@ -907,8 +930,10 @@ define([
         ],
         'validate-item-quantity': [
             function (value, params) {
-                // obtain values for validation
-                var qty = utils.parseNumber(value),
+                var validator = this,
+                    result = false,
+                    // obtain values for validation
+                    qty = utils.parseNumber(value),
                     isMinAllowedValid = typeof params.minAllowed === 'undefined' ||
                         qty >= utils.parseNumber(params.minAllowed),
                     isMaxAllowedValid = typeof params.maxAllowed === 'undefined' ||
@@ -916,9 +941,42 @@ define([
                     isQtyIncrementsValid = typeof params.qtyIncrements === 'undefined' ||
                         qty % utils.parseNumber(params.qtyIncrements) === 0;
 
-                return isMaxAllowedValid && isMinAllowedValid && isQtyIncrementsValid && qty > 0;
-            },
-            ''
+                result = qty > 0;
+
+                if (result === false) {
+                    validator.itemQtyErrorMessage = $.mage.__('Please enter a quantity greater than 0.');//eslint-disable-line max-len
+
+                    return result;
+                }
+
+                result = isMinAllowedValid;
+
+                if (result === false) {
+                    validator.itemQtyErrorMessage = $.mage.__('The fewest you may purchase is %1.').replace('%1', params.minAllowed);//eslint-disable-line max-len
+
+                    return result;
+                }
+
+                result = isMaxAllowedValid;
+
+                if (result === false) {
+                    validator.itemQtyErrorMessage = $.mage.__('The maximum you may purchase is %1.').replace('%1', params.maxAllowed);//eslint-disable-line max-len
+
+                    return result;
+                }
+
+                result = isQtyIncrementsValid;
+
+                if (result === false) {
+                    validator.itemQtyErrorMessage = $.mage.__('You can buy this product only in quantities of %1 at a time.').replace('%1', params.qtyIncrements);//eslint-disable-line max-len
+
+                    return result;
+                }
+
+                return result;
+            }, function () {
+                return this.itemQtyErrorMessage;
+            }
         ],
         'equalTo': [
             function (value, param) {
@@ -961,6 +1019,22 @@ define([
                 return moment.utc(value, params.dateFormat).unix() <= maxValue;
             },
             $.mage.__('The date is not within the specified range.')
+        ],
+        'validate-color': [
+            function (value) {
+                if (value === '') {
+                    return true;
+                }
+
+                return tinycolor(value).isValid();
+            },
+            $.mage.__('Wrong color format. Please specify color in HEX, RGBa, HSVa, HSLa or use color name.')
+        ],
+        'blacklist-url': [
+            function (value, param) {
+                return new RegExp(param).test(value);
+            },
+            $.mage.__('This link is not allowed.')
         ]
     }, function (data) {
         return {

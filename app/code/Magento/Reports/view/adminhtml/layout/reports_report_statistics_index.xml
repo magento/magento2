@@ -42,7 +42,7 @@
                             <argument name="filter_visibility" xsi:type="string">0</argument>
                             <argument name="id" xsi:type="string">gridRefreshStatistics</argument>
                         </arguments>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="report">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.reportrefresh.statistics.columnSet.report" as="report">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Report</argument>
                                 <argument name="type" xsi:type="string">string</argument>
@@ -53,7 +53,7 @@
                                 <argument name="header_css_class" xsi:type="string">col-report</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="comment">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.reportrefresh.statistics.columnSet.comment" as="comment">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Description</argument>
                                 <argument name="type" xsi:type="string">string</argument>
@@ -64,7 +64,7 @@
                                 <argument name="header_css_class" xsi:type="string">col-description</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="updated_at">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.reportrefresh.statistics.columnSet.updated_at" as="updated_at">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Updated</argument>
                                 <argument name="type" xsi:type="string">datetime</argument>

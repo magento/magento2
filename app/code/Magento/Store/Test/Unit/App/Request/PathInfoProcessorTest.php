@@ -12,44 +12,83 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Store\App\Request\PathInfoProcessor
      */
-    protected $_model;
+    private $model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeManagerMock;
+    private $requestMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_requestMock;
+    private $validatorConfigMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $processorConfigMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $pathInfoMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeRepositoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storePathInfoValidator;
 
     /**
      * @var string
      */
-    protected $_pathInfo = '/storeCode/node_one/';
+    protected $pathInfo = '/storeCode/node_one/';
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
-        $this->_model = new \Magento\Store\App\Request\PathInfoProcessor($this->_storeManagerMock);
+
+        $this->validatorConfigMock = $this->createMock(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+
+        $this->processorConfigMock = $this->createMock(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+
+        $this->storeRepositoryMock = $this->createMock(\Magento\Store\Api\StoreRepositoryInterface::class);
+
+        $this->pathInfoMock = $this->getMockBuilder(\Magento\Framework\App\Request\PathInfo ::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->storePathInfoValidator = new \Magento\Store\App\Request\StorePathInfoValidator(
+            $this->validatorConfigMock,
+            $this->storeRepositoryMock,
+            $this->pathInfoMock
+        );
+
+        $this->model = new \Magento\Store\App\Request\PathInfoProcessor(
+            $this->storePathInfoValidator,
+            $this->validatorConfigMock
+        );
     }
 
-    public function testProcessIfStoreExistsAndIsNotDirectAcccessToFrontName()
+    public function testProcessIfStoreExistsAndIsNotDirectAccessToFrontName()
     {
+        $this->validatorConfigMock->expects($this->any())->method('getValue')->willReturn(true);
+
         $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->_storeManagerMock->expects(
-            $this->once()
+        $this->storeRepositoryMock->expects(
+            $this->atLeastOnce()
         )->method(
-            'getStore'
+            'getActiveStoreByCode'
         )->with(
             'storeCode'
         )->willReturn($store);
-        $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
-        $this->_requestMock->expects(
-            $this->once()
+        $this->requestMock->expects(
+            $this->atLeastOnce()
         )->method(
             'isDirectAccessFrontendName'
         )->with(
@@ -57,67 +96,69 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(false)
         );
-        $this->_storeManagerMock->expects($this->once())->method('setCurrentStore')->with('storeCode');
-        $this->assertEquals('/node_one/', $this->_model->process($this->_requestMock, $this->_pathInfo));
+        $this->assertEquals('/node_one/', $this->model->process($this->requestMock, $this->pathInfo));
     }
 
-    public function testProcessIfStoreExistsAndDirectAcccessToFrontName()
+    public function testProcessIfStoreExistsAndDirectAccessToFrontName()
     {
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->_storeManagerMock->expects(
-            $this->once()
+        $this->validatorConfigMock->expects($this->atLeastOnce())->method('getValue')->willReturn(true);
+
+        $this->storeRepositoryMock->expects(
+            $this->any()
         )->method(
-            'getStore'
-        )->with(
-            'storeCode'
-        )->willReturn($store);
-        $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
-        $this->_requestMock->expects(
-            $this->once()
+            'getActiveStoreByCode'
+        );
+        $this->requestMock->expects(
+            $this->atLeastOnce()
         )->method(
             'isDirectAccessFrontendName'
         )->with(
             'storeCode'
-        )->will(
-            $this->returnValue(true)
-        );
-        $this->_requestMock->expects($this->once())->method('setActionName')->with('noroute');
-        $this->assertEquals($this->_pathInfo, $this->_model->process($this->_requestMock, $this->_pathInfo));
+        )->willReturn(true);
+        $this->requestMock->expects($this->once())->method('setActionName')->with('noroute');
+        $this->assertEquals($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
     }
 
     public function testProcessIfStoreIsEmpty()
     {
+        $this->validatorConfigMock->expects($this->any())->method('getValue')->willReturn(true);
+
         $path = '/0/node_one/';
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->_storeManagerMock->expects(
-            $this->once()
+        $this->storeRepositoryMock->expects(
+            $this->never()
         )->method(
-            'getStore'
-        )->with(
-            '0'
-        )->willReturn($store);
-        $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
-        $this->_requestMock->expects(
-            $this->once()
+            'getActiveStoreByCode'
+        );
+        $this->requestMock->expects(
+            $this->never()
         )->method(
             'isDirectAccessFrontendName'
-        )->with(
-            '0'
-        )->will(
-            $this->returnValue(true)
         );
-        $this->_requestMock->expects($this->never())->method('setActionName');
-        $this->assertEquals($path, $this->_model->process($this->_requestMock, $path));
+        $this->requestMock->expects($this->never())->method('setActionName');
+        $this->assertEquals($path, $this->model->process($this->requestMock, $path));
     }
 
     public function testProcessIfStoreCodeIsNotExist()
     {
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->_storeManagerMock->expects($this->once())->method('getStore')->with('storeCode')
-            ->willThrowException(new NoSuchEntityException());
-        $store->expects($this->never())->method('isUseStoreInUrl');
-        $this->_requestMock->expects($this->never())->method('isDirectAccessFrontendName');
+        $this->validatorConfigMock->expects($this->atLeastOnce())->method('getValue')->willReturn(true);
 
-        $this->assertEquals($this->_pathInfo, $this->_model->process($this->_requestMock, $this->_pathInfo));
+        $this->storeRepositoryMock->expects($this->once())->method('getActiveStoreByCode')->with('storeCode')
+            ->willThrowException(new NoSuchEntityException());
+        $this->requestMock->expects($this->never())->method('isDirectAccessFrontendName');
+
+        $this->assertEquals($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
+    }
+
+    public function testProcessIfStoreUrlNotEnabled()
+    {
+        $this->validatorConfigMock->expects($this->at(0))->method('getValue')->willReturn(true);
+
+        $this->validatorConfigMock->expects($this->at(1))->method('getValue')->willReturn(true);
+
+        $this->validatorConfigMock->expects($this->at(2))->method('getValue')->willReturn(false);
+
+        $this->storeRepositoryMock->expects($this->once())->method('getActiveStoreByCode')->willReturn(1);
+
+        $this->assertEquals($this->pathInfo, $this->model->process($this->requestMock, $this->pathInfo));
     }
 }

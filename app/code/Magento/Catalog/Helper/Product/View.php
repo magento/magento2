@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Helper\Product;
 
 use Magento\Framework\View\Result\Page as ResultPage;
@@ -62,6 +60,11 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     protected $categoryUrlPathGenerator;
 
     /**
+     * @var \Magento\Framework\Stdlib\StringUtils
+     */
+    private $string;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -72,6 +75,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param array $messageGroups
+     * @param \Magento\Framework\Stdlib\StringUtils|null $string
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -81,7 +85,8 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        array $messageGroups = []
+        array $messageGroups = [],
+        \Magento\Framework\Stdlib\StringUtils $string = null
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogDesign = $catalogDesign;
@@ -90,7 +95,56 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $this->messageGroups = $messageGroups;
         $this->messageManager = $messageManager;
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
+        $this->string = $string ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Stdlib\StringUtils::class);
         parent::__construct($context);
+    }
+
+    /**
+     * Add meta information from product to layout
+     *
+     * @param \Magento\Framework\View\Result\Page $resultPage
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Framework\View\Result\Page
+     */
+    private function preparePageMetadata(ResultPage $resultPage, $product)
+    {
+        $pageLayout = $resultPage->getLayout();
+        $pageConfig = $resultPage->getConfig();
+
+        $metaTitle = $product->getMetaTitle();
+        $pageConfig->setMetaTitle($metaTitle);
+        $pageConfig->getTitle()->set($metaTitle ?: $product->getName());
+
+        $keyword = $product->getMetaKeyword();
+        $currentCategory = $this->_coreRegistry->registry('current_category');
+        if ($keyword) {
+            $pageConfig->setKeywords($keyword);
+        } elseif ($currentCategory) {
+            $pageConfig->setKeywords($product->getName());
+        }
+
+        $description = $product->getMetaDescription();
+        if ($description) {
+            $pageConfig->setDescription($description);
+        } else {
+            $pageConfig->setDescription($this->string->substr(strip_tags($product->getDescription()), 0, 255));
+        }
+
+        if ($this->_catalogProduct->canUseCanonicalTag()) {
+            $pageConfig->addRemotePageAsset(
+                $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]),
+                'canonical',
+                ['attributes' => ['rel' => 'canonical']]
+            );
+        }
+
+        $pageMainTitle = $pageLayout->getBlock('page.main.title');
+        if ($pageMainTitle) {
+            $pageMainTitle->setPageTitle($product->getName());
+        }
+
+        return $this;
     }
 
     /**
@@ -122,18 +176,18 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         // Load default page handles and page configurations
         if ($params && $params->getBeforeHandles()) {
             foreach ($params->getBeforeHandles() as $handle) {
-                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
                 $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
-
-        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
+    
         $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
+        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
 
         if ($params && $params->getAfterHandles()) {
             foreach ($params->getAfterHandles() as $handle) {
-                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
                 $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
 
@@ -227,6 +281,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         $this->initProductLayout($resultPage, $product, $params);
+        $this->preparePageMetadata($resultPage, $product);
         return $this;
     }
 }

@@ -38,7 +38,7 @@ class AssertTransactionStatus extends AbstractConstraint
         foreach ($transactions as $transaction) {
             foreach ($actualTransactions as $actualTransaction) {
                 if ($actualTransaction['transactionType'] === $transaction['transactionType']) {
-                    \PHPUnit_Framework_Assert::assertEquals(
+                    \PHPUnit\Framework\Assert::assertEquals(
                         $transaction['statusIsClosed'],
                         $actualTransaction['statusIsClosed'],
                         'The ' . $transaction['transactionType'] . ' transaction status is not closed.'

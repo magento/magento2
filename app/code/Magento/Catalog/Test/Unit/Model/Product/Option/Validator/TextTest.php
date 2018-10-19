@@ -18,10 +18,14 @@ class TextTest extends \PHPUnit\Framework\TestCase
      */
     protected $valueMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
-        $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price();
+        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price($storeManagerMock);
         $config = [
             [
                 'label' => 'group label 1',
@@ -53,23 +57,33 @@ class TextTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testIsValidSuccess()
     {
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
         $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
-        $this->valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue('fixed'));
-        $this->valueMock->expects($this->once())->method('getPrice')->will($this->returnValue(10));
+        $this->valueMock->method('getPriceType')
+            ->willReturn('fixed');
+        $this->valueMock->method('getPrice')
+            ->willReturn(10);
         $this->valueMock->expects($this->once())->method('getMaxCharacters')->will($this->returnValue(10));
         $this->assertTrue($this->validator->isValid($this->valueMock));
         $this->assertEmpty($this->validator->getMessages());
     }
 
+    /**
+     * @return void
+     */
     public function testIsValidWithNegativeMaxCharacters()
     {
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
         $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
-        $this->valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue('fixed'));
-        $this->valueMock->expects($this->once())->method('getPrice')->will($this->returnValue(10));
+        $this->valueMock->method('getPriceType')
+            ->willReturn('fixed');
+        $this->valueMock->method('getPrice')
+            ->willReturn(10);
         $this->valueMock->expects($this->once())->method('getMaxCharacters')->will($this->returnValue(-10));
         $messages = [
             'option values' => 'Invalid option value',

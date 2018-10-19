@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\DataProvider\Modifier;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -33,7 +34,7 @@ class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
      */
     public function __construct(
         ModifierFactory $factory,
-        array $modifiers
+        array $modifiers = []
     ) {
         $this->factory = $factory;
         $this->modifiers = $this->sort($modifiers);
@@ -63,11 +64,13 @@ class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
 
         foreach ($this->modifiers as $modifier) {
             if (empty($modifier['class'])) {
-                throw new LocalizedException(__('Parameter "class" must be present.'));
+                throw new LocalizedException(__('The parameter "class" is missing. Set the "class" and try again.'));
             }
 
             if (empty($modifier['sortOrder'])) {
-                throw new LocalizedException(__('Parameter "sortOrder" must be present.'));
+                throw new LocalizedException(
+                    __('The parameter "sortOrder" is missing. Set the "sortOrder" and try again.')
+                );
             }
 
             $this->modifiersInstances[$modifier['class']] = $this->factory->create($modifier['class']);
@@ -85,14 +88,7 @@ class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
     protected function sort(array $data)
     {
         usort($data, function (array $a, array $b) {
-            $a['sortOrder'] = $this->getSortOrder($a);
-            $b['sortOrder'] = $this->getSortOrder($b);
-
-            if ($a['sortOrder'] == $b['sortOrder']) {
-                return 0;
-            }
-
-            return ($a['sortOrder'] < $b['sortOrder']) ? -1 : 1;
+            return $this->getSortOrder($a) <=> $this->getSortOrder($b);
         });
 
         return $data;

@@ -24,7 +24,7 @@
     <preference for="Magento\Eav\Api\Data\AttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Eav\Api\Data\AttributeSetSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface" type="Magento\Eav\Model\EavCustomAttributeTypeLocator" />
+    <preference for="Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface" type="Magento\Eav\Model\TypeLocator" />
 
     <type name="Magento\Eav\Model\Entity\Attribute\Config">
         <arguments>
@@ -46,10 +46,35 @@
     <type name="Magento\Eav\Model\ResourceModel\Entity\Attribute">
         <plugin name="storeLabelCaching" type="Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute" />
     </type>
-    <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
+    <type name="Magento\Framework\Webapi\ServiceTypeToEntityTypeMap">
         <arguments>
-            <argument name="serviceEntityTypeMap" xsi:type="array" />
-            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array" />
+            <argument name="serviceTypeToEntityTypeMap" xsi:type="array" />
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\TypeLocator">
+        <arguments>
+            <argument name="typeLocators" xsi:type="array">
+                <item name="simpleType" sortOrder="50" xsi:type="object">Magento\Eav\Model\TypeLocator\SimpleType</item>
+                <item name="complexType" sortOrder="10" xsi:type="object">Magento\Eav\Model\TypeLocator\ComplexType</item>
+                <item name="serviceClassType" sortOrder="0" xsi:type="object">Magento\Eav\Model\TypeLocator\ServiceClassLocator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\TypeLocator\ComplexType">
+        <arguments>
+            <argument name="backendModelToAttributeTypeMap" xsi:type="array">
+                <item name="Magento\Eav\Model\Attribute\Data\Text" xsi:type="string">string</item>
+                <item name="Magento\Eav\Model\Attribute\Data\Date" xsi:type="string">string</item>
+                <item name="Magento\Eav\Model\Attribute\Data\Boolean" xsi:type="string">boolean</item>
+                <item name="Magento\Eav\Model\Attribute\Data\File" xsi:type="string">string</item>
+                <item name="Magento\Eav\Model\Attribute\Data\Hidden" xsi:type="string">string</item>
+                <item name="Magento\Eav\Model\Attribute\Data\Image" xsi:type="string">Magento\Framework\Api\Data\ImageContentInterface</item>
+                <item name="Magento\Eav\Model\Attribute\Data\Multiline" xsi:type="string">string</item>
+                <item name="Magento\Eav\Model\Attribute\Data\Multiselect" xsi:type="string">string</item>
+                <item name="Magento\Eav\Model\Attribute\Data\Select" xsi:type="string">string</item>
+                <item name="Magento\Eav\Model\Attribute\Data\Textarea" xsi:type="string">string</item>
+                <item name="Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend" xsi:type="string">string</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\Attribute">

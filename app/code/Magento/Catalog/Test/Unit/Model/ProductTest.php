@@ -4,18 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Catalog\Api\Data\ProductExtensionFactory;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Product Test
@@ -81,6 +78,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_priceInfoMock;
+
+    /**
+     * @var \Magento\Catalog\Model\FilterProductCustomAttribute|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filterCustomAttribute;
 
     /**
      * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
@@ -201,6 +203,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $extensionAttributes;
 
     /**
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eavConfig;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -250,7 +257,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $contextMock = $this->createPartialMock(
             \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'], [], '', false
+            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'],
+            [],
+            '',
+            false
         );
         $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($this->appStateMock));
         $contextMock->expects($this->any())
@@ -323,9 +333,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $this->mediaGalleryEntryFactoryMock =
             $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
 
         $this->metadataServiceMock = $this->createMock(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
         $this->attributeValueFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
@@ -342,11 +352,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::class
             );
 
-        $this->mediaGalleryEntryConverterPoolMock->expects($this->any())->method('getConverterByMediaType')->willReturn(
-            $this->converterMock
-        );
+        $this->mediaGalleryEntryConverterPoolMock->expects($this->any())->method('getConverterByMediaType')
+            ->willReturn($this->converterMock);
         $this->productLinkRepositoryMock = $this->getMockBuilder(
-            \Magento\Catalog\Api\ProductLinkRepositoryInterface::class)
+            \Magento\Catalog\Api\ProductLinkRepositoryInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->extensionAttributesFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)
@@ -360,6 +370,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->mediaConfig = $this->createMock(\Magento\Catalog\Model\Product\Media\Config::class);
+        $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $this->extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem'])
@@ -368,6 +379,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('create')
             ->willReturn($this->extensionAttributes);
+
+        $this->filterCustomAttribute = $this->createTestProxy(
+            \Magento\Catalog\Model\FilterProductCustomAttribute::class
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -397,7 +412,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 'catalogProductMediaConfig' => $this->mediaConfig,
                 '_filesystem' => $this->filesystemMock,
                 '_collectionFactory' => $this->collectionFactoryMock,
-                'data' => ['id' => 1]
+                'data' => ['id' => 1],
+                'eavConfig' => $this->eavConfig,
+                'filterCustomAttribute' => $this->filterCustomAttribute
             ]
         );
     }
@@ -502,6 +519,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($initCategoryCollection, $result);
     }
 
+    /**
+     * @return array
+     */
     public function getCategoryCollectionCollectionNullDataProvider()
     {
         return [
@@ -612,13 +632,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->model->reindex();
     }
 
+    /**
+     * @return array
+     */
     public function getProductReindexProvider()
     {
-        return array(
+        return [
             'set 1' => [true, false, 1, 1],
             'set 2' => [true, true, 1, 0],
             'set 3' => [false, false, 1, 0]
-        );
+        ];
     }
 
     public function testPriceReindexCallback()
@@ -858,13 +881,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testSave()
     {
-        $this->imageCache->expects($this->once())
-            ->method('generate')
-            ->with($this->model);
-        $this->imageCacheFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->imageCache);
-
+        $collection = $this->createMock(\Magento\Framework\Data\Collection::class);
+        $collection->method('count')->willReturn(1);
+        $collection->method('getIterator')->willReturn(new \ArrayObject([]));
+        $this->collectionFactoryMock->method('create')->willReturn($collection);
         $this->model->setIsDuplicate(false);
         $this->configureSaveTest();
         $this->model->beforeSave();
@@ -890,13 +910,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveAndDuplicate()
     {
-        $this->imageCache->expects($this->once())
-            ->method('generate')
-            ->with($this->model);
-        $this->imageCacheFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->imageCache);
-
+        $collection = $this->createMock(\Magento\Framework\Data\Collection::class);
+        $collection->method('count')->willReturn(1);
+        $collection->method('getIterator')->willReturn(new \ArrayObject([]));
+        $this->collectionFactoryMock->method('create')->willReturn($collection);
         $this->model->setIsDuplicate(true);
         $this->configureSaveTest();
         $this->model->beforeSave();
@@ -1159,19 +1176,19 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         ];
 
         $entryMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class)
-                          ->setMethods(
-                              [
-                                  'getId',
-                                  'getFile',
-                                  'getLabel',
-                                  'getPosition',
-                                  'isDisabled',
-                                  'types',
-                                  'getContent',
-                                  'getMediaType'
-                              ]
-                          )
-                          ->getMockForAbstractClass();
+            ->setMethods(
+                [
+                    'getId',
+                    'getFile',
+                    'getLabel',
+                    'getPosition',
+                    'isDisabled',
+                    'types',
+                    'getContent',
+                    'getMediaType'
+                ]
+            )
+            ->getMockForAbstractClass();
 
         $result = [
             'value_id' => 1,
@@ -1206,7 +1223,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                     'media_type' => 'image',
                 ],
                 [
-                    'value_id' => 1,
+                    'value_id' => 3,
                     'file' => 'imageFile.jpg',
                 ],
                 [
@@ -1233,30 +1250,31 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             'path' => '/var/www/html/pub/smallImageFile.jpg',
         ]);
 
-        $directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filesystemMock->expects($this->once())->method('getDirectoryRead')->willReturn($directoryMock);
+        $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $directoryMock->method('getAbsolutePath')->willReturnOnConsecutiveCalls(
+            '/var/www/html/pub/imageFile.jpg',
+            '/var/www/html/pub/smallImageFile.jpg'
+        );
+        $this->mediaConfig->method('getMediaUrl')->willReturnOnConsecutiveCalls(
+            'http://magento.dev/pub/imageFile.jpg',
+            'http://magento.dev/pub/smallImageFile.jpg'
+        );
+        $this->filesystemMock->method('getDirectoryRead')->willReturn($directoryMock);
         $this->model->setData('media_gallery', $mediaEntries);
-        $imagesCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($imagesCollectionMock);
-        $imagesCollectionMock->expects($this->at(2))->method('getItemById')->with(1)->willReturn($expectedImageDataObject);
-        $this->mediaConfig->expects($this->at(0))
-            ->method('getMediaUrl')
-            ->willReturn('http://magento.dev/pub/imageFile.jpg');
-        $directoryMock->expects($this->at(0))
-            ->method('getAbsolutePath')
-            ->willReturn('/var/www/html/pub/imageFile.jpg');
-        $this->mediaConfig->expects($this->at(2))
-            ->method('getMediaUrl')
-            ->willReturn('http://magento.dev/pub/smallImageFile.jpg');
-        $directoryMock->expects($this->at(1))
-            ->method('getAbsolutePath')
-            ->willReturn('/var/www/html/pub/smallImageFile.jpg');
-        $imagesCollectionMock->expects($this->at(1))->method('addItem')->with($expectedImageDataObject);
-        $imagesCollectionMock->expects($this->at(4))->method('addItem')->with($expectedSmallImageDataObject);
+        $imagesCollectionMock = $this->createMock(\Magento\Framework\Data\Collection::class);
+        $imagesCollectionMock->method('count')->willReturn(0);
+        $imagesCollectionMock->method('getItemById')->willReturnMap(
+            [
+                [1, null],
+                [2, null],
+                [3, 'not_null_skeep_foreache'],
+            ]
+        );
+        $imagesCollectionMock->expects(self::exactly(2))->method('addItem')->withConsecutive(
+            $expectedImageDataObject,
+            $expectedSmallImageDataObject
+        );
+        $this->collectionFactoryMock->method('create')->willReturn($imagesCollectionMock);
 
         $this->model->getMediaGalleryImages();
     }
@@ -1264,19 +1282,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetCustomAttributes()
     {
         $priceCode = 'price';
-        $colorAttributeCode = 'color';
-        $interfaceAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $interfaceAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($priceCode);
-        $colorAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $colorAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($colorAttributeCode);
-        $customAttributesMetadata = [$interfaceAttribute, $colorAttribute];
-
-        $this->metadataServiceMock->expects($this->once())
-            ->method('getCustomAttributesMetadata')
+        $customAttributeCode = 'color';
+        $initialCustomAttributeValue = 'red';
+        $newCustomAttributeValue = 'blue';
+        $customAttributesMetadata = [$priceCode => 'attribute1', $customAttributeCode => 'attribute2'];
+        $this->metadataServiceMock->expects($this->never())->method('getCustomAttributesMetadata');
+        $this->eavConfig->expects($this->once())
+            ->method('getEntityAttributes')
             ->willReturn($customAttributesMetadata);
         $this->model->setData($priceCode, 10);
 
@@ -1284,20 +1296,26 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $this->model->getCustomAttributes());
 
         //Set the color attribute;
-        $this->model->setData($colorAttributeCode, "red");
+        $this->model->setData($customAttributeCode, $initialCustomAttributeValue);
         $attributeValue = new \Magento\Framework\Api\AttributeValue();
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
-        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
-        $this->assertEquals("red", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+        $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
+        $this->assertEquals(
+            $initialCustomAttributeValue,
+            $this->model->getCustomAttribute($customAttributeCode)->getValue()
+        );
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->model->setData($colorAttributeCode, "blue");
+        $this->model->setCustomAttribute($customAttributeCode, $newCustomAttributeValue);
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
-        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
-        $this->assertEquals("blue", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+        $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
+        $this->assertEquals(
+            $newCustomAttributeValue,
+            $this->model->getCustomAttribute($customAttributeCode)->getValue()
+        );
     }
 
     /**
@@ -1393,7 +1411,20 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $qty = 1;
         $this->model->setQty($qty);
         $this->model->setFinalPrice($finalPrice);
-        $this->productTypeInstanceMock->expects($this->never())->method('priceFactory');
+        $productTypePriceMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Type\Price::class,
+            ['getFinalPrice']
+        );
+        $productTypePriceMock->expects($this->any())
+            ->method('getFinalPrice')
+            ->with($qty, $this->model)
+            ->willReturn($finalPrice);
+
+        $this->productTypeInstanceMock->expects($this->any())
+            ->method('priceFactory')
+            ->with($this->model->getTypeId())
+            ->willReturn($productTypePriceMock);
+
         $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
     }
 

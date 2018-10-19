@@ -109,7 +109,7 @@ define([
 
             $('body').trigger('processStart');
 
-            $.get(self.nonceUrl, {
+            $.getJSON(self.nonceUrl, {
                 'public_hash': self.publicHash
             }).done(function (response) {
                 self.setPaymentDetails(response.paymentMethodNonce);

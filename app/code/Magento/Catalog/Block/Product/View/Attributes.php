@@ -67,12 +67,11 @@ class Attributes extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * $excludeAttr is optional array of attribute codes to
-     * exclude them from additional data array
+     * $excludeAttr is optional array of attribute codes to exclude them from additional data array
      *
      * @param array $excludeAttr
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAdditionalData(array $excludeAttr = [])
     {
@@ -80,18 +79,16 @@ class Attributes extends \Magento\Framework\View\Element\Template
         $product = $this->getProduct();
         $attributes = $product->getAttributes();
         foreach ($attributes as $attribute) {
-            if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
+            if ($this->isVisibleOnFrontend($attribute, $excludeAttr)) {
                 $value = $attribute->getFrontend()->getValue($product);
 
-                if (!$product->hasData($attribute->getAttributeCode())) {
-                    $value = __('N/A');
-                } elseif ((string)$value == '') {
-                    $value = __('No');
+                if ($value instanceof Phrase) {
+                    $value = (string)$value;
                 } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
                     $value = $this->priceCurrency->convertAndFormat($value);
                 }
 
-                if ($value instanceof Phrase || (is_string($value) && strlen($value))) {
+                if (is_string($value) && strlen($value)) {
                     $data[$attribute->getAttributeCode()] = [
                         'label' => __($attribute->getStoreLabel()),
                         'value' => $value,
@@ -101,5 +98,19 @@ class Attributes extends \Magento\Framework\View\Element\Template
             }
         }
         return $data;
+    }
+
+    /**
+     * Determine if we should display the attribute on the front-end
+     *
+     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param array $excludeAttr
+     * @return bool
+     */
+    protected function isVisibleOnFrontend(
+        \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,
+        array $excludeAttr
+    ) {
+        return ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr));
     }
 }

@@ -30,6 +30,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @deprecated since 2.3.0 in favor of stateful global objects elimination.
      */
     private $registry;
 
@@ -298,6 +299,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedTemplateStyles, $model->getTemplateStyles());
     }
 
+    /**
+     * @return array
+     */
     public function loadDefaultDataProvider()
     {
         return [
@@ -453,6 +457,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $model->isValidForSend());
     }
 
+    /**
+     * @return array
+     */
     public function isValidForSendDataProvider()
     {
         return [
@@ -548,6 +555,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $model->getVariablesOptionArray($withGroup));
     }
 
+    /**
+     * @return array
+     */
     public function getVariablesOptionArrayDataProvider()
     {
         return [
@@ -648,6 +658,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($model->getUseAbsoluteLinks());
     }
 
+    /**
+     * @return array
+     */
     public function processTemplateVariable()
     {
         return [
@@ -744,6 +757,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $model->getType());
     }
 
+    /**
+     * @return array
+     */
     public function getTypeDataProvider()
     {
         return [['text', 1], ['html', 2]];

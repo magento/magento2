@@ -45,6 +45,10 @@
                 <item name="Ship" xsi:type="string">Magento_Sales::ship</item>
                 <item name="Comment" xsi:type="string">Magento_Sales::comment</item>
                 <item name="Send Sales Emails" xsi:type="string">Magento_Sales::emails</item>
+                <item name="System" xsi:type="string">Magento_Backend::system</item>
+                <item name="Other Settings" xsi:type="string">Magento_Backend::system_other_settings</item>
+                <item name="Notifications" xsi:type="string">Magento_AdminNotification::adminnotification</item>
+                <item name="Show list" xsi:type="string">Magento_AdminNotification::show_list</item>
             </field>
         </dataset>
 

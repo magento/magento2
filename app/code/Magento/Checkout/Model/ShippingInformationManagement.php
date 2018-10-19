@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Model;
 
 use Magento\Framework\Exception\InputException;
@@ -151,7 +152,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         }
 
         if (!$address->getCountryId()) {
-            throw new StateException(__('Shipping address is not set'));
+            throw new StateException(__('The shipping address is missing. Set the address and try again.'));
         }
 
         /** @var \Magento\Quote\Model\Quote $quote */
@@ -169,7 +170,9 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save shipping information. Please check input data.'));
+            throw new InputException(
+                __('The shipping information was unable to be saved. Verify the input data and try again.')
+            );
         }
 
         $shippingAddress = $quote->getShippingAddress();
@@ -198,7 +201,9 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     protected function validateQuote(\Magento\Quote\Model\Quote $quote)
     {
         if (0 == $quote->getItemsCount()) {
-            throw new InputException(__('Shipping method is not applicable for empty cart'));
+            throw new InputException(
+                __("The shipping method can't be set for an empty cart. Add an item to cart and try again.")
+            );
         }
     }
 

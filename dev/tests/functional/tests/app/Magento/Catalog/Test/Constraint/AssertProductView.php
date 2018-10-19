@@ -48,19 +48,19 @@ class AssertProductView extends AbstractConstraint
         $name = $viewBlock->getProductName();
         $sku = $viewBlock->getProductSku();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $product->getName(),
             $name,
             'Product name on product view page is not correct.'
         );
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $product->getSku(),
             $sku,
             'Product sku on product view page is not correct.'
         );
 
         if (isset($price['price_regular_price'])) {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 number_format($product->getPrice(), 2),
                 $price['price_regular_price'],
                 'Product regular price on product view page is not correct.'
@@ -73,7 +73,7 @@ class AssertProductView extends AbstractConstraint
         }
 
         if ($priceComparing && isset($price['price_special_price'])) {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 number_format($priceComparing, 2),
                 $price['price_special_price'],
                 'Product special price on product view page is not correct.'

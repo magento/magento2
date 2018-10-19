@@ -18,9 +18,9 @@ class TransactionSubmitForSettlement extends AbstractTransaction
      */
     protected function process(array $data)
     {
-        return  $this->adapter->submitForSettlement(
-            $data[CaptureDataBuilder::TRANSACTION_ID],
-            $data[PaymentDataBuilder::AMOUNT]
-        );
+        $storeId = $data['store_id'] ?? null;
+
+        return  $this->adapterFactory->create($storeId)
+            ->submitForSettlement($data[CaptureDataBuilder::TRANSACTION_ID], $data[PaymentDataBuilder::AMOUNT]);
     }
 }

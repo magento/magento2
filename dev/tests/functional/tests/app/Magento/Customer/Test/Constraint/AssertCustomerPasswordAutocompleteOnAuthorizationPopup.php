@@ -29,7 +29,7 @@ class AssertCustomerPasswordAutocompleteOnAuthorizationPopup extends AbstractCon
         $cartPage->open();
         $cartPage->getProceedToCheckoutBlock()->proceedToCheckout();
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $checkoutPage->getAuthenticationPopupBlock()->isPasswordAutocompleteOff(),
             'Password field autocomplete is not off.'
         );

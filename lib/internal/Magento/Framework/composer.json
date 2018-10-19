@@ -2,38 +2,48 @@
     "name": "magento/framework",
     "description": "N/A",
     "type": "magento2-library",
-    "version": "100.3.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "ext-spl": "*",
-        "ext-dom": "*",
-        "ext-simplexml": "*",
-        "ext-mcrypt": "*",
-        "ext-hash": "*",
+        "php": "~7.1.3||~7.2.0",
         "ext-curl": "*",
-        "ext-iconv": "*",
+        "ext-dom": "*",
         "ext-gd": "*",
+        "ext-hash": "*",
+        "ext-iconv": "*",
         "ext-openssl": "*",
-        "lib-libxml": "*",
+        "ext-simplexml": "*",
+        "ext-spl": "*",
         "ext-xsl": "*",
-        "symfony/process": "~2.1",
-        "colinmollenhour/php-redis-session-abstract": "~1.2.2",
-        "composer/composer": "1.4.1",
+        "ext-bcmath": "*",
+        "lib-libxml": "*",
+        "colinmollenhour/php-redis-session-abstract": "~1.4.0",
+        "composer/composer": "^1.6",
+        "magento/zendframework1": "~1.14.0",
         "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
-        "symfony/console": "~2.3, !=2.7.0",
-        "tedivm/jshrink": "~1.1.0",
-        "zendframework/zend-code": "^3.1.0",
+        "symfony/console": "~4.1.0",
+        "symfony/process": "~4.1.0",
+        "tedivm/jshrink": "~1.3.0",
+        "zendframework/zend-code": "~3.3.0",
         "zendframework/zend-crypt": "^2.6.0",
-        "zendframework/zend-mvc": "~2.6.3",
-        "zendframework/zend-uri": "^2.5.1",
-        "zendframework/zend-validator": "^2.6.0",
+        "zendframework/zend-http": "^2.6.0",
+        "zendframework/zend-mvc": "~2.7.0",
         "zendframework/zend-stdlib": "^2.7.7",
-        "zendframework/zend-http": "^2.6.0"
+        "zendframework/zend-uri": "^2.5.1",
+        "zendframework/zend-validator": "^2.6.0"
+    },
+    "archive": {
+        "exclude": [
+            "Amqp",
+            "Bulk",
+            "MessageQueue"
+        ]
     },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"

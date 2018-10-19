@@ -1,33 +1,34 @@
 {
     "name": "magento/module-checkout",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/module-store": "100.3.*",
-        "magento/module-sales": "100.3.*",
-        "magento/module-backend": "100.3.*",
-        "magento/module-catalog-inventory": "100.3.*",
-        "magento/module-config": "100.3.*",
-        "magento/module-customer": "100.3.*",
-        "magento/module-catalog": "101.2.*",
-        "magento/module-payment": "100.3.*",
-        "magento/module-shipping": "100.3.*",
-        "magento/module-tax": "100.3.*",
-        "magento/module-directory": "100.3.*",
-        "magento/module-eav": "100.3.*",
-        "magento/module-page-cache": "100.3.*",
-        "magento/module-sales-rule": "100.3.*",
-        "magento/module-theme": "100.3.*",
-        "magento/module-msrp": "100.3.*",
-        "magento/framework": "100.3.*",
-        "magento/module-ui": "100.3.*",
-        "magento/module-quote": "100.3.*"
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-inventory": "*",
+        "magento/module-config": "*",
+        "magento/module-customer": "*",
+        "magento/module-directory": "*",
+        "magento/module-eav": "*",
+        "magento/module-msrp": "*",
+        "magento/module-page-cache": "*",
+        "magento/module-payment": "*",
+        "magento/module-quote": "*",
+        "magento/module-sales": "*",
+        "magento/module-sales-rule": "*",
+        "magento/module-shipping": "*",
+        "magento/module-store": "*",
+        "magento/module-tax": "*",
+        "magento/module-theme": "*",
+        "magento/module-ui": "*"
     },
     "suggest": {
-        "magento/module-cookie": "100.3.*"
+        "magento/module-cookie": "*"
     },
     "type": "magento2-module",
-    "version": "100.3.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

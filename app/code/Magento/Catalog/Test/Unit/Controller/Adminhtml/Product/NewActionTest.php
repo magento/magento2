@@ -76,10 +76,6 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
                 'resultForwardFactory' => $resultForwardFactory,
             ]
         );
-
-        $this->resultPage->expects($this->atLeastOnce())
-            ->method('getLayout')
-            ->willReturn($this->layout);
     }
 
     public function testExecute()

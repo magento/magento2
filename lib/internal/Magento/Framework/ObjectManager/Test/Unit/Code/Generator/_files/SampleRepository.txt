@@ -27,9 +27,9 @@ class SampleRepository implements SampleRepositoryInterface
      *
      * @var array
      */
-    protected $registry = array(
+    protected $registry = [
         
-    );
+    ];
 
     /**
      * Extension attributes join processor.
@@ -71,13 +71,17 @@ class SampleRepository implements SampleRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new \Magento\Framework\Exception\InputException(new \Magento\Framework\Phrase('ID required'));
+            throw new \Magento\Framework\Exception\InputException(
+                new \Magento\Framework\Phrase('An ID is needed. Set the ID and try again.')
+            );
         }
         if (!isset($this->registry[$id])) {
             $entity = $this->sampleInterfacePersistor->loadEntity($id);
             if (!$entity->getId()) {
                 throw new \Magento\Framework\Exception\NoSuchEntityException(
-                    new \Magento\Framework\Phrase('Requested entity doesn\'t exist')
+                    new \Magento\Framework\Phrase(
+                        'The entity that was requested doesn\'t exist. Verify the entity and try again.'
+                    )
                 );
             }
             $this->registry[$id] = $entity;

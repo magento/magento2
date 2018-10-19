@@ -429,7 +429,6 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     public function testValidateSource()
     {
-        $this->markTestSkipped('Test needs to be refacotred,');
         $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
         $allowedErrorCount = 1;
 

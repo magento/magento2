@@ -27,11 +27,9 @@ class HandlerFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateWithInvalidType()
     {
-        $this->expectException(
-            '\InvalidArgumentException',
-            \Magento\Framework\DataObject::class . ' does not implement ' .
-            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface::class
-        );
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage(\Magento\Framework\DataObject::class . ' does not implement ' .
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface::class);
         $this->_objectManagerMock->expects($this->never())->method('create');
         $this->_model->create(\Magento\Framework\DataObject::class);
     }

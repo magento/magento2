@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -155,6 +153,19 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_custom.php
+     */
+    public function testGetConfigurableAttributesWithSourceModel()
+    {
+        $collection = $this->model->getConfigurableAttributes($this->product);
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
+        $configurableAttribute = $collection->getFirstItem();
+        $attribute = $this->_getAttributeByCode('test_configurable_with_sm');
+        $this->assertSameSize($attribute->getSource()->getAllOptions(), $configurableAttribute->getOptions());
+    }
+
+    /**
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
     public function testGetConfigurableAttributesAsArray()
@@ -237,6 +248,26 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * Test getUsedProducts returns array with same indexes regardless collections was cache or not.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
+    public function testGetUsedProductsCached()
+    {
+        /** @var  \Magento\Framework\App\Cache\StateInterface $cacheState */
+        $cacheState = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache\StateInterface::class);
+        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Collection::TYPE_IDENTIFIER, true);
+
+        $products = $this->getUsedProducts();
+        $productsCached = $this->getUsedProducts();
+        self::assertEquals(
+            array_keys($products),
+            array_keys($productsCached)
+        );
+    }
+
     public function testGetUsedProductCollection()
     {
         $this->assertInstanceOf(
@@ -301,7 +332,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $product->addCustomOption('attributes',
+        $product->addCustomOption(
+            'attributes',
             $serializer->serialize([$attribute['attribute_id'] => $optionValueId])
         );
 
@@ -570,5 +602,15 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->model->prepareForCart($buyRequest, $product);
 
         return $product;
+    }
+
+    /**
+     * @return ProductInterface[]
+     */
+    protected function getUsedProducts()
+    {
+        $product = Bootstrap::getObjectManager()->create(Product::class);
+        $product->load(1);
+        return $this->model->getUsedProducts($product);
     }
 }

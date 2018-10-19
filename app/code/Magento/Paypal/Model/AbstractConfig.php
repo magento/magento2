@@ -62,6 +62,11 @@ abstract class AbstractConfig implements ConfigInterface
     private static $bnCode = 'Magento_Cart_%s';
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
@@ -129,7 +134,7 @@ abstract class AbstractConfig implements ConfigInterface
      * Returns payment configuration value
      *
      * @param string $key
-     * @param null $storeId
+     * @param null|int $storeId
      * @return null|string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -219,7 +224,18 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function shouldUseUnilateralPayments()
     {
-        return $this->getValue('business_account') && !$this->isWppApiAvailabe();
+        return $this->getValue('business_account') && !$this->isWppApiAvailable();
+    }
+
+    /**
+     * Check whether WPP API credentials are available for this method
+     *
+     * @deprecated
+     * @return bool
+     */
+    public function isWppApiAvailabe()
+    {
+        return $this->isWppApiAvailable();
     }
 
     /**
@@ -227,7 +243,7 @@ abstract class AbstractConfig implements ConfigInterface
      *
      * @return bool
      */
-    public function isWppApiAvailabe()
+    public function isWppApiAvailable()
     {
         return $this->getValue('api_username')
         && $this->getValue('api_password')
@@ -238,7 +254,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Check whether method available for checkout or not
      *
-     * @param null $methodCode
+     * @param null|string $methodCode
      *
      * @return bool
      */

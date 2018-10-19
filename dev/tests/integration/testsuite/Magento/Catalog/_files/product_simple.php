@@ -5,6 +5,7 @@
  */
 
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
+use Magento\Catalog\Api\Data\ProductExtensionInterfaceFactory;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
@@ -19,10 +20,15 @@ $tierPrices = [];
 $tierPriceFactory = $objectManager->get(\Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class);
 /** @var  $tpExtensionAttributes */
 $tpExtensionAttributesFactory = $objectManager->get(ProductTierPriceExtensionFactory::class);
+/** @var  $productExtensionAttributes */
+$productExtensionAttributesFactory = $objectManager->get(ProductExtensionInterfaceFactory::class);
 
 $adminWebsite = $objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class)->get('admin');
 $tierPriceExtensionAttributes1 = $tpExtensionAttributesFactory->create()
     ->setWebsiteId($adminWebsite->getId());
+$productExtensionAttributesWebsiteIds = $productExtensionAttributesFactory->create(
+    ['website_ids' => $adminWebsite->getId()]
+);
 
 $tierPrices[] = $tierPriceFactory->create(
     [
@@ -82,6 +88,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setTaxClassId(0)
     ->setTierPrices($tierPrices)
     ->setDescription('Description with <b>html tag</b>')
+    ->setExtensionAttributes($productExtensionAttributesWebsiteIds)
     ->setMetaTitle('meta title')
     ->setMetaKeyword('meta keyword')
     ->setMetaDescription('meta description')
@@ -182,7 +189,7 @@ foreach ($oldOptions as $option) {
 
 $product->setOptions($options);
 
-/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $productRepository->save($product);
 

@@ -35,7 +35,7 @@
 ############################################
 ## adjust memory limit
 
-    php_value memory_limit 768M
+    php_value memory_limit 756M
     php_value max_execution_time 18000
 
 ############################################
@@ -111,7 +111,8 @@
 ############################################
 ## enable rewrites
 
-    Options +FollowSymLinks
+    # The following line has better security but add some performance overhead - see https://httpd.apache.org/docs/2.4/en/misc/perf-tuning.html
+    Options -FollowSymLinks +SymLinksIfOwnerMatch
     RewriteEngine on
 
 ############################################
@@ -179,72 +180,166 @@
     RedirectMatch 403 /\.git
 
     <Files composer.json>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files composer.lock>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files .gitignore>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files .htaccess>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files .htaccess.sample>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files .php_cs.dist>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files .travis.yml>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files CHANGELOG.md>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files COPYING.txt>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files Gruntfile.js>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files LICENSE.txt>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files LICENSE_AFL.txt>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files nginx.conf.sample>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files package.json>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files php.ini.sample>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files README.md>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
     <Files magento_umask>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+    </Files>
+    <Files auth.json>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
 
 # For 404s and 403s that aren't handled by the application, show plain 404 response

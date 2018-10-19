@@ -4,16 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Model\ResourceModel\OrderFactory;
+use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Model\Order;
-use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
+use Magento\Sales\Model\ResourceModel\OrderFactory;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class InvoiceTest
@@ -72,7 +70,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods(
                 [
                     'getPayment', '__wakeup', 'load', 'setHistoryEntityName', 'getStore', 'getBillingAddress',
-                    'getShippingAddress'
+                    'getShippingAddress', 'getConfig',
                 ]
             )
             ->getMock();
@@ -83,7 +81,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->paymentMock = $this->getMockBuilder(
             \Magento\Sales\Model\Order\Payment::class
         )->disableOriginalConstructor()->setMethods(
-            ['canVoid', '__wakeup', 'canCapture', 'capture', 'pay']
+            ['canVoid', '__wakeup', 'canCapture', 'capture', 'pay', 'cancelInvoice']
         )->getMock();
 
         $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
@@ -98,9 +96,11 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             'context' => $contextMock,
             'orderFactory' => $this->orderFactory,
             'calculatorFactory' => $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
-            'invoiceItemCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class),
+            'invoiceItemCollectionFactory' =>
+                $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class),
             'invoiceCommentFactory' => $this->createMock(\Magento\Sales\Model\Order\Invoice\CommentFactory::class),
-            'commentCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class),
+            'commentCollectionFactory' =>
+                $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class),
         ];
         $this->model = $this->helperManager->getObject(\Magento\Sales\Model\Order\Invoice::class, $arguments);
         $this->model->setOrder($this->order);
@@ -137,6 +137,9 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($canVoid, $this->model->canVoid());
     }
 
+    /**
+     * @return array
+     */
     public function canVoidDataProvider()
     {
         return [[true], [false]];
@@ -202,7 +205,6 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $store = $this->helperManager->getObject(\Magento\Store\Model\Store::class, []);
         $this->order->expects($this->once())->method('getStore')->willReturn($store);
         $this->assertEquals($store, $this->model->getStore());
-
     }
 
     public function testGetShippingAddress()
@@ -210,7 +212,6 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $address = $this->helperManager->getObject(\Magento\Sales\Model\Order\Address::class, []);
         $this->order->expects($this->once())->method('getShippingAddress')->willReturn($address);
         $this->assertEquals($address, $this->model->getShippingAddress());
-
     }
 
     /**
@@ -381,6 +382,9 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expectedTotal, $this->order->getTotalPaid());
     }
 
+    /**
+     * @return array
+     */
     public function payDataProvider()
     {
         return [
@@ -406,5 +410,69 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $refProperty->setValue($this->order, $collection);
 
         return $collection;
+    }
+
+    /**
+     * Assert open invoice can be canceled, and its status changes
+     */
+    public function testCancelOpenInvoice()
+    {
+        $orderConfigMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Config::class)
+            ->disableOriginalConstructor()->setMethods(
+                ['getStateDefaultStatus']
+            )->getMock();
+
+        $orderConfigMock->expects($this->once())->method('getStateDefaultStatus')
+            ->with(Order::STATE_PROCESSING)
+            ->willReturn(Order::STATE_PROCESSING);
+
+        $this->order->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
+        $this->order->expects($this->once())->method('getConfig')->willReturn($orderConfigMock);
+
+        $this->paymentMock->expects($this->once())
+            ->method('cancelInvoice')
+            ->willReturn($this->paymentMock);
+
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with('sales_order_invoice_cancel');
+
+        $this->model->setData(InvoiceInterface::ITEMS, []);
+        $this->model->setState(Invoice::STATE_OPEN);
+        $this->model->cancel();
+
+        self::assertEquals(Invoice::STATE_CANCELED, $this->model->getState());
+    }
+
+    /**
+     * Assert open invoice can be canceled, and its status changes
+     *
+     * @param $initialInvoiceStatus
+     * @param $finalInvoiceStatus
+     * @dataProvider getNotOpenedInvoiceStatuses
+     */
+    public function testCannotCancelNotOpenedInvoice($initialInvoiceStatus, $finalInvoiceStatus)
+    {
+        $this->order->expects($this->never())->method('getPayment');
+        $this->paymentMock->expects($this->never())->method('cancelInvoice');
+        $this->eventManagerMock->expects($this->never())
+            ->method('dispatch')
+            ->with('sales_order_invoice_cancel');
+
+        $this->model->setState($initialInvoiceStatus);
+        $this->model->cancel();
+
+        self::assertEquals($finalInvoiceStatus, $this->model->getState());
+    }
+
+    /**
+     * @return array
+     */
+    public function getNotOpenedInvoiceStatuses()
+    {
+        return [
+            [Invoice::STATE_PAID, Invoice::STATE_PAID],
+            [Invoice::STATE_CANCELED, Invoice::STATE_CANCELED],
+        ];
     }
 }

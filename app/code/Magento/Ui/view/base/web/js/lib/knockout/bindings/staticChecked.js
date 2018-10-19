@@ -100,7 +100,7 @@ define([
         }
     };
 
-    ko.expressionRewriting.twoWayBindings.staticChecked = true;
+    ko.expressionRewriting._twoWayBindings.staticChecked = true;
 
     renderer.addAttribute('staticChecked');
 });

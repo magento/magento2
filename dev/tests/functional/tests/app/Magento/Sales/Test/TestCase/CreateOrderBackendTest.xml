@@ -19,7 +19,7 @@
             </data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
             <data name="configData" xsi:type="string">cashondelivery</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductsOutOfStock" />
         </variation>
@@ -35,7 +35,7 @@
             </data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
             <data name="configData" xsi:type="string">cashondelivery</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertReorderButtonIsNotVisibleOnFrontend" />
         </variation>

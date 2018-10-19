@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
 
 use Magento\Paypal\Model\ResourceModel\Billing\Agreement as BillingAgreementResource;

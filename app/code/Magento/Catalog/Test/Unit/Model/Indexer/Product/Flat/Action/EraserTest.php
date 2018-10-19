@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
 class EraserTest extends \PHPUnit\Framework\TestCase
@@ -56,6 +54,7 @@ class EraserTest extends \PHPUnit\Framework\TestCase
         $productsToDeleteIds = [1, 2];
         $select = $this->createMock(\Magento\Framework\DB\Select::class);
         $select->expects($this->once())->method('from')->with('catalog_product_entity')->will($this->returnSelf());
+        $select->expects($this->once())->method('columns')->with('entity_id')->will($this->returnSelf());
         $select->expects($this->once())->method('where')->with('entity_id IN(?)', $productsToDeleteIds)
             ->will($this->returnSelf());
         $products = [['entity_id' => 2]];

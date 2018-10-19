@@ -45,7 +45,6 @@ class ObjectManagerFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateObjectManagerFactoryCouldBeOverridden()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $rootPath = __DIR__ . '/_files/';
         $factory = Bootstrap::createObjectManagerFactory($rootPath, []);
         $factory->create([], false);

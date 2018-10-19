@@ -232,7 +232,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
-     * @param \Magento\Dhl\Model\Validator\XmlValidatorFactory $xmlValidatorFactory
+     * @param \Magento\Dhl\Model\Validator\XmlValidator $xmlValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -606,7 +606,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             'L' => __('Express 10:30'),
             'G' => __('Domestic economy select'),
             'W' => __('Economy select'),
-            'I' => __('Break bulk economy'),
+            'I' => __('Domestic express 9:00'),
             'N' => __('Domestic express'),
             'O' => __('Others'),
             'R' => __('Globalmail business'),
@@ -616,7 +616,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         ];
 
         $nonDocType = [
-            '1' => __('Customer services'),
+            '1' => __('Domestic express 12:00'),
             '3' => __('Easy shop'),
             '4' => __('Jetline'),
             '8' => __('Express easy'),
@@ -1263,8 +1263,20 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Framework\DataObject $request
      * @return $this|\Magento\Framework\DataObject|boolean
+     * @deprecated
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
+    {
+        return $this->processAdditionalValidation($request);
+    }
+
+    /**
+     * Processing additional validation to check is carrier applicable.
+     *
+     * @param \Magento\Framework\DataObject $request
+     * @return $this|\Magento\Framework\DataObject|boolean
+     */
+    public function processAdditionalValidation(\Magento\Framework\DataObject $request)
     {
         //Skip by item validation if there is no items in request
         if (!count($this->getAllItems($request))) {
@@ -1409,7 +1421,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         if (!$originRegion) {
             $xml->addChild('RequestedPickupTime', 'N', '');
         }
-        $xml->addChild('NewShipper', 'N', '');
+        if ($originRegion !== 'AP') {
+            $xml->addChild('NewShipper', 'N', '');
+        }
         $xml->addChild('LanguageCode', 'EN', '');
         $xml->addChild('PiecesEnabled', 'Y', '');
 
@@ -1451,7 +1465,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         }
 
         $nodeConsignee->addChild('City', $rawRequest->getRecipientAddressCity());
-        $nodeConsignee->addChild('Division', $rawRequest->getRecipientAddressStateOrProvinceCode());
+        if ($originRegion !== 'AP') {
+            $nodeConsignee->addChild('Division', $rawRequest->getRecipientAddressStateOrProvinceCode());
+        }
         $nodeConsignee->addChild('PostalCode', $rawRequest->getRecipientAddressPostalCode());
         $nodeConsignee->addChild('CountryCode', $rawRequest->getRecipientAddressCountryCode());
         $nodeConsignee->addChild(
@@ -1500,7 +1516,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeShipper = $xml->addChild('Shipper', '', '');
         $nodeShipper->addChild('ShipperID', (string)$this->getConfigData('account'));
         $nodeShipper->addChild('CompanyName', $rawRequest->getShipperContactCompanyName());
-        $nodeShipper->addChild('RegisteredAccount', (string)$this->getConfigData('account'));
+        if ($originRegion !== 'AP') {
+            $nodeShipper->addChild('RegisteredAccount', (string)$this->getConfigData('account'));
+        }
 
         $address = $rawRequest->getShipperAddressStreet1() . ' ' . $rawRequest->getShipperAddressStreet2();
         $address = $this->string->split($address, 35, false, true);
@@ -1513,7 +1531,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         }
 
         $nodeShipper->addChild('City', $rawRequest->getShipperAddressCity());
-        $nodeShipper->addChild('Division', $rawRequest->getShipperAddressStateOrProvinceCode());
+        if ($originRegion !== 'AP') {
+            $nodeShipper->addChild('Division', $rawRequest->getShipperAddressStateOrProvinceCode());
+        }
         $nodeShipper->addChild('PostalCode', $rawRequest->getShipperAddressPostalCode());
         $nodeShipper->addChild('CountryCode', $rawRequest->getShipperAddressCountryCode());
         $nodeShipper->addChild(
@@ -1533,7 +1553,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {
-            $debugData = ['request' => $request];
+            $debugData = ['request' => $this->filterDebugData($request)];
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
@@ -1542,7 +1562,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
                 $responseBody = utf8_decode($responseBody);
-                $debugData['result'] = $responseBody;
+                $debugData['result'] = $this->filterDebugData($responseBody);
                 $this->_setCachedQuotes($request, $responseBody);
             } catch (\Exception $e) {
                 $this->_errors[$e->getCode()] = $e->getMessage();
@@ -1727,7 +1747,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {
-            $debugData = ['request' => $request];
+            $debugData = ['request' => $this->filterDebugData($request)];
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
@@ -1735,7 +1755,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
-                $debugData['result'] = $responseBody;
+                $debugData['result'] = $this->filterDebugData($responseBody);
                 $this->_setCachedQuotes($request, $responseBody);
             } catch (\Exception $e) {
                 $this->_errors[$e->getCode()] = $e->getMessage();
@@ -1950,6 +1970,6 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         return
             self::DHL_CONTENT_TYPE_NON_DOC == $this->getConfigData('content_type')
-            && !$this->_isDomestic;
+            || !$this->_isDomestic;
     }
 }

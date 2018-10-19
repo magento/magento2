@@ -125,30 +125,18 @@ Ok,Ok
 "Label Actions Two","Label Actions Two"
 "Some Dynamic Actions","Some Dynamic Actions"
 "Log JS Errors to Session Storage","Log JS Errors to Session Storage"
+"If enabled, can be used by functional tests for extended reporting","If enabled, can be used by functional tests for extended reporting"
 "Log JS Errors to Session Storage Key","Log JS Errors to Session Storage Key"
+"Use this key to retrieve collected js errors","Use this key to retrieve collected js errors"
 settings/label,settings/label
 settings/confirm/title,settings/confirm/title
-"settings/confirm/message
-                        ","settings/confirm/message
-                        "
-"
-                            settings/callback/provider
-                        ","
-                            settings/callback/provider
-                        "
-"settings/callback/target
-                        ","settings/callback/target
-                        "
-"settings/newViewLabel
-                    ","settings/newViewLabel
-                    "
+"settings/confirm/message","settings/confirm/message"
+"settings/callback/provider","settings/callback/provider"
+"settings/callback/target","settings/callback/target"
+"settings/newViewLabel","settings/newViewLabel"
 settings/title,settings/title
 settings/description,settings/description
-"
-                        settings/addButtonLabel
-                    ","
-                        settings/addButtonLabel
-                    "
+"settings/addButtonLabel","settings/addButtonLabel"
 "
                         formElements/*[name(.)=../../@formElement]/settings/description
                     ","
@@ -179,3 +167,26 @@ settings/addAfter,settings/addAfter
 Action,Action
 CSV,CSV
 "Excel XML","Excel XML"
+"Please select one of the options above.","Please select one of the options above."
+"Please select a file.","Please select a file."
+"Please select one of the options.","Please select one of the options."
+"Please enter a value less than or equal to %s.","Please enter a value less than or equal to %s."
+"Please enter a value greater than or equal to %s.","Please enter a value greater than or equal to %s."
+"Card type does not match credit card number.","Card type does not match credit card number."
+"Credit card number does not match credit card type.","Credit card number does not match credit card type."
+"Incorrect credit card expiration date.","Incorrect credit card expiration date."
+"Please enter less or equal than %1 symbols.","Please enter less or equal than %1 symbols."
+"Please enter more or equal than %1 symbols.","Please enter more or equal than %1 symbols."
+"Please enter a valid value from list","Please enter a valid value from list"
+"Please enter valid SKU key.","Please enter valid SKU key."
+"Please enter a valid number.","Please enter a valid number."
+"Admin is a required field in each row.","Admin is a required field in each row."
+"Please fix this field.","Please fix this field."
+"Please enter a valid date (ISO).","Please enter a valid date (ISO)."
+"Please enter only digits.","Please enter only digits."
+"Please enter the same value again.","Please enter the same value again."
+"Please enter no more than {0} characters.","Please enter no more than {0} characters."
+"Please enter at least {0} characters.","Please enter at least {0} characters."
+"Please enter a value between {0} and {1} characters long.","Please enter a value between {0} and {1} characters long."
+"Please enter a value between {0} and {1}.","Please enter a value between {0} and {1}."
+"was not uploaded","was not uploaded"

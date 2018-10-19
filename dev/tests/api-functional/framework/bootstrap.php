@@ -14,6 +14,14 @@ $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
 $fixtureBaseDir = $integrationTestsDir . '/testsuite';
 
+if (!defined('TESTS_TEMP_DIR')) {
+    define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');
+}
+
+if (!defined('INTEGRATION_TESTS_DIR')) {
+    define('INTEGRATION_TESTS_DIR', $integrationTestsDir);
+}
+
 try {
     setCustomErrorHandler();
 
@@ -36,7 +44,7 @@ try {
     }
 
     $testFrameworkDir = __DIR__;
-    require_once __DIR__ . '/../../integration/framework/deployTestModules.php';
+    require_once INTEGRATION_TESTS_DIR . '/framework/deployTestModules.php';
 
     $installConfigFile = $settings->getAsConfigFile('TESTS_INSTALL_CONFIG_FILE');
     if (!file_exists($installConfigFile)) {
@@ -58,10 +66,8 @@ try {
     );
 
     if (defined('TESTS_MAGENTO_INSTALLATION') && TESTS_MAGENTO_INSTALLATION === 'enabled') {
-        if (defined('TESTS_CLEANUP') && TESTS_CLEANUP === 'enabled') {
-            $application->cleanup();
-        }
-        $application->install();
+        $cleanup = (defined('TESTS_CLEANUP') && TESTS_CLEANUP === 'enabled');
+        $application->install($cleanup);
     }
 
     $bootstrap = new \Magento\TestFramework\Bootstrap(

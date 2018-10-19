@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
 class FileTest extends \PHPUnit\Framework\TestCase
@@ -31,12 +29,19 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $localeResolverMock = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
         $this->urlEncoder = $this->createMock(\Magento\Framework\Url\EncoderInterface::class);
-        $this->fileValidatorMock = $this->createPartialMock(\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class, ['isValid', 'getMessages']);
+        $this->fileValidatorMock = $this->createPartialMock(
+            \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class,
+            ['isValid', 'getMessages']
+        );
         $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
 
         $this->model = new \Magento\Eav\Model\Attribute\Data\File(
-            $timezoneMock, $loggerMock, $localeResolverMock,
-            $this->urlEncoder, $this->fileValidatorMock, $filesystemMock
+            $timezoneMock,
+            $loggerMock,
+            $localeResolverMock,
+            $this->urlEncoder,
+            $this->fileValidatorMock,
+            $filesystemMock
         );
     }
 
@@ -105,7 +110,13 @@ class FileTest extends \PHPUnit\Framework\TestCase
      * @dataProvider validateValueDataProvider
      */
     public function testValidateValue(
-        $value, $originalValue, $isRequired, $isAjaxRequest, $rules, $fileIsValid, $expectedResult
+        $value,
+        $originalValue,
+        $isRequired,
+        $isAjaxRequest,
+        $rules,
+        $fileIsValid,
+        $expectedResult
     ) {
         $this->markTestSkipped('MAGETWO-34751: Test fails after being moved.  Might have hidden dependency.');
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
@@ -262,7 +273,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-};
+}
 
 /**
  * Mocking of std function to test validation

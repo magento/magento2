@@ -279,7 +279,6 @@
     .nested .choice .label,
     .nested .choice .control {
         float: none;
-        width: auto;
         position: static;
         left: auto;
         text-align: left;
@@ -487,8 +486,8 @@
     }
 
     .notification-entry-dialog .action-close:hover {
-        color: #000;
-        border-bottom-color: #000;
+        color: @color-black;
+        border-bottom-color: @color-black;
         filter: none;
     }
 
@@ -525,7 +524,7 @@
         right: 0;
         top: 100%;
         border: 1px solid #cac2b5;
-        background: #fff;
+        background: @color-white;
         box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
         z-index: 990;
     }
@@ -786,7 +785,7 @@
         border-radius: 1px;
         padding: 4px;
         color: #303030;
-        background-color: #fff;
+        background-color: @color-white;
         font-weight: 500;
         font-size: 14px;
         height: 33px;
@@ -860,7 +859,7 @@
     input[type="radio"],
     input[type="checkbox"] {
         .lib-css(appearance, none, 1);
-        background: #fff;
+        background: @color-white;
         border-radius: 2px;
         border: 1px solid #adadad;
         cursor: pointer;
@@ -945,7 +944,7 @@
     }
 
     select[disabled] option[selected] {
-        color: #fff;
+        color: @color-white;
         background: #aaa;
     }
 
@@ -1157,7 +1156,7 @@
 
     .fieldset-wrapper,
     .fieldset {
-        background: #fff;
+        background: @color-white;
         border: 0;
         margin: 0;
         padding: 5px 0 38px;
@@ -1215,6 +1214,7 @@
         -webkit-user-select: none; // use in 41 Chrome
         -moz-user-select: none; // use in 36 Firefox
         -ms-user-select: none; // use in 11 IE
+        user-select: none;
         min-height: 39px;
     }
 
@@ -1383,7 +1383,6 @@
             line-height: 1.33;
             vertical-align: middle;
             white-space: normal;
-            word-break: break-all;
 
             &[data-config-scope] {
                 position: relative;
@@ -1575,7 +1574,7 @@
 
     .multiselect-alt .item {
         position: relative;
-        border-top: 1px solid #fff;
+        border-top: 1px solid @color-white;
         cursor: pointer;
     }
 
@@ -1652,7 +1651,7 @@
 
             ~ .addafter strong {
                 display: inline-block;
-                background: #fff;
+                background: @color-white;
                 line-height: 24px;
                 margin: 0 3px 0 0;
                 padding-left: 4px;
@@ -2042,7 +2041,7 @@
         &:before {
             position: absolute;
             content: "";
-            background-color: #fff;
+            background-color: @color-white;
             right: 0;
             top: 0;
             bottom: 0;
@@ -2299,7 +2298,7 @@
     //  --------------------------------------
 
     .preview-window {
-        background: #fff;
+        background: @color-white;
     }
 
     .preview-window .toolbar {
@@ -2459,7 +2458,7 @@
     }
 
     .attribute-popup .page-actions.fixed .page-actions-inner {
-        background: #fff;
+        background: @color-white;
         padding: 0;
         min-width: 100%;
         max-width: 100%;
@@ -2758,7 +2757,7 @@
             border: 1px solid #c9c2b8;
             border-width: 0 0 1px;
             padding: 6px 10px 7px;
-            background: #fff;
+            background: @color-white;
             .style2();
 
             span {
@@ -2770,7 +2769,7 @@
         td {
             border: none;
             padding: 6px 10px 7px;
-            background: #fff;
+            background: @color-white;
         }
 
         tr:last-child td {
@@ -2859,7 +2858,7 @@
 
     .table-fieldset-alt tbody tr:nth-child(odd) td,
     .table-fieldset-alt tbody tr:nth-child(odd):hover td {
-        background: #fff;
+        background: @color-white;
     }
 
     //
@@ -2919,7 +2918,7 @@
     }
 
     .order-details-existing-customer {
-        background: #fff;
+        background: @color-white;
         padding-left: 0;
         position: relative;
         width: 77.9%;
@@ -3036,7 +3035,7 @@
     }
 
     .gift-options-tooltip {
-        background: #fff;
+        background: @color-white;
         border-radius: 5px;
         padding: 10px;
         box-shadow: 0 0 3px rgba(0, 0, 0, .3);
@@ -3195,7 +3194,7 @@
             left: 0;
             margin: 0 8px;
             padding: 10px;
-            background: #fff;
+            background: @color-white;
         }
     }
 
@@ -3387,7 +3386,7 @@
 
     .rma-popup,
     .cms-popup {
-        background: #fff;
+        background: @color-white;
         box-shadow: 0 3px 6px rgba(0, 0, 0, .4);
         cursor: default;
         position: fixed;
@@ -3411,7 +3410,7 @@
     }
 
     .rma-popup .content {
-        background: #fff;
+        background: @color-white;
         border-bottom: 1px solid #ccc;
         max-height: 400px;
         overflow: auto;
@@ -3468,7 +3467,7 @@
     .grid .rma-popup .form-list tr,
     .grid tr.even .rma-popup .form-list tr,
     .grid tr.on-mouse .rma-popup .form-list tr {
-        background: #fff !important;
+        background: @color-white !important;
     }
 
     //
@@ -3799,7 +3798,7 @@
     }
 
     .rule-param .label {
-        color: #000;
+        color: @color-black;
         float: none;
         text-align: left;
         padding: 0;
@@ -3886,7 +3885,7 @@
     .defaultSkin {
         table.mceLayout {
             td {
-                background: #fff;
+                background: @color-white;
             }
         }
 
@@ -3902,117 +3901,6 @@
     #category_tab_content {
         .ui-tabs-panel {
             border-top: 1px solid #adadad;
-        }
-    }
-}
-
-//
-//  IE9 styles
-//  ---------------------------------------------
-
-.ie9 {
-    .admin__scope-old {
-        select {
-            &:not([multiple]) {
-                padding-right: 4px;
-                min-width: 0;
-            }
-        }
-
-        //  Table Filters
-        .filter select {
-            &:not([multiple]) {
-                padding-right: 0;
-            }
-        }
-
-        .adminhtml-widget-instance-edit {
-            .grid-chooser .control {
-                margin-top: -18px;
-            }
-        }
-        .page-layout-admin-1column .page-columns,
-        .catalog-product-edit,
-        .catalog-product-new,
-        .catalog-category-edit {
-            table.data {
-                table-layout: fixed;
-                word-wrap: break-word;
-
-                th {
-                    word-wrap: normal;
-                    overflow: hidden;
-                    vertical-align: top;
-
-                    > span {
-                        white-space: normal;
-                    }
-                }
-
-                th:not(.col-select):not(.col-id):not(.col-severity),
-                td:not(.col-select):not(.col-id):not(.col-severity) {
-                    width: auto;
-                }
-            }
-        }
-
-        #setGrid_table,
-        #attributeGrid_table,
-        .custom-options .data-table,
-        .ui-dialog .data,
-        .page-layout-admin-1column .page-columns .data,
-        .catalog-category-edit .data {
-            word-wrap: break-word;
-            table-layout: fixed;
-        }
-
-        .fieldset-wrapper {
-            table.data {
-                table-layout: inherit;
-                word-wrap: normal;
-            }
-        }
-
-        .sales-order-create-index table.data,
-        .sales-order-create-index .fieldset-wrapper table.data {
-            table-layout: fixed;
-            word-wrap: break-word;
-
-            th {
-                word-wrap: normal;
-                overflow: hidden;
-                vertical-align: top;
-
-                > span {
-                    white-space: normal;
-                }
-            }
-        }
-
-        .entry-edit .product-options .grouped-items-table {
-            table-layout: fixed;
-            word-wrap: break-word;
-
-            th {
-                word-wrap: normal;
-                overflow: hidden;
-                vertical-align: top;
-
-                > span {
-                    white-space: normal;
-                }
-            }
-        }
-
-        .catalog-category-edit,
-        .adminhtml-cache-index,
-        .adminhtml-process-list,
-        .indexer-indexer-list,
-        .adminhtml-notification-index {
-            table.data {
-                table-layout: inherit;
-                word-wrap: normal;
-            }
         }
     }
 }
@@ -5230,7 +5118,7 @@
 @media print {
     * {
         background: transparent !important;
-        color: #000 !important;
+        color: @color-black !important;
         box-shadow: none !important;
         text-shadow: none !important;
         filter: none !important;

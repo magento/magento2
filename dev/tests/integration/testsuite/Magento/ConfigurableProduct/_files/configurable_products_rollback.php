@@ -17,7 +17,7 @@ $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
 
 foreach (['simple_10', 'simple_20', 'configurable', 'simple_30', 'simple_40', 'configurable_12345'] as $sku) {
     try {
-        $product = $productRepository->get($sku, false, null, true);
+        $product = $productRepository->get($sku, true);
 
         $stockStatus = $objectManager->create(\Magento\CatalogInventory\Model\Stock\Status::class);
         $stockStatus->load($product->getEntityId(), 'product_id');

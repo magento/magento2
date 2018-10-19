@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -143,6 +141,7 @@ class SetupUtil
         'discount_amount' => 40,
         'discount_step' => 0,
         'stop_rules_processing' => 1,
+        'apply_to_shipping' => 0,
         'website_ids' => [1],
     ];
 
@@ -170,9 +169,11 @@ class SetupUtil
     {
         $this->objectManager = $objectManager;
         $this->customerRepository = $this->objectManager->create(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class);
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
+        );
         $this->accountManagement = $this->objectManager->create(
-            \Magento\Customer\Api\AccountManagementInterface::class);
+            \Magento\Customer\Api\AccountManagementInterface::class
+        );
     }
 
     /**
@@ -254,7 +255,8 @@ class SetupUtil
                 $this->taxRates[$taxRateCode]['data']['rate'] = $taxRateOverrides[$taxRateCode];
             }
             $this->taxRates[$taxRateCode]['id'] = $this->objectManager->create(
-                \Magento\Tax\Model\Calculation\Rate::class)
+                \Magento\Tax\Model\Calculation\Rate::class
+            )
                 ->setData($this->taxRates[$taxRateCode]['data'])
                 ->save()
                 ->getId();
@@ -395,7 +397,7 @@ class SetupUtil
                 ->save()
                 ->getId();
         } else {
-            foreach ($overrides[self::TAX_RULE_OVERRIDES] as $taxRuleOverrideData ) {
+            foreach ($overrides[self::TAX_RULE_OVERRIDES] as $taxRuleOverrideData) {
                 //convert code to id for productTaxClass, customerTaxClass and taxRate
                 $taxRuleOverrideData = $this->processTaxRuleOverrides($taxRuleOverrideData, $taxRateIds);
                 $mergedTaxRuleData = array_merge($taxRuleDefaultData, $taxRuleOverrideData);

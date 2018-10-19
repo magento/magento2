@@ -32,9 +32,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
     {
         if (!($this->securityCookie instanceof SecurityCookie)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
-        } else {
-            return $this->securityCookie;
         }
+        return $this->securityCookie;
     }
 
     /**
@@ -54,9 +53,9 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         $user = $this->_objectManager->create(\Magento\User\Model\User::class)->load($userId);
 
         $user->setId($userId)
-            ->setUsername($this->getRequest()->getParam('username', false))
-            ->setFirstname($this->getRequest()->getParam('firstname', false))
-            ->setLastname($this->getRequest()->getParam('lastname', false))
+            ->setUserName($this->getRequest()->getParam('username', false))
+            ->setFirstName($this->getRequest()->getParam('firstname', false))
+            ->setLastName($this->getRequest()->getParam('lastname', false))
             ->setEmail(strtolower($this->getRequest()->getParam('email', false)));
 
         if ($this->_objectManager->get(\Magento\Framework\Validator\Locale::class)->isValid($interfaceLocale)) {
@@ -77,12 +76,12 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             $errors = $user->validate();
             if ($errors !== true && !empty($errors)) {
                 foreach ($errors as $error) {
-                    $this->messageManager->addError($error);
+                    $this->messageManager->addErrorMessage($error);
                 }
             } else {
                 $user->save();
                 $user->sendNotificationEmailsIfRequired();
-                $this->messageManager->addSuccess(__('You saved the account.'));
+                $this->messageManager->addSuccessMessage(__('You saved the account.'));
             }
         } catch (UserLockedException $e) {
             $this->_auth->logout();
@@ -92,12 +91,12 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         } catch (ValidatorException $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         } catch (LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('An error occurred while saving account.'));
+            $this->messageManager->addErrorMessage(__('An error occurred while saving account.'));
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

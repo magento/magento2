@@ -24,7 +24,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="variable_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.variable.grid.columnSet.variable_id" as="variable_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Variable ID</argument>
                             <argument name="index" xsi:type="string">variable_id</argument>
@@ -32,13 +32,13 @@
                             <argument name="header_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="code">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.variable.grid.columnSet.code" as="code">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Variable Code</argument>
                             <argument name="index" xsi:type="string">code</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="name">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.variable.grid.columnSet.name" as="name">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Name</argument>
                             <argument name="index" xsi:type="string">name</argument>

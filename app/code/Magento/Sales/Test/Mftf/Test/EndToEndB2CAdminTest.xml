@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EndToEndB2CAdminTest">
+        <before>
+            <!--Create order via API-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProductApi">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="GuestCart" stepKey="createGuestCart"/>
+            <createData entity="SimpleCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createSimpleProductApi"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddress">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </createData>
+            <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </updateData>
+            <!--END Create order via API-->
+        </before>
+
+        <!--Prerequisites-->
+        <!--Create store view to ensure multiple store views-->
+        <comment userInput="Create prerequisite store view" stepKey="createStoreViewComment" before="createStoreView"/>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" before="navigateToNewOrderPage"/>
+
+        <!--Admin creates order-->
+        <comment userInput="Admin creates order" stepKey="adminCreateOrderComment" before="navigateToNewOrderPage"/>
+        <actionGroup ref="navigateToNewOrderPageNewCustomer" stepKey="navigateToNewOrderPage" after="deleteCategory"/>
+
+        <actionGroup ref="checkRequiredFieldsNewOrderForm" stepKey="checkRequiredFieldsNewOrder" after="navigateToNewOrderPage"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="checkRequiredFieldsNewOrder"/>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder" after="scrollToTopOfOrderFormPage">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="addConfigurableProductToOrder" stepKey="addConfigurableProductToOrder" after="addSimpleProductToOrder">
+            <argument name="product" value="BaseConfigurableProduct"/>
+            <argument name="attribute" value="colorProductAttribute"/>
+            <argument name="option" value="colorProductAttribute1"/>
+        </actionGroup>
+
+        <!--Fill customer group information-->
+        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectGroup" after="addConfigurableProductToOrder"/>
+        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillEmail" after="selectGroup"/>
+
+        <!--Fill customer address information-->
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="fillEmail">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
+
+        <!--Verify totals on Order page-->
+        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleConfigurableProduct.subtotal}}" stepKey="seeOrderSubTotal" after="selectFlatRateShipping"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleConfigurableProduct.shipping}}" stepKey="seeOrderShipping" after="seeOrderSubTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="${{AdminOrderSimpleConfigurableProduct.grandTotal}}" stepKey="seeCorrectGrandTotal" after="seeOrderShipping"/>
+
+        <!--Submit Order and verify information-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="seeCorrectGrandTotal"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage" after="clickSubmitOrder"/>
+
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage" after="seeViewOrderPage"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus" after="seeSuccessMessage"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId" after="seeOrderPendingStatus"/>
+        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty" after="getOrderId"/>
+        <actionGroup ref="verifyBasicOrderInformation" stepKey="verifyOrderInformation" after="assertOrderIdIsNotEmpty">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInItemsOrdered" stepKey="seeSimpleProductInItemsOrdered" after="verifyOrderInformation">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInItemsOrdered" stepKey="seeConfigurableProductInItemsOrdered" after="seeSimpleProductInItemsOrdered">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+
+        <!--Create order invoice-->
+        <comment userInput="Admin creates invoice for order" stepKey="adminCreateInvoiceComment" before="closeAdminNotificationInvoice"/>
+        <closeAdminNotification stepKey="closeAdminNotificationInvoice" after="seeConfigurableProductInItemsOrdered"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction" after="closeAdminNotificationInvoice"/>
+        <seeInCurrentUrl url="{{AdminInvoiceNewPage.url}}" stepKey="seeOrderInvoiceUrl" after="clickInvoiceAction"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage" after="seeOrderInvoiceUrl"/>
+
+        <!--Check Invoice Data-->
+        <see selector="{{AdminInvoiceOrderInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingInvoice" after="seePageNameNewInvoicePage"/>
+        <actionGroup ref="verifyBasicInvoiceInformation" stepKey="verifyOrderInvoiceInformation" after="seeOrderPendingInvoice">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <see selector="{{AdminInvoicePaymentShippingSection.ShippingMethod}}" userInput="{{DefaultFlatRateMethod.title}}" stepKey="seeShippingMethod" after="verifyOrderInvoiceInformation"/>
+        <see selector="{{AdminInvoicePaymentShippingSection.ShippingPrice}}" userInput="${{AdminOrderSimpleConfigurableProduct.shipping}}" stepKey="seeShippingCost" after="seeShippingMethod"/>
+        <!--Submit Invoice-->
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice" after="seeShippingCost"/>
+        <!--Invoice created successfully-->
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageInvoice" after="clickSubmitInvoice"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess" after="seeViewOrderPageInvoice"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="$getOrderId" stepKey="seePageNameMatchesOrderIdAfterInvoice" after="seeInvoiceCreateSuccess"/>
+
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab" after="seePageNameMatchesOrderIdAfterInvoice"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask" after="clickOrderInvoicesTab"/>
+        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderInvoiceInTabGrid" after="waitForInvoiceGridLoadingMask"/>
+        <click selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="clickToViewInvoiceRow" after="seeOrderInvoiceInTabGrid"/>
+        <see selector="{{AdminInvoiceOrderInformationSection.orderId}}" userInput="$getOrderId" stepKey="seeOrderIdOnInvoice" after="clickToViewInvoiceRow"/>
+        <actionGroup ref="verifyBasicInvoiceInformation" stepKey="verifyBasicInvoiceInformation" after="seeOrderIdOnInvoice">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInInvoiceItems" stepKey="seeSimpleProductInInvoice" after="verifyBasicInvoiceInformation">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInInvoiceItems" stepKey="seeConfigurableProductInInvoice" after="seeSimpleProductInInvoice">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <click selector="{{AdminInvoiceOrderInformationSection.orderId}}" stepKey="clickOrderIdLinkOnInvoice" after="seeConfigurableProductInInvoice"/>
+
+        <!--Create Credit Memo-->
+        <comment userInput="Admin creates credit memo" stepKey="createCreditMemoComment" after="clickOrderIdOnShipment"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo" after="createCreditMemoComment"/>
+        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewCreditMemoPage" after="clickCreateCreditMemo"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle" after="seeNewCreditMemoPage"/>
+        <!--Check Credit Memo Order Data-->
+        <actionGroup ref="verifyBasicCreditMemoInformation" stepKey="verifyOrderCreditMemoInformation" after="seeNewMemoInPageTitle">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <!--Submit credit memo-->
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline" after="verifyOrderCreditMemoInformation"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeCreditMemoSuccess" after="clickRefundOffline"/>
+        <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickOrderCreditMemosTab" after="seeCreditMemoSuccess"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCreditMemoTabLoadingMask" after="clickOrderCreditMemosTab"/>
+        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderCreditMemoInTabGrid" after="waitForCreditMemoTabLoadingMask"/>
+        <click selector="{{AdminOrderCreditMemosTabSection.viewGridRow('1')}}" stepKey="clickToViewCreditMemoRow" after="seeOrderCreditMemoInTabGrid"/>
+        <waitForPageLoad stepKey="waitForCreditMemoPageLoad" after="clickToViewCreditMemoRow"/>
+        <see selector="{{AdminCreditMemoOrderInformationSection.orderId}}" userInput="$getOrderId" stepKey="seeOrderIdOnCreditMemo" after="waitForCreditMemoPageLoad"/>
+        <actionGroup ref="verifyBasicCreditMemoInformation" stepKey="verifyBasicCreditMemoInformation" after="seeOrderIdOnCreditMemo">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInItemsRefunded" stepKey="seeSimpleProductInItemsRefunded" after="verifyBasicCreditMemoInformation">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInItemsRefunded" stepKey="seeConfigurableProductInItemsRefunded" after="seeSimpleProductInItemsRefunded">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfCreditMemo" after="seeConfigurableProductInItemsRefunded"/>
+        <click selector="{{AdminCreditMemoOrderInformationSection.orderId}}" stepKey="clickOrderIdLinkOnCreditMemo" after="scrollToTopOfCreditMemo"/>
+
+        <!--Admin uses order grid-->
+        <comment userInput="Admin uses order grid" stepKey="adminUseOrderGridComment" before="navigateToOrderGridPage"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage" after="clickOrderIdLinkOnCreditMemo"/>
+        <waitForPageLoad time="60" stepKey="waitForLoadUseOrderGrid" after="navigateToOrderGridPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrderGridPageLoad" after="waitForLoadUseOrderGrid"/>
+
+        <!--Search order grid by name-->
+        <comment userInput="Admin searches order grid by name" stepKey="searchOrderGridComment" after="waitForOrderGridPageLoad"/>
+        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="setOrderGridToDefaultViewForSearch" after="searchOrderGridComment"/>
+        <!--@TODO use "Ship-to Name" when MQE-794 is fixed-->
+        <see selector="{{AdminDataGridTableSection.column('Ship')}}" userInput="{{Simple_US_Customer.fullname}}" stepKey="seeNonFilterNameInShipNameColumn" after="setOrderGridToDefaultViewForSearch"/>
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchOrderGridByNameKeyword" after="seeNonFilterNameInShipNameColumn">
+            <argument name="keyword" value="BillingAddressTX.fullname"/>
+        </actionGroup>
+        <dontSee selector="{{AdminDataGridTableSection.column('Ship')}}" userInput="{{Simple_US_Customer.fullname}}" stepKey="dontSeeNonFilterNameInShipNameColumn" after="searchOrderGridByNameKeyword"/>
+        <see selector="{{AdminDataGridTableSection.column('Ship')}}" userInput="{{BillingAddressTX.fullname}}" stepKey="seeFilterNameInShipNameColumn" after="dontSeeNonFilterNameInShipNameColumn"/>
+
+        <!--Filter order grid-->
+        <comment userInput="Admin filters order grid by 'Bill-to Name'" stepKey="filterOrderGridByNameComment" after="seeFilterNameInShipNameColumn"/>
+        <!--Filter order grid by "Bill-to Name"-->
+        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetOrderGridForNameFilter" after="filterOrderGridByNameComment"/>
+        <!--@TODO use "Bill-to Name" when MQE-794 is fixed-->
+        <see selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{BillingAddressTX.fullname}}" stepKey="seeNonFilterNameInColumn" after="resetOrderGridForNameFilter"/>
+        <actionGroup ref="filterOrderGridByBillingName" stepKey="filterOrderGridByBillingName" after="seeNonFilterNameInColumn">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <dontSee selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{BillingAddressTX.fullname}}" stepKey="dontSeeNonFilterNameInColumn" after="filterOrderGridByBillingName"/>
+        <see selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{Simple_US_Customer.fullname}}" stepKey="seeFilterNameInColumn" after="dontSeeNonFilterNameInColumn"/>
+        <!--Filter order grid by Grand Total (Base)-->
+        <comment userInput="Admin filters order grid by 'Grand Total'" stepKey="filterOrderGridByTotalComment" after="seeFilterNameInColumn"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilterBeforeTotalFilter" after="filterOrderGridByTotalComment"/>
+        <see selector="{{AdminDataGridTableSection.column('Grand Total')}}" userInput="{{AdminOrderSimpleProduct.grandTotal}}" stepKey="seeLowerTotalInGrid" after="clearFilterBeforeTotalFilter"/>
+        <actionGroup ref="filterOrderGridByBaseTotalRange" stepKey="filterOrderGridByTotal" after="seeLowerTotalInGrid">
+            <argument name="from" value="OrderGrandTotalFilterRange.from"/>
+            <argument name="to" value="OrderGrandTotalFilterRange.to"/>
+        </actionGroup>
+        <dontSee selector="{{AdminDataGridTableSection.column('Grand Total')}}" userInput="{{AdminOrderSimpleProduct.grandTotal}}" stepKey="dontSeeLowerTotalInGrid" after="filterOrderGridByTotal"/>
+        <see selector="{{AdminDataGridTableSection.column('Grand Total')}}" userInput="{{AdminOrderSimpleConfigurableProduct.grandTotal}}" stepKey="seeExpectedTotalInGrid" after="dontSeeLowerTotalInGrid"/>
+        <!--Filter order grid by purchase date-->
+        <comment userInput="Admin filters order grid by 'Purchase Date'" stepKey="filterOrderGridByDateComment" after="seeExpectedTotalInGrid"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilterBeforeOrderDateFilter" after="filterOrderGridByDateComment"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderFilterForOrderDateFrom" after="clearFilterBeforeOrderDateFilter"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('created_at[from]')}}" userInput="01/01/2018" stepKey="fillOrderDateFromFilter" after="openOrderFilterForOrderDateFrom"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="applyFilterOrderDateFrom" after="fillOrderDateFromFilter"/>
+        <!--Both of our orders should be in grid-->
+        <see selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{Simple_US_Customer.fullname}}" stepKey="seeFirstOrderInGrid" after="applyFilterOrderDateFrom"/>
+        <see selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{BillingAddressTX.fullname}}" stepKey="seeSecondOrderInGrid" after="seeFirstOrderInGrid"/>
+        <!--Add end date to date range filter (past date)-->
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderFilterForOrderDateTo" after="seeSecondOrderInGrid"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('created_at[to]')}}" userInput="01/10/2018" stepKey="fillOrderDateToFilter" after="openOrderFilterForOrderDateTo"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="applyFilterOrderDateTo" after="fillOrderDateToFilter"/>
+        <!--Dont see our orders in the grid-->
+        <dontSee selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{Simple_US_Customer.fullname}}" stepKey="dontSeeFirstOrderInGrid" after="applyFilterOrderDateTo"/>
+        <dontSee selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{BillingAddressTX.fullname}}" stepKey="dontSeeSecondOrderInGrid" after="dontSeeFirstOrderInGrid"/>
+        <!--Filter order grid by status-->
+        <comment userInput="Admin filters order grid by 'Status'" stepKey="filterOrderGridByStatusComment" after="dontSeeSecondOrderInGrid"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilterBeforeStatusFilter" after="filterOrderGridByStatusComment"/>
+        <actionGroup ref="filterOrderGridByStatus" stepKey="filterOrderGridByPendingStatus" after="clearFilterBeforeStatusFilter">
+            <argument name="status" value="OrderStatus.pending"/>
+        </actionGroup>
+        <dontSee selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.closed}}" stepKey="dontSeeClosedStatusInOrderGrid" after="filterOrderGridByPendingStatus"/>
+        <see selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.pending}}" stepKey="seePendingStatusInOrderGrid" after="dontSeeClosedStatusInOrderGrid"/>
+        <actionGroup ref="filterOrderGridByStatus" stepKey="filterOrderGridByClosedStatus" after="seePendingStatusInOrderGrid">
+            <argument name="status" value="OrderStatus.closed"/>
+        </actionGroup>
+        <see selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.closed}}" stepKey="seeClosedStatusInOrderGrid" after="filterOrderGridByClosedStatus"/>
+        <dontSee selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.pending}}" stepKey="dontSeePendingStatusInOrderGrid" after="seeClosedStatusInOrderGrid"/>
+
+        <!--Sort order grid-->
+        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetOrderGridForSorting" after="dontSeePendingStatusInOrderGrid"/>
+        <!--Sort order grid by status-->
+        <comment userInput="Admin sorts order grid by status" stepKey="sortOrderGridByStatusComment" after="resetOrderGridForSorting"/>
+        <click selector="{{AdminDataGridTableSection.columnHeader('Status')}}" stepKey="clickStatusToSortAsc" after="sortOrderGridByStatusComment"/>
+        <grabTextFrom selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" stepKey="getOrderStatusFirstRow" after="clickStatusToSortAsc"/>
+        <grabTextFrom selector="{{AdminDataGridTableSection.gridCell('2', 'Status')}}" stepKey="getOrderStatusSecondRow" after="getOrderStatusFirstRow"/>
+        <assertGreaterThanOrEqual expected="$getOrderStatusFirstRow" actual="$getOrderStatusSecondRow" stepKey="checkStatusSortOrderAsc" after="getOrderStatusSecondRow"/>
+        <!--@TODO improve sort assertion and check price and date column when MQE-690 is resolved-->
+
+        <!--Use paging on order grid-->
+        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminGridBeforePaging" after="checkStatusSortOrderAsc"/>
+        <comment userInput="Admin uses paging on order grid" stepKey="usePagingOrderGridComment" after="resetAdminGridBeforePaging"/>
+        <actionGroup ref="adminDataGridSelectCustomPerPage" stepKey="select1OrderPerPage" after="usePagingOrderGridComment">
+            <!--@TODO Change this to scalar when MQE-498 is implemented-->
+            <argument name="perPage" value="Const.one"/>
+        </actionGroup>
+        <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" userInput="1" stepKey="see1RowOnFirstPage" after="select1OrderPerPage"/>
+        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="seeOnFirstPageOrderGrid" after="see1RowOnFirstPage"/>
+        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPageOrderGrid" after="seeOnFirstPageOrderGrid"/>
+        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageOrderGrid" after="clickNextPageOrderGrid"/>
+        <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" userInput="1" stepKey="see1RowOnSecondPage" after="seeOnSecondPageOrderGrid"/>
+        <actionGroup ref="adminDataGridSelectPerPage" stepKey="select50OrdersPerPage" after="see1RowOnSecondPage">
+            <!--@TODO Change this to scalar when MQE-498 is implemented-->
+            <argument name="perPage" value="Const.fifty"/>
+        </actionGroup>
+        <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" parameterArray="[2,50]" stepKey="seeCorrectNumberOfRowsPerPage" after="select50OrdersPerPage"/>
+
+        <!--Add column to order grid-->
+        <!--@TODO Change to action group when MQE-498 is implemented-->
+        <comment userInput="Admin adds column to order grid" stepKey="adminAddsColumnOrderGrid" after="seeCorrectNumberOfRowsPerPage"/>
+        <dontSeeElement selector="{{AdminDataGridTableSection.columnHeader('Customer Email')}}" stepKey="dontSeeCustomerEmailColumnInGrid" after="adminAddsColumnOrderGrid"/>
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="openOrderGridColumnOptions" after="dontSeeCustomerEmailColumnInGrid"/>
+        <checkOption selector="{{AdminDataGridHeaderSection.columnCheckbox('Customer Email')}}" stepKey="addCustomerEmailColumnToOrderGrid" after="openOrderGridColumnOptions"/>
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="closeOrderGridColumnOptions" after="addCustomerEmailColumnToOrderGrid"/>
+        <seeElement selector="{{AdminDataGridTableSection.columnHeader('Customer Email')}}" stepKey="seeCustomerEmailColumnInGrid" after="closeOrderGridColumnOptions"/>
+        <!--Remove column from order grid-->
+        <!--@TODO Change to action group when MQE-498 is implemented-->
+        <comment userInput="Admin removes column from order grid" stepKey="adminRemovesColumnOrderGrid" after="seeCustomerEmailColumnInGrid"/>
+        <seeElement selector="{{AdminDataGridTableSection.columnHeader('Purchase Point')}}" stepKey="seePurchasePointColumnInGrid" after="adminRemovesColumnOrderGrid"/>
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="openOrderGridColumnOptionsPurchasePoint" after="seePurchasePointColumnInGrid"/>
+        <uncheckOption selector="{{AdminDataGridHeaderSection.columnCheckbox('Purchase Point')}}" stepKey="removePurchasePointColumnFromGrid" after="openOrderGridColumnOptionsPurchasePoint"/>
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="closeOrderGridColumnOptionsPurchasePoint" after="removePurchasePointColumnFromGrid"/>
+        <dontSeeElement selector="{{AdminDataGridTableSection.columnHeader('Purchase Point')}}" stepKey="dontSeePurchasePointColumnInGrid" after="closeOrderGridColumnOptionsPurchasePoint"/>
+        <!--END admin uses order grid-->
+
+        <!--Delete store view created as prerequisites-->
+        <comment userInput="Clean up store view" stepKey="cleanUpStoreView" before="deleteStoreView"/>
+        <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
+    </test>
+</tests>
