@@ -6,16 +6,20 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Sales\Controller\Adminhtml\Order as OrderAction;
 
 /**
- * Class CommentsHistory
+ * Comments History tab, needs to be accessible by POST becuase of tabs mechanism.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
+class CommentsHistory extends OrderAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
