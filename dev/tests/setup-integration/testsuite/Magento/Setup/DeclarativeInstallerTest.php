@@ -312,4 +312,25 @@ class DeclarativeInstallerTest extends SetupTestCase
             ->from($this->resourceConnection->getTableName('some_table_renamed'));
         self::assertEquals([$dataToMigrate], $adapter->fetchAll($select));
     }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule8
+     */
+    public function testForeignKeyReferenceId()
+    {
+        $this->cliCommad->install(
+            ['Magento_TestSetupDeclarationModule8']
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'unpatterned_fk_name',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->cliCommad->upgrade();
+        $tableStatements = $this->describeTable->describeShard('default');
+        $tableSql = $tableStatements['dependent'];
+        $this->assertRegExp('/CONSTRAINT\s`DEPENDENT_PAGE_ID_ON_TEST_TABLE_PAGE_ID`/', $tableSql);
+        $this->assertRegExp('/CONSTRAINT\s`DEPENDENT_SCOPE_ID_ON_TEST_SCOPE_TABLE_SCOPE_ID`/', $tableSql);
+    }
 }
