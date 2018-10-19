@@ -56,7 +56,7 @@
             <argument name="conditions" xsi:type="array">
                 <item name="stock_item_is_in_stock" xsi:type="array">
                     <item name="required" xsi:type="boolean">true</item>
-                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsSalableStockItemIsInStock</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsSetInStockStatusForCompositeProductCondition</item>
                 </item>
                 <item name="back_order" xsi:type="array">
                     <item name="sort_order" xsi:type="number">10</item>

@@ -9,15 +9,15 @@ namespace Magento\InventorySales\Model\IsProductSalableCondition;
 
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemManagementAllowedForSku;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface;
 
 /**
  * @inheritdoc
  */
-class IsSalableStockItemIsInStock implements IsProductSalableInterface
+class IsSetInStockStatusForCompositeProductCondition implements IsProductSalableInterface
 {
     /**
-     * @var IsSourceItemManagementAllowedForSku
+     * @var IsSourceItemManagementAllowedForSkuInterface
      */
     private $isSourceItemManagementAllowedForSku;
 
@@ -27,7 +27,7 @@ class IsSalableStockItemIsInStock implements IsProductSalableInterface
     private $getStockItemConfiguration;
 
     /**
-     * @param IsSourceItemManagementAllowedForSku $isSourceItemManagementAllowedForSku
+     * @param IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      */
     public function __construct(
