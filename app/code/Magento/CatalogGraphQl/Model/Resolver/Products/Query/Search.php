@@ -45,7 +45,7 @@ class Search
     private $metadataPool;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Search\PageSizeProvider
+     * @var \Magento\Search\Model\Search\PageSizeProvider
      */
     private $pageSizeProvider;
 

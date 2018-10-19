@@ -9,6 +9,7 @@ namespace Magento\Search\Model\Search;
 
 /**
  * Returns max  page size by search engine name
+ * @api
  */
 class PageSizeProvider
 {
