@@ -177,9 +177,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 
             $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
             if ($fileExtension && !$this->checkAllowedExtension($fileExtension)) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('File extension \'%1\' is not a supported upload type', $fileExtension)
-                );
+                throw new \Magento\Framework\Exception\LocalizedException(__('Disallowed file type.'));
             }
 
             $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $fileName);
