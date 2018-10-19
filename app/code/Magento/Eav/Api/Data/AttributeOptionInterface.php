@@ -75,7 +75,7 @@ interface AttributeOptionInterface
     /**
      * is default
      *
-     * @return bool|null
+     * @return string[]|null
      */
     public function getIsDefault();
 
