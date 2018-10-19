@@ -32,11 +32,11 @@
         <includePath>testsuite</includePath>
         <ini name="date.timezone" value="America/Los_Angeles"/>
         <ini name="xdebug.max_nesting_level" value="200"/>
-        <const name="TESTS_INSTALL_CONFIG_FILE" value="{{local_config_file}}"/>
+        <const name="TESTS_INSTALL_CONFIG_FILE" value="etc/install-config-mysql.php"/>
         <const name="TESTS_GLOBAL_CONFIG_FILE" value="etc/config-global.php"/>
         <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
-        <const name="TESTS_CLEANUP" value="{{tests_cleanup}}"/>
-        <const name="TESTS_MAGENTO_MODE" value="{{app_mode}}"/>
+        <const name="TESTS_CLEANUP" value="enabled"/>
+        <const name="TESTS_MAGENTO_MODE" value="developer"/>
         <const name="TESTS_ERROR_LOG_LISTENER_LEVEL" value="1"/>
     </php>
     <!-- Test listeners -->
