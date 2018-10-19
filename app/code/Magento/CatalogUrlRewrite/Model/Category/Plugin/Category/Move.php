@@ -64,15 +64,19 @@ class Move
         Category $newParent,
         $afterCategoryId
     ) {
+
+        $categoryStoreId = $category->getStoreId();
         foreach ($category->getStoreIds() as $storeId) {
             $category->setStoreId($storeId);
             if (!$this->isGlobalScope($storeId)) {
                 $this->updateCategoryUrlKeyForStore($category);
+                $category->unsUrlPath();
                 $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
                 $category->getResource()->saveAttribute($category, 'url_path');
                 $this->updateUrlPathForChildren($category);
             }
         }
+        $category->setStoreId($categoryStoreId);
 
         return $result;
     }
