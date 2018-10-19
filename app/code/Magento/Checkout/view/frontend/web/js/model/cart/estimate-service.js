@@ -19,7 +19,7 @@ define([
         /**
          * Estimate totals for shipping address and update shipping rates.
          */
-        estimateTotalsAndUpdateRates = function() {
+        estimateTotalsAndUpdateRates = function () {
             var type = quote.shippingAddress().getType();
 
             if (
@@ -58,14 +58,14 @@ define([
         /**
          * Estimate totals for shipping address.
          */
-        estimateTotalsShipping = function() {
+        estimateTotalsShipping = function () {
             totalsDefaultProvider.estimateTotals(quote.shippingAddress());
         },
 
         /**
          * Estimate totals for billing address.
          */
-        estimateTotalsBilling = function() {
+        estimateTotalsBilling = function () {
             var type = quote.billingAddress().getType();
 
             if (quote.isVirtual()) {
