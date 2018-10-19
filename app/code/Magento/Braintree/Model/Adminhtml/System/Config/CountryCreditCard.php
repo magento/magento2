@@ -8,11 +8,13 @@ namespace Magento\Braintree\Model\Adminhtml\System\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Framework\Unserialize\SecureUnserializer;
 
 /**
  * Class CountryCreditCard
@@ -25,6 +27,11 @@ class CountryCreditCard extends Value
     protected $mathRandom;
 
     /**
+     * @var SecureUnserializer
+     */
+    private $secureUnserializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -32,6 +39,7 @@ class CountryCreditCard extends Value
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param SecureUnserializer|null $secureUnserializer
      * @param array $data
      */
     public function __construct(
@@ -42,9 +50,11 @@ class CountryCreditCard extends Value
         Random $mathRandom,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
+        SecureUnserializer $secureUnserializer = null,
         array $data = []
     ) {
         $this->mathRandom = $mathRandom;
+        $this->secureUnserializer = $secureUnserializer ?: ObjectManager::getInstance()->get(SecureUnserializer::class);
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
@@ -58,7 +68,7 @@ class CountryCreditCard extends Value
         $value = $this->getValue();
         if (!is_array($value)) {
             try {
-                $value = unserialize($value);
+                $value = $this->secureUnserializer->unserialize($value);
             } catch (\InvalidArgumentException $e) {
                 $value = [];
             }
