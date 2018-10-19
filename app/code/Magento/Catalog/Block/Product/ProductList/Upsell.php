@@ -97,7 +97,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      */
     protected function _prepareData()
     {
-        $product = $this->_coreRegistry->registry('product');
+        $product = $this->getProduct();
         /* @var $product \Magento\Catalog\Model\Product */
         $this->_itemCollection = $product->getUpSellProductCollection()->setPositionOrder()->addStoreFilter();
         if ($this->moduleManager->isEnabled('Magento_Checkout')) {
