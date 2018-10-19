@@ -54,24 +54,24 @@
 
         <!--Create configuration-->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton1"/>
-        <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30" stepKey="waitForGridPresent1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <!--Add new attribute-->
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnCreateNewAttributeButton1"/>
         <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="enterAttributePanelIFrame"/>
         <wait time="2" stepKey="waitForModalIframeReady"/>
-        <waitForElementVisible selector="{{AdminNewAttributePanel.defaultLabel}}" time="30" stepKey="waitForNewAttributePanel"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
         <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{textSwatchProductAttribute.default_label}}" stepKey="fillDefaultLabel"/>
         <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="{{textSwatchProductAttribute.input_type}}" stepKey="selectAttributeInputType"/>
         <!--Add text swatch 1 to attribute-->
         <click selector="{{AdminNewAttributePanel.addTextSwatch}}" stepKey="clickAddTextSwatch1"/>
-        <waitForElementVisible selector="{{AdminNewAttributePanel.isDefaultTextSwatch('1')}}" time="30" stepKey="waitForTextSwatchRow1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
         <fillField selector="{{AdminNewAttributePanel.textSwatchAdminSwatchValue('0')}}" userInput="{{textSwatchProductAttribute1.adminSwatch}}" stepKey="fillAdminSwatchLabel1"/>
         <fillField selector="{{AdminNewAttributePanel.textSwatchDefaultStoreSwatchValue('0')}}" userInput="{{textSwatchProductAttribute1.defaultStoreSwatch}}" stepKey="fillDefaultStoreSwatchLabel1"/>
         <fillField selector="{{AdminNewAttributePanel.textSwatchAdminDescriptionValue('0')}}" userInput="{{textSwatchProductAttribute1.adminDescription}}" stepKey="fillAdminDescriptionLabel1"/>
         <fillField selector="{{AdminNewAttributePanel.textSwatchDefaultStoreDescriptionValue('0')}}" userInput="{{textSwatchProductAttribute1.defaultStoreDescription}}" stepKey="fillDefaultStoreDescriptionLabel1"/>
         <!--Add text swatch 2 to attribute-->
         <click selector="{{AdminNewAttributePanel.addTextSwatch}}" stepKey="clickAddTextSwatch2"/>
-        <waitForElementVisible selector="{{AdminNewAttributePanel.isDefaultTextSwatch('2')}}" time="30" stepKey="waitForTextSwatchRow2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
         <fillField selector="{{AdminNewAttributePanel.textSwatchAdminSwatchValue('1')}}" userInput="{{textSwatchProductAttribute2.adminSwatch}}" stepKey="fillAdminSwatchLabel2"/>
         <fillField selector="{{AdminNewAttributePanel.textSwatchDefaultStoreSwatchValue('1')}}" userInput="{{textSwatchProductAttribute2.defaultStoreSwatch}}" stepKey="fillDefaultStoreSwatchLabel2"/>
         <fillField selector="{{AdminNewAttributePanel.textSwatchAdminDescriptionValue('1')}}" userInput="{{textSwatchProductAttribute2.adminDescription}}" stepKey="fillAdminDescriptionLabel2"/>
@@ -79,14 +79,10 @@
         <!--Save new attribute-->
         <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickSaveAttribute"/>
         <switchToIFrame stepKey="switchToParentPage" after="clickSaveAttribute"/>
-        <waitForElementNotVisible selector="{{AdminNewAttributePanel.container}}" time="30" stepKey="waitForNewAttributePanelClose"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSaveAttributeLoadingMask"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
         <!--Find new attribute in grid and select-->
         <conditionalClick selector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" dependentSelector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" visible="true" stepKey="clickClearFilters1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="openFilterPanel"/>
-        <waitForPageLoad stepKey="waitForPageLoad12" time="10"/>
-        <conditionalClick selector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" dependentSelector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" visible="true" stepKey="clickClearFilters1"/>
-        <waitForPageLoad stepKey="waitForPageLoad16" time="10"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeLabel}}" userInput="{{textSwatchProductAttribute.default_label}}" stepKey="fillAttributeLabelFilter"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersAttribute"/>
         <checkOption selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="checkAttributeInGrid"/>
@@ -99,15 +95,12 @@
         <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="clickOnAssignSources2"/>
 
         <conditionalClick selector="(//*[contains(@class, '_show')]//*[contains(@class, 'action-clear')])[1]" dependentSelector="(//*[contains(@class, 'admin__data-grid-filters-current _show')])[1]" visible="true" stepKey="clickClearFilters2"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
-        <waitForPageLoad stepKey="waitForPageLoad13" time="10"/>
-        <conditionalClick selector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" dependentSelector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" visible="true" stepKey="clickClearFilters2"/>
-        <waitForPageLoad stepKey="waitForPageLoad15" time="10"/>
         <fillField userInput="$$createSource1.source[source_code]$$" selector="{{AdminManageSourcesGridFilterControls.code}}" stepKey="fillCodeField2"/>
 
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>
-        <waitForPageLoad stepKey="waitForPageLoad14" time="10"/>
+
         <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource1"/>
         <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="clickOnDone2"/>
 
@@ -117,7 +110,7 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickGenerateProducts"/>
         <!--Save configurable product-->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveConfigurableProduct"/>
-        <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" time="30" stepKey="waitForAttributeSetConfirmation"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickConfirmAttributeSet"/>
 
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage1"/>
