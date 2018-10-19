@@ -23,7 +23,7 @@
         <column xsi:type="int" name="page_id_on" nullable="false" unsigned="false"/>
         <column xsi:type="int" name="scope_id_on" nullable="false" unsigned="false"/>
         <!-- Expected name in DB: DEPENDENT_PAGE_ID_ON_TEST_TABLE_PAGE_ID -->
-        <constraint xsi:type="foreign" referenceId="FOREIGN" table="dependent" column="page_id_on" referenceColumn="page_id"
+        <constraint xsi:type="foreign" referenceId="DEPENDENT_PAGE_ID_ON_TEST_TABLE_PAGE_ID" table="dependent" column="page_id_on" referenceColumn="page_id"
                     referenceTable="test_table"/>
         <!-- Expected name in DB: DEPENDENT_SCOPE_ID_ON_TEST_SCOPE_TABLE_SCOPE_ID -->
         <constraint xsi:type="foreign" referenceId="ScopeIDOnTOScopeTableAndScopeId" table="dependent" column="scope_id_on" referenceColumn="scope_id"
