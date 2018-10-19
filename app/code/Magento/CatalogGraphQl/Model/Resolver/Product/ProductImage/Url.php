@@ -61,10 +61,10 @@ class Url implements ResolverInterface
 
     /**
      * @param string $imageType
-     * @param string $imagePath
+     * @param string|null $imagePath Null if image is not set
      * @return string
      */
-    private function getImageUrl(string $imageType, string $imagePath): string
+    private function getImageUrl(string $imageType, ?string $imagePath): string
     {
         $image = $this->productImageFactory->create();
         $image->setDestinationSubdir($imageType)

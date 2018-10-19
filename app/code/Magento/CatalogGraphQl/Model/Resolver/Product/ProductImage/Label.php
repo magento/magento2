@@ -62,24 +62,33 @@ class Label implements ResolverInterface
 
         /** @var Product $product */
         $product = $value['model'];
+        $imageType = $value['image_type'];
+        $imagePath = $product->getData($imageType);
+        $productId = (int)$product->getEntityId();
 
-        $imageLabel = $this->getImageLabel((int)$product->getEntityId(), $value['image_type']);
+        // null if image is not set
+        if (null === $imagePath) {
+            return $this->getAttributeValue($productId, 'name');
+        }
+
+        $imageLabel = $this->getAttributeValue($productId, $imageType . '_label');
+        if (null === $imageLabel) {
+            $imageLabel = $this->getAttributeValue($productId, 'name');
+        }
+
         return $imageLabel;
     }
 
     /**
      * @param int $productId
-     * @param string $imageType
-     * @return string
+     * @param string $attributeCode
+     * @return null|string Null if attribute value is not exists
      */
-    private function getImageLabel(int $productId, string $imageType): string
+    private function getAttributeValue(int $productId, string $attributeCode): ?string
     {
         $storeId = $this->storeManager->getStore()->getId();
 
-        $imageLabel = $this->productResource->getAttributeRawValue($productId, $imageType . '_label', $storeId);
-        if (empty($imageLabel)) {
-            $imageLabel = $this->productResource->getAttributeRawValue($productId, 'name', $storeId);
-        }
-        return $imageLabel;
+        $value = $this->productResource->getAttributeRawValue($productId, $attributeCode, $storeId);
+        return is_array($value) && empty($value) ? null : $value;
     }
 }
