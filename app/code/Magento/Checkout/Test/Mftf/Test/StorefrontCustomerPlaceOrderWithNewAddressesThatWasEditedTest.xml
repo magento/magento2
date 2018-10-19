@@ -65,16 +65,13 @@
 
         <!--Close Popup and click next-->
         <click selector="{{CheckoutAddressPopupSection.closeAddressModalPopup}}" stepKey="closePopup"/>
-        <!--<waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>-->
-        <waitForPageLoad stepKey="123"/>
+        <waitForPageLoad stepKey="waitForPopupClosed"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
 
         <!--Refresh Page and Place Order-->
         <reloadPage stepKey="reloadPage"/>
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="grabOrderNumber"/>
 
         <!--Verify New addresses in Customer's Address Book-->
