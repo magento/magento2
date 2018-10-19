@@ -619,6 +619,8 @@ class Cart extends DataObject implements CartInterface
     }
 
     /**
+     * Get product ids.
+     *
      * @return int[]
      */
     public function getProductIds()
