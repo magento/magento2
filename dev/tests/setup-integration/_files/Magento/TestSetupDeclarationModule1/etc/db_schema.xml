@@ -53,15 +53,15 @@
         <column xsi:type="boolean" name="boolean"/>
         <column xsi:type="varbinary" name="varbinary_rename" default="10101" disabled="true"/>
         <!--Constraints-->
-        <constraint xsi:type="unique" referenceId="TEST_TABLE_SMALLINT_BIGINT">
+        <constraint xsi:type="unique" referenceId="TEST_TABLE_UNIQUE">
             <column name="smallint"/>
             <column name="bigint"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
+        <constraint xsi:type="foreign" referenceId="TEST_TABLE_TINYINT_REFERENCE"
                     column="tinyint" table="test_table"
                     referenceTable="reference_table" referenceColumn="tinyint_ref" onDelete="NO ACTION"/>
         <!--Indexes-->
-        <index referenceId="TEST_TABLE_TINYINT_BIGINT" indexType="btree">
+        <index referenceId="TEST_TABLE_INDEX" indexType="btree">
             <column name="tinyint"/>
             <column name="bigint"/>
         </index>

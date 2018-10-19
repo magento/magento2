@@ -65,6 +65,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
      *
      * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProvider contentsDataProvider
+     * @throws \Exception
      */
     public function testExecute(array $expectedWhitelistContent)
     {
@@ -119,6 +120,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
                             'constraint' =>
                                 [
                                     'tinyint_primary' => true,
+                                    'PRIMARY' => true,
                                 ],
                         ],
                     'auto_increment_test' =>

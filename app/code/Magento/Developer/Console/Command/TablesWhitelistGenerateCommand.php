@@ -10,7 +10,10 @@ namespace Magento\Developer\Console\Command;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverByModule;
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\SchemaBuilder;
 use Magento\Framework\Setup\Declaration\Schema\Diff\Diff;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
+use Magento\Framework\Setup\Declaration\Schema\Dto\SchemaFactory;
 use Magento\Framework\Setup\JsonPersistor;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
 use Symfony\Component\Console\Command\Command;
@@ -51,21 +54,37 @@ class TablesWhitelistGenerateCommand extends Command
     private $primaryDbSchema;
 
     /**
+     * @var SchemaFactory
+     */
+    private $schemaFactory;
+
+    /**
+     * @var SchemaBuilder
+     */
+    private $schemaBuilder;
+
+    /**
      * @param ComponentRegistrar $componentRegistrar
      * @param ReaderComposite $readerComposite
      * @param JsonPersistor $jsonPersistor
+     * @param SchemaFactory $schemaFactory
+     * @param SchemaBuilder $schemaBuilder
      * @param string|null $name
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
         ReaderComposite $readerComposite,
         JsonPersistor $jsonPersistor,
+        SchemaFactory $schemaFactory,
+        SchemaBuilder $schemaBuilder,
         $name = null
     ) {
         parent::__construct($name);
         $this->componentRegistrar = $componentRegistrar;
         $this->readerComposite = $readerComposite;
         $this->jsonPersistor = $jsonPersistor;
+        $this->schemaFactory = $schemaFactory;
+        $this->schemaBuilder = $schemaBuilder;
     }
 
     /**
@@ -98,6 +117,7 @@ class TablesWhitelistGenerateCommand extends Command
      *
      * @param string $moduleName
      * @return void
+     * @throws \Magento\Framework\Setup\Exception
      */
     private function persistModule($moduleName)
     {
@@ -113,15 +133,20 @@ class TablesWhitelistGenerateCommand extends Command
             $content = json_decode(file_get_contents($whiteListFileName), true);
         }
 
-        $newContent = $this->filterPrimaryTables($this->readerComposite->read($moduleName));
+        $schema = $this->schemaFactory->create();
+        $data = $this->filterPrimaryTables($this->readerComposite->read($moduleName));
+        if (isset($data['table'])) {
+            $this->schemaBuilder->addTablesData($data['table']);
+            $schema = $this->schemaBuilder->build($schema);
 
-        //Do merge between what we have before, and what we have now and filter to only certain attributes.
-        $content = array_replace_recursive(
-            $content,
-            $this->filterAttributeNames($newContent)
-        );
-        if (!empty($content)) {
-            $this->jsonPersistor->persist($content, $whiteListFileName);
+            //Do merge between what we have before, and what we have now and filter to only certain attributes.
+            $content = array_replace_recursive(
+                $content,
+                $this->getDeclaredContent($schema)
+            );
+            if (!empty($content)) {
+                $this->jsonPersistor->persist($content, $whiteListFileName);
+            }
         }
     }
 
@@ -149,27 +174,30 @@ class TablesWhitelistGenerateCommand extends Command
     }
 
     /**
-     * Filter attribute names
+     * Convert Schema into a whitelist structure.
      *
      * As for whitelist we do not need any specific attributes like nullable or indexType, we need to choose only names.
      *
-     * @param array $content
+     * @param Schema $schema
      * @return array
      */
-    private function filterAttributeNames(array $content) : array
+    private function getDeclaredContent(Schema $schema) : array
     {
         $names = [];
-        $types = ['column', 'index', 'constraint'];
+        foreach ($schema->getTables() as $tableName => $table) {
+            $columns = array_keys($table->getColumns());
+            if ($columns) {
+                $names[$tableName]['column'] = array_fill_keys($columns, true);
+            }
 
-        foreach ($content['table'] as $tableName => $tableContent) {
-            foreach ($types as $type) {
-                if (isset($tableContent[$type])) {
-                    //Add elements to whitelist
-                    foreach (array_keys($tableContent[$type]) as $elementName) {
-                        //Depends on flag column will be whitelisted or not
-                        $names[$tableName][$type][$elementName] = true;
-                    }
-                }
+            $indexes = array_keys($table->getIndexes());
+            if ($indexes) {
+                $names[$tableName]['index'] = array_fill_keys($indexes, true);
+            }
+
+            $constraints = array_keys($table->getConstraints());
+            if ($constraints) {
+                $names[$tableName]['constraint'] = array_fill_keys($constraints, true);
             }
         }
 
