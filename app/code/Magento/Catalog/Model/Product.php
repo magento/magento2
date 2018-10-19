@@ -596,6 +596,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @see \Magento\Catalog\Model\Product\Visibility
      *
      * @return int
+     * @codeCoverageIgnoreStart
      */
     public function getVisibility()
     {
@@ -818,6 +819,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasStoreIds()) {
             $storeIds = [];
             if ($websiteIds = $this->getWebsiteIds()) {
+                if ($this->_storeManager->isSingleStoreMode()) {
+                    $websiteIds = array_keys($websiteIds);
+                }
                 foreach ($websiteIds as $websiteId) {
                     $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
                     $storeIds = array_merge($storeIds, $websiteStores);
@@ -1049,7 +1053,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * Register indexing event before delete product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeDelete()
     {
@@ -1723,8 +1728,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Check is a virtual product
      *
-     * Data helper wrapper
-     *
      * @return bool
      */
     public function isVirtual()
@@ -2033,7 +2036,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $code Option code
      * @param mixed $value Value of the option
-     * @param int|Product $product Product ID
+     * @param int|Product|null $product Product ID
      * @return $this
      */
     public function addCustomOption($code, $value, $product = null)
@@ -2227,9 +2230,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Prepare product custom options.
+     * Prepare product custom options
      *
-     * To be sure that all product custom options does not has ID and has product instance
+     * To be sure that all product custom options does not has ID and has product instance.
      *
      * @return \Magento\Catalog\Model\Product
      */
@@ -2586,10 +2589,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     //@codeCoverageIgnoreEnd
 
     /**
-     * Convert array to media gallery interface
+     * Convert Image to ProductAttributeMediaGalleryEntryInterface
      *
      * @param array $mediaGallery
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function convertToMediaGalleryInterface(array $mediaGallery)
     {
@@ -2608,6 +2612,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Returns media gallery entries
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]|null
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getMediaGalleryEntries()
     {
@@ -2625,6 +2630,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param ProductAttributeMediaGalleryEntryInterface[] $mediaGalleryEntries
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setMediaGalleryEntries(array $mediaGalleryEntries = null)
     {
