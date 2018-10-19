@@ -213,6 +213,9 @@
             <formElements>
                 <multiselect>
                     <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
                         <options class="Magento\Cms\Ui\Component\Listing\Column\Cms\Options"/>
                     </settings>
                 </multiselect>
