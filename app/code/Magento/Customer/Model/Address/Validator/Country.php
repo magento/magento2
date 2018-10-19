@@ -7,7 +7,8 @@ namespace Magento\Customer\Model\Address\Validator;
 
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Address\ValidatorInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Directory\Helper\Data;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -16,35 +17,25 @@ use Magento\Store\Model\ScopeInterface;
 class Country implements ValidatorInterface
 {
     /**
-     * @var \Magento\Directory\Helper\Data
+     * @var Data
      */
     private $directoryData;
 
     /**
-     * @var \Magento\Directory\Model\AllowedCountries
+     * @var AllowedCountries
      */
     private $allowedCountriesReader;
 
     /**
-     * @var \Magento\Customer\Model\Config\Share
-     */
-    private $shareConfig;
-
-    /**
-     * @param \Magento\Directory\Helper\Data $directoryData
-     * @param \Magento\Directory\Model\AllowedCountries|null $allowedCountriesReader
-     * @param \Magento\Customer\Model\Config\Share|null $shareConfig
+     * @param Data $directoryData
+     * @param AllowedCountries $allowedCountriesReader
      */
     public function __construct(
-        \Magento\Directory\Helper\Data $directoryData,
-        \Magento\Directory\Model\AllowedCountries $allowedCountriesReader = null,
-        \Magento\Customer\Model\Config\Share $shareConfig = null
+        Data $directoryData,
+        AllowedCountries $allowedCountriesReader
     ) {
         $this->directoryData = $directoryData;
-        $this->allowedCountriesReader = $allowedCountriesReader
-            ?: ObjectManager::getInstance()->get(\Magento\Directory\Model\AllowedCountries::class);
-        $this->shareConfig = $shareConfig
-            ?: ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
+        $this->allowedCountriesReader = $allowedCountriesReader;
     }
 
     /**
@@ -128,12 +119,7 @@ class Country implements ValidatorInterface
      */
     private function getWebsiteAllowedCountries(AbstractAddress $address): array
     {
-        $websiteId = null;
-
-        if (!$this->shareConfig->isGlobalScope()) {
-            $websiteId = $address->getCustomer() ? $address->getCustomer()->getWebsiteId() : null;
-        }
-
-        return $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $websiteId);
+        $storeId = $address->getData('store_id');
+        return $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
     }
 }
