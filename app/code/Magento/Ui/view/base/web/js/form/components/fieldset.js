@@ -161,7 +161,6 @@ define([
             }
 
             this.error(hasErrors || message);
-
             if (hasErrors || message) {
                 this.open();
             }
