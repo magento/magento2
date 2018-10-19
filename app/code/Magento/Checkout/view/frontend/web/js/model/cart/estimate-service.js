@@ -80,4 +80,5 @@ define([
     quote.shippingAddress.subscribe(estimateTotalsAndUpdateRates);
     quote.shippingMethod.subscribe(estimateTotalsShipping);
     quote.billingAddress.subscribe(estimateTotalsBilling);
+    customerData.get('cart').subscribe(estimateTotalsShipping);
 });
