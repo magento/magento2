@@ -405,7 +405,6 @@ define([
                 isValid = this.disabled() || !this.visible() || result.passed;
 
             this.error(message);
-
             this.error.valueHasMutated();
             this.bubble('error', message);
 
