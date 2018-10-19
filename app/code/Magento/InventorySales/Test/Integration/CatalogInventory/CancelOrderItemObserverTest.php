@@ -28,6 +28,9 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CancelOrderItemObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
