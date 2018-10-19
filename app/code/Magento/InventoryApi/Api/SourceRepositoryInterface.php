@@ -40,7 +40,7 @@ interface SourceRepositoryInterface
      * @throws \Magento\Framework\Validation\ValidationException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(SourceInterface $source);
+    public function save(SourceInterface $source): void;
 
     /**
      * Get Source data by given code. If you want to create plugin on get method, also you need to create separate

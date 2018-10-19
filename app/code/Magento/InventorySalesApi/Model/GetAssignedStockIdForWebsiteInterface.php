@@ -20,5 +20,5 @@ interface GetAssignedStockIdForWebsiteInterface
      * @param string $websiteCode
      * @return int|null
      */
-    public function execute(string $websiteCode);
+    public function execute(string $websiteCode): ?int;
 }

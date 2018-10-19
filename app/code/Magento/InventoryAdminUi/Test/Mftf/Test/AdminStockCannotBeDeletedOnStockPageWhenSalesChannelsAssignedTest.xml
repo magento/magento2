@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminStockCannotBeDeletedOnStockPageWhenSalesChannelIsAssignedTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Delete Stock"/>
             <title value="Cannot Delete Stock from Stock Edit Page when Sales Channel assigned"/>
             <description value="You should not be able to delete a Stock fro Stock Edit Page when a Sales Channel is assigned."/>
-            <testCaseId value="950"/>
+            <testCaseId value="MSI-950"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

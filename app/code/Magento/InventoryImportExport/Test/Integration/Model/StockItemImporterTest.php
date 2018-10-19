@@ -83,7 +83,7 @@ class StockItemImporterTest extends TestCase
                 'is_in_stock' => SourceItemInterface::STATUS_IN_STOCK,
                 'product_id' => $productId,
                 'website_id' => 0,
-                'stock_id' => '1',
+                'stock_id' => 1,
             ]
         ];
 
@@ -92,9 +92,9 @@ class StockItemImporterTest extends TestCase
         $compareData = $this->buildDataArray($this->getSourceItemList()->getItems());
         $expectedData = [
             SourceItemInterface::SKU => 'SKU-1',
-            SourceItemInterface::QUANTITY => '1.0000',
-            SourceItemInterface::SOURCE_CODE => (string)$this->defaultSourceProvider->getCode(),
-            SourceItemInterface::STATUS => (string)SourceItemInterface::STATUS_IN_STOCK,
+            SourceItemInterface::QUANTITY => 1.0,
+            SourceItemInterface::SOURCE_CODE => $this->defaultSourceProvider->getCode(),
+            SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
         ];
 
         $this->assertArrayHasKey('SKU-1', $compareData);

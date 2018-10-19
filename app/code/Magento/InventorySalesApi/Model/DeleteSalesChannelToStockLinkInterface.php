@@ -19,5 +19,5 @@ interface DeleteSalesChannelToStockLinkInterface
      * @param string $code
      * @return void
      */
-    public function execute(string $type, string $code);
+    public function execute(string $type, string $code): void;
 }

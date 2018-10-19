@@ -7,18 +7,18 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminBackordersEnabledOnConfigurationPageAndAppliedToSimpleProductOnTestSourceTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="CatalogInventory stock option"/>
             <title value="Backorders enabled on Configuration page and applied from Homepage to Simple product on Test source"/>
             <description value="In test source you should be able to create order with simple product and enabled backorders config"/>
-            <testCaseId value="1557"/>
+            <testCaseId value="MSI-1557"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
+
         <before>
             <comment userInput="Fill config 'Backorders'." stepKey="fillConfigComment"/>
             <magentoCLI command="config:set cataloginventory/item_options/backorders 1" stepKey="fillConfigValue"/>
@@ -105,6 +105,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createStock" stepKey="deleteStock"/>
         </after>
+
         <comment userInput="Customer login to storefront." stepKey="customerLoginToStorefrontComment"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
             <argument name="Customer" value="$$createCustomer$$"/>
