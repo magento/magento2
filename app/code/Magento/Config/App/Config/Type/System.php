@@ -101,6 +101,8 @@ class System implements ConfigTypeInterface
     }
 
     /**
+     * Get config value by path.
+     *
      * System configuration is separated by scopes (default, websites, stores). Configuration of a scope is inherited
      * from its parent scope (store inherits website).
      *
@@ -121,7 +123,7 @@ class System implements ConfigTypeInterface
     public function get($path = '')
     {
         if ($path === '') {
-            $this->data = array_replace_recursive($this->loadAllData(), $this->data);
+            $this->data = array_replace_recursive($this->data, $this->loadAllData());
 
             return $this->data;
         }
@@ -142,7 +144,7 @@ class System implements ConfigTypeInterface
         if (count($pathParts) === 1 && $pathParts[0] !== ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$pathParts[0]])) {
                 $data = $this->readData();
-                $this->data = array_replace_recursive($data, $this->data);
+                $this->data = array_replace_recursive($this->data, $this->postProcessor->process($data));
             }
 
             return $this->data[$pathParts[0]];
@@ -152,7 +154,12 @@ class System implements ConfigTypeInterface
 
         if ($scopeType === ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$scopeType])) {
-                $this->data = array_replace_recursive($this->loadDefaultScopeData($scopeType), $this->data);
+                $this->data = array_replace_recursive(
+                    $this->data,
+                    $scopeData = $this->loadDefaultScopeData($scopeType)
+                );
+                $scopeData = $this->postProcessor->process($scopeData);
+                $this->data = array_replace_recursive($this->data, $scopeData);
             }
 
             return $this->getDataByPathParts($this->data[$scopeType], $pathParts);
@@ -162,10 +169,9 @@ class System implements ConfigTypeInterface
 
         if (!isset($this->data[$scopeType][$scopeId])) {
             $scopeData = $this->loadScopeData($scopeType, $scopeId);
-
-            if (!isset($this->data[$scopeType][$scopeId])) {
-                $this->data = array_replace_recursive($scopeData, $this->data);
-            }
+            $this->data = array_replace_recursive($this->data, $scopeData);
+            $scopeData = $this->postProcessor->process($scopeData);
+            $this->data = array_replace_recursive($this->data, $scopeData);
         }
 
         return isset($this->data[$scopeType][$scopeId])
@@ -186,9 +192,10 @@ class System implements ConfigTypeInterface
             $data = $this->readData();
         } else {
             $data = $this->serializer->unserialize($cachedData);
+            $this->data = $data;
         }
 
-        return $data;
+        return $this->postProcessor->process($data);
     }
 
     /**
@@ -243,6 +250,7 @@ class System implements ConfigTypeInterface
 
     /**
      * Cache configuration data.
+     *
      * Caches data per scope to avoid reading data for all scopes on every request
      *
      * @param array $data
@@ -308,9 +316,6 @@ class System implements ConfigTypeInterface
     private function readData(): array
     {
         $this->data = $this->reader->read();
-        $this->data = $this->postProcessor->process(
-            $this->data
-        );
 
         return $this->data;
     }
