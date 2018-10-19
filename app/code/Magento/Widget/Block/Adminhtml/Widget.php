@@ -12,6 +12,7 @@ namespace Magento\Widget\Block\Adminhtml;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
  */
 class Widget extends \Magento\Backend\Block\Widget\Form\Container
 {
