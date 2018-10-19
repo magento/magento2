@@ -20,6 +20,7 @@
         </annotations>
 
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock1"/>
             <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock2"/>
             <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock3"/>
@@ -42,8 +43,6 @@
             <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock20"/>
             <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock21"/>
             <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock22"/>
-
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
@@ -53,8 +52,9 @@
         <waitForPageLoad time="30" stepKey="waitForAdminManageStockPageLoad"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <waitForPageLoad time="30" stepKey="waitFilterCleared"/>
-        <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown"/>
-        <click selector="{{AdminDataGridPaginationSection.perPageOption('20')}}" stepKey="selectCustomPerPage"/>
+        <actionGroup ref="adminDataGridSelectPerPage" stepKey="select20StocksPerPage">
+            <argument name="perPage" value="20"/>
+        </actionGroup>
         <waitForPageLoad time="30" stepKey="waitSelectPerPageApplied"/>
         <click selector="{{AdminManageStockGridControls.multicheckDropdown}}" stepKey="openDropdownToSelectAll"/>
         <click selector="{{AdminManageStockGridControls.multicheckOption('Select All')}}" stepKey="selectAll"/>
