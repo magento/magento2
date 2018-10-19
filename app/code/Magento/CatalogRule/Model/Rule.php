@@ -632,8 +632,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     {
         if (!$this->isObjectNew()) {
             $arrayDiff = $this->dataDiff($this->getOrigData(), $this->getStoredData());
-            unset($arrayDiff['name']);
-            unset($arrayDiff['description']);
+            unset($arrayDiff['name'], $arrayDiff['description']);
             if (empty($arrayDiff)) {
                 return false;
             }

@@ -374,8 +374,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             }
 
             $attr = $this->getAttribute($attrCode);
-            unset($this->_attributesByTable[$attr->getBackend()->getTable()][$attrCode]);
-            unset($this->_attributesByCode[$attrCode]);
+            unset($this->_attributesByTable[$attr->getBackend()->getTable()][$attrCode], $this->_attributesByCode[$attrCode]);
         }
 
         return $this;

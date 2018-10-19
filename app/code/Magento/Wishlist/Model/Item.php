@@ -257,8 +257,7 @@ class Item extends AbstractModel implements ItemInterface
         foreach ($this->_options as $index => $option) {
             if ($option->isDeleted()) {
                 $option->delete();
-                unset($this->_options[$index]);
-                unset($this->_optionsByCode[$option->getCode()]);
+                unset($this->_options[$index], $this->_optionsByCode[$option->getCode()]);
             } else {
                 $option->save();
             }

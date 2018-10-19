@@ -188,8 +188,7 @@ class CssUrls implements ProcessorInterface
         $prevIndex = 0;
         foreach ($urlParts as $index => $part) {
             if ($part == '..') {
-                unset($urlParts[$index]);
-                unset($urlParts[$prevIndex]);
+                unset($urlParts[$index], $urlParts[$prevIndex]);
                 --$prevIndex;
             } else {
                 $prevIndex = $index;

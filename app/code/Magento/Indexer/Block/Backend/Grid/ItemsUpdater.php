@@ -28,8 +28,7 @@ class ItemsUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterInt
     public function update($argument)
     {
         if (false === $this->authorization->isAllowed('Magento_Indexer::changeMode')) {
-            unset($argument['change_mode_onthefly']);
-            unset($argument['change_mode_changelog']);
+            unset($argument['change_mode_onthefly'], $argument['change_mode_changelog']);
         }
         return $argument;
     }

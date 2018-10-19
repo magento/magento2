@@ -62,8 +62,7 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
                 ['result' => $result, 'action' => $this]
             );
 
-            unset($result['tmp_name']);
-            unset($result['path']);
+            unset($result['tmp_name'], $result['path']);
 
             $result['url'] = $this->_objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class)
                 ->getTmpMediaUrl($result['file']);

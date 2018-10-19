@@ -42,8 +42,7 @@ class Redirect extends \Magento\Authorizenet\Controller\Directpost\Payment
         if (isset($redirectParams['controller_action_name'])
             && strpos($redirectParams['controller_action_name'], 'sales_order_') !== false
         ) {
-            unset($redirectParams['controller_action_name']);
-            unset($params['redirect_parent']);
+            unset($redirectParams['controller_action_name'], $params['redirect_parent']);
         }
 
         $this->_coreRegistry->register(Iframe::REGISTRY_KEY, $params);

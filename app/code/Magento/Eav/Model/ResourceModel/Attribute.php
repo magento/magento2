@@ -125,8 +125,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
 
             $data['attribute_id'] = (int)$object->getId();
             $data['website_id'] = (int)$websiteId;
-            unset($describe['attribute_id']);
-            unset($describe['website_id']);
+            unset($describe['attribute_id'], $describe['website_id']);
 
             $updateColumns = [];
             foreach (array_keys($describe) as $columnName) {

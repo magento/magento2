@@ -190,8 +190,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $data = $model->getData();
-        unset($data['password']);
-        unset($data[self::CURRENT_USER_PASSWORD_FIELD]);
+        unset($data['password'], $data[self::CURRENT_USER_PASSWORD_FIELD]);
         $form->setValues($data);
 
         $this->setForm($form);

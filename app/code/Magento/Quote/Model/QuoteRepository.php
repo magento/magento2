@@ -179,8 +179,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
         }
 
         $this->getSaveHandler()->save($quote);
-        unset($this->quotesById[$quote->getId()]);
-        unset($this->quotesByCustomerId[$quote->getCustomerId()]);
+        unset($this->quotesById[$quote->getId()], $this->quotesByCustomerId[$quote->getCustomerId()]);
     }
 
     /**
@@ -191,8 +190,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
         $quoteId = $quote->getId();
         $customerId = $quote->getCustomerId();
         $quote->delete();
-        unset($this->quotesById[$quoteId]);
-        unset($this->quotesByCustomerId[$customerId]);
+        unset($this->quotesById[$quoteId], $this->quotesByCustomerId[$customerId]);
     }
 
     /**

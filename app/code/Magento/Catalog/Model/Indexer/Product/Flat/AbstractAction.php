@@ -213,9 +213,7 @@ abstract class AbstractAction
             ) {
                 $columns = $this->_productIndexerHelper->getFlatColumns();
                 $fieldList = array_keys($columns);
-                unset($columns['entity_id']);
-                unset($columns['child_id']);
-                unset($columns['is_child']);
+                unset($columns['entity_id'], $columns['child_id'], $columns['is_child']);
                 /** @var $select \Magento\Framework\DB\Select */
                 $select = $this->_connection->select()->from(
                     ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],

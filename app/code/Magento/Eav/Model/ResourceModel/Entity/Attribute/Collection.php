@@ -416,8 +416,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 $attributeData['attribute_set_info'] = $setInfo;
             }
 
-            unset($attributeToSetInfo);
-            unset($attributeIds);
+            unset($attributeToSetInfo, $attributeIds);
         }
         return $this;
     }

@@ -742,8 +742,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         foreach ($this->_options as $index => $option) {
             if ($option->isDeleted()) {
                 $option->delete();
-                unset($this->_options[$index]);
-                unset($this->_optionsByCode[$option->getCode()]);
+                unset($this->_options[$index], $this->_optionsByCode[$option->getCode()]);
             } else {
                 if (!$option->getItem() || !$option->getItem()->getId()) {
                     $option->setItem($this);

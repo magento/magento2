@@ -1197,13 +1197,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $type = $dataRow[self::COL_TYPE];
         $attributeSet = $dataRow[self::COL_ATTR_SET];
 
-        unset($dataRow['product_id']);
-        unset($dataRow['product_link_id']);
-        unset($dataRow['store_id']);
-        unset($dataRow[self::COL_SKU]);
-        unset($dataRow[self::COL_STORE]);
-        unset($dataRow[self::COL_ATTR_SET]);
-        unset($dataRow[self::COL_TYPE]);
+        unset($dataRow['product_id'], $dataRow['product_link_id'], $dataRow['store_id'], $dataRow[self::COL_SKU], $dataRow[self::COL_STORE], $dataRow[self::COL_ATTR_SET], $dataRow[self::COL_TYPE]);
+
 
         if (Store::DEFAULT_STORE_ID == $storeId) {
             $this->updateDataWithCategoryColumns($dataRow, $multiRawData['rowCategories'], $productId);
