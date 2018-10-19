@@ -31,7 +31,7 @@ class IsSetInStockStatusForCompositeProductCondition implements IsProductSalable
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      */
     public function __construct(
-        IsSourceItemManagementAllowedForSku $isSourceItemManagementAllowedForSku,
+        IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku,
         GetStockItemConfigurationInterface $getStockItemConfiguration
     ) {
         $this->isSourceItemManagementAllowedForSku = $isSourceItemManagementAllowedForSku;
