@@ -7,18 +7,18 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMassActionTransferInventoryToSourceForSimpleProductsTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Transfer inventory to source"/>
             <title value="Admin user apply to several simple products mass action 'Transfer Inventory To Source' on Products grid"/>
             <description value="You should be able to transfer inventory to source via mass action on products grid"/>
-            <testCaseId value="1512"/>
+            <testCaseId value="MSI-1512"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
+
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="BasicMsiStock1" stepKey="createStock"/>
@@ -84,7 +84,6 @@
             <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
         </before>
-
         <after>
             <comment userInput="Disable created sources." stepKey="disableCreatedSourcesComment"/>
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableFirstCreatedSource">

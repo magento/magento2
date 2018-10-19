@@ -7,18 +7,18 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminUserApplyOnlyXLeftThresholdForSimpleProductOnTestSourceTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="InventoryAdminUi stock option"/>
             <title value="Admin user apply 'Only X left Threshold' for Simple product on Test source"/>
             <description value="In test source you should be able to create order with simple order and enabled config 'Only X left Threshold'."/>
-            <testCaseId value="1528"/>
+            <testCaseId value="MSI-1528"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
+
         <before>
             <comment userInput="Fill config 'Only X left Threshold'." stepKey="fillConfigComment"/>
             <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 500" stepKey="fillConfigValue"/>
@@ -103,6 +103,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createStock" stepKey="deleteStock"/>
         </after>
+
         <comment userInput="Customer login to storefront." stepKey="customerLoginToStorefrontComment"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
             <argument name="Customer" value="$$createCustomer$$"/>

@@ -63,7 +63,8 @@ interface StockRepositoryInterface
      *
      * @param int $stockId
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function deleteById(int $stockId);
+    public function deleteById(int $stockId): void;
 }

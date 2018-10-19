@@ -31,5 +31,5 @@ interface PlaceReservationsForSalesEventInterface
      * @throws InputException
      * @throws CouldNotSaveException
      */
-    public function execute(array $items, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent);
+    public function execute(array $items, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent): void;
 }
