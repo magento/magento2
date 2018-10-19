@@ -236,7 +236,9 @@ class Switcher extends \Magento\Framework\View\Element\Template
     public function getTargetStorePostData(\Magento\Store\Model\Store $store, $data = [])
     {
         $data[\Magento\Store\Api\StoreResolverInterface::PARAM_NAME] = $store->getCode();
-        $data['___from_store'] = $this->_storeManager->getStore()->getCode();
+        if (!$store->isUseStoreInUrl()) {
+            $data['___from_store'] = $this->_storeManager->getStore()->getCode();
+        }
 
         $urlOnTargetStore = $store->getCurrentUrl(false);
         $data[ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl($urlOnTargetStore);
