@@ -54,6 +54,10 @@
     <type name="Magento\InventorySales\Model\IsProductSalableCondition\IsProductSalableConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">
+                <item name="stock_item_is_in_stock" xsi:type="array">
+                    <item name="required" xsi:type="boolean">true</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsSetInStockStatusForCompositeProductCondition</item>
+                </item>
                 <item name="back_order" xsi:type="array">
                     <item name="sort_order" xsi:type="number">10</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\BackOrderCondition</item>
@@ -158,5 +162,10 @@
                 <item name="sales_channels" xsi:type="object">Magento\InventorySales\Model\Stock\Validator\SalesChannelsValidator</item>
             </argument>
         </arguments>
+    </type>
+    <!-- StockItemConfiguration -->
+    <type name="Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface">
+        <plugin name="load_stock_item_is_in_stock"
+                type="Magento\InventoryCatalog\Plugin\InventoryConfigurationApi\GetStockItemConfiguration\LoadIsInStockPlugin"/>
     </type>
 </config>
