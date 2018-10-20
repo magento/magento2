@@ -23,6 +23,9 @@ use Magento\Framework\DB\Ddl\Table;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
