@@ -27,8 +27,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $setup->startSetup();
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $setup->getConnection()->dropColumn($setup->getTable('ui_bookmark'), 'created_at');
-            $setup->getConnection()->dropColumn($setup->getTable('ui_bookmark'), 'updated_at');
             $tableName = $setup->getTable('ui_bookmark');
             if ($setup->getConnection()->isTableExists($tableName) == true) {
                 $columns = [
@@ -48,7 +46,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $connection = $setup->getConnection();
 
                 foreach ($columns as $name => $definition) {
-                    $connection->addColumn($tableName, $name, $definition);
+                    $connection->modifyColumn($tableName, $name, $definition);
                 }
             }
         }
