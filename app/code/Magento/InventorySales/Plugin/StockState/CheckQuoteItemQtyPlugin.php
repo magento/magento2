@@ -123,7 +123,7 @@ class CheckQuoteItemQtyPlugin
         $productSku = $skus[$productId];
 
         $websiteCode = $this->storeManager->getWebsite()->getCode();
-        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+        $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $stockId = $stock->getStockId();
 
         $isSalableResult = $this->isProductSalableForRequestedQty->execute($productSku, (int)$stockId, $qty);
