@@ -23,6 +23,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Replace legacy quote item check
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CheckQuoteItemQtyPlugin
 {
