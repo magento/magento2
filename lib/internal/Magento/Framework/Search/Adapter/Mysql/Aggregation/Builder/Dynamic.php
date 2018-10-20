@@ -12,6 +12,12 @@ use Magento\Framework\Search\Dynamic\EntityStorageFactory;
 use Magento\Framework\Search\Request\Aggregation\DynamicBucket;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 
+/**
+ * MySQL search dynamic aggregation builder.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class Dynamic implements BucketInterface
 {
     /**
@@ -37,7 +43,7 @@ class Dynamic implements BucketInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(
         DataProviderInterface $dataProvider,

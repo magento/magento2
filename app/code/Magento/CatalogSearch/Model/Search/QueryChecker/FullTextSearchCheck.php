@@ -13,8 +13,8 @@ use Magento\Framework\Search\Request\Query\Filter;
 /**
  * Class is responsible for checking if fulltext search is required for search query
  *
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class FullTextSearchCheck
 {
