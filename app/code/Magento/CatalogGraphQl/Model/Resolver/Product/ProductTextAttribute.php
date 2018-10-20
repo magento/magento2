@@ -39,7 +39,7 @@ class ProductTextAttribute implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -55,8 +55,8 @@ class ProductTextAttribute implements ResolverInterface
         /* @var $product Product */
         $product = $value['model'];
         $fieldName = $field->getName();
-        $formatIdentifier = $args['format'] ?? $this->defaultFormat;
-        $format = $this->formatList->create($formatIdentifier);
+        $formatIdentifier = $args['filter']['description']['format'] ?? $this->defaultFormat;
+        $format = $this->formatList->getFormatByIdentifier($formatIdentifier);
         $result = ['content' => $format->getContent($product, $fieldName)];
 
         return $result;

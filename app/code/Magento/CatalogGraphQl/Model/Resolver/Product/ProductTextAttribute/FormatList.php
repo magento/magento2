@@ -7,8 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextAttribute;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class FormatList
+ * @package Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextAttribute
+ */
 class FormatList
 {
     /**
@@ -37,10 +42,12 @@ class FormatList
      * @param string $formatIdentifier
      * @return FormatInterface
      */
-    public function create(string $formatIdentifier) : FormatInterface
+    public function getFormatByIdentifier(string $formatIdentifier) : FormatInterface
     {
-        $formatClassName = 'Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextAttribute\\' . ucfirst($formatIdentifier);
-        $formatInstance = $this->objectManager->get($formatClassName);
+        if (!isset($this->formats[$formatIdentifier])) {
+            throw new GraphQlInputException(__('Format %1 does not exist.', [$formatIdentifier]));
+        }
+        $formatInstance = $this->objectManager->get($this->formats[$formatIdentifier]);
 
         return $formatInstance;
     }
