@@ -58,6 +58,16 @@ define([
             }
             delete addressData['region_id'];
 
+            if (addressData['custom_attributes']) {
+                addressData['custom_attributes'] = Object.entries(addressData['custom_attributes'])
+                    .map(function (customAttribute) {
+                        return {
+                            'attribute_code': customAttribute[0],
+                            'value': customAttribute[1]
+                        };
+                    });
+            }
+
             return address(addressData);
         },
 
