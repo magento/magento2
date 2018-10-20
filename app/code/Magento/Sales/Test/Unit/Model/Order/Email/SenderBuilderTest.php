@@ -122,7 +122,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
         $customerName = 'test_name';
         $customerEmail = 'test_email';
         $identity = 'email_identity_test';
-        
+
         $transportMock = $this->createMock(
             \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class
         );
