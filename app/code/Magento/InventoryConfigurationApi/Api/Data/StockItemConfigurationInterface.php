@@ -298,8 +298,6 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface|null
      */
     public function getExtensionAttributes(): ?StockItemConfigurationExtensionInterface;

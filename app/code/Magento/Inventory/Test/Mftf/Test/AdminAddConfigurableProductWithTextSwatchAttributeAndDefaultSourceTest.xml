@@ -82,8 +82,10 @@
         <waitForElementNotVisible selector="{{AdminNewAttributePanel.container}}" time="30" stepKey="waitForNewAttributePanelClose"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSaveAttributeLoadingMask"/>
         <!--Find new attribute in grid and select-->
-        <conditionalClick selector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" dependentSelector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" visible="true" stepKey="clickClearFilters1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="openFilterPanel"/>
+        <waitForPageLoad stepKey="waitForPageLoad12" time="10"/>
+        <conditionalClick selector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" dependentSelector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" visible="true" stepKey="clickClearFilters1"/>
+        <waitForPageLoad stepKey="waitForPageLoad16" time="10"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeLabel}}" userInput="{{textSwatchProductAttribute.default_label}}" stepKey="fillAttributeLabelFilter"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersAttribute"/>
         <checkOption selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="checkAttributeInGrid"/>
@@ -95,14 +97,15 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku1"/>
         <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="clickOnAssignSources2"/>
 
-        <conditionalClick selector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" dependentSelector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" visible="true" stepKey="clickClearFilters2"/>
-        <waitForPageLoad stepKey="waitForPageLoad" time="5"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="10"/>
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
+        <waitForPageLoad stepKey="waitForPageLoad13" time="10"/>
+        <conditionalClick selector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" dependentSelector="[class*='assign_sources_configurable_modal'] div.admin__data-grid-header [data-action='grid-filter-reset']" visible="true" stepKey="clickClearFilters2"/>
+        <waitForPageLoad stepKey="waitForPageLoad15" time="10"/>
         <fillField userInput="$$createSource1.source[source_code]$$" selector="{{AdminManageSourcesGridFilterControls.code}}" stepKey="fillCodeField2"/>
-        <fillField userInput="" selector="{{AdminManageSourcesGridFilterControls.name}}" stepKey="fillNameField"/>
 
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>
-
+        <waitForPageLoad stepKey="waitForPageLoad14" time="10"/>
         <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource1"/>
         <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="clickOnDone2"/>
 
