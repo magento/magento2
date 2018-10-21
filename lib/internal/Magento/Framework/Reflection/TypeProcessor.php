@@ -542,7 +542,7 @@ class TypeProcessor
      * @param string $typeName
      * @return string
      */
-    public function resolveFullyQualifiedClassName(ClassReflection $sourceClass, string $typeName): string
+    private function resolveFullyQualifiedClassName(ClassReflection $sourceClass, string $typeName): string
     {
         $typeName = trim($typeName);
 
