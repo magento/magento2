@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\Stock\Command;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Delete Stock by stockId command (Service Provider Interface - SPI)
@@ -27,6 +28,7 @@ interface DeleteByIdInterface
      * @param int $stockId
      * @return void
      * @throws CouldNotDeleteException
+     * @throws NoSuchEntityException
      */
     public function execute(int $stockId);
 }

@@ -66,6 +66,7 @@ class CreateLegacyStockStatusView implements SchemaPatchInterface
         $legacyStockStatusTable = $this->schemaSetup->getTable('cataloginventory_stock_status');
         $productTable = $this->schemaSetup->getTable('catalog_product_entity');
         $sql = "CREATE
+                SQL SECURITY INVOKER
                 VIEW {$viewToLegacyIndex}
                   AS
                     SELECT

@@ -41,7 +41,7 @@ class CleanupReservations implements CleanupReservationsInterface
     /**
      * @inheritdoc
      */
-    public function execute()
+    public function execute(): void
     {
         $connection = $this->resource->getConnection();
         $reservationTable = $this->resource->getTableName('inventory_reservation');

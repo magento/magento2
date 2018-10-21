@@ -54,7 +54,7 @@ class SaveStockItemConfiguration implements SaveStockItemConfigurationInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(string $sku, int $stockId, StockItemConfigurationInterface $stockItemConfiguration)
+    public function execute(string $sku, int $stockId, StockItemConfigurationInterface $stockItemConfiguration): void
     {
         $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
 
@@ -101,6 +101,7 @@ class SaveStockItemConfiguration implements SaveStockItemConfigurationInterface
             StockItemInterface::LOW_STOCK_DATE => $stockItemConfiguration->getLowStockDate(),
             StockItemInterface::IS_DECIMAL_DIVIDED => $stockItemConfiguration->isDecimalDivided(),
             StockItemInterface::STOCK_STATUS_CHANGED_AUTO => $stockItemConfiguration->getStockStatusChangedAuto(),
+            StockItemInterface::IS_IN_STOCK => $stockItemConfiguration->getExtensionAttributes()->getIsInStock()
         ];
     }
 }

@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminManageStockGridChangeColumnOrderByDragAndDropTest">
         <annotations>
-            <features value="Multi-Stock Inventory"/>
             <stories value="Column drag and drop changed column order."/>
             <title value="Column drag and drop changed column order in Manage Stock grid by Admin user."/>
             <description value="Column drag and drop changed column order in Manage Stock grid by Admin user."/>
-            <testCaseId value="934"/>
+            <testCaseId value="MSI-934"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -47,7 +46,7 @@
         <grabMultiple selector="{{AdminGridHeaders.columnsNames}}" stepKey="grabColumnsDefaultOrder" />
         <assertEquals stepKey="assertDefaultOrder">
             <actualResult type="variable">grabColumnsDefaultOrder</actualResult>
-            <expectedResult type="array">["ID", "Name", "Sales Channels", "Action"]</expectedResult>
+            <expectedResult type="array">["ID", "Name", "Sales Channels", "Assigned sources", "Action"]</expectedResult>
         </assertEquals>
 
         <dragAndDrop selector1="{{AdminGridHeaders.headerByName('ID')}}"
@@ -57,7 +56,7 @@
         <grabMultiple selector="{{AdminGridHeaders.columnsNames}}" stepKey="grabColumnsAfterIdColumnMoved" />
         <assertEquals stepKey="assertOrderAfterIdColumnMoved">
             <actualResult type="variable">grabColumnsAfterIdColumnMoved</actualResult>
-            <expectedResult type="array">["Name", "Sales Channels", "ID", "Action"]</expectedResult>
+            <expectedResult type="array">["Name", "Sales Channels", "ID", "Assigned sources", "Action"]</expectedResult>
         </assertEquals>
 
         <dragAndDrop selector1="{{AdminGridHeaders.headerByName('Name')}}"
@@ -67,7 +66,7 @@
         <grabMultiple selector="{{AdminGridHeaders.columnsNames}}" stepKey="grabColumnsAfterNameColumnMoved" />
         <assertEquals stepKey="assertOrderAfterNameColumnMoved">
             <actualResult type="variable">grabColumnsAfterNameColumnMoved</actualResult>
-            <expectedResult type="array">["Sales Channels", "Name", "ID", "Action"]</expectedResult>
+            <expectedResult type="array">["Sales Channels", "Name", "ID", "Assigned sources", "Action"]</expectedResult>
         </assertEquals>
     </test>
 </tests>

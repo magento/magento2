@@ -29,8 +29,7 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '?'
-                    . http_build_query(['sourceCode' => $sourceCode, 'sku' => $sku]),
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceCode . '/' . $sku,
                 'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [

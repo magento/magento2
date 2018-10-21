@@ -87,9 +87,9 @@ class ProductTest extends TestCase
         );
         $expectedData = [
             SourceItemInterface::SKU => $sku,
-            SourceItemInterface::QUANTITY => '100.0000',
-            SourceItemInterface::SOURCE_CODE => (string)$this->defaultSourceProvider->getCode(),
-            SourceItemInterface::STATUS => (string)SourceItemInterface::STATUS_IN_STOCK,
+            SourceItemInterface::QUANTITY => 100.0000,
+            SourceItemInterface::SOURCE_CODE => $this->defaultSourceProvider->getCode(),
+            SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
         ];
         $this->assertArrayHasKey(
             $sku,
@@ -118,9 +118,9 @@ class ProductTest extends TestCase
         );
         $expectedData = [
             SourceItemInterface::SKU => $sku,
-            SourceItemInterface::QUANTITY => '150.0000',
-            SourceItemInterface::SOURCE_CODE => (string)$this->defaultSourceProvider->getCode(),
-            SourceItemInterface::STATUS => (string)SourceItemInterface::STATUS_IN_STOCK,
+            SourceItemInterface::QUANTITY => 150.0000,
+            SourceItemInterface::SOURCE_CODE => $this->defaultSourceProvider->getCode(),
+            SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
         ];
         $this->assertArrayHasKey(
             $sku,
