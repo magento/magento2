@@ -22,7 +22,7 @@ interface ProductSalableResultInterface extends ExtensibleDataInterface
     public function isSalable(): bool;
 
     /**
-     * @return ProductSalabilityErrorInterface[]
+     * @return \Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface[]
      */
     public function getErrors(): array;
 

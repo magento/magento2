@@ -23,8 +23,46 @@ class ProductSalabilityError extends AbstractExtensibleModel implements ProductS
      */
     private $message;
 
-    public function __construct(string $code, string $message)
-    {
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     */
+    private $extensionFactory;
+
+    /**
+     * ProductSalabilityError constructor.
+     *
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
+     * @param string $code
+     * @param string $message
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+        string $code,
+        string $message,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
+
+        $this->extensionFactory = $extensionFactory;
         $this->code = $code;
         $this->message = $message;
     }
