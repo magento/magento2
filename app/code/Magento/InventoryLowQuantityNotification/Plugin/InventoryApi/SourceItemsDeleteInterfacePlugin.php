@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Plugin\InventoryApi;
 
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\SourceItemConfiguration\Delete;
+use Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemsConfigurationInterface;
 
 /**
  * This plugin keeps consistency between SourceItem and SourceItemConfiguration while deleting
@@ -17,17 +16,19 @@ use Magento\InventoryLowQuantityNotification\Model\ResourceModel\SourceItemConfi
 class SourceItemsDeleteInterfacePlugin
 {
     /**
-     * @var Delete
+     * @var DeleteSourceItemsConfigurationInterface
      */
-    private $delete;
+    private $deleteSourceItemsConfiguration;
 
     /**
-     * @param Delete $delete
+     * SourceItemsDeleteInterfacePlugin constructor.
+     * @param DeleteSourceItemsConfigurationInterface $deleteSourceItemsConfiguration
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        Delete $delete
+        DeleteSourceItemsConfigurationInterface $deleteSourceItemsConfiguration
     ) {
-        $this->delete = $delete;
+        $this->deleteSourceItemsConfiguration = $deleteSourceItemsConfiguration;
     }
 
     /**
@@ -43,9 +44,6 @@ class SourceItemsDeleteInterfacePlugin
         $result,
         array $sourceItems
     ) {
-        foreach ($sourceItems as $sourceItem) {
-            /** @var SourceItemInterface $sourceItem */
-            $this->delete->execute($sourceItem->getSourceCode(), $sourceItem->getSku());
-        }
+        $this->deleteSourceItemsConfiguration->execute($sourceItems);
     }
 }
