@@ -41,7 +41,8 @@ if (empty($_SERVER['ENABLE_IIS_REWRITES']) || ($_SERVER['ENABLE_IIS_REWRITES'] !
      * Unset headers used by IIS URL rewrites.
      */
     unset($_SERVER['HTTP_X_REWRITE_URL'], $_SERVER['HTTP_X_ORIGINAL_URL'],
-        $_SERVER['IIS_WasUrlRewritten'], $_SERVER['UNENCODED_URL'], $_SERVER['ORIG_PATH_INFO']);
+        $_SERVER['IIS_WasUrlRewritten'],
+        $_SERVER['UNENCODED_URL'], $_SERVER['ORIG_PATH_INFO']);
 }
 
 if (

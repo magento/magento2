@@ -57,7 +57,8 @@ class PaymentSectionModifier
                 $moveInstructions = $this->getMoveInstructions($childSection, $childData);
                 if (!empty($moveInstructions)) {
                     foreach ($moveInstructions as $moveInstruction) {
-                        unset($childData['children'][$moveInstruction['section']],
+                        unset($childData['children']
+                            [$moveInstruction['section']],
                             $moveInstruction['data']['displayIn']);
                         $changedStructure
                             [$moveInstruction['parent']]
