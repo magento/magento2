@@ -8,21 +8,21 @@ declare(strict_types=1);
 namespace Magento\InventorySalesApi\Api;
 
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
- * The stock resolver is responsible for getting the linked stock for a certain sales channel
+ * Service which returns linked stock for a certain sales channel
  *
  * @api
  */
-interface StockResolverInterface
+interface GetStockBySalesChannelInterface
 {
     /**
-     * Resolve Stock by Sales Channel type and code
+     * Resolve Stock by Sales Channel
      *
-     * @param string $type
-     * @param string $code
+     * @param SalesChannelInterface $salesChannel
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return StockInterface
      */
-    public function execute(string $type, string $code): StockInterface;
+    public function execute(SalesChannelInterface $salesChannel): StockInterface;
 }

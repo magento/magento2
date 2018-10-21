@@ -81,7 +81,7 @@ class AdaptApplyStockConditionToSelectPlugin
             []
         );
         $websiteCode = $this->storeManager->getWebsite()->getCode();
-        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+        $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $tableName = $this->stockIndexTableNameResolver->execute((int)$stock->getStockId());
 
         $select->joinInner(
