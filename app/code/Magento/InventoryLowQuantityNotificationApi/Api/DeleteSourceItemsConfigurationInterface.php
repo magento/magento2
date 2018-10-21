@@ -12,12 +12,13 @@ namespace Magento\InventoryLowQuantityNotificationApi\Api;
  *
  * @api
  */
-interface DeleteSourceItemConfigurationInterface
+interface DeleteSourceItemsConfigurationInterface
 {
     /**
-     * @param string $sourceCode
-     * @param string $sku
+     * Delete multiple source items configuration for low quantity
+     *
+     * @param array $sourceItems
      * @return void
      */
-    public function execute(string $sourceCode, string $sku): void;
+    public function execute(array $sourceItems);
 }

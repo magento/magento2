@@ -8,14 +8,16 @@ declare(strict_types=1);
 namespace Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\SourceItemConfiguration\Delete as DeleteResourceModel;
+use Magento\InventoryLowQuantityNotification\Model\ResourceModel\SourceItemConfiguration\DeleteMultiple
+    as DeleteResourceModel;
+use Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemsConfigurationInterface;
 use Psr\Log\LoggerInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemConfigurationInterface;
 
 /**
  * @inheritdoc
  */
-class Delete implements DeleteSourceItemConfigurationInterface
+class DeleteMultiple implements DeleteSourceItemsConfigurationInterface
 {
     /**
      * @var DeleteResourceModel
@@ -28,6 +30,7 @@ class Delete implements DeleteSourceItemConfigurationInterface
     private $logger;
 
     /**
+     * DeleteMultiple constructor.
      * @param DeleteResourceModel $deleteResourceModel
      * @param LoggerInterface $logger
      */
@@ -42,13 +45,13 @@ class Delete implements DeleteSourceItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $sourceCode, string $sku): void
+    public function execute(array $sourceItems)
     {
         try {
-            $this->deleteResourceModel->execute($sourceCode, $sku);
+            $this->deleteResourceModel->execute($sourceItems);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotDeleteException(__('Could not delete SourceItem Configuration.'), $e);
+            throw new CouldNotDeleteException(__('Could not delete SourceItems Configuration.'), $e);
         }
     }
 }
