@@ -45,7 +45,7 @@ class DeleteMultiple implements DeleteSourceItemsConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $sourceItems)
+    public function execute(array $sourceItems): void
     {
         try {
             $this->deleteResourceModel->execute($sourceItems);
