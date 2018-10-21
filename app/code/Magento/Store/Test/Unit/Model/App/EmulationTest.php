@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests Magento\Store\Model\App\Emulation
+ * Tests Magento\Store\Model\App\EnvironmentEmulation
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -71,7 +71,7 @@ class EmulationTest extends \PHPUnit\Framework\TestCase
     const NEW_STORE_ID = 9;
 
     /**
-     * @var \Magento\Store\Model\App\Emulation
+     * @var \Magento\Store\Model\App\EnvironmentEmulation
      */
     private $model;
 
@@ -112,7 +112,7 @@ class EmulationTest extends \PHPUnit\Framework\TestCase
 
         // Prepare SUT
         $this->model = $this->objectManager->getObject(
-            \Magento\Store\Model\App\Emulation::class,
+            \Magento\Store\Model\App\EnvironmentEmulation::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'viewDesign' => $this->viewDesignMock,

@@ -64,7 +64,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     private $themeModelFactory;
 
     /**
-     * @var \Magento\Store\Model\App\Emulation|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\App\EnvironmentEmulation|\PHPUnit_Framework_MockObject_MockObject
      */
     private $appEmulation;
 
@@ -91,7 +91,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $this->themeModelFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
         $this->validator = $this->createMock(\Magento\Framework\View\Design\Theme\Validator::class);
         $this->appState = $this->createMock(\Magento\Framework\App\State::class);
-        $this->appEmulation = $this->createMock(\Magento\Store\Model\App\Emulation::class);
+        $this->appEmulation = $this->createMock(\Magento\Store\Model\App\EnvironmentEmulation::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(

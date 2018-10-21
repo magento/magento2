@@ -74,7 +74,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     protected $_appState;
 
     /**
-     * @var \Magento\Store\Model\App\Emulation
+     * @var \Magento\Store\Model\App\EnvironmentEmulation
      */
     private $appEmulation;
 
@@ -86,7 +86,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
      * @param array $themes
-     * @param \Magento\Store\Model\App\Emulation $appEmulation
+     * @param \Magento\Store\Model\App\EnvironmentEmulation $appEmulation
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -96,7 +96,7 @@ class Design implements \Magento\Framework\View\DesignInterface
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\State $appState,
         array $themes,
-        \Magento\Store\Model\App\Emulation $appEmulation = null
+        \Magento\Store\Model\App\EnvironmentEmulation $appEmulation = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_flyweightFactory = $flyweightFactory;
@@ -105,7 +105,8 @@ class Design implements \Magento\Framework\View\DesignInterface
         $this->_appState = $appState;
         $this->_themes = $themes;
         $this->objectManager = $objectManager;
-        $this->appEmulation = $appEmulation ?? $objectManager->get(\Magento\Store\Model\App\Emulation::class);
+        $this->appEmulation = $appEmulation
+            ?? $objectManager->get(\Magento\Store\Model\App\EnvironmentEmulation::class);
     }
 
     /**

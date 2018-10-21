@@ -70,7 +70,7 @@ class TranslateTest extends TestCase
                     $objectManager->get(\Magento\Framework\ObjectManagerInterface::class),
                     $objectManager->get(\Magento\Framework\App\State::class),
                     ['frontend' => 'Test/default'],
-                    $objectManager->get(\Magento\Store\Model\App\Emulation::class)
+                    $objectManager->get(\Magento\Store\Model\App\EnvironmentEmulation::class)
                 ]
             )
             ->getMock();
