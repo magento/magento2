@@ -176,7 +176,9 @@ class CustomerRegistry
             /** @var Customer $customer */
             $customer = $this->customerRegistryById[$customerId];
             $emailKey = $this->getEmailKey($customer->getEmail(), $customer->getWebsiteId());
-            unset($this->customerRegistryByEmail[$emailKey], $this->customerRegistryById[$customerId], $this->customerSecureRegistryById[$customerId]);
+            unset($this->customerRegistryByEmail[$emailKey],
+                $this->customerRegistryById[$customerId],
+                $this->customerSecureRegistryById[$customerId]);
         }
     }
 
@@ -196,7 +198,9 @@ class CustomerRegistry
         if ($emailKey) {
             /** @var Customer $customer */
             $customer = $this->customerRegistryByEmail[$emailKey];
-            unset($this->customerRegistryByEmail[$emailKey], $this->customerRegistryById[$customer->getId()], $this->customerSecureRegistryById[$customer->getId()]);
+            unset($this->customerRegistryByEmail[$emailKey],
+                $this->customerRegistryById[$customer->getId()],
+                $this->customerSecureRegistryById[$customer->getId()]);
         }
     }
 

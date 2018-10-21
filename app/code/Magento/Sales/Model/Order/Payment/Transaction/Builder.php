@@ -143,7 +143,8 @@ class Builder implements BuilderInterface
      */
     public function reset()
     {
-        unset($this->payment, $this->document, $this->order, $this->message, $this->transactionId);
+        unset($this->payment, $this->document, $this->order,
+            $this->message, $this->transactionId);
         $this->failSafe = false;
         $this->transactionAdditionalInfo = [];
         return $this;
