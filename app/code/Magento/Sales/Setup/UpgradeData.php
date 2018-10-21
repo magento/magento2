@@ -178,23 +178,24 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function fillQuoteAddressIdInSalesOrderAddress(ModuleDataSetupInterface $setup)
     {
-        $addressTable = $setup->getTable('sales_order_address');
+        $addressTable = $setup->getTable('sales_order_address', 'sales');
         $updateOrderAddress = $setup->getConnection()
             ->select()
             ->joinInner(
-                ['sales_order' => $setup->getTable('sales_order')],
+                ['sales_order' => $setup->getTable('sales_order', 'sales')],
                 $addressTable . '.parent_id = sales_order.entity_id',
                 ['quote_address_id' => 'quote_address.address_id']
             )
             ->joinInner(
-                ['quote_address' => $setup->getTable('quote_address')],
+                ['quote_address' => $setup->getTable('quote_address', 'checkout')],
                 'sales_order.quote_id = quote_address.quote_id 
                 AND ' . $addressTable . '.address_type = quote_address.address_type',
                 []
             )
             ->where(
                 $addressTable . '.quote_address_id IS NULL'
-            );
+            )
+        ;
         $updateOrderAddress = $setup->getConnection()->updateFromSelect(
             $updateOrderAddress,
             $addressTable
