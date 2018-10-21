@@ -39,6 +39,9 @@ class ItemIdProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->model->process($jsLayout, $itemMock));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderProcess()
     {
         return [

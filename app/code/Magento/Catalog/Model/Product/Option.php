@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
+use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
@@ -103,6 +104,11 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     private $metadataPool;
 
     /**
+     * @var ProductCustomOptionValuesInterfaceFactory
+     */
+    private $customOptionValuesFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -114,6 +120,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -127,12 +134,16 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         Option\Validator\Pool $validatorPool,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ProductCustomOptionValuesInterfaceFactory $customOptionValuesFactory = null
     ) {
         $this->productOptionValue = $productOptionValue;
         $this->optionTypeFactory = $optionFactory;
         $this->validatorPool = $validatorPool;
         $this->string = $string;
+        $this->customOptionValuesFactory = $customOptionValuesFactory ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
+
         parent::__construct(
             $context,
             $registry,
@@ -312,7 +323,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
             self::OPTION_TYPE_TIME => self::OPTION_GROUP_DATE,
         ];
 
-        return isset($optionGroupsToTypes[$type]) ? $optionGroupsToTypes[$type] : '';
+        return $optionGroupsToTypes[$type] ?? '';
     }
 
     /**
@@ -391,20 +402,21 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     public function afterSave()
     {
-        $this->getValueInstance()->unsetValues();
         $values = $this->getValues() ?: $this->getData('values');
         if (is_array($values)) {
             foreach ($values as $value) {
-                if ($value instanceof \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface) {
+                if ($value instanceof ProductCustomOptionValuesInterface) {
                     $data = $value->getData();
                 } else {
                     $data = $value;
                 }
-                $this->getValueInstance()->addValue($data);
-            }
 
-            $this->getValueInstance()->setOption($this)->saveValues();
-        } elseif ($this->getGroupByType($this->getType()) == self::OPTION_GROUP_SELECT) {
+                $this->customOptionValuesFactory->create()
+                    ->addValue($data)
+                    ->setOption($this)
+                    ->saveValues();
+            }
+        } elseif ($this->getGroupByType($this->getType()) === self::OPTION_GROUP_SELECT) {
             throw new LocalizedException(__('Select type options required values rows.'));
         }
 
@@ -805,7 +817,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * @param \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface[] $values
+     * @param ProductCustomOptionValuesInterface[] $values
      * @return $this
      */
     public function setValues(array $values = null)

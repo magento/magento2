@@ -1006,6 +1006,12 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
         $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
     }
 
+    /**
+     * @param $subConditions
+     * @param $aggregator
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getMockForCombinedCondition($subConditions, $aggregator)
     {
         $mock = $this->getMockBuilder(CombinedCondition::class)
@@ -1020,6 +1026,11 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
         return $mock;
     }
 
+    /**
+     * @param $attribute
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getMockForSimpleCondition($attribute)
     {
         $mock = $this->getMockBuilder(SimpleCondition::class)

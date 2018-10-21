@@ -7,6 +7,7 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\Address as CustomerAddressModel;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ResourceModel\Address\Collection;
@@ -123,6 +124,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         } else {
             $addressModel->updateData($address);
         }
+        $addressModel->setStoreId($customerModel->getStoreId());
 
         $errors = $addressModel->validate();
         if ($errors !== true) {

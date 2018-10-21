@@ -115,6 +115,7 @@ class Save extends Attribute
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {
+            $this->preprocessOptionsData($data);
             $setId = $this->getRequest()->getParam('set');
 
             $attributeSet = null;
@@ -210,7 +211,7 @@ class Save extends Attribute
 
                 $data['attribute_code'] = $model->getAttributeCode();
                 $data['is_user_defined'] = $model->getIsUserDefined();
-                $data['frontend_input'] = $model->getFrontendInput();
+                $data['frontend_input'] = $data['frontend_input'] ?? $model->getFrontendInput();
             } else {
                 /**
                  * @todo add to helper and specify all relations for properties
@@ -221,13 +222,13 @@ class Save extends Attribute
                 $data['backend_model'] = $this->productHelper->getAttributeBackendModelByInputType(
                     $data['frontend_input']
                 );
+
+                if ($model->getIsUserDefined() === null) {
+                    $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
+                }
             }
 
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
-
-            if ($model->getIsUserDefined() === null || $model->getIsUserDefined() != 0) {
-                $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
-            }
 
             $defaultValueField = $model->getDefaultValueByInput($data['frontend_input']);
             if ($defaultValueField) {
@@ -309,6 +310,29 @@ class Save extends Attribute
         }
 
         return $this->returnResult('catalog/*/', [], ['error' => true]);
+    }
+
+    /**
+     * Extract options data from serialized options field and append to data array.
+     *
+     * This logic is required to overcome max_input_vars php limit
+     * that may vary and/or be inaccessible to change on different instances.
+     *
+     * @param array $data
+     * @return void
+     */
+    private function preprocessOptionsData(&$data)
+    {
+        if (isset($data['serialized_options'])) {
+            $serializedOptions = json_decode($data['serialized_options'], JSON_OBJECT_AS_ARRAY);
+            foreach ($serializedOptions as $serializedOption) {
+                $option = [];
+                $serializedOptionWithParsedAmpersand = str_replace('&', '%26', $serializedOption);
+                parse_str($serializedOptionWithParsedAmpersand, $option);
+                $data = array_replace_recursive($data, $option);
+            }
+        }
+        unset($data['serialized_options']);
     }
 
     /**

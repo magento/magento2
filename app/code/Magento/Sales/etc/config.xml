@@ -29,6 +29,7 @@
         <sales_email>
             <general>
                 <async_sending>0</async_sending>
+                <sending_limit>50</sending_limit>
             </general>
             <order>
                 <enabled>1</enabled>

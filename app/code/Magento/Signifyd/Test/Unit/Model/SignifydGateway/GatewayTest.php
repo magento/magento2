@@ -393,6 +393,9 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(Gateway::GUARANTEE_CANCELED, $result);
     }
 
+    /**
+     * @return array
+     */
     public function supportedGuaranteeDispositionsProvider()
     {
         return [

@@ -13,8 +13,8 @@ Position,Position
 Day,Day
 Month,Month
 Year,Year
-"<label class=""label""><span>from</span></label>","<label class=""label""><span>from</span></label>"
-"<label class=""label""><span>to</span></label>","<label class=""label""><span>to</span></label>"
+from,from
+to,to
 [GLOBAL],[GLOBAL]
 [WEBSITE],[WEBSITE]
 "[STORE VIEW]","[STORE VIEW]"
@@ -516,6 +516,9 @@ Groups,Groups
 "Maximum image width","Maximum image width"
 "Maximum image height","Maximum image height"
 "Maximum number of characters:","Maximum number of characters:"
+"Maximum %1 characters", "Maximum %1 characters"
+"too many", "too many"
+"remaining", "remaining"
 "start typing to search template","start typing to search template"
 "Product online","Product online"
 "Product offline","Product offline"

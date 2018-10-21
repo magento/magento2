@@ -103,7 +103,6 @@
                 <clone_fields>1</clone_fields>
                 <clone_model>Magento\Catalog\Model\Config\CatalogClone\Media\Image</clone_model>
                 <field id="placeholder" type="image" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label></label>
                     <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
                     <upload_dir config="system/filesystem/media" scope_info="1">catalog/product/placeholder</upload_dir>
                     <base_url type="media" scope_info="1">catalog/product/placeholder</base_url>

@@ -259,6 +259,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $category->getUseFlatResource());
     }
 
+    /**
+     * @return object
+     */
     protected function getCategoryModel()
     {
         return $this->objectManager->getObject(
@@ -287,6 +290,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function reindexFlatEnabledTestDataProvider()
     {
         return [
@@ -336,6 +342,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->category->reindex();
     }
 
+    /**
+     * @return array
+     */
     public function reindexFlatDisabledTestDataProvider()
     {
         return [

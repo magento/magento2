@@ -81,13 +81,13 @@ class LoadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $sectionNames
-     * @param $updateSectionID
-     * @param $sectionNamesAsArray
-     * @param $updateIds
+     * @param string $sectionNames
+     * @param bool $forceNewSectionTimestamp
+     * @param string[] $sectionNamesAsArray
+     * @param bool $forceNewTimestamp
      * @dataProvider executeDataProvider
      */
-    public function testExecute($sectionNames, $updateSectionID, $sectionNamesAsArray, $updateIds)
+    public function testExecute($sectionNames, $forceNewSectionTimestamp, $sectionNamesAsArray, $forceNewTimestamp)
     {
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
@@ -101,12 +101,12 @@ class LoadTest extends \PHPUnit\Framework\TestCase
 
         $this->httpRequestMock->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(['sections'], ['update_section_id'])
-            ->willReturnOnConsecutiveCalls($sectionNames, $updateSectionID);
+            ->withConsecutive(['sections'], ['force_new_section_timestamp'])
+            ->willReturnOnConsecutiveCalls($sectionNames, $forceNewSectionTimestamp);
 
         $this->sectionPoolMock->expects($this->once())
             ->method('getSectionsData')
-            ->with($sectionNamesAsArray, $updateIds)
+            ->with($sectionNamesAsArray, $forceNewTimestamp)
             ->willReturn([
                 'message' => 'some message',
                 'someKey' => 'someValue'
@@ -123,20 +123,23 @@ class LoadTest extends \PHPUnit\Framework\TestCase
         $this->loadAction->execute();
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [
             [
                 'sectionNames' => 'sectionName1,sectionName2,sectionName3',
-                'updateSectionID' => 'updateSectionID',
+                'forceNewSectionTimestamp' => 'forceNewSectionTimestamp',
                 'sectionNamesAsArray' => ['sectionName1', 'sectionName2', 'sectionName3'],
-                'updateIds' => true
+                'forceNewTimestamp' => true
             ],
             [
                 'sectionNames' => null,
-                'updateSectionID' => null,
+                'forceNewSectionTimestamp' => null,
                 'sectionNamesAsArray' => null,
-                'updateIds' => false
+                'forceNewTimestamp' => false
             ],
         ];
     }

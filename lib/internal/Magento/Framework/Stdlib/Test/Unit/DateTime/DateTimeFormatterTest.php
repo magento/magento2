@@ -133,6 +133,6 @@ class DateTimeFormatterTest extends \PHPUnit\Framework\TestCase
         $reflectionProperty = $reflection->getProperty('localeResolver');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($dateTimeFormatter, $this->localeResolverMock);
-        $dateTimeFormatter->formatObject(new \DateTime('2013-06-06 17:05:06 Europe/Dublin'), new \StdClass());
+        $dateTimeFormatter->formatObject(new \DateTime('2013-06-06 17:05:06 Europe/Dublin'), new \stdClass());
     }
 }

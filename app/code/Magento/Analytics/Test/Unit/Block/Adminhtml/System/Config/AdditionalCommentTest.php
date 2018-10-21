@@ -65,11 +65,11 @@ class AdditionalCommentTest extends \PHPUnit\Framework\TestCase
             ->method('getLabel')
             ->willReturn('Comment label');
         $html = $this->additionalComment->render($this->abstractElementMock);
-        $this->assertRegexp(
+        $this->assertRegExp(
             "/New comment/",
             $html
         );
-        $this->assertRegexp(
+        $this->assertRegExp(
             "/Comment label/",
             $html
         );

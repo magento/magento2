@@ -27,6 +27,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected $productResource;
 
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
     protected function setUp()
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
@@ -38,6 +43,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $this->productResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\ResourceModel\Product::class
+        );
+
+        $this->categoryRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\CategoryRepositoryInterface::class
         );
     }
 
@@ -198,6 +207,27 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         foreach ($categories as $categoryId) {
             $this->assertFalse((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
         }
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @depends testReindexAll
+     *
+     * @return void
+     */
+    public function testCatalogCategoryProductIndexInvalidateAfterDelete()
+    {
+        $indexerShouldBeValid = (bool)$this->indexer->isInvalid();
+
+        $categories = $this->getCategories(1);
+        $this->categoryRepository->delete(array_pop($categories));
+
+        $state = $this->indexer->getState();
+        $state->loadByIndexer($this->indexer->getId());
+        $status = $state->getStatus();
+
+        $this->assertFalse($indexerShouldBeValid);
+        $this->assertEquals(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID, $status);
     }
 
     /**

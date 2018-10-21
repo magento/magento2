@@ -525,9 +525,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getStoreId()
     {
         if ($this->hasData(self::STORE_ID)) {
-            return $this->getData(self::STORE_ID);
+            return (int)$this->getData(self::STORE_ID);
         }
-        return $this->_storeManager->getStore()->getId();
+        return (int)$this->_storeManager->getStore()->getId();
     }
 
     /**
@@ -809,6 +809,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasStoreIds()) {
             $storeIds = [];
             if ($websiteIds = $this->getWebsiteIds()) {
+                if ($this->_storeManager->isSingleStoreMode()) {
+                    $websiteIds = array_keys($websiteIds);
+                }
                 foreach ($websiteIds as $websiteId) {
                     $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
                     $storeIds = array_merge($storeIds, $websiteStores);
@@ -1149,11 +1152,24 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get formatted by currency product price
      *
-     * @return  array || double
+     * @return  array|double
+     */
+    public function getFormattedPrice()
+    {
+        return $this->getPriceModel()->getFormattedPrice($this);
+    }
+
+    /**
+     * Get formatted by currency product price
+     *
+     * @return  array|double
+     *
+     * @deprecated
+     * @see getFormattedPrice()
      */
     public function getFormatedPrice()
     {
-        return $this->getPriceModel()->getFormatedPrice($this);
+        return $this->getFormattedPrice();
     }
 
     /**

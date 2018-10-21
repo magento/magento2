@@ -411,6 +411,9 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $tierPrice->getQuantity());
     }
 
+    /**
+     * @return array
+     */
     public function getQuantityDataProvider()
     {
         return [

@@ -144,6 +144,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($isActive ? ['active_method' => $adapter] : [], $this->config->getActiveMethods());
     }
 
+    /**
+     * @return array
+     */
     public function getActiveMethodsDataProvider()
     {
         return [[true], [false]];

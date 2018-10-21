@@ -268,10 +268,11 @@ class Processor
         $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off');
         $url = ($isSecure ? 'https://' : 'http://') . $host;
 
-        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], [80, 443])
+        $port = explode(':', $host);
+        if (isset($port[1]) && !in_array($port[1], [80, 443])
             && !preg_match('/.*?\:[0-9]+$/', $url)
         ) {
-            $url .= ':' . $_SERVER['SERVER_PORT'];
+            $url .= ':' . $port[1];
         }
         return  $url;
     }
@@ -379,6 +380,8 @@ class Processor
     }
 
     /**
+     * Render page
+     *
      * @param string $template
      * @return string
      */
@@ -463,7 +466,7 @@ class Processor
     public function saveReport($reportData)
     {
         $this->reportData = $reportData;
-        $this->reportId   = abs(intval(microtime(true) * random_int(100, 1000)));
+        $this->reportId   = abs((int)microtime(true) * random_int(100, 1000));
         $this->_reportFile = $this->_reportDir . '/' . $this->reportId;
         $this->_setReportData($reportData);
 

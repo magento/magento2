@@ -18,7 +18,7 @@
         "magento/module-cms-sample-data": "Sample Data version:100.2.*"
     },
     "type": "magento2-module",
-    "version": "102.0.4",
+    "version": "102.0.6",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

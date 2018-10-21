@@ -15,7 +15,7 @@ class UpdateQuoteItemsTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\ResourceModel\Quote
      */
-    private $quoteResource ;
+    private $quoteResource;
 
     protected function setUp()
     {
@@ -49,6 +49,9 @@ class UpdateQuoteItemsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $productResourceMock);
     }
 
+    /**
+     * @return array
+     */
     public function aroundUpdateDataProvider()
     {
         return [

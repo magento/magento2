@@ -63,6 +63,9 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function setupOrderMock()
     {
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
@@ -80,6 +83,9 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
         return $orderMock;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function setupExtensionAttributeMock()
     {
         $orderExtensionAttributeMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderExtensionInterface::class)
@@ -95,6 +101,9 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
         return $orderExtensionAttributeMock;
     }
 
+    /**
+     * @param $expectedTaxes
+     */
     protected function verifyOrderTaxes($expectedTaxes)
     {
         $index = 0;
@@ -125,6 +134,9 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @param $expectedItemTaxes
+     */
     public function verifyItemTaxes($expectedItemTaxes)
     {
         $index = 0;

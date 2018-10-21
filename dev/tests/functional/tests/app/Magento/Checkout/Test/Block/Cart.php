@@ -107,6 +107,13 @@ class Cart extends Block
     protected $cartItemClass = \Magento\Checkout\Test\Block\Cart\CartItem::class;
 
     /**
+     * Paypal page elements locator.
+     *
+     * @var string
+     */
+    private $popupWindowContent = '#main';
+
+    /**
      * Wait for PayPal page is loaded.
      *
      * @return void
@@ -114,6 +121,7 @@ class Cart extends Block
     public function waitForFormLoaded()
     {
         $this->waitForElementNotVisible($this->preloaderSpinner);
+        $this->waitForElementVisible($this->popupWindowContent);
     }
 
     /**
@@ -164,8 +172,17 @@ class Cart extends Block
     public function braintreePaypalCheckout()
     {
         $currentWindow = $this->browser->getCurrentWindow();
+        // Button can be enabled/disabled few times.
+        sleep(2);
+
+        $windowsCount = count($this->browser->getWindowHandles());
         $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
             ->click();
+        $browser = $this->browser;
+        $this->browser->waitUntil(function () use ($browser, $windowsCount) {
+            return count($browser->getWindowHandles()) === ($windowsCount + 1) ? true: null;
+        });
+
         return $currentWindow;
     }
 
@@ -185,7 +202,12 @@ class Cart extends Block
     public function inContextPaypalCheckout()
     {
         $this->waitForCheckoutButton();
+        $windowsCount = count($this->browser->getWindowHandles());
         $this->_rootElement->find($this->inContextPaypalCheckoutButton)->click();
+        $browser = $this->browser;
+        $this->browser->waitUntil(function () use ($browser, $windowsCount) {
+            return count($browser->getWindowHandles()) === ($windowsCount + 1) ? true: null;
+        });
         $this->browser->selectWindow();
         $this->waitForFormLoaded();
         $this->browser->closeWindow();

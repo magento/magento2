@@ -12,6 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Customer grid collection tests.
+ * @magentoAppIsolation enabled
  */
 class CollectionTest extends \Magento\TestFramework\Indexer\TestCase
 {

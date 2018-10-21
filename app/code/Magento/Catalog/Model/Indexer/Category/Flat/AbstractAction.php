@@ -113,7 +113,7 @@ class AbstractAction
     public function getMainStoreTable($storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
     {
         if (is_string($storeId)) {
-            $storeId = intval($storeId);
+            $storeId = (int)$storeId;
         }
 
         $suffix = sprintf('store_%d', $storeId);

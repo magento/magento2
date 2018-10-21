@@ -91,6 +91,9 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function addWebsitesToResultDataProvider()
     {
         return [

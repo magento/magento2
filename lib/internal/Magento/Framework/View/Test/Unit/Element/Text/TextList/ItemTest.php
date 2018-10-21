@@ -51,6 +51,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedHtml, $this->item->toHtml());
     }
 
+    /**
+     * @return array
+     */
     public function toHtmlDataProvider()
     {
         return [
