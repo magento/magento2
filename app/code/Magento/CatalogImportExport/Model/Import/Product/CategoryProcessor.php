@@ -66,7 +66,7 @@ class CategoryProcessor
     }
 
     /**
-     * Initialize categories to be processed
+     * Initialize categories
      *
      * @return $this
      */
@@ -106,7 +106,6 @@ class CategoryProcessor
      *
      * @param string $name
      * @param int $parentId
-     *
      * @return int
      */
     protected function createCategory($name, $parentId)
@@ -116,7 +115,7 @@ class CategoryProcessor
         if (!($parentCategory = $this->getCategoryById($parentId))) {
             $parentCategory = $this->categoryFactory->create()->load($parentId);
         }
-        
+
         // Set StoreId to 0 to generate URL Keys global and prevent generating url rewrites just for default website
         $category->setStoreId(0);
         $category->setPath($parentCategory->getPath());
@@ -139,7 +138,6 @@ class CategoryProcessor
      * Returns ID of category by string path creating nonexistent ones.
      *
      * @param string $categoryPath
-     *
      * @return int
      */
     protected function upsertCategory($categoryPath)
@@ -170,7 +168,6 @@ class CategoryProcessor
      *
      * @param string $categoriesString
      * @param string $categoriesSeparator
-     *
      * @return array
      */
     public function upsertCategories($categoriesString, $categoriesSeparator)
