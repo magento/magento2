@@ -476,4 +476,20 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($results);
         $this->assertEquals($this->resource->countImageUses(1), count($results));
     }
+
+    public function testRemoveImagesPositionExcludeDefaultStore()
+    {
+        $storeId = 0;
+        $entityId = "1";
+
+        $this->connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
+        $this->connection->expects($this->once())->method('update')->with(
+            'table',
+            ['position' => NULL],
+            ['store_id <> ?' => $storeId, 'entity_id = ?' => $entityId]
+        )->willReturn(1);
+        $this->connection->expects($this->once())->method('commit')->willReturnSelf();
+
+        $this->resource->removeImagesPositionExcludeDefaultStore($entityId, $storeId);
+    }
 }

@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+//declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\MediaStorage\Model\File\Uploader as FileUploader;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * Create handler for catalog product gallery
@@ -199,7 +202,7 @@ class CreateHandler implements ExtensionInterface
         $this->processNewAndExistingImages($product, $value['images']);
 
         if (!$product->getStoreId()) {
-            $this->processSetImagesPositionToDefault($product->getStoreId());
+            $this->processSetImagesPositionToDefault($product->getEntityId(), $product->getStoreId());
         }
 
         $product->setData($attrCode, $value);
@@ -524,10 +527,12 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
-     * @param string $id
+     * @param string $entityId
+     * @param int $storeId
+     * @return void
      */
-    protected function processSetImagesPositionToDefault($id)
+    protected function processSetImagesPositionToDefault(string $entityId, int $storeId) : void
     {
-        $this->resourceModel->removeImagesPositionExcludeDefaultStore($id);
+        $this->resourceModel->removeImagesPositionExcludeDefaultStore($entityId, $storeId);
     }
 }

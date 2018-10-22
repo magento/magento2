@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Store\Model\Store;
@@ -500,9 +502,11 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Remove images position when product saved in default store
      *
-     * @param string $id
+     * @param string $entityId
+     * @param int $storeId
+     * @return $this
      */
-    public function removeImagesPositionExcludeDefaultStore($id)
+    public function removeImagesPositionExcludeDefaultStore(string $entityId, int $storeId) : object
     {
         try {
 
@@ -510,7 +514,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getConnection()->update(
                 $this->getTable(self::GALLERY_VALUE_TABLE),
                 ['position' => NULL],
-                ['store_id <> ?' => $id]
+                ['store_id <> ?' => $storeId, $this->metadata->getLinkField() . ' = ?' => $entityId]
             );
             $this->getConnection()->commit();
 
