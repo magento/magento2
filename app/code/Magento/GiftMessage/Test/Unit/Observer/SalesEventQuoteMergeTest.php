@@ -10,7 +10,7 @@ namespace Magento\GiftMessage\Test\Unit\Observer;
 
 use Magento\GiftMessage\Observer\SalesEventQuoteMerge;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\Framework\Event\Observer;
+use Magento\Framework\Event\Observer;
 use Magento\Quote\Model\Quote;
 
 /**
