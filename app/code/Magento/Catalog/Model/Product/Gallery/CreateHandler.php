@@ -10,7 +10,6 @@ namespace Magento\Catalog\Model\Product\Gallery;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\MediaStorage\Model\File\Uploader as FileUploader;
-use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * Create handler for catalog product gallery
