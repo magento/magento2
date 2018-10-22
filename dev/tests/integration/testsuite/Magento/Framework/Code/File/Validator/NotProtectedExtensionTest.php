@@ -18,9 +18,10 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
      * Tests that phpt, pht are invalid extension types.
      *
      * @dataProvider isValidDataProvider
+     * @param string $extension
      * @return void
      */
-    public function testIsValid($extension)
+    public function testIsValid(string $extension)
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $model */
