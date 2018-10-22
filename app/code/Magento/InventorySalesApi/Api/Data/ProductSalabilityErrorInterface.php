@@ -7,12 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * @api
  */
-interface ProductSalabilityErrorInterface extends ExtensibleDataInterface
+interface ProductSalabilityErrorInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return string
@@ -37,5 +35,7 @@ interface ProductSalabilityErrorInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(ProductSalabilityErrorExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(
+        \Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorExtensionInterface $extensionAttributes
+    ): void;
 }

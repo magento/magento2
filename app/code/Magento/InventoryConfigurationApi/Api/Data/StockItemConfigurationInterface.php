@@ -7,12 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurationApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * @api
  */
-interface StockItemConfigurationInterface extends ExtensibleDataInterface
+interface StockItemConfigurationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     const BACKORDERS_NO = 0;
     const BACKORDERS_YES_NONOTIFY = 1;
@@ -308,5 +306,7 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(StockItemConfigurationExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(
+        \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface $extensionAttributes
+    ): void;
 }

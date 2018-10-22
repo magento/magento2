@@ -50,7 +50,6 @@ class ProductSalableResult extends AbstractExtensibleModel implements ProductSal
             $resourceCollection,
             $data
         );
-
         $this->errors = $errors;
     }
 

@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Result of how we will deduct product qty from different Sources
  *
  * @api
  */
-interface SourceSelectionResultInterface extends ExtensibleDataInterface
+interface SourceSelectionResultInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface[]
@@ -39,5 +37,7 @@ interface SourceSelectionResultInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SourceSelectionResultExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(
+        \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultExtensionInterface $extensionAttributes
+    ): void;
 }
