@@ -51,7 +51,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
                 . 'has been already defined in \'' . self::$paths[$type][$componentName] . '\'.'
             );
         } else {
-            self::$paths[$type][$componentName] = str_replace('\\', '/', $path);
+            self::$paths[$type][$componentName] = realpath(str_replace('\\', '/', $path));
         }
     }
 
