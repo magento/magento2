@@ -198,6 +198,10 @@ class CreateHandler implements ExtensionInterface
         $this->processDeletedImages($product, $value['images']);
         $this->processNewAndExistingImages($product, $value['images']);
 
+        if (!$product->getStoreId()) {
+            $this->processSetImagesPositionToDefault($product->getStoreId());
+        }
+
         $product->setData($attrCode, $value);
 
         return $product;
@@ -517,5 +521,13 @@ class CreateHandler implements ExtensionInterface
                 $product->getStoreId()
             );
         }
+    }
+
+    /**
+     * @param string $id
+     */
+    protected function processSetImagesPositionToDefault($id)
+    {
+        $this->resourceModel->removeImagesPositionExcludeDefaultStore($id);
     }
 }
