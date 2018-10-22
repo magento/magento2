@@ -60,7 +60,7 @@ class Review extends AbstractAction
         try {
             $this->validateQuote($quote);
 
-            if ($this->validateRequestData($requestData)) {
+            if ($requestData && $this->validateRequestData($requestData)) {
                 $this->quoteUpdater->execute(
                     $requestData['nonce'],
                     $requestData['details'],
