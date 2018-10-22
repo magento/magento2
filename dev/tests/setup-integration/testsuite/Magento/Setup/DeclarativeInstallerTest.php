@@ -344,16 +344,34 @@ class DeclarativeInstallerTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule1', 'Magento_TestSetupDeclarationModule8']
         );
         $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'index_to_disable',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule8',
             'disable_index_by_external_module',
             'db_schema.xml',
+            'etc'
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'disable_index_by_external_module',
+            'db_schema_whitelist.json',
+            'etc'
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'disable_index_by_external_module',
+            'module.xml',
             'etc'
         );
         $this->cliCommad->upgrade();
         $tableStatements = $this->describeTable->describeShard('default');
         $tableSql = $tableStatements['test_table'];
         $this->assertNotRegExp(
-            '/KEY\s+`TEST_TABLE_TINYINT_BIGINT`\s+\(`tinyint`,`bigint`\)/',
+            '/KEY\s+`TEST_TABLE_VARCHAR`\s+\(`varchar`\)/',
             $tableSql,
             'Index is not being disabled by external module'
         );

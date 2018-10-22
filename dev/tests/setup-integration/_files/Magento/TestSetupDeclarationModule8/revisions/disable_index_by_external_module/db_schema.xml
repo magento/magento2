@@ -8,6 +8,6 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="test_table" resource="default">
-        <index referenceId="TEST_TABLE_TINYINT_BIGINT" disabled="1"/>
+        <index referenceId="TEST_TABLE_INDEX_VARCHAR" disabled="1"/>
     </table>
 </schema>

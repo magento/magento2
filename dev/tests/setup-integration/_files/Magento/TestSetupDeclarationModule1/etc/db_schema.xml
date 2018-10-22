@@ -65,5 +65,8 @@
             <column name="tinyint"/>
             <column name="bigint"/>
         </index>
+        <index referenceId="TEST_TABLE_INDEX_VARCHAR" indexType="btree">
+            <column name="varchar"/>
+        </index>
     </table>
 </schema>
