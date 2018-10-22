@@ -12,6 +12,7 @@ use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Backup\Test\Page\Adminhtml\BackupIndex;
 use Magento\Store\Test\Fixture\Website;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Config\Test\TestStep\SetupConfigurationStep;
 
 /**
  * Delete Website (Store Management)
@@ -102,7 +103,15 @@ class DeleteWebsiteEntityTest extends Injectable
     {
         //Preconditions
         $website->persist();
-        $this->backupIndex->open()->getBackupGrid()->massaction([], 'Delete', true, 'Select All');
+        /** @var SetupConfigurationStep $enableBackupsStep */
+        $enableBackupsStep = $this->objectManager->create(
+            SetupConfigurationStep::class,
+            ['configData' => 'enable_backups_functionality']
+        );
+        $enableBackupsStep->run();
+        $this->backupIndex->open()
+            ->getBackupGrid()
+            ->massaction([], 'Delete', true, 'Select All');
 
         //Steps
         $this->storeIndex->open();
