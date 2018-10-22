@@ -43,7 +43,6 @@ class ForeignKey implements DbDefinitionProcessorInterface
     }
 
     /**
-     * @param Reference $foreignKey
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $foreignKey)

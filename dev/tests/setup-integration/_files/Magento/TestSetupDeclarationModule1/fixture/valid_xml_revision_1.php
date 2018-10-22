@@ -225,17 +225,17 @@ return [
                 ],
             ],
             'constraint' => [
-                'TEST_TABLE_SMALLINT_BIGINT' => [
+                'TEST_TABLE_UNIQUE' => [
                     'column' => [
                         'smallint' => 'smallint',
                         'bigint' => 'bigint',
                     ],
                     'type' => 'unique',
-                    'referenceId' => 'TEST_TABLE_SMALLINT_BIGINT',
+                    'referenceId' => 'TEST_TABLE_UNIQUE',
                 ],
-                'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF' => [
+                'TEST_TABLE_TINYINT_REFERENCE' => [
                     'type' => 'foreign',
-                    'referenceId' => 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF',
+                    'referenceId' => 'TEST_TABLE_TINYINT_REFERENCE',
                     'column' => 'tinyint',
                     'table' => 'test_table',
                     'referenceTable' => 'reference_table',
@@ -244,12 +244,12 @@ return [
                 ],
             ],
             'index' => [
-                'TEST_TABLE_TINYINT_BIGINT' => [
+                'TEST_TABLE_INDEX' => [
                     'column' => [
                         'tinyint' => 'tinyint',
                         'bigint' => 'bigint',
                     ],
-                    'referenceId' => 'TEST_TABLE_TINYINT_BIGINT',
+                    'referenceId' => 'TEST_TABLE_INDEX',
                     'indexType' => 'btree',
                 ],
             ],
