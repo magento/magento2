@@ -3,21 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Model\ResourceModel\Product;
+declare(strict_types=1);
 
-use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
+namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedSelectByParent;
+
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 
 /**
- * A decorator for a linked product select builder.
+ * A decorator for a linked product select builder by parent product.
  *
  * Extends functionality of the linked product select builder to allow perform
  * some additional processing of built Select objects.
- *
- * @deprecated
- * @see \Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedSelectByParent\Builder
  */
-class LinkedProductSelectBuilder implements LinkedProductSelectBuilderInterface
+class Builder implements LinkedProductSelectBuilderInterface
 {
     /**
      * @var BaseSelectProcessorInterface
@@ -42,14 +40,14 @@ class LinkedProductSelectBuilder implements LinkedProductSelectBuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function build($productId)
+    public function build($productId): array
     {
         $selects = $this->linkedProductSelectBuilder->build($productId);
 
         foreach ($selects as $select) {
-            $this->baseSelectProcessor->process($select);
+            $this->baseSelectProcessor->process($select, (int)$productId);
         }
 
         return $selects;

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Pricing\Render;
 
@@ -64,7 +65,9 @@ class FinalPriceBox extends BasePriceBox
      */
     protected function _toHtml()
     {
-        if (!$this->salableResolver->isSalable($this->getSaleableItem())) {
+        if ($this->isApplySalableCheck($this->getSaleableItem()) &&
+            !$this->salableResolver->isSalable($this->getSaleableItem())
+        ) {
             return '';
         }
 
@@ -84,6 +87,16 @@ class FinalPriceBox extends BasePriceBox
         }
 
         return $this->wrapResult($result);
+    }
+
+    /**
+     * @param SaleableInterface $salableItem
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function isApplySalableCheck(SaleableInterface $salableItem): bool
+    {
+        return true;
     }
 
     /**
