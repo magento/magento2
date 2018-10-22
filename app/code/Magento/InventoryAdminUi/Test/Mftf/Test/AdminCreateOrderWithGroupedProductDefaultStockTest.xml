@@ -91,7 +91,7 @@
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openGroupedProductEditPage"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategoryForSimpleProduct"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
-        <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModal" after="clickAddProductsToGroup"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedProductOptionsBySimple" after="waitForGroupedProductModal">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
@@ -101,7 +101,7 @@
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkVirtualProductFilterResult"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForProductsAssignedToGroupedProduct" after="clickAddSelectedGroupProducts"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
         <actionGroup ref="fillDefaultQuantityForLinkedToGroupProductInGrid" stepKey="fillDefaultQtyForSimpleProduct">
             <argument name="productName" value="$$simpleProduct.name$$"/>
             <argument name="qty" value="2"/>
@@ -118,7 +118,7 @@
         </actionGroup>
 
         <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
         <comment userInput="Add Simple Grouped product to order." stepKey="addSimpleGroupedProductToOrderComment"/>
         <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductSimpleOptionToOrder">
