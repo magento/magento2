@@ -21,6 +21,7 @@
 
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
             <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock1"/>
             <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock2"/>
             <createData entity="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" stepKey="createStock3"/>
@@ -46,10 +47,35 @@
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+
+            <deleteData createDataKey="createStock1" stepKey="deleteStock1"/>
+            <deleteData createDataKey="createStock2" stepKey="deleteStock2"/>
+            <deleteData createDataKey="createStock3" stepKey="deleteStock3"/>
+            <deleteData createDataKey="createStock4" stepKey="deleteStock4"/>
+            <deleteData createDataKey="createStock5" stepKey="deleteStock5"/>
+            <deleteData createDataKey="createStock6" stepKey="deleteStock6"/>
+            <deleteData createDataKey="createStock7" stepKey="deleteStock7"/>
+            <deleteData createDataKey="createStock8" stepKey="deleteStock8"/>
+            <deleteData createDataKey="createStock9" stepKey="deleteStock9"/>
+            <deleteData createDataKey="createStock10" stepKey="deleteStock10"/>
+            <deleteData createDataKey="createStock11" stepKey="deleteStock11"/>
+            <deleteData createDataKey="createStock12" stepKey="deleteStock12"/>
+            <deleteData createDataKey="createStock13" stepKey="deleteStock13"/>
+            <deleteData createDataKey="createStock14" stepKey="deleteStock14"/>
+            <deleteData createDataKey="createStock15" stepKey="deleteStock15"/>
+            <deleteData createDataKey="createStock16" stepKey="deleteStock16"/>
+            <deleteData createDataKey="createStock17" stepKey="deleteStock17"/>
+            <deleteData createDataKey="createStock18" stepKey="deleteStock18"/>
+            <deleteData createDataKey="createStock19" stepKey="deleteStock19"/>
+            <deleteData createDataKey="createStock20" stepKey="deleteStock20"/>
+            <deleteData createDataKey="createStock21" stepKey="deleteStock21"/>
+            <deleteData createDataKey="createStock22" stepKey="deleteStock22"/>
         </after>
 
         <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheManageStockPage"/>
         <waitForPageLoad time="30" stepKey="waitForAdminManageStockPageLoad"/>
+        <click selector="{{AdminGridDefaultViewControls.defaultView}}" stepKey="clickOnDefaultView3"/>
+        <click selector="{{AdminGridDefaultViewControls.viewByName('Default View')}}" stepKey="clickOnDefaultViewMenuOption1"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <waitForPageLoad time="30" stepKey="waitFilterCleared"/>
         <actionGroup ref="adminDataGridSelectPerPage" stepKey="select20StocksPerPage">
