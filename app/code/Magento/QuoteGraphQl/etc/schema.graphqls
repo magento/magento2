@@ -67,7 +67,7 @@ type SetShippingAddressesOnCartOutput {
 }
 
 type SetShippingMethodsOnCartOutput {
-    cart: String #TODO: temp placeholder, should be Cart!
+    cart: Cart!
 }
 
 # If no address is provided, the system get address assigned to a quote
@@ -92,28 +92,28 @@ type ApplyCouponToCartOutput {
 }
 
 type Cart {
+    cart_id: String
     items: [CartItemInterface]
     applied_coupon: AppliedCoupon
-    addresses: [CartAddress]!
+    addresses: [CartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddress")
 }
 
 type CartAddress {
-    firstname: String!
-    lastname: String!
+    firstname: String
+    lastname: String
     company: String
-    street: [String!]!
-    city: String!
+    street: [String]
+    city: String
     region: CartAddressRegion
     postcode: String
-    country: CartAddressCountry!
-    telephone: String!
-    address_type: AdressTypeEnum!
+    country: CartAddressCountry
+    telephone: String
+    address_type: AdressTypeEnum
     selected_shipping_method: CheckoutShippingMethod
-    available_shipping_methods: [CheckoutShippingMethod]!
+    available_shipping_methods: [CheckoutShippingMethod]
     items_weight: Float
     customer_notes: String
     cart_items: [CartItemQuantity]
-    applied_coupon: AppliedCoupon
 }
 
 type CartItemQuantity {

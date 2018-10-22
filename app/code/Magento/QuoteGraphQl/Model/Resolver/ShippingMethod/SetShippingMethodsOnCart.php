@@ -158,6 +158,10 @@ class SetShippingMethodsOnCart implements ResolverInterface
             throw new GraphQlInputException(__($exception->getMessage()));
         }
 
-        return 'Success!'; // TODO we should return cart here
+        return [
+            'cart' => [
+                'cart_id' => $maskedCartId
+            ]
+        ];
     }
 }
