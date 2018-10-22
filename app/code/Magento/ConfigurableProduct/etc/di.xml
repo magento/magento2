@@ -16,6 +16,7 @@
     <preference for="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider" />
     <preference for="Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface" type="Magento\ConfigurableProduct\Model\AttributeOptionProvider" />
     <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder" />
+    <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\StockStatusInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\StockStatus"/>
 
     <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />

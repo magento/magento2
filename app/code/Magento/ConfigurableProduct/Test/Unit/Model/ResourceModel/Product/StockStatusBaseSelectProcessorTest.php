@@ -12,6 +12,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\StockStatusBaseSelectProcessor;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\StockStatusInterface as StockStatusConfigurableInterface;
 
 class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,9 +27,19 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
     private $stockConfigMock;
 
     /**
+     * @var StockStatusConfigurableInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stockStatusConfigurableResourceMock;
+
+    /**
      * @var string
      */
     private $stockStatusTable = 'cataloginventory_stock_status';
+
+    /**
+     * @var int
+     */
+    private $productId = 1;
 
     /**
      * @var StockStatusResource|\PHPUnit_Framework_MockObject_MockObject
@@ -48,32 +59,42 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getMainTable')
             ->willReturn($this->stockStatusTable);
 
+        $this->stockStatusConfigurableResourceMock = $this->getMockBuilder(StockStatusConfigurableInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->subject = (new ObjectManager($this))->getObject(
             StockStatusBaseSelectProcessor::class,
             [
                 'stockConfig' => $this->stockConfigMock,
-                'stockStatusResource' => $this->stockStatusResourceMock
+                'stockStatusResource' => $this->stockStatusResourceMock,
+                'stockStatusConfigurableResource' => $this->stockStatusConfigurableResourceMock
             ]
         );
     }
 
     /**
      * @param bool $isShowOutOfStock
+     * @param bool $isAllChildOutOfStock
      *
      * @dataProvider processDataProvider
      */
-    public function testProcess($isShowOutOfStock)
+    public function testProcess($isShowOutOfStock, $isAllChildOutOfStock)
     {
         $this->stockConfigMock->expects($this->any())
             ->method('isShowOutOfStock')
             ->willReturn($isShowOutOfStock);
+
+        $this->stockStatusConfigurableResourceMock->expects($this->any())
+            ->method('isAllChildOutOfStock')
+            ->willReturn($isAllChildOutOfStock);
 
         /** @var Select|\PHPUnit_Framework_MockObject_MockObject $selectMock */
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        if ($isShowOutOfStock) {
+        if ($isShowOutOfStock && !$isAllChildOutOfStock) {
             $selectMock->expects($this->once())
                 ->method('joinInner')
                 ->with(
@@ -97,7 +118,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
                 ->method($this->anything());
         }
 
-        $this->assertEquals($selectMock, $this->subject->process($selectMock));
+        $this->assertEquals($selectMock, $this->subject->process($selectMock, $this->productId));
     }
 
     /**
@@ -106,8 +127,10 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
     public function processDataProvider()
     {
         return [
-            'Out of stock products are being displayed' => [true],
-            'Out of stock products are NOT being displayed' => [false]
+            'Out of stock filter was NOT applied [true, true]' => [true, true],
+            'Out of stock filter was applied [true, false]' => [true, false],
+            'Out of stock filter was NOT applied [false, true]' => [false, true],
+            'Out of stock filter was NOT applied [false, false]' => [false, false]
         ];
     }
 }

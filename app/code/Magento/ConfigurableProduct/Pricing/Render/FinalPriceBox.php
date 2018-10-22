@@ -16,6 +16,7 @@ use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\StockStatus;
 
 class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
 {
@@ -23,6 +24,11 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * @var LowestPriceOptionsProviderInterface
      */
     private $lowestPriceOptionsProvider;
+
+    /**
+     * @var StockStatus
+     */
+    private $stockStatus;
 
     /**
      * @param Context $context
@@ -34,6 +40,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
      * @param SalableResolverInterface|null $salableResolver
      * @param MinimalPriceCalculatorInterface|null $minimalPriceCalculator
+     * @param StockStatus $stockStatus
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -45,7 +52,8 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
         array $data = [],
         LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null,
         SalableResolverInterface $salableResolver = null,
-        MinimalPriceCalculatorInterface $minimalPriceCalculator = null
+        MinimalPriceCalculatorInterface $minimalPriceCalculator = null,
+        StockStatus $stockStatus = null
     ) {
         parent::__construct(
             $context,
@@ -58,6 +66,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
         );
         $this->lowestPriceOptionsProvider = $lowestPriceOptionsProvider ?:
             ObjectManager::getInstance()->get(LowestPriceOptionsProviderInterface::class);
+        $this->stockStatus = $stockStatus ?: ObjectManager::getInstance()->get(StockStatus::class);
     }
 
     /**
@@ -76,5 +85,13 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
             }
         }
         return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function isApplySalableCheck(SaleableInterface $salableItem)
+    {
+        return !$this->stockStatus->isAllChildOutOfStock($salableItem->getId());
     }
 }

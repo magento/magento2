@@ -5,7 +5,6 @@
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product;
 
-use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 
 /**
@@ -46,7 +45,7 @@ class LinkedProductSelectBuilder implements LinkedProductSelectBuilderInterface
         $selects = $this->linkedProductSelectBuilder->build($productId);
 
         foreach ($selects as $select) {
-            $this->baseSelectProcessor->process($select);
+            $this->baseSelectProcessor->process($select, $productId);
         }
 
         return $selects;

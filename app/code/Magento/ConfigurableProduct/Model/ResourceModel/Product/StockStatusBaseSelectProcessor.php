@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product;
 
 use Magento\Framework\DB\Select;
-use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\StockStatusInterface as StockStatusConfigurableInterface;
 
 /**
  * A Select object processor.
@@ -29,23 +30,34 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     private $stockStatusResource;
 
     /**
+     * @var StockStatusConfigurableInterface
+     */
+    private $stockStatusConfigurableResource;
+
+    /**
      * @param StockConfigurationInterface $stockConfig
      * @param StockStatusResource $stockStatusResource
+     * @param StockStatusConfigurableInterface $stockStatusConfigurableResource
      */
     public function __construct(
         StockConfigurationInterface $stockConfig,
-        StockStatusResource $stockStatusResource
-    ) {
+        StockStatusResource $stockStatusResource,
+        StockStatusConfigurableInterface $stockStatusConfigurableResource
+    )
+    {
         $this->stockConfig = $stockConfig;
         $this->stockStatusResource = $stockStatusResource;
+        $this->stockStatusConfigurableResource = $stockStatusConfigurableResource;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function process(Select $select)
+    public function process(Select $select, $productId)
     {
-        if ($this->stockConfig->isShowOutOfStock()) {
+        if ($this->stockConfig->isShowOutOfStock() &&
+            !$this->isAllChildOutOfStock($productId)
+        ) {
             $select->joinInner(
                 ['stock' => $this->stockStatusResource->getMainTable()],
                 sprintf(
@@ -60,5 +72,15 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
         }
 
         return $select;
+    }
+
+    /**
+     * @param int $productId
+     * @return bool
+     * @throws \Exception
+     */
+    protected function isAllChildOutOfStock($productId)
+    {
+        return $this->stockStatusConfigurableResource->isAllChildOutOfStock($productId);
     }
 }

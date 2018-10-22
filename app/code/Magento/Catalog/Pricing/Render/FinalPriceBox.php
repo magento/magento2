@@ -64,7 +64,8 @@ class FinalPriceBox extends BasePriceBox
      */
     protected function _toHtml()
     {
-        if (!$this->salableResolver->isSalable($this->getSaleableItem())) {
+        if (!$this->salableResolver->isSalable($this->getSaleableItem()) &&
+            $this->isApplySalableCheck($this->getSaleableItem())) {
             return '';
         }
 
@@ -84,6 +85,15 @@ class FinalPriceBox extends BasePriceBox
         }
 
         return $this->wrapResult($result);
+    }
+
+    /**
+     * @param SaleableInterface $salableItem
+     * @return bool
+     */
+    protected function isApplySalableCheck(SaleableInterface $salableItem)
+    {
+        return true;
     }
 
     /**
