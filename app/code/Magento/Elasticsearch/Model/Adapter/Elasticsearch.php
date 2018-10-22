@@ -197,7 +197,7 @@ class Elasticsearch
 
         // prepare new index name and increase version
         $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $mappedIndexerId);
-        $version = intval(str_replace($indexPattern, '', $indexName));
+        $version = (int)(str_replace($indexPattern, '', $indexName));
         $newIndexName = $indexPattern . ++$version;
 
         // remove index if already exists
@@ -279,8 +279,9 @@ class Elasticsearch
      * Checks whether Elasticsearch index and alias exists.
      *
      * @param int $storeId
-     * @param bool $checkAlias
      * @param string $mappedIndexerId
+     * @param bool $checkAlias
+     *
      * @return $this
      */
     public function checkIndex(
