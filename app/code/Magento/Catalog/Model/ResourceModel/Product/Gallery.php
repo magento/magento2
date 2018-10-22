@@ -506,7 +506,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $storeId
      * @return $this
      */
-    public function removeImagesPositionExcludeDefaultStore(string $entityId, int $storeId) : object
+    public function removeImagesPositionExcludeDefaultStore(string $entityId, int $storeId) : \Magento\Catalog\Model\ResourceModel\Product\Gallery
     {
         try {
 
