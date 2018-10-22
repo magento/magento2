@@ -79,8 +79,26 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         //Second time installation should not find anything as we do not change anything
         self::assertNull($diff->getAll());
+        $this->compareStructures();
+    }
+
+    /**
+     * Compare structure of DB and declared structure.
+     */
+    private function compareStructures()
+    {
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getTrimmedData(), $shardData);
+        foreach ($this->getTrimmedData() as $tableName => $sql) {
+            $this->assertArrayHasKey($tableName, $shardData);
+            /**
+             * MySQL 8.0 and above does not provide information about the ON DELETE instruction
+             * if ON DELETE NO ACTION
+             */
+            if (preg_match('#ON DELETE\s+NO ACTION#i', $shardData[$tableName] === 1)) {
+                preg_replace('#ON DELETE\s+NO ACTION#i', '', $sql);
+                self::assertEquals($sql, $shardData[$tableName]);
+            }
+        }
     }
 
     /**
@@ -110,8 +128,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDbConfig()
         );
         self::assertNull($diff->getAll());
-        $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getTrimmedData(), $shardData);
+        $this->compareStructures();
     }
 
     /**
@@ -156,8 +173,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDbConfig()
         );
         self::assertNull($diff->getAll());
-        $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getTrimmedData(), $shardData);
+        $this->compareStructures();
     }
 
     /**
