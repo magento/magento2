@@ -79,7 +79,7 @@ class TablesWhitelistGenerateCommand extends Command
         try {
             $this->whitelistGenerator->generate($moduleName);
         } catch (ConfigurationMismatchException $e) {
-            $output->writeln("<info>". $e . "</info>");
+            $output->writeln($e->getMessage());
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } catch (\Exception $e) {
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;

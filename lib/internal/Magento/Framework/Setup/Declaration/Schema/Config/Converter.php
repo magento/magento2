@@ -75,7 +75,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Provides the value of the ID attribute for each element.
+     * Provide the value of the ID attribute for each element.
      *
      * @param \DOMElement $element
      * @return string
