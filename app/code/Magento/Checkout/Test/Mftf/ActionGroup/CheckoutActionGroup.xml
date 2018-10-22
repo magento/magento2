@@ -11,7 +11,6 @@
     <!-- Checkout select Check/Money Order payment -->
     <actionGroup name="CheckoutSelectCheckMoneyOrderPaymentActionGroup">
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddress}}" time="30" stepKey="waitForBillingAddressDetailsAppears"/>
         <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" visible="true" stepKey="clickCheckMoneyOrderPayment"/>
     </actionGroup>
 
@@ -59,5 +58,12 @@
         <waitForElement selector="{{StorefrontCheckoutCartSummarySection.blockSummary}}" stepKey="waitBlockSummaryLoaded"/>
         <conditionalClick selector="{{StorefrontCheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{StorefrontCheckoutCartSummarySection.country}}" visible="false" stepKey="openShippingDetails"/>
         <see selector="{{StorefrontCheckoutCartSummarySection.countryParameterized('placeNumber')}}" userInput="{{country}}" stepKey="seeCountry"/>
+    </actionGroup>
+
+    <!--Click Place Order button-->
+    <actionGroup name="ClickPlaceOrderActionGroup">
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
     </actionGroup>
 </actionGroups>

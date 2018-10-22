@@ -51,6 +51,7 @@
         <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
         <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>
+        <waitForPageLoad stepKey="waitForCartToLoad"/>
         <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="$$createProduct.name$$" stepKey="seeProductInCart"/>
         <conditionalClick selector="{{CheckoutPaymentSection.productOptionsByProductItemName($$createProduct.name$$)}}" dependentSelector="{{CheckoutPaymentSection.productOptionsActiveByProductItemName($$createProduct.name$$)}}" visible="false" stepKey="exposeProductOptions"/>
         <see selector="{{CheckoutPaymentSection.productOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
