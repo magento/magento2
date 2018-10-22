@@ -20,11 +20,6 @@ class ProductSalableResult extends AbstractExtensibleModel implements ProductSal
     private $errors = [];
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttributesFactory
-     */
-    private $extensionFactory;
-
-    /**
      * ProductSalabilityError constructor.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -55,8 +50,6 @@ class ProductSalableResult extends AbstractExtensibleModel implements ProductSal
             $resourceCollection,
             $data
         );
-
-        $this->extensionFactory = $extensionFactory;
         $this->errors = $errors;
     }
 

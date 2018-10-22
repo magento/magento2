@@ -24,11 +24,6 @@ class ProductSalabilityError extends AbstractExtensibleModel implements ProductS
     private $message;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttributesFactory
-     */
-    private $extensionFactory;
-
-    /**
      * ProductSalabilityError constructor.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -62,7 +57,6 @@ class ProductSalabilityError extends AbstractExtensibleModel implements ProductS
             $data
         );
 
-        $this->extensionFactory = $extensionFactory;
         $this->code = $code;
         $this->message = $message;
     }
