@@ -91,10 +91,11 @@ class FinalPriceBox extends BasePriceBox
     /**
      * @param SaleableInterface $salableItem
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function isApplySalableCheck(SaleableInterface $salableItem): bool
     {
-        return (bool)$salableItem;
+        return true;
     }
 
     /**
