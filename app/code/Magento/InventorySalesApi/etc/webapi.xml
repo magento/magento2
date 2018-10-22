@@ -26,7 +26,7 @@
         </resources>
     </route>
     <route url="/V1/inventory/stock-resolver/:type/:code" method="GET">
-        <service class="Magento\InventorySalesApi\Api\StockResolverInterface" method="get"/>
+        <service class="Magento\InventorySalesApi\Api\StockResolverInterface" method="execute"/>
         <resources>
             <resource ref="InventorySalesApi::stock"/>
         </resources>
