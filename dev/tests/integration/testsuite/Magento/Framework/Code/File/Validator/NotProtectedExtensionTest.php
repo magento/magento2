@@ -18,6 +18,7 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
      * Tests that phpt, pht are invalid extension types.
      *
      * @dataProvider isValidDataProvider
+     * @return void
      */
     public function testIsValid($extension)
     {
@@ -27,7 +28,10 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($model->isValid($extension));
     }
 
-    public function isValidDataProvider()
+    /**
+     * @return array
+     */
+    public function isValidDataProvider(): array
     {
         return [
             ['phpt'],
