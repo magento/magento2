@@ -39,9 +39,38 @@
     <xs:element name="schema">
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:element name="table" type="table"/>
+                <xs:element name="table" type="table">
+                    <xs:unique name="uniqueColumnName">
+                        <xs:annotation>
+                            <xs:documentation>Column name be unique for each table</xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="column" />
+                        <xs:field xpath="@name" />
+                    </xs:unique>
+                    <xs:unique name="uniqueIndexReferenceId">
+                        <xs:annotation>
+                            <xs:documentation>Reference ID should be unique for indexes</xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="index" />
+                        <xs:field xpath="@referenceId" />
+                    </xs:unique>
+                    <xs:unique name="uniqueConstraintReferenceId">
+                        <xs:annotation>
+                            <xs:documentation>Reference ID should be unique for constraints</xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="constraint" />
+                        <xs:field xpath="@referenceId" />
+                    </xs:unique>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
+        <xs:unique name="uniqueTableName">
+            <xs:annotation>
+                <xs:documentation>Table name should be unique for each module</xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="table" />
+            <xs:field xpath="@name" />
+        </xs:unique>
     </xs:element>
 
     <xs:complexType name="table">

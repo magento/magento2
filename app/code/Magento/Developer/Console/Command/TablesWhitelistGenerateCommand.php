@@ -7,15 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Developer\Console\Command;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Developer\Model\Setup\Declaration\Schema\WhitelistGenerator;
 use Magento\Framework\Config\FileResolverByModule;
-use Magento\Framework\Module\Dir;
-use Magento\Framework\Setup\Declaration\Schema\Declaration\SchemaBuilder;
-use Magento\Framework\Setup\Declaration\Schema\Diff\Diff;
-use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
-use Magento\Framework\Setup\Declaration\Schema\Dto\SchemaFactory;
-use Magento\Framework\Setup\JsonPersistor;
-use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
+use Magento\Framework\Exception\ConfigurationMismatchException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -34,57 +28,20 @@ class TablesWhitelistGenerateCommand extends Command
     const MODULE_NAME_KEY = 'module-name';
 
     /**
-     * @var ComponentRegistrar
+     * @var WhitelistGenerator
      */
-    private $componentRegistrar;
+    private $whitelistGenerator;
 
     /**
-     * @var ReaderComposite
-     */
-    private $readerComposite;
-
-    /**
-     * @var JsonPersistor
-     */
-    private $jsonPersistor;
-
-    /**
-     * @var array
-     */
-    private $primaryDbSchema;
-
-    /**
-     * @var SchemaFactory
-     */
-    private $schemaFactory;
-
-    /**
-     * @var SchemaBuilder
-     */
-    private $schemaBuilder;
-
-    /**
-     * @param ComponentRegistrar $componentRegistrar
-     * @param ReaderComposite $readerComposite
-     * @param JsonPersistor $jsonPersistor
-     * @param SchemaFactory $schemaFactory
-     * @param SchemaBuilder $schemaBuilder
+     * @param WhitelistGenerator $whitelistGenerator
      * @param string|null $name
      */
     public function __construct(
-        ComponentRegistrar $componentRegistrar,
-        ReaderComposite $readerComposite,
-        JsonPersistor $jsonPersistor,
-        SchemaFactory $schemaFactory,
-        SchemaBuilder $schemaBuilder,
+        WhitelistGenerator $whitelistGenerator,
         $name = null
     ) {
+        $this->whitelistGenerator = $whitelistGenerator;
         parent::__construct($name);
-        $this->componentRegistrar = $componentRegistrar;
-        $this->readerComposite = $readerComposite;
-        $this->jsonPersistor = $jsonPersistor;
-        $this->schemaFactory = $schemaFactory;
-        $this->schemaBuilder = $schemaBuilder;
     }
 
     /**
@@ -113,44 +70,6 @@ class TablesWhitelistGenerateCommand extends Command
     }
 
     /**
-     * Update whitelist tables for all modules that are enabled on the moment.
-     *
-     * @param string $moduleName
-     * @return void
-     * @throws \Magento\Framework\Setup\Exception
-     */
-    private function persistModule($moduleName)
-    {
-        $content = [];
-        $modulePath = $this->componentRegistrar->getPath('module', $moduleName);
-        $whiteListFileName = $modulePath
-            . DIRECTORY_SEPARATOR
-            . Dir::MODULE_ETC_DIR
-            . DIRECTORY_SEPARATOR
-            . Diff::GENERATED_WHITELIST_FILE_NAME;
-        //We need to load whitelist file and update it with new revision of code.
-        if (file_exists($whiteListFileName)) {
-            $content = json_decode(file_get_contents($whiteListFileName), true);
-        }
-
-        $schema = $this->schemaFactory->create();
-        $data = $this->filterPrimaryTables($this->readerComposite->read($moduleName));
-        if (isset($data['table'])) {
-            $this->schemaBuilder->addTablesData($data['table']);
-            $schema = $this->schemaBuilder->build($schema);
-
-            //Do merge between what we have before, and what we have now and filter to only certain attributes.
-            $content = array_replace_recursive(
-                $content,
-                $this->getDeclaredContent($schema)
-            );
-            if (!empty($content)) {
-                $this->jsonPersistor->persist($content, $whiteListFileName);
-            }
-        }
-    }
-
-    /**
      * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -158,80 +77,14 @@ class TablesWhitelistGenerateCommand extends Command
         $moduleName = $input->getOption(self::MODULE_NAME_KEY);
 
         try {
-            if ($moduleName === FileResolverByModule::ALL_MODULES) {
-                foreach (array_keys($this->componentRegistrar->getPaths('module')) as $moduleName) {
-                    $this->persistModule($moduleName);
-                }
-            } else {
-                $this->persistModule($moduleName);
-            }
+            $this->whitelistGenerator->generate($moduleName);
+        } catch (ConfigurationMismatchException $e) {
+            $output->writeln("<info>". $e . "</info>");
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } catch (\Exception $e) {
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        //If script comes here, that we sucessfully write whitelist configuration
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-    }
-
-    /**
-     * Convert Schema into a whitelist structure.
-     *
-     * As for whitelist we do not need any specific attributes like nullable or indexType, we need to choose only names.
-     *
-     * @param Schema $schema
-     * @return array
-     */
-    private function getDeclaredContent(Schema $schema) : array
-    {
-        $names = [];
-        foreach ($schema->getTables() as $tableName => $table) {
-            $columns = array_keys($table->getColumns());
-            if ($columns) {
-                $names[$tableName]['column'] = array_fill_keys($columns, true);
-            }
-
-            $indexes = array_keys($table->getIndexes());
-            if ($indexes) {
-                $names[$tableName]['index'] = array_fill_keys($indexes, true);
-            }
-
-            $constraints = array_keys($table->getConstraints());
-            if ($constraints) {
-                $names[$tableName]['constraint'] = array_fill_keys($constraints, true);
-            }
-        }
-
-        return $names;
-    }
-
-    /**
-     * Load db_schema content from the primary scope app/etc/db_schema.xml.
-     *
-     * @return array
-     */
-    private function getPrimaryDbSchema()
-    {
-        if (!$this->primaryDbSchema) {
-            $this->primaryDbSchema = $this->readerComposite->read('primary');
-        }
-        return $this->primaryDbSchema;
-    }
-
-    /**
-     * Filter tables from module db_schema.xml as they should not contain the primary system tables.
-     *
-     * @param array $moduleDbSchema
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
-    private function filterPrimaryTables(array $moduleDbSchema)
-    {
-        $primaryDbSchema = $this->getPrimaryDbSchema();
-        if (isset($moduleDbSchema['table']) && isset($primaryDbSchema['table'])) {
-            foreach ($primaryDbSchema['table'] as $tableNameKey => $tableContents) {
-                unset($moduleDbSchema['table'][$tableNameKey]);
-            }
-        }
-        return $moduleDbSchema;
     }
 }
