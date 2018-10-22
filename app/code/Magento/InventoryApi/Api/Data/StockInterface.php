@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Represents product aggregation among some different physical storages (in technical words, it is an index)
  *
@@ -16,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface StockInterface extends ExtensibleDataInterface
+interface StockInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -58,11 +56,9 @@ interface StockInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventoryApi\Api\Data\StockExtensionInterface|null
      */
-    public function getExtensionAttributes(): ?StockExtensionInterface;
+    public function getExtensionAttributes(): ?\Magento\InventoryApi\Api\Data\StockExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -70,5 +66,7 @@ interface StockInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\StockExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(StockExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(
+        \Magento\InventoryApi\Api\Data\StockExtensionInterface $extensionAttributes
+    ): void;
 }

@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Represents sales channels (which are a linkage between stocks and websites, customer groups, etc.)
  *
@@ -16,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface SalesChannelInterface extends ExtensibleDataInterface
+interface SalesChannelInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -65,7 +63,7 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      *
      * @return \Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface|null
      */
-    public function getExtensionAttributes(): ?SalesChannelExtensionInterface;
+    public function getExtensionAttributes(): ?\Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -73,5 +71,7 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SalesChannelExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(
+        \Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface $extensionAttributes
+    ): void;
 }

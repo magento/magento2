@@ -12,6 +12,7 @@
     <preference for="Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\StockItemConfiguration"/>
     <!-- Product types -->
     <preference for="Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface" type="Magento\InventoryConfiguration\Model\IsSourceItemManagementAllowedForProductType"/>
+    <preference for="Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface" type="Magento\InventoryConfiguration\Model\IsSourceItemManagementAllowedForSku"/>
     <preference for="Magento\InventoryConfigurationApi\Model\GetAllowedProductTypesForSourceItemManagementInterface" type="Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemManagement"/>
     <type name="Magento\CatalogInventory\Model\System\Config\Backend\Minqty">
         <plugin name="allow_negative_min_qty_in_config"

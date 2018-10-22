@@ -11,6 +11,7 @@ declare(strict_types=1);
  * However, if to create such a bundle product, it will be always out of stock.
  */
 require __DIR__ . '/../../../../../../dev/tests/integration/testsuite/Magento/Catalog/_files/products_rollback.php';
+require __DIR__ . '/product_simple_out_of_stock_rollback.php';
 
 /** @var \Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
