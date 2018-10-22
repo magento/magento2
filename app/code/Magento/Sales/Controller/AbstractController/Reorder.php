@@ -8,6 +8,7 @@ namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\Registry;
+use Magento\Framework\Exception\NotFoundException;
 
 abstract class Reorder extends Action\Action
 {
@@ -43,6 +44,11 @@ abstract class Reorder extends Action\Action
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found.'));
+            return;
+        }
+
         $result = $this->orderLoader->load($this->_request);
         if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
             return $result;
