@@ -15,7 +15,8 @@ define([
                 'mage/url': {
                     /** Method stub. */
                     build: jasmine.createSpy()
-                }
+                },
+                'Magento_Ui/js/model/messageList': jasmine.createSpy('globalList')
             },
             model;
 
@@ -58,6 +59,7 @@ define([
             it('check on failed status', function () {
                 var messageContainer = jasmine.createSpyObj('globalMessageList', ['addErrorMessage']);
 
+                spyOn(window.location, 'replace').and.callFake(function () {});
                 model.process({
                     status: 401,
                     responseText: ''
