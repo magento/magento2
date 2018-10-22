@@ -57,6 +57,10 @@ class FreeShipping implements FreeShippingInterface
         );
         $shippingAddress = $quote->getShippingAddress();
         $shippingAddress->setFreeShipping(0);
+        
+        if (!$items) {
+            return $this;
+        }
         /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
         foreach ($items as $item) {
             if ($item->getNoDiscount()) {
