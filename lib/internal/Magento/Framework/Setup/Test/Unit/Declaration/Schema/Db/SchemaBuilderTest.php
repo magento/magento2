@@ -312,8 +312,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             Schema::class,
             ['resourceConnection' => $resourceConnectionMock]
         );
-        $this->expectException(\PHPUnit\Framework\Exception::class);
-        $this->expectExceptionCode(E_USER_WARNING);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
             'User Warning: Column unknown_column does not exist for index/constraint FIRST_INDEX in table second_table.'
         );
