@@ -25,5 +25,5 @@ interface StockResolverInterface
      * @throws NoSuchEntityException
      * @return StockInterface
      */
-    public function get(string $type, string $code): StockInterface;
+    public function execute(string $type, string $code): StockInterface;
 }

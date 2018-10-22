@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotificationApi\Test\Api;
 
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request;
 
-class DeleteSourceItemConfigurationTest extends WebapiAbstract
+class DeleteSourceItemsConfigurationTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/inventory/low-quantity-notification';
-    const SERVICE_NAME_DELETE = 'inventoryLowQuantityNotificationApiDeleteSourceItemConfigurationV1';
+    const RESOURCE_DELETE_PATH = '/V1/inventory/low-quantity-notifications-delete';
+    const SERVICE_NAME_DELETE = 'inventoryLowQuantityNotificationApiDeleteSourceItemsConfigurationV1';
     const SERVICE_NAME_GET = 'inventoryLowQuantityNotificationApiGetSourceItemConfigurationV1';
 
     /**
@@ -24,13 +26,21 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
      */
     public function testDeleteSourceItemConfiguration()
     {
-        $sourceCode = 'eu-1';
-        $sku = 'SKU-1';
+        $sourceItemsForDelete = [
+            [
+                SourceItemInterface::SOURCE_CODE => 'eu-1',
+                SourceItemInterface::SKU => 'SKU-1',
+            ],
+            [
+                SourceItemInterface::SOURCE_CODE => 'eu-2',
+                SourceItemInterface::SKU => 'SKU-3',
+            ],
+        ];
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceCode . '/' . $sku,
-                'httpMethod' => Request::HTTP_METHOD_DELETE,
+                'resourcePath' => self::RESOURCE_DELETE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME_DELETE,
@@ -38,11 +48,16 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
             ],
         ];
 
-        (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
-            ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode, 'sku' => $sku]);
+        $this->_webApiCall($serviceInfo, ['sourceItems' => $sourceItemsForDelete]);
 
-        $sourceItemConfiguration = $this->getSourceItemConfiguration($sourceCode, $sku);
+        $sourceItemConfiguration = $this->getSourceItemConfiguration('eu-1', 'SKU-1');
+        $defaultNotifyQtyValue = 1;
+        self::assertEquals(
+            $defaultNotifyQtyValue,
+            $sourceItemConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]
+        );
+
+        $sourceItemConfiguration = $this->getSourceItemConfiguration('eu-2', 'SKU-3');
         $defaultNotifyQtyValue = 1;
         self::assertEquals(
             $defaultNotifyQtyValue,
