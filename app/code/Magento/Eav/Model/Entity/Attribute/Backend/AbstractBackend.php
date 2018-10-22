@@ -203,12 +203,12 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Retrieve default value
      *
-     * @return mixed
+     * @return string
      */
     public function getDefaultValue()
     {
         if ($this->_defaultValue === null) {
-            if ($this->getAttribute()->getDefaultValue()) {
+            if ($this->getAttribute()->getDefaultValue() !== null) {
                 $this->_defaultValue = $this->getAttribute()->getDefaultValue();
             } else {
                 $this->_defaultValue = "";
@@ -280,7 +280,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     public function beforeSave($object)
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
-        if (!$object->hasData($attrCode) && $this->getDefaultValue()) {
+        if (!$object->hasData($attrCode) && $this->getDefaultValue() !== '') {
             $object->setData($attrCode, $this->getDefaultValue());
         }
 
