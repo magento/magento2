@@ -152,6 +152,9 @@ case $TEST_SUITE in
             --admin-use-security-key=0 \
             --admin-password="123123q"
 
+        php bin/magento module:status # DEBUG
+        php bin/magento setup:upgrade # DEBUG
+
         echo "Enabling production mode"
         php bin/magento deploy:mode:set production
 
