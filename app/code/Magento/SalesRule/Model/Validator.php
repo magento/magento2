@@ -503,6 +503,9 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     public function sortItemsByPriority($items, Address $address = null)
     {
         $itemsSorted = [];
+        if (!$items) {
+            return $this;
+        }
         /** @var $rule \Magento\SalesRule\Model\Rule */
         foreach ($this->_getRules($address) as $rule) {
             foreach ($items as $itemKey => $itemValue) {
