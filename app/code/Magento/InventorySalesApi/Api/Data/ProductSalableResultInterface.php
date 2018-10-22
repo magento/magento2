@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Represents result of service Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface::execute
  *
  * @api
  */
-interface ProductSalableResultInterface extends ExtensibleDataInterface
+interface ProductSalableResultInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return bool
@@ -39,5 +37,7 @@ interface ProductSalableResultInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySalesApi\Api\Data\ProductSalableResultExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(ProductSalableResultExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(
+        \Magento\InventorySalesApi\Api\Data\ProductSalableResultExtensionInterface $extensionAttributes
+    ): void;
 }

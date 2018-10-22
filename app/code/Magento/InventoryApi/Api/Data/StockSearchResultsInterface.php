@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api\Data;
 
-use Magento\Framework\Api\SearchResultsInterface;
-
 /**
  * Search results of Repository::getList method
  *
@@ -16,7 +14,7 @@ use Magento\Framework\Api\SearchResultsInterface;
  *
  * @api
  */
-interface StockSearchResultsInterface extends SearchResultsInterface
+interface StockSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
      * Get stocks list
