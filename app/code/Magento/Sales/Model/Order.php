@@ -1337,7 +1337,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _getItemsRandomCollection($limit, $nonChildrenOnly = false)
     {
-        $collection = $this->_orderItemCollectionFactory->create()->setOrderFilter($this)->setRandomOrder();
+        $collection = $this->_orderItemCollectionFactory->create()
+            ->setOrderFilter($this)
+            ->setRandomOrder()
+            ->setPageSize($limit);
 
         if ($nonChildrenOnly) {
             $collection->filterByParent();
@@ -1351,9 +1354,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $products
         )->setVisibility(
             $this->_productVisibility->getVisibleInSiteIds()
-        )->addPriceData()->setPageSize(
-            $limit
-        )->load();
+        )->addPriceData()->load();
 
         foreach ($collection as $item) {
             $product = $productsCollection->getItemById($item->getProductId());
