@@ -48,6 +48,11 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
          * Process address items
          */
         $items = $shippingAssignment->getItems();
+        
+        if (!$items) {
+            return $this;
+        }
+        
         foreach ($items as $item) {
             if ($this->_initItem($address, $item) && $item->getQty() > 0) {
                 /**
