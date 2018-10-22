@@ -60,6 +60,7 @@ class StockStatus implements StockStatusInterface
         }
 
         $this->allChildOutOfStockInfo[$productId] = $isAllChildOutOfStock;
+
         return $this->allChildOutOfStockInfo[$productId];
     }
 
