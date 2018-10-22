@@ -22,13 +22,11 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
             <!-- Choose TinyMCE3 as the default WYSIWYG editor-->
-            <!--<actionGroup ref="SwitchToTinyMCE3" stepKey="switchToTinyMCE3"/>-->
             <magentoCLI command="config:set cms/wysiwyg/editor Magento_Tinymce3/tinymce3Adapter" stepKey="enableTinyMCE3"/>
         </before>
         <after>
             <!-- Switch WYSIWYG editor to TinyMCE4-->
             <comment userInput="Reset editor as TinyMCE4" stepKey="chooseTinyMCE4AsEditor"/>
-            <!--<actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4"/>-->
             <magentoCLI command="config:set cms/wysiwyg/editor mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter" stepKey="enableTinyMCE4"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
