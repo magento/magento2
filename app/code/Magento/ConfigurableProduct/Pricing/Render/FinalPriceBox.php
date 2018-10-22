@@ -41,7 +41,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * @param array $data
      * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
      * @param SalableResolverInterface|null $salableResolver
-     * @param MinimalPriceCalculatorInterface|null $minimalPriceCalculator
+     * @param MinimalPriceCalculatorInterface|null $minPriceCalculator
      * @param StockStatus $stockStatus
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -54,7 +54,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
         array $data = [],
         LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null,
         SalableResolverInterface $salableResolver = null,
-        MinimalPriceCalculatorInterface $minimalPriceCalculator = null,
+        MinimalPriceCalculatorInterface $minPriceCalculator = null,
         StockStatus $stockStatus = null
     ) {
         parent::__construct(
@@ -64,7 +64,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
             $rendererPool,
             $data,
             $salableResolver,
-            $minimalPriceCalculator
+            $minPriceCalculator
         );
         $this->lowestPriceOptionsProvider = $lowestPriceOptionsProvider ?:
             ObjectManager::getInstance()->get(LowestPriceOptionsProviderInterface::class);

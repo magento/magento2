@@ -35,21 +35,21 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     /**
      * @var StockStatusConfigurableInterface
      */
-    private $stockStatusConfigurableResource;
+    private $stockConfigurable;
 
     /**
      * @param StockConfigurationInterface $stockConfig
      * @param StockStatusResource $stockStatusResource
-     * @param StockStatusConfigurableInterface $stockStatusConfigurableResource
+     * @param StockStatusConfigurableInterface $stockConfigurable
      */
     public function __construct(
         StockConfigurationInterface $stockConfig,
         StockStatusResource $stockStatusResource,
-        StockStatusConfigurableInterface $stockStatusConfigurableResource = null
+        StockStatusConfigurableInterface $stockConfigurable = null
     ) {
         $this->stockConfig = $stockConfig;
         $this->stockStatusResource = $stockStatusResource;
-        $this->stockStatusConfigurableResource = $stockStatusConfigurableResource ?:
+        $this->stockConfigurable = $stockConfigurable ?:
             ObjectManager::getInstance()->get(StockStatusConfigurableInterface::class);
     }
 
@@ -84,6 +84,6 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
      */
     private function isAllChildOutOfStock(int $productId): bool
     {
-        return $this->stockStatusConfigurableResource->isAllChildOutOfStock($productId);
+        return $this->stockConfigurable->isAllChildOutOfStock($productId);
     }
 }
