@@ -317,4 +317,29 @@ class DeclarativeInstallerTest extends SetupTestCase
         $this->assertRegExp('/CONSTRAINT\s`DEPENDENT_PAGE_ID_ON_TEST_TABLE_PAGE_ID`/', $tableSql);
         $this->assertRegExp('/CONSTRAINT\s`DEPENDENT_SCOPE_ID_ON_TEST_SCOPE_TABLE_SCOPE_ID`/', $tableSql);
     }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule1
+     * @moduleName Magento_TestSetupDeclarationModule8
+     */
+    public function testDisableIndexByExternalModule()
+    {
+        $this->cliCommad->install(
+            ['Magento_TestSetupDeclarationModule1', 'Magento_TestSetupDeclarationModule8']
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'disable_index_by_external_module',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->cliCommad->upgrade();
+        $tableStatements = $this->describeTable->describeShard('default');
+        $tableSql = $tableStatements['test_table'];
+        $this->assertNotRegExp(
+            '/KEY\s+`TEST_TABLE_TINYINT_BIGINT`\s+\(`tinyint`,`bigint`\)/',
+            $tableSql,
+            'Index is not being disabled by external module'
+        );
+    }
 }
