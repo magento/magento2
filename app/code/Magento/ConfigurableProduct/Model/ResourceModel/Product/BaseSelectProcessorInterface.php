@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product;
 
 use Magento\Framework\DB\Select;
@@ -23,5 +25,5 @@ interface BaseSelectProcessorInterface
      * @param int $productId
      * @return Select
      */
-    public function process(Select $select, $productId);
+    public function process(Select $select, int $productId): Select;
 }

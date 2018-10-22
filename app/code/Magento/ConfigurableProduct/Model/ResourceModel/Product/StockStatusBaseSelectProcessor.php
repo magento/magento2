@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product;
 
 use Magento\Framework\DB\Select;
+use Magento\Framework\App\ObjectManager;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\StockStatusInterface as StockStatusConfigurableInterface;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\StockStatusInterface
+    as StockStatusConfigurableInterface;
 
 /**
  * A Select object processor.
@@ -42,18 +45,18 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     public function __construct(
         StockConfigurationInterface $stockConfig,
         StockStatusResource $stockStatusResource,
-        StockStatusConfigurableInterface $stockStatusConfigurableResource
-    )
-    {
+        StockStatusConfigurableInterface $stockStatusConfigurableResource = null
+    ) {
         $this->stockConfig = $stockConfig;
         $this->stockStatusResource = $stockStatusResource;
-        $this->stockStatusConfigurableResource = $stockStatusConfigurableResource;
+        $this->stockStatusConfigurableResource = $stockStatusConfigurableResource ?:
+            ObjectManager::getInstance()->get(StockStatusConfigurableInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function process(Select $select, $productId)
+    public function process(Select $select, int $productId): Select
     {
         if ($this->stockConfig->isShowOutOfStock() &&
             !$this->isAllChildOutOfStock($productId)
@@ -79,7 +82,7 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
      * @return bool
      * @throws \Exception
      */
-    protected function isAllChildOutOfStock($productId)
+    private function isAllChildOutOfStock(int $productId): bool
     {
         return $this->stockStatusConfigurableResource->isAllChildOutOfStock($productId);
     }

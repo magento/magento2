@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
@@ -74,7 +76,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      *
      * @return bool
      */
-    public function hasSpecialPrice()
+    public function hasSpecialPrice(): bool
     {
         $product = $this->getSaleableItem();
         foreach ($this->lowestPriceOptionsProvider->getProducts($product) as $subProduct) {
@@ -90,7 +92,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     /**
      * @inheritdoc
      */
-    protected function isApplySalableCheck(SaleableInterface $salableItem)
+    protected function isApplySalableCheck(SaleableInterface $salableItem): bool
     {
         return !$this->stockStatus->isAllChildOutOfStock($salableItem->getId());
     }

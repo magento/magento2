@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface as CatalogInventoryStockStatusInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class StockStatus implements StockStatusInterface
 {
@@ -41,7 +44,7 @@ class StockStatus implements StockStatusInterface
     /**
      * @inheritdoc
      */
-    public function isAllChildOutOfStock($productId)
+    public function isAllChildOutOfStock(int $productId): bool
     {
         if (isset($this->allChildOutOfStockInfo[$productId])) {
             return $this->allChildOutOfStockInfo[$productId];
@@ -50,7 +53,7 @@ class StockStatus implements StockStatusInterface
         $statuses = $this->getAllChildStockInfo($productId);
         $isAllChildOutOfStock = true;
         foreach ($statuses as $status) {
-            if ($status == CatalogInventoryStockStatusInterface::STATUS_IN_STOCK) {
+            if ($status === CatalogInventoryStockStatusInterface::STATUS_IN_STOCK) {
                 $isAllChildOutOfStock = false;
                 break;
             }
@@ -61,11 +64,11 @@ class StockStatus implements StockStatusInterface
     }
 
     /**
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @return AdapterInterface
      */
-    protected function getConnection()
+    protected function getConnection(): AdapterInterface
     {
-        return $this->resource->getConnection(ResourceConnection::DEFAULT_CONNECTION);
+        return $this->resource->getConnection();
     }
 
     /**
@@ -73,7 +76,7 @@ class StockStatus implements StockStatusInterface
      * @return array
      * @throws \Exception
      */
-    protected function getAllChildStockInfo($productId)
+    private function getAllChildStockInfo(int $productId): array
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $productTable = $this->resource->getTableName('catalog_product_entity');

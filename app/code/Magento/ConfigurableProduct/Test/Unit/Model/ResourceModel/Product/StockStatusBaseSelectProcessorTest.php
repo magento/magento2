@@ -12,7 +12,8 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\StockStatusBaseSelectProcessor;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\StockStatusInterface as StockStatusConfigurableInterface;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\StockStatusInterface
+    as StockStatusConfigurableInterface;
 
 class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
 {

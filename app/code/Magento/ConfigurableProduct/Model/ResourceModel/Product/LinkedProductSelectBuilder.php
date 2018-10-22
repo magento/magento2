@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
@@ -38,9 +40,9 @@ class LinkedProductSelectBuilder implements LinkedProductSelectBuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function build($productId)
+    public function build($productId): array
     {
         $selects = $this->linkedProductSelectBuilder->build($productId);
 
