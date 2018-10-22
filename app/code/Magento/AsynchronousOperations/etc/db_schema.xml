@@ -27,6 +27,8 @@
         <constraint xsi:type="unique" name="MAGENTO_BULK_UUID">
             <column name="uuid"/>
         </constraint>
+        <constraint xsi:type="foreign" name="MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID" table="magento_bulk"
+                    column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
         <index name="MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID" indexType="btree">
             <column name="user_id"/>
         </index>
