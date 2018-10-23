@@ -39,8 +39,8 @@ class CountryCreditCard extends Value
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param SecureUnserializer|null $secureUnserializer
      * @param array $data
+     * @param SecureUnserializer|null $secureUnserializer
      */
     public function __construct(
         Context $context,
@@ -50,8 +50,8 @@ class CountryCreditCard extends Value
         Random $mathRandom,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
-        SecureUnserializer $secureUnserializer = null,
-        array $data = []
+        array $data = [],
+        SecureUnserializer $secureUnserializer = null
     ) {
         $this->mathRandom = $mathRandom;
         $this->secureUnserializer = $secureUnserializer ?: ObjectManager::getInstance()->get(SecureUnserializer::class);
