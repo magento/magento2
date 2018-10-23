@@ -8,6 +8,11 @@ namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Index\Render;
 use Magento\Ui\Controller\Adminhtml\Index\Render\Handle;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
+/**
+ * Tests \Magento\Ui\Controller\Adminhtml\Index\Render\Handle.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class HandleTest extends \PHPUnit\Framework\TestCase
 {
     /**
