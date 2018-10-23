@@ -5,6 +5,7 @@
  */
 namespace Magento\Review\Model;
 
+use Magento\Framework\DataObject;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection as ProductCollection;
@@ -326,6 +327,9 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
                 if ($summary->getEntityPkValue() == $item->getEntityId()) {
                     $item->setRatingSummary($summary);
                 }
+            }
+            if (!$item->getRatingSummary()) {
+                $item->setRatingSummary(new DataObject());
             }
         }
 
