@@ -36,13 +36,13 @@ class LocalizedDateToUtcConverter implements LocalizedDateToUtcConverterInterfac
     /**
      * LocalizedDateToUtcConverter constructor.
      *
+     * @param TimezoneInterface $timezone
      * @param ResolverInterface $localeResolver
      */
     public function __construct(
         TimezoneInterface $timezone,
         ResolverInterface $localeResolver
-    )
-    {
+    ) {
         $this->timezone = $timezone;
         $this->localeResolver = $localeResolver;
     }
