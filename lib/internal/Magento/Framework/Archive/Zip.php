@@ -74,7 +74,7 @@ class Zip extends AbstractArchive implements ArchiveInterface
      * @param string $path
      * @return string
      */
-    private function filterRelativePaths(string $path)
+    private function filterRelativePaths($path)
     {
         if ($path && preg_match('#^\s*(../)|(/../)#i', $path)) {
             $path = '';
