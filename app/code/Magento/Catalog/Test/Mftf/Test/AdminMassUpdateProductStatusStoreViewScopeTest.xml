@@ -79,7 +79,7 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct2">
                 <argument name="productName" value="simpleProductForMassUpdate2.name"/>
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->
