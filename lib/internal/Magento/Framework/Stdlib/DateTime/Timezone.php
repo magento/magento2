@@ -257,6 +257,8 @@ class Timezone implements TimezoneInterface
     }
 
     /**
+     * Format date according to date and time formats, locale, timezone and pattern
+     *
      * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
@@ -300,6 +302,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * Convert date from config timezone to Utc.
+     *
      * If pass \DateTime object as argument be sure that timezone is the same with config timezone
      *
      * @param string|\DateTimeInterface $date
