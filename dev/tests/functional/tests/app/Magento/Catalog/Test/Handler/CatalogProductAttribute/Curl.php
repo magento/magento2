@@ -157,10 +157,9 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
      * Provides serialized product attribute options.
      *
      * @param array $data
-     * @param array $optionKeys
      * @return string
      */
-    protected function getSerializeOptions(array $data, array $optionKeys = []): string
+    protected function getSerializeOptions(array $data): string
     {
         $options = [];
         foreach ($data as $optionRowData) {

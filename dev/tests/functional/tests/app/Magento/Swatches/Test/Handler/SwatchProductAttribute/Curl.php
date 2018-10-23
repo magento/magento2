@@ -43,7 +43,7 @@ class Curl extends CatalogProductAttributeCurl implements SwatchProductAttribute
      *
      * @inheritdoc
      */
-    protected function getSerializeOptions(array $data, array $optionKeys = []): string
+    protected function getSerializeOptions(array $data): string
     {
         $options = [];
         foreach ($data as $optionRowData) {
