@@ -349,6 +349,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
             $data = $paymentMethod->getData();
             $quote->getPayment()->importData($data);
+        } else {
+            $quote->collectTotals();
         }
 
         if ($quote->getCheckoutMethod() === self::METHOD_GUEST) {
