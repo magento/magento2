@@ -19,7 +19,7 @@ class Index extends Template
      */
     private function getParamStore()
     {
-        return $this->getRequest()->getParam('store') ?: 'all';
+        return $this->stripTags($this->getRequest()->getParam('store')) ?: 'all';
     }
 
     /**
