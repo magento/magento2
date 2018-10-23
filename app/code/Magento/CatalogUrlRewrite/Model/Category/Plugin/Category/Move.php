@@ -64,7 +64,6 @@ class Move
         Category $newParent,
         $afterCategoryId
     ) {
-
         $categoryStoreId = $category->getStoreId();
         foreach ($category->getStoreIds() as $storeId) {
             $category->setStoreId($storeId);

@@ -69,7 +69,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getResource', 'setUrlPath', 'getStoreIds'])
+            ->setMethods(['getResource', 'setUrlPath', 'getStoreIds', 'getStoreId', 'setStoreId'])
             ->getMock();
         $this->plugin = $this->objectManager->getObject(
             CategoryMovePlugin::class,
