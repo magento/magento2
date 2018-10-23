@@ -168,9 +168,9 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
         $specialPriceToDate = $object->getSpecialToDate();
         $today = time();
 
-        if ($specialPrice && ($object->getPrice() > $object->getFinalPrice())){
+        if ($specialPrice && ($object->getPrice() > $object->getFinalPrice())) {
             if ($today >= strtotime($specialPriceFromDate) && $today <= strtotime($specialPriceToDate) ||
-                $today >= strtotime($specialPriceFromDate) && is_null($specialPriceToDate)) {
+                $today >= strtotime($specialPriceFromDate) && is_null($specialPriceToDate) === TRUE) {
                 $price = $specialPrice;
             }
         }
