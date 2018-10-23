@@ -18,8 +18,12 @@ use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\StockStatus;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
+/**
+ * Class FinalPriceBox
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
 {
     /**
@@ -28,9 +32,9 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     private $lowestPriceOptionsProvider;
 
     /**
-     * @var StockStatus
+     * @var StockConfigurationInterface
      */
-    private $stockStatus;
+    private $stockConfig;
 
     /**
      * @param Context $context
@@ -42,8 +46,9 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
      * @param SalableResolverInterface|null $salableResolver
      * @param MinimalPriceCalculatorInterface|null $minPriceCalculator
-     * @param StockStatus $stockStatus
+     * @param StockConfigurationInterface|null $stockConfig
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -55,7 +60,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
         LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null,
         SalableResolverInterface $salableResolver = null,
         MinimalPriceCalculatorInterface $minPriceCalculator = null,
-        StockStatus $stockStatus = null
+        StockConfigurationInterface $stockConfig = null
     ) {
         parent::__construct(
             $context,
@@ -68,7 +73,8 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
         );
         $this->lowestPriceOptionsProvider = $lowestPriceOptionsProvider ?:
             ObjectManager::getInstance()->get(LowestPriceOptionsProviderInterface::class);
-        $this->stockStatus = $stockStatus ?: ObjectManager::getInstance()->get(StockStatus::class);
+        $this->stockConfig = $stockConfig ?:
+            ObjectManager::getInstance()->get(StockConfigurationInterface::class);
     }
 
     /**
@@ -94,6 +100,6 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      */
     protected function isApplySalableCheck(SaleableInterface $salableItem): bool
     {
-        return !$this->stockStatus->isAllChildOutOfStock($salableItem->getId());
+        return !$this->stockConfig->isShowOutOfStock();
     }
 }

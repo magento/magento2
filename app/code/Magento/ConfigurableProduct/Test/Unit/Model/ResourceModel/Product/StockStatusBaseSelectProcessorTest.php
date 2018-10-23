@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
@@ -30,7 +32,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @var StockStatusConfigurableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stockStatusConfigurableResourceMock;
+    private $stockConfigurable;
 
     /**
      * @var string
@@ -60,7 +62,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getMainTable')
             ->willReturn($this->stockStatusTable);
 
-        $this->stockStatusConfigurableResourceMock = $this->getMockBuilder(StockStatusConfigurableInterface::class)
+        $this->stockConfigurable = $this->getMockBuilder(StockStatusConfigurableInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -69,7 +71,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             [
                 'stockConfig' => $this->stockConfigMock,
                 'stockStatusResource' => $this->stockStatusResourceMock,
-                'stockStatusConfigurableResource' => $this->stockStatusConfigurableResourceMock
+                'stockConfigurable' => $this->stockConfigurable
             ]
         );
     }
@@ -86,7 +88,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('isShowOutOfStock')
             ->willReturn($isShowOutOfStock);
 
-        $this->stockStatusConfigurableResourceMock->expects($this->any())
+        $this->stockConfigurable->expects($this->any())
             ->method('isAllChildOutOfStock')
             ->willReturn($isAllChildOutOfStock);
 
