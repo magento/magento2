@@ -15,7 +15,7 @@ interface LocalizedDateToUtcConverterInterface
     /**
      * Convert localized date to UTC
      *
-     * @param string $data
+     * @param string $date
      * @return string
      */
     public function convertLocalizedDateToUtc($date);
