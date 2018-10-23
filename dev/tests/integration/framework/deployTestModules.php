@@ -25,6 +25,7 @@ foreach ($iterator as $file) {
             mkdir($targetDir, 0755, true);
         }
         copy($source, $destination);
+        echo "\n\nDestination $destination\n\n"; // DEBUG
     }
 }
 unset($iterator, $file);
@@ -38,5 +39,3 @@ if ($files === false) {
 foreach ($files as $file) {
     include $file;
 }
-
-echo "\n\n TEST MODULES WERE DEPLOYED \n\n"; // DEBUG
