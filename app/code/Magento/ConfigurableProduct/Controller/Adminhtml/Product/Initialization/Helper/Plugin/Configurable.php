@@ -14,6 +14,7 @@ use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProduct;
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
 /**
  * Class Configurable
@@ -36,6 +37,11 @@ class Configurable
      * @var Factory
      */
     private $optionsFactory;
+
+    /**
+     * @var JsonSerializer
+     */
+    private $serializer;
 
     /**
      * @var array
@@ -64,11 +70,13 @@ class Configurable
     public function __construct(
         VariationHandler $variationHandler,
         RequestInterface $request,
-        Factory $optionsFactory
+        Factory $optionsFactory,
+        JsonSerializer $serializer
     ) {
         $this->variationHandler = $variationHandler;
         $this->request = $request;
         $this->optionsFactory = $optionsFactory;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -101,7 +109,7 @@ class Configurable
         $configurableOptions = [];
         if (!empty($productData['configurable_attributes_data_serialized'])) {
             $configurableOptions = $this->optionsFactory->create(
-                json_decode($productData['configurable_attributes_data_serialized'], true)
+                $this->serializer->unserialize($productData['configurable_attributes_data_serialized'])
             );
         }
 
@@ -129,7 +137,7 @@ class Configurable
     {
         $associatedProductIds = $this->request->getPost('associated_product_ids_serialized', '[]');
         if (!empty($associatedProductIds)) {
-            $associatedProductIds = json_decode($associatedProductIds, true);
+            $associatedProductIds = $this->serializer->unserialize($associatedProductIds);
         }
 
         $variationsMatrix = $this->getVariationMatrix();
@@ -155,7 +163,7 @@ class Configurable
         $result = [];
         $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', "[]");
         if (isset($configurableMatrix) && $configurableMatrix != "") {
-            $configurableMatrix = json_decode($configurableMatrix, true);
+            $configurableMatrix = $this->serializer->unserialize($configurableMatrix);
 
             foreach ($configurableMatrix as $item) {
                 if ($item['newProduct']) {

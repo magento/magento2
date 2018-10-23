@@ -13,6 +13,8 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableP
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -51,6 +53,16 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
+     * @var JsonSerializer
+     */
+    private $serializer;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -87,6 +99,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->request,
             $this->optionFactory
         );
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->serializer = $this->objectManagerHelper->getObject(JsonSerializer::class);
     }
 
     /**
@@ -102,7 +117,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $valueMap = [
             ['new-variations-attribute-set-id', null, 24],
             ['associated_product_ids_serialized', '[]', []],
-            ['product', [], ['configurable_attributes_data_serialized' => json_encode($attributes)]],
+            ['product', [], ['configurable_attributes_data_serialized' => $this->serializer->serialize($attributes)]],
         ];
         $simpleProductsIds = [1, 2, 3];
         $simpleProducts = [
@@ -150,7 +165,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $paramValueMap = [
-            ['configurable-matrix-serialized', "[]", json_encode($simpleProducts)],
+            ['configurable-matrix-serialized', "[]", $this->serializer->serialize($simpleProducts)],
             ['attributes', null, $attributes],
         ];
 
@@ -213,7 +228,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $valueMap = [
             ['new-variations-attribute-set-id', null, 24],
             ['associated_product_ids_serialized', "[]", "[]"],
-            ['product', [], ['configurable_attributes_data_serialized' => json_encode($attributes)]],
+            ['product', [], ['configurable_attributes_data_serialized' => $this->serializer->serialize($attributes)]],
         ];
         $paramValueMap = [
             ['configurable-matrix-serialized', "[]", "[]"],
