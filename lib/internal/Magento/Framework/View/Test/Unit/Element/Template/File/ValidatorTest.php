@@ -81,7 +81,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             [],
             [],
             '',
-            false);
+            false
+        );
         $this->compiledDirectoryMock = $this->getMock(
             \Magento\Framework\Filesystem\Directory\ReadInterface::class,
             [],
