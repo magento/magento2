@@ -14,6 +14,7 @@ use Magento\Framework\Api\ImageContentValidatorInterface;
 
 /**
  * Class GalleryManagement
+ *
  * Provides implementation of api interface ProductAttributeMediaGalleryManagementInterface
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
