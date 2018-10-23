@@ -33,7 +33,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->assertContains(
             '/newsletter/subscriber/confirm/id/' . $this->_model->getSubscriberId()
             . '/code/ysayquyajua23iq29gxwu2eax2qb6gvy',
-            $transportBuilder->getSentMessage()->getBodyHtml()->getRawContent()
+            $transportBuilder->getSentMessage()->getRawMessage()
         );
         $this->assertEquals(Subscriber::STATUS_NOT_ACTIVE, $this->_model->getSubscriberStatus());
     }
