@@ -25,7 +25,6 @@ foreach ($iterator as $file) {
             mkdir($targetDir, 0755, true);
         }
         copy($source, $destination);
-        echo "\n\nDestination $destination\n\n"; // DEBUG
     }
 }
 unset($iterator, $file);
