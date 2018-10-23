@@ -485,7 +485,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $this->connection->expects($this->once())->method('update')->with(
             'table',
-            ['position' => NULL],
+            ['position' => null],
             ['store_id <> ?' => $storeId, 'entity_id = ?' => $entityId]
         )->willReturn(1);
         $this->connection->expects($this->once())->method('commit')->willReturnSelf();
