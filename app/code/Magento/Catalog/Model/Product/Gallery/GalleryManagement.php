@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,13 +7,15 @@
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 
 /**
+ * Class GalleryManagement
+ * Provides implementation of api interface ProductAttributeMediaGalleryManagementInterface
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface
@@ -44,7 +45,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create($sku, ProductAttributeMediaGalleryEntryInterface $entry)
     {
@@ -84,7 +85,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update($sku, ProductAttributeMediaGalleryEntryInterface $entry)
     {
@@ -125,7 +126,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function remove($sku, $entryId)
     {
@@ -155,7 +156,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($sku, $entryId)
     {
@@ -176,7 +177,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($sku)
     {
