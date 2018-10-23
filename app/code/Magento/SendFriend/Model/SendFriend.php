@@ -5,7 +5,15 @@
  */
 namespace Magento\SendFriend\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException as CoreException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\RequestInterface;
+use Magento\Captcha\Model\DefaultModel as CaptchaModel;
+use Magento\Captcha\Helper\Data as CaptchaHelper;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Captcha\Observer\CaptchaStringResolver;
+use Magento\Customer\Model\Customer;
 
 /**
  * SendFriend Log
@@ -17,6 +25,7 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @api
  * @since 100.0.2
@@ -110,6 +119,26 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     protected $remoteAddress;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var CaptchaHelper
+     */
+    private $captchaHelper;
+
+    /**
+     * @var CaptchaStringResolver
+     */
+    private $captchaStringResolver;
+
+    /**
+     * @var CustomerSession
+     */
+    private $customerSession;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -123,6 +152,10 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CaptchaHelper|null $captchaHelper
+     * @param CaptchaStringResolver|null $captchaStringResolver
+     * @param CustomerSession|null $customerSession
+     * @param RequestInterface|null $request
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -138,7 +171,11 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?CaptchaHelper $captchaHelper = null,
+        ?CaptchaStringResolver $captchaStringResolver = null,
+        ?CustomerSession $customerSession = null,
+        ?RequestInterface $request = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_transportBuilder = $transportBuilder;
@@ -148,6 +185,11 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         $this->remoteAddress = $remoteAddress;
         $this->cookieManager = $cookieManager;
         $this->inlineTranslation = $inlineTranslation;
+        $this->captchaHelper = $captchaHelper ?: ObjectManager::getInstance()->create(CaptchaHelper::class);
+        $this->captchaStringResolver = $captchaStringResolver ?:
+            ObjectManager::getInstance()->create(CaptchaStringResolver::class);
+        $this->customerSession = $customerSession ?: ObjectManager::getInstance()->create(CustomerSession::class);
+        $this->request = $request ?: ObjectManager::getInstance()->get(RequestInterface::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -162,6 +204,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Entrypoint for send action
+     *
      * @return $this
      * @throws CoreException
      */
@@ -420,10 +464,47 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Check if user is exceed limit
      *
      * @return boolean
+     * @throws LocalizedException
      */
     public function isExceedLimit()
     {
+        $captchaTargetFormName = 'product_sendtofriend_form';
+        /** @var CaptchaModel $captchaModel */
+         $captchaModel = $this->captchaHelper->getCaptcha($captchaTargetFormName);
+
+        if ($captchaModel->isRequired()) {
+            $word = $this->captchaStringResolver->resolve(
+                $this->request,
+                $captchaTargetFormName
+            );
+
+            $isCorrectCaptcha = $captchaModel->isCorrect($word);
+            $this->logCaptchaAttempt($captchaModel, $captchaTargetFormName);
+
+            if (!$isCorrectCaptcha) {
+                throw new LocalizedException(__('Incorrect CAPTCHA'));
+            }
+        }
+
         return $this->getSentCount() >= $this->getMaxSendsToFriend();
+    }
+
+    /**
+     * Logs a try to pass captcha validation
+     *
+     * @param CaptchaModel $captchaModel
+     */
+    private function logCaptchaAttempt(CaptchaModel $captchaModel): void
+    {
+        /** @var Customer $customer */
+        $customer = $this->customerSession->getCustomer();
+        $email = '';
+
+        if ($customer->getId()) {
+            $email = $customer->getEmail();
+        }
+
+        $captchaModel->logAttempt($email);
     }
 
     /**

@@ -90,7 +90,7 @@
 
     <fieldset class="fieldset recipients">
         <?= $block->getBlockHtml('formkey') ?>
-        <legend class="legend"><span><?= $block->escapeHtml(__('Invite')) ?></span></legend>
+        <legend class="legend"><span><?= $block->escapeHtml(__('Invitee')) ?></span></legend>
         <br />
         <div id="recipients-options"></div>
         <?php if ($block->getMaxRecipients()): ?>
@@ -102,7 +102,7 @@
             <div class="secondary">
             <?php if (1 < $block->getMaxRecipients()): ?>
                 <button type="button" id="add-recipient-button" class="action add">
-                    <span><?= $block->escapeHtml(__('Add Invite')) ?></span></button>
+                    <span><?= $block->escapeHtml(__('Add Invitee')) ?></span></button>
             <?php endif; ?>
             </div>
         </div>
