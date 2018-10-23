@@ -115,22 +115,14 @@ class CategoryProcessor
         if (!($parentCategory = $this->getCategoryById($parentId))) {
             $parentCategory = $this->categoryFactory->create()->load($parentId);
         }
-
-        // Set StoreId to 0 to generate URL Keys global and prevent generating url rewrites just for default website
-        $category->setStoreId(0);
         $category->setPath($parentCategory->getPath());
         $category->setParentId($parentId);
         $category->setName($this->unquoteDelimiter($name));
         $category->setIsActive(true);
         $category->setIncludeInMenu(true);
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
-        try {
-            $category->save();
-            $this->categoriesCache[$category->getId()] = $category;
-        } catch (\Exception $e) {
-            $this->addFailedCategory($category, $e);
-        }
-
+        $category->save();
+        $this->categoriesCache[$category->getId()] = $category;
         return $category->getId();
     }
 
