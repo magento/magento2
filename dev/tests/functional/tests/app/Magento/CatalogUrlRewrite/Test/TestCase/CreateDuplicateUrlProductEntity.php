@@ -68,6 +68,7 @@ class CreateDuplicateUrlProductEntity extends Injectable
      * Run create product simple entity test.
      *
      * @param CatalogProductSimple $product
+     * @param CatalogProductSimple $product2
      * @param Category $category
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductNew $newProductPage
@@ -77,6 +78,7 @@ class CreateDuplicateUrlProductEntity extends Injectable
      */
     public function testCreate(
         CatalogProductSimple $product,
+        CatalogProductSimple $product2,
         Category $category,
         CatalogProductIndex $productGrid,
         CatalogProductNew $newProductPage,
@@ -92,13 +94,15 @@ class CreateDuplicateUrlProductEntity extends Injectable
             ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
 
-        for ($index = 0; $index < 2; $index++) {
-            // Duplicate product
-            $productGrid->open();
-            $productGrid->getGridPageActionBlock()->addProduct('simple');
-            $newProductPage->getProductForm()->fill($product, null, $category);
-            $newProductPage->getFormPageActions()->save();
-        }
+        $productGrid->open();
+        $productGrid->getGridPageActionBlock()->addProduct('simple');
+        $newProductPage->getProductForm()->fill($product, null, $category);
+        $newProductPage->getFormPageActions()->save();
+
+        $productGrid->open();
+        $productGrid->getGridPageActionBlock()->addProduct('simple');
+        $newProductPage->getProductForm()->fill($product2, null, $category);
+        $newProductPage->getFormPageActions()->save();
 
         return ['product' => $product];
     }
