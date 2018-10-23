@@ -20,5 +20,5 @@ interface ModuleManagerInterface
      * @param string $moduleName Fully-qualified module name, e.g. Magento_Config
      * @return boolean Whether or not the module is enabled in the configuration
      */
-    public function isEnabled($moduleName);
+    public function isEnabled(string $moduleName): bool;
 }

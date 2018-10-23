@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 /**
  * Module statuses manager
  */
@@ -49,7 +51,7 @@ class Manager implements ModuleManagerInterface
     /**
      * @inheritdoc
      */
-    public function isEnabled($moduleName)
+    public function isEnabled(string $moduleName): bool
     {
         return $this->moduleList->has($moduleName);
     }
