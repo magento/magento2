@@ -706,23 +706,23 @@ class Eav extends AbstractModifier
 
     /**
      * @param array $overridden
-     * @return string
+     * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function formatOverriddenScopes(array $overridden)
     {
-        $formatted = '<div class="overridden-hint-wrapper">' .
-            '<p class="lead-text">' . __('This attribute is overridden at the following scope(s):') . '</p>' .
-            '<dl class="overridden-hint-list">';
-
+        $overriddenScopes = [];
         foreach ($overridden as $overriddenScope) {
             $scope = $overriddenScope['scope'];
             $scopeId = $overriddenScope['scope_id'];
             $scopeLabel = $scopeId;
-
             $url = '#';
+            $scopeType = '';
             switch ($scope) {
                 case ProductAttributeInterface::SCOPE_WEBSITE_TEXT:
+                    $scopeType = 'Website';
+                    /** @var \Magento\Store\Model\Website $website */
                     $website = $this->storeManager->getWebsite($scopeId);
                     $url = $this->urlBuilder->getUrl(
                         '*/*/*',
@@ -731,16 +731,13 @@ class Eav extends AbstractModifier
                             'store' => $website->getDefaultStore()->getId()
                         ]
                     );
-                    $scopeLabel = __(
-                        'Website <a href="%1" target="_blank">%2</a>',
-                        $url,
-                        $this->storeManager->getWebsite($scopeId)->getName()
-                    );
-
+                    $scopeLabel = $this->storeManager->getWebsite($scopeId)->getName();
                     break;
                 case ProductAttributeInterface::SCOPE_STORE_TEXT:
+                    $scopeType = 'Store view';
                     /** @var \Magento\Store\Model\Store $store */
                     $store = $this->storeManager->getStore($scopeId);
+                    /** @var \Magento\Store\Model\Website $website */
                     $website = $store->getWebsite();
                     $url = $this->urlBuilder->getUrl(
                         '*/*/*',
@@ -749,23 +746,17 @@ class Eav extends AbstractModifier
                             'store'     => $store->getId()
                         ]
                     );
-                    $scopeLabel = __(
-                        'Store view <a href="%1" target="_blank">%2</a>',
-                        $url,
-                        $website->getName() . ' / ' . $store->getName()
-                    );
+                    $scopeLabel = $website->getName() . ' / ' . $store->getName();
                     break;
             }
-
-            $formatted .=
-                '<dt class="override-scope ' . $scope . '" title="'. __('Click to see overridden value') .'">'
-                . $scopeLabel .
-                '</dt>';
+            $overriddenScopes[] = [
+                'scopeType' => $scopeType,
+                'scopeUrl' => $url,
+                'scopeLabel' => $scopeLabel
+            ];
         }
 
-        $formatted .= '</dl></div>';
-
-        return $formatted;
+        return $overriddenScopes;
     }
 
     /**
@@ -845,7 +836,7 @@ class Eav extends AbstractModifier
             $overriddenLevels = $this->getOverriddenLevels($attribute);
             if ($overriddenLevels) {
                 $meta = $this->arrayManager->merge($configPath, $meta, [
-                    'additionalInfo' => $this->formatOverriddenScopes($overriddenLevels),
+                    'scopeHints' => $this->formatOverriddenScopes($overriddenLevels),
                 ]);
             }
         }
