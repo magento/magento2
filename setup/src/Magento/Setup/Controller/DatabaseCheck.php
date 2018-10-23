@@ -70,7 +70,7 @@ class DatabaseCheck extends AbstractActionController
 
     /**
      * Is Driver Options Given
-     * 
+     *
      * @param array $params
      * @return bool
      */
