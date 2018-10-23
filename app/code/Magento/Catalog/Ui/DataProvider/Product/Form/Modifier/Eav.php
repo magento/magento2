@@ -269,7 +269,7 @@ class Eav extends AbstractModifier
         CompositeConfigProcessor $wysiwygConfigProcessor = null,
         ScopeConfigInterface $scopeConfig = null,
         AttributeCollectionFactory $attributeCollectionFactory = null,
-        Url $urlBuilder
+        Url $urlBuilder = null
     ) {
         $this->locator = $locator;
         $this->catalogEavValidationRules = $catalogEavValidationRules;
@@ -296,7 +296,8 @@ class Eav extends AbstractModifier
         ->get(ScopeConfigInterface::class);
         $this->attributeCollectionFactory = $attributeCollectionFactory
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
-        $this->urlBuilder = $urlBuilder;
+        $this->urlBuilder = $urlBuilder
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Url::class);
     }
 
     /**
