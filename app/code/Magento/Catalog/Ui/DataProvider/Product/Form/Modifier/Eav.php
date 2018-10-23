@@ -632,48 +632,40 @@ class Eav extends AbstractModifier
     private function getOverriddenLevels(ProductAttributeInterface $attribute)
     {
         $overridden = [];
+        $tree = $this->getScopeTree();
+        if (!$tree) {
+            return $overridden;
+        }
+        $contextScopeId = $this->locator->getStore()->getId();
 
-        if ($tree = $this->getScopeTree()) {
-            $contextScopeId = $this->locator->getStore()->getId();
-
-            switch ($attribute->getScope()) {
-                case ProductAttributeInterface::SCOPE_WEBSITE_TEXT:
-                    if (isset($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT][$contextScopeId][ProductAttributeInterface::SCOPE_STORE_TEXT])) {
-                        $stores = array_values($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT][$contextScopeId][ProductAttributeInterface::SCOPE_STORE_TEXT]);
-                        foreach ($stores as $storeId) {
-                            if ($this->scopeOverriddenValue->containsValue(
-                                ProductInterface::class,
-                                $this->locator->getProduct(),
-                                $attribute->getAttributeCode(),
-                                $storeId
-                            )) {
-                                $overridden[] = [
-                                    'scope' => 'store',
-                                    'scope_id' => $storeId,
-                                ];
-                            }
+        switch ($attribute->getScope()) {
+            case ProductAttributeInterface::SCOPE_WEBSITE_TEXT:
+                if (isset($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT][$contextScopeId][ProductAttributeInterface::SCOPE_STORE_TEXT])) {
+                    $stores = array_values($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT][$contextScopeId][ProductAttributeInterface::SCOPE_STORE_TEXT]);
+                }
+                break;
+            default:
+                if (isset($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT])) {
+                    foreach ($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT] as $website) {
+                        foreach ($website[ProductAttributeInterface::SCOPE_STORE_TEXT] as $storeId) {
+                            $stores = [$storeId];
                         }
                     }
-                    break;
-                default:
-                    if (isset($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT])) {
-                        foreach ($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT] as $website) {
-                            foreach ($website[ProductAttributeInterface::SCOPE_STORE_TEXT] as $storeId) {
-                                if ($this->scopeOverriddenValue->containsValue(
-                                    ProductInterface::class,
-                                    $this->locator->getProduct(),
-                                    $attribute->getAttributeCode(),
-                                    $storeId
-                                )) {
-                                    $overridden[] = [
-                                        'scope' => 'store',
-                                        'scope_id' => $storeId,
-                                    ];
-                                }
-                            }
-                        }
-                    }
-                    break;
+                }
+                break;
+        }
+
+        foreach ($stores ?? [] as $storeId) {
+            if ($this->scopeOverriddenValue->containsValue(
+                ProductInterface::class,
+                $this->locator->getProduct(),
+                $attribute->getAttributeCode(),
+                $storeId
+            )) {
+                $overridden[] = [
+                    'scope' => 'store',
+                    'scope_id' => $storeId,
+                ];
             }
         }
 
