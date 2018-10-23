@@ -167,7 +167,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             $filePath = $this->getTmpDir() . '/';
         } else {
             $filePath = '';
- 		}
+        }
 
         if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
             $url = str_replace($matches[0], '', $fileName);
