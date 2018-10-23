@@ -257,13 +257,7 @@ class Processor
         /**
          * Define server http host
          */
-        if (!empty($_SERVER['HTTP_HOST'])) {
-            $host = $_SERVER['HTTP_HOST'];
-        } elseif (!empty($_SERVER['SERVER_NAME'])) {
-            $host = $_SERVER['SERVER_NAME'];
-        } else {
-            $host = 'localhost';
-        }
+        $host = $this->resolveHostName();
 
         $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off')
             || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && ($_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
@@ -276,6 +270,23 @@ class Processor
             $url .= ':' . $port[1];
         }
         return  $url;
+    }
+
+    /**
+     * Resolve hostname
+     *
+     * @return string
+     */
+    private function resolveHostName() : string
+    {
+        if (!empty($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } elseif (!empty($_SERVER['SERVER_NAME'])) {
+            $host = $_SERVER['SERVER_NAME'];
+        } else {
+            $host = 'localhost';
+        }
+        return $host;
     }
 
     /**

@@ -8,6 +8,8 @@
 namespace Magento\AdminNotification\Block;
 
 /**
+ * Admin notification window block
+ *
  * @api
  * @since 100.0.2
  */

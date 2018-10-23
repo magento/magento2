@@ -113,9 +113,9 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
-     * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
+     * @inheritdoc. In addition, it sets status 'invalidate' for config caches
      *
      * @return $this
      */
@@ -129,9 +129,9 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
-     * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
+     * @inheritdoc. In addition, it sets status 'invalidate' for config caches
      *
      * @return $this
      */
