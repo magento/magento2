@@ -248,8 +248,8 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     id: Int @doc(description: "The ID number assigned to the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
     name: String @doc(description: "The product name. Customers use this name to identify the product.")
     sku: String @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer")
-    description: ProductTextAttribute @doc(description: "Detailed information about the product. The value can include simple HTML tags.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductTextAttribute")
-    short_description: ProductTextAttribute @doc(description: "A short description of the product. Its use depends on the theme.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductTextAttribute")
+    description: ProductTextAttribute @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
+    short_description: ProductTextAttribute @doc(description: "A short description of the product. Its use depends on the theme.")
     special_price: Float @doc(description: "The discounted price of the product")
     special_from_date: String @doc(description: "The beginning date that a product has a special price")
     special_to_date: String @doc(description: "The end date that a product has a special price")
@@ -433,8 +433,8 @@ type CategoryProducts @doc(description: "The category products object returned i
 input ProductFilterInput @doc(description: "ProductFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
     name: FilterTypeInput @doc(description: "The product name. Customers use this name to identify the product.")
     sku: FilterTypeInput @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer")
-    description: ProductTextAttributeTypeInput @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
-    short_description: ProductTextAttributeTypeInput @doc(description: "A short description of the product. Its use depends on the theme.")
+    description: FilterTypeInput @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
+    short_description: FilterTypeInput @doc(description: "A short description of the product. Its use depends on the theme.")
     price: FilterTypeInput @doc(description: "The price of an item")
     special_price: FilterTypeInput @doc(description: "The discounted price of the product")
     special_from_date: FilterTypeInput @doc(description: "The beginning date that a product has a special price")
@@ -558,24 +558,5 @@ type SortFields @doc(description: "SortFields contains a default value for sort 
 }
 
 type ProductTextAttribute @doc(description: "Product text attribute.") {
-    content: String
-}
-
-input ProductTextAttributeTypeInput @doc(description: "FilterTypeInput specifies which action will be performed in a query ") {
-    format: String @doc(description: "Format of the content")
-    eq: String @doc(description: "Equals")
-    finset: [String] @doc(description: "Find in set. The value can contain a set of comma-separated values")
-    from: String @doc(description: "From. Must be used with 'to'")
-    gt: String @doc(description: "Greater than")
-    gteq: String @doc(description: "Greater than or equal to")
-    in: [String] @doc(description: "In. The value can contain a set of comma-separated values")
-    like: String @doc(description: "Like. The specified value can contain % (percent signs) to allow matching of 0 or more characters")
-    lt: String @doc(description: "Less than")
-    lteq: String @doc(description: "Less than or equal to")
-    moreq: String @doc(description: "More than or equal to")
-    neq: String @doc(description: "Not equal to")
-    notnull: String @doc(description: "Not null")
-    null: String @doc(description: "Is null")
-    to: String@doc(description: "To. Must be used with 'from'")
-    nin: [String] @doc(description: "Not in. The value can contain a set of comma-separated values")
+    html: String @doc(description: "Attribute HTML content") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductTextAttribute\\HtmlContent")
 }
