@@ -10,9 +10,10 @@ use Magento\Sales\Model\Order\Address as OrderAddress;
 
 require 'order.php';
 /** @var Order $order */
-/** @var Order\Payment $payment */
-/** @var Order\Item $orderItem */
-/** @var array $addressData Data for creating addresses for the orders. */
+/** @var  Order\Payment $payment */
+/** @var  Order\Item $orderItem */
+/** @var  Order\Address $billingAddress */
+/** @var  Order\Address $shippingAddress */
 $orders = [
     [
         'increment_id' => '100000002',
@@ -49,6 +50,7 @@ $orders = [
     ],
 ];
 
+$orderList = [];
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objectManager->create(OrderRepositoryInterface::class);
 /** @var array $orderData */
@@ -75,4 +77,5 @@ foreach ($orders as $orderData) {
         ->setShippingAddress($shippingAddress);
 
     $orderRepository->save($order);
+    $orderList[] = $order;
 }

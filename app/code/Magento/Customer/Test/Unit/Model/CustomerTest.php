@@ -307,8 +307,6 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         }
 
         $expectedResult[$attribute->getAttributeCode()] = $attribute->getValue();
-        $expectedResult['attribute_set_id'] =
-            \Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER;
 
         $this->assertEquals($this->_model->getData(), $expectedResult);
     }
