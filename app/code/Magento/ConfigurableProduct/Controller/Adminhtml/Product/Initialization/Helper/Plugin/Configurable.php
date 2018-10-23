@@ -13,6 +13,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProduct;
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
@@ -71,12 +72,12 @@ class Configurable
         VariationHandler $variationHandler,
         RequestInterface $request,
         Factory $optionsFactory,
-        JsonSerializer $serializer
+        JsonSerializer $serializer = null
     ) {
         $this->variationHandler = $variationHandler;
         $this->request = $request;
         $this->optionsFactory = $optionsFactory;
-        $this->serializer = $serializer;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(JsonSerializer::class);
     }
 
     /**
