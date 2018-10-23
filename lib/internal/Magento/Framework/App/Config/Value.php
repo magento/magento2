@@ -9,7 +9,7 @@ namespace Magento\Framework\App\Config;
  * Config data model
  *
  * This model is temporarily marked as API since {@see \Magento\Framework\App\Config\ValueInterface} doesn't fit
- * developers' needs of extensibility. In 2.4 we are going to introduce a new iterface which should cover all needs
+ * developers' needs of extensibility. In 2.4 we are going to introduce a new interface which should cover all needs
  * and deprecate the mentioned together with the model
  *
  * @method string getScope()
@@ -113,9 +113,9 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
-     * @inheritdoc
+     * Processing object after save data
      *
-     * @inheritdoc. In addition, it sets status 'invalidate' for config caches
+     * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
      * @return $this
      */
@@ -129,9 +129,9 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
-     * @inheritdoc
+     * Processing object after delete data
      *
-     * @inheritdoc. In addition, it sets status 'invalidate' for config caches
+     * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
      * @return $this
      */

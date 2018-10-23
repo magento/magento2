@@ -18,6 +18,8 @@ interface ValueInterface
 {
     /**
      * Table name
+     *
+     * @deprecated since it is not used
      */
     const ENTITY = 'config_data';
 
