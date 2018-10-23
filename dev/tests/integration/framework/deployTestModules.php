@@ -1,4 +1,4 @@
-<?php
+x<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -38,3 +38,5 @@ if ($files === false) {
 foreach ($files as $file) {
     include $file;
 }
+
+echo "\n\n TEST MODULES WERE DEPLOYED \n\n"; // DEBUG
