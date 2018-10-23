@@ -136,6 +136,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param TimezoneInterface $timezone
+     * @param LocalizedDateToUtcConverterInterface $utcConverter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
