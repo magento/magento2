@@ -9,9 +9,6 @@ use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultContro
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
-use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 class Validate extends ImportResultController
 {
@@ -42,12 +39,7 @@ class Validate extends ImportResultController
             /** @var $import \Magento\ImportExport\Model\Import */
             $import = $this->getImport()->setData($data);
             try {
-                $source = ImportAdapter::findAdapterFor(
-                    $import->uploadSource(),
-                    $this->_objectManager->create('Magento\Framework\Filesystem')
-                        ->getDirectoryWrite(DirectoryList::ROOT),
-                    $data[$import::FIELD_FIELD_SEPARATOR]
-                );
+                $source = $import->uploadFileAndGetSource();
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $resultBlock->addError($e->getMessage());
@@ -72,6 +64,7 @@ class Validate extends ImportResultController
      * @param bool $validationResult
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function processValidationResult($validationResult, $resultBlock)
     {
@@ -128,6 +121,7 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function addMessageToSkipErrors(Result $resultBlock)
     {
@@ -148,6 +142,7 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function addMessageForValidResult(Result $resultBlock)
     {
@@ -166,6 +161,7 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function collectErrors(Result $resultBlock)
     {
