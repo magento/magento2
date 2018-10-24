@@ -44,7 +44,9 @@ class ProductViewTest extends GraphQlAbstract
             attribute_set_id
             country_of_manufacture
             created_at
-            description
+            description {
+                html
+            }
             gift_message_available
             id
             categories {
@@ -203,7 +205,9 @@ class ProductViewTest extends GraphQlAbstract
                 position
                 sku
             }
-            short_description
+            short_description {
+                html
+            }
             sku
             small_image {
                 path
@@ -262,6 +266,7 @@ QUERY;
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
+        $this->assertTextEavAttributes($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
         $this->assertTierPrices($product, $response['products']['items'][0]);
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
@@ -917,11 +922,9 @@ QUERY;
     {
         $eavAttributes = [
             'url_key',
-            'description',
             'meta_description',
             'meta_keyword',
             'meta_title',
-            'short_description',
             'country_of_manufacture',
             'gift_message_available',
             'news_from_date',
@@ -937,6 +940,31 @@ QUERY;
             $assertionMap[] = [
                 'response_field' => $this->eavAttributesToGraphQlSchemaFieldTranslator($attributeCode),
                 'expected_value' => $expectedAttribute ? $expectedAttribute->getValue() : null
+            ];
+        }
+
+        $this->assertResponseFields($actualResponse, $assertionMap);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $actualResponse
+     */
+    private function assertTextEavAttributes($product, $actualResponse)
+    {
+        $eavAttributes = [
+            'description',
+            'short_description',
+        ];
+        $assertionMap = [];
+        foreach ($eavAttributes as $attributeCode) {
+            $expectedAttribute = $product->getCustomAttribute($attributeCode);
+
+            $assertionMap[] = [
+                'response_field' => $this->eavAttributesToGraphQlSchemaFieldTranslator($attributeCode),
+                'expected_value' => $expectedAttribute ? [
+                    'html' => $expectedAttribute->getValue()
+                ] : null
             ];
         }
 

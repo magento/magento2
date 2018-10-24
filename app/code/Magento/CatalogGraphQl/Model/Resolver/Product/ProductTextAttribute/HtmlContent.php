@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextAttribute;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Helper\Output as OutputHelper;
@@ -41,14 +42,17 @@ class HtmlContent implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): array {
+    ): ?string {
         if (!isset($value['model'])) {
-            return [];
+            throw new GraphQlInputException(__('"model" value should be specified'));
+        }
+        if (!isset($value['field'])) {
+            throw new GraphQlInputException(__('"field" value should be specified'));
         }
 
         /* @var $product Product */
         $product = $value['model'];
-        $fieldName = $field->getName();
+        $fieldName = $value['field'];
         $renderedValue = $this->outputHelper->productAttribute($product, $product->getData($fieldName), $fieldName);
 
         return $renderedValue;
