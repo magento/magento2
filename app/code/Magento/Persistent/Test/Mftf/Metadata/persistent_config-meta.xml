@@ -14,6 +14,9 @@
                     <object key="enabled" dataType="persistent_options_enabled">
                         <field key="value">string</field>
                     </object>
+                    <object key="logout_clear" dataType="persistent_options_logout_clear">
+                        <field key="value">string</field>
+                    </object>
                 </object>
             </object>
         </object>
