@@ -58,6 +58,6 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
 
         return $value === null
             ? null
-            : $this->calculator->getAmount($value, $saleableItem);
+            : $this->calculator->getAmount($value, $saleableItem, ['weee', 'weee_tax', 'tax']);
     }
 }
