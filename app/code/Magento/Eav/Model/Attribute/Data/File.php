@@ -180,7 +180,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
             $fileData = [
                 'size' => filesize($dir . $value),
                 'name' => $value,
-                'tmp_name' => $dir . $value
+                'tmp_name' => $dir . $value,
             ];
         }
 
