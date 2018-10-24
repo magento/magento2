@@ -9,6 +9,7 @@ namespace Magento\InventorySourceDeductionApi\Model;
 
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -33,26 +34,26 @@ class SourceDeductionService implements SourceDeductionServiceInterface
     private $getStockItemConfiguration;
 
     /**
-     * @var StockResolverInterface
+     * @var GetStockBySalesChannelInterface
      */
-    private $stockResolver;
+    private $getStockBySalesChannel;
 
     /**
      * @param SourceItemsSaveInterface $sourceItemsSave
      * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
-     * @param StockResolverInterface $stockResolver
+     * @param GetStockBySalesChannelInterface $getStockBySalesChannel
      */
     public function __construct(
         SourceItemsSaveInterface $sourceItemsSave,
         GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku,
         GetStockItemConfigurationInterface $getStockItemConfiguration,
-        StockResolverInterface $stockResolver
+        GetStockBySalesChannelInterface $getStockBySalesChannel
     ) {
         $this->sourceItemsSave = $sourceItemsSave;
         $this->getSourceItemBySourceCodeAndSku = $getSourceItemBySourceCodeAndSku;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
-        $this->stockResolver = $stockResolver;
+        $this->getStockBySalesChannel = $getStockBySalesChannel;
     }
 
     /**
@@ -64,10 +65,7 @@ class SourceDeductionService implements SourceDeductionServiceInterface
         $sourceCode = $sourceDeductionRequest->getSourceCode();
         $salesChannel = $sourceDeductionRequest->getSalesChannel();
 
-        $stockId = (int)$this->stockResolver->get(
-            $salesChannel->getType(),
-            $salesChannel->getCode()
-        )->getStockId();
+        $stockId = $this->getStockBySalesChannel->execute($salesChannel)->getStockId();
         foreach ($sourceDeductionRequest->getItems() as $item) {
             $itemSku = $item->getSku();
             $qty = $item->getQty();

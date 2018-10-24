@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Represents relation between Stock and Source entities.
  *
@@ -16,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface StockSourceLinkInterface extends ExtensibleDataInterface
+interface StockSourceLinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -76,11 +74,9 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface|null
      */
-    public function getExtensionAttributes(): ?StockSourceLinkExtensionInterface;
+    public function getExtensionAttributes(): ?\Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -88,5 +84,7 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(StockSourceLinkExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(
+        \Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface $extensionAttributes
+    ): void;
 }
