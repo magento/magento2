@@ -82,42 +82,111 @@ class UpdateLegacyStockItemConfigurationAtSourceItemConfigurationSavePlugin
             return;
         }
 
-        $connection = $this->resourceConnection->getConnection();
-        $connection->beginTransaction();
-
-        try {
-            foreach ($sourceItemConfigurations as $sourceItemConfiguration) {
-                if ($sourceItemConfiguration->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
-                    continue;
-                }
-
-                $productId = $this->getProductIdsBySkus->execute(
-                    [$sourceItemConfiguration->getSku()]
-                )[$sourceItemConfiguration->getSku()];
-
-                if ($sourceItemConfiguration->getNotifyStockQty() === null) {
-                    $data[StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY] = 1;
-                } else {
-                    $data[StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY] = 0;
-                    $data[StockItemInterface::NOTIFY_STOCK_QTY] = $sourceItemConfiguration->getNotifyStockQty();
-                }
-
-                $where = [
-                    StockItemInterface::STOCK_ID . ' = ?' => $this->defaultStockProvider->getId(),
-                    StockItemInterface::PRODUCT_ID . ' = ?' => $productId
-                ];
-
-                $connection->update(
-                    $this->resourceConnection->getTableName('cataloginventory_stock_item'),
-                    $data,
-                    $where
-                );
+        $sourceItemsConfigurationToUpdate = [];
+        $skus = [];
+        foreach ($sourceItemConfigurations as $sourceItemConfiguration) {
+            if ($sourceItemConfiguration->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
+                continue;
             }
+            $skus[] = $sourceItemConfiguration->getSku();
 
-            $connection->commit();
-        } catch (\Exception $e) {
-            $connection->rollBack();
-            throw $e;
+            $notifyStockQty = $sourceItemConfiguration->getNotifyStockQty();
+            $sourceItemConfigurationData[StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY] = $notifyStockQty ? 0 : 1;
+            $sourceItemConfigurationData[StockItemInterface::NOTIFY_STOCK_QTY] = $notifyStockQty ?? 1;
+            $sourceItemsConfigurationToUpdate[$sourceItemConfiguration->getSku()] = $sourceItemConfigurationData;
         }
+
+        $productIds = $this->getProductIdsBySkus->execute($skus);
+
+        foreach ($sourceItemsConfigurationToUpdate as $sku => &$sourceItemConfiguration) {
+            if (!empty($productIds[$sku])) {
+                $sourceItemConfiguration[StockItemInterface::PRODUCT_ID] = $productIds[$sku];
+            } else {
+                unset($sourceItemsConfigurationToUpdate[$sku]);
+            }
+        }
+
+        $connection = $this->resourceConnection->getConnection();
+
+        $tableName = $this->resourceConnection
+            ->getTableName('cataloginventory_stock_item');
+
+        $columnsSql = $this->buildColumnsSqlPart([
+            StockItemInterface::STOCK_ID,
+            StockItemInterface::PRODUCT_ID,
+            StockItemInterface::NOTIFY_STOCK_QTY,
+            StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY
+        ]);
+
+        $valuesSql = $this->buildValuesSqlPart($sourceItemsConfigurationToUpdate);
+        $onDuplicateSql = $this->buildOnDuplicateSqlPart([
+            StockItemInterface::NOTIFY_STOCK_QTY,
+            StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY
+        ]);
+        $bind = $this->getSqlBindData($sourceItemsConfigurationToUpdate);
+
+        $insertSql = sprintf(
+            'INSERT INTO %s (%s) VALUES %s %s',
+            $tableName,
+            $columnsSql,
+            $valuesSql,
+            $onDuplicateSql
+        );
+        $connection->query($insertSql, $bind);
+    }
+
+    /**
+     * @param array $columns
+     * @return string
+     */
+    private function buildColumnsSqlPart(array $columns): string
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $processedColumns = array_map([$connection, 'quoteIdentifier'], $columns);
+        $sql = implode(', ', $processedColumns);
+        return $sql;
+    }
+
+    /**
+     * @param array $sourceItemConfigurations
+     * @return string
+     */
+    private function buildValuesSqlPart(array $sourceItemConfigurations): string
+    {
+        $sql = rtrim(str_repeat('(?, ?, ?, ?), ', count($sourceItemConfigurations)), ', ');
+        return $sql;
+    }
+
+    /**
+     * @param array $sourceItemConfigurations
+     * @return array
+     */
+    private function getSqlBindData(array $sourceItemConfigurations): array
+    {
+        $bind = [];
+        foreach ($sourceItemConfigurations as $sourceItemConfiguration) {
+            $bind = array_merge($bind, [
+                $this->defaultStockProvider->getId(),
+                $sourceItemConfiguration[StockItemInterface::PRODUCT_ID],
+                $sourceItemConfiguration[StockItemInterface::NOTIFY_STOCK_QTY],
+                $sourceItemConfiguration[StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY],
+            ]);
+        }
+        return $bind;
+    }
+
+    /**
+     * @param array $fields
+     * @return string
+     */
+    private function buildOnDuplicateSqlPart(array $fields): string
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $processedFields = [];
+        foreach ($fields as $field) {
+            $processedFields[] = sprintf('%1$s = VALUES(%1$s)', $connection->quoteIdentifier($field));
+        }
+        $sql = 'ON DUPLICATE KEY UPDATE ' . implode(', ', $processedFields);
+        return $sql;
     }
 }
