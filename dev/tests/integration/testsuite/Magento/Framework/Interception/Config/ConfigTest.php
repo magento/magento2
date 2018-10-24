@@ -38,7 +38,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->serializer = $this->objectManager->get(\Magento\Framework\Serialize\Serializer\Serialize::class);
+        $this->serializer = $this->objectManager->get(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->cache = $this->objectManager->get(\Magento\Framework\App\CacheInterface::class);
         $this->configWriter = $this->objectManager->get(\Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem::class);
 
@@ -130,6 +130,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             [
                 'cacheId' => self::CACHE_ID,
                 'compiledLoader' => $this->objectManager->create(\Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class),
+                'serializer' => $this->serializer,
             ]
         );
     }
