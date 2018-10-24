@@ -9,6 +9,9 @@ namespace Magento\Framework\Filesystem\Directory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
 
+/**
+ * Write Interface implementation
+ */
 class Write extends Read implements WriteInterface
 {
     /**
@@ -289,7 +292,7 @@ class Write extends Read implements WriteInterface
     /**
      * Check if given path is writable
      *
-     * @param null $path
+     * @param string|null $path
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws ValidatorException

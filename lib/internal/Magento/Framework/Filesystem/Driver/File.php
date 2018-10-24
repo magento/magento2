@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Glob;
 
 /**
  * Class File
+ *
  * @package Magento\Framework\Filesystem\Driver
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -855,6 +856,8 @@ class File implements DriverInterface
     }
 
     /**
+     * Retrieves absolute path
+     *
      * @param string $basePath
      * @param string $path
      * @param string|null $scheme
