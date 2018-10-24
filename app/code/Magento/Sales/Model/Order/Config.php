@@ -128,7 +128,7 @@ class Config
         $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);
 
-        if ($area == 'adminhtml') {
+        if ($area === 'adminhtml') {
             return $status->getLabel();
         }
 
