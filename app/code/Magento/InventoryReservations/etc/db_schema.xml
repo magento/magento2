@@ -14,10 +14,10 @@
         <column xsi:type="decimal" name="quantity" scale="4" precision="10" unsigned="false" nullable="false"
                 default="0"/>
         <column xsi:type="varchar" name="metadata" nullable="true" length="255"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="reservation_id"/>
         </constraint>
-        <index name="INVENTORY_RESERVATION_STOCK_ID_SKU_QUANTITY" indexType="btree">
+        <index referenceId="INVENTORY_RESERVATION_STOCK_ID_SKU_QUANTITY" indexType="btree">
             <column name="stock_id"/>
             <column name="sku"/>
             <column name="quantity"/>

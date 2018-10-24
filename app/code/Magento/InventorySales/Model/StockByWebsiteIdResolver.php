@@ -47,7 +47,7 @@ class StockByWebsiteIdResolver implements StockByWebsiteIdResolverInterface
     {
         $websiteCode = $this->websiteRepository->getById($websiteId)->getCode();
 
-        return $this->stockResolver->get(
+        return $this->stockResolver->execute(
             SalesChannelInterface::TYPE_WEBSITE,
             $websiteCode
         );

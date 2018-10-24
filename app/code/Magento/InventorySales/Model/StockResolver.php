@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
+use Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
-use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventorySales\Model\ResourceModel\StockIdResolver;
 
 /**
  * @inheritdoc
@@ -19,37 +19,38 @@ use Magento\InventorySales\Model\ResourceModel\StockIdResolver;
 class StockResolver implements StockResolverInterface
 {
     /**
-     * @var StockRepositoryInterface
+     * @var GetStockBySalesChannelInterface
      */
-    private $stockRepository;
+    private $getStockBySalesChannel;
 
     /**
-     * @var StockIdResolver
+     * @var SalesChannelInterfaceFactory
      */
-    private $stockIdResolver;
+    private $salesChannelInterfaceFactory;
 
     /**
-     * @param StockRepositoryInterface $stockRepositoryInterface
-     * @param StockIdResolver $stockIdResolver
+     * @param GetStockBySalesChannelInterface $getStockBySalesChannel
+     * @param SalesChannelInterfaceFactory $salesChannelInterfaceFactory
      */
     public function __construct(
-        StockRepositoryInterface $stockRepositoryInterface,
-        StockIdResolver $stockIdResolver
+        GetStockBySalesChannelInterface $getStockBySalesChannel,
+        SalesChannelInterfaceFactory $salesChannelInterfaceFactory
     ) {
-        $this->stockRepository = $stockRepositoryInterface;
-        $this->stockIdResolver = $stockIdResolver;
+        $this->getStockBySalesChannel = $getStockBySalesChannel;
+        $this->salesChannelInterfaceFactory = $salesChannelInterfaceFactory;
     }
 
     /**
      * @inheritdoc
      */
-    public function get(string $type, string $code): StockInterface
+    public function execute(string $type, string $code): StockInterface
     {
-        $stockId = $this->stockIdResolver->resolve($type, $code);
-
-        if (null === $stockId) {
-            throw new NoSuchEntityException(__('No linked stock found'));
-        }
-        return $this->stockRepository->get($stockId);
+        $salesChannel = $this->salesChannelInterfaceFactory->create([
+            'data' => [
+                SalesChannelInterface::TYPE => $type,
+                SalesChannelInterface::CODE => $code
+            ]
+        ]);
+        return $this->getStockBySalesChannel->execute($salesChannel);
     }
 }
