@@ -23,6 +23,9 @@
         <element name="checkIfTabOpen" selector="//div[@id='advanced_fieldset-wrapper' and not(contains(@class,'opened'))]" type="button"/>
         <element name="useInLayeredNavigation" type="select" selector="#is_filterable"/>
     </section>
+    <section name="AttributeOptionsSection">
+        <element name="AddOption" type="button" selector="#add_new_option_button"/>
+    </section>
     <section name="StorefrontPropertiesSection">
         <element name="PageTitle" type="text" selector="//span[text()='Storefront Properties']" />
         <element name="StoreFrontPropertiesTab" selector="#product_attribute_tabs_front" type="button"/>
