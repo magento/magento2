@@ -35,3 +35,7 @@ enum SortEnum @doc(description: "This enumeration indicates whether to return re
     ASC
     DESC
 }
+
+type ComplexTextValue {
+    html: String! @doc(description: "HTML format") @resolver(class: "\\Magento\\GraphQl\\Model\\Resolver\\ComplexTextValue\\HtmlFormat")
+}
