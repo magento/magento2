@@ -20,4 +20,11 @@
         <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
         <waitForPageLoad stepKey="waitForPageLoad2" />
     </actionGroup>
+    <actionGroup name="deleteProductAttribute" extends="navigateToCreatedProductAttribute">
+        <click selector="{{AttributePropertiesSection.DeleteAttribute}}" stepKey="deleteAttribute"/>
+        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="ClickOnDeleteButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}"
+                    stepKey="waitForSuccessMessage"/>
+    </actionGroup>
 </actionGroups>
