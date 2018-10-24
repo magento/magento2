@@ -189,10 +189,15 @@ class Write extends Read implements WriteInterface
         } else {
             try {
                 $this->deleteFilesRecursively($absolutePath);
+            } catch (FileSystemException $e) {
+                $exceptionMessages[] = $e->getMessage();
+            }
+            try {
                 $this->driver->deleteDirectory($absolutePath);
             } catch (FileSystemException $e) {
                 $exceptionMessages[] = $e->getMessage();
             }
+
             if (!empty($exceptionMessages)) {
                 throw new FileSystemException(
                     new \Magento\Framework\Phrase(
