@@ -117,16 +117,14 @@ class Config
     }
 
     /**
-     * Retrieve status label
+     * Get status label for a specified area
      *
      * @param string $code
-     * @param string|null $forceArea
+     * @param string $area
      * @return string
-     * @throws LocalizedException
      */
-    public function getStatusLabel($code, $forceArea = null)
+    private function getStatusLabelForArea(string $code, string $area): string
     {
-        $area = $forceArea ?: $this->state->getAreaCode();
         $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);
 
@@ -135,6 +133,29 @@ class Config
         }
 
         return $status->getStoreLabel();
+    }
+
+    /**
+     * Retrieve status label for detected area
+     *
+     * @param string $code
+     * @return string
+     * @throws LocalizedException
+     */
+    public function getStatusLabel($code)
+    {
+        return $this->getStatusLabelForArea($code, $this->state->getAreaCode());
+    }
+
+    /**
+     * Retrieve status label for area
+     *
+     * @param string $code
+     * @return string
+     */
+    public function getStatusFrontendLabel(string $code): string
+    {
+        return $this->getStatusLabelForArea($code, \Magento\Framework\App\Area::AREA_FRONTEND);
     }
 
     /**
