@@ -14,13 +14,13 @@
                 default="0" comment="Query Id"/>
         <column xsi:type="int" name="relation_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Relation Id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="CATALOGSEARCH_RECOMMENDATIONS_QUERY_ID_SEARCH_QUERY_QUERY_ID"
+        <constraint xsi:type="foreign" referenceId="CATALOGSEARCH_RECOMMENDATIONS_QUERY_ID_SEARCH_QUERY_QUERY_ID"
                     table="catalogsearch_recommendations" column="query_id" referenceTable="search_query"
                     referenceColumn="query_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CATALOGSEARCH_RECOMMENDATIONS_RELATION_ID_SEARCH_QUERY_QUERY_ID"
+        <constraint xsi:type="foreign" referenceId="CATALOGSEARCH_RECOMMENDATIONS_RELATION_ID_SEARCH_QUERY_QUERY_ID"
                     table="catalogsearch_recommendations" column="relation_id" referenceTable="search_query"
                     referenceColumn="query_id" onDelete="CASCADE"/>
     </table>

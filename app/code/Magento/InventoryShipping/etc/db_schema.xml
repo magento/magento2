@@ -10,7 +10,7 @@
     <table name="inventory_shipment_source" resource="default" engine="innodb">
         <column xsi:type="int" name="shipment_id" padding="10" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="varchar" name="source_code" nullable="false" length="255"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="shipment_id"/>
         </constraint>
     </table>
