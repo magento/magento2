@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -533,5 +535,16 @@ class CreateHandler implements ExtensionInterface
                 $product->getStoreId()
             );
         }
+    }
+
+    /**
+     * @param string $entityId
+     * @param int $storeId
+     * @return $this
+     */
+    protected function processSetImagesPositionToDefault(string $entityId, int $storeId) : CreateHandler
+    {
+        $this->resourceModel->removeImagesPositionExcludeDefaultStore($entityId, $storeId);
+        return $this;
     }
 }
