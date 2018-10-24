@@ -266,7 +266,7 @@ QUERY;
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
-        $this->assertTextEavAttributes($product, $response['products']['items'][0]);
+        $this->assertComplexTextAttributes($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
         $this->assertTierPrices($product, $response['products']['items'][0]);
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
@@ -950,7 +950,7 @@ QUERY;
      * @param ProductInterface $product
      * @param array $actualResponse
      */
-    private function assertTextEavAttributes($product, $actualResponse)
+    private function assertComplexTextAttributes($product, $actualResponse)
     {
         $eavAttributes = [
             'description',

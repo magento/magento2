@@ -17,7 +17,7 @@ use Magento\Catalog\Helper\Output as OutputHelper;
 /**
  * Resolve rendered content for attributes where HTML content is allowed
  */
-class ProductTextAttribute implements ResolverInterface
+class ProductComplexTextAttribute implements ResolverInterface
 {
     /**
      * @var OutputHelper
