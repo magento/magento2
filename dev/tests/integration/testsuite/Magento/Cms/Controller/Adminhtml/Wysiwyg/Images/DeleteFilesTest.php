@@ -91,6 +91,9 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
         if ($directory->isExist('.htaccess')) {
             $directory->delete('.htaccess');
         }
+        if ($directory->isExist('thtaccess')) {
+            $directory->delete('thtaccess');
+        }
     }
 
     /**
