@@ -1161,6 +1161,7 @@ define([
             var justAnImage = images[0],
                 initialImages = this.options.mediaGalleryInitial,
                 imagesToUpdate,
+                gallery,
                 isInitial;
 
             if (isInProductView) {
