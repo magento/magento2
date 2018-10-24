@@ -88,10 +88,13 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
         if ($directory->isExist('wysiwyg')) {
             $directory->delete('wysiwyg');
         }
+        if ($directory->isExist('.htaccess')) {
+            $directory->delete('.htaccess');
+        }
     }
 
     /**
-     * Creates file and tried to delete it via
+     * Creates file and tries to delete it via
      * \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::execute method
      *
      * @param  string $fileName
