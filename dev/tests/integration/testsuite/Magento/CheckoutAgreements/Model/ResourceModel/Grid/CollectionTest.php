@@ -25,7 +25,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $this->collection = Bootstrap::getObjectManager()
+            ->create(Collection::class);
     }
 
     /**
@@ -35,7 +36,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddStoresToFilter(): void
     {
-        $collectionSize = $this->collection->addStoreFilter(1)->load(false, false)->getSize();
+        $collectionSize = $this->collection->addStoreFilter(1)
+            ->load(false, false)
+            ->getSize();
         $this->assertEquals(2, $collectionSize);
     }
 }
