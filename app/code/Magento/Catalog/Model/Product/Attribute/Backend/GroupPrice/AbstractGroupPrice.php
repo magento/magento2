@@ -331,11 +331,15 @@ abstract class AbstractGroupPrice extends Price
     /**
      * @param \Magento\Catalog\Model\Product $object
      * @param array $priceData
+     * @param int|null $storeId
      */
-    public function setPriceData($object, $priceData)
+    public function setPriceData($object, $priceData, $storeId = null)
     {
         $priceData = $this->modifyPriceData($object, $priceData);
-        $websiteId = $this->getWebsiteId($object->getStoreId());
+        if (!$storeId) {
+            $storeId = $object->getStoreId();
+        }
+        $websiteId = $this->getWebsiteId($storeId);
         if (!$object->getData('_edit_mode') && $websiteId) {
             $priceData = $this->preparePriceData($priceData, $object->getTypeId(), $websiteId);
         }

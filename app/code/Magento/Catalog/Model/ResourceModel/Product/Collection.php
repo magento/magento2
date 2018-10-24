@@ -2218,7 +2218,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
         foreach ($this->getItems() as $item) {
             $productId = $item->getData($this->getLinkField());
-            $this->getBackend()->setPriceData($item, isset($tierPrices[$productId]) ? $tierPrices[$productId] : []);
+            $storeId = !$item->hasData('store_id') ? $this->getStoreId() : null;
+            $this->getBackend()->setPriceData($item, isset($tierPrices[$productId]) ? $tierPrices[$productId] : [], $storeId);
         }
     }
 
