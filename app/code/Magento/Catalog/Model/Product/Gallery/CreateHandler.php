@@ -203,7 +203,7 @@ class CreateHandler implements ExtensionInterface
         $this->processNewAndExistingImages($product, $value['images']);
 
         if (!$product->getStoreId()) {
-            $this->processSetImagesPositionToDefault($product->getStoreId());
+            $this->processSetImagesPositionToDefault($product->getEntityId(), $product->getStoreId());
         }
 
         $product->setData($attrCode, $value);
