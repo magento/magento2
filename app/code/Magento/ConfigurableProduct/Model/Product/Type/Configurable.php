@@ -768,7 +768,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $productObject = $productCollection->getFirstItem();
             $productLinkFieldId = $productObject->getId();
             if ($productLinkFieldId) {
-                return $this->productRepository->getById($productLinkFieldId);
+                $storeId = $product->getData('store_id');
+                return $this->productRepository->getById($productLinkFieldId, false, $storeId);
             }
 
             foreach ($productCollection as $productObject) {
