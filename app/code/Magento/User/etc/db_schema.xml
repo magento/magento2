@@ -37,10 +37,10 @@
         <column xsi:type="timestamp" name="first_failure" on_update="false" nullable="true" comment="First Failure"/>
         <column xsi:type="timestamp" name="lock_expires" on_update="false" nullable="true"
                 comment="Expiration Lock Dates"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="user_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="ADMIN_USER_USERNAME">
+        <constraint xsi:type="unique" referenceId="ADMIN_USER_USERNAME">
             <column name="username"/>
         </constraint>
     </table>
@@ -54,12 +54,12 @@
                 comment="Deprecated"/>
         <column xsi:type="int" name="last_updated" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Last Updated"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="password_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="ADMIN_PASSWORDS_USER_ID_ADMIN_USER_USER_ID" table="admin_passwords"
+        <constraint xsi:type="foreign" referenceId="ADMIN_PASSWORDS_USER_ID_ADMIN_USER_USER_ID" table="admin_passwords"
                     column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
-        <index name="ADMIN_PASSWORDS_USER_ID" indexType="btree">
+        <index referenceId="ADMIN_PASSWORDS_USER_ID" indexType="btree">
             <column name="user_id"/>
         </index>
     </table>
