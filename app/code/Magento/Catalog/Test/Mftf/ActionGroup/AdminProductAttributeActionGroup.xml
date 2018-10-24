@@ -25,7 +25,6 @@
             <argument name="ProductAttribute" type="string"/>
         </arguments>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}" userInput="{{ProductAttribute}}" stepKey="navigateToAttributeEditPage1" />
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="navigateToAttributeEditPage2" />
         <waitForPageLoad stepKey="waitForPageLoad2" />
