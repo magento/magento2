@@ -215,7 +215,7 @@ class Write extends Read implements WriteInterface
         $exceptionMessages = [];
         $entitiesList = $this->driver->readDirectoryRecursively($path);
         foreach ($entitiesList as $entityPath) {
-            if (!$this->driver->isDirectory($entityPath)) {
+            if ($this->driver->isFile($entityPath)) {
                 try {
                     $this->driver->deleteFile($entityPath);
                 } catch (FileSystemException $e) {
