@@ -1243,7 +1243,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         if ($entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE && $entity->getTypeId()) {
             $select->where(
-                'entity_type_id =?',
+                't_d.entity_type_id =?',
                 $entity->getTypeId()
             );
         }
