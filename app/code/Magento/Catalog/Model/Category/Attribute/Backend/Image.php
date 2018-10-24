@@ -70,6 +70,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * Gets image name from $value array.
+     *
      * Will return empty string in a case when $value is not an array
      *
      * @param array $value Attribute value
@@ -100,7 +101,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * Avoiding saving potential upload data to DB
+     * Avoiding saving potential upload data to DB.
+     *
      * Will set empty image attribute value if image was not uploaded
      *
      * @param \Magento\Framework\DataObject $object
@@ -128,8 +130,9 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @return \Magento\Catalog\Model\ImageUploader
+     * Get Image Uploader instance
      *
+     * @return \Magento\Catalog\Model\ImageUploader
      * @deprecated 101.0.0
      */
     private function getImageUploader()
