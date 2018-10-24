@@ -31,4 +31,8 @@
         <plugin name="inventory_low_quantity_notification_source_item_delete"
                 type="Magento\InventoryLowQuantityNotification\Plugin\InventoryApi\SourceItemsDeleteInterfacePlugin"/>
     </type>
+    <type name="Magento\InventoryLowQuantityNotificationApi\Api\SourceItemConfigurationsSaveInterface">
+        <plugin name="update_legacy_stock_item_configuration_at_source_item_configuration_save"
+                type="Magento\InventoryLowQuantityNotification\Plugin\InventoryLowQuantityNotificationApi\UpdateLegacyStockItemConfigurationAtSourceItemConfigurationSavePlugin"/>
+    </type>
 </config>
