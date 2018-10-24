@@ -106,7 +106,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
         $order = $this->orderFactory->create()->load($orderId);
         if (!$order->getEntityId()) {
             throw new NoSuchEntityException(__('No order exists with this ID. Verify your information and try again.'));
-        };
+        }
 
         if (0 == $order->getTotalItemCount()) {
             throw new InputException(

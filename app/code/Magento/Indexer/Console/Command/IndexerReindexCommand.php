@@ -187,7 +187,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                     $this->getDependentIndexerIds($id)
                 );
             }
-        };
+        }
 
         return array_unique($dependentIndexerIds);
     }

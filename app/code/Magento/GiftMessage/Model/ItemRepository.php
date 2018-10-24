@@ -88,7 +88,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
             throw new NoSuchEntityException(
                 __('No item with the provided ID was found in the Cart. Verify the ID and try again.')
             );
-        };
+        }
         $messageId = $item->getGiftMessageId();
         if (!$messageId) {
             return null;
@@ -121,7 +121,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
                     $itemId
                 )
             );
-        };
+        }
 
         if ($item->getIsVirtual()) {
             throw new InvalidTransitionException(__('Gift messages can\'t be used for virtual products.'));
