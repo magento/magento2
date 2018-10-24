@@ -43,7 +43,7 @@ class AssertBundleOptionTitleOnStorefront extends AbstractConstraint
             $cmsIndex->getLinksBlock()->waitWelcomeMessage();
             $browser->open($_ENV['app_frontend_url'] . $originalProduct->getUrlKey() . '.html');
             $catalogProductView->getBundleViewBlock()->clickCustomize();
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $catalogProductView->getBundleViewBlock()->getBundleBlock()->isOptionVisible(
                     $optionTitles[$store->getStoreId()]
                 ),

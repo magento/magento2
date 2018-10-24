@@ -96,7 +96,7 @@ class File
             if (!is_writable($this->_fileLocation)) {
                 throw new LocalizedException(
                     new \Magento\Framework\Phrase(
-                        'Permission denied to write to %1',
+                        'You don\'t have permissions to write to the "%1" file.',
                         [$this->_fileLocation]
                     )
                 );
@@ -105,7 +105,7 @@ class File
             if (is_file($this->_filePath) && !is_writable($this->_filePath)) {
                 throw new LocalizedException(
                     new \Magento\Framework\Phrase(
-                        "Can't open file %1 for writing. Permission denied.",
+                        'You don\'t have the permissions to open the "%1" file for writing access.',
                         [$this->_fileName]
                     )
                 );
@@ -115,13 +115,19 @@ class File
         if ($this->_isReadableMode($mode) && (!is_file($this->_filePath) || !is_readable($this->_filePath))) {
             if (!is_file($this->_filePath)) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase('File %1 does not exist', [$this->_filePath])
+                    new \Magento\Framework\Phrase(
+                        'The "%1" file doesn\'t exist. Verify the file and try again.',
+                        [$this->_filePath]
+                    )
                 );
             }
 
             if (!is_readable($this->_filePath)) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase('Permission denied to read file %1', [$this->_filePath])
+                    new \Magento\Framework\Phrase(
+                        'You don\'t have permissions to read the "%1" file.',
+                        [$this->_filePath]
+                    )
                 );
             }
         }
@@ -200,7 +206,7 @@ class File
 
         if (false === $this->_fileHandler) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase('Failed to open file %1', [$this->_filePath])
+                new \Magento\Framework\Phrase('The "%1" file failed to open.', [$this->_filePath])
             );
         }
     }
@@ -218,7 +224,7 @@ class File
 
         if (false === $result) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase('Failed to write data to %1', [$this->_filePath])
+                new \Magento\Framework\Phrase('The data failed to write to "%1".', [$this->_filePath])
             );
         }
     }

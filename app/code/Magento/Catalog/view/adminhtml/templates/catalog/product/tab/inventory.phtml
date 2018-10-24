@@ -27,7 +27,7 @@
             <option value="0"<?php if ($block->getFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ __('No') ?></option>
         </select>
         <input type="hidden" id="inventory_manage_stock_default" value="<?= /* @escapeNotVerified */ $block->getDefaultConfigValue('manage_stock') ?>">
-        <?php $_checked = ($block->getFieldValue('use_config_manage_stock') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+        <?php $_checked = ($block->getFieldValue('use_config_manage_stock') || $block->isNew()) ? 'checked="checked"' : '' ?>
         <input type="checkbox" id="inventory_use_config_manage_stock" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_manage_stock]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
         <label for="inventory_use_config_manage_stock"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         <?php if (!$block->isReadonly()): ?>
@@ -67,7 +67,7 @@ toggleValueElements($('inventory_use_config_manage_stock'), $('inventory_use_con
         <input type="text" class="input-text validate-number" id="inventory_min_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][min_qty]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('min_qty') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
 
         <div class="control-inner-wrap">
-            <?php $_checked = ($block->getFieldValue('use_config_min_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+            <?php $_checked = ($block->getFieldValue('use_config_min_qty') || $block->isNew()) ? 'checked="checked"' : '' ?>
             <input type="checkbox" id="inventory_use_config_min_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_min_qty]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
             <label for="inventory_use_config_min_qty"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
@@ -94,7 +94,7 @@ toggleValueElements($('inventory_use_config_min_qty'), $('inventory_use_config_m
                name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][min_sale_qty]"
                value="<?= /* @escapeNotVerified */ $block->getFieldValue('min_sale_qty') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
         <div class="control-inner-wrap">
-        <?php $_checked = ($block->getFieldValue('use_config_min_sale_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+        <?php $_checked = ($block->getFieldValue('use_config_min_sale_qty') || $block->isNew()) ? 'checked="checked"' : '' ?>
             <input type="checkbox" id="inventory_use_config_min_sale_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_min_sale_qty]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?= /* @escapeNotVerified */ $_readonly ?>>
             <label for="inventory_use_config_min_sale_qty"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
@@ -117,7 +117,7 @@ toggleValueElements($('inventory_use_config_min_sale_qty'), $('inventory_use_con
     </label>
     <div class="control">
         <input type="text" class="input-text validate-number" id="inventory_max_sale_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][max_sale_qty]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('max_sale_qty') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
-        <?php $_checked = ($block->getFieldValue('use_config_max_sale_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+        <?php $_checked = ($block->getFieldValue('use_config_max_sale_qty') || $block->isNew()) ? 'checked="checked"' : '' ?>
         <div class="control-inner-wrap">
             <input type="checkbox" id="inventory_use_config_max_sale_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_max_sale_qty]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?= /* @escapeNotVerified */ $_readonly ?>>
             <label for="inventory_use_config_max_sale_qty"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
@@ -182,7 +182,7 @@ toggleValueElements($('inventory_use_config_max_sale_qty'), $('inventory_use_con
         </select>
 
         <div class="control-inner-wrap">
-            <?php $_checked = ($block->getFieldValue('use_config_backorders') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+            <?php $_checked = ($block->getFieldValue('use_config_backorders') || $block->isNew()) ? 'checked="checked"' : '' ?>
             <input type="checkbox" id="inventory_use_config_backorders" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_backorders]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
             <label for="inventory_use_config_backorders"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
@@ -207,7 +207,7 @@ toggleValueElements($('inventory_use_config_backorders'), $('inventory_use_confi
         <input type="text" class="input-text validate-number" id="inventory_notify_stock_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][notify_stock_qty]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('notify_stock_qty') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
 
         <div class="control-inner-wrap">
-            <?php $_checked = ($block->getFieldValue('use_config_notify_stock_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+            <?php $_checked = ($block->getFieldValue('use_config_notify_stock_qty') || $block->isNew()) ? 'checked="checked"' : '' ?>
             <input type="checkbox" id="inventory_use_config_notify_stock_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_notify_stock_qty]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
             <label for="inventory_use_config_notify_stock_qty"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
@@ -238,7 +238,7 @@ toggleValueElements($('inventory_use_config_notify_stock_qty'), $('inventory_use
         <input type="hidden" id="inventory_enable_qty_increments_default" value="<?= /* @escapeNotVerified */ $block->getDefaultConfigValue('enable_qty_increments') ?>">
 
         <div class="control-inner-wrap">
-            <?php $_checked = ($block->getFieldValue('use_config_enable_qty_inc') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+            <?php $_checked = ($block->getFieldValue('use_config_enable_qty_inc') || $block->isNew()) ? 'checked="checked"' : '' ?>
             <input type="checkbox" id="inventory_use_config_enable_qty_increments" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_enable_qty_increments]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
             <label for="inventory_use_config_enable_qty_increments"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>
@@ -262,7 +262,7 @@ toggleValueElements($('inventory_use_config_enable_qty_increments'), $('inventor
     <div class="control">
         <input type="text" class="input-text validate-digits" id="inventory_qty_increments" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][qty_increments]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('qty_increments') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
         <div class="control-inner-wrap">
-            <?php $_checked = ($block->getFieldValue('use_config_qty_increments') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+            <?php $_checked = ($block->getFieldValue('use_config_qty_increments') || $block->isNew()) ? 'checked="checked"' : '' ?>
             <input type="checkbox" id="inventory_use_config_qty_increments" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][use_config_qty_increments]" value="1" <?= /* @escapeNotVerified */ $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?= /* @escapeNotVerified */ $_readonly ?>>
             <label for="inventory_use_config_qty_increments"><?= /* @escapeNotVerified */ __('Use Config Settings') ?></label>
         </div>

@@ -45,7 +45,9 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
         $linkTypes = $this->linkTypeProvider->getLinkTypes();
 
         if (!isset($linkTypes[$type])) {
-            throw new NoSuchEntityException(__('Unknown link type: %1', (string)$type));
+            throw new NoSuchEntityException(
+                __('The "%1" link type is unknown. Verify the type and try again.', (string)$type)
+            );
         }
         $product = $this->productRepository->get($sku);
         $links = $product->getProductLinks();
@@ -76,7 +78,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
                 }
                 if (!isset($linkTypes[$type])) {
                     throw new NoSuchEntityException(
-                        __('Provided link type "%1" does not exist', $type)
+                        __('The "%1" link type wasn\'t found. Verify the type and try again.', $type)
                     );
                 }
             }
@@ -101,7 +103,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
         try {
             $this->productRepository->save($product);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
+            throw new CouldNotSaveException(__('The linked products data is invalid. Verify the data and try again.'));
         }
 
         return true;

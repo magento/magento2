@@ -37,7 +37,7 @@ class AssertCategoryWithCustomStoreOnFrontend extends AbstractConstraint
         $cmsIndex->open();
         $cmsIndex->getLinksBlock()->waitWelcomeMessage();
         $browser->open($_ENV['app_frontend_url'] . $initialCategory->getUrlKey() . '.html');
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $initialCategory->getName(),
             $categoryView->getTitleBlock()->getTitle(),
             'Wrong category name is displayed for default store.'
@@ -47,7 +47,7 @@ class AssertCategoryWithCustomStoreOnFrontend extends AbstractConstraint
         $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store);
         $cmsIndex->getLinksBlock()->waitWelcomeMessage();
         $browser->open($_ENV['app_frontend_url'] . $initialCategory->getUrlKey() . '.html');
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $category->getName(),
             $categoryView->getTitleBlock()->getTitle(),
             'Wrong category name is displayed for ' . $store

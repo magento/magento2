@@ -123,7 +123,7 @@ class Pro
     /**
      * Config instance setter
      *
-     * @param \Magento\Paypal\Model\Config $instace
+     * @param \Magento\Paypal\Model\Config $instance
      * @param int|null $storeId
      * @return $this
      */
@@ -256,7 +256,7 @@ class Pro
         }
         $api = $this->getApi()
             ->setAuthorizationId($authTransactionId)
-            ->setIsCaptureComplete($payment->getShouldCloseParentTransaction())
+            ->setIsCaptureComplete($payment->isCaptureFinal($amount))
             ->setAmount($amount);
 
         $order = $payment->getOrder();

@@ -125,6 +125,8 @@ class InvoiceService implements InvoiceManagementInterface
     }
 
     /**
+     * Creates an invoice based on the order and quantities provided
+     *
      * @param Order $order
      * @param array $qtys
      * @return \Magento\Sales\Model\Order\Invoice
@@ -136,7 +138,7 @@ class InvoiceService implements InvoiceManagementInterface
         $totalQty = 0;
         $qtys = $this->prepareItemsQty($order, $qtys);
         foreach ($order->getAllItems() as $orderItem) {
-            if (!$this->_canInvoiceItem($orderItem)) {
+            if (!$this->_canInvoiceItem($orderItem, $qtys)) {
                 continue;
             }
             $item = $this->orderConverter->itemToInvoiceItem($orderItem);
@@ -192,16 +194,15 @@ class InvoiceService implements InvoiceManagementInterface
     }
 
     /**
-     * Check if order item can be invoiced. Dummy item can be invoiced or with his children or
-     * with parent item which is included to invoice
+     * Check if order item can be invoiced.
      *
      * @param \Magento\Sales\Api\Data\OrderItemInterface $item
+     * @param array $qtys
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _canInvoiceItem(\Magento\Sales\Api\Data\OrderItemInterface $item)
+    protected function _canInvoiceItem(\Magento\Sales\Api\Data\OrderItemInterface $item, array $qtys = [])
     {
-        $qtys = [];
         if ($item->getLockedDoInvoice()) {
             return false;
         }

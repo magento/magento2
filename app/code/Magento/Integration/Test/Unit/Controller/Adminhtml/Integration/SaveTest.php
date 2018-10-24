@@ -181,7 +181,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
 
     public function testSaveActionExceptionOnIntegrationsCreatedFromConfigFile()
     {
-        $exceptionMessage = 'Cannot edit integrations created via config file.';
+        $exceptionMessage = "The integrations created in the config file can't be edited.";
         $intData = new \Magento\Framework\DataObject(
             [
                 Info::DATA_NAME => 'nameTest',
@@ -215,7 +215,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
      */
     public function testSaveActionUserLockedException()
     {
-        $exceptionMessage = __('Your account is temporarily disabled.');
+        $exceptionMessage = __('Your account is temporarily disabled. Please try again later.');
         $passwordString = '1234567';
 
         $this->_requestMock->expects($this->exactly(2))
@@ -254,7 +254,8 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
     public function testSaveActionAuthenticationException()
     {
         $passwordString = '1234567';
-        $exceptionMessage = __('You have entered an invalid password for current user.');
+        $exceptionMessage =
+            __('The password entered for the current user is invalid. Verify the password and try again.');
 
         $this->_requestMock->expects($this->any())
             ->method('getParam')

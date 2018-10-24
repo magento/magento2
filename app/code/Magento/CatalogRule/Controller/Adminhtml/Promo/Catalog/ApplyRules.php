@@ -25,14 +25,14 @@ class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
             $ruleJob->applyAll();
 
             if ($ruleJob->hasSuccess()) {
-                $this->messageManager->addSuccess($ruleJob->getSuccess());
+                $this->messageManager->addSuccessMessage($ruleJob->getSuccess());
                 $this->_objectManager->create(\Magento\CatalogRule\Model\Flag::class)->loadSelf()->setState(0)->save();
             } elseif ($ruleJob->hasError()) {
-                $this->messageManager->addError($errorMessage . ' ' . $ruleJob->getError());
+                $this->messageManager->addErrorMessage($errorMessage . ' ' . $ruleJob->getError());
             }
         } catch (\Exception $e) {
             $this->_objectManager->create(\Psr\Log\LoggerInterface::class)->critical($e);
-            $this->messageManager->addError($errorMessage);
+            $this->messageManager->addErrorMessage($errorMessage);
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

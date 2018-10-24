@@ -288,6 +288,28 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     }
 
     /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        //Preparing both customer and address imports for mass validation.
+        $source = $this->getSource();
+        $this->_customerEntity->prepareCustomerData($source);
+        $source->rewind();
+        $rows = [];
+        foreach ($source as $row) {
+            $rows[] = [
+                Address::COLUMN_EMAIL => $row[Customer::COLUMN_EMAIL],
+                Address::COLUMN_WEBSITE => $row[Customer::COLUMN_WEBSITE],
+            ];
+        }
+        $source->rewind();
+        $this->_addressEntity->prepareCustomerData($rows);
+
+        return parent::validateData();
+    }
+
+    /**
      * Validate data row
      *
      * @param array $rowData
@@ -308,14 +330,13 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
                 // Add new customer data into customer storage for address entity instance
                 $websiteId = $this->_customerEntity->getWebsiteId($this->_currentWebsiteCode);
                 if (!$this->_addressEntity->getCustomerStorage()->getCustomerId($this->_currentEmail, $websiteId)) {
-                    $customerData = new \Magento\Framework\DataObject(
+                    $this->_addressEntity->getCustomerStorage()->addCustomerByArray(
                         [
-                            'id' => $this->_nextCustomerId,
+                            'entity_id' => $this->_nextCustomerId,
                             'email' => $this->_currentEmail,
                             'website_id' => $websiteId,
                         ]
                     );
-                    $this->_addressEntity->getCustomerStorage()->addCustomer($customerData);
                     $this->_nextCustomerId++;
                 }
 

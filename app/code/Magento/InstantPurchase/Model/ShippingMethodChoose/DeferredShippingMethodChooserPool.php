@@ -15,6 +15,9 @@ class DeferredShippingMethodChooserPool
 {
     private $choosers;
 
+    /**
+     * @param DeferredShippingMethodChooserInterface[] $choosers
+     */
     public function __construct(array $choosers)
     {
         foreach ($choosers as $chooser) {
@@ -28,11 +31,15 @@ class DeferredShippingMethodChooserPool
         $this->choosers = $choosers;
     }
 
+    /**
+     * @param string $type
+     * @return DeferredShippingMethodChooserInterface
+     */
     public function get($type) : DeferredShippingMethodChooserInterface
     {
         if (!isset($this->choosers[$type])) {
             throw new \InvalidArgumentException(sprintf(
-                'Deferred shipping method chooser is not registered.',
+                'Deferred shipping method %s is not registered.',
                 $type
             ));
         }

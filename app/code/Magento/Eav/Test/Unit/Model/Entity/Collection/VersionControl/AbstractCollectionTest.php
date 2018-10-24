@@ -68,6 +68,9 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
         }
     }
 
+    /**
+     * @return array
+     */
     public static function fetchItemDataProvider()
     {
         return [

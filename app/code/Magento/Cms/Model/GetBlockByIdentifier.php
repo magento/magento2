@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\GetBlockByIdentifierInterface;
@@ -46,7 +47,7 @@ class GetBlockByIdentifier implements GetBlockByIdentifierInterface
         $this->blockResource->load($block, $identifier, BlockInterface::IDENTIFIER);
 
         if (!$block->getId()) {
-            throw new NoSuchEntityException(__('CMS Block with identifier "%1" does not exist.', $identifier));
+            throw new NoSuchEntityException(__('The CMS block with the "%1" ID doesn\'t exist.', $identifier));
         }
 
         return $block;

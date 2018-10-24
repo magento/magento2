@@ -26,7 +26,7 @@ class AssertPasswordLengthErrorMessage extends AbstractConstraint
     public function processAssert(CustomerAccountCreate $registerPage)
     {
         $errorMessage = $registerPage->getRegisterForm()->getPasswordError();
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::PASSWORD_LENGTH_ERROR_MESSAGE,
             $errorMessage,
             'Incorrect password error message.'

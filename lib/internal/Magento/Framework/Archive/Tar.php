@@ -4,16 +4,15 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Framework\Archive;
+
+use Magento\Framework\Archive\Helper\File;
+
 /**
  * Class to work with tar archives
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Framework\Archive;
-
-use Magento\Framework\Archive\Helper\File;
-use Magento\Framework\Filesystem\DriverInterface;
-
 class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
     /**
@@ -252,7 +251,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
         $file = $this->_getCurrentFile();
 
         if (is_dir($file)) {
-            $dirFiles = scandir($file);
+            $dirFiles = scandir($file, SCANDIR_SORT_NONE);
 
             if (false === $dirFiles) {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -260,10 +259,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
                 );
             }
 
-            array_shift($dirFiles);
-            /* remove  './'*/
-            array_shift($dirFiles);
-            /* remove  '../'*/
+            $dirFiles = array_diff($dirFiles, ['..', '.']);
 
             foreach ($dirFiles as $item) {
                 $this->_setCurrentFile($file . $item)->_createTar();

@@ -43,7 +43,7 @@ class QuoteAdapterTest extends \PHPUnit\Framework\TestCase
     public function testGetCurrencyCode()
     {
         $expected = 'USD';
-        /** @var \Magento\Quote\Api\Data\CurrencyInterface $currencyrMock */
+        /** @var \Magento\Quote\Api\Data\CurrencyInterface $currencyMock */
         $currencyMock = $this->getMockBuilder(
             \Magento\Quote\Api\Data\CurrencyInterface::class
         )->getMockForAbstractClass();

@@ -57,7 +57,10 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             'setOptions',
             'setCanSaveBundleSelections',
             '__wakeup',
-            'getOptionsReadonly'
+            'getOptionsReadonly',
+            'getBundleOptionsData',
+            'getExtensionAttributes',
+            'setExtensionAttributes',
         ];
         $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methods);
         $optionInterfaceFactory = $this->getMockBuilder(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
@@ -127,6 +130,17 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         );
         $this->productMock->expects($this->once())->method('setOptions')->with(null);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(true);
+        $this->productMock->expects($this->once())
+            ->method('getBundleOptionsData')
+            ->willReturn(['option_1' => ['delete' => 1]]);
+        $extentionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setBundleProductOptions'])
+            ->getMockForAbstractClass();
+        $extentionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
+        $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extentionAttribute);
+        $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extentionAttribute);
+
         $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
 
@@ -147,6 +161,29 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())->method('getPriceType')->will($this->returnValue(2));
         $this->productMock->expects($this->any())->method('getOptionsReadonly')->will($this->returnValue(true));
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(false);
+        $this->model->afterInitialize($this->subjectMock, $this->productMock);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterInitializeIfBundleOptionsNotExist(): void
+    {
+        $valueMap = [
+            ['bundle_options', null, null],
+            ['affect_bundle_product_selections', null, false],
+        ];
+        $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($valueMap));
+        $extentionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setBundleProductOptions'])
+            ->getMockForAbstractClass();
+        $extentionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
+        $this->productMock->expects($this->any())->method('getCompositeReadonly')->will($this->returnValue(false));
+        $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extentionAttribute);
+        $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extentionAttribute);
+        $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(false);
+
         $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
 }

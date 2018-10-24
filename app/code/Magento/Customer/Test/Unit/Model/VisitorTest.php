@@ -60,15 +60,15 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
                 'commit',
                 'clean',
             ])->disableOriginalConstructor()->getMock();
-        $this->resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('visitor_id'));
-        $this->resource->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
+        $this->resource->expects($this->any())->method('getIdFieldName')->willReturn('visitor_id');
+        $this->resource->expects($this->any())->method('addCommitCallback')->willReturnSelf();
 
         $arguments = $this->objectManagerHelper->getConstructArguments(
             \Magento\Customer\Model\Visitor::class,
             [
                 'registry' => $this->registry,
                 'session' => $this->session,
-                'resource' => $this->resource
+                'resource' => $this->resource,
             ]
         );
 
@@ -77,14 +77,13 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
     public function testInitByRequest()
     {
-        $this->session->expects($this->once())->method('getSessionId')
-            ->will($this->returnValue('asdfhasdfjhkj2198sadf8sdf897'));
+        $oldSessionId = 'asdfhasdfjhkj2198sadf8sdf897';
+        $newSessionId = 'bsdfhasdfjhkj2198sadf8sdf897';
+        $this->session->expects($this->any())->method('getSessionId')->willReturn($newSessionId);
+        $this->session->expects($this->atLeastOnce())->method('getVisitorData')
+            ->willReturn(['session_id' => $oldSessionId]);
         $this->visitor->initByRequest(null);
-        $this->assertEquals('asdfhasdfjhkj2198sadf8sdf897', $this->visitor->getSessionId());
-
-        $this->visitor->setData(['visitor_id' => 1]);
-        $this->visitor->initByRequest(null);
-        $this->assertNull($this->visitor->getSessionId());
+        $this->assertEquals($newSessionId, $this->visitor->getSessionId());
     }
 
     public function testSaveByRequest()
@@ -101,7 +100,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
                 'registry' => $this->registry,
                 'session' => $this->session,
                 'resource' => $this->resource,
-                'ignores' => ['test_route_name' => true]
+                'ignores' => ['test_route_name' => true],
             ]
         );
         $request = new \Magento\Framework\DataObject(['route_name' => 'test_route_name']);
@@ -164,7 +163,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
     public function testClean()
     {
-        $this->resource->expects($this->once())->method('clean')->with($this->visitor)->will($this->returnSelf());
+        $this->resource->expects($this->once())->method('clean')->with($this->visitor)->willReturnSelf();
         $this->visitor->clean();
     }
 }

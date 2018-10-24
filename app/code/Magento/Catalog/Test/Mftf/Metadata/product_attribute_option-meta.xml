@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductAttributeOption" dataType="ProductAttributeOption" type="create" auth="adminOauth" url="/V1/products/attributes/{attribute_code}/options" method="POST">
+        <contentType>application/json</contentType>
+        <object dataType="ProductAttributeOption" key="option">
+            <field key="label">string</field>
+            <field key="value">string</field>
+            <field key="sort_order">integer</field>
+            <field key="is_default">boolean</field>
+            <array key="store_labels">
+                <value>StoreLabel</value>
+            </array>
+        </object>
+    </operation>
+    <operation name="DeleteProductAttributeOption" dataType="ProductAttributeOption" type="delete" auth="adminOauth" url="/V1/products/attributes/{attribute_code}/options/{option_id}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+    <operation name="GetProductAttributeOption" dataType="ProductAttributeOption" type="get" auth="adminOauth" url="/V1/products/attributes/{attribute_code}/options/" method="GET">
+        <contentType>application/json</contentType>
+    </operation>
+</operations>

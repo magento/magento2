@@ -88,7 +88,8 @@ class InlineTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willThrowException($exception);
 
-        $this->expectException('Exception', $message);
+        $this->expectException('Exception');
+        $this->expectExceptionMessage($message);
         $this->renderer->render(['text'], []);
     }
 }

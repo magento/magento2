@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\GiftMessage\Test\Unit\Model;
 
 use Magento\GiftMessage\Model\ItemRepository;
@@ -115,7 +116,7 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage There is no item with provided id in the cart
+     * @expectedExceptionMessage No item with the provided ID was found in the Cart. Verify the ID and try again.
      */
     public function testGetWithNoSuchEntityException()
     {
@@ -163,20 +164,22 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage There is no product with provided  itemId: 1 in the cart
      */
     public function testSaveWithNoSuchEntityException()
     {
         $itemId = 1;
 
         $this->quoteMock->expects($this->once())->method('getItemById')->with($itemId)->will($this->returnValue(null));
-
         $this->itemRepository->save($this->cartId, $this->messageMock, $itemId);
+
+        $this->expectExceptionMessage(
+            'No product with the "1" itemId exists in the Cart. Verify your information and try again.'
+        );
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift Messages are not applicable for virtual products
+     * @expectedExceptionMessage Gift messages can't be used for virtual products.
      */
     public function testSaveWithInvalidTransitionException()
     {

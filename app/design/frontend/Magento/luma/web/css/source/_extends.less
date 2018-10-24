@@ -7,6 +7,8 @@
 //  List default styles reset
 //  ---------------------------------------------
 
+@_column-number: 1;
+
 & when (@media-common = true) {
     .abs-reset-list {
         .lib-list-reset-styles();
@@ -705,7 +707,7 @@
 //  ---------------------------------------------
 
 @abs-form-field-revert-column-1: {
-    .lib-form-field-column-number(@_column-number: 1);
+    .lib-form-field-column-number(@_column-number);
 };
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
@@ -760,7 +762,7 @@
                     white-space: nowrap;
                     width: 33%;
 
-                    &:before {
+                    &[data-th]:before {
                         content: attr(data-th) ':';
                         display: block;
                         font-weight: @font-weight__bold;
@@ -1681,7 +1683,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-checkout-tooltip-content-position-top-mobile {
         @abs-checkout-tooltip-content-position-top();
     }

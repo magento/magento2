@@ -48,7 +48,10 @@ class AttributeTypeResolver implements AttributeTypeResolverInterface
             $output = $this->typeProcessor->getArrayItemType($type);
             if (!(class_exists($output) || interface_exists($output))) {
                 throw new \LogicException(
-                    sprintf('Class "%s" does not exist. Please note that namespace must be specified.', $type)
+                    sprintf(
+                        'The "%s" class doesn\'t exist and the namespace must be specified. Verify and try again.',
+                        $type
+                    )
                 );
             }
         }

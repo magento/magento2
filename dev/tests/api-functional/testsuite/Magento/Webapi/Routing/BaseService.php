@@ -25,7 +25,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
             $this->_assertSoapException(
                 $serviceInfo,
                 $requestData,
-                'Consumer is not authorized to access %resources'
+                "The consumer isn't authorized to access %resources."
             );
         } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
             $this->_assertRestUnauthorizedException($serviceInfo, $requestData);
@@ -44,7 +44,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\Exception $e) {
             $this->assertContains(
-                '{"message":"Consumer is not authorized to access %resources"',
+                '{"message":"The consumer isn\'t authorized to access %resources.',
                 $e->getMessage(),
                 sprintf(
                     'REST routing did not fail as expected for the method "%s" of service "%s"',

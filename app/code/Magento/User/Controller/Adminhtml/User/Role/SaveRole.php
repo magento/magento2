@@ -4,8 +4,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Controller\ResultFactory;
@@ -15,7 +17,7 @@ use Magento\Security\Model\SecurityCookie;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
+class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements HttpPostActionInterface
 {
     /**
      * Session keys for Info form data
@@ -117,7 +119,9 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             );
             return $resultRedirect->setPath('*');
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
-            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+            $this->messageManager->addError(
+                __('The password entered for the current user is invalid. Verify the password and try again.')
+            );
             return $this->saveDataToSessionAndRedirect($role, $this->getRequest()->getPostValue(), $resultRedirect);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

@@ -25,7 +25,7 @@
                 <model>Magento\Ups\Model\Carrier</model>
                 <pickup>CC</pickup>
                 <title>United Parcel Service</title>
-                <tracking_xml_url>https://www.ups.com/ups.app/xml/Track</tracking_xml_url>
+                <tracking_xml_url>https://onlinetools.ups.com/ups.app/xml/Track</tracking_xml_url>
                 <unit_of_measure>LBS</unit_of_measure>
                 <username backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
@@ -35,6 +35,7 @@
                 <handling_type>F</handling_type>
                 <handling_action>O</handling_action>
                 <negotiated_active>0</negotiated_active>
+                <include_taxes>0</include_taxes>
                 <mode_xml>1</mode_xml>
                 <type>UPS</type>
                 <is_account_live>0</is_account_live>

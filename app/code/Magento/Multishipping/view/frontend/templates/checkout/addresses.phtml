@@ -14,20 +14,42 @@
  * @var $block \Magento\Multishipping\Block\Checkout\Addresses
  */
 ?>
-<form id="checkout_multishipping_form" data-mage-init='{"multiShipping":{}, "validation":{}}' action="<?= /* @escapeNotVerified */ $block->getPostActionUrl() ?>" method="post" class="multicheckout address form">
+<form id="checkout_multishipping_form"
+      data-mage-init='{
+          "multiShipping":{},
+          "validation":{},
+          "cartUpdate": {
+               "validationURL": "/multishipping/checkout/checkItems",
+               "eventName": "updateMulticartItemQty"
+          }}'
+      action="<?= $block->escapeUrl($block->getPostActionUrl()) ?>"
+      method="post"
+      class="multicheckout address form">
+<form id="checkout_multishipping_form"
+      data-mage-init='{
+          "multiShipping":{},
+          "cartUpdate": {
+               "validationURL": "/multishipping/checkout/checkItems",
+               "eventName": "updateMulticartItemQty"
+          }}'
+      action="<?= $block->escapeUrl($block->getPostActionUrl()) ?>"
+      method="post"
+      class="multicheckout address form">
     <div class="title">
-        <strong><?= /* @escapeNotVerified */ __('Please select a shipping address for applicable items.') ?></strong>
+        <strong><?= $block->escapeHtml(__('Please select a shipping address for applicable items.')) ?></strong>
     </div>
     <input type="hidden" name="continue" value="0" id="can_continue_flag"/>
     <input type="hidden" name="new_address" value="0" id="add_new_address_flag"/>
     <div class="table-wrapper">
         <table class="items data table" id="multiship-addresses-table">
-            <caption class="table-caption"><?= /* @escapeNotVerified */ __('Please select a shipping address for applicable items.') ?></caption>
+            <caption class="table-caption">
+                <?= $block->escapeHtml(__('Please select a shipping address for applicable items.')) ?>
+            </caption>
             <thead>
             <tr>
-                <th class="col product" scope="col"><?= /* @escapeNotVerified */ __('Product') ?></th>
-                <th class="col qty" scope="col"><?= /* @escapeNotVerified */ __('Qty') ?></th>
-                <th class="col address" scope="col"><?= /* @escapeNotVerified */ __('Send To') ?></th>
+                <th class="col product" scope="col"><?= $block->escapeHtml(__('Product')) ?></th>
+                <th class="col qty" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
+                <th class="col address" scope="col"><?= $block->escapeHtml(__('Send To')) ?></th>
                 <th class="col actions" scope="col">&nbsp;</th>
             </tr>
             </thead>
@@ -35,24 +57,37 @@
             <?php foreach ($block->getItems() as $_index => $_item): ?>
                 <?php if ($_item->getQuoteItem()) : ?>
                     <tr>
-                        <td class="col product" data-th="<?= $block->escapeHtml(__('Product')) ?>"><?= $block->getItemHtml($_item->getQuoteItem()) ?></td>
+                        <td class="col product" data-th="<?= $block->escapeHtml(__('Product')) ?>">
+                            <?= $block->getItemHtml($_item->getQuoteItem()) ?>
+                        </td>
                         <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>">
                             <div class="field qty">
-                                <label for="ship-<?= /* @escapeNotVerified */ $_index ?>-<?= /* @escapeNotVerified */ $_item->getQuoteItemId() ?>-qty" class="label">
-                                    <span><?= /* @escapeNotVerified */ __('Qty') ?></span>
+                                <label for="ship-<?= $block->escapeHtml($_index) ?>-<?= $block->escapeHtml($_item->getQuoteItemId()) ?>-qty"
+                                       class="label">
+                                    <span><?= $block->escapeHtml(__('Qty')) ?></span>
                                 </label>
                                 <div class="control">
-                                    <input type="number" data-multiship-item-id="<?= /* @escapeNotVerified */ $_item->getSku() ?>" id="ship-<?= /* @escapeNotVerified */ $_index ?>-<?= /* @escapeNotVerified */ $_item->getQuoteItemId() ?>-qty" name="ship[<?= /* @escapeNotVerified */ $_index ?>][<?= /* @escapeNotVerified */ $_item->getQuoteItemId() ?>][qty]" value="<?= $block->escapeHtml($_item->getQty()) ?>" size="2" class="input-text qty" data-validate="{number: true}"/>
+                                    <input type="number"
+                                           data-multiship-item-id="<?= $block->escapeHtml($_item->getSku()) ?>"
+                                           id="ship-<?= $block->escapeHtml($_index) ?>-<?= $block->escapeHtml($_item->getQuoteItemId()) ?>-qty"
+                                           name="ship[<?= $block->escapeHtml($_index) ?>][<?= $block->escapeHtml($_item->getQuoteItemId()) ?>][qty]"
+                                           value="<?= $block->escapeHtml($_item->getQty()) ?>"
+                                           size="2"
+                                           class="input-text qty"
+                                           data-validate="{number: true}"/>
                                 </div>
                             </div>
                         </td>
                         <td class="col address" data-th="<?= $block->escapeHtml(__('Send To')) ?>">
                             <?php if ($_item->getProduct()->getIsVirtual()): ?>
-                                <div class="applicable"><?= /* @escapeNotVerified */ __('A shipping selection is not applicable.') ?></div>
+                                <div class="applicable">
+                                    <?= $block->escapeHtml(__('A shipping selection is not applicable.')) ?>
+                                </div>
                             <?php else: ?>
                                 <div class="field address">
-                                    <label for="ship_<?= /* @escapeNotVerified */ $_index ?>_<?= /* @escapeNotVerified */ $_item->getQuoteItemId() ?>_address" class="label">
-                                        <span><?= /* @escapeNotVerified */ __('Send To') ?></span>
+                                    <label for="ship_<?= $block->escapeHtml($_index) ?>_<?= $block->escapeHtml($_item->getQuoteItemId()) ?>_address"
+                                           class="label">
+                                        <span><?= $block->escapeHtml(__('Send To')) ?></span>
                                     </label>
                                     <div class="control">
                                         <?= $block->getAddressesHtmlSelect($_item, $_index) ?>
@@ -61,8 +96,11 @@
                             <?php endif; ?>
                         </td>
                         <td class="col actions" data-th="<?= $block->escapeHtml(__('Actions')) ?>">
-                            <a href="<?= /* @escapeNotVerified */ $block->getItemDeleteUrl($_item) ?>" title="<?= /* @escapeNotVerified */ __('Remove Item') ?>" class="action delete" data-multiship-item-update="">
-                                <span><?= /* @escapeNotVerified */ __('Remove item') ?></span>
+                            <a href="<?= $block->escapeUrl($block->getItemDeleteUrl($_item)) ?>"
+                               title="<?= $block->escapeHtml(__('Remove Item')) ?>"
+                               class="action delete"
+                               data-multiship-item-remove="">
+                                <span><?= $block->escapeHtml(__('Remove item')) ?></span>
                             </a>
                         </td>
                     </tr>
@@ -73,12 +111,35 @@
     </div>
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit" title="<?= /* @escapeNotVerified */ __('Go to Shipping Information') ?>" class="action primary continue<?php if ($block->isContinueDisabled()):?> disabled<?php endif; ?>" data-role="can-continue" data-flag="1"<?php if ($block->isContinueDisabled()):?> disabled="disabled"<?php endif; ?>><span><?= /* @escapeNotVerified */ __('Go to Shipping Information') ?></span></button>
+            <button type="submit"
+                    title="<?= $block->escapeHtml(__('Go to Shipping Information')) ?>"
+                    class="action primary continue<?php if ($block->isContinueDisabled()):?> disabled<?php endif; ?>"
+                    data-role="can-continue"
+                    data-flag="1"
+                <?php if ($block->isContinueDisabled()):?>
+                    disabled="disabled"
+                <?php endif; ?>>
+                <span><?= $block->escapeHtml(__('Go to Shipping Information')) ?></span>
+            </button>
         </div>
         <div class="secondary">
-            <button type="submit" data-multiship-item-update="" class="action update" data-role="can-continue" data-flag="0"><span><?= /* @escapeNotVerified */ __('Update Qty &amp; Addresses') ?></span></button>
-            <button type="button" title="<?= /* @escapeNotVerified */ __('Enter a New Address') ?>" class="action add" data-role="add-new-address"><span><?= /* @escapeNotVerified */ __('Enter a New Address') ?></span></button>
-            <a href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>" class="action back"><span><?= /* @escapeNotVerified */ __('Back to Shopping Cart') ?></span></a>
+            <button type="submit"
+                    data-multiship-item-update=""
+                    class="action update"
+                    data-role="can-continue"
+                    data-flag="0">
+                <span><?= $block->escapeHtml(__('Update Qty &amp; Addresses')) ?></span>
+            </button>
+            <button type="button"
+                    title="<?= $block->escapeHtml(__('Enter a New Address')) ?>"
+                    class="action add"
+                    data-role="add-new-address">
+                <span><?= $block->escapeHtml(__('Enter a New Address')) ?></span>
+            </button>
+            <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>"
+               class="action back">
+                <span><?= $block->escapeHtml(__('Back to Shopping Cart')) ?></span>
+            </a>
         </div>
     </div>
 </form>

@@ -8,6 +8,9 @@ namespace Magento\Newsletter\Model\Plugin;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Newsletter\Model\ResourceModel\Subscriber;
+use Magento\Customer\Api\Data\CustomerExtensionInterface;
 
 class CustomerPlugin
 {
@@ -19,13 +22,35 @@ class CustomerPlugin
     private $subscriberFactory;
 
     /**
+     * @var ExtensionAttributesFactory
+     */
+    private $extensionFactory;
+
+    /**
+     * @var Subscriber
+     */
+    private $subscriberResource;
+
+    /**
+     * @var array
+     */
+    private $customerSubscriptionStatus = [];
+
+    /**
      * Initialize dependencies.
      *
      * @param SubscriberFactory $subscriberFactory
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param Subscriber $subscriberResource
      */
-    public function __construct(SubscriberFactory $subscriberFactory)
-    {
+    public function __construct(
+        SubscriberFactory $subscriberFactory,
+        ExtensionAttributesFactory $extensionFactory,
+        Subscriber $subscriberResource
+    ) {
         $this->subscriberFactory = $subscriberFactory;
+        $this->extensionFactory = $extensionFactory;
+        $this->subscriberResource = $subscriberResource;
     }
 
     /**
@@ -41,14 +66,34 @@ class CustomerPlugin
      */
     public function afterSave(CustomerRepository $subject, CustomerInterface $result, CustomerInterface $customer)
     {
-        $this->subscriberFactory->create()->updateSubscription($result->getId());
-        if ($result->getId() && $customer->getExtensionAttributes()) {
-            if ($customer->getExtensionAttributes()->getIsSubscribed() === true) {
-                $this->subscriberFactory->create()->subscribeCustomerById($result->getId());
-            } elseif ($customer->getExtensionAttributes()->getIsSubscribed() === false) {
-                $this->subscriberFactory->create()->unsubscribeCustomerById($result->getId());
+        $resultId = $result->getId();
+        /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
+        $subscriber = $this->subscriberFactory->create();
+
+        $subscriber->updateSubscription($resultId);
+        // update the result only if the original customer instance had different value.
+        $initialExtensionAttributes = $result->getExtensionAttributes();
+        if ($initialExtensionAttributes === null) {
+            /** @var CustomerExtensionInterface $initialExtensionAttributes */
+            $initialExtensionAttributes = $this->extensionFactory->create(CustomerInterface::class);
+            $result->setExtensionAttributes($initialExtensionAttributes);
+        }
+
+        $newExtensionAttributes = $customer->getExtensionAttributes();
+        if ($newExtensionAttributes
+            && $initialExtensionAttributes->getIsSubscribed() !== $newExtensionAttributes->getIsSubscribed()
+        ) {
+            if ($newExtensionAttributes->getIsSubscribed()) {
+                $subscriber->subscribeCustomerById($resultId);
+            } else {
+                $subscriber->unsubscribeCustomerById($resultId);
             }
         }
+
+        $isSubscribed = $subscriber->isSubscribed();
+        $this->customerSubscriptionStatus[$resultId] = $isSubscribed;
+        $initialExtensionAttributes->setIsSubscribed($isSubscribed);
+
         return $result;
     }
 
@@ -93,5 +138,48 @@ class CustomerPlugin
             $subscriber->delete();
         }
         return $result;
+    }
+
+    /**
+     * Plugin after getById customer that obtains newsletter subscription status for given customer.
+     *
+     * @param CustomerRepository $subject
+     * @param CustomerInterface $customer
+     * @return CustomerInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterGetById(CustomerRepository $subject, CustomerInterface $customer)
+    {
+        $extensionAttributes = $customer->getExtensionAttributes();
+
+        if ($extensionAttributes === null) {
+            /** @var CustomerExtensionInterface $extensionAttributes */
+            $extensionAttributes = $this->extensionFactory->create(CustomerInterface::class);
+            $customer->setExtensionAttributes($extensionAttributes);
+        }
+        if ($extensionAttributes->getIsSubscribed() === null) {
+            $isSubscribed = $this->isSubscribed($customer);
+            $extensionAttributes->setIsSubscribed($isSubscribed);
+        }
+
+        return $customer;
+    }
+
+    /**
+     * This method returns newsletters subscription status for given customer.
+     *
+     * @param CustomerInterface $customer
+     * @return bool
+     */
+    private function isSubscribed(CustomerInterface $customer)
+    {
+        $customerId = $customer->getId();
+        if (!isset($this->customerSubscriptionStatus[$customerId])) {
+            $subscriber = $this->subscriberResource->loadByCustomerData($customer);
+            $this->customerSubscriptionStatus[$customerId] = isset($subscriber['subscriber_status'])
+                && $subscriber['subscriber_status'] == 1;
+        }
+
+        return $this->customerSubscriptionStatus[$customerId];
     }
 }

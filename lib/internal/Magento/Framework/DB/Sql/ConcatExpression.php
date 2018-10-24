@@ -65,7 +65,7 @@ class ConcatExpression extends Expression
         }
         return sprintf(
             'TRIM(%s)',
-            $this->adapter->getConcatSql($columns, ' ')
+            $this->adapter->getConcatSql($columns, $this->separator)
         );
     }
 }

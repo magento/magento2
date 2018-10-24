@@ -1,0 +1,49 @@
+type Query {
+    placeholder: String @doc(description: "comment for placeholder.")
+}
+
+type Mutation {
+    placeholder: String @doc(description: "comment for placeholder.")
+}
+
+input FilterTypeInput @doc(description:"Comment for FilterTypeInput") {
+    eq: String @doc(description:"Equal")
+    finset: [String]
+    from: String
+    gt: String
+    gteq: String
+    in: [String]
+    like: String
+    lt: String
+    lteq: String
+    moreq: String
+    neq: String
+    notnull: String
+    null: String
+    to: String
+    nin: [String]
+}
+
+type SearchResultPageInfo
+@doc(description:"Comment for SearchResultPageInfo")
+{
+    page_size: Int @doc(description:"Comment for page_size")
+    current_page: Int @doc(description:"Comment for current_page")
+}
+
+enum SortEnum @doc(description: "Comment for SortEnum.")
+{
+    ASC @doc(description:"Ascending Order")
+    DESC @doc(description:"Descending Order")
+}
+
+interface ProductInterface {
+    url_key: String @doc(description: "comment for url_key inside ProductInterface type.")
+    url_path: String
+}
+
+
+type SimpleProduct {
+    url_key: String @doc(description: "comment for url_key for simple product that implements [ProductInterface]")
+    url_path: String
+}

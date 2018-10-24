@@ -1,14 +1,23 @@
 <?php
 /**
- * Test for \Magento\Checkout\Controller\Index\Index
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Controller\Index;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\Builder\InvocationMocker as InvocationMocker;
+use PHPUnit\Framework\MockObject\Matcher\InvokedCount as InvokedCount;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Checkout\Helper\Data;
+use Magento\Quote\Model\Quote;
+use Magento\Framework\View\Result\Page;
+use Magento\Checkout\Controller\Index\Index;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -17,108 +26,111 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
-    private $dataMock;
+    private $data;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
-    private $quoteMock;
+    private $quote;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
-    private $sessionMock;
+    private $session;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $onepageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
-    private $requestMock;
+    private $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $redirectMock;
 
     /**
-     * @var \Magento\Checkout\Controller\Index\Index
+     * @var Index
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var Page|MockObject
      */
-    protected $resultPageMock;
+    private $resultPage;
 
     /**
      * @var \Magento\Framework\View\Page\Config
      */
-    protected $pageConfigMock;
+    private $pageConfigMock;
 
     /**
      * @var \Magento\Framework\View\Page\Title
      */
-    protected $titleMock;
+    private $titleMock;
 
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected $url;
+    private $url;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Redirect|MockObject
      */
-    protected $resultRedirectMock;
+    private $resultRedirectMock;
 
     protected function setUp()
     {
         // mock objects
         $this->objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->basicMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->dataMock = $this->basicMock(\Magento\Checkout\Helper\Data::class);
-        $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
+        $this->objectManagerMock = $this->basicMock(ObjectManagerInterface::class);
+        $this->data = $this->basicMock(Data::class);
+        $this->quote = $this->createPartialMock(
+            Quote::class,
             ['getHasError', 'hasItems', 'validateMinimumAmount', 'hasError']
         );
         $this->contextMock = $this->basicMock(\Magento\Framework\App\Action\Context::class);
-        $this->sessionMock = $this->basicMock(\Magento\Customer\Model\Session::class);
+        $this->session = $this->basicMock(Session::class);
         $this->onepageMock = $this->basicMock(\Magento\Checkout\Model\Type\Onepage::class);
         $this->layoutMock = $this->basicMock(\Magento\Framework\View\Layout::class);
-        $this->requestMock = $this->basicMock(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isSecure', 'getHeader'])
+            ->getMock();
         $this->responseMock = $this->basicMock(\Magento\Framework\App\ResponseInterface::class);
         $this->redirectMock = $this->basicMock(\Magento\Framework\App\Response\RedirectInterface::class);
-        $this->resultPageMock = $this->basicMock(\Magento\Framework\View\Result\Page::class);
+        $this->resultPage = $this->basicMock(Page::class);
         $this->pageConfigMock = $this->basicMock(\Magento\Framework\View\Page\Config::class);
         $this->titleMock = $this->basicMock(\Magento\Framework\View\Page\Title::class);
         $this->url = $this->createMock(\Magento\Framework\UrlInterface::class);
@@ -130,7 +142,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $resultPageFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturn($this->resultPageMock);
+            ->willReturn($this->resultPage);
 
         $resultRedirectFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
             ->disableOriginalConstructor()
@@ -141,21 +153,21 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->resultRedirectMock);
 
         // stubs
-        $this->basicStub($this->onepageMock, 'getQuote')->willReturn($this->quoteMock);
-        $this->basicStub($this->resultPageMock, 'getLayout')->willReturn($this->layoutMock);
+        $this->basicStub($this->onepageMock, 'getQuote')->willReturn($this->quote);
+        $this->basicStub($this->resultPage, 'getLayout')->willReturn($this->layoutMock);
 
         $this->basicStub($this->layoutMock, 'getBlock')
             ->willReturn($this->basicMock(\Magento\Theme\Block\Html\Header::class));
-        $this->basicStub($this->resultPageMock, 'getConfig')->willReturn($this->pageConfigMock);
+        $this->basicStub($this->resultPage, 'getConfig')->willReturn($this->pageConfigMock);
         $this->basicStub($this->pageConfigMock, 'getTitle')->willReturn($this->titleMock);
         $this->basicStub($this->titleMock, 'set')->willReturn($this->titleMock);
 
         // objectManagerMock
         $objectManagerReturns = [
-            [\Magento\Checkout\Helper\Data::class, $this->dataMock],
+            [Data::class, $this->data],
             [\Magento\Checkout\Model\Type\Onepage::class, $this->onepageMock],
             [\Magento\Checkout\Model\Session::class, $this->basicMock(\Magento\Checkout\Model\Session::class)],
-            [\Magento\Customer\Model\Session::class, $this->basicMock(\Magento\Customer\Model\Session::class)],
+            [Session::class, $this->basicMock(Session::class)],
 
         ];
         $this->objectManagerMock->expects($this->any())
@@ -165,7 +177,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->basicMock(\Magento\Framework\UrlInterface::class));
         // context stubs
         $this->basicStub($this->contextMock, 'getObjectManager')->willReturn($this->objectManagerMock);
-        $this->basicStub($this->contextMock, 'getRequest')->willReturn($this->requestMock);
+        $this->basicStub($this->contextMock, 'getRequest')->willReturn($this->request);
         $this->basicStub($this->contextMock, 'getResponse')->willReturn($this->responseMock);
         $this->basicStub($this->contextMock, 'getMessageManager')
             ->willReturn($this->basicMock(\Magento\Framework\Message\ManagerInterface::class));
@@ -175,33 +187,82 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
         // SUT
         $this->model = $this->objectManager->getObject(
-            \Magento\Checkout\Controller\Index\Index::class,
+            Index::class,
             [
                 'context' => $this->contextMock,
-                'customerSession' => $this->sessionMock,
+                'customerSession' => $this->session,
                 'resultPageFactory' => $resultPageFactoryMock,
                 'resultRedirectFactory' => $resultRedirectFactoryMock
             ]
         );
     }
 
-    public function testRegenerateSessionIdOnExecute()
+    /**
+     * Checks a case when session should be or not regenerated during the request.
+     *
+     * @param bool $secure
+     * @param string $referer
+     * @param InvokedCount $expectedCall
+     * @dataProvider sessionRegenerationDataProvider
+     */
+    public function testRegenerateSessionIdOnExecute(bool $secure, string $referer, InvokedCount $expectedCall)
     {
-        //Stubs to control execution flow
-        $this->basicStub($this->dataMock, 'canOnepageCheckout')->willReturn(true);
-        $this->basicStub($this->quoteMock, 'hasItems')->willReturn(true);
-        $this->basicStub($this->quoteMock, 'getHasError')->willReturn(false);
-        $this->basicStub($this->quoteMock, 'validateMinimumAmount')->willReturn(true);
-        $this->basicStub($this->sessionMock, 'isLoggedIn')->willReturn(true);
+        $this->data->method('canOnepageCheckout')
+            ->willReturn(true);
+        $this->quote->method('hasItems')
+            ->willReturn(true);
+        $this->quote->method('getHasError')
+            ->willReturn(false);
+        $this->quote->method('validateMinimumAmount')
+            ->willReturn(true);
+        $this->session->method('isLoggedIn')
+            ->willReturn(true);
+        $this->request->method('isSecure')
+            ->willReturn($secure);
+        $this->request->method('getHeader')
+            ->with('referer')
+            ->willReturn($referer);
 
-        //Expected outcomes
-        $this->sessionMock->expects($this->once())->method('regenerateId');
-        $this->assertSame($this->resultPageMock, $this->model->execute());
+        $this->session->expects($expectedCall)
+            ->method('regenerateId');
+        $this->assertSame($this->resultPage, $this->model->execute());
+    }
+
+    /**
+     * Gets list of variations for generating new session.
+     *
+     * @return array
+     */
+    public function sessionRegenerationDataProvider(): array
+    {
+        return [
+            [
+                'secure' => false,
+                'referer' => 'https://test.domain.com/',
+                'expectedCall' => self::once()
+            ],
+            [
+                'secure' => true,
+                'referer' => false,
+                'expectedCall' => self::once()
+            ],
+            [
+                'secure' => true,
+                'referer' => 'http://test.domain.com/',
+                'expectedCall' => self::once()
+            ],
+            // This is the only case in which session regeneration can be skipped
+            [
+                'secure' => true,
+                'referer' => 'https://test.domain.com/',
+                'expectedCall' => self::never()
+            ],
+        ];
     }
 
     public function testOnepageCheckoutNotAvailable()
     {
-        $this->basicStub($this->dataMock, 'canOnepageCheckout')->willReturn(false);
+        $this->basicStub($this->data, 'canOnepageCheckout')->willReturn(false);
         $expectedPath = 'checkout/cart';
 
         $this->resultRedirectMock->expects($this->once())
@@ -214,7 +275,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidQuote()
     {
-        $this->basicStub($this->quoteMock, 'hasError')->willReturn(true);
+        $this->basicStub($this->quote, 'hasError')->willReturn(true);
 
         $expectedPath = 'checkout/cart';
         $this->resultRedirectMock->expects($this->once())
@@ -226,23 +287,22 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $mock
+     * @param MockObject $mock
      * @param string $method
      *
-     * @return \PHPUnit\Framework\MockObject_Builder_InvocationMocker
+     * @return InvocationMocker
      */
-    private function basicStub($mock, $method)
+    private function basicStub($mock, $method): InvocationMocker
     {
-        return $mock->expects($this->any())
-                ->method($method)
-                ->withAnyParameters();
+        return $mock->method($method)
+            ->withAnyParameters();
     }
 
     /**
      * @param string $className
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function basicMock($className)
+    private function basicMock(string $className): MockObject
     {
         return $this->getMockBuilder($className)
             ->disableOriginalConstructor()

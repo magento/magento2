@@ -128,7 +128,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $processFrontendFunc = function ($class, $params) {
             switch ($class) {
                 case \Magento\Framework\Cache\Frontend\Adapter\Zend::class:
-                    return new $class($params['frontend']);
+                    return new $class($params['frontendFactory']);
                 case \Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy::class:
                     $frontend = $params['frontend'];
                     unset($params['frontend']);

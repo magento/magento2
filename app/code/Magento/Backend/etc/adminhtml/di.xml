@@ -139,10 +139,16 @@
     <type name="Magento\Backend\Model\Menu\Builder">
         <plugin name="SetupMenuBuilder" type="Magento\Backend\Model\Setup\MenuBuilder" />
     </type>
-    <type name="Magento\Config\Model\Config\Structure\ConcealInProductionConfigList">
+    <type name="Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction">
         <arguments>
             <argument name="configs" xsi:type="array">
                 <item name="dev" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProductionWithoutScdOnDemand">
+        <arguments>
+            <argument name="configs" xsi:type="array">
                 <item name="general/locale/code" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::DISABLED</item>
             </argument>
         </arguments>
@@ -156,4 +162,10 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Layout\Generator\Block">
+        <arguments>
+            <argument name="defaultClass" xsi:type="string">Magento\Backend\Block\Template</argument>
+        </arguments>
+    </type>
+    <preference for="CsrfRequestValidator" type="Magento\Backend\App\Request\BackendValidator" />
 </config>

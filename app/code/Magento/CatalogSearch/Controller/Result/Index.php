@@ -6,14 +6,20 @@
  */
 namespace Magento\CatalogSearch\Controller\Result;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\QueryFactory;
+use Magento\Search\Model\PopularSearchTerms;
 
-class Index extends \Magento\Framework\App\Action\Action
+/**
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
+ */
+class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Catalog session
@@ -64,34 +70,88 @@ class Index extends \Magento\Framework\App\Action\Action
      * Display search result
      *
      * @return void
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
         $this->layerResolver->create(Resolver::CATALOG_LAYER_SEARCH);
+
         /* @var $query \Magento\Search\Model\Query */
         $query = $this->_queryFactory->get();
 
-        $query->setStoreId($this->_storeManager->getStore()->getId());
+        $storeId = $this->_storeManager->getStore()->getId();
+        $query->setStoreId($storeId);
 
-        if ($query->getQueryText() != '') {
-            if ($this->_objectManager->get(\Magento\CatalogSearch\Helper\Data::class)->isMinQueryLength()) {
-                $query->setId(0)->setIsActive(1)->setIsProcessed(1);
+        $queryText = $query->getQueryText();
+
+        if ($queryText != '') {
+            $catalogSearchHelper = $this->_objectManager->get(\Magento\CatalogSearch\Helper\Data::class);
+
+            $getAdditionalRequestParameters = $this->getRequest()->getParams();
+            unset($getAdditionalRequestParameters[QueryFactory::QUERY_VAR_NAME]);
+
+            if (empty($getAdditionalRequestParameters) &&
+                $this->_objectManager->get(PopularSearchTerms::class)->isCacheable($queryText, $storeId)
+            ) {
+                $this->getCacheableResult($catalogSearchHelper, $query);
             } else {
-                $query->saveIncrementalPopularity();
-
-                $redirect = $query->getRedirect();
-                if ($redirect && $this->_url->getCurrentUrl() !== $redirect) {
-                    $this->getResponse()->setRedirect($redirect);
-                    return;
-                }
+                $this->getNotCacheableResult($catalogSearchHelper, $query);
             }
-
-            $this->_objectManager->get(\Magento\CatalogSearch\Helper\Data::class)->checkNotes();
-
-            $this->_view->loadLayout();
-            $this->_view->renderLayout();
         } else {
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
         }
+    }
+
+    /**
+     * Return cacheable result
+     *
+     * @param \Magento\CatalogSearch\Helper\Data $catalogSearchHelper
+     * @param \Magento\Search\Model\Query $query
+     * @return void
+     */
+    private function getCacheableResult($catalogSearchHelper, $query)
+    {
+        if (!$catalogSearchHelper->isMinQueryLength()) {
+            $redirect = $query->getRedirect();
+            if ($redirect && $this->_url->getCurrentUrl() !== $redirect) {
+                $this->getResponse()->setRedirect($redirect);
+                return;
+            }
+        }
+
+        $catalogSearchHelper->checkNotes();
+
+        $this->_view->loadLayout();
+        $this->_view->renderLayout();
+    }
+
+    /**
+     * Return not cacheable result
+     *
+     * @param \Magento\CatalogSearch\Helper\Data $catalogSearchHelper
+     * @param \Magento\Search\Model\Query $query
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getNotCacheableResult($catalogSearchHelper, $query)
+    {
+        if ($catalogSearchHelper->isMinQueryLength()) {
+            $query->setId(0)->setIsActive(1)->setIsProcessed(1);
+        } else {
+            $query->saveIncrementalPopularity();
+            $redirect = $query->getRedirect();
+            if ($redirect && $this->_url->getCurrentUrl() !== $redirect) {
+                $this->getResponse()->setRedirect($redirect);
+                return;
+            }
+        }
+
+        $catalogSearchHelper->checkNotes();
+
+        $this->_view->loadLayout();
+        $this->getResponse()->setNoCacheHeaders();
+        $this->_view->renderLayout();
     }
 }

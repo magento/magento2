@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Query;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -75,7 +76,9 @@ class Generator
         $fromSelect = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (empty($fromSelect)) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase('Select object must have correct "FROM" part')
+                new \Magento\Framework\Phrase(
+                    'The select object must have the correct "FROM" part. Verify and try again.'
+                )
             );
         }
 
@@ -143,7 +146,9 @@ class Generator
         $fromSelect = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (empty($fromSelect)) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase('Select object must have correct "FROM" part')
+                new \Magento\Framework\Phrase(
+                    'The select object must have the correct "FROM" part. Verify and try again.'
+                )
             );
         }
 

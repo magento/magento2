@@ -67,12 +67,14 @@
         .lib-css(background-color, @page__background-color);
     }
 
-    //  ToDo UI: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
     .page-wrapper {
-        .ie9 & {
-            .lib-css(background-color, @page__background-color);
-            min-height: 0;
-        }
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-direction(column);
+        min-height: 100vh; // Stretch content area for sticky footer
+    }
+
+    .page-main {
+        .lib-vendor-prefix-flex-grow(1);
     }
 
     //
@@ -262,6 +264,7 @@
     .copyright {
         .lib-css(background-color, @copyright__background-color);
         .lib-css(color, @color-white);
+        box-sizing: border-box;
         display: block;
         padding: @indent__s;
         text-align: center;
@@ -313,7 +316,6 @@
     //
     //  Widgets
     //  ---------------------------------------------
-
     .sidebar {
         .widget.block:not(:last-child),
         .widget:not(:last-child) {
@@ -332,6 +334,10 @@
     .page-footer {
         .widget.block {
             .lib-css(margin, @indent__base 0);
+        }
+
+        .links .widget.block {
+            margin: 0;
         }
     }
 
@@ -424,6 +430,17 @@
 }
 
 //
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .cms-page-view .page-main {
+        padding-top: 41px;
+        position: relative;
+    }
+}
+
+//
 //  Desktop
 //  _____________________________________________
 
@@ -431,12 +448,6 @@
     html,
     body {
         height: 100%; // Stretch screen area for sticky footer
-    }
-
-    body {
-        .ie9 & {
-            .lib-css(background-color, @copyright__background-color);
-        }
     }
 
     .navigation ul {
@@ -527,6 +538,7 @@
 
         .header.links {
             min-width: 175px;
+            z-index: 1000;
         }
 
         &.active {
@@ -605,10 +617,7 @@
     }
 
     .page-wrapper {
-        .lib-vendor-prefix-display(flex);
-        .lib-vendor-prefix-flex-direction(column);
         margin: 0;
-        min-height: 100%; // Stretch content area for sticky footer
         position: relative;
         transition: margin .3s ease-out 0s;
 
@@ -619,7 +628,6 @@
             width: 100%;
         }
 
-        .ie10 &,
         .ie11 & {
             height: 100%;
         }

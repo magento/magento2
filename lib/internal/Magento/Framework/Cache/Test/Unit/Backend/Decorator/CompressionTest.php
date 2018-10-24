@@ -129,12 +129,21 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_testString, $loadedValue);
     }
 
+    /**
+     * @param $data
+     * @param $cacheId
+     * @return bool
+     */
     public static function mockSave($data, $cacheId)
     {
         self::$_cacheStorage[$cacheId] = $data;
         return true;
     }
 
+    /**
+     * @param $cacheId
+     * @return bool|mixed
+     */
     public static function mockLoad($cacheId)
     {
         return array_key_exists($cacheId, self::$_cacheStorage) ? self::$_cacheStorage[$cacheId] : false;

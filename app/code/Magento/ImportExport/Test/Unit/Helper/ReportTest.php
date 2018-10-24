@@ -45,11 +45,20 @@ class ReportTest extends \PHPUnit\Framework\TestCase
     protected $report;
 
     /**
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $requestMock;
+
+    /**
      * Set up
      */
     protected function setUp()
     {
         $this->context = $this->createMock(\Magento\Framework\App\Helper\Context::class);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->timezone = $this->createPartialMock(
             \Magento\Framework\Stdlib\DateTime\Timezone::class,
             ['date', 'getConfigTimezone', 'diff', 'format']
@@ -80,12 +89,17 @@ class ReportTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetExecutionTime()
     {
-        $time = '01:02:03';
-        $this->timezone->expects($this->any())->method('date')->willReturnSelf();
-        $this->timezone->expects($this->any())->method('getConfigTimezone')->willReturn('America/Los_Angeles');
-        $this->timezone->expects($this->any())->method('diff')->willReturnSelf();
-        $this->timezone->expects($this->any())->method('format')->willReturn($time);
-        $this->assertEquals($time, $this->report->getExecutionTime($time));
+        $startDate = '2000-01-01 01:01:01';
+        $endDate = '2000-01-01 02:03:04';
+        $executionTime = '01:02:03';
+
+        $startDateMock = $this->createTestProxy(\DateTime::class, ['time' => $startDate]);
+        $endDateMock = $this->createTestProxy(\DateTime::class, ['time' => $endDate]);
+        $this->timezone->method('date')
+            ->withConsecutive([$startDate], [])
+            ->willReturnOnConsecutiveCalls($startDateMock, $endDateMock);
+
+        $this->assertEquals($executionTime, $this->report->getExecutionTime($startDate));
     }
 
     /**
@@ -138,9 +152,41 @@ class ReportTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Framework\Phrase::class, $message);
     }
 
+    /**
+     * @dataProvider importFileExistsDataProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Filename has not permitted symbols in it
+     * @param string $fileName
+     * @return void
+     */
+    public function testImportFileExistsException($fileName)
+    {
+        $this->report->importFileExists($fileName);
+    }
+
+    /**
+     * Test importFileExists()
+     */
     public function testImportFileExists()
     {
-        $this->assertEquals($this->report->importFileExists('file'), true);
+        $this->assertEquals($this->report->importFileExists('..file..name'), true);
+    }
+
+    /**
+     * Dataprovider for testImportFileExistsException()
+     *
+     * @return array
+     */
+    public function importFileExistsDataProvider()
+    {
+        return [
+            [
+                'fileName' => 'some_folder/../another_folder',
+            ],
+            [
+                'fileName' => 'some_folder\..\another_folder',
+            ],
+        ];
     }
 
     /**
@@ -158,5 +204,21 @@ class ReportTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->report->getReportSize('file');
         $this->assertNull($result);
+    }
+
+    /**
+     * Test getDelimiter() take into consideration request param '_import_field_separator'.
+     */
+    public function testGetDelimiter()
+    {
+        $testDelimiter = 'some delimiter';
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with($this->identicalTo(\Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR))
+            ->willReturn($testDelimiter);
+        $this->assertEquals(
+            $testDelimiter,
+            $this->report->getDelimiter()
+        );
     }
 }

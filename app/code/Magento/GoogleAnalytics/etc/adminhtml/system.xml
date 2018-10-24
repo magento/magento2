@@ -23,11 +23,10 @@
                         <field id="*/*/active">1</field>
                     </depends>
                 </field>
-
-		<field id="anonymize" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="anonymize" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Anonymize IP</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-		    <depends>
+                    <depends>
                         <field id="*/*/active">1</field>
                     </depends>
                 </field>

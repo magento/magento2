@@ -7,15 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\GraphQl\Controller\GraphQl" />
-    <type name="Magento\GraphQl\Model\Type\HandlerConfig">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="SearchCriteriaExpression" xsi:type="string">Magento\GraphQl\Model\Type\Handler\SearchCriteriaExpression</item>
-                <item name="SearchResultPageInfo" xsi:type="string">Magento\GraphQl\Model\Type\Handler\SearchResultPageInfo</item>
-                <item name="SortEnum" xsi:type="string">Magento\GraphQl\Model\Type\Handler\SortEnum</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Authorization\Model\CompositeUserContext">
         <arguments>
             <argument name="userContexts" xsi:type="array">
@@ -34,7 +25,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\GraphQl\HttpRequestProcessor">
+    <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
         <arguments>
             <argument name="graphQlHeaders" xsi:type="array">
                 <item name="Content-Type" xsi:type="object">Magento\GraphQl\Controller\HttpHeaderProcessor\ContentTypeProcessor</item>

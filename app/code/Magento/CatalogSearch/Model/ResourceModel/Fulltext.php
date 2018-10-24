@@ -14,6 +14,8 @@ use Magento\Framework\EntityManager\MetadataPool;
  *
  * @api
  * @since 100.0.2
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -62,12 +64,33 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Reset search results
      *
      * @return $this
+     * @deprecated Not used anymore
+     * @see Fulltext::resetSearchResultsByStore
      */
     public function resetSearchResults()
     {
         $connection = $this->getConnection();
         $connection->update($this->getTable('search_query'), ['is_processed' => 0], ['is_processed != 0']);
         $this->_eventManager->dispatch('catalogsearch_reset_search_result');
+        return $this;
+    }
+
+    /**
+     * Reset search results by store
+     *
+     * @param int $storeId
+     * @return $this
+     */
+    public function resetSearchResultsByStore($storeId)
+    {
+        $storeId = (int) $storeId;
+        $connection = $this->getConnection();
+        $connection->update(
+            $this->getTable('search_query'),
+            ['is_processed' => 0],
+            ['is_processed != ?' => 0, 'store_id = ?' => $storeId]
+        );
+        $this->_eventManager->dispatch('catalogsearch_reset_search_result', ['store_id' => $storeId]);
         return $this;
     }
 
@@ -82,17 +105,20 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        $select = $connection->select()->from(
-            ['relation' => $this->getTable('catalog_product_relation')],
-            []
-        )->join(
-            ['cpe' => $this->getTable('catalog_product_entity')],
-            'cpe.' . $linkField . ' = relation.parent_id',
-            ['cpe.entity_id']
-        )->where(
-            'relation.child_id IN (?)',
-            $childIds
-        )->distinct(true);
+        $select = $connection
+            ->select()
+            ->from(
+                ['relation' => $this->getTable('catalog_product_relation')],
+                []
+            )->distinct(true)
+            ->join(
+                ['cpe' => $this->getTable('catalog_product_entity')],
+                'cpe.' . $linkField . ' = relation.parent_id',
+                ['cpe.entity_id']
+            )->where(
+                'relation.child_id IN (?)',
+                $childIds
+            );
 
         return $connection->fetchCol($select);
     }

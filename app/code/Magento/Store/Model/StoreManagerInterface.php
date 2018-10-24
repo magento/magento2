@@ -6,6 +6,8 @@
 
 namespace Magento\Store\Model;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
  * Store manager interface
  *
@@ -18,6 +20,11 @@ interface StoreManagerInterface
      * Store cache context
      */
     const CONTEXT_STORE = 'store';
+
+    /**
+     * The store GET Param name
+     */
+    const PARAM_NAME = '___store';
 
     /**
      * Allow or disallow single store mode
@@ -46,6 +53,7 @@ interface StoreManagerInterface
      *
      * @param null|string|bool|int|\Magento\Store\Api\Data\StoreInterface $storeId
      * @return \Magento\Store\Api\Data\StoreInterface
+     * @throws NoSuchEntityException If given store doesn't exist.
      */
     public function getStore($storeId = null);
 

@@ -357,12 +357,12 @@ define([
             var element;
 
             _.each(this.disabledAttributes, function (attribute) {
-                registry.get('index = ' + attribute).disabled(false);
+                registry.get('inputName = ' + 'product[' + attribute + ']').disabled(false);
             });
             this.disabledAttributes = [];
 
             _.each(attributes, function (attribute) {
-                element = registry.get('index = ' + attribute.code);
+                element = registry.get('inputName = ' + 'product[' + attribute.code + ']');
 
                 if (!_.isUndefined(element)) {
                     element.disabled(true);
@@ -410,14 +410,12 @@ define([
             if (this.source.data['configurable-matrix']) {
                 this.source.data['configurable-matrix-serialized'] =
                     JSON.stringify(this.source.data['configurable-matrix']);
-
                 delete this.source.data['configurable-matrix'];
             }
 
             if (this.source.data['associated_product_ids']) {
                 this.source.data['associated_product_ids_serialized'] =
                     JSON.stringify(this.source.data['associated_product_ids']);
-
                 delete this.source.data['associated_product_ids'];
             }
         },
@@ -492,7 +490,7 @@ define([
                 dataType: 'json',
                 showLoader: true,
                 context: this
-            }).success(function (data) {
+            }).done(function (data) {
                 if (!data.error) {
                     this.set(
                         'skeletonAttributeSet',
@@ -507,7 +505,7 @@ define([
                 }
 
                 return false;
-            }).error(function (xhr) {
+            }).fail(function (xhr) {
                 if (xhr.statusText === 'abort') {
                     return;
                 }

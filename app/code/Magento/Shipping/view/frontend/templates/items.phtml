@@ -66,14 +66,12 @@
             </tr>
         </thead>
         <?php $_items = $_shipment->getAllItems(); ?>
-        <?php $_count = count($_items) ?>
         <?php foreach ($_items as $_item): ?>
-        <?php if ($_item->getOrderItem()->getParentItem()) {
-    continue;
-} ?>
-        <tbody>
-            <?= $block->getItemHtml($_item) ?>
-        </tbody>
+            <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
+                <tbody>
+                    <?= $block->getItemHtml($_item) ?>
+                </tbody>
+            <?php endif; ?>
         <?php endforeach; ?>
     </table>
 </div>

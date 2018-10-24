@@ -6,7 +6,9 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
-class Delete extends \Magento\Checkout\Controller\Cart
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Delete extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
 {
     /**
      * Delete shopping cart item action
@@ -24,7 +26,7 @@ class Delete extends \Magento\Checkout\Controller\Cart
             try {
                 $this->cart->removeItem($id)->save();
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('We can\'t remove the item.'));
+                $this->messageManager->addErrorMessage(__('We can\'t remove the item.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             }
         }

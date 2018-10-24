@@ -93,9 +93,6 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $processedLayout = ['layout' => ['processed' => true]];
         $jsonLayout = '{"layout":{"processed":true}}';
         $this->layoutProcessorMock->expects($this->once())->method('process')->with([])->willReturn($processedLayout);
-        $this->serializer->expects($this->once())->method('serialize')->will(
-            $this->returnValue(json_encode($processedLayout))
-        );
 
         $this->assertEquals($jsonLayout, $this->model->getJsLayout());
     }
@@ -104,9 +101,6 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
     {
         $checkoutConfig = ['checkout', 'config'];
         $this->configProviderMock->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
-        $this->serializer->expects($this->once())->method('serialize')->will(
-            $this->returnValue(json_encode($checkoutConfig))
-        );
 
         $this->assertEquals(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
     }

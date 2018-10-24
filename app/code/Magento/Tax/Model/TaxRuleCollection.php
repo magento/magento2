@@ -27,14 +27,14 @@ class TaxRuleCollection extends AbstractServiceCollection
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
+     * @param EntityFactory $entityFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SortOrderBuilder $sortOrderBuilder
      * @param TaxRuleRepositoryInterface $ruleService
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
+        EntityFactory $entityFactory,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,

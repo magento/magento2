@@ -40,13 +40,16 @@ function getFrontTab() {
 
 function checkOptionsPanelVisibility(){
     if($('manage-options-panel')){
-        var panel = $('manage-options-panel').up('.fieldset');
+        var panel = $('manage-options-panel').up('.fieldset'),
+            activePanelClass = 'selected-type-options';
 
         if($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect')){
             panel.show();
+            panel.addClass(activePanelClass);
         }
         else {
             panel.hide();
+            panel.removeClass(activePanelClass);
         }
     }
 }
@@ -55,7 +58,7 @@ function bindAttributeInputType()
 {
     checkOptionsPanelVisibility();
     switchDefaultValueField();
-    if($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect' || $('frontend_input').value=='price')){
+    if($('frontend_input') && ($('frontend_input').value=='boolean' || $('frontend_input').value=='select' || $('frontend_input').value=='multiselect' || $('frontend_input').value=='price')){
         if($('is_filterable') && !$('is_filterable').getAttribute('readonly')){
             $('is_filterable').disabled = false;
         }
@@ -196,9 +199,11 @@ function switchDefaultValueField()
 
         <?php foreach ($this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields() as $type => $fields): ?>
             case '<?= /* @escapeNotVerified */ $type ?>':
+                var isFrontTabHidden = false;
                 <?php foreach ($fields as $one): ?>
                     <?php if ($one == '_front_fieldset'): ?>
                         getFrontTab().hide();
+                        isFrontTabHidden = true;
                     <?php elseif ($one == '_default_value'): ?>
                         defaultValueTextVisibility =
                         defaultValueTextareaVisibility =
@@ -210,6 +215,10 @@ function switchDefaultValueField()
                         setRowVisibility('<?= /* @escapeNotVerified */ $one ?>', false);
                     <?php endif; ?>
                 <?php endforeach; ?>
+
+                if (!isFrontTabHidden){
+                  getFrontTab().show();
+                }
             break;
         <?php endforeach; ?>
 

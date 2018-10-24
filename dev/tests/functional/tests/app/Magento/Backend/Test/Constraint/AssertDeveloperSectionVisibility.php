@@ -22,12 +22,12 @@ class AssertDeveloperSectionVisibility extends AbstractConstraint
     public function processAssert(SystemConfigEdit $configEdit)
     {
         if ($_ENV['mage_mode'] === 'production') {
-            \PHPUnit_Framework_Assert::assertFalse(
+            \PHPUnit\Framework\Assert::assertFalse(
                 in_array('Developer', $configEdit->getTabs()->getSubTabsNames('Advanced')),
                 'Developer section should be hidden in production mode.'
             );
         } else {
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 in_array('Developer', $configEdit->getTabs()->getSubTabsNames('Advanced')),
                 'Developer section should be not hidden in developer or default mode.'
             );

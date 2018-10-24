@@ -27,7 +27,7 @@ class AssertProductCustomOptionsErrors extends AbstractConstraint
     ) {
         foreach ($products as $product) {
             foreach ($product->getData('custom_options') as $option) {
-                \PHPUnit_Framework_Assert::assertTrue(
+                \PHPUnit\Framework\Assert::assertTrue(
                     $catalogProductView->getCustomOptionsBlock()->isJsMessageVisible($option['title']),
                     'Required Custom Option ' . $option['title'] . " doesn't contain JS validation error."
                 );

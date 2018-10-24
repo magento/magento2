@@ -36,7 +36,7 @@ abstract class Sidebar extends Block
     protected $addToOrderProductName = './/tr/td[.="%s"]';
 
     /**
-     * Add productz to order.
+     * Add products to order.
      *
      * @param array $products
      * @return void

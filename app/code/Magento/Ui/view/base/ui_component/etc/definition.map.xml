@@ -16,15 +16,11 @@
                     <item name="url" type="url" xsi:type="converter">settings/url</item>
                     <item name="confirm" xsi:type="array">
                         <item name="title" type="string" translate="true" xsi:type="xpath">settings/confirm/title</item>
-                        <item name="message" type="string" translate="true" xsi:type="xpath">settings/confirm/message
-                        </item>
+                        <item name="message" type="string" translate="true" xsi:type="xpath">settings/confirm/message</item>
                     </item>
                     <item name="callback" xsi:type="array">
-                        <item name="provider" type="string" translate="true" xsi:type="xpath">
-                            settings/callback/provider
-                        </item>
-                        <item name="target" type="string" translate="true" xsi:type="xpath">settings/callback/target
-                        </item>
+                        <item name="provider" type="string" translate="true" xsi:type="xpath">settings/callback/provider</item>
+                        <item name="target" type="string" translate="true" xsi:type="xpath">settings/callback/target</item>
                     </item>
                 </item>
             </argument>
@@ -59,8 +55,7 @@
                 <item name="config" xsi:type="array">
                     <item name="childDefaults" type="item" xsi:type="converter">settings/childDefaults</item>
                     <item name="viewTmpl" type="string" xsi:type="xpath">settings/viewTmpl</item>
-                    <item name="newViewLabel" translate="true" type="string" xsi:type="xpath">settings/newViewLabel
-                    </item>
+                    <item name="newViewLabel" translate="true" type="string" xsi:type="xpath">settings/newViewLabel</item>
                 </item>
             </argument>
         </schema>
@@ -99,6 +94,16 @@
                 <item name="config" xsi:type="array">
                     <item name="multiple" type="boolean" xsi:type="xpath">settings/multiple</item>
                     <item name="options" type="options" xsi:type="converter">settings/options</item>
+                </item>
+            </argument>
+        </schema>
+    </component>
+    <component name="colorPicker" include="abstractSettings">
+        <schema name="current">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="colorPickerMode" type="string" xsi:type="xpath">settings/colorPickerMode</item>
+                    <item name="colorFormat" type="string" xsi:type="xpath">settings/colorFormat</item>
                 </item>
             </argument>
         </schema>
@@ -255,9 +260,7 @@
                     <item name="columnsHeaderClasses" type="string" xsi:type="xpath">settings/columnsHeaderClasses</item>
                     <item name="recordTemplate" type="string" xsi:type="xpath">settings/recordTemplate</item>
                     <item name="collapsibleHeader" type="boolean" xsi:type="xpath">settings/collapsibleHeader</item>
-                    <item name="addButtonLabel" type="string" translate="true" xsi:type="xpath">
-                        settings/addButtonLabel
-                    </item>
+                    <item name="addButtonLabel" type="string" translate="true" xsi:type="xpath">settings/addButtonLabel</item>
                     <item name="addButton" type="boolean" xsi:type="xpath">settings/addButton</item>
                     <item name="deleteProperty" type="string" xsi:type="xpath">settings/deleteProperty</item>
                     <item name="identificationProperty" type="string" xsi:type="xpath">settings/identificationProperty</item>
@@ -287,6 +290,12 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="formElement" type="string" xsi:type="xpath">@formElement</item>
+                    <item name="colorPickerMode" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/colorPickerMode
+                    </item>
+                    <item name="colorFormat" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/colorFormat
+                    </item>
                     <item name="wysiwyg" type="boolean" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/wysiwyg
                     </item>
@@ -359,6 +368,12 @@
                     <item name="allowedExtensions" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/allowedExtensions
                     </item>
+                    <item name="openDialogTitle" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/openDialogTitle
+                    </item>
+                    <item name="initialMediaGalleryOpenSubpath" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/initialMediaGalleryOpenSubpath
+                    </item>
                     <item name="customEntry" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/customEntry
                     </item>
@@ -404,6 +419,22 @@
     <component name="hidden" include="abstractSettings"/>
     <component name="filterInput" include="abstractSettings"/>
     <component name="filterDate" include="abstractSettings"/>
+    <!--add here list of required settings-->
+    <component name="urlInput" include="abstractSettings">
+        <schema name="current">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <!--selected related data-->
+                    <item name="urlTypes" type="urlTypes" xsi:type="converter">settings/urlTypes</item>
+                    <item name="isDisplayAdditionalSettings" type="boolean" xsi:type="xpath">settings/isDisplayAdditionalSettings</item>
+                    <item name="settingLabel" type="string" translate="true" xsi:type="xpath">settings/settingLabel</item>
+                    <item name="typeSelectorTemplate" type="string" translate="true" xsi:type="xpath">settings/typeSelectorTemplate</item>
+                    <item name="settingTemplate" type="string" translate="true" xsi:type="xpath">settings/settingTemplate</item>
+                    <item name="settingValue" type="boolean" xsi:type="xpath">settings/settingValue</item>
+                </item>
+            </argument>
+        </schema>
+    </component>
     <component name="fileUploader" include="abstractSettings">
         <schema name="current">
             <argument name="data" xsi:type="array">
@@ -415,6 +446,16 @@
                     <item name="previewTmpl" type="string" xsi:type="xpath">settings/previewTmpl</item>
                     <item name="dropZone" type="string" xsi:type="xpath">settings/dropZone</item>
                     <item name="uploaderConfig" type="item" xsi:type="converter">settings/uploaderConfig</item>
+                </item>
+            </argument>
+        </schema>
+    </component>
+    <component name="imageUploader" include="fileUploader">
+        <schema name="current">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="openDialogTitle" type="string" translate="true" xsi:type="xpath">settings/openDialogTitle</item>
+                    <item name="initialMediaGalleryOpenSubpath" type="string" xsi:type="xpath">settings/initialMediaGalleryOpenSubpath</item>
                 </item>
             </argument>
         </schema>

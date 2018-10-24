@@ -219,7 +219,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
      * @param array $conditions
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage When passing in a field array there must be a matching condition array
+     * @expectedExceptionMessage The field array failed to pass. The array must have a matching condition array.
      * @dataProvider addFieldToFilterInconsistentArraysDataProvider
      */
     public function testAddFieldToFilterInconsistentArrays($fields, $conditions)
@@ -227,6 +227,9 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->serviceCollection->addFieldToFilter($fields, $conditions);
     }
 
+    /**
+     * @return array
+     */
     public function addFieldToFilterInconsistentArraysDataProvider()
     {
         return [
@@ -243,7 +246,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage When passing an array of fields there must be at least one field in the array.
+     * @expectedExceptionMessage The array of fields failed to pass. The array must include at one field.
      * @dataProvider addFieldToFilterInconsistentArraysDataProvider
      */
     public function testAddFieldToFilterEmptyArrays()

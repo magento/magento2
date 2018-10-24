@@ -5,47 +5,64 @@
  */
 namespace Magento\Deploy\Test\Unit\Model;
 
+use Magento\Deploy\Model\Filesystem as DeployFilesystem;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\ShellInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Config\StoreView;
+use Magento\User\Model\ResourceModel\User\Collection;
+use Magento\User\Model\User;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Validator\Locale;
+use Magento\Framework\Setup\Lists;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FilesystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\Model\Config\StoreView
+     * @var StoreView|MockObject
      */
-    private $storeViewMock;
+    private $storeView;
 
     /**
-     * @var \Magento\Framework\ShellInterface
+     * @var ShellInterface|MockObject
      */
-    private $shellMock;
+    private $shell;
 
     /**
-     * @var \Magento\User\Model\ResourceModel\User\Collection
+     * @var OutputInterface|MockObject
      */
-    private $userCollectionMock;
+    private $output;
 
     /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    private $outputMock;
-
-    /**
-     * @var \Magento\Framework\Filesystem
-     */
-    private $filesystemMock;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     */
-    private $directoryWriteMock;
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManagerMock;
-
-    /**
-     * @var \Magento\Deploy\Model\Filesystem
+     * @var Filesystem|MockObject
      */
     private $filesystem;
+
+    /**
+     * @var WriteInterface|MockObject
+     */
+    private $directoryWrite;
+
+    /**
+     * @var Collection|MockObject
+     */
+    private $userCollection;
+
+    /**
+     * @var ObjectManagerInterface|MockObject
+     */
+    private $objectManager;
+
+    /**
+     * @var DeployFilesystem
+     */
+    private $deployFilesystem;
 
     /**
      * @var string
@@ -54,30 +71,55 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->storeViewMock = $this->createMock(\Magento\Store\Model\Config\StoreView::class);
-        $this->shellMock = $this->createMock(\Magento\Framework\ShellInterface::class);
-        $this->userCollectionMock = $this->createMock(\Magento\User\Model\ResourceModel\User\Collection::class);
-        $this->outputMock = $this->createMock(\Symfony\Component\Console\Output\OutputInterface::class);
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
-        $this->filesystemMock->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->willReturn($this->directoryWriteMock);
-        $this->filesystem = $objectManager->getObject(
-            \Magento\Deploy\Model\Filesystem::class,
+        $this->storeView = $this->getMockBuilder(StoreView::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->shell = $this->getMockBuilder(ShellInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->output = $this->getMockBuilder(OutputInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->directoryWrite = $this->getMockBuilder(WriteInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filesystem->method('getDirectoryWrite')
+            ->willReturn($this->directoryWrite);
+
+        $this->userCollection = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $lists = $this->getMockBuilder(Lists::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $lists->method('getLocaleList')
+            ->willReturn([
+                'fr_FR' => 'France',
+                'de_DE' => 'Germany',
+                'nl_NL' => 'Netherlands',
+                'en_US' => 'USA',
+            ]);
+        $locale = $objectManager->getObject(Locale::class, ['lists' => $lists]);
+
+        $this->deployFilesystem = $objectManager->getObject(
+            DeployFilesystem::class,
             [
-                'storeView' => $this->storeViewMock,
-                'shell' => $this->shellMock,
-                'filesystem' => $this->filesystemMock
+                'storeView' => $this->storeView,
+                'shell' => $this->shell,
+                'filesystem' => $this->filesystem,
+                'userCollection' => $this->userCollection,
+                'locale' => $locale,
             ]
         );
-
-        $userCollection = new \ReflectionProperty(\Magento\Deploy\Model\Filesystem::class, 'userCollection');
-        $userCollection->setAccessible(true);
-        $userCollection->setValue($this->filesystem, $this->userCollectionMock);
 
         $this->cmdPrefix = PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
@@ -85,44 +127,90 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     public function testRegenerateStatic()
     {
         $storeLocales = ['fr_FR', 'de_DE', 'nl_NL'];
-        $adminUserInterfaceLocales = ['de_DE', 'en_US'];
-        $this->storeViewMock->expects($this->once())
-            ->method('retrieveLocales')
+        $this->storeView->method('retrieveLocales')
             ->willReturn($storeLocales);
-        $userMock = $this->createMock(\Magento\User\Model\User::class);
-        $userMock->expects($this->once())
-            ->method('getInterfaceLocale')
-            ->willReturn('en_US');
-        $this->userCollectionMock->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$userMock]));
 
-        $usedLocales = array_unique(
-            array_merge($storeLocales, $adminUserInterfaceLocales)
-        );
-        $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
-            . implode(' ', $usedLocales);
         $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
-        $this->shellMock->expects($this->at(0))
+        $this->shell->expects(self::at(0))
             ->method('execute')
             ->with($setupDiCompileCmd);
-        $this->shellMock->expects($this->at(1))
+
+        $this->initAdminLocaleMock('en_US');
+
+        $usedLocales = ['fr_FR', 'de_DE', 'nl_NL', 'en_US'];
+        $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
+            . implode(' ', $usedLocales);
+        $this->shell->expects(self::at(1))
             ->method('execute')
             ->with($staticContentDeployCmd);
 
-        $this->outputMock->expects($this->at(0))
+        $this->output->expects(self::at(0))
             ->method('writeln')
             ->with('Starting compilation');
-        $this->outputMock->expects($this->at(2))
+        $this->output->expects(self::at(2))
             ->method('writeln')
             ->with('Compilation complete');
-        $this->outputMock->expects($this->at(3))
+        $this->output->expects(self::at(3))
             ->method('writeln')
             ->with('Starting deployment of static content');
-        $this->outputMock->expects($this->at(5))
+        $this->output->expects(self::at(5))
             ->method('writeln')
             ->with('Deployment of static content complete');
 
-        $this->filesystem->regenerateStatic($this->outputMock);
+        $this->deployFilesystem->regenerateStatic($this->output);
+    }
+
+    /**
+     * Checks a case when configuration contains incorrect locale code.
+     *
+     * @return void
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage ;echo argument has invalid value, run info:language:list for list of available locales
+     */
+    public function testGenerateStaticForNotAllowedStoreViewLocale()
+    {
+        $storeLocales = ['fr_FR', 'de_DE', ';echo'];
+        $this->storeView->method('retrieveLocales')
+            ->willReturn($storeLocales);
+
+        $this->initAdminLocaleMock('en_US');
+
+        $this->deployFilesystem->regenerateStatic($this->output);
+    }
+
+    /**
+     * Checks as case when admin locale is incorrect.
+     *
+     * @return void
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage ;echo argument has invalid value, run info:language:list for list of available locales
+     */
+    public function testGenerateStaticForNotAllowedAdminLocale()
+    {
+        $storeLocales = ['fr_FR', 'de_DE', 'en_US'];
+        $this->storeView->method('retrieveLocales')
+            ->willReturn($storeLocales);
+
+        $this->initAdminLocaleMock(';echo');
+
+        $this->deployFilesystem->regenerateStatic($this->output);
+    }
+
+    /**
+     * Initializes admin user locale.
+     *
+     * @param string $locale
+     * @return void
+     */
+    private function initAdminLocaleMock($locale)
+    {
+        /** @var User|MockObject $user */
+        $user = $this->getMockBuilder(User::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $user->method('getInterfaceLocale')
+            ->willReturn($locale);
+        $this->userCollection->method('getIterator')
+            ->willReturn(new \ArrayIterator([$user]));
     }
 }

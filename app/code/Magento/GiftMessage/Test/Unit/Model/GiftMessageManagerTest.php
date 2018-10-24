@@ -312,7 +312,7 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not add gift message to shopping cart
+     * @expectedExceptionMessage The gift message couldn't be added to Cart.
      */
     public function testSetMessageCouldNotAddGiftMessageException()
     {

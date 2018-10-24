@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Model\AttributeManagement;
@@ -101,7 +102,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     /**
      *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage AttributeSet with id "2" does not exist.
+     * @expectedExceptionMessage The AttributeSet with a "2" ID doesn't exist. Verify the attributeSet and try again.
      */
     public function testAssignNoSuchEntityException()
     {
@@ -128,7 +129,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     /**
      *
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Wrong attribute set id provided
+     * @expectedExceptionMessage The attribute set ID is incorrect. Verify the ID and try again.
      */
     public function testAssignInputException()
     {
@@ -160,7 +161,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     /**
      *
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Attribute group does not belong to attribute set
+     * @expectedExceptionMessage The attribute group doesn't belong to the attribute set.
      */
     public function testAssignInputExceptionGroupInSet()
     {
@@ -295,7 +296,6 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Attribute "code" not found in attribute set 1.
      */
     public function testUnassignInputException()
     {
@@ -335,11 +335,15 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->never())->method('deleteEntity');
 
         $this->attributeManagement->unassign($attributeSetId, $attributeCode);
+
+        $this->expectExceptionMessage(
+            'The "code" attribute wasn\'t found in the "1" attribute set. Enter the attribute and try again.'
+        );
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Attribute set not found: 1
+     * @expectedExceptionMessage The "1234567" attribute set wasn't found. Verify and try again.
      */
     public function testUnassignWithWrongAttributeSet()
     {
@@ -356,7 +360,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage System attribute can not be deleted
+     * @expectedExceptionMessage The system attribute can't be deleted.
      */
     public function testUnassignStateException()
     {

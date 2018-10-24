@@ -30,7 +30,8 @@
     </testsuites>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
-        <const name="TESTCODESTYLE_IS_FULL_SCAN" value="1"/>
+        <!-- TESTCODESTYLE_IS_FULL_SCAN - specify if full scan should be performed for test code style test -->
+        <const name="TESTCODESTYLE_IS_FULL_SCAN" value="0"/>
         <!-- TESTS_COMPOSER_PATH - specify the path to composer binary, if a relative reference cannot be resolved -->
         <!--<const name="TESTS_COMPOSER_PATH" value="/usr/local/bin/composer"/>-->
     </php>

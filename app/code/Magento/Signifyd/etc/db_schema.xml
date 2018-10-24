@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="signifyd_case" resource="sales" engine="innodb" comment="signifyd_case">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity_id"/>
+        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Order_id"/>
+        <column xsi:type="int" name="case_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Case_id"/>
+        <column xsi:type="boolean" name="guarantee_eligible" nullable="true" comment="Guarantee_eligible"/>
+        <column xsi:type="varchar" name="guarantee_disposition" nullable="true" length="32" default="PENDING"
+                comment="Guarantee_disposition"/>
+        <column xsi:type="varchar" name="status" nullable="true" length="32" default="PENDING" comment="Status"/>
+        <column xsi:type="int" name="score" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Score"/>
+        <column xsi:type="text" name="associated_team" nullable="true" comment="Associated_team"/>
+        <column xsi:type="varchar" name="review_disposition" nullable="true" length="32" comment="Review_disposition"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created_at"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Updated_at"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="SIGNIFYD_CASE_ORDER_ID_SALES_ORDER_ENTITY_ID" table="signifyd_case"
+                    column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="SET NULL"/>
+        <constraint xsi:type="unique" name="SIGNIFYD_CASE_ORDER_ID">
+            <column name="order_id"/>
+        </constraint>
+        <constraint xsi:type="unique" name="SIGNIFYD_CASE_CASE_ID">
+            <column name="case_id"/>
+        </constraint>
+    </table>
+    <table name="sales_order_grid" resource="sales" comment="Sales Flat Order Grid">
+        <column xsi:type="varchar" name="signifyd_guarantee_status" nullable="true" length="32"
+                comment="Signifyd Guarantee Disposition Status"/>
+    </table>
+</schema>

@@ -10,32 +10,18 @@
         <title>Swagger UI</title>
 
         <!--<title>Swagger UI assets</title>-->
-        <css src='Magento_Swagger::swagger-ui/css/typography.css' media='screen' rel='stylesheet' type='text/css'/>
-        <css src='Magento_Swagger::swagger-ui/css/reset.css' media='screen' rel='stylesheet' type='text/css'/>
-        <css src='Magento_Swagger::swagger-ui/css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
-        <css src='Magento_Swagger::swagger-ui/css/reset.css' media='print' rel='stylesheet' type='text/css'/>
-        <css src='Magento_Swagger::swagger-ui/css/print.css' media='print' rel='stylesheet' type='text/css'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/jquery-1.8.0.min.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/jquery.slideto.min.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/jquery.wiggle.min.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/jquery.ba-bbq.min.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/handlebars.min-v4.0.10.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/underscore-min.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/backbone-min.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/jsoneditor.min.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/swagger-ui.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/highlight.9.1.0.pack.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/highlight.9.1.0.pack_extended.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/lodash.min.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/object-assign-pollyfill.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/marked.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/swagger-oauth.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lang/translator.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lang/ru.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lang/en.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/magento-swagger.js' type='text/javascript'/>
+        <css src='Magento_Swagger::swagger-ui/css/style.css' media='screen' rel='stylesheet' type='text/css'/>
+        <css src='Magento_Swagger::swagger-ui/css/swagger-ui.css' media='screen' rel='stylesheet' type='text/css'/>
+        <link src='Magento_Swagger::swagger-ui/js/lang/translator.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/lang/ru.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/lang/en.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/swagger-ui-bundle.min.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/swagger-ui-standalone-preset.min.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/magento-swagger.js' type='text/javascript' defer="defer"/>
 
         <!--Remove require-js assets-->
+        <remove src="css/styles-m.css"/>
+        <remove src="css/styles-s.css"/>
         <remove src="requirejs/require.js"/>
         <remove src="mage/requirejs/mixins.js"/>
         <remove src="requirejs-config.js"/>
@@ -43,10 +29,10 @@
     <body>
         <!--Remove Magento page content-->
         <referenceContainer name="page.wrapper" remove="true"/>
+        <referenceBlock name="translate" remove="true"/>
         <referenceBlock name="requirejs-config" remove="true"/>
         <referenceContainer name="root">
-            <block name="swaggerUiContent" class="Magento\Swagger\Block\Index" template="Magento_Swagger::swagger-ui/index.phtml"/>
+            <block name="swaggerUiContent" class="Magento\Swagger\Block\Index" template="Magento_Swagger::swagger-ui/index.phtml" />
         </referenceContainer>
     </body>
 </page>
-

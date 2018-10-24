@@ -96,8 +96,10 @@ class GenerateFixturesCommand extends Command
             $indexerRegistry = $fixtureModel->getObjectManager()
                 ->create(\Magento\Framework\Indexer\IndexerRegistry::class);
 
+            $indexersState = [];
             foreach ($indexerListIds as $indexerId) {
                 $indexer = $indexerRegistry->get($indexerId['indexer_id']);
+                $indexersState[$indexerId['indexer_id']] = $indexer->isScheduled();
                 $indexer->setScheduled(true);
             }
 
@@ -106,6 +108,12 @@ class GenerateFixturesCommand extends Command
             }
 
             $this->clearChangelog();
+
+            foreach ($indexerListIds as $indexerId) {
+                /** @var $indexer \Magento\Indexer\Model\Indexer */
+                $indexer = $indexerRegistry->get($indexerId['indexer_id']);
+                $indexer->setScheduled($indexersState[$indexerId['indexer_id']]);
+            }
 
             /** @var \Magento\Setup\Fixtures\IndexersStatesApplyFixture $indexerFixture */
             $indexerFixture = $fixtureModel
@@ -125,6 +133,7 @@ class GenerateFixturesCommand extends Command
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -148,6 +157,10 @@ class GenerateFixturesCommand extends Command
         }
     }
 
+    /**
+     * @param \Magento\Setup\Fixtures\Fixture $fixture
+     * @param OutputInterface $output
+     */
     private function executeFixture(\Magento\Setup\Fixtures\Fixture $fixture, OutputInterface $output)
     {
         $output->write('<info>' . $fixture->getActionTitle() . '... </info>');

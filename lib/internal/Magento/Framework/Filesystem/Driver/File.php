@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -50,7 +51,7 @@ class File implements DriverInterface
         $result = @file_exists($this->getScheme() . $path);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('Error occurred during execution %1', [$this->getWarningMessage()])
+                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -88,7 +89,7 @@ class File implements DriverInterface
         $result = @is_readable($this->getScheme() . $path);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('Error occurred during execution %1', [$this->getWarningMessage()])
+                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -107,7 +108,7 @@ class File implements DriverInterface
         $result = @is_file($this->getScheme() . $path);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('Error occurred during execution %1', [$this->getWarningMessage()])
+                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -126,7 +127,7 @@ class File implements DriverInterface
         $result = @is_dir($this->getScheme() . $path);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('Error occurred during execution %1', [$this->getWarningMessage()])
+                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -148,7 +149,7 @@ class File implements DriverInterface
         if (false === $result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Cannot read contents from file "%1" %2',
+                    'The contents from the "%1" file can\'t be read. %2',
                     [$path, $this->getWarningMessage()]
                 )
             );
@@ -169,7 +170,7 @@ class File implements DriverInterface
         $result = @is_writable($this->getScheme() . $path);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('Error occurred during execution %1', [$this->getWarningMessage()])
+                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -350,13 +351,13 @@ class File implements DriverInterface
     public function symlink($source, $destination, DriverInterface $targetDriver = null)
     {
         $result = false;
-        if (get_class($targetDriver) == get_class($this)) {
+        if ($targetDriver === null || get_class($targetDriver) == get_class($this)) {
             $result = @symlink($this->getScheme() . $source, $destination);
         }
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Cannot create a symlink for "%1" and place it to "%2" %3',
+                    'A symlink for "%1" can\'t be created and placed to "%2". %3',
                     [
                         $source,
                         $destination,
@@ -380,7 +381,10 @@ class File implements DriverInterface
         $result = @unlink($this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('The file "%1" cannot be deleted %2', [$path, $this->getWarningMessage()])
+                new \Magento\Framework\Phrase(
+                    'The "%1" file can\'t be deleted. %2',
+                    [$path, $this->getWarningMessage()]
+                )
             );
         }
         return $result;
@@ -431,7 +435,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Cannot change permissions for path "%1" %2',
+                    'The permissions can\'t be changed for the "%1" path. %2.',
                     [$path, $this->getWarningMessage()]
                 )
             );
@@ -459,7 +463,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Cannot change permissions for path "%1" %2',
+                    'The permissions can\'t be changed for the "%1" path. %2.',
                     [$path, $this->getWarningMessage()]
                 )
             );
@@ -481,7 +485,7 @@ class File implements DriverInterface
             if (!$result) {
                 throw new FileSystemException(
                     new \Magento\Framework\Phrase(
-                        'Cannot change permissions for path "%1" %2',
+                        'The permissions can\'t be changed for the "%1" path. %2.',
                         [$path, $this->getWarningMessage()]
                     )
                 );
@@ -508,7 +512,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'The file or directory "%1" cannot be touched %2',
+                    'The "%1" file or directory can\'t be touched. %2',
                     [$path, $this->getWarningMessage()]
                 )
             );
@@ -531,7 +535,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'The specified "%1" file could not be written %2',
+                    'The specified "%1" file couldn\'t be written. %2',
                     [$path, $this->getWarningMessage()]
                 )
             );
@@ -613,7 +617,10 @@ class File implements DriverInterface
         $result = @fgetcsv($resource, $length, $delimiter, $enclosure, $escape);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('Wrong CSV handle %1', [$this->getWarningMessage()])
+                new \Magento\Framework\Phrase(
+                    'The "%1" CSV handle is incorrect. Verify the handle and try again.',
+                    [$this->getWarningMessage()]
+                )
             );
         }
         return $result;
@@ -631,7 +638,7 @@ class File implements DriverInterface
         $result = @ftell($resource);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('Error occurred during execution %1', [$this->getWarningMessage()])
+                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -652,7 +659,7 @@ class File implements DriverInterface
         if ($result === -1) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Error occurred during execution of fileSeek %1',
+                    'An error occurred during "%1" fileSeek execution.',
                     [$this->getWarningMessage()]
                 )
             );
@@ -684,7 +691,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Error occurred during execution of fileClose %1',
+                    'An error occurred during "%1" fileClose execution.',
                     [$this->getWarningMessage()]
                 )
             );
@@ -710,7 +717,7 @@ class File implements DriverInterface
             }
             if (false === $fwrite) {
                 $this->fileSystemException(
-                    'Error occurred during execution of fileWrite %1',
+                    'An error occurred during "%1" fileWrite execution.',
                     [$this->getWarningMessage()]
                 );
             }
@@ -763,7 +770,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Error occurred during execution of filePutCsv %1',
+                    'An error occurred during "%1" filePutCsv execution.',
                     [$this->getWarningMessage()]
                 )
             );
@@ -784,7 +791,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Error occurred during execution of fileFlush %1',
+                    'An error occurred during "%1" fileFlush execution.',
                     [$this->getWarningMessage()]
                 )
             );
@@ -806,7 +813,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Error occurred during execution of fileLock %1',
+                    'An error occurred during "%1" fileLock execution.',
                     [$this->getWarningMessage()]
                 )
             );
@@ -827,7 +834,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Error occurred during execution of fileUnlock %1',
+                    'An error occurred during "%1" fileUnlock execution.',
                     [$this->getWarningMessage()]
                 )
             );
@@ -943,6 +950,13 @@ class File implements DriverInterface
         if (strpos($path, DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) === false) {
             return $path;
         }
+
+        //Removing redundant directory separators.
+        $path = preg_replace(
+            '/\\' .DIRECTORY_SEPARATOR .'\\' .DIRECTORY_SEPARATOR .'+/',
+            DIRECTORY_SEPARATOR,
+            $path
+        );
         $pathParts = explode(DIRECTORY_SEPARATOR, $path);
         $realPath = [];
         foreach ($pathParts as $pathPart) {

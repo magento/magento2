@@ -268,7 +268,7 @@ class PluginList extends Scoped implements InterceptionPluginList
             $this->_inheritPlugins($type);
         }
         $key = $type . '_' . lcfirst($method) . '_' . $code;
-        return isset($this->_processed[$key]) ? $this->_processed[$key] : null;
+        return $this->_processed[$key] ?? null;
     }
 
     /**
@@ -295,7 +295,7 @@ class PluginList extends Scoped implements InterceptionPluginList
                 $virtualTypes = [];
                 foreach ($this->_scopePriorityScheme as $scopeCode) {
                     if (false == isset($this->_loadedScopes[$scopeCode])) {
-                        $data = $this->_reader->read($scopeCode);
+                        $data = $this->_reader->read($scopeCode) ?: [];
                         unset($data['preferences']);
                         if (count($data) > 0) {
                             $this->_inherited = [];

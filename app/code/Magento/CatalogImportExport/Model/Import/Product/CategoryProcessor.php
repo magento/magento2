@@ -66,6 +66,8 @@ class CategoryProcessor
     }
 
     /**
+     * Initialize categories to be processed
+     *
      * @return $this
      */
     protected function initCategories()
@@ -75,6 +77,7 @@ class CategoryProcessor
             $collection->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('url_path');
+            $collection->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
             /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
             foreach ($collection as $category) {
                 $structure = explode(self::DELIMITER_CATEGORY, $category->getPath());
@@ -113,14 +116,21 @@ class CategoryProcessor
         if (!($parentCategory = $this->getCategoryById($parentId))) {
             $parentCategory = $this->categoryFactory->create()->load($parentId);
         }
+        
+        // Set StoreId to 0 to generate URL Keys global and prevent generating url rewrites just for default website
+        $category->setStoreId(0);
         $category->setPath($parentCategory->getPath());
         $category->setParentId($parentId);
         $category->setName($this->unquoteDelimiter($name));
         $category->setIsActive(true);
         $category->setIncludeInMenu(true);
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
-        $category->save();
-        $this->categoriesCache[$category->getId()] = $category;
+        try {
+            $category->save();
+            $this->categoriesCache[$category->getId()] = $category;
+        } catch (\Exception $e) {
+            $this->addFailedCategory($category, $e);
+        }
 
         return $category->getId();
     }
@@ -229,7 +239,7 @@ class CategoryProcessor
      */
     public function getCategoryById($categoryId)
     {
-        return isset($this->categoriesCache[$categoryId]) ? $this->categoriesCache[$categoryId] : null;
+        return $this->categoriesCache[$categoryId] ?? null;
     }
 
     /**

@@ -19,6 +19,9 @@ define([
         window.onRequestAnimationFrame ||
         window.msRequestAnimationFrame ||
         function (callback) {
+            if (typeof callback != 'function') {
+                throw new Error('raf argument "callback" must be of type function');
+            }
             window.setTimeout(callback, 1000 / 60);
         };
 

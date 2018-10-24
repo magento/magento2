@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Api\Data\ShipmentCommentInterface;
@@ -14,7 +15,13 @@ use Magento\Sales\Api\Data\ShipmentCommentInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentCommentSearchResultInterfaceFactory;
 use Magento\Sales\Api\ShipmentCommentRepositoryInterface;
 use Magento\Sales\Model\Spi\ShipmentCommentResourceInterface;
+use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CommentRepository implements ShipmentCommentRepositoryInterface
 {
     /**
@@ -38,21 +45,47 @@ class CommentRepository implements ShipmentCommentRepositoryInterface
     private $collectionProcessor;
 
     /**
+     * @var ShipmentCommentSender
+     */
+    private $shipmentCommentSender;
+
+    /**
+     * @var ShipmentRepositoryInterface
+     */
+    private $shipmentRepository;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ShipmentCommentResourceInterface $commentResource
      * @param ShipmentCommentInterfaceFactory $commentFactory
      * @param ShipmentCommentSearchResultInterfaceFactory $searchResultFactory
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param ShipmentCommentSender|null $shipmentCommentSender
+     * @param ShipmentRepositoryInterface|null $shipmentRepository
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         ShipmentCommentResourceInterface $commentResource,
         ShipmentCommentInterfaceFactory $commentFactory,
         ShipmentCommentSearchResultInterfaceFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor
+        CollectionProcessorInterface $collectionProcessor,
+        ShipmentCommentSender $shipmentCommentSender = null,
+        ShipmentRepositoryInterface $shipmentRepository = null,
+        LoggerInterface $logger = null
     ) {
         $this->commentResource = $commentResource;
         $this->commentFactory = $commentFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
+        $this->shipmentCommentSender = $shipmentCommentSender
+            ?: ObjectManager::getInstance()->get(ShipmentCommentSender::class);
+        $this->shipmentRepository = $shipmentRepository
+            ?: ObjectManager::getInstance()->get(ShipmentRepositoryInterface::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -99,6 +132,14 @@ class CommentRepository implements ShipmentCommentRepositoryInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not save the shipment comment.'), $e);
         }
+
+        try {
+            $shipment = $this->shipmentRepository->get($entity->getParentId());
+            $this->shipmentCommentSender->send($shipment, $entity->getIsCustomerNotified(), $entity->getComment());
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+        }
+
         return $entity;
     }
 }

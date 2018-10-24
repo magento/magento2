@@ -25,7 +25,7 @@ class AssertNewAccountsReportTotalResult extends AbstractConstraint
     public function processAssert(CustomerAccounts $customerAccounts, $total)
     {
         $totalForm = $customerAccounts->getGridBlock()->getTotalResults();
-        \PHPUnit_Framework_Assert::assertEquals($total, $totalForm);
+        \PHPUnit\Framework\Assert::assertEquals($total, $totalForm);
     }
 
     /**

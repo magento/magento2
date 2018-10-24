@@ -68,7 +68,7 @@ class SampleDataDeployCommand extends Command
     protected function configure()
     {
         $this->setName('sampledata:deploy')
-            ->setDescription('Deploy sample data modules');
+            ->setDescription('Deploy sample data modules for composer-based Magento installations');
         $this->addOption(
             self::OPTION_NO_UPDATE,
             null,
@@ -83,6 +83,12 @@ class SampleDataDeployCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $rootJson = json_decode($this->filesystem->getDirectoryRead(DirectoryList::ROOT)->readFile("composer.json"));
+        if (!isset($rootJson->version)) {
+            // @codingStandardsIgnoreLine
+            $output->writeln('<info>' . 'Git installations must deploy sample data from GitHub; see https://devdocs.magento.com/guides/v2.3/install-gde/install/sample-data-after-clone.html for more information.' . '</info>');
+            return;
+        }
         $this->updateMemoryLimit();
         $this->createAuthFile();
         $sampleDataPackages = $this->sampleDataDependency->getSampleDataPackages();

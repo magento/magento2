@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="related_grid_edit">
+            <block class="Magento\AdvancedSearch\Block\Adminhtml\Search\Grid" name="search.edit.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">catalog_search_grid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\AdvancedSearch\Model\ResourceModel\Search\Grid\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">name</argument>
+                    <argument name="default_dir" xsi:type="string">ASC</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                    <argument name="use_ajax" xsi:type="string">1</argument>
+                    <argument name="grid_url" xsi:type="url" path="*/*/relatedGrid">
+                        <param name="_current">1</param>
+                    </argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="search.edit.grid.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">*/*/edit</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="id" xsi:type="string">getId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet." as="query_id_selected">
+                        <arguments>
+                            <argument name="index" xsi:type="string">query_id</argument>
+                            <argument name="id" xsi:type="string">query_id_selected</argument>
+                            <argument name="type" xsi:type="string">checkbox</argument>
+                            <argument name="name" xsi:type="string">query_id_selected</argument>
+                            <argument name="values" xsi:type="options" model="Magento\AdvancedSearch\Model\Adminhtml\Search\Grid\Options"/>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.query_id" as="query_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">ID</argument>
+                            <argument name="index" xsi:type="string">query_id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.search_query" as="search_query">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Search Query</argument>
+                            <argument name="index" xsi:type="string">query_text</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="search.edit.grid.columnSet.store_id" as="store_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Store</argument>
+                            <argument name="index" xsi:type="string">store_id</argument>
+                            <argument name="type" xsi:type="string">store</argument>
+                            <argument name="store_view" xsi:type="string">1</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.num_results" as="num_results">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Results</argument>
+                            <argument name="index" xsi:type="string">num_results</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.popularity" as="popularity">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Uses</argument>
+                            <argument name="index" xsi:type="string">popularity</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.redirect" as="redirect">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Redirect URL</argument>
+                            <argument name="index" xsi:type="string">redirect</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.display_in_terms" as="display_in_terms">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Suggested Term</argument>
+                            <argument name="sortable" xsi:type="string">1</argument>
+                            <argument name="index" xsi:type="string">display_in_terms</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="array">
+                                <item name="yes" xsi:type="array">
+                                    <item name="value" xsi:type="string">1</item>
+                                    <item name="label" xsi:type="string" translate="true">Yes</item>
+                                </item>
+                                <item name="no" xsi:type="array">
+                                    <item name="value" xsi:type="string">0</item>
+                                    <item name="label" xsi:type="string" translate="true">No</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.action" as="action">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Action</argument>
+                            <argument name="index" xsi:type="string">catalog</argument>
+                            <argument name="type" xsi:type="string">action</argument>
+                            <argument name="getter" xsi:type="string">getId</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="actions" xsi:type="array">
+                                <item name="edit_action" xsi:type="array">
+                                    <item name="caption" xsi:type="string" translate="true">Edit</item>
+                                    <item name="url" xsi:type="array">
+                                        <item name="base" xsi:type="string">*/*/edit</item>
+                                    </item>
+                                    <item name="field" xsi:type="string">id</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

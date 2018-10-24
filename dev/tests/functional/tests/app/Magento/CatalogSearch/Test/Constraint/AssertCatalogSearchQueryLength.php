@@ -22,7 +22,7 @@ class AssertCatalogSearchQueryLength extends AbstractConstraint
      */
     public function processAssert(CatalogsearchResult $catalogSearchResult)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             mb_strlen($catalogSearchResult->getSearchResultsTitleBlock()->getSearchQuery()),
             128,
             'Search query length is not truncated to 128 symbols.'

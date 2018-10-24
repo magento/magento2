@@ -9,6 +9,9 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
 use Magento\Framework\Phrase;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirectory;
 
+/**
+ * Row parser.
+ */
 class RowParser
 {
     /**
@@ -26,6 +29,8 @@ class RowParser
     }
 
     /**
+     * Retrieve columns.
+     *
      * @return array
      */
     public function getColumns()
@@ -42,6 +47,8 @@ class RowParser
     }
 
     /**
+     * Parse provided row data.
+     *
      * @param array $rowData
      * @param int $rowNumber
      * @param int $websiteId
@@ -62,27 +69,39 @@ class RowParser
     ) {
         // validate row
         if (count($rowData) < 5) {
-            throw new RowException(__('Please correct Table Rates format in the Row #%1.', $rowNumber));
+            throw new RowException(
+                __(
+                    'The Table Rates File Format is incorrect in row number "%1". Verify the format and try again.',
+                    $rowNumber
+                )
+            );
         }
 
         $countryId = $this->getCountryId($rowData, $rowNumber, $columnResolver);
-        $regionId = $this->getRegionId($rowData, $rowNumber, $columnResolver, $countryId);
+        $regionIds = $this->getRegionIds($rowData, $rowNumber, $columnResolver, $countryId);
         $zipCode = $this->getZipCode($rowData, $columnResolver);
         $conditionValue = $this->getConditionValue($rowData, $rowNumber, $conditionFullName, $columnResolver);
         $price = $this->getPrice($rowData, $rowNumber, $columnResolver);
 
-        return [
-            'website_id' => $websiteId,
-            'dest_country_id' => $countryId,
-            'dest_region_id' => $regionId,
-            'dest_zip' => $zipCode,
-            'condition_name' => $conditionShortName,
-            'condition_value' => $conditionValue,
-            'price' => $price,
-        ];
+        $rates = [];
+        foreach ($regionIds as $regionId) {
+            $rates[] = [
+                'website_id' => $websiteId,
+                'dest_country_id' => $countryId,
+                'dest_region_id' => $regionId,
+                'dest_zip' => $zipCode,
+                'condition_name' => $conditionShortName,
+                'condition_value' => $conditionValue,
+                'price' => $price,
+            ];
+        }
+
+        return $rates;
     }
 
     /**
+     * Get country id from provided row data.
+     *
      * @param array $rowData
      * @param int $rowNumber
      * @param ColumnResolver $columnResolver
@@ -99,34 +118,51 @@ class RowParser
         } elseif ($countryCode === '*' || $countryCode === '') {
             $countryId = '0';
         } else {
-            throw new RowException(__('Please correct Country "%1" in the Row #%2.', $countryCode, $rowNumber));
+            throw new RowException(
+                __(
+                    'The "%1" country in row number "%2" is incorrect. Verify the country and try again.',
+                    $countryCode,
+                    $rowNumber
+                )
+            );
         }
         return $countryId;
     }
 
     /**
+     * Retrieve region id from provided row data.
+     *
      * @param array $rowData
      * @param int $rowNumber
      * @param ColumnResolver $columnResolver
      * @param int $countryId
-     * @return int|string
+     * @return array
      * @throws ColumnNotFoundException
      * @throws RowException
      */
-    private function getRegionId(array $rowData, $rowNumber, ColumnResolver $columnResolver, $countryId)
+    private function getRegionIds(array $rowData, $rowNumber, ColumnResolver $columnResolver, $countryId)
     {
         $regionCode = $columnResolver->getColumnValue(ColumnResolver::COLUMN_REGION, $rowData);
         if ($countryId !== '0' && $this->locationDirectory->hasRegionId($countryId, $regionCode)) {
-            $regionId = $this->locationDirectory->getRegionId($countryId, $regionCode);
+            $regionIds = $this->locationDirectory->getRegionIds($countryId, $regionCode);
         } elseif ($regionCode === '*' || $regionCode === '') {
-            $regionId = 0;
+            $regionIds = [0];
         } else {
-            throw new RowException(__('Please correct Region/State "%1" in the Row #%2.', $regionCode, $rowNumber));
+            throw new RowException(
+                __(
+                    'The "%1" region or state in row number "%2" is incorrect. '
+                    . 'Verify the region or state and try again.',
+                    $regionCode,
+                    $rowNumber
+                )
+            );
         }
-        return $regionId;
+        return $regionIds;
     }
 
     /**
+     * Retrieve zip code from provided row data.
+     *
      * @param array $rowData
      * @param ColumnResolver $columnResolver
      * @return float|int|null|string
@@ -142,6 +178,8 @@ class RowParser
     }
 
     /**
+     * Get condition value form provided row data.
+     *
      * @param array $rowData
      * @param int $rowNumber
      * @param string $conditionFullName
@@ -169,6 +207,8 @@ class RowParser
     }
 
     /**
+     * Retrieve price from provided row data.
+     *
      * @param array $rowData
      * @param int $rowNumber
      * @param ColumnResolver $columnResolver
@@ -181,13 +221,20 @@ class RowParser
         $priceValue = $columnResolver->getColumnValue(ColumnResolver::COLUMN_PRICE, $rowData);
         $price = $this->_parseDecimalValue($priceValue);
         if ($price === false) {
-            throw new RowException(__('Please correct Shipping Price "%1" in the Row #%2.', $priceValue, $rowNumber));
+            throw new RowException(
+                __(
+                    'The "%1" shipping price in row number "%2" is incorrect. Verify the shipping price and try again.',
+                    $priceValue,
+                    $rowNumber
+                )
+            );
         }
         return $price;
     }
 
     /**
      * Parse and validate positive decimal value
+     *
      * Return false if value is not decimal or is not positive
      *
      * @param string $value

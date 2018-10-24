@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Communication\Config;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -30,7 +31,7 @@ class ConfigParser
         if (!isset($matches[1]) || !isset($matches[2])) {
             throw new LocalizedException(
                 new Phrase(
-                    'Service method "%serviceMethod" must match the following pattern: "%pattern"',
+                    'The "%serviceMethod" service method must match the "%pattern" pattern.',
                     ['serviceMethod' => $serviceMethod, 'pattern' => $pattern]
                 )
             );

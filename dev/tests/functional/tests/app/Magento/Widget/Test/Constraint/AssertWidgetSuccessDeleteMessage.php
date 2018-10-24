@@ -32,7 +32,7 @@ class AssertWidgetSuccessDeleteMessage extends AbstractConstraint
     public function processAssert(WidgetInstanceIndex $widgetInstanceIndex)
     {
         $actualMessage = $widgetInstanceIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::DELETE_MESSAGE,
             $actualMessage,
             'Wrong widget success delete message is displayed.'

@@ -56,9 +56,6 @@ abstract class Sales extends AbstractReport
             case 'coupons':
                 return $this->_authorization->isAllowed('Magento_Reports::coupons');
                 break;
-            case 'shipping':
-                return $this->_authorization->isAllowed('Magento_Reports::shipping');
-                break;
             case 'bestsellers':
                 return $this->_authorization->isAllowed('Magento_Reports::bestsellers');
                 break;

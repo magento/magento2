@@ -35,7 +35,7 @@ class AssertInvoicedOrderOnDashboard extends AbstractConstraint
         )->run()['dashboardOrder']['quantity'];
         $invoicedOrdersQty = $orderQty - $dashboardOrder['quantity'];
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $invoicedOrdersQty,
             $expectedOrdersQuantityOnDashboard,
             'Order quantity om admin dashboard is not correct.'

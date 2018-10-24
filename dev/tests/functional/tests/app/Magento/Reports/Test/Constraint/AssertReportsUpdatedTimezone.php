@@ -27,7 +27,7 @@ class AssertReportsUpdatedTimezone extends AbstractConstraint
         $currentDate  = new \DateTime();
         $currentDate->setTimezone(new \DateTimeZone($_ENV['magento_timezone']));
         foreach ($dates as $date) {
-            \PHPUnit_Framework_Assert::assertContains(
+            \PHPUnit\Framework\Assert::assertContains(
                 $currentDate->format('M j, Y, g'),
                 date('M j, Y, g', strtotime($date['updated_at'])),
                 "Reports 'Updated' column values are displayed in an incorrect timezone."

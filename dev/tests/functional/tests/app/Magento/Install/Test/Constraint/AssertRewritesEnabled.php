@@ -29,7 +29,7 @@ class AssertRewritesEnabled extends AbstractConstraint
         $homePage->open();
         $homePage->getTopmenu()->selectCategoryByName($category->getName());
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             strpos($browser->getUrl(), 'index.php') === false,
             'Apache redirect for category does not work.'
         );

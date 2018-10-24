@@ -39,7 +39,7 @@ class KeyLength extends \Zend_Validate_StringLength
      * Default encoding is set to utf-8 if none provided
      * New option name added to allow adding key name in validation error messages
      *
-     * @param  integer|array|\Zend_Config $options
+     * @inheritdoc
      */
     public function __construct($options = [])
     {

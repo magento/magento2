@@ -43,8 +43,8 @@ define([
             });
 
             expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([]);
-            expect(multiSelect.selected()).toEqual([]);
+            expect(multiSelect.excluded().toString()).toEqual('');
+            expect(multiSelect.selected().toString()).toEqual('');
         });
 
         it('Select specific several rows on several pages', function () {
@@ -52,8 +52,8 @@ define([
             multiSelect.selected.push(5);
 
             expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([]);
-            expect(multiSelect.selected()).toEqual([4, 5]);
+            expect(multiSelect.excluded().toString()).toEqual('');
+            expect(multiSelect.selected().toString()).toEqual('4,5');
         });
 
         it('Select all rows on several pages', function () {
@@ -71,8 +71,8 @@ define([
             multiSelect.selectPage();
 
             expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([]);
-            expect(multiSelect.selected()).toEqual([1, 2, 3, 4]);
+            expect(multiSelect.excluded().toString()).toEqual('');
+            expect(multiSelect.selected().toString()).toEqual('1,2,3,4');
         });
 
         it('Select all rows on current page with some specific rows on another page', function () {
@@ -94,8 +94,8 @@ define([
             }]);
             multiSelect.selected.push(6);
             expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([5]);
-            expect(multiSelect.selected()).toEqual([3, 4, 6]);
+            expect(multiSelect.excluded().toString()).toEqual('5');
+            expect(multiSelect.selected().toString()).toEqual('3,4,6');
         });
 
         it('Select all rows on several pages without some specific rows', function () {
@@ -113,8 +113,8 @@ define([
             multiSelect.selected.remove(4); // remove second
 
             expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([4]);
-            expect(multiSelect.selected()).toEqual([3]);
+            expect(multiSelect.excluded().toString()).toEqual('4');
+            expect(multiSelect.selected().toString()).toEqual('3');
         });
 
         it('Select all rows all over the Grid', function () {
@@ -131,8 +131,8 @@ define([
             }]);
 
             expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([]);
-            expect(multiSelect.selected()).toEqual([3, 4, 1, 2]);
+            expect(multiSelect.excluded().toString()).toEqual('');
+            expect(multiSelect.selected().toString()).toEqual('3,4,1,2');
         });
 
         it('Select all rows all over the Grid without all rows on current page but with specific rows on another page',
@@ -156,8 +156,8 @@ define([
                 }]);
 
                 expect(multiSelect.allSelected()).toBeFalsy();
-                expect(multiSelect.excluded()).toEqual([3, 4]);
-                expect(multiSelect.selected()).toEqual([5, 6]);
+                expect(multiSelect.excluded().toString()).toEqual('3,4');
+                expect(multiSelect.selected().toString()).toEqual('5,6');
             });
     });
 });

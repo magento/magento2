@@ -11,7 +11,7 @@ class ItemsForReindex
     /**
      * @var array
      */
-    protected $itemsForReindex;
+    protected $itemsForReindex = [];
 
     /**
      * @param array $items

@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Model;
 
+use Magento\Framework\Setup\Patch\PatchApplier;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -31,6 +32,10 @@ class ModuleUninstaller
      * @var \Magento\Setup\Module\SetupFactory
      */
     private $setupFactory;
+    /**
+     * @var PatchApplier
+     */
+    private $patchApplier;
 
     /**
      * Constructor
@@ -39,6 +44,7 @@ class ModuleUninstaller
      * @param \Magento\Framework\Composer\Remove $remove
      * @param UninstallCollector $collector
      * @param \Magento\Setup\Module\SetupFactory $setupFactory
+     * @param PatchApplier $patchApplier
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
@@ -50,6 +56,18 @@ class ModuleUninstaller
         $this->remove = $remove;
         $this->collector = $collector;
         $this->setupFactory = $setupFactory;
+    }
+
+    /**
+     * @return PatchApplier
+     */
+    private function getPatchApplier()
+    {
+        if (!$this->patchApplier) {
+            $this->patchApplier = $this->objectManager->get(PatchApplier::class);
+        }
+
+        return $this->patchApplier;
     }
 
     /**
@@ -71,9 +89,9 @@ class ModuleUninstaller
                     $setupModel,
                     new ModuleContext($resource->getDbVersion($module) ?: '')
                 );
-            } else {
-                $output->writeln("<info>No data to clear in $module</info>");
             }
+
+            $this->getPatchApplier()->revertDataPatches($module);
         }
     }
 

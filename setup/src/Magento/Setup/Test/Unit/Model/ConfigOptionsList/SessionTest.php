@@ -32,7 +32,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions()
     {
         $options = $this->configList->getOptions();
-        $this->assertCount(19, $options);
+        $this->assertCount(23, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -156,7 +156,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
                     'bot_lifetime' => '',
                     'disable_locking' => '',
                     'min_lifetime' => '',
-                    'max_lifetime' => ''
+                    'max_lifetime' => '',
+                    'sentinel_master' => '',
+                    'sentinel_servers' => '',
+                    'sentinel_connect_retries' => '',
+                    'sentinel_verify_master' => '',
                 ]
 
             ]
@@ -209,7 +213,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
                     'bot_lifetime' => '',
                     'disable_locking' => '',
                     'min_lifetime' => '60',
-                    'max_lifetime' => '3600'
+                    'max_lifetime' => '3600',
+                    'sentinel_master' => '',
+                    'sentinel_servers' => '',
+                    'sentinel_connect_retries' => '',
+                    'sentinel_verify_master' => '',
                 ]
             ],
 
@@ -262,6 +270,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($errorMessage, $errors[0]);
     }
 
+    /**
+     * @return array
+     */
     public function redisOptionProvider()
     {
         return [
@@ -286,6 +297,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function invalidOptionsProvider()
     {
         return [

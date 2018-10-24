@@ -35,7 +35,7 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
     protected $selectMock;
 
     /** @var \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface */
-    protected $tansactionMock;
+    protected $transactionMock;
 
     /** @var |\PHPUnit_Framework_MockObject_MockObject */
     protected $objRelationMock;
@@ -77,7 +77,7 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['from', 'where', 'update'])
             ->getMock();
         $translationClassName = \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class;
-        $this->tansactionMock = $this->getMockBuilder($translationClassName)
+        $this->transactionMock = $this->getMockBuilder($translationClassName)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -99,7 +99,7 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
                 'writer' => $this->writerMock,
                 'adapterInterface' => $this->adapterMock,
                 'resource' => $this->resourceMock,
-                'transactionManager' => $this->tansactionMock,
+                'transactionManager' => $this->transactionMock,
                 'relationProcessor' => $this->objRelationMock,
                 'random' => $this->randomMock
             ]

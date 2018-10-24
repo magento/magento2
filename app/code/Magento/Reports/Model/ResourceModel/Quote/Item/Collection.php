@@ -192,7 +192,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             . ' AND product_name.attribute_id = ' . $productAttrNameId
             . ' AND product_name.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
             ['name' => 'product_name.value']
-        )->joinInner(
+        )->joinLeft(
             ['product_price' => $productAttrPrice->getBackend()->getTable()],
             "product_price.{$linkField} = main_table.{$linkField}"
             ." AND product_price.attribute_id = {$productAttrPriceId}",

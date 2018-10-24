@@ -36,6 +36,24 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
 
     const UPDATED_AT = 'updated_at';
 
+    const MEDIA_GALLERY = 'media_gallery';
+
+    const TIER_PRICE = 'tier_price';
+
+    const ATTRIBUTES = [
+        self::SKU,
+        self::NAME,
+        self::PRICE,
+        self::WEIGHT,
+        self::STATUS,
+        self::VISIBILITY,
+        self::ATTRIBUTE_SET_ID,
+        self::TYPE_ID,
+        self::CREATED_AT,
+        self::UPDATED_AT,
+        self::MEDIA_GALLERY,
+        self::TIER_PRICE,
+    ];
     /**#@-*/
 
     /**

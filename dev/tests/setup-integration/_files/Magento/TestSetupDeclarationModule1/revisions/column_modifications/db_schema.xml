@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="reference_table" resource="default">
+        <column xsi:type="tinyint" name="tinyint_ref" padding="7" nullable="false" identity="true" unsigned="false"/>
+        <column xsi:type="tinyint" name="tinyint_without_padding" nullable="false" unsigned="false"/>
+        <column xsi:type="bigint" name="bigint_without_padding" default="0" nullable="false" unsigned="false"/>
+        <column xsi:type="smallint" name="smallint_without_padding" default="0" nullable="false" unsigned="false"/>
+        <column xsi:type="int" name="integer_without_padding" default="0" nullable="false" unsigned="false"/>
+        <column xsi:type="smallint" name="smallint_with_big_padding" padding="254" default="0" nullable="false"
+                unsigned="false"/>
+        <column xsi:type="smallint" name="smallint_without_default" padding="2" nullable="true" unsigned="false"/>
+        <column xsi:type="int" name="int_without_unsigned" padding="2" nullable="true"/>
+        <column xsi:type="int" name="int_unsigned" padding="2" nullable="true" unsigned="true"/>
+        <column xsi:type="bigint" name="bigint_default_nullable" padding="2" nullable="true" default="123"
+                unsigned="true"/>
+        <column xsi:type="bigint" name="bigint_not_default_not_nullable" nullable="false" unsigned="false"/>
+        <constraint xsi:type="primary" name="tinyint_primary">
+            <column name="tinyint_ref"/>
+        </constraint>
+    </table>
+    <table name="auto_increment_test" resource="default">
+        <column xsi:type="int" name="int_auto_increment_with_nullable" padding="15" unsigned="true" nullable="true"/>
+        <column xsi:type="smallint" name="int_disabled_auto_increment" default="0" identity="false" padding="12"
+                unsigned="true" nullable="true"/>
+        <constraint xsi:type="unique" name="AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE">
+            <column name="int_auto_increment_with_nullable"/>
+        </constraint>
+    </table>
+    <table name="test_table" resource="default">
+        <!--Columns-->
+        <column xsi:type="smallint" identity="true" name="smallint" padding="3" nullable="true"/>
+        <column xsi:type="tinyint" name="tinyint" padding="7" nullable="true" unsigned="false"/>
+        <column xsi:type="bigint" name="bigint" default="0" padding="13" nullable="true" unsigned="false"/>
+        <column xsi:type="float" name="float" default="0" precision="12" scale="10"/>
+        <column xsi:type="double" name="double" precision="245" scale="10"/>
+        <column xsi:type="decimal" name="decimal" default="0" scale="4" precision="15"/>
+        <column xsi:type="date" name="date"/>
+        <column xsi:type="timestamp" name="timestamp" default="CURRENT_TIMESTAMP" on_update="false"/>
+        <column xsi:type="datetime" name="datetime" default="0"/>
+        <column xsi:type="longtext" name="longtext"/>
+        <column xsi:type="mediumtext" name="mediumtext"/>
+        <column xsi:type="varchar" name="varchar" length="100" nullable="true"/>
+        <column xsi:type="mediumblob" name="mediumblob"/>
+        <column xsi:type="blob" name="blob"/>
+        <column xsi:type="boolean" name="boolean" default="true"/>
+        <column xsi:type="varbinary" name="varbinary_rename" default="10101" disabled="true"/>
+        <!--Constraints-->
+        <constraint xsi:type="unique" name="TEST_TABLE_SMALLINT_BIGINT">
+            <column name="smallint"/>
+            <column name="bigint"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
+                    column="tinyint" table="test_table"
+                    referenceTable="reference_table" referenceColumn="tinyint_ref" onDelete="NO ACTION"/>
+        <!--Indexes-->
+        <index name="TEST_TABLE_TINYINT_BIGINT" indexType="btree">
+            <column name="tinyint"/>
+            <column name="bigint"/>
+        </index>
+    </table>
+</schema>

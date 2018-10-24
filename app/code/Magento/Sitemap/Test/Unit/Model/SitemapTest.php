@@ -527,7 +527,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             ->willReturn([
                 new SitemapItem('category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
                 new SitemapItem('/category/sub-category.html', '1.0', 'daily', '2012-12-21 00:00:00'),
-                new SitemapItem('product.html', '0.5', 'monthly', '2012-12-21 00:00:00'),
+                new SitemapItem('product.html', '0.5', 'monthly', '0000-00-00 00:00:00'),
                 new SitemapItem(
                     'product2.html',
                     '0.5',

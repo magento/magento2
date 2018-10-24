@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @deprecated use lib/web/mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter.js instead
+ */
 /* global varienGlobalEvents, tinyMceEditors, MediabrowserUtility, closeEditorPopup, Base64 */
 /* eslint-disable strict */
 define([
@@ -34,7 +37,15 @@ define([
             this.config = config;
             this.schema = config.schema || html5Schema;
 
-            _.bindAll(this, 'beforeSetContent', 'saveContent', 'onChangeContent', 'openFileBrowser', 'updateTextArea');
+            _.bindAll(
+                this,
+                'beforeSetContent',
+                'saveContent',
+                'onChangeContent',
+                'openFileBrowser',
+                'updateTextArea',
+                'removeEvents'
+            );
 
             varienGlobalEvents.attachEventHandler('tinymceChange', this.onChangeContent);
             varienGlobalEvents.attachEventHandler('tinymceBeforeSetContent', this.beforeSetContent);
@@ -67,6 +78,17 @@ define([
             }
 
             tinyMCE3.init(this.getSettings(mode));
+        },
+
+        /**
+         * Remove events from instance.
+         *
+         * @param {String} wysiwygId
+         */
+        removeEvents: function (wysiwygId) {
+            var editor = tinyMceEditors.get(wysiwygId);
+
+            varienGlobalEvents.removeEventHandler('tinymceChange', editor.onChangeContent);
         },
 
         /**
@@ -131,6 +153,10 @@ define([
                     ed.onPreInit.add(self.onEditorPreInit.bind(self));
 
                     ed.onInit.add(self.onEditorInit.bind(self));
+
+                    ed.onInit.add(function (editor) {
+                        varienGlobalEvents.fireEvent('wysiwygEditorInitialized', editor);
+                    });
 
                     ed.onSubmit.add(function (edi, e) {
                         varienGlobalEvents.fireEvent('tinymceSubmit', e);
@@ -245,6 +271,13 @@ define([
         },
 
         /**
+         * @return {String|null}
+         */
+        getId: function () {
+            return this.id || (this.activeEditor() ? this.activeEditor().id : null) || tinyMceEditors.values()[0].id;
+        },
+
+        /**
          * @return {Object}
          */
         activeEditor: function () {
@@ -259,6 +292,35 @@ define([
          */
         insertContent: function (content, ui) {
             this.activeEditor().execCommand('mceInsertContent', typeof ui !== 'undefined' ? ui : false, content);
+        },
+
+        /**
+         * Set the status of the toolbar to disabled or enabled (true for enabled, false for disabled)
+         * @param {Boolean} enabled
+         */
+        setToolbarStatus: function (enabled) {
+            _.each(this.activeEditor().controlManager.controls, function (property, index, controls) {
+                controls[property.id].setDisabled(!enabled);
+            });
+        },
+
+        /**
+         * Set the status of the editor and toolbar
+         *
+         * @param {Boolean} enabled
+         */
+        setEnabledStatus: function (enabled) {
+            if (this.activeEditor()) {
+                this.activeEditor().getBody().setAttribute('contenteditable', enabled);
+                this.activeEditor().readonly = !enabled;
+                this.setToolbarStatus(enabled);
+            }
+
+            if (enabled) {
+                this.getTextArea().removeProp('disabled');
+            } else {
+                this.getTextArea().prop('disabled', 'disabled');
+            }
         },
 
         /**
@@ -279,7 +341,7 @@ define([
                 storeId = this.config['store_id'] !== null ? this.config['store_id'] : 0,
                 frameDialog = jQuery(o.win.frameElement).parents('[role="dialog"]'),
                 wUrl = this.config['files_browser_window_url'] +
-                    'target_element_id/' + this.id + '/' +
+                    'target_element_id/' + this.getId() + '/' +
                     'store/' + storeId + '/';
 
             this.mediaBrowserOpener = o.win;
@@ -331,14 +393,14 @@ define([
          * @return {jQuery|*|HTMLElement}
          */
         getToggleButton: function () {
-            return $('toggle' + this.id);
+            return $('toggle' + this.getId());
         },
 
         /**
          * Get plugins button.
          */
         getPluginButtons: function () {
-            return $$('#buttons' + this.id + ' > button.plugin');
+            return jQuery('#buttons' + this.getId() + ' > button.plugin');
         },
 
         /**
@@ -350,11 +412,9 @@ define([
 
             this.setup(mode);
 
-            tinyMCE3.execCommand('mceAddControl', false, this.id);
+            tinyMCE3.execCommand('mceAddControl', false, this.getId());
 
-            this.getPluginButtons().each(function (e) {
-                e.hide();
-            });
+            this.getPluginButtons().hide();
 
             return this;
         },
@@ -365,11 +425,9 @@ define([
         turnOff: function () {
             this.closePopups();
 
-            tinyMCE3.execCommand('mceRemoveControl', false, this.id);
+            tinyMCE3.execCommand('mceRemoveControl', false, this.getId());
 
-            this.getPluginButtons().each(function (e) {
-                e.show();
-            });
+            this.getPluginButtons().show();
 
             return this;
         },
@@ -380,8 +438,8 @@ define([
         closePopups: function () {
             if (typeof closeEditorPopup == 'function') {
                 // close all popups to avoid problems with updating parent content area
-                closeEditorPopup('widget_window' + this.id);
-                closeEditorPopup('browser_window' + this.id);
+                closeEditorPopup('widget_window' + this.getId());
+                closeEditorPopup('browser_window' + this.getId());
             }
         },
 
@@ -389,7 +447,7 @@ define([
          * @return {Boolean}
          */
         toggle: function () {
-            if (!tinyMCE3.get(this.id)) {
+            if (!tinyMCE3.get(this.getId())) {
                 this.turnOn();
 
                 return true;
@@ -415,8 +473,8 @@ define([
          * On form validation.
          */
         onFormValidation: function () {
-            if (tinyMCE3.get(this.id)) {
-                $(this.id).value = tinyMCE3.get(this.id).getContent();
+            if (tinyMCE3.get(this.getId())) {
+                $(this.getId()).value = tinyMCE3.get(this.getId()).getContent();
             }
         },
 
@@ -444,25 +502,30 @@ define([
          * @param {String} directive
          */
         makeDirectiveUrl: function (directive) {
-            return this.config['directives_url'].replace('directive', 'directive/___directive/' + directive);
+            return this.config['directives_url']
+                .replace(/directive/, 'directive/___directive/' + directive)
+                .replace(/\/$/, '');
         },
 
         /**
+         * Convert {{directive}} style attributes syntax to absolute URLs
          * @param {Object} content
          * @return {*}
          */
         encodeDirectives: function (content) {
             // collect all HTML tags with attributes that contain directives
-            return content.gsub(/<([a-z0-9\-\_]+.+?)([a-z0-9\-\_]+=".*?\{\{.+?\}\}.*?".*?)>/i, function (match) {
-                var attributesString = match[2];
+            return content.gsub(/<([a-z0-9\-\_]+[^>]+?)([a-z0-9\-\_]+="[^"]*?\{\{.+?\}\}.*?".*?)>/i, function (match) {
+                var attributesString = match[2],
+                    decodedDirectiveString;
 
                 // process tag attributes string
                 attributesString = attributesString.gsub(/([a-z0-9\-\_]+)="(.*?)(\{\{.+?\}\})(.*?)"/i, function (m) {
-                    return m[1] + '="' + m[2] + this.makeDirectiveUrl(Base64.mageEncode(m[3])) + m[4] + '"';
+                    decodedDirectiveString = encodeURIComponent(Base64.mageEncode(m[3].replace(/&quot;/g, '"')));
+
+                    return m[1] + '="' + m[2] + this.makeDirectiveUrl(decodedDirectiveString) + m[4] + '"';
                 }.bind(this));
 
                 return '<' + match[1] + attributesString + '>';
-
             }.bind(this));
         },
 
@@ -493,16 +556,23 @@ define([
         },
 
         /**
+         * Convert absolute URLs to {{directive}} style attributes syntax
          * @param {Object} content
          * @return {*}
          */
         decodeDirectives: function (content) {
-            // escape special chars in directives url to use it in regular expression
-            var url = this.makeDirectiveUrl('%directive%').replace(/([$^.?*!+:=()\[\]{}|\\])/g, '\\$1'),
-                reg = new RegExp(url.replace('%directive%', '([a-zA-Z0-9,_-]+)'));
+            var directiveUrl = this.makeDirectiveUrl('%directive%').split('?')[0], // remove query string from directive
+                // escape special chars in directives url to use in regular expression
+                regexEscapedDirectiveUrl = directiveUrl.replace(/([$^.?*!+:=()\[\]{}|\\])/g, '\\$1'),
+                regexDirectiveUrl = regexEscapedDirectiveUrl
+                    .replace(
+                        '%directive%',
+                        '([a-zA-Z0-9,_-]+(?:%2[A-Z]|)+\/?)(?:(?!").)*'
+                    ) + '/?(\\\\?[^"]*)?', // allow optional query string
+                reg = new RegExp(regexDirectiveUrl);
 
-            return content.gsub(reg, function (match) { //eslint-disable-line no-extra-bind
-                return Base64.mageDecode(match[1]);
+            return content.gsub(reg, function (match) {
+                return Base64.mageDecode(decodeURIComponent(match[1]).replace(/\/$/, '')).replace(/"/g, '&quot;');
             });
         },
 
@@ -548,7 +618,7 @@ define([
          * Update text area.
          */
         updateTextArea: function () {
-            var editor = tinyMCE3.get(this.id),
+            var editor = tinyMCE3.get(this.getId()),
                 content;
 
             if (!editor) {
@@ -558,7 +628,14 @@ define([
             content = editor.getContent();
             content = this.decodeContent(content);
 
-            jQuery('#' + this.id).val(content).trigger('change');
+            this.getTextArea().val(content).trigger('change');
+        },
+
+        /**
+         * @return {Object} jQuery textarea element
+         */
+        getTextArea: function () {
+            return jQuery('#' + this.getId());
         },
 
         /**

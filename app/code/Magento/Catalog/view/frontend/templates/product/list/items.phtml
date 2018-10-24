@@ -146,8 +146,8 @@ switch ($type = $block->getType()) {
         }
     break;
 
-    case 'other':
-    break;
+    default:
+        $exist = null;
 }
 ?>
 
@@ -202,7 +202,7 @@ switch ($type = $block->getType()) {
                                 <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
                             <?php endif; ?>
 
-                            <?php if (!$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>
+                            <?php if ($canItemsAddToCart && !$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>
                                 <?php if (!$_item->getRequiredOptions()): ?>
                                     <div class="field choice related">
                                         <input type="checkbox" class="checkbox related" id="related-checkbox<?= /* @escapeNotVerified */ $_item->getId() ?>" name="related_products[]" value="<?= /* @escapeNotVerified */ $_item->getId() ?>" />

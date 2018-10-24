@@ -32,7 +32,7 @@ class AssertCategoryUrlDuplicateErrorMessage extends AbstractConstraint
         Category $category
     ) {
         $actualMessage = $productPage->getMessagesBlock()->getErrorMessage();
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::ERROR_MESSAGE_TITLE,
             $actualMessage,
             'Wrong error message is displayed.'
@@ -40,7 +40,7 @@ class AssertCategoryUrlDuplicateErrorMessage extends AbstractConstraint
             . "\nActual:\n" . $actualMessage
         );
 
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             $category->getUrlKey(),
             $actualMessage,
             'Category url is not present on error message.'

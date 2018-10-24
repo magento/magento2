@@ -102,6 +102,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Execute create handler
+     *
      * @param object $product
      * @param array $arguments
      * @return object
@@ -167,23 +169,19 @@ class CreateHandler implements ExtensionInterface
             if (empty($attrData) && empty($clearImages) && empty($newImages) && empty($existImages)) {
                 continue;
             }
-            if (in_array($attrData, $clearImages)) {
-                $product->setData($mediaAttrCode, 'no_selection');
-            }
-
-            if (in_array($attrData, array_keys($newImages))) {
-                $product->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
-                $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
-            }
-
-            if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
-                $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
-            }
-            if (!empty($product->getData($mediaAttrCode))) {
-                $product->addAttributeUpdate(
+            $this->processMediaAttribute(
+                $product,
+                $mediaAttrCode,
+                $clearImages,
+                $newImages
+            );
+            if (in_array($mediaAttrCode, ['image', 'small_image', 'thumbnail'])) {
+                $this->processMediaAttributeLabel(
+                    $product,
                     $mediaAttrCode,
-                    $product->getData($mediaAttrCode),
-                    $product->getStoreId()
+                    $clearImages,
+                    $newImages,
+                    $existImages
                 );
             }
         }
@@ -208,6 +206,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Returns media gallery atribute instance
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @since 101.0.0
      */
@@ -223,6 +223,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Process delete images
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
@@ -234,6 +236,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Process images
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
@@ -245,12 +249,13 @@ class CreateHandler implements ExtensionInterface
             if (empty($image['removed'])) {
                 $data = $this->processNewImage($product, $image);
 
-                $this->resourceModel->deleteGalleryValueInStore(
-                    $image['value_id'],
-                    $product->getData($this->metadata->getLinkField()),
-                    $product->getStoreId()
-                );
-
+                if (!$product->isObjectNew()) {
+                    $this->resourceModel->deleteGalleryValueInStore(
+                        $image['value_id'],
+                        $product->getData($this->metadata->getLinkField()),
+                        $product->getStoreId()
+                    );
+                }
                 // Add per store labels, position, disabled
                 $data['value_id'] = $image['value_id'];
                 $data['label'] = isset($image['label']) ? $image['label'] : '';
@@ -295,6 +300,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Duplicate attribute
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      * @since 101.0.0
@@ -363,6 +370,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Returns file name according to tmp name
+     *
      * @param string $file
      * @return string
      * @since 101.0.0
@@ -447,5 +456,82 @@ class CreateHandler implements ExtensionInterface
             $this->mediaAttributeCodes = $this->mediaConfig->getMediaAttributeCodes();
         }
         return $this->mediaAttributeCodes;
+    }
+
+    /**
+     * Process media attribute
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $mediaAttrCode
+     * @param array $clearImages
+     * @param array $newImages
+     */
+    private function processMediaAttribute(
+        \Magento\Catalog\Model\Product $product,
+        $mediaAttrCode,
+        array $clearImages,
+        array $newImages
+    ) {
+        $attrData = $product->getData($mediaAttrCode);
+        if (in_array($attrData, $clearImages)) {
+            $product->setData($mediaAttrCode, 'no_selection');
+        }
+
+        if (in_array($attrData, array_keys($newImages))) {
+            $product->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
+        }
+        if (!empty($product->getData($mediaAttrCode))) {
+            $product->addAttributeUpdate(
+                $mediaAttrCode,
+                $product->getData($mediaAttrCode),
+                $product->getStoreId()
+            );
+        }
+    }
+
+    /**
+     * Process media attribute label
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $mediaAttrCode
+     * @param array $clearImages
+     * @param array $newImages
+     * @param array $existImages
+     */
+    private function processMediaAttributeLabel(
+        \Magento\Catalog\Model\Product $product,
+        $mediaAttrCode,
+        array $clearImages,
+        array $newImages,
+        array $existImages
+    ) {
+        $resetLabel = false;
+        $attrData = $product->getData($mediaAttrCode);
+        if (in_array($attrData, $clearImages)) {
+            $product->setData($mediaAttrCode . '_label', null);
+            $resetLabel = true;
+        }
+
+        if (in_array($attrData, array_keys($newImages))) {
+            $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
+        }
+
+        if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
+            $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
+        }
+
+        if ($attrData === 'no_selection' && !empty($product->getData($mediaAttrCode . '_label'))) {
+            $product->setData($mediaAttrCode . '_label', null);
+            $resetLabel = true;
+        }
+        if (!empty($product->getData($mediaAttrCode . '_label'))
+            || $resetLabel === true
+        ) {
+            $product->addAttributeUpdate(
+                $mediaAttrCode . '_label',
+                $product->getData($mediaAttrCode . '_label'),
+                $product->getStoreId()
+            );
+        }
     }
 }

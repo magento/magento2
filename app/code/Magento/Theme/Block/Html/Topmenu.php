@@ -177,7 +177,7 @@ class Topmenu extends Template implements IdentityInterface
             return $html;
         }
 
-        $colStops = null;
+        $colStops = [];
         if ($childLevel == 0 && $limit) {
             $colStops = $this->_columnBrake($child->getChildren(), $limit);
         }
@@ -205,7 +205,7 @@ class Topmenu extends Template implements IdentityInterface
         \Magento\Framework\Data\Tree\Node $menuTree,
         $childrenWrapClass,
         $limit,
-        $colBrakes = []
+        array $colBrakes = []
     ) {
         $html = '';
 
@@ -235,10 +235,16 @@ class Topmenu extends Template implements IdentityInterface
 
             if ($childLevel == 0 && $outermostClass) {
                 $outermostClassCode = ' class="' . $outermostClass . '" ';
-                $child->setClass($outermostClass);
+                $currentClass = $child->getClass();
+
+                if (empty($currentClass)) {
+                    $child->setClass($outermostClass);
+                } else {
+                    $child->setClass($currentClass . ' ' . $outermostClass);
+                }
             }
 
-            if (count($colBrakes) && $colBrakes[$counter]['colbrake']) {
+            if (is_array($colBrakes) && count($colBrakes) && $colBrakes[$counter]['colbrake']) {
                 $html .= '</ul></li><li class="column"><ul>';
             }
 
@@ -255,7 +261,7 @@ class Topmenu extends Template implements IdentityInterface
             $counter++;
         }
 
-        if (count($colBrakes) && $limit) {
+        if (is_array($colBrakes) && count($colBrakes) && $limit) {
             $html = '<li class="column"><ul>' . $html . '</ul></li>';
         }
 
@@ -303,6 +309,10 @@ class Topmenu extends Template implements IdentityInterface
         $classes[] = 'level' . $item->getLevel();
         $classes[] = $item->getPositionClass();
 
+        if ($item->getIsCategory()) {
+            $classes[] = 'category-item';
+        }
+
         if ($item->getIsFirst()) {
             $classes[] = 'first';
         }
@@ -331,7 +341,7 @@ class Topmenu extends Template implements IdentityInterface
     /**
      * Add identity
      *
-     * @param array $identity
+     * @param string|array $identity
      * @return void
      */
     public function addIdentity($identity)

@@ -130,12 +130,16 @@ class CompositeConfigProvider
     /**
      * Returns active editor path
      *
+     * @param \Magento\Framework\DataObject $config
      * @return string
      */
-    private function getActiveEditorPath()
+    private function getActiveEditorPath($config)
     {
-        if (!isset($this->activeEditorPath)) {
-            $this->activeEditorPath = $this->activeEditor->getWysiwygAdapterPath();
+        if (!isset($this->activeEditorPath) || $this->activeEditorPath !== $config->getData('activeEditorPath')) {
+            $this->activeEditorPath = $config->getData('activeEditorPath')
+                ? $config->getData('activeEditorPath')
+                : $this->activeEditor->getWysiwygAdapterPath();
+            $config->setData('activeEditorPath', $this->activeEditorPath);
         }
         return $this->activeEditorPath;
     }
@@ -149,7 +153,7 @@ class CompositeConfigProvider
      */
     private function updateConfig($config, array $configProviders)
     {
-        $adapterType = $this->getActiveEditorPath();
+        $adapterType = $this->getActiveEditorPath($config);
         //Extension point to update plugin settings by adapter type
         $providerClass = isset($configProviders[$adapterType])
             ? $configProviders[$adapterType]

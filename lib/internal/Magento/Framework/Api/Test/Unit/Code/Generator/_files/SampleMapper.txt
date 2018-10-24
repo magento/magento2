@@ -17,9 +17,9 @@ class SampleMapper
      *
      * @var array
      */
-    protected $registry = array(
+    protected $registry = [
         
-    );
+    ];
 
     /**
      * Mapper constructor

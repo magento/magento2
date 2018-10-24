@@ -70,7 +70,7 @@ class AssertIntegrationForm extends AbstractAssertForm
         unset($formData['current_password']);
         unset($data['current_password']);
         $dataDiff = $this->verifyForm($formData, $data);
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             $dataDiff,
             'Integration form was filled incorrectly.'
             . "\nLog:\n" . implode(";\n", $dataDiff)

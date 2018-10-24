@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="vault_payment_token" resource="default" engine="innodb" comment="Vault tokens of payment">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Customer Id"/>
+        <column xsi:type="varchar" name="public_hash" nullable="false" length="128"
+                comment="Hash code for using on frontend"/>
+        <column xsi:type="varchar" name="payment_method_code" nullable="false" length="128"
+                comment="Payment method code"/>
+        <column xsi:type="varchar" name="type" nullable="false" length="128" comment="Type"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="expires_at" on_update="false" nullable="true" comment="Expires At"/>
+        <column xsi:type="varchar" name="gateway_token" nullable="false" length="255" comment="Gateway Token"/>
+        <column xsi:type="text" name="details" nullable="true" comment="Details"/>
+        <column xsi:type="boolean" name="is_active" nullable="false" default="true"/>
+        <column xsi:type="boolean" name="is_visible" nullable="false" default="true"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="VAULT_PAYMENT_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="vault_payment_token" column="customer_id" referenceTable="customer_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" name="VAULT_PAYMENT_TOKEN_PAYMENT_METHOD_CODE_CSTR_ID_GATEWAY_TOKEN">
+            <column name="payment_method_code"/>
+            <column name="customer_id"/>
+            <column name="gateway_token"/>
+        </constraint>
+        <constraint xsi:type="unique" name="VAULT_PAYMENT_TOKEN_PUBLIC_HASH">
+            <column name="public_hash"/>
+        </constraint>
+    </table>
+    <table name="vault_payment_token_order_payment_link" resource="default" engine="innodb"
+           comment="Order payments to vault token">
+        <column xsi:type="int" name="order_payment_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Order payment Id"/>
+        <column xsi:type="int" name="payment_token_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Payment token Id"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="order_payment_id"/>
+            <column name="payment_token_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="FK_CF37B9D854256534BE23C818F6291CA2"
+                    table="vault_payment_token_order_payment_link" column="order_payment_id"
+                    referenceTable="sales_order_payment" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="FK_4ED894655446D385894580BECA993862"
+                    table="vault_payment_token_order_payment_link" column="payment_token_id"
+                    referenceTable="vault_payment_token" referenceColumn="entity_id" onDelete="CASCADE"/>
+    </table>
+</schema>

@@ -8,6 +8,7 @@ namespace Magento\Config\Block\System\Config;
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
+use Magento\Framework\App\Config\Data\ProcessorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
@@ -425,23 +426,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if ($placeholderValue) {
             $data = $placeholderValue;
         }
-        if ($data === null) {
-            if (array_key_exists($path, $this->_configData)) {
-                $data = $this->_configData[$path];
-            } elseif ($field->getConfigPath() !== null) {
-                $data = $this->getConfigValue($field->getConfigPath());
-            } else {
-                $data = $this->getConfigValue($path);
-            }
 
+        if ($data === null) {
+            $path = $field->getConfigPath() !== null ? $field->getConfigPath() : $path;
+            $data = $this->getConfigValue($path);
             if ($field->hasBackendModel()) {
                 $backendModel = $field->getBackendModel();
-                $backendModel->setPath($path)
-                    ->setValue($data)
-                    ->setWebsite($this->getWebsiteCode())
-                    ->setStore($this->getStoreCode())
-                    ->afterLoad();
-                $data = $backendModel->getValue();
+                // Backend models which implement ProcessorInterface are processed by ScopeConfigInterface
+                if (!$backendModel instanceof ProcessorInterface) {
+                    $backendModel->setPath($path)
+                        ->setValue($data)
+                        ->setWebsite($this->getWebsiteCode())
+                        ->setStore($this->getStoreCode())
+                        ->afterLoad();
+                    $data = $backendModel->getValue();
+                }
             }
         }
 
@@ -710,7 +709,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Temporary moved those $this->getRequest()->getParam('blabla') from the code accross this block
+     * Temporary moved those $this->getRequest()->getParam('blabla') from the code across this block
      * to getBlala() methods to be later set from controller with setters
      */
 

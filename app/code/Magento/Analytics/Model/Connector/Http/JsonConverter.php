@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Model\Connector\Http;
 
 use Magento\Framework\Serialize\Serializer\Json;
@@ -14,14 +16,24 @@ class JsonConverter implements ConverterInterface
 {
     /**
      * Content-Type HTTP header for json.
+     * @deprecated
+     * @see CONTENT_MEDIA_TYPE
      */
     const CONTENT_TYPE_HEADER = 'Content-Type: application/json';
+
+    /**
+     * Media-Type corresponding to this converter.
+     */
+    const CONTENT_MEDIA_TYPE = 'application/json';
 
     /**
      * @var Json
      */
     private $serializer;
 
+    /**
+     * @param Json $serializer
+     */
     public function __construct(Json $serializer)
     {
         $this->serializer = $serializer;
@@ -53,6 +65,14 @@ class JsonConverter implements ConverterInterface
      */
     public function getContentTypeHeader()
     {
-        return self::CONTENT_TYPE_HEADER;
+        return sprintf('Content-Type: %s', self::CONTENT_MEDIA_TYPE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContentMediaType(): string
+    {
+        return self::CONTENT_MEDIA_TYPE;
     }
 }

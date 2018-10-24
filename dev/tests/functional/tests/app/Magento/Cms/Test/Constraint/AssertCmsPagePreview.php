@@ -47,21 +47,21 @@ class AssertCmsPagePreview extends AbstractConstraint
         $browser->selectWindow();
 
         $fixtureContent = $cms->getContent();
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             $displayContent != null ? $displayContent : $fixtureContent['content'],
             $frontCmsPage->getCmsPageBlock()->getPageContent(),
             'Wrong content is displayed.'
         );
         if (isset($fixtureContent['widget'])) {
             foreach ($fixtureContent['widget']['dataset'] as $widget) {
-                \PHPUnit_Framework_Assert::assertTrue(
+                \PHPUnit\Framework\Assert::assertTrue(
                     $frontCmsPage->getCmsPageBlock()->isWidgetVisible($widget['widget_type'], $widget['anchor_text']),
                     'Widget \'' . $widget['widget_type'] . '\' is not displayed.'
                 );
             }
         }
         if ($cms->getContentHeading()) {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $cms->getContentHeading(),
                 $frontCmsIndex->getTitleBlock()->getTitle(),
                 'Wrong title is displayed.'

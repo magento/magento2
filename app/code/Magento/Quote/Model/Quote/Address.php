@@ -872,13 +872,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     protected function _sortRates($firstItem, $secondItem)
     {
-        if ((int)$firstItem[0]->carrier_sort_order < (int)$secondItem[0]->carrier_sort_order) {
-            return -1;
-        } elseif ((int)$firstItem[0]->carrier_sort_order > (int)$secondItem[0]->carrier_sort_order) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return (int) $firstItem[0]->carrier_sort_order <=> (int) $secondItem[0]->carrier_sort_order;
     }
 
     /**
@@ -1170,7 +1164,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getAppliedTaxes()
     {
-        return $this->serializer->unserialize($this->getData('applied_taxes'));
+        $taxes = $this->getData('applied_taxes');
+        return $taxes ? $this->serializer->unserialize($taxes) : [];
     }
 
     /**

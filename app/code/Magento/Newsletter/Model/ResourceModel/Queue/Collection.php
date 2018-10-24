@@ -70,7 +70,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Joines templates information
+     * Joins templates information
      *
      * @return $this
      */
@@ -86,7 +86,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Adds subscribers info to selelect
+     * Adds subscribers info to select
      *
      * @return $this
      */
@@ -130,7 +130,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Joines subscribers information
+     * Joins subscribers information
      *
      * @return $this
      */
@@ -142,7 +142,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Checks if field is 'subscribers_total', 'subscribers_sent'
-     * to add specific filter or adds reguler filter
+     * to add specific filter or adds regular filter
      *
      * @param string $field
      * @param null|string|array $condition
@@ -221,7 +221,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             [\Magento\Newsletter\Model\Queue::STATUS_SENDING, \Magento\Newsletter\Model\Queue::STATUS_NEVER]
         )->where(
             'main_table.queue_start_at < ?',
-            $this->_date->gmtdate()
+            $this->_date->gmtDate()
         )->where(
             'main_table.queue_start_at IS NOT NULL'
         );

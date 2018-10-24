@@ -48,7 +48,7 @@ return [
                 'type' => 'label',
                 '@' => ['type' => 'complex'],
                 'helper_block' => [
-                    'type' => \Magento\Backend\Block\Catalog\Product\Widget\Chooser::class,
+                    'type' => \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser::class,
                     'data' => ['button' => ['open' => 'Select Product...']],
                 ],
                 'visible' => '1',

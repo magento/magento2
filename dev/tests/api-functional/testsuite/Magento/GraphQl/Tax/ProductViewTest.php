@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GraphQl\Tax;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Store\Model\StoreManagerInterface;
@@ -176,11 +178,11 @@ class ProductViewTest extends GraphQlAbstract
               }
             }
             sku
-            status
             type_id
             updated_at
-            visibility
-            weight
+            ... on PhysicalProductInterface {
+                weight
+            }
         }
     }
 }
@@ -190,6 +192,11 @@ QUERY;
 
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($productSku, false, null, true);
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        $product->setId(
+            $product->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));
@@ -267,8 +274,8 @@ QUERY;
                                             'value' => 0.286501,
                                             'currency' => 'USD',
                                         ],
-                                        'code' => 'tax',
-                                        'description' => 'Included',
+                                        'code' => 'TAX',
+                                        'description' => 'INCLUDED',
                                 ],
                         ]
                     ],
@@ -285,8 +292,8 @@ QUERY;
                                             'value' => 0.750001,
                                             'currency' => 'USD',
                                         ],
-                                        'code' => 'tax',
-                                        'description' => 'Included',
+                                        'code' => 'TAX',
+                                        'description' => 'INCLUDED',
                                 ],
                         ]
                     ],
@@ -303,46 +310,19 @@ QUERY;
                                             'value' => 0.286501,
                                             'currency' => 'USD',
                                         ],
-                                        'code' => 'tax',
-                                        'description' => 'Included',
+                                        'code' => 'TAX',
+                                        'description' => 'INCLUDED',
                                 ],
                         ]
                     ],
                 ]
             ],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
-            ['response_field' => 'status', 'expected_value' => $product->getStatus()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
             ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
-            ['response_field' => 'visibility', 'expected_value' => $product->getVisibility()],
             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
         ];
 
         $this->assertResponseFields($actualResponse, $assertionMap);
-    }
-
-    /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields($actualResponse, $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            $this->assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            $this->assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
-            );
-        }
     }
 }

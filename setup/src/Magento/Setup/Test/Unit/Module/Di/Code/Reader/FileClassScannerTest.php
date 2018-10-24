@@ -204,13 +204,38 @@ PHP
         self::assertContains('This\Is\Not\My\Ns\ThisIsNotMyTest', $result);
     }
 
-    public function testClassKeywordInMiddleOfFile()
+    public function testMultipleClassKeywordsInMiddleOfFileWithStringVariableParsing()
     {
-        $filename = __DIR__
-            . '/../../../../../../../../../..'
-            . '/app/code/Magento/Catalog/Model/ResourceModel/Product/Indexer/Eav/AbstractEav.php';
-        $filename = realpath($filename);
-        $scanner = new FileClassScanner($filename);
+        $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
+            'getFileContents'
+        ])->getMock();
+        $scanner->expects(self::once())->method('getFileContents')->willReturn(<<<'PHP'
+<?php
+
+namespace This\Is\My\Ns;
+
+use stdClass;
+
+class ThisIsMyTest
+{
+    protected function firstMethod()
+    {
+        $test = 1;
+        $testString = "foo {$test}";
+        $className = stdClass::class;
+        $testString2 = "bar {$test}";
+    }
+
+    protected function secondMethod()
+    {
+        $this->doMethod(stdClass::class)->runAction();
+    }
+}
+
+PHP
+        );
+
+        /* @var $scanner FileClassScanner */
         $result = $scanner->getClassNames();
 
         self::assertCount(1, $result);

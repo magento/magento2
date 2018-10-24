@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\File;
 
-use Magento\Framework\Filesystem\DriverInterface;
-
 /**
  * File upload class
  *
@@ -118,6 +116,11 @@ class Uploader
      */
     protected $_validateCallbacks = [];
 
+    /**
+     * @var \Magento\Framework\File\Mime
+     */
+    private $fileMime;
+
     /**#@+
      * File upload type (multiple or single)
      */
@@ -133,14 +136,18 @@ class Uploader
     const TMP_NAME_EMPTY = 666;
 
     /**
-     * Max Image Width resolution in pixels. For image resizing on client side
+     * Maximum Image Width resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
-    const MAX_IMAGE_WIDTH = 1920;
+    const MAX_IMAGE_WIDTH = 4096;
 
     /**
-     * Max Image Height resolution in pixels. For image resizing on client side
+     * Maximum Image Height resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
-    const MAX_IMAGE_HEIGHT = 1200;
+    const MAX_IMAGE_HEIGHT = 2160;
 
     /**
      * Resulting of uploaded file
@@ -154,10 +161,13 @@ class Uploader
      * Init upload
      *
      * @param string|array $fileId
+     * @param \Magento\Framework\File\Mime|null $fileMime
      * @throws \Exception
      */
-    public function __construct($fileId)
-    {
+    public function __construct(
+        $fileId,
+        Mime $fileMime = null
+    ) {
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
@@ -165,6 +175,7 @@ class Uploader
         } else {
             $this->_fileExists = true;
         }
+        $this->fileMime = $fileMime ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Mime::class);
     }
 
     /**
@@ -180,8 +191,7 @@ class Uploader
     }
 
     /**
-     * Used to save uploaded file into destination folder with
-     * original or new file name (if specified)
+     * Used to save uploaded file into destination folder with original or new file name (if specified).
      *
      * @param string $destinationFolder
      * @param string $newFileName
@@ -201,7 +211,7 @@ class Uploader
         if ($this->_enableFilesDispersion) {
             $fileName = $this->correctFileNameCase($fileName);
             $this->setAllowCreateFolders(true);
-            $this->_dispretionPath = self::getDispretionPath($fileName);
+            $this->_dispretionPath = self::getDispersionPath($fileName);
             $destinationFile .= $this->_dispretionPath;
             $this->_createDestinationFolder($destinationFile);
         }
@@ -258,6 +268,8 @@ class Uploader
     }
 
     /**
+     * Set access permissions to file.
+     *
      * @param string $file
      * @return void
      *
@@ -511,7 +523,7 @@ class Uploader
      */
     private function _getMimeType()
     {
-        return $this->_file['type'];
+        return $this->fileMime->getMimeType($this->_file['tmp_name']);
     }
 
     /**
@@ -534,7 +546,7 @@ class Uploader
 
             preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
 
-            if (count($file) > 0 && count($file[0]) > 0 && count($file[1]) > 0) {
+            if (is_array($file) && count($file) > 0 && count($file[0]) > 0 && count($file[1]) > 0) {
                 array_shift($file);
                 $this->_uploadType = self::MULTIPLE_STYLE;
 
@@ -547,7 +559,7 @@ class Uploader
 
                 $fileAttributes = $tmpVar;
                 $this->_file = $fileAttributes;
-            } elseif (count($fileId) > 0 && isset($_FILES[$fileId])) {
+            } elseif (!empty($fileId) && isset($_FILES[$fileId])) {
                 $this->_uploadType = self::SINGLE_STYLE;
                 $this->_file = $_FILES[$fileId];
             } elseif ($fileId == '') {
@@ -610,8 +622,20 @@ class Uploader
      *
      * @param string $fileName
      * @return string
+     * @deprecated
      */
     public static function getDispretionPath($fileName)
+    {
+        return self::getDispersionPath($fileName);
+    }
+
+    /**
+     * Get dispertion path
+     *
+     * @param string $fileName
+     * @return string
+     */
+    public static function getDispersionPath($fileName)
     {
         $char = 0;
         $dispertionPath = '';

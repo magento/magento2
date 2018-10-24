@@ -3,11 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+declare(strict_types=1);
 namespace Magento\Tinymce3\Model\Config\Widget;
 
 /**
  * Class PlaceholderImages provide ability to override placeholder images for Widgets
+ * @deprecated
  */
 class PlaceholderImagesPool
 {
@@ -29,7 +30,7 @@ class PlaceholderImagesPool
     /**
      * @return array
      */
-    public function getWidgetPlaceholders()
+    public function getWidgetPlaceholders() : array
     {
         return $this->widgetPlaceholders;
     }
