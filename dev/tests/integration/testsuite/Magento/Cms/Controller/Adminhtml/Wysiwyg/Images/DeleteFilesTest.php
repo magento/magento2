@@ -44,6 +44,11 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+     * @var string
+     */
+    private $fullDirectoryPath;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -54,6 +59,11 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::class);
+        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/directory1';
+        $path = $this->fullDirectoryPath . '/.htaccess';
+        if (!$this->mediaDirectory->isFile($path)) {
+            $this->mediaDirectory->writeFile($path, "Order deny,allow\nDeny from all");
+        }
     }
 
     /**
@@ -104,6 +114,26 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $this->model->getStorage()->getSession()->setCurrentPath($wysiwygDir);
         $this->model->execute();
         $this->assertFalse(is_file($fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName));
+    }
+
+    /**
+     * Check that htaccess file couldn't be removed via
+     * \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::execute method
+     *
+     * @return void
+     */
+    public function testDeleteHtaccess()
+    {
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('files', [$this->imagesHelper->idEncode('.htaccess')]);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
+        $this->model->execute();
+
+        $this->assertTrue(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . '.htaccess')
+            )
+        );
     }
 
     /**
