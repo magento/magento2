@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryLowQuantityNotification\Plugin;
+namespace Magento\InventoryLowQuantityNotification\Plugin\InventoryLowQuantityNotificationApi;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
