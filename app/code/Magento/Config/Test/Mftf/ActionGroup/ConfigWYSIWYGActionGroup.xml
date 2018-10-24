@@ -28,6 +28,7 @@
     <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 3" stepKey="switchToVersion3" />
     <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions" />
     <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+    <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigurationSuccessMessage"/>
     </actionGroup>
     <actionGroup name="DisabledWYSIWYG">
         <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToConfigurationPage" />
