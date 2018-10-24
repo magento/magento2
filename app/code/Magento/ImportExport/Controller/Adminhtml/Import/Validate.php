@@ -64,7 +64,6 @@ class Validate extends ImportResultController
      * @param bool $validationResult
      * @param Result $resultBlock
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function processValidationResult($validationResult, $resultBlock)
     {
@@ -121,7 +120,6 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function addMessageToSkipErrors(Result $resultBlock)
     {
@@ -142,7 +140,6 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function addMessageForValidResult(Result $resultBlock)
     {
@@ -161,7 +158,6 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function collectErrors(Result $resultBlock)
     {

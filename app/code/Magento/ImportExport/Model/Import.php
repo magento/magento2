@@ -284,7 +284,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param string $sourceFile Full path to source file
      * @return \Magento\ImportExport\Model\Import\AbstractSource
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function _getSourceAdapter($sourceFile)
     {
@@ -300,7 +299,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param ProcessingErrorAggregatorInterface $validationResult
      * @return string[]
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getOperationResultMessages(ProcessingErrorAggregatorInterface $validationResult)
     {
@@ -397,7 +395,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Returns number of checked entities.
      *
      * @return int
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getProcessedEntitiesCount()
     {
@@ -408,7 +405,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Returns number of checked rows.
      *
      * @return int
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getProcessedRowsCount()
     {
@@ -464,7 +460,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
     /**
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function processImport()
     {
@@ -493,7 +488,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Import possibility getter.
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function isImportAllowed()
     {
@@ -591,7 +585,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param string $sourceFile
      * @return $this
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function _removeBom($sourceFile)
     {
@@ -611,7 +604,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param \Magento\ImportExport\Model\Import\AbstractSource $source
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateSource(\Magento\ImportExport\Model\Import\AbstractSource $source)
     {
@@ -651,7 +643,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Invalidate indexes by process codes.
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function invalidateIndex()
     {
@@ -717,7 +708,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * )
      *
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getUniqueEntityBehaviors()
     {
@@ -808,7 +798,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Get count of created items
      *
      * @return int
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCreatedItemsCount()
     {
@@ -819,7 +808,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Get count of updated items
      *
      * @return int
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getUpdatedItemsCount()
     {
@@ -830,7 +818,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Get count of deleted items
      *
      * @return int
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getDeletedItemsCount()
     {
