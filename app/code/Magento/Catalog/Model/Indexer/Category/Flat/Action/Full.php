@@ -183,7 +183,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         foreach ($this->storeManager->getStores() as $store) {
             $actualStoreTables[] = sprintf(
                 '%s_store_%s',
-                $this->connection->getTableName('catalog_category_flat'), $store->getId()
+                $this->connection->getTableName('catalog_category_flat'),
+                $store->getId()
             );
         }
 
