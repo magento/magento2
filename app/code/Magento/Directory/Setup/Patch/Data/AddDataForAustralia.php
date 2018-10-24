@@ -27,8 +27,6 @@ class AddDataForAustralia implements DataPatchInterface, PatchVersionInterface
     private $dataInstallerFactory;
 
     /**
-     * AddDataForCroatia constructor.
-     *
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
      */
@@ -54,7 +52,7 @@ class AddDataForAustralia implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * Croatian states data.
+     * Australian states data.
      *
      * @return array
      */
