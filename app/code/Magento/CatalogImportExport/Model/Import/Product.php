@@ -1640,7 +1640,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
                 $rowScope = $this->getRowScope($rowData);
 
-                $rowData[self::URL_KEY] = $this->getUrlKey($rowData);
+                $urlKey = $this->getUrlKey($rowData);
+                if (!empty($urlKey)) {
+                    $rowData[self::URL_KEY] = $urlKey;
+                }
 
                 $rowSku = $rowData[self::COL_SKU];
 
@@ -2548,7 +2551,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function isNeedToValidateUrlKey($rowData)
     {
-        return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
+        $urlKey = $this->getUrlKey($rowData);
+
+        return (!empty($urlKey))
             && (empty($rowData[self::COL_VISIBILITY])
             || $rowData[self::COL_VISIBILITY]
             !== (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
@@ -2867,7 +2872,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return $this->productUrl->formatUrlKey($rowData[self::URL_KEY]);
         }
 
-        if (!empty($rowData[self::COL_NAME])) {
+        /**
+         * If the product exists, assume it already has a URL Key and even
+         * if a name is provided in the import data, it should not be used
+         * to overwrite that existing URL Key the product already has.
+         */
+        $isSkuExist = $this->isSkuExist($rowData[self::COL_SKU]);
+        if (!$isSkuExist && !empty($rowData[self::COL_NAME])) {
             return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
         }
 
