@@ -657,9 +657,9 @@ class TypeProcessor
         $aliases = $this->getAliasMapping($sourceClass);
 
         $namespace = $sourceClass->getNamespaceName();
-        $fqClassName = $this->getAliasedClassName($basicTypeName, $namespace, $aliases);
+        $fqClassName = '\\' . $this->getAliasedClassName($basicTypeName, $namespace, $aliases);
 
-        if (class_exists($fqClassName)) {
+        if (interface_exists($fqClassName) || class_exists($fqClassName)) {
             return $fqClassName . ($isArray ? '[]' : '');
         }
 
