@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
 
 /**
- * Catalog product SKU backend attribute model.
+ * Catalog product SKU backend attribute model
+ *
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
