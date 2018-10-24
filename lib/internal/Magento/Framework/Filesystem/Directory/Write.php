@@ -193,13 +193,13 @@ class Write extends Read implements WriteInterface
             } catch (FileSystemException $e) {
                 $exceptionMessages[] = $e->getMessage();
             }
-        }
-        if (!empty($exceptionMessages)) {
-            throw new FileSystemException(
-                new \Magento\Framework\Phrase(
-                    \implode(' ', $exceptionMessages)
-                )
-            );
+            if (!empty($exceptionMessages)) {
+                throw new FileSystemException(
+                    new \Magento\Framework\Phrase(
+                        \implode(' ', $exceptionMessages)
+                    )
+                );
+            }
         }
         return true;
     }

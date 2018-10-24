@@ -405,14 +405,14 @@ class File implements DriverInterface
         $iterator = new \FilesystemIterator($path, $flags);
         /** @var \FilesystemIterator $entity */
         foreach ($iterator as $entity) {
-            if ($entity->isDir()) {
-                try {
+            try {
+                if ($entity->isDir()) {
                     $this->deleteDirectory($entity->getPathname());
-                } catch (FileSystemException $exception) {
-                    $exceptionMessages[] = $exception->getMessage();
+                } else {
+                    $this->deleteFile($entity->getPathname());
                 }
-            } else {
-                $this->deleteFile($entity->getPathname());
+            } catch (FileSystemException $exception) {
+                $exceptionMessages[] = $exception->getMessage();
             }
         }
         if (!empty($exceptionMessages)) {
