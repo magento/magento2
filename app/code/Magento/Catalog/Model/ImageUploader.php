@@ -283,6 +283,7 @@ class ImageUploader
 
     /**
      * Get the final filename to use when the image is saved
+     *
      * @param string $imageName
      * @return string
      */
