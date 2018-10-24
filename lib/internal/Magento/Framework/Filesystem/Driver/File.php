@@ -895,6 +895,7 @@ class File implements DriverInterface
 
     /**
      * Fixes path separator
+     *
      * Utility method.
      *
      * @param string $path
