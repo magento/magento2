@@ -142,7 +142,10 @@ class Configurable
             $generatedProductIds = $this->variationHandler->generateSimpleProducts($product, $variationsMatrix);
             $associatedProductIds = array_merge($associatedProductIds, $generatedProductIds);
         }
-        $extensionAttributes->setConfigurableProductLinks(array_filter($associatedProductIds));
+        
+        if (is_array($associatedProductIds)) {
+            $extensionAttributes->setConfigurableProductLinks(array_filter($associatedProductIds));
+        }
     }
 
     /**
@@ -158,7 +161,7 @@ class Configurable
             $configurableMatrix = json_decode($configurableMatrix, true);
 
             foreach ($configurableMatrix as $item) {
-                if ($item['newProduct']) {
+                if (isset($item['newProduct'])) {
                     $result[$item['variationKey']] = $this->mapData($item);
 
                     if (isset($item['qty'])) {
