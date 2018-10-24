@@ -144,6 +144,10 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
      */
     protected function changeStructureOfTheData(array $data): array
     {
+        if (!isset($data['options'])) {
+            return $data;
+        }
+
         $serializedOptions = $this->getSerializeOptions($data['options']);
         if ($serializedOptions) {
             $data['serialized_options'] = $serializedOptions;
