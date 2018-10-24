@@ -536,38 +536,13 @@ class TypeProcessor
     }
 
     /**
-     * Resolve fully qualified type name in the class alias context
+     * Get alias mapping for source class
      *
      * @param ClassReflection $sourceClass
-     * @param string $typeName
-     * @return string
+     * @return array
      */
-    private function resolveFullyQualifiedClassName(ClassReflection $sourceClass, string $typeName): string
+    public function getAliasMapping(ClassReflection $sourceClass): array
     {
-        $typeName = trim($typeName);
-
-        // Not a class, but a basic type
-        if ((strtolower($typeName[0])) === $typeName[0]) {
-            return $typeName;
-        }
-
-        // Split array suffix
-        if (preg_match('/^(.+?)\[\]$/', $typeName, $matches)) {
-            $typeName = $matches[1];
-            $arraySuffix = '[]';
-        } else {
-            $arraySuffix = '';
-        }
-
-        // If class exists, then return it
-        try {
-            new ClassReflection($typeName);
-            return $typeName . $arraySuffix;
-        } catch (\ReflectionException $e) {
-            unset($e);
-        }
-
-        // Extract alias mapping
         $sourceFileName = $sourceClass->getDeclaringFile();
         $aliases = [];
         foreach ($sourceFileName->getUses() as $use) {
@@ -581,27 +556,114 @@ class TypeProcessor
             }
         }
 
-        // Resolve FQN
-        $namespace = $sourceClass->getNamespaceName();
+        return $aliases;
+    }
 
-        $pos = strpos($typeName, '\\');
-        if ($pos === 0) {
-            return substr($typeName, 1);
-        }
+    /**
+     * Return true if the passed type is a simple type
+     *
+     * eg.:
+     * Return true with; array, string, ...
+     * Return false with: SomeClassName
+     *
+     * @param string $typeName
+     * @return bool
+     */
+    public function isSimpleType(string $typeName): bool
+    {
+        return strtolower($typeName) === $typeName;
+    }
 
+    /**
+     * Get basic type for a class name
+     *
+     * eg.:
+     * SomeClassName[] => SomeClassName
+     *
+     * @param string $className
+     * @return string
+     */
+    public function getBasicClassName(string $className): string
+    {
+        $pos = strpos($className, '[');
+        return ($pos === false) ? $className : substr($className, 0, $pos);
+    }
+
+    /**
+     * Return true if it is a FQ class name
+     *
+     * eg.:
+     * SomeClassName => false
+     * \My\NameSpace\SomeClassName => true
+     *
+     * @param string $className
+     * @return bool
+     */
+    public function isFullyQualifiedClassName(string $className): bool
+    {
+        return strpos($className, '\\') === 0;
+    }
+
+    /**
+     * Get aliased class name
+     *
+     * @param string $className
+     * @param string $namespace
+     * @param array $aliases
+     * @return string
+     */
+    private function getAliasedClassName(string $className, string $namespace, array $aliases): string
+    {
+        $pos = strpos($className, '\\');
         if ($pos === false) {
-            $namespacePrefix = $typeName;
+            $namespacePrefix = $className;
             $partialClassName = '';
         } else {
-            $namespacePrefix = substr($typeName, 0, $pos);
-            $partialClassName = substr($typeName, $pos);
+            $namespacePrefix = substr($className, 0, $pos);
+            $partialClassName = substr($className, $pos);
         }
 
         if (isset($aliases[$namespacePrefix])) {
-            return $aliases[$namespacePrefix] . $partialClassName . $arraySuffix;
+            return $aliases[$namespacePrefix] . $partialClassName;
         }
 
-        return $namespace . '\\' . $typeName . $arraySuffix;
+        return $namespace . '\\' . $className;
+    }
+
+    /**
+     * Resolve fully qualified type name in the class alias context
+     *
+     * @param ClassReflection $sourceClass
+     * @param string $typeName
+     * @return string
+     */
+    public function resolveFullyQualifiedClassName(ClassReflection $sourceClass, string $typeName): string
+    {
+        $typeName = trim($typeName);
+
+        // Simple way to understand it is a basic type or a class name
+        if ($this->isSimpleType($typeName)) {
+            return $typeName;
+        }
+
+        $basicTypeName = $this->getBasicClassName($typeName);
+
+        // Already a FQN class name
+        if ($this->isFullyQualifiedClassName($basicTypeName)) {
+            return substr($typeName, 1);
+        }
+
+        $isArray = $this->isArrayType($typeName);
+        $aliases = $this->getAliasMapping($sourceClass);
+
+        $namespace = $sourceClass->getNamespaceName();
+        $fqClassName = $this->getAliasedClassName($basicTypeName, $namespace, $aliases);
+
+        if (class_exists($fqClassName)) {
+            return $fqClassName . ($isArray ? '[]' : '');
+        }
+
+        return $typeName;
     }
 
     /**
