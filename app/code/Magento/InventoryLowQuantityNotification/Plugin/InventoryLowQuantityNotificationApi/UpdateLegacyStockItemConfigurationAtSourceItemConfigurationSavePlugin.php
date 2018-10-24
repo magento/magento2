@@ -96,6 +96,10 @@ class UpdateLegacyStockItemConfigurationAtSourceItemConfigurationSavePlugin
             $sourceItemsConfigurationToUpdate[$sourceItemConfiguration->getSku()] = $sourceItemConfigurationData;
         }
 
+        if (empty($sourceItemsConfigurationToUpdate)) {
+            return;
+        }
+
         $productIds = $this->getProductIdsBySkus->execute($skus);
 
         foreach ($sourceItemsConfigurationToUpdate as $sku => &$sourceItemConfiguration) {
