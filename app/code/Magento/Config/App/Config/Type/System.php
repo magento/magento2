@@ -140,7 +140,8 @@ class System implements ConfigTypeInterface
      */
     private function mergeData(array $newData): void
     {
-        return $this->data = array_merge_recursive($this->data, $newData);
+        $this->data = array_replace_recursive($this->data, $newData);
+        return;
         if (array_key_exists(ScopeInterface::SCOPE_DEFAULT, $newData)) {
             //Sometimes new data may contain links to arrays and we don't want that.
             $this->data[ScopeInterface::SCOPE_DEFAULT] = (array)$newData[ScopeInterface::SCOPE_DEFAULT];
