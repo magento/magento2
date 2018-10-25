@@ -45,7 +45,7 @@ matrix:
     - php: 7.1
       env: TEST_SUITE=functional
     - php: 7.1
-      env: TEST_SUITE=api-functional
+      env: TEST_SUITE=graphql-api-functional
 cache:
   apt: true
   directories:

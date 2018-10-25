@@ -158,7 +158,6 @@ case $TEST_SUITE in
         echo "Prepare api-functional tests for running"
         cd dev/tests/api-functional
         cp -r _files/Magento/* ../../../app/code/Magento # Deploy and enable test modules before running tests
-        php ../../../bin/magento setup:upgrade
 
         cp ./phpunit_graphql.xml.dist ./phpunit.xml
         sed -e "s?magento.url?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
