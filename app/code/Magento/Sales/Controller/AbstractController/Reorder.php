@@ -7,6 +7,7 @@
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Registry;
 use Magento\Framework\Exception\NotFoundException;
@@ -42,7 +43,7 @@ abstract class Reorder extends Action\Action
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
-        $this->formKeyValidator = $formKeyValidator;
+        $this->formKeyValidator = $formKeyValidator ?: ObjectManager::getInstance()->create(Validator::class);
         parent::__construct($context);
     }
 
