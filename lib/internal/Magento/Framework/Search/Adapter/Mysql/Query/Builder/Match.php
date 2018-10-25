@@ -15,9 +15,11 @@ use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 /**
- * Class for building select where condition.
+ * MySQL search query match.
  *
  * @api
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class Match implements QueryInterface
 {

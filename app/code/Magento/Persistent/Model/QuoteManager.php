@@ -109,7 +109,7 @@ class QuoteManager
     public function convertCustomerCartToGuest()
     {
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
+        $quote = $this->quoteRepository->get($this->checkoutSession->getQuoteId());
         if ($quote && $quote->getId()) {
             $this->_setQuotePersistent = false;
             $quote->setIsActive(true)

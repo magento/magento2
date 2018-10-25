@@ -20,7 +20,6 @@ define([
 
     return function (config) {
         var optionPanel = jQuery('#manage-options-panel'),
-            optionsValues = [],
             editForm = jQuery('#edit_form'),
             attributeOption = {
                 table: $('attribute-options-table'),
@@ -145,7 +144,9 @@ define([
 
                     return optionDefaultInputType;
                 }
-            };
+            },
+            tableBody = jQuery(),
+            activePanelClass = 'selected-type-options';
 
         if ($('add_new_option_button')) {
             Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption, {}, true));
@@ -180,30 +181,32 @@ define([
                 });
             });
         }
-        editForm.on('submit', function () {
-            optionPanel.find('input')
-                .each(function () {
-                    if (this.disabled) {
-                        return;
-                    }
+        editForm.on('beforeSubmit', function () {
+            var optionContainer = optionPanel.find('table tbody'),
+                optionsValues;
 
-                    if (this.type === 'checkbox' || this.type === 'radio') {
-                        if (this.checked) {
-                            optionsValues.push(this.name + '=' + jQuery(this).val());
-                        }
-                    } else {
-                        optionsValues.push(this.name + '=' + jQuery(this).val());
+            if (optionPanel.hasClass(activePanelClass)) {
+                optionsValues = jQuery.map(
+                    optionContainer.find('tr'),
+                    function (row) {
+                        return jQuery(row).find('input, select, textarea').serialize();
                     }
-                });
-            jQuery('<input>')
-                .attr({
-                    type: 'hidden',
-                    name: 'serialized_options'
-                })
-                .val(JSON.stringify(optionsValues))
-                .prependTo(editForm);
-            optionPanel.find('table')
-                .replaceWith(jQuery('<div>').text(jQuery.mage.__('Sending attribute values as package.')));
+                );
+                jQuery('<input>')
+                    .attr({
+                        type: 'hidden',
+                        name: 'serialized_options'
+                    })
+                    .val(JSON.stringify(optionsValues))
+                    .prependTo(editForm);
+            }
+            tableBody = optionContainer.detach();
+        });
+        editForm.on('afterValidate.error highlight.validate', function () {
+            if (optionPanel.hasClass(activePanelClass)) {
+                optionPanel.find('table').append(tableBody);
+                jQuery('input[name="serialized_options"]').remove();
+            }
         });
         window.attributeOption = attributeOption;
         window.optionDefaultInputType = attributeOption.getOptionInputType();

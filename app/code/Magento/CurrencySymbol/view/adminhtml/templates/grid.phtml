@@ -23,10 +23,9 @@
             </label>
             <div class="admin__field-control">
                 <input id="custom_currency_symbol<?= /* @escapeNotVerified */ $code ?>"
-                       class="required-entry admin__control-text"
+                       class="required-entry admin__control-text <?= $data['inherited'] ? 'disabled' : '' ?>"
                        type="text"
                        value="<?= $block->escapeHtmlAttr($data['displaySymbol']) ?>"
-                       <?= $data['inherited'] ? ' disabled="disabled"' : '' ?>
                        name="custom_currency_symbol[<?= /* @escapeNotVerified */ $code ?>]">
                 <div class="admin__field admin__field-option">
                     <input id="custom_currency_symbol_inherit<?= /* @escapeNotVerified */ $code ?>"
@@ -49,16 +48,18 @@ require(['jquery', "mage/mage", 'prototype'], function(jQuery){
 
     function toggleUseDefault(code, value)
     {
-        checkbox = $('custom_currency_symbol_inherit'+code);
-        input = $('custom_currency_symbol'+code);
-        if (checkbox.checked) {
-            input.value = value;
-            input.disabled = true;
+        checkbox = jQuery('#custom_currency_symbol_inherit'+code);
+        input = jQuery('#custom_currency_symbol'+code);
+
+        if (checkbox.is(':checked')) {
+            input.addClass('disabled');
+            input.val(value);
+            input.prop('readonly', true);
         } else {
-            input.disabled = false;
+            input.removeClass('disabled');
+            input.prop('readonly', false);
         }
     }
-
     window.toggleUseDefault = toggleUseDefault;
 });
 </script>
