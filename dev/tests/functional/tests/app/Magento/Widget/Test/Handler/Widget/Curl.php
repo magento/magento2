@@ -177,7 +177,7 @@ class Curl extends AbstractCurl
                 throw new \Exception('Method for prepare page group "' . $method . '" is not exist.');
             }
             $widgetInstances[$key]['page_group'] = $pageGroup;
-            $widgetInstances[$key][$pageGroup] = $this->$method($widgetInstance);
+            $widgetInstances[$key][$pageGroup] = $this->{$method}($widgetInstance);
             if (!isset($widgetInstance[$pageGroup]['page_id'])) {
                 $widgetInstances[$key][$pageGroup]['page_id'] = 0;
             }

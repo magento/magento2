@@ -67,7 +67,7 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
     public function testAssertCode($method)
     {
         $object = new DirectoryList('/root/dir');
-        $object->$method('foo');
+        $object->{$method}('foo');
     }
 
     /**

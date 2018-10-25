@@ -92,7 +92,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $setterMethodName = 'setDefault' . ucfirst($addressType);
 
         $customer = $this->customerRepository->get('customer@example.com');
-        $customer->$setterMethodName($secondFixtureAddressId);
+        $customer->{$setterMethodName}($secondFixtureAddressId);
         $this->customerRepository->save($customer);
 
         /** @var Customer $customerModel */
@@ -102,7 +102,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $customerSession = $this->objectManager->get(Session::class);
         $customerSession->setCustomer($customerModel);
 
-        $addressId = $this->model->$methodName();
+        $addressId = $this->model->{$methodName}();
         $address = $this->addressRepository->getById($addressId);
 
         self::assertEquals($secondFixtureAddressId, $address->getId(), "Invalid address loaded.");
@@ -114,9 +114,9 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
         /** Ensure that results are cached properly by changing default address and invoking SUT once again */
         $firstFixtureAddressId = 1;
-        $customer->$setterMethodName($firstFixtureAddressId);
+        $customer->{$setterMethodName}($firstFixtureAddressId);
         $this->customerRepository->save($customer);
-        $addressId = $this->model->$methodName();
+        $addressId = $this->model->{$methodName}();
 
         $address = $this->addressRepository->getById($addressId);
 
@@ -147,7 +147,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $firstFixtureAddressStreet = ['Green str, 67'];
         $customer = $this->customerRepository->get('customer@example.com');
         $methodName = 'setDefault' . ucfirst($addressType);
-        $customer->$methodName(null);
+        $customer->{$methodName}(null);
         $this->customerRepository->save($customer);
 
         /** @var Customer $customerModel */
@@ -158,7 +158,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $customerSession->setCustomer($customerModel);
 
         $methodName = 'getCustomerDefault' . ucfirst($addressType) . 'Address';
-        $addressId = $this->model->$methodName();
+        $addressId = $this->model->{$methodName}();
         $address = $this->addressRepository->getById($addressId);
 
         self::assertEquals($firstFixtureAddressId, $address->getId(), "Invalid address loaded.");
@@ -197,7 +197,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $customerSession->setCustomer($customerModel);
 
         $methodName = 'getCustomerDefault' . ucfirst($addressType) . 'Address';
-        $address = $this->model->$methodName();
+        $address = $this->model->{$methodName}();
 
         self::assertNull($address, "When customer has no addresses, null is expected.");
     }
@@ -433,7 +433,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     {
         foreach ($expected as $key => $item) {
             $methodName = 'get' . ucfirst($key);
-            self::assertEquals($item, $address->$methodName(), 'The "'. $key . '" does not match.');
+            self::assertEquals($item, $address->{$methodName}(), 'The "'. $key . '" does not match.');
         }
     }
 
@@ -455,7 +455,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             $isFound = true;
             foreach ($searchAddress as $key => $item) {
                 $methodName = 'get' . ucfirst($key);
-                $isFound = $isFound ? $item === $quoteAddress->$methodName() : false;
+                $isFound = $isFound ? $item === $quoteAddress->{$methodName}() : false;
             }
             if ($isFound) {
                 return true;

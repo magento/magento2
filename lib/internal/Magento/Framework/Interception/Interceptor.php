@@ -118,7 +118,7 @@ trait Interceptor
                 foreach ($currentPluginInfo[DefinitionInterface::LISTENER_BEFORE] as $code) {
                     $pluginInstance = $pluginList->getPlugin($type, $code);
                     $pluginMethod = 'before' . $capMethod;
-                    $beforeResult = $pluginInstance->$pluginMethod($this, ...array_values($arguments));
+                    $beforeResult = $pluginInstance->{$pluginMethod}($this, ...array_values($arguments));
 
                     if ($beforeResult !== null) {
                         $arguments = (array)$beforeResult;
@@ -132,7 +132,7 @@ trait Interceptor
                 $pluginInfo = $pluginList->getNext($type, $method, $code);
                 $pluginInstance = $pluginList->getPlugin($type, $code);
                 $pluginMethod = 'around' . $capMethod;
-                $result = $pluginInstance->$pluginMethod($subject, $next, ...array_values($arguments));
+                $result = $pluginInstance->{$pluginMethod}($subject, $next, ...array_values($arguments));
             } else {
                 // Call original method
                 $result = $subject->___callParent($method, $arguments);
@@ -143,7 +143,7 @@ trait Interceptor
                 foreach ($currentPluginInfo[DefinitionInterface::LISTENER_AFTER] as $code) {
                     $pluginInstance = $pluginList->getPlugin($type, $code);
                     $pluginMethod = 'after' . $capMethod;
-                    $result = $pluginInstance->$pluginMethod($subject, $result, ...array_values($arguments));
+                    $result = $pluginInstance->{$pluginMethod}($subject, $result, ...array_values($arguments));
                 }
             }
 

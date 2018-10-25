@@ -64,7 +64,7 @@ class ShipmentGetTest extends WebapiAbstract
                         $methodName = 'get' .
                             SimpleDataObjectConverter::snakeCaseToUpperCamelCase($extensionAttributeKey);
                         $this->assertEquals(
-                            $shipment->getExtensionAttributes()->$methodName(),
+                            $shipment->getExtensionAttributes()->{$methodName}(),
                             $extensionAttributeValue
                         );
                     }

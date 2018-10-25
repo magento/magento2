@@ -26,7 +26,7 @@ class CallableMethod implements DirectiveInterface
         foreach (explode('.', $directive[1]) as $method) {
             $methodName = substr($method, 0, strpos($method, '('));
             if (is_callable([$object, $methodName])) {
-                $result = $object->$methodName();
+                $result = $object->{$methodName}();
                 if (is_scalar($result)) {
                     break;
                 }

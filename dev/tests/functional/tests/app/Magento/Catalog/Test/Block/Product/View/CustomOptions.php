@@ -156,7 +156,7 @@ class CustomOptions extends Form
             $typeMethod = preg_replace('/[^a-zA-Z]/i', '', $this->getOptionType($option['type']));
             $getTypeData = 'get' . ucfirst(strtolower($typeMethod)) . 'Data';
 
-            $optionData = $this->$getTypeData($optionElement);
+            $optionData = $this->{$getTypeData}($optionElement);
             $optionData['title'] = $title;
             $optionData['type'] = $option['type'];
             $optionData['is_require'] = $optionElement->find($this->required, Locator::SELECTOR_XPATH)->isVisible()

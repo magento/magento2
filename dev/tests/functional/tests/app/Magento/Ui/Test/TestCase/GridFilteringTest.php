@@ -89,7 +89,7 @@ class GridFilteringTest extends Injectable
         // Steps
         $page->open();
         /** @var DataGrid $gridBlock */
-        $gridBlock = $page->$gridRetriever();
+        $gridBlock = $page->{$gridRetriever}();
         $gridBlock->resetFilter();
 
         $filterResults = [];
@@ -110,7 +110,7 @@ class GridFilteringTest extends Injectable
                     $idsInGrid = $filteredTargetIds;
                 }
                 $filteredIds = $this->getActualIds($idsInGrid, $items, $idGetter);
-                $filterResults[$items[$index]->$idGetter()][$itemFiltersName] = $filteredIds;
+                $filterResults[$items[$index]->{$idGetter}()][$itemFiltersName] = $filteredIds;
             }
         }
 
@@ -127,8 +127,8 @@ class GridFilteringTest extends Injectable
     {
         $actualIds = [];
         foreach ($items as $item) {
-            if (in_array($item->$idGetter(), $ids)) {
-                $actualIds[] = $item->$idGetter();
+            if (in_array($item->{$idGetter}(), $ids)) {
+                $actualIds[] = $item->{$idGetter}();
             }
         }
         return  $actualIds;

@@ -115,7 +115,7 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
     protected function performAction($actionName)
     {
         if (method_exists(__CLASS__, $actionName)) {
-            $this->$actionName();
+            $this->{$actionName}();
         }
     }
 

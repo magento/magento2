@@ -154,7 +154,7 @@ class Curl extends AbstractCurl implements OrderInjectableInterface
             if (!method_exists($this, $methodName)) {
                 $methodName = 'prepareSimpleData';
             }
-            $result['item'][$value->getId()] = $this->$methodName($value);
+            $result['item'][$value->getId()] = $this->{$methodName}($value);
         }
         return $result;
     }

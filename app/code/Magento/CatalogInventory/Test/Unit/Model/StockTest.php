@@ -119,7 +119,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
             })
         );
             
-        $this->stockModel->$methodName();
+        $this->stockModel->{$methodName}();
         $this->assertTrue(
             ($isCalledWithRightPrefix && $isObjectNameRight),
             sprintf('Event "%s" with object name "%s" doesn\'t dispatched properly', $eventName, $objectName)

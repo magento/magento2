@@ -89,7 +89,7 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
                 $store->getCode()
             );
-            $storeConfig->$methodName($configValue);
+            $storeConfig->{$methodName}($configValue);
         }
 
         $storeConfig->setBaseUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, false));

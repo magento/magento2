@@ -67,10 +67,10 @@ $number = is_object($track) ? $track->getTracking() : $track['number'];
             </tr>
         <?php else: ?>
             <?php foreach ($fields as $title => $property): ?>
-                <?php if (!empty($track->$property())): ?>
+                <?php if (!empty($track->{$property}())): ?>
                     <tr>
                         <th class="col label" scope="row"><?= /* @noEscape */ $block->escapeHtml(__($title . ':')) ?></th>
-                        <td class="col value"><?= $block->escapeHtml($track->$property()) ?></td>
+                        <td class="col value"><?= $block->escapeHtml($track->{$property}()) ?></td>
                     </tr>
                 <?php endif;?>
             <?php endforeach; ?>

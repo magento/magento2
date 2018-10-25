@@ -212,7 +212,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
         if ($sharedStoreIds) {
             $quote->setSharedStoreIds($sharedStoreIds);
         }
-        $quote->setStoreId($this->storeManager->getStore()->getId())->$loadMethod($identifier);
+        $quote->setStoreId($this->storeManager->getStore()->getId())->{$loadMethod}($identifier);
         if (!$quote->getId()) {
             throw NoSuchEntityException::singleField($loadField, $identifier);
         }

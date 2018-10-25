@@ -46,7 +46,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterCanEmailToFriend($result, $callSendfriend)
     {
-        $this->sendfriendModel->expects($this->$callSendfriend())->method('canEmailToFriend')
+        $this->sendfriendModel->expects($this->{$callSendfriend}())->method('canEmailToFriend')
             ->will($this->returnValue(true));
 
         $this->assertTrue($this->view->afterCanEmailToFriend($this->productView, $result));

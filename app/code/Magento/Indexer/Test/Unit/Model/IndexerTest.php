@@ -435,7 +435,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
 
         $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
         $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue($status));
-        $this->assertEquals(true, $this->model->$method());
+        $this->assertEquals(true, $this->model->{$method}());
     }
 
     /**

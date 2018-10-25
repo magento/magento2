@@ -90,7 +90,7 @@ class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleIndex->open();
         $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule, null, $replace);
-        $this->catalogRuleNew->getFormPageActions()->$saveAction();
+        $this->catalogRuleNew->getFormPageActions()->{$saveAction}();
 
         if ($isCronEnabled) {
             $cron->run();

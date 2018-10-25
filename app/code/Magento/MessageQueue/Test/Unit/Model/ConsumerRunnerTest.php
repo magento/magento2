@@ -75,7 +75,7 @@ class ConsumerRunnerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($consumerMock);
         $this->maintenanceModeMock->expects($this->once())->method('isOn')->willReturn($isMaintenanceModeOn);
 
-        $this->consumerRunner->$consumerName();
+        $this->consumerRunner->{$consumerName}();
     }
 
     /**
@@ -94,7 +94,7 @@ class ConsumerRunnerTest extends \PHPUnit\Framework\TestCase
             ->with($consumerName)
             ->willThrowException(new LocalizedException(new Phrase("Some exception")));
 
-        $this->consumerRunner->$consumerName();
+        $this->consumerRunner->{$consumerName}();
     }
 
     /**
@@ -116,6 +116,6 @@ class ConsumerRunnerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($consumerMock);
         $this->maintenanceModeMock->expects($this->once())->method('isOn')->willReturn($isMaintenanceModeOn);
 
-        $this->consumerRunner->$consumerName();
+        $this->consumerRunner->{$consumerName}();
     }
 }

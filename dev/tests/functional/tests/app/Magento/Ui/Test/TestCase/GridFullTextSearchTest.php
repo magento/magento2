@@ -89,12 +89,12 @@ class GridFullTextSearchTest extends Injectable
         // Steps
         $page->open();
         /** @var DataGrid $gridBlock */
-        $gridBlock = $page->$gridRetriever();
+        $gridBlock = $page->{$gridRetriever}();
         $gridBlock->resetFilter();
 
         $filterResults = [];
         foreach ($items as $item) {
-            $gridBlock->fullTextSearch($item->$fieldGetter());
+            $gridBlock->fullTextSearch($item->{$fieldGetter}());
             $idsInGrid = $gridBlock->getAllIds();
             if ($idColumn) {
                 $filteredTargetIds = [];
@@ -104,7 +104,7 @@ class GridFullTextSearchTest extends Injectable
                 $idsInGrid = $filteredTargetIds;
             }
             $filteredIds = $this->getActualIds($idsInGrid, $items, $idGetter);
-            $filterResults[$item->$idGetter()] = $filteredIds;
+            $filterResults[$item->{$idGetter}()] = $filteredIds;
         }
 
         return ['results' => $filterResults];
@@ -120,8 +120,8 @@ class GridFullTextSearchTest extends Injectable
     {
         $actualIds = [];
         foreach ($items as $item) {
-            if (in_array($item->$idGetter(), $ids)) {
-                $actualIds[] = $item->$idGetter();
+            if (in_array($item->{$idGetter}(), $ids)) {
+                $actualIds[] = $item->{$idGetter}();
             }
         }
         return  $actualIds;

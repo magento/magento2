@@ -17,7 +17,7 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $matcher = $data['matcher'];
-        $eavProcessorMock->expects($this->$matcher())
+        $eavProcessorMock->expects($this->{$matcher}())
             ->method('markIndexerAsInvalid');
 
         $subjectMock = $this->getMockBuilder(\Magento\Store\Model\ResourceModel\Store::class)
