@@ -33,7 +33,7 @@ env:
 #    - TEST_SUITE=integration INTEGRATION_INDEX=2
 #    - TEST_SUITE=integration INTEGRATION_INDEX=3
 #    - TEST_SUITE=functional
-    - TEST_SUITE=api-functional
+    - TEST_SUITE=graphql-api-functional
 matrix:
   exclude:
     - php: 7.1
@@ -66,4 +66,4 @@ script:
   - if [ $TEST_SUITE == "functional" ]; then dev/tests/functional/vendor/phpunit/phpunit/phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
   - if [ $TEST_SUITE != "functional" ] && [ $TEST_SUITE != "js"] && [ $TEST_SUITE != "api" ]; then phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
   - if [ $TEST_SUITE == "js" ]; then grunt $GRUNT_COMMAND; fi
-  - if [ $TEST_SUITE == "api-functional" ]; then phpunit -c dev/tests/api-functional; fi
+  - if [ $TEST_SUITE == "graphql-api-functional" ]; then phpunit -c dev/tests/api-functional; fi
