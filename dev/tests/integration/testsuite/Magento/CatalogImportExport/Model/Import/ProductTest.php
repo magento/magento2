@@ -431,7 +431,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'Append behavior with new product' => [
                 'importFile' => 'product_with_custom_options_new.csv',
                 'sku' => 'simple_new',
-                'expectedOptionsQty' => 4,
+                'expectedOptionsQty' => 5,
             ],
         ];
     }
