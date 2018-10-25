@@ -57,9 +57,8 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     {
         if (!($this->securityCookie instanceof SecurityCookie)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
-        } else {
-            return $this->securityCookie;
         }
+        return $this->securityCookie;
     }
 
     /**
