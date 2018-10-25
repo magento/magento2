@@ -41,4 +41,11 @@
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product attribute." stepKey="successMessage"/>
     </actionGroup>
+    <actionGroup name="deleteProductAttribute" extends="navigateToCreatedProductAttribute">
+        <click selector="{{AttributePropertiesSection.DeleteAttribute}}" stepKey="deleteAttribute"/>
+        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="ClickOnDeleteButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}"
+                    stepKey="waitForSuccessMessage"/>
+    </actionGroup>
 </actionGroups>
