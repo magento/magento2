@@ -252,7 +252,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
     public function registerIds($productIds)
     {
         $this->_getResource()->registerIds($this, $productIds);
-        $this->_getSession()->unsData($this->_countCacheKey);
+        $this->_getSession()->unsetData($this->_countCacheKey);
         return $this;
     }
 }

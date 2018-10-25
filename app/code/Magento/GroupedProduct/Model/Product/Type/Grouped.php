@@ -236,7 +236,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function flushAssociatedProductsCache($product)
     {
-        return $product->unsData($this->_keyAssociatedProducts);
+        return $product->unsetData($this->_keyAssociatedProducts);
     }
 
     /**
