@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Registry;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Controller\ResultFactory;
 
 abstract class Reorder extends Action\Action
 {
@@ -57,7 +58,11 @@ abstract class Reorder extends Action\Action
         if ($this->getRequest()->isPost()) {
             if (!$this->formKeyValidator->validate($this->getRequest())) {
                 $this->messageManager->addErrorMessage(__('Invalid Form Key. Please refresh the page.'));
-                $this->_redirect('*/*/');
+
+                /** @var \Magento\Framework\Controller\Result\Redirect $redirect */
+                $redirect=$this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+                $redirect->setRefererUrl();
+                return $redirect;
             }
         } else {
             throw new NotFoundException(__('Page not found.'));
