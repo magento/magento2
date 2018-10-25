@@ -144,7 +144,8 @@ class Config
      */
     public function getStatusLabel($code)
     {
-        return $this->getStatusLabelForArea($code, $this->state->getAreaCode());
+        $area = $this->state->getAreaCode() ?: \Magento\Framework\App\Area::AREA_FRONTEND;
+        return $this->getStatusLabelForArea($code, $area);
     }
 
     /**
