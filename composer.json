@@ -89,7 +89,8 @@
         "phpmd/phpmd": "@stable",
         "phpunit/phpunit": "~6.5.0",
         "sebastian/phpcpd": "~3.0.0",
-        "squizlabs/php_codesniffer": "3.3.1"
+        "squizlabs/php_codesniffer": "3.3.1",
+        "allure-framework/allure-phpunit": "~1.2.0"
     },
     "suggest": {
         "ext-pcntl": "Need for run processes in parallel mode"
