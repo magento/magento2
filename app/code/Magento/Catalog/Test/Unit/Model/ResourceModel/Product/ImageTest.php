@@ -131,7 +131,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             return $result;
         };
 
-        $getAllProductImagesSelectFetchResults = function ($batchSize): array {
+        $getFetchResults = function ($batchSize): array {
             $result = [];
             $count = $batchSize;
             while ($count) {
@@ -146,7 +146,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('select')
             ->willReturn($this->getVisibleImagesSelectMock());
 
-        $fetchResult = $getAllProductImagesSelectFetchResults($this->batchSize);
+        $fetchResult = $getFetchResults($this->batchSize);
         $this->connectionMock->expects($this->exactly($this->imagesCount / $this->batchSize))
             ->method('fetchAll')
             ->willReturn($fetchResult);
