@@ -650,7 +650,7 @@ class TypeProcessor
 
         // Already a FQN class name
         if ($this->isFullyQualifiedClassName($basicTypeName)) {
-            return substr($typeName, 1);
+            return '\\' . substr($typeName, 1);
         }
 
         $isArray = $this->isArrayType($typeName);
