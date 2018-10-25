@@ -8,7 +8,6 @@
 namespace Magento\Framework\Interception\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
 
 class Config implements \Magento\Framework\Interception\ConfigInterface
 {
@@ -35,7 +34,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
 
     /**
      * Cache
-     *
+     * @deprecated
      * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_cache;
@@ -74,33 +73,24 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     protected $_scopeList;
 
     /**
-     * @var SerializerInterface
+     * @var CacheManager
      */
-    private $serializer;
-
-    /**
-     * @var \Magento\Framework\App\ObjectManager\ConfigWriterInterface
-     */
-    private $configWriter;
-
-    /**
-     * @var \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled
-     */
-    private $compiledLoader;
+    private $cacheManager;
 
     /**
      * Config constructor
      *
      * @param \Magento\Framework\Config\ReaderInterface $reader
      * @param \Magento\Framework\Config\ScopeListInterface $scopeList
-     * @param \Magento\Framework\Cache\FrontendInterface $cache
+     * @param \Magento\Framework\Cache\FrontendInterface $cache @deprecated
      * @param \Magento\Framework\ObjectManager\RelationsInterface $relations
      * @param \Magento\Framework\Interception\ObjectManager\ConfigInterface $omConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions
      * @param string $cacheId
-     * @param SerializerInterface|null $serializer
-     * @param \Magento\Framework\App\ObjectManager\ConfigWriterInterface $configWriter
-     * @param \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled $compiledLoader
+     * @param SerializerInterface|null $serializer @deprecated
+     * @param CacheManager $cacheManager
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $reader,
@@ -111,8 +101,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         $cacheId = 'interception',
         SerializerInterface $serializer = null,
-        \Magento\Framework\App\ObjectManager\ConfigWriterInterface $configWriter = null,
-        \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled $compiledLoader = null
+        CacheManager $cacheManager = null
     ) {
         $this->_omConfig = $omConfig;
         $this->_relations = $relations;
@@ -121,14 +110,9 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         $this->_cacheId = $cacheId;
         $this->_reader = $reader;
         $this->_scopeList = $scopeList;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(Serialize::class);
-        $this->configWriter = $configWriter ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem::class);
-        $this->compiledLoader = $compiledLoader ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class);
-        $intercepted = $this->loadIntercepted();
-        if ($intercepted !== false) {
+        $this->cacheManager = $cacheManager ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CacheManager::class);
+        $intercepted = $this->cacheManager->load($cacheId);
+        if ($intercepted !== null) {
             $this->_intercepted = $intercepted;
         } else {
             $this->initializeUncompiled($this->_classDefinitions->getClasses());
@@ -145,7 +129,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     {
         $this->generateIntercepted($classDefinitions);
 
-        $this->configWriter->write($this->_cacheId, $this->_intercepted);
+        $this->cacheManager->saveCompiled($this->_cacheId, $this->_intercepted);
     }
 
     /**
@@ -199,11 +183,11 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      */
     private function initializeUncompiled($classDefinitions = [])
     {
-        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$this->_cacheId]);
+        $this->cacheManager->clean($this->_cacheId);
 
         $this->generateIntercepted($classDefinitions);
 
-        $this->_cache->save($this->serializer->serialize($this->_intercepted), $this->_cacheId);
+        $this->cacheManager->save($this->_cacheId, $this->_intercepted);
     }
 
     /**
@@ -229,30 +213,5 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         foreach ($classDefinitions as $class) {
             $this->hasPlugins($class);
         }
-    }
-
-    /**
-     * Load the interception config from cache
-     *
-     * @return array|false
-     */
-    private function loadIntercepted()
-    {
-        if ($this->isCompiled()) {
-            return $this->compiledLoader->load($this->_cacheId);
-        }
-
-        $intercepted = $this->_cache->load($this->_cacheId);
-        return $intercepted ? $this->serializer->unserialize($intercepted) : false;
-    }
-
-    /**
-     * Check for the compiled config with the generated metadata
-     *
-     * @return bool
-     */
-    private function isCompiled()
-    {
-        return file_exists(\Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::getFilePath($this->_cacheId));
     }
 }

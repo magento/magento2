@@ -59,7 +59,8 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
         $areaList->expects($this->any())->method('getCodes')->will($this->returnValue([]));
         $configScope = new \Magento\Framework\Config\Scope($areaList, 'global');
         $cache = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
-        $cache->expects($this->any())->method('load')->will($this->returnValue(false));
+        $cacheManager = $this->createMock(\Magento\Framework\Interception\Config\CacheManager::class);
+        $cacheManager->method('load')->willReturn(null);
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
         $relations = new \Magento\Framework\ObjectManager\Relations\Runtime();
         $interceptionConfig = new Config\Config(
@@ -68,7 +69,10 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
             $cache,
             $relations,
             $config,
-            $definitions
+            $definitions,
+            'interception',
+            null,
+            $cacheManager
         );
         $interceptionDefinitions = new Definition\Runtime();
         $json = new \Magento\Framework\Serialize\Serializer\Json();

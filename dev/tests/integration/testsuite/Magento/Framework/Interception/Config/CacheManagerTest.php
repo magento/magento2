@@ -10,7 +10,7 @@ namespace Magento\Framework\Interception\Config;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class CacheManagerTest extends \PHPUnit\Framework\TestCase
 {
     const CACHE_ID = 'interceptiontest';
 
@@ -68,9 +68,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->configWriter->write(self::CACHE_ID, $testConfig);
         $config = $this->getConfig();
 
-        foreach ($testConfig as $className => $hasPlugins) {
-            $this->assertEquals($hasPlugins, $config->hasPlugins($className));
-        }
+        $this->assertEquals($testConfig, $config->load(self::CACHE_ID));
     }
 
     /**
@@ -83,9 +81,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->cache->save($this->serializer->serialize($testConfig), self::CACHE_ID);
         $config = $this->getConfig();
 
-        foreach ($testConfig as $className => $hasPlugins) {
-            $this->assertEquals($hasPlugins, $config->hasPlugins($className));
-        }
+        $this->assertEquals($testConfig, $config->load(self::CACHE_ID));
     }
 
     public function interceptionCompiledConfigDataProvider()
@@ -121,16 +117,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * from altering the interception config that may have been generated during application
      * installation. Inject a new instance of the compileLoaded to bypass it's caching.
      *
-     * @return \Magento\Framework\Interception\Config\Config
+     * @return \Magento\Framework\Interception\Config\CacheManager
      */
     private function getConfig()
     {
         return $this->objectManager->create(
-            \Magento\Framework\Interception\Config\Config::class,
+            \Magento\Framework\Interception\Config\CacheManager::class,
             [
                 'cacheId' => self::CACHE_ID,
                 'compiledLoader' => $this->objectManager->create(\Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class),
-                'serializer' => $this->serializer,
             ]
         );
     }
