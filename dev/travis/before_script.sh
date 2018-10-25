@@ -138,25 +138,27 @@ case $TEST_SUITE in
     api-functional)
         echo "Installing Magento"
         mysql -uroot -e 'CREATE DATABASE magento2;'
-        php bin/magento setup:install -q \
-            --language="en_US" \
-            --timezone="UTC" \
-            --currency="USD" \
-            --base-url="http://${MAGENTO_HOST_NAME}/" \
-            --admin-firstname="John" \
-            --admin-lastname="Doe" \
-            --backend-frontname="backend" \
-            --admin-email="admin@example.com" \
-            --admin-user="admin" \
-            --use-rewrites=1 \
-            --admin-use-security-key=0 \
-            --admin-password="123123q"
+#        php bin/magento setup:install -q \
+#            --language="en_US" \
+#            --timezone="UTC" \
+#            --currency="USD" \
+#            --base-url="http://${MAGENTO_HOST_NAME}/" \
+#            --admin-firstname="John" \
+#            --admin-lastname="Doe" \
+#            --backend-frontname="backend" \
+#            --admin-email="admin@example.com" \
+#            --admin-user="admin" \
+#            --use-rewrites=1 \
+#            --admin-use-security-key=0 \
+#            --admin-password="123123q"
 
-        echo "Enabling production mode"
-        php bin/magento deploy:mode:set production
+#        echo "Enabling production mode"
+#        php bin/magento deploy:mode:set production
 
         echo "Prepare api-functional tests for running"
         cd dev/tests/api-functional
+        cp config/install-config-mysql.php.dist config/install-config-mysql.php
+        sed -e "s?http://localhost/?http://${MAGENTO_HOST_NAME}/?g" --in-place ./config/install-config-mysql.php
 
         cp ./phpunit_graphql.xml.dist ./phpunit.xml
         sed -e "s?magento.url?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
