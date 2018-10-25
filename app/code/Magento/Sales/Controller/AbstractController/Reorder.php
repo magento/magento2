@@ -7,6 +7,7 @@
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Registry;
 use Magento\Framework\Exception\NotFoundException;
 
@@ -23,17 +24,25 @@ abstract class Reorder extends Action\Action
     protected $_coreRegistry;
 
     /**
+     * @var Validator
+     */
+    private $formKeyValidator;
+
+    /**
      * @param Action\Context $context
      * @param OrderLoaderInterface $orderLoader
      * @param Registry $registry
+     * @param Validator|null $formKeyValidator
      */
     public function __construct(
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
-        Registry $registry
+        Registry $registry,
+        Validator $formKeyValidator = null
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
+        $this->formKeyValidator = $formKeyValidator;
         parent::__construct($context);
     }
 
@@ -44,7 +53,7 @@ abstract class Reorder extends Action\Action
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost()) {
+        if (!$this->getRequest()->isPost() || !$this->formKeyValidator->validate($this->getRequest())) {
             throw new NotFoundException(__('Page not found.'));
             return;
         }
