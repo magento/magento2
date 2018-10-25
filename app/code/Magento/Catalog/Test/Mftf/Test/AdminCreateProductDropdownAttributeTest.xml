@@ -55,7 +55,7 @@
                    userInput="Fish &amp; Chips" stepKey="fillAdminValue2"/>
 
         <!-- Save the new product attribute -->
-        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave1"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave1"/>
         <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}"
                                stepKey="waitForSuccessMessage"/>
 

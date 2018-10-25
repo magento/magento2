@@ -60,7 +60,7 @@
         <scrollToTopOfPage stepKey="scrollToTop"/>
 
         <!-- Save the new product attribute -->
-        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave1"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave1"/>
         <waitForElementVisible selector="{{AdminMessagesSection.error}}" stepKey="waitForError"/>
 
         <!-- Fill options data -->
@@ -96,7 +96,7 @@
         <click selector="{{AdminManageSwatchSection.nthIsDefault('2')}}" stepKey="setSecondOptionAsDefault"/>
 
         <!-- Save the new product attribute -->
-        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave2"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave2"/>
         <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}"
                                stepKey="waitForSuccessMessage"/>
 
