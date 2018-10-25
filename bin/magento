@@ -30,3 +30,4 @@ try {
     }
     exit(Magento\Framework\Console\Cli::RETURN_FAILURE);
 }
+?>
