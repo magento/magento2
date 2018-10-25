@@ -78,7 +78,10 @@ class Blocks implements ResolverInterface
         $blocksData = [];
         try {
             foreach ($blockIdentifiers as $blockIdentifier) {
-                $blocksData[$blockIdentifier] = $this->blockDataProvider->getData($blockIdentifier);
+                $blockData = $this->blockDataProvider->getData($blockIdentifier);
+                if (!empty($blockData)) {
+                    $blocksData[$blockIdentifier] = $blockData;
+                }
             }
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);

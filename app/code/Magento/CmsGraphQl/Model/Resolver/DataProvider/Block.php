@@ -49,7 +49,7 @@ class Block
         $block = $this->blockRepository->getById($blockIdentifier);
 
         if (false === $block->isActive()) {
-            throw new NoSuchEntityException();
+            return [];
         }
 
         $renderedContent = $this->widgetFilter->filter($block->getContent());
