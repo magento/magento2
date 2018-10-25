@@ -22,16 +22,16 @@
     </entity>
 
     <entity name="PersistentLogoutClearEnabled" type="persistent_config_state">
-        <requiredEntity type="persistent_options_logout_clear">persistentEnabledLogoutClear</requiredEntity>
+        <requiredEntity type="persistent_options_logout_clear">PersistentEnabledLogoutClear</requiredEntity>
     </entity>
-    <entity name="persistentEnabledLogoutClear" type="logout_clear">
+    <entity name="PersistentEnabledLogoutClear" type="logout_clear">
         <data key="value">1</data>
     </entity>
 
     <entity name="PersistentLogoutClearDisable" type="persistent_config_state">
-        <requiredEntity type="persistent_options_logout_clear">persistentDisableLogoutClear</requiredEntity>
+        <requiredEntity type="persistent_options_logout_clear">PersistentDisableLogoutClear</requiredEntity>
     </entity>
-    <entity name="persistentDisableLogoutClear" type="logout_clear">
+    <entity name="PersistentDisableLogoutClear" type="logout_clear">
         <data key="value">0</data>
     </entity>
 </entities>
