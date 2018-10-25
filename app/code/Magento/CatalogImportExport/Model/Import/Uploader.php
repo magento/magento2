@@ -113,15 +113,15 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         \Magento\Framework\Filesystem\File\ReadFactory $readFactory,
         $filePath = null
     ) {
-        if ($filePath !== null) {
-            $this->_setUploadFile($filePath);
-        }
         $this->_imageFactory = $imageFactory;
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;
         $this->_validator = $validator;
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->_readFactory = $readFactory;
+        if ($filePath !== null) {
+            $this->_setUploadFile($filePath);
+        }
     }
 
     /**
