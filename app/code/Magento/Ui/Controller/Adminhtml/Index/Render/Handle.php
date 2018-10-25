@@ -55,7 +55,7 @@ class Handle extends AbstractAction
         $context = $this->contextFactory->create(
             [
                 'namespace' => $namespace,
-                'pageLayout' => $layout
+                'pageLayout' => $layout,
             ]
         );
 
@@ -79,7 +79,7 @@ class Handle extends AbstractAction
      * @param mixed $dataProviderConfigData
      * @return bool
      */
-    private function validateAclResource($dataProviderConfigData)
+    private function validateAclResource($dataProviderConfigData): bool
     {
         if (isset($dataProviderConfigData['aclResource'])
             && !$this->_authorization->isAllowed($dataProviderConfigData['aclResource'])
@@ -87,6 +87,7 @@ class Handle extends AbstractAction
             if (!$this->_request->isAjax()) {
                 $this->_redirect('admin/denied');
             }
+
             return false;
         }
 
