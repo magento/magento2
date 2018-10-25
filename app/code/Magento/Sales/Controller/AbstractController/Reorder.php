@@ -54,9 +54,13 @@ abstract class Reorder extends Action\Action
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost() || !$this->formKeyValidator->validate($this->getRequest())) {
+        if ($this->getRequest()->isPost()) {
+            if (!$this->formKeyValidator->validate($this->getRequest())) {
+                $this->messageManager->addErrorMessage(__('Invalid Form Key. Please refresh the page.'));
+                $this->_redirect('*/*/');
+            }
+        } else {
             throw new NotFoundException(__('Page not found.'));
-            return;
         }
 
         $result = $this->orderLoader->load($this->_request);
