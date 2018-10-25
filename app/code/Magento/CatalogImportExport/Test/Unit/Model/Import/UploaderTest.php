@@ -179,13 +179,13 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 '$fileUrl' => 'http://test_uploader_file',
                 '$expectedHost' => 'test_uploader_file',
                 '$expectedFileName' => 'httptest_uploader_file',
-                '$checkAllowedExtension' => 0
+                '$checkAllowedExtension' => 0,
             ],
             [
                 '$fileUrl' => 'https://!:^&`;file',
                 '$expectedHost' => '!:^&`;file',
                 '$expectedFileName' => 'httpsfile',
-                '$checkAllowedExtension' => 0
+                '$checkAllowedExtension' => 0,
             ],
         ];
     }
