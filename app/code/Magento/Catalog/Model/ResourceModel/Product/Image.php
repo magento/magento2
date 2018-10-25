@@ -77,7 +77,13 @@ class Image
      */
     public function getCountAllProductImages(): int
     {
-        $select = $this->getVisibleImagesSelect()->reset('columns')->columns('count(*)');
+        $select = $this->getVisibleImagesSelect()
+            ->reset('columns')
+            ->reset('distinct')
+            ->columns(
+                new \Zend_Db_Expr('count(distinct value)')
+            );
+
         return (int) $this->connection->fetchOne($select);
     }
 
