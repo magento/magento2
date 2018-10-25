@@ -478,11 +478,13 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
                 $captchaTargetFormName
             );
 
-            $isCorrectCaptcha = $captchaModel->isCorrect($word);
-            $this->logCaptchaAttempt($captchaModel, $captchaTargetFormName);
+            if ($word) {
+                $isCorrectCaptcha = $captchaModel->isCorrect($word);
+                $this->logCaptchaAttempt($captchaModel);
 
-            if (!$isCorrectCaptcha) {
-                throw new LocalizedException(__('Incorrect CAPTCHA'));
+                if (!$isCorrectCaptcha) {
+                    throw new LocalizedException(__('Incorrect CAPTCHA'));
+                }
             }
         }
 
