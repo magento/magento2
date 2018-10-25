@@ -399,10 +399,7 @@ class Eav extends AbstractModifier
 
             foreach ($attributes as $attribute) {
                 if (null !== ($attributeValue = $this->setupAttributeData($attribute))) {
-                    if ($attribute->getFrontendInput() === 'price'
-                        && is_scalar($attributeValue)
-                        && !$this->isBundleSpecialPrice($attribute)
-                    ) {
+                    if ($this->isPriceAttribute($attribute, $attributeValue)) {
                         $attributeValue = $this->formatPrice($attributeValue);
                     }
                     $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
@@ -411,6 +408,20 @@ class Eav extends AbstractModifier
         }
 
         return $data;
+    }
+
+    /**
+     * Obtain if given attribute is a price
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @param string|integer $attributeValue
+     * @return bool
+     */
+    private function isPriceAttribute(ProductAttributeInterface $attribute, $attributeValue)
+    {
+        return $attribute->getFrontendInput() === 'price'
+            && is_scalar($attributeValue)
+            && !$this->isBundleSpecialPrice($attribute);
     }
 
     /**
