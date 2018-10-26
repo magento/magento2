@@ -822,7 +822,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $flatArray = [];
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $flatArray = array_merge($flatArray, $this->multiToFlatArray($value));
+                $flatArray = $flatArray + $this->multiToFlatArray($value);
             } else {
                 $flatArray[$key] = $value;
             }
