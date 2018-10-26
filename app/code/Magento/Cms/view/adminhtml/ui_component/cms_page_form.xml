@@ -207,7 +207,7 @@
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>int</dataType>
-                <label translate="true">Store View </label>
+                <label translate="true">Store View</label>
                 <dataScope>store_id</dataScope>
             </settings>
             <formElements>
