@@ -49,6 +49,13 @@ class Storage
     private $customerCollectionFactory;
 
     /**
+     * Customer collection.
+     *
+     * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
+     */
+    private $_customerCollection;
+
+    /**
      * @param CustomerCollectionFactory $collectionFactory
      * @param CollectionByPagesIteratorFactory $colIteratorFactory
      * @param array $data
