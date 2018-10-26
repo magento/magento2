@@ -75,6 +75,7 @@ define([
          */
         initElement: function (elem) {
             elem.initContainer(this);
+
             elem.on({
                 'update': this.onChildrenUpdate,
                 'loading': this.onContentLoading,
@@ -160,6 +161,7 @@ define([
                 hasErrors = this._isChildrenHasErrors(hasErrors, this);
             }
             this.error(hasErrors || message);
+
             if (hasErrors || message) {
                 this.open();
             }
