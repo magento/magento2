@@ -163,16 +163,12 @@ define([
                     data[elementName + '[' + option + ']'] = option;
                 });
             } else {
-                if (elementValue) { //eslint-disable-line no-lonely-if
-                    if (elementName.substr(elementName.length - 2) == '[]') { //eslint-disable-line eqeqeq, max-depth
-                        elementName = elementName.substring(0, elementName.length - 2);
+                if (elementName.substr(elementName.length - 2) == '[]') { //eslint-disable-line eqeqeq, max-depth
+                    elementName = elementName.substring(0, elementName.length - 2);
 
-                        if (elementValue) { //eslint-disable-line max-depth
-                            data[elementName + '[' + elementValue + ']'] = elementValue;
-                        }
-                    } else {
-                        data[elementName] = elementValue;
-                    }
+                    data[elementName + '[' + elementValue + ']'] = elementValue;
+                } else {
+                    data[elementName] = elementValue;
                 }
             }
 
