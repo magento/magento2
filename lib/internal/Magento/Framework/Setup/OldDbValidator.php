@@ -47,7 +47,7 @@ class OldDbValidator implements UpToDateValidatorInterface
                 $requiredVersion = $versionParser->parseConstraints('>' . $error[DbVersionInfo::KEY_REQUIRED]);
                 if ($requiredVersion->matches($currentVersion)) {
                     $codebaseUpdateNeeded = true;
-                };
+                }
 
                 $messages[] = sprintf(
                     "<info>%20s %10s: %11s  ->  %-11s</info>",
