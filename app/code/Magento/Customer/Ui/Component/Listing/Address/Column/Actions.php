@@ -89,10 +89,7 @@ class Actions extends Column
                         'label' => __('Set as default shipping'),
                         'confirm' => [
                             'title' => __('Set address as default shipping'),
-                            'message' => __(
-                                'Are you sure you want to set the address with ID: %1 as default shipping address?',
-                                $item['entity_id']
-                            )
+                            'message' => __('Are you sure you want to set the address as default shipping address?')
                         ]
                     ];
 
@@ -104,10 +101,7 @@ class Actions extends Column
                         'label' => __('Set as default billing'),
                         'confirm' => [
                             'title' => __('Set address as default billing'),
-                            'message' => __(
-                                'Are you sure you want to set the address with ID: %1 as default billing address?',
-                                $item['entity_id']
-                            )
+                            'message' => __('Are you sure you want to set the address as default billing address?')
                         ]
                     ];
 
@@ -119,10 +113,7 @@ class Actions extends Column
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete address'),
-                            'message' => __(
-                                'Are you sure you want to delete the address with ID: %1?',
-                                $item['entity_id']
-                            )
+                            'message' => __('Are you sure you want to delete the address?')
                         ]
                     ];
                 }
