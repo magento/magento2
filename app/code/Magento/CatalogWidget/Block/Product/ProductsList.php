@@ -410,6 +410,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
+     * Get widget block name
+     *
      * @return string
      */
     private function getWidgetPagerBlockName()

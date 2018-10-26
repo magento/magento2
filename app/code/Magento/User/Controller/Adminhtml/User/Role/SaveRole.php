@@ -15,6 +15,8 @@ use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
 
 /**
+ * Save role controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements HttpPostActionInterface
@@ -150,6 +152,8 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
     }
 
     /**
+     * Process previous users
+     *
      * @param \Magento\Authorization\Model\Role $role
      * @return $this
      * @throws \Exception
@@ -206,6 +210,8 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
     }
 
     /**
+     * Save data to session and redirect
+     *
      * @param \Magento\Authorization\Model\Role $role
      * @param array $data
      * @param \Magento\Backend\Model\View\Result\Redirect $resultRedirect

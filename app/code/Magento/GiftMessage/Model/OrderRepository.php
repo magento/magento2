@@ -74,7 +74,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function get($orderId)
     {
@@ -98,7 +98,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function save($orderId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
     {

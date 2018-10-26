@@ -74,7 +74,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function get($cartId, $itemId)
     {
@@ -103,7 +103,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function save($cartId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage, $itemId)
     {

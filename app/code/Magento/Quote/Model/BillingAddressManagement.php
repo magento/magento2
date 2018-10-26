@@ -14,7 +14,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Quote billing address write service object.
- *
  */
 class BillingAddressManagement implements BillingAddressManagementInterface
 {
@@ -70,7 +69,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
@@ -92,7 +91,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function get($cartId)
     {
@@ -101,6 +100,8 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     }
 
     /**
+     * Get shipping address assignment
+     *
      * @return \Magento\Quote\Model\ShippingAddressAssignment
      * @deprecated 100.2.0
      */

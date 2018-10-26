@@ -61,6 +61,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Text validation
+     *
      * @param mixed $attrCode
      * @param string $type
      * @return bool
@@ -108,6 +110,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Numeric validation
+     *
      * @param mixed $attrCode
      * @param string $type
      * @return bool
@@ -135,6 +139,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Is required attribute valid
+     *
      * @param string $attrCode
      * @param array $attributeParams
      * @param array $rowData
@@ -162,6 +168,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Is attribute valid
+     *
      * @param string $attrCode
      * @param array $attrParams
      * @param array $rowData
@@ -258,6 +266,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Set invalid attribute
+     *
      * @param string|null $attribute
      * @return void
      * @since 100.1.0
@@ -268,6 +278,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Get invalid attribute
+     *
      * @return string
      * @since 100.1.0
      */
@@ -277,6 +289,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Is valid attributes
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -303,7 +317,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {
@@ -334,6 +348,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Init
+     *
      * @param \Magento\CatalogImportExport\Model\Import\Product $context
      * @return $this
      */

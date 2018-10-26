@@ -38,6 +38,7 @@ class ProductCategoryCondition implements CustomConditionInterface
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     * @param \Magento\Catalog\Model\CategoryRepository $categoryRepository
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,

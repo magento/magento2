@@ -84,7 +84,6 @@ class ProductCategoryList
                 'intval',
                 $this->productResource->getConnection()->fetchCol($unionSelect)
             );
-
         }
 
         return $this->categoryIdList[$productId];

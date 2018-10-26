@@ -14,7 +14,7 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
 {
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -30,6 +30,8 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
     }
 
     /**
+     * Add stores to result
+     *
      * @return void
      */
     private function addStoresToResult()
@@ -56,6 +58,8 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
     }
 
     /**
+     * Get stores for agreements
+     *
      * @return array
      */
     private function getStoresForAgreements()

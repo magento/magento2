@@ -15,6 +15,8 @@ use Magento\Sales\Model\ValidatorInterface;
 class CanInvoice implements ValidatorInterface
 {
     /**
+     * Validate
+     *
      * @param OrderInterface $entity
      * @return array
      */
@@ -32,6 +34,8 @@ class CanInvoice implements ValidatorInterface
     }
 
     /**
+     * Is state ready for invoice
+     *
      * @param OrderInterface $order
      * @return bool
      */
@@ -50,6 +54,8 @@ class CanInvoice implements ValidatorInterface
     }
 
     /**
+     * Can invoice
+     *
      * @param OrderInterface $order
      * @return bool
      */
