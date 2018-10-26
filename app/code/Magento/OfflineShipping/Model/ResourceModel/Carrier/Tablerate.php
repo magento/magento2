@@ -220,7 +220,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
-    private function importData(array $fields, array $values)
+    public function importData(array $fields, array $values)
     {
         $connection = $this->getConnection();
         $connection->beginTransaction();
