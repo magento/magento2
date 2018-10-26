@@ -60,7 +60,7 @@
                 <dataType>text</dataType>
             </settings>
         </field>
-        <field name="default_shipping" sortOrder="0" formElement="checkbox">
+        <field name="default_billing" sortOrder="1" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="default" xsi:type="number">0</item>
@@ -68,8 +68,8 @@
             </argument>
             <settings>
                 <dataType>boolean</dataType>
-                <label translate="true">Default Shipping Address</label>
-                <dataScope>default_shipping</dataScope>
+                <label translate="true">Default Billing Address</label>
+                <dataScope>default_billing</dataScope>
             </settings>
             <formElements>
                 <checkbox>
@@ -83,7 +83,7 @@
                 </checkbox>
             </formElements>
         </field>
-        <field name="default_billing" sortOrder="1" formElement="checkbox">
+        <field name="default_shipping" sortOrder="0" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="default" xsi:type="number">0</item>
@@ -91,8 +91,8 @@
             </argument>
             <settings>
                 <dataType>boolean</dataType>
-                <label translate="true">Default Billing Address</label>
-                <dataScope>default_billing</dataScope>
+                <label translate="true">Default Shipping Address</label>
+                <dataScope>default_shipping</dataScope>
             </settings>
             <formElements>
                 <checkbox>

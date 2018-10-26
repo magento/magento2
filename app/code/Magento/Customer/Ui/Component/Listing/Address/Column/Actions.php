@@ -81,18 +81,6 @@ class Actions extends Column
                         'hidden' => false,
                     ];
 
-                    $item[$name]['set_default_shipping'] = [
-                        'href' => $this->urlBuilder->getUrl(
-                            self::CUSTOMER_ADDRESS_PATH_DEFAULT_SHIPPING,
-                            ['parent_id' => $item['parent_id'], 'id' => $item['entity_id']]
-                        ),
-                        'label' => __('Set as default shipping'),
-                        'confirm' => [
-                            'title' => __('Set address as default shipping'),
-                            'message' => __('Are you sure you want to set the address as default shipping address?')
-                        ]
-                    ];
-
                     $item[$name]['set_default_billing'] = [
                         'href' => $this->urlBuilder->getUrl(
                             self::CUSTOMER_ADDRESS_PATH_DEFAULT_BILLING,
@@ -102,6 +90,18 @@ class Actions extends Column
                         'confirm' => [
                             'title' => __('Set address as default billing'),
                             'message' => __('Are you sure you want to set the address as default billing address?')
+                        ]
+                    ];
+
+                    $item[$name]['set_default_shipping'] = [
+                        'href' => $this->urlBuilder->getUrl(
+                            self::CUSTOMER_ADDRESS_PATH_DEFAULT_SHIPPING,
+                            ['parent_id' => $item['parent_id'], 'id' => $item['entity_id']]
+                        ),
+                        'label' => __('Set as default shipping'),
+                        'confirm' => [
+                            'title' => __('Set address as default shipping'),
+                            'message' => __('Are you sure you want to set the address as default shipping address?')
                         ]
                     ];
 
