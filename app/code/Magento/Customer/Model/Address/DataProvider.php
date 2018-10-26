@@ -384,7 +384,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Check whether the specific attribute can be shown in form: customer registration, customer edit, etc...
      *
-     * @param Attribute $customerAttribute
+     * @param AbstractAttribute $customerAttribute
      * @return bool
      */
     private function canShowAttributeInForm(AbstractAttribute $customerAttribute): bool

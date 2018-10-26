@@ -539,29 +539,4 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
             ];
         }
     }
-
-    /**
-     * Prepare address data
-     *
-     * @param int $addressId
-     * @param array $addresses
-     * @param array $customer
-     * @return void
-     */
-    protected function prepareAddressData($addressId, array &$addresses, array $customer)
-    {
-        if (isset($customer['default_billing'])
-            && $addressId == $customer['default_billing']
-        ) {
-            $addresses[$addressId]['default_billing'] = $customer['default_billing'];
-        }
-        if (isset($customer['default_shipping'])
-            && $addressId == $customer['default_shipping']
-        ) {
-            $addresses[$addressId]['default_shipping'] = $customer['default_shipping'];
-        }
-        if (isset($addresses[$addressId]['street']) && !\is_array($addresses[$addressId]['street'])) {
-            $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
-        }
-    }
 }
