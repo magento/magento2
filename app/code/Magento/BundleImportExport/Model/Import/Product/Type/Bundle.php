@@ -779,7 +779,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     private function getStoreIdByCode(string $storeCode): int
     {
-        if (!isset($this->storeIdToCode[$storeCode])) {
+        if (!isset($this->storeCodeToId[$storeCode])) {
             /** @var $store \Magento\Store\Model\Store */
             foreach ($this->storeManager->getStores() as $store) {
                 $this->storeCodeToId[$store->getCode()] = $store->getId();
