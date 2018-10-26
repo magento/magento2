@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Emulation model
- */
 namespace Magento\Store\Model\App;
 
 use \Magento\Framework\App\Area;
 
+/**
+ * Environment emulation model
+ */
 class EnvironmentEmulation extends \Magento\Framework\DataObject implements \Magento\Store\Model\App\EmulationInterface
 {
     /**
@@ -188,9 +188,7 @@ class EnvironmentEmulation extends \Magento\Framework\DataObject implements \Mag
     }
 
     /**
-     * Checks whether the environment is being emulated
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isEnvironmentEmulated()
     {

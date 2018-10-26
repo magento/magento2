@@ -74,7 +74,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     protected $_appState;
 
     /**
-     * @var \Magento\Store\Model\App\EnvironmentEmulation
+     * @var \Magento\Store\Model\App\EmulationInterface
      */
     private $appEmulation;
 
@@ -86,7 +86,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
      * @param array $themes
-     * @param \Magento\Store\Model\App\EnvironmentEmulation $appEmulation
+     * @param \Magento\Store\Model\App\EmulationInterface $appEmulation
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -96,7 +96,7 @@ class Design implements \Magento\Framework\View\DesignInterface
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\State $appState,
         array $themes,
-        \Magento\Store\Model\App\EnvironmentEmulation $appEmulation = null
+        \Magento\Store\Model\App\EmulationInterface $appEmulation = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_flyweightFactory = $flyweightFactory;
@@ -106,7 +106,7 @@ class Design implements \Magento\Framework\View\DesignInterface
         $this->_themes = $themes;
         $this->objectManager = $objectManager;
         $this->appEmulation = $appEmulation
-            ?? $objectManager->get(\Magento\Store\Model\App\EnvironmentEmulation::class);
+            ?? $objectManager->get(\Magento\Store\Model\App\EmulationInterface::class);
     }
 
     /**
@@ -130,7 +130,6 @@ class Design implements \Magento\Framework\View\DesignInterface
      */
     public function getArea()
     {
-        // In order to support environment emulation of area, if area is set, return it
         if ($this->_area
             && (!$this->_appState->isAreaCodeEmulated() || $this->appEmulation->isEnvironmentEmulated())
         ) {

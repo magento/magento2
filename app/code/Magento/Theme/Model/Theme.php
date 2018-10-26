@@ -90,7 +90,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     protected $inheritanceSequence;
 
     /**
-     * @var \Magento\Store\Model\App\EnvironmentEmulation
+     * @var \Magento\Store\Model\App\EmulationInterface
      */
     private $appEmulation;
 
@@ -108,7 +108,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $resourceCollection
      * @param array $data
      * @param ThemeFactory $themeModelFactory
-     * @param \Magento\Store\Model\App\EnvironmentEmulation $appEmulation
+     * @param \Magento\Store\Model\App\EmulationInterface $appEmulation
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -123,7 +123,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         ThemeCollection $resourceCollection = null,
         array $data = [],
         ThemeFactory $themeModelFactory = null,
-        \Magento\Store\Model\App\EnvironmentEmulation $appEmulation = null
+        \Magento\Store\Model\App\EmulationInterface $appEmulation = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_themeFactory = $themeFactory;
@@ -133,7 +133,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         $this->_customFactory = $customizationFactory;
         $this->themeModelFactory = $themeModelFactory ?? ObjectManager::getInstance()->get(ThemeFactory::class);
         $this->appEmulation = $appEmulation ?? ObjectManager::getInstance()
-                ->get(\Magento\Store\Model\App\EnvironmentEmulation::class);
+                ->get(\Magento\Store\Model\App\EmulationInterface::class);
         $this->addData(['type' => self::TYPE_VIRTUAL]);
     }
 

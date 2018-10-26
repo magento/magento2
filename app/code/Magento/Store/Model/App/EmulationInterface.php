@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Store\Model\App;
 
 use Magento\Framework\App\Area;
 
+/**
+ * Environment emulation interface
+ */
 interface EmulationInterface
 {
     /**
@@ -18,7 +22,6 @@ interface EmulationInterface
      * @param string $area
      * @param bool $force A true value will ensure that environment is always emulated, regardless of current store
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function startEnvironmentEmulation($storeId, $area = Area::AREA_FRONTEND, $force = false);
 
@@ -35,7 +38,13 @@ interface EmulationInterface
      * Stores current environment info
      *
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function storeCurrentEnvironmentInfo();
+
+    /**
+     * Checks whether the environment is being emulated
+     *
+     * @return bool
+     */
+    public function isEnvironmentEmulated();
 }
