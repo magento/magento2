@@ -431,7 +431,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'Append behavior with new product' => [
                 'importFile' => 'product_with_custom_options_new.csv',
                 'sku' => 'simple_new',
-                'expectedOptionsQty' => 4,
+                'expectedOptionsQty' => 5,
             ],
         ];
     }
@@ -1292,12 +1292,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Catalog/_files/category_duplicates.php
+     * @magentoDataFixture Magento/CatalogImportExport/_files/update_category_duplicates.php
      */
     public function testProductDuplicateCategories()
     {
-        $this->markTestSkipped('Due to MAGETWO-48956');
-
         $csvFixture = 'products_duplicate_category.csv';
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/' . $csvFixture;
@@ -1321,19 +1319,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() === 0);
-
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Category::class
-        );
-
-        $category->load(444);
-
-        $this->assertTrue($category !== null);
-
-        $category->setName(
-            'Category 2-updated'
-        )->save();
 
         $this->_model->importData();
 
