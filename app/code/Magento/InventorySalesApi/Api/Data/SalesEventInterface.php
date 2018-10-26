@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Represents the sales event that brings to appending reservations.
  *
  * @api
  */
-interface SalesEventInterface extends ExtensibleDataInterface
+interface SalesEventInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for event types
@@ -52,7 +50,7 @@ interface SalesEventInterface extends ExtensibleDataInterface
      *
      * @return \Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface|null
      */
-    public function getExtensionAttributes(): ?SalesEventExtensionInterface;
+    public function getExtensionAttributes(): ?\Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -60,5 +58,7 @@ interface SalesEventInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SalesEventExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(
+        \Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface $extensionAttributes
+    ): void;
 }

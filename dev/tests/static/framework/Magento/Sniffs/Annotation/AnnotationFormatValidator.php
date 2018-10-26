@@ -125,7 +125,7 @@ class AnnotationFormatValidator
             $phpcsFile->addFixableError($error, $shortPtr, 'MethodAnnotation');
         }
         if (strtolower($tokens[$shortPtr]['content']) === '{@inheritdoc}') {
-            $error = '{@inheritdoc} imports only short description, annotation must have long description';
+            $error = 'If the @inheritdoc not inline it shouldn’t have braces';
             $phpcsFile->addFixableError($error, $shortPtr, 'MethodAnnotation');
         }
         $shortPtrContent = $tokens[$shortPtr]['content'];

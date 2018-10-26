@@ -16,6 +16,8 @@ use Magento\Catalog\Model\Product\Type;
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
 require __DIR__ . '/../../../../../../dev/tests/integration/testsuite/Magento/Catalog/_files/products.php';
+require __DIR__ . '/product_simple_out_of_stock.php';
+
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
@@ -94,6 +96,7 @@ if ($productBundleInStock->getBundleOptionsData()) {
 }
 $productBundleInStock->save();
 
+$sampleProductOutOfStock = $productRepository->get('simple-out-of-stock');
 /** @var $productBundleOutOfStock \Magento\Catalog\Model\Product */
 $productBundleOutOfStock = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productBundleOutOfStock->setTypeId(Type::TYPE_BUNDLE)
@@ -104,7 +107,13 @@ $productBundleOutOfStock->setTypeId(Type::TYPE_BUNDLE)
     ->setSku('bundle-product-out-of-stock')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 0])
+    ->setStockData([
+        'use_config_manage_stock' => 1,
+        'use_config_backorders' => 1,
+        'qty' => 100,
+        'is_qty_decimal' => 0,
+        'is_in_stock' => 1
+        ])
     ->setPriceView(1)
     ->setPriceType(1)
     ->setShipmentType(1)
@@ -123,7 +132,7 @@ $productBundleOutOfStock->setTypeId(Type::TYPE_BUNDLE)
         [
             [
                 [
-                    'product_id' => $sampleProduct->getId(),
+                    'product_id' => $sampleProductOutOfStock->getId(),
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',

@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Represents physical storage, i.e. brick and mortar store or warehouse
  *
@@ -16,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface SourceInterface extends ExtensibleDataInterface
+interface SourceInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -307,11 +305,9 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventoryApi\Api\Data\SourceExtensionInterface|null
      */
-    public function getExtensionAttributes(): ?SourceExtensionInterface;
+    public function getExtensionAttributes(): ?\Magento\InventoryApi\Api\Data\SourceExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -319,5 +315,7 @@ interface SourceInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\SourceExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SourceExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(
+        \Magento\InventoryApi\Api\Data\SourceExtensionInterface $extensionAttributes
+    ): void;
 }
