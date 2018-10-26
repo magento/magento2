@@ -25,6 +25,11 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
      */
     protected $website;
 
+    /**
+     * @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $websiteString;
+
     protected function setUp()
     {
         $this->webSiteModel = $this->getMockBuilder(\Magento\Store\Model\Website::class)
