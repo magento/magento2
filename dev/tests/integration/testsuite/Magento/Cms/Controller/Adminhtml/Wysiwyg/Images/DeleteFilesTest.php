@@ -88,5 +88,64 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
         if ($directory->isExist('wysiwyg')) {
             $directory->delete('wysiwyg');
         }
+        if ($directory->isExist('.htaccess')) {
+            $directory->delete('.htaccess');
+        }
+        if ($directory->isExist('thtaccess')) {
+            $directory->delete('thtaccess');
+        }
+    }
+
+    /**
+     * Creates file and tries to delete it via
+     * \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::execute method
+     *
+     * @param  string $fileName
+     * @return void
+     */
+    private function createFileAndExecuteDelete($fileName)
+    {
+        $path = '/' . $fileName;
+        if (!$this->mediaDirectory->isFile($path)) {
+            $this->mediaDirectory->writeFile($path, "Order deny,allow\nDeny from all");
+        }
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('files', [$this->imagesHelper->idEncode($fileName)]);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->mediaDirectory->getAbsolutePath());
+        $this->model->execute();
+    }
+
+    /**
+     * Check that htaccess file couldn't be removed via
+     * \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::execute method
+     *
+     * @return void
+     */
+    public function testCouldNotDeleteHtaccess()
+    {
+        $fileName = '.htaccess';
+        $this->createFileAndExecuteDelete($fileName);
+        $this->assertTrue(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($fileName)
+            )
+        );
+    }
+
+    /**
+     * Check that random file could be removed via
+     * \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::execute method
+     *
+     * @return void
+     */
+    public function testDeleteAnyFile()
+    {
+        $fileName = 'thtaccess';
+        $this->createFileAndExecuteDelete($fileName);
+        $this->assertFalse(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($fileName)
+            )
+        );
     }
 }
