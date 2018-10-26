@@ -127,7 +127,7 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
         $this->createFileAndExecuteDelete($fileName);
         $this->assertTrue(
             $this->mediaDirectory->isExist(
-                $this->mediaDirectory->getRelativePath('/' . $fileName)
+                $this->mediaDirectory->getRelativePath($fileName)
             )
         );
     }
@@ -144,7 +144,7 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
         $this->createFileAndExecuteDelete($fileName);
         $this->assertFalse(
             $this->mediaDirectory->isExist(
-                $this->mediaDirectory->getRelativePath('/' . $fileName)
+                $this->mediaDirectory->getRelativePath($fileName)
             )
         );
     }
