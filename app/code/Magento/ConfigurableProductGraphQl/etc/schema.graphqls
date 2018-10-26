@@ -65,8 +65,3 @@ type SelectedConfigurableOption {
     value_id: Int!
     value_label: String!
 }
-
-input CartItemDetailsInput {
-    sku: String!
-    qty: Float!
-}

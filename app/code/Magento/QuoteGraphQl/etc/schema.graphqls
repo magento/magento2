@@ -94,3 +94,8 @@ type CartItemSelectedOptionValuePrice {
     units: String!
     type: PriceTypeEnum!
 }
+
+input CartItemDetailsInput {
+    sku: String!
+    qty: Float!
+}
