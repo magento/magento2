@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="RequiredRMAAttributesValidationWhileCustomerSubmitsReturnTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="MAGETWO-95812: Required RMA Attributes are not validated while Customer submits a return"/>
+            <title value="Required RMA Attributes Validation While Customer Submits A Return"/>
+            <description value="Required RMA Attributes Validation While Customer Submits A Return"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95864"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!-- log in as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Enabled RMA On Storefront-->
+            <createData entity="EnableRMA" stepKey="enabledRMAOnStorefront"/>
+            <!-- create new product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+
+        <!-- Place an order from frontend -->
+
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="checkoutProductFromCart"/>
+
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+
+        <!-- place for order -->
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <waitForPageLoad stepKey="waitForPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!--Complete the order from admin bay creating Invoice and then Shipment-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersIndexPage"/>
+        <waitForPageLoad stepKey="waitForOrderIndexPage"/>
+
+        <!-- Open Order -->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForCreatedOrderPageOpened"/>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
+        <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+
+        <!--Goes to Orders and Returns -->
+        <amOnPage url="{{StorefrontOrdersAndReturnsPage.url}}" stepKey="goToOrderAndReturnPage"/>
+        <waitForPageLoad stepKey="waitForOrdersAndReturnsPageLoad"/>
+        <seeInCurrentUrl url="{{StorefrontOrdersAndReturnsPage.url}}" stepKey="seeOrdersAndReturnsUrl"/>
+
+        <actionGroup ref="fillOrderInformationActionGroup" stepKey="fillOrderInformationAndContinue">
+            <argument name="orderId" value="$grabOrderNumber"/>
+            <argument name="orderLastName" value="CustomerEntityOne.lastname"/>
+            <argument name="orderEmail" value="CustomerEntityOne.email"/>
+        </actionGroup>
+
+        <click selector="{{OrderInformationMainSection.return}}" stepKey="clickOnReturn"/>
+        <actionGroup ref="fillQuantityToReturnActionGroup" stepKey="fillQuantityToReturn"/>
+
+        <seeElement selector="{{CreateNewReturnMainSection.resolutionError}}" stepKey="AssertResolutionError" />
+        <seeElement selector="{{CreateNewReturnMainSection.conditionError}}" stepKey="AssertConditionError" />
+        <seeElement selector="{{CreateNewReturnMainSection.reasonError}}" stepKey="AssertReasonError" />
+
+        <after>
+            <!--Disable RMA On Storefront-->
+            <createData entity="DisableRMA" stepKey="disableRMAOnStorefront"/>
+
+            <!--Delete the created product-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>
