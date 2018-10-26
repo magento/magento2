@@ -108,7 +108,6 @@ class Login extends \Magento\Framework\App\Action\Action
 
     /**
      * Get account redirect.
-     * For release backward compatibility.
      *
      * @deprecated 100.0.10
      * @return AccountRedirect
@@ -134,6 +133,8 @@ class Login extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Initializes config dependency.
+     *
      * @deprecated 100.0.10
      * @return ScopeConfigInterface
      */
@@ -146,6 +147,8 @@ class Login extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Sets config dependency.
+     *
      * @deprecated 100.0.10
      * @param ScopeConfigInterface $value
      * @return void
@@ -200,25 +203,17 @@ class Login extends \Magento\Framework\App\Action\Action
                 $response['redirectUrl'] = $this->_redirect->success($redirectRoute);
                 $this->getAccountRedirect()->clearRedirectCookie();
             }
-        } catch (EmailNotConfirmedException $e) {
-            $response = [
-                'errors' => true,
-                'message' => $e->getMessage()
-            ];
-        } catch (InvalidEmailOrPasswordException $e) {
-            $response = [
-                'errors' => true,
-                'message' => $e->getMessage()
-            ];
         } catch (LocalizedException $e) {
             $response = [
                 'errors' => true,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
+                'captcha' => $this->customerSession->getData('user_login_show_captcha')
             ];
         } catch (\Exception $e) {
             $response = [
                 'errors' => true,
-                'message' => __('Invalid login or password.')
+                'message' => __('Invalid login or password.'),
+                'captcha' => $this->customerSession->getData('user_login_show_captcha')
             ];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
