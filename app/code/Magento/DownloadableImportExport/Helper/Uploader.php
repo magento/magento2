@@ -39,6 +39,13 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
     protected $parameters = [];
 
     /**
+     * Connection resource.
+     *
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    protected $connection = [];
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\App\Helper\Context $context
