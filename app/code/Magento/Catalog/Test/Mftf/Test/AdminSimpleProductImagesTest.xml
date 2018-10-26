@@ -161,7 +161,7 @@
         <!-- Go to the product page and see the uploaded image -->
         <amOnPage url="$$secondProduct.name$$.html" stepKey="goToStorefront2"/>
         <waitForPageLoad stepKey="waitForStorefront2"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('Large')}}" stepKey="seeLarge2"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
     </test>
 
     <test name="AdminSimpleProductRemoveImagesTest">
