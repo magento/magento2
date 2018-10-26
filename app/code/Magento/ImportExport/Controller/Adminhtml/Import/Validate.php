@@ -85,7 +85,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
                 $resultBlock->addError(
                     __('Data validation failed. Please fix the following errors and upload the file again.')
                 );
-                $this->addErrorMessages($resultBlock, $errorAggregator);
+
                 if ($errorAggregator->getErrorsCount()) {
                     $this->addMessageToSkipErrors($resultBlock);
                 }
@@ -99,6 +99,8 @@ class Validate extends ImportResultController implements HttpPostActionInterface
                     $errorAggregator->getErrorsCount()
                 )
             );
+            
+            $this->addErrorMessages($resultBlock, $errorAggregator);
         } else {
             if ($errorAggregator->getErrorsCount()) {
                 $this->collectErrors($resultBlock);
