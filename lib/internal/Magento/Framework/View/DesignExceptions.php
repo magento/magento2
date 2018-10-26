@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Unserialize\Unserialize;
+use Psr\Log\LoggerInterface;
+
 /**
  * Class DesignExceptions
  */
@@ -32,18 +36,35 @@ class DesignExceptions
     protected $scopeType;
 
     /**
+     * @var Unserialize
+     */
+    private $secureUnserializer;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $exceptionConfigPath
      * @param string $scopeType
+     * @param Unserialize|null $secureUnserializer
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $exceptionConfigPath,
-        $scopeType
+        $scopeType,
+        Unserialize $secureUnserializer = null,
+        LoggerInterface $logger = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->exceptionConfigPath = $exceptionConfigPath;
         $this->scopeType = $scopeType;
+        $this->secureUnserializer = $secureUnserializer ?:
+            ObjectManager::getInstance()->create(Unserialize::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->create(LoggerInterface::class);
     }
 
     /**
@@ -65,12 +86,20 @@ class DesignExceptions
         if (!$expressions) {
             return false;
         }
-        $expressions = unserialize($expressions);
+
+        try {
+            $expressions = $this->secureUnserializer->unserialize($expressions);
+        } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
+            return false;
+        }
+
         foreach ($expressions as $rule) {
             if (preg_match($rule['regexp'], $userAgent)) {
                 return $rule['value'];
             }
         }
+
         return false;
     }
 }
