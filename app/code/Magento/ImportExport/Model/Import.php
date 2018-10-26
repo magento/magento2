@@ -288,7 +288,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     {
         $messages = [];
         if ($this->getProcessedRowsCount()) {
-            if ($validationResult->getErrorsCount()) {
+            if ($validationResult->isErrorLimitExceeded()) {
                 $messages[] = __('Data validation failed. Please fix the following errors and upload the file again.');
 
                 // errors info
@@ -588,12 +588,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
 
-        $result = !$errorAggregator->getErrorsCount();
-        $validationStrategy = $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY);
-        if ($validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS) {
-            $result = true;
-        }
-
+        $result = !$errorAggregator->isErrorLimitExceeded();
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         }

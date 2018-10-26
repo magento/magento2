@@ -191,10 +191,10 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     public function isErrorLimitExceeded()
     {
         $isExceeded = false;
-        $errorsCount = $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]);
+        $errorsCount = $this->getErrorsCount();
         if ($errorsCount > 0
             && $this->validationStrategy == self::VALIDATION_STRATEGY_STOP_ON_ERROR
-            && $errorsCount >= $this->allowedErrorsCount
+            && $errorsCount > $this->allowedErrorsCount
         ) {
             $isExceeded = true;
         }
