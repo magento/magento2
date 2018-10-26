@@ -237,6 +237,7 @@
         "magento/module-weee": "*",
         "magento/module-widget": "*",
         "magento/module-wishlist": "*",
+        "magento/module-wishlist-graph-ql": "*",
         "magento/module-wishlist-analytics": "*",
         "magento/theme-adminhtml-backend": "*",
         "magento/theme-frontend-blank": "*",

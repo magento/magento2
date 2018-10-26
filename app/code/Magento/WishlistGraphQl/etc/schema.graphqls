@@ -1,0 +1,20 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    wishlist: WishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver") @doc(description: "todo")
+}
+
+type WishlistOutput {
+    items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @doc(description: "todo"),
+    sharing_code: String! @doc(description: "todo"),
+    updated_at: String! @doc(description: "todo")
+}
+
+type WishlistItem {
+    id: Int! @doc(description: "todo")
+    qty: Float! @doc(description: "todo"),
+    description: String! @doc(description: "todo"),
+    added_at: String! @doc(description: "todo"),
+    product: ProductInterface @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsProductsResolver")
+}
