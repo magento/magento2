@@ -102,6 +102,13 @@ class Address extends AbstractCustomer
     protected $_entityTable;
 
     /**
+     * Region collection instance
+     *
+     * @var string
+     */
+    protected $_regionCollection;
+
+    /**
      * Countries and regions
      *
      * Example array: array(
