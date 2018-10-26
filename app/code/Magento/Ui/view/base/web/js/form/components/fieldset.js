@@ -160,8 +160,8 @@ define([
             if (!message) {
                 hasErrors = this._isChildrenHasErrors(hasErrors, this);
             }
-            this.error(hasErrors || message);
 
+            this.error(hasErrors || message);
             if (hasErrors || message) {
                 this.open();
             }
