@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\Template;
  * Class Index
  *
  * @api
+ * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
  */
 class Index extends Template
 {
