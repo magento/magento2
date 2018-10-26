@@ -1,11 +1,9 @@
 <?php
-declare(strict_types=1);
 /**
- * WishlistItemTypeResolver
- *
- * @copyright Copyright © 2018 brandung GmbH & Co. KG. All rights reserved.
- * @author    david.verholen@brandung.de
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\WishlistGraphQl\Model\Resolver;
 
