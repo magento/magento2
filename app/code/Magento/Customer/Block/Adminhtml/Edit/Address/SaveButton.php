@@ -14,7 +14,7 @@ use Magento\Customer\Block\Adminhtml\Edit\GenericButton;
 class SaveButton extends GenericButton implements ButtonProviderInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return array
      */

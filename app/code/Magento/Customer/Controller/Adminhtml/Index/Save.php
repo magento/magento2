@@ -15,6 +15,8 @@ use Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
+ * Save customer action.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpPostActionInterface

@@ -27,9 +27,9 @@ use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- *
  * Dataprovider for customer address grid.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -52,11 +52,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var array
      */
     private $loadedData;
-
-    /**
-     * @var Config
-     */
-    private $eavConfig;
 
     /**
      * EAV attribute properties to fetch from meta storage
@@ -154,6 +149,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param ContextInterface $context
      * @param FileProcessorFactory $fileProcessorFactory
      * @param \Magento\Customer\Model\Config\Share $shareConfig
+     * @param CountryWithWebsites $countryWithWebsites
      * @param array $meta
      * @param array $data
      * @param bool $allowToShowHiddenAttributes
@@ -170,6 +166,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         ContextInterface $context,
         FileProcessorFactory $fileProcessorFactory,
         \Magento\Customer\Model\Config\Share $shareConfig,
+        CountryWithWebsites $countryWithWebsites,
         array $meta = [],
         array $data = [],
         $allowToShowHiddenAttributes = true
@@ -182,6 +179,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->allowToShowHiddenAttributes = $allowToShowHiddenAttributes;
         $this->context = $context;
         $this->fileProcessorFactory = $fileProcessorFactory;
+        $this->countryWithWebsiteSource = $countryWithWebsites;
         $this->shareConfig = $shareConfig;
         $this->meta['general']['children'] = $this->getAttributesMeta(
             $eavConfig->getEntityType('customer_address')
@@ -323,7 +321,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             if ($attribute->usesSource()) {
                 if ($code == AddressInterface::COUNTRY_ID) {
-                    $meta[$code]['arguments']['data']['config']['options'] = $this->getCountryWithWebsiteSource()
+                    $meta[$code]['arguments']['data']['config']['options'] = $this->countryWithWebsiteSource
                         ->getAllOptions();
                 } else {
                     $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
@@ -365,24 +363,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Retrieve Country With Websites Source
-     *
-     * @return CountryWithWebsites
-     * @deprecated 100.2.0
-     */
-    private function getCountryWithWebsiteSource(): CountryWithWebsites
-    {
-        if (!$this->countryWithWebsiteSource) {
-            $this->countryWithWebsiteSource = ObjectManager::getInstance()->get(CountryWithWebsites::class);
-        }
-
-        return $this->countryWithWebsiteSource;
-    }
-
-    /**
      * Detect can we show attribute on specific form or not
      *
-     * @param Attribute $customerAttribute
+     * @param AbstractAttribute $customerAttribute
      * @return bool
      */
     private function canShowAttribute(AbstractAttribute $customerAttribute): bool

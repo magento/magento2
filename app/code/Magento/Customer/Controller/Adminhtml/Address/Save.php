@@ -135,7 +135,8 @@ class Save extends Action
             $this->logger->critical($e);
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
-                $e, __('We can\'t change customer address right now.')
+                $e,
+                __('We can\'t change customer address right now.')
             );
         }
 

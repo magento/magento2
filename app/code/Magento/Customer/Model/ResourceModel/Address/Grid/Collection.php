@@ -92,7 +92,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return AggregationInterface
      */
@@ -102,7 +102,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param AggregationInterface $aggregations
      * @return $this

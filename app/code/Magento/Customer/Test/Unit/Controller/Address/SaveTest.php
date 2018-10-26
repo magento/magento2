@@ -24,7 +24,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
      */
     private $addressRepositoryMock;
 
-
     /**
      * @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -64,7 +63,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $messageManagerMock;
-
 
     /**
      * @inheritdoc

@@ -33,9 +33,9 @@ class Validate extends \Magento\Backend\App\Action implements HttpPostActionInte
     private $formFactory;
 
     /**
-     * @param Action\Context                                   $context
+     * @param Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Customer\Model\Metadata\FormFactory     $formFactory
+     * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      */
     public function __construct(
         Action\Context $context,

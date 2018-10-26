@@ -31,6 +31,7 @@ use Magento\Ui\DataProvider\EavValidationRules;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
+ * @deprecated \Magento\Customer\Model\Address\DataProvider is used instead
  * @api
  * @since 100.0.2
  */

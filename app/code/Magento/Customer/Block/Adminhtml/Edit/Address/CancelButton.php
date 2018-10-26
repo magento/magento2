@@ -14,7 +14,7 @@ use Magento\Customer\Block\Adminhtml\Edit\GenericButton;
 class CancelButton extends GenericButton implements ButtonProviderInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return array
      */

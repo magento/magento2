@@ -11,6 +11,9 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Message\Error;
 use Magento\Customer\Controller\Adminhtml\Index as CustomerAction;
 
+/**
+ * Class for validation of customer
+ */
 class Validate extends CustomerAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**

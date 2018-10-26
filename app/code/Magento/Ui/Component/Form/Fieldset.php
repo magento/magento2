@@ -8,6 +8,8 @@ namespace Magento\Ui\Component\Form;
 use Magento\Ui\Component\AbstractComponent;
 
 /**
+ * Fieldset UI Component.
+ *
  * @api
  * @since 100.0.2
  */

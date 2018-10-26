@@ -186,9 +186,6 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
         $this->meta['customer']['children'] = $this->getAttributesMeta(
             $eavConfig->getEntityType('customer')
         );
-//        $this->meta['address']['children'] = $this->getAttributesMeta(
-//            $eavConfig->getEntityType('customer_address')
-//        );
     }
 
     /**
@@ -300,7 +297,7 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
         $file = $customerData[$attributeCode] ?? '';
 
         /** @var FileProcessor $fileProcessor */
-        $fileProcessor = $this->getFileProcessorFactory()->create([
+        $fileProcessor = $this->fileProcessorFactory->create([
             'entityTypeCode' => $entityType->getEntityTypeCode(),
         ]);
 
@@ -566,20 +563,5 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
         if (isset($addresses[$addressId]['street']) && !\is_array($addresses[$addressId]['street'])) {
             $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
         }
-    }
-
-    /**
-     * Get FileProcessorFactory instance
-     *
-     * @return FileProcessorFactory
-     * @deprecated 100.1.3
-     */
-    private function getFileProcessorFactory(): FileProcessorFactory
-    {
-        if ($this->fileProcessorFactory === null) {
-            $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get(\Magento\Customer\Model\FileProcessorFactory::class);
-        }
-        return $this->fileProcessorFactory;
     }
 }
