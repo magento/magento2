@@ -40,7 +40,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ['/root/path/', 'sub', '/root/path/sub'],
             ['/root/path/', '/sub', '/root/path/sub'],
             ['/root/path/', '../sub', '/root/path/../sub'],
-            ['/root/path/', '/root/path/sub', '/root/path/root/path/sub'],
+            ['/root/path/', '/root/path/sub', '/root/path/sub'],
         ];
     }
 
