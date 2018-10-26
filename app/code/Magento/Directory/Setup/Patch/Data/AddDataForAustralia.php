@@ -39,7 +39,7 @@ class AddDataForAustralia implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -71,17 +71,19 @@ class AddDataForAustralia implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
         return [
             InitializeDirectoryData::class,
+            AddDataForCroatia::class,
+            AddDataForIndia::class,
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -89,7 +91,7 @@ class AddDataForAustralia implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
