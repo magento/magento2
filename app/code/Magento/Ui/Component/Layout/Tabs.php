@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
@@ -87,6 +88,9 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
             }
             if ($childComponent instanceof BlockWrapperInterface) {
                 $this->addWrappedBlock($childComponent, $childrenAreas);
+                continue;
+            }
+            if ($childComponent instanceof Fieldset && false === $childComponent->canShow()) {
                 continue;
             }
 

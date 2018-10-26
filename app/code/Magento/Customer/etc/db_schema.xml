@@ -120,6 +120,15 @@
         <index referenceId="CUSTOMER_ADDRESS_ENTITY_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
+        <index name="CUSTOMER_ADDRESS_ENTITY_FULLTEXT_INDEX" indexType="fulltext">
+        <column name="firstname"/>
+            <column name="lastname"/>
+            <column name="street"/>
+            <column name="city"/>
+            <column name="region"/>
+            <column name="postcode"/>
+            <column name="telephone"/>
+        </index>
     </table>
     <table name="customer_address_entity_datetime" resource="default" engine="innodb"
            comment="Customer Address Entity Datetime">

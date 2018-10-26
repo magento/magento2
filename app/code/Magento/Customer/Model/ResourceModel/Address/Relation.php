@@ -38,16 +38,26 @@ class Relation implements RelationInterface
         /**
          * @var $object \Magento\Customer\Model\Address
          */
-        if (!$object->getIsCustomerSaveTransaction() && $this->isAddressDefault($object)) {
+        if (!$object->getIsCustomerSaveTransaction() && $object->getId()) {
             $customer = $this->customerFactory->create()->load($object->getCustomerId());
             $changedAddresses = [];
 
             if ($object->getIsDefaultBilling()) {
                 $changedAddresses['default_billing'] = $object->getId();
+            } elseif ($customer->getDefaultBillingAddress()
+                && (int)$customer->getDefaultBillingAddress()->getId() === (int)$object->getId()
+                && !$object->getIsDefaultBilling()
+            ) {
+                $changedAddresses['default_billing'] = null;
             }
 
             if ($object->getIsDefaultShipping()) {
                 $changedAddresses['default_shipping'] = $object->getId();
+            } elseif ($customer->getDefaultShippingAddress()
+                && (int)$customer->getDefaultShippingAddress()->getId() === (int)$object->getId()
+                && !$object->getIsDefaultShipping()
+            ) {
+                $changedAddresses['default_shipping'] = null;
             }
 
             if ($changedAddresses) {
@@ -63,6 +73,9 @@ class Relation implements RelationInterface
     /**
      * Checks if address has chosen as default and has had an id
      *
+     * @deprecated Is not used anymore due to changes in logic of save of address.
+     *             If address was default and becomes not default than default address id for customer must be
+     *             set to null
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool
      */

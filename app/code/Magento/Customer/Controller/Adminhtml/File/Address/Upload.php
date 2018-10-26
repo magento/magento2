@@ -14,6 +14,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Uploads files for customer address
+ */
 class Upload extends Action
 {
     /**
@@ -39,20 +42,28 @@ class Upload extends Action
     private $logger;
 
     /**
+     * @var string
+     */
+    private $scope;
+
+    /**
      * @param Context $context
      * @param FileUploaderFactory $fileUploaderFactory
      * @param AddressMetadataInterface $addressMetadataService
      * @param LoggerInterface $logger
+     * @param string $scope
      */
     public function __construct(
         Context $context,
         FileUploaderFactory $fileUploaderFactory,
         AddressMetadataInterface $addressMetadataService,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        string $scope = 'address'
     ) {
         $this->fileUploaderFactory = $fileUploaderFactory;
         $this->addressMetadataService = $addressMetadataService;
         $this->logger = $logger;
+        $this->scope = $scope;
         parent::__construct($context);
     }
 
@@ -69,14 +80,14 @@ class Upload extends Action
             // Must be executed before any operations with $_FILES!
             $this->convertFilesArray();
 
-            $attributeCode = key($_FILES['address']['name']);
+            $attributeCode = key($_FILES[$this->scope]['name']);
             $attributeMetadata = $this->addressMetadataService->getAttributeMetadata($attributeCode);
 
             /** @var FileUploader $fileUploader */
             $fileUploader = $this->fileUploaderFactory->create([
                 'attributeMetadata' => $attributeMetadata,
                 'entityTypeCode' => AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
-                'scope' => 'address',
+                'scope' => $this->scope,
             ]);
 
             $errors = $fileUploader->validate();
@@ -114,14 +125,11 @@ class Upload extends Action
      */
     private function convertFilesArray()
     {
-        foreach ($_FILES['address'] as $itemKey => $item) {
-            foreach ($item as $value) {
-                if (is_array($value)) {
-                    $_FILES['address'][$itemKey] = [
-                        key($value) => current($value),
-                    ];
-                }
+        foreach ($_FILES as $itemKey => $item) {
+            foreach ($item as $fieldName => $value) {
+                    $_FILES[$this->scope][$fieldName] = [$itemKey => $value];
             }
+            unset($_FILES[$itemKey]);
         }
     }
 }

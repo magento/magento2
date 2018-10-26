@@ -109,7 +109,7 @@ class File extends AbstractData
         $extend = $this->_getRequestValue($request);
 
         $attrCode = $this->getAttribute()->getAttributeCode();
-        if ($this->_requestScope) {
+        if ($this->_requestScope || !isset($_FILES[$attrCode])) {
             $value = [];
             if (strpos($this->_requestScope, '/') !== false) {
                 $scopes = explode('/', $this->_requestScope);

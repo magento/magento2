@@ -5,6 +5,9 @@
 
 /**
  * @api
+ * @deprecated as customer addresses are handled by ui components.
+ * This collection component manages rendering address list in Addresses tab of customer.
+ * Now address list is rendered with ui component listing.
  */
 define([
     'underscore',
@@ -46,6 +49,7 @@ define([
          * @param {Object} elem - Incoming child.
          */
         initElement: function (elem) {
+            debugger;
             this._super();
 
             elem.activate();
@@ -153,6 +157,7 @@ define([
          * Creates function that removes element
          * from collection using '_removeChild' method.
          * @param  {Object} elem - Element that should be removed.
+         * @deprecated Not used anymore
          */
         removeAddress: function (elem) {
             var self = this;
@@ -169,7 +174,7 @@ define([
         },
 
         /**
-         * Removes elememt from both collection and data storage,
+         * Removes element from both collection and data storage,
          * activates first element if removed one was active,
          * triggers 'update' event.
          *
