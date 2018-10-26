@@ -423,6 +423,7 @@ define([
         /**
          * Creates overlay, append it to wrapper, set previous click event on overlay.
          */
+<<<<<<< HEAD
          _createOverlay: function () {
              var events;
 
@@ -437,6 +438,22 @@ define([
              events = $._data(this.overlay.get(0), 'events');
              events ? this.prevOverlayHandler = events.click[0].handler : false;
          },
+=======
+        _createOverlay: function () {
+            var events;
+
+            this.overlay = $('.' + this.options.overlayClass);
+            
+            if (!this.overlay.length) {
+                $(this.options.appendTo).addClass(this.options.parentModalClass);
+                this.overlay = $('<div></div>')
+                    .addClass(this.options.overlayClass)
+                    .appendTo(this.modalWrapper);
+            }
+            events = $._data(this.overlay.get(0), 'events');
+            events ? this.prevOverlayHandler = events.click[0].handler : false;
+        },
+>>>>>>> 5195d38d47d1d8b3bf5700ddcdeeee822edc1bbc
 
         /**
          * Destroy overlay.
