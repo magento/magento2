@@ -37,7 +37,7 @@ class Discount extends AbstractTotal
          * If credit memo's shipping amount is set and Order's shipping amount is 0,
          * throw exception with different message
          */
-        if ( $baseShippingAmount && $order->getBaseShippingAmount() <= 0 ) {
+        if ($baseShippingAmount && $order->getBaseShippingAmount() <= 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 new \Magento\Framework\Phrase("You can not refund shipping if there is no shipping amount.",[])
             );
