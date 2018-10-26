@@ -35,7 +35,7 @@ class Discount extends AbstractTotal
 
         /**
          * If credit memo's shipping amount is set and Order's shipping amount is 0,
-         *      throw exception with differente message
+         * throw exception with different message
          */
         if ( $baseShippingAmount && $order->getBaseShippingAmount() <= 0 ) {
             throw new \Magento\Framework\Exception\LocalizedException(
