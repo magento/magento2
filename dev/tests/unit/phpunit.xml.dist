@@ -88,8 +88,15 @@
                     <element key="assertException">
                         <string>assertException</string>
                     </element>
-                    <element key="paran">
+                    <element key="paran">exceptionMessage
                         <string>paran</string>
+                    </element>
+
+                    <element key="exceptionMessage">
+                        <string>exceptionMessage</string>
+                    </element>
+                    <element key="magentoAppArea">
+                        <string>magentoAppArea</string> <!-- \Magento\Logging\Test\Unit\Block\Adminhtml\Details\Renderer\DiffTest -->
                     </element>
                 </array>
             </arguments>
