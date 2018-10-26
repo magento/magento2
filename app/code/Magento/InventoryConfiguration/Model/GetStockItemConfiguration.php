@@ -12,6 +12,7 @@ use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForSkuInterface;
 
 /**
  * @inheritdoc
@@ -39,7 +40,7 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     private $defaultStockProvider;
 
     /**
-     * @var IsSourceItemManagementAllowedForSku
+     * @var IsSourceItemManagementAllowedForSkuInterface
      */
     private $isSourceItemManagementAllowedForSku;
 
@@ -48,14 +49,14 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
      * @param StockItemConfigurationFactory $stockItemConfigurationFactory
      * @param IsProductAssignedToStockInterface $isProductAssignedToStock
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param IsSourceItemManagementAllowedForSku $isSourceItemManagementAllowedForSku
+     * @param IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
      */
     public function __construct(
         GetLegacyStockItem $getLegacyStockItem,
         StockItemConfigurationFactory $stockItemConfigurationFactory,
         IsProductAssignedToStockInterface $isProductAssignedToStock,
         DefaultStockProviderInterface $defaultStockProvider,
-        IsSourceItemManagementAllowedForSku $isSourceItemManagementAllowedForSku
+        IsSourceItemManagementAllowedForSkuInterface $isSourceItemManagementAllowedForSku
     ) {
         $this->getLegacyStockItem = $getLegacyStockItem;
         $this->stockItemConfigurationFactory = $stockItemConfigurationFactory;

@@ -24,4 +24,8 @@
     <section name="BlockContentSection">
         <element name="TextArea" type="input" selector="#cms_block_form_content"/>
     </section>
+    <section name="CmsBlockBlockActionSection">
+        <element name="deleteBlock" type="button" selector="#delete" timeout="30"/>
+        <element name="deleteConfirm" type="button" selector=".action-primary.action-accept" timeout="60"/>
+    </section>
 </sections>
