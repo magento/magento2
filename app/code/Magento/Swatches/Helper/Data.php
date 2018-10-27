@@ -353,7 +353,7 @@ class Data
             'large' => $this->imageHelper->init($product, 'product_page_image_large_no_frame')
                 ->setImageFile($imageFile)
                 ->getUrl(),
-            'medium' => $this->imageHelper->init($product, 'new_products_content_widget_grid')
+            'medium' => $this->imageHelper->init($product, 'category_page_grid')
                 ->setImageFile($imageFile)
                 ->getUrl(),
             'small' => $this->imageHelper->init($product, 'product_page_image_small')
