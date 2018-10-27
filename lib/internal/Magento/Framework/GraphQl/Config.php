@@ -10,6 +10,7 @@ namespace Magento\Framework\GraphQl;
 use Magento\Framework\Config\DataInterface;
 use Magento\Framework\GraphQl\Config\ConfigElementFactoryInterface;
 use Magento\Framework\GraphQl\Config\ConfigElementInterface;
+use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 
 /**
  * Provides access to typing information for a configured GraphQL schema.
