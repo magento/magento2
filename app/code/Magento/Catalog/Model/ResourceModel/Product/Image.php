@@ -12,6 +12,9 @@ use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\App\ResourceConnection;
 
+/*
+ * Class for retrieval of all product images
+ */
 class Image
 {
     /**
@@ -73,6 +76,7 @@ class Image
 
     /**
      * Get the number of unique pictures of products
+     *
      * @return int
      */
     public function getCountAllProductImages(): int
@@ -88,6 +92,8 @@ class Image
     }
 
     /**
+     * Return Select to fetch all products images
+     *
      * @return Select
      */
     private function getVisibleImagesSelect(): Select
