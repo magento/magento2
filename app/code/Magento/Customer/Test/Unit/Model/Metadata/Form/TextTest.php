@@ -5,8 +5,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Model\Metadata\Form\Text;
 
 class TextTest extends AbstractFormTestCase
@@ -111,7 +113,7 @@ class TextTest extends AbstractFormTestCase
      */
     public function testValidateValueLength($value, $expected)
     {
-        $minTextLengthRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
+        $minTextLengthRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
@@ -122,7 +124,7 @@ class TextTest extends AbstractFormTestCase
             ->method('getValue')
             ->will($this->returnValue(4));
 
-        $maxTextLengthRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
+        $maxTextLengthRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
@@ -133,7 +135,19 @@ class TextTest extends AbstractFormTestCase
             ->method('getValue')
             ->will($this->returnValue(8));
 
+        $inputValidationRule = $this->getMockBuilder(ValidationRuleInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getName', 'getValue'])
+            ->getMockForAbstractClass();
+        $inputValidationRule->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('input_validation'));
+        $inputValidationRule->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue('other'));
+
         $validationRules = [
+            'input_validation' => $inputValidationRule,
             'min_text_length' => $minTextLengthRule,
             'max_text_length' => $maxTextLengthRule,
         ];

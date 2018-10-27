@@ -75,9 +75,12 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
      */
     public function massAction(AbstractCollection $collection)
     {
+        $pdf = $this->pdfInvoice->getPdf($collection);
+        $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
+
         return $this->fileFactory->create(
             sprintf('invoice%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
-            $this->pdfInvoice->getPdf($collection)->render(),
+            $fileContent,
             DirectoryList::VAR_DIR,
             'application/pdf'
         );

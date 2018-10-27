@@ -15,8 +15,8 @@
         <link src='Magento_Swagger::swagger-ui/js/lang/translator.js' type='text/javascript' defer="defer"/>
         <link src='Magento_Swagger::swagger-ui/js/lang/ru.js' type='text/javascript' defer="defer"/>
         <link src='Magento_Swagger::swagger-ui/js/lang/en.js' type='text/javascript' defer="defer"/>
-        <link src='Magento_Swagger::swagger-ui/js/swagger-ui-bundle.js' type='text/javascript' defer="defer"/>
-        <link src='Magento_Swagger::swagger-ui/js/swagger-ui-standalone-preset.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/swagger-ui-bundle.min.js' type='text/javascript' defer="defer"/>
+        <link src='Magento_Swagger::swagger-ui/js/swagger-ui-standalone-preset.min.js' type='text/javascript' defer="defer"/>
         <link src='Magento_Swagger::swagger-ui/js/magento-swagger.js' type='text/javascript' defer="defer"/>
 
         <!--Remove require-js assets-->

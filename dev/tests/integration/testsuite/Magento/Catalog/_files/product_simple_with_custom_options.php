@@ -86,7 +86,18 @@ $oldOptions = [
                 'sku' => '4-2-radio',
             ],
         ]
-    ]
+    ],
+    [
+        'previous_group' => 'text',
+        'title'     => 'Test Field',
+        'type'      => 'field',
+        'is_require' => 1,
+        'sort_order' => 0,
+        'price'     => 1,
+        'price_type' => 'fixed',
+        'sku'       => '1-text',
+        'max_characters' => 100,
+    ],
 ];
 
 $options = [];

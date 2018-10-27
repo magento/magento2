@@ -10,6 +10,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Escaper;
 
 /**
+ * Eav attribute default source when values are coming from another table
+ *
  * @api
  * @since 100.0.2
  */
@@ -136,12 +138,14 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
+     * Add an empty option to the array
+     *
      * @param array $options
      * @return array
      */
     private function addEmptyOption(array $options)
     {
-        array_unshift($options, ['label' => $this->getAttribute()->getIsRequired() ? '' : ' ', 'value' => '']);
+        array_unshift($options, ['label' => ' ', 'value' => '']);
         return $options;
     }
 
@@ -167,7 +171,9 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $optionsText = [];
         foreach ($options as $item) {
             if (in_array($item['value'], $value)) {
-                $optionsText[] = $this->escaper->escapeHtml($item['label']);
+                $optionsText[] = ($this->_attribute->getIsHtmlAllowedOnFront())
+                    ? $item['label']
+                    : $this->escaper->escapeHtml($item['label']);
             }
         }
 

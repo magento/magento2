@@ -247,6 +247,7 @@ define([
          */
         setShippingInformation: function () {
             if (this.validateShippingInformation()) {
+                checkoutDataResolver.resolveBillingAddress();
                 setShippingInformationAction().done(
                     function () {
                         stepNavigator.next();

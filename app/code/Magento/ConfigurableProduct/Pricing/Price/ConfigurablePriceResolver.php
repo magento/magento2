@@ -64,7 +64,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
 
         foreach ($this->lowestPriceOptionsProvider->getProducts($product) as $subProduct) {
             $productPrice = $this->priceResolver->resolvePrice($subProduct);
-            $price = $price ? min($price, $productPrice) : $productPrice;
+            $price = isset($price) ? min($price, $productPrice) : $productPrice;
         }
 
         return (float)$price;
