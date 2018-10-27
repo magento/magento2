@@ -35,11 +35,17 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_logger;
 
     /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $_state;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\ResourceModel\Review\Summary $reviewSummary
+     * @param \Magento\Framework\App\State
      * @param string $connectionName
      */
     public function __construct(
@@ -48,12 +54,14 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Review\Model\ResourceModel\Review\Summary $reviewSummary,
+        \Magento\Framework\App\State $state,
         $connectionName = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_storeManager = $storeManager;
         $this->_logger = $logger;
         $this->_reviewSummary = $reviewSummary;
+        $this->_state = $state;
         parent::__construct($context, $connectionName);
     }
 
@@ -425,9 +433,15 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $data = $connection->fetchAll($select, [':review_id' => $object->getReviewId()]);
 
+        if ($this->_state->getAreaCode() == "adminhtml") {
+            $currentStore = false;
+        } else {
+            $currentStore = $this->_storeManager->getStore()->setId();
+        }
+
         if ($onlyForCurrentStore) {
             foreach ($data as $row) {
-                if ($row['store_id'] == $this->_storeManager->getStore()->getId()) {
+                if ($row['store_id'] == $currentStore) {
                     $object->addData($row);
                 }
             }
