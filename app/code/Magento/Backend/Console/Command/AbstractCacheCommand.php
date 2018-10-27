@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputOption;
 abstract class AbstractCacheCommand extends Command
 {
     /**
-     * Input option bootsrap
+     * Input option bootstrap
      */
     const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
