@@ -210,10 +210,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     public function dataProvider(): array
     {
         return [
+            [300, 300],
             [300, 100],
             [139, 100],
             [67, 10],
-            [154, 47]
+            [154, 47],
+            [0, 100]
         ];
     }
 }
