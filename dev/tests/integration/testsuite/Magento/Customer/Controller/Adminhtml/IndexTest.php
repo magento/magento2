@@ -717,12 +717,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $this->assertContains('{"error":true,"messages":', $body);
         $this->assertContains('\"First Name\" is a required value', $body);
-        $this->assertContains('\"First Name\" length must be equal or greater than 1 characters', $body);
         $this->assertContains('\"Last Name\" is a required value.', $body);
-        $this->assertContains('\"Last Name\" length must be equal or greater than 1 characters.', $body);
         $this->assertContains('\"Country\" is a required value.', $body);
         $this->assertContains('\"Phone Number\" is a required value.', $body);
-        $this->assertContains('\"Phone Number\" length must be equal or greater than 1 characters.', $body);
     }
 
     /**

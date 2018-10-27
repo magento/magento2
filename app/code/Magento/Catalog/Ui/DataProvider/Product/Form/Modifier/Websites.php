@@ -135,7 +135,6 @@ class Websites extends AbstractModifier
                                     'collapsible' => true,
                                     'componentType' => Form\Fieldset::NAME,
                                     'dataScope' => self::DATA_SCOPE_PRODUCT,
-                                    'disabled' => false,
                                     'sortOrder' => $this->getNextGroupSortOrder(
                                         $meta,
                                         'search-engine-optimization',
@@ -176,9 +175,11 @@ class Websites extends AbstractModifier
         $label = __('Websites');
 
         $defaultWebsiteId = $this->websiteRepository->getDefault()->getId();
+        $isOnlyOneWebsiteAvailable = count($websitesList) === 1;
         foreach ($websitesList as $website) {
             $isChecked = in_array($website['id'], $websiteIds)
-                || ($defaultWebsiteId == $website['id'] && $isNewProduct);
+                || ($defaultWebsiteId == $website['id'] && $isNewProduct)
+                || $isOnlyOneWebsiteAvailable;
             $children[$website['id']] = [
                 'arguments' => [
                     'data' => [
@@ -196,6 +197,7 @@ class Websites extends AbstractModifier
                                 'false' => '0',
                             ],
                             'value' => $isChecked ? (string)$website['id'] : '0',
+                            'disabled' => $this->locator->getProduct()->isLockedAttribute('website_ids'),
                         ],
                     ],
                 ],
@@ -397,8 +399,9 @@ class Websites extends AbstractModifier
         $this->websitesList = [];
         $groupList = $this->groupRepository->getList();
         $storesList = $this->storeRepository->getList();
+        $websiteList = $this->storeManager->getWebsites(true);
 
-        foreach ($this->websiteRepository->getList() as $website) {
+        foreach ($websiteList as $website) {
             $websiteId = $website->getId();
             if (!$websiteId) {
                 continue;

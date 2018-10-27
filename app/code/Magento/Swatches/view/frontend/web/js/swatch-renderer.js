@@ -67,6 +67,8 @@ define([
      *  - option-label (string)
      *  - option-tooltip-thumb
      *  - option-tooltip-value
+     *  - thumb-width
+     *  - thumb-height
      */
     $.widget('mage.SwatchRendererTooltip', {
         options: {
@@ -86,6 +88,8 @@ define([
                 label = $this.attr('option-label'),
                 thumb = $this.attr('option-tooltip-thumb'),
                 value = $this.attr('option-tooltip-value'),
+                width = $this.attr('thumb-width'),
+                height = $this.attr('thumb-height'),
                 $image,
                 $title,
                 $corner;
@@ -115,7 +119,9 @@ define([
                                 // Image
                                 $image.css({
                                     'background': 'url("' + thumb + '") no-repeat center', //Background case
-                                    'background-size': 'initial'
+                                    'background-size': 'initial',
+                                    'width': width + 'px',
+                                    'height': height + 'px'
                                 });
                                 $image.show();
                             } else if (type === 1) {
@@ -476,6 +482,7 @@ define([
         _RenderSwatchOptions: function (config, controlId) {
             var optionConfig = this.options.jsonSwatchConfig[config.id],
                 optionClass = this.options.classes.optionClass,
+                sizeConfig = this.options.jsonSwatchImageSizeConfig,
                 moreLimit = parseInt(this.options.numberToShow, 10),
                 moreClass = this.options.classes.moreButton,
                 moreText = this.options.moreButtonText,
@@ -492,6 +499,8 @@ define([
                     value,
                     thumb,
                     label,
+                    width,
+                    height,
                     attr;
 
                 if (!optionConfig.hasOwnProperty(this.id)) {
@@ -507,6 +516,8 @@ define([
                 type = parseInt(optionConfig[id].type, 10);
                 value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '';
                 thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
+                width = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.width : 110;
+                height = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.height : 90;
                 label = this.label ? this.label : '';
                 attr =
                     ' id="' + controlId + '-item-' + id + '"' +
@@ -519,7 +530,9 @@ define([
                     ' aria-label="' + label + '"' +
                     ' option-tooltip-thumb="' + thumb + '"' +
                     ' option-tooltip-value="' + value + '"' +
-                    ' role="option"';
+                    ' role="option"' +
+                    ' thumb-width="' + width + '"' +
+                    ' thumb-height="' + height + '"';
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
                     attr += ' option-empty="true"';
@@ -538,7 +551,8 @@ define([
                 } else if (type === 2) {
                     // Image
                     html += '<div class="' + optionClass + ' image" ' + attr +
-                        ' style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' +
+                        ' style="background: url(' + value + ') no-repeat center; background-size: initial;width:' +
+                        sizeConfig.swatchImage.width + 'px; height:' + sizeConfig.swatchImage.height + 'px">' + '' +
                         '</div>';
                 } else if (type === 3) {
                     // Clear
@@ -1240,8 +1254,20 @@ define([
          */
         _EmulateSelected: function (selectedAttributes) {
             $.each(selectedAttributes, $.proxy(function (attributeCode, optionId) {
-                this.element.find('.' + this.options.classes.attributeClass +
-                    '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]').trigger('click');
+                var elem = this.element.find('.' + this.options.classes.attributeClass +
+                    '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]'),
+                    parentInput = elem.parent();
+
+                if (elem.hasClass('selected')) {
+                    return;
+                }
+
+                if (parentInput.hasClass(this.options.classes.selectClass)) {
+                    parentInput.val(optionId);
+                    parentInput.trigger('change');
+                } else {
+                    elem.trigger('click');
+                }
             }, this));
         },
 

@@ -12,6 +12,8 @@ use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceModifierInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class for filter product price index.
@@ -29,13 +31,31 @@ class ProductPriceIndexFilter implements PriceModifierInterface
     private $stockItem;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var string
+     */
+    private $connectionName;
+
+    /**
      * @param StockConfigurationInterface $stockConfiguration
      * @param Item $stockItem
+     * @param ResourceConnection $resourceConnection
+     * @param string $connectionName
      */
-    public function __construct(StockConfigurationInterface $stockConfiguration, Item $stockItem)
-    {
+    public function __construct(
+        StockConfigurationInterface $stockConfiguration,
+        Item $stockItem,
+        ResourceConnection $resourceConnection = null,
+        $connectionName = 'indexer'
+    ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockItem = $stockItem;
+        $this->resourceConnection = $resourceConnection ?: ObjectManager::getInstance()->get(ResourceConnection::class);
+        $this->connectionName = $connectionName;
     }
 
     /**
@@ -44,6 +64,8 @@ class ProductPriceIndexFilter implements PriceModifierInterface
      * @param IndexTableStructure $priceTable
      * @param array $entityIds
      * @return void
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = [])
@@ -52,7 +74,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
             return;
         }
 
-        $connection = $this->stockItem->getConnection();
+        $connection = $this->resourceConnection->getConnection($this->connectionName);
         $select = $connection->select();
         $select->from(
             ['price_index' => $priceTable->getTableName()],

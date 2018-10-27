@@ -89,7 +89,7 @@ class Grouped implements DimensionalIndexerInterface
      *
      * @throws \Exception
      */
-    public function executeByDimension(array $dimensions, \Traversable $entityIds = null)
+    public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {
         /** @var IndexTableStructure $temporaryPriceTable */
         $temporaryPriceTable = $this->indexTableStructureFactory->create([
@@ -112,12 +112,12 @@ class Grouped implements DimensionalIndexerInterface
     /**
      * Prepare data index select for Grouped products prices
      *
-     * @param $dimensions
-     * @param int|array $entityIds the parent entity ids limitation
+     * @param array $dimensions
+     * @param array $entityIds the parent entity ids limitation
      * @return \Magento\Framework\DB\Select
      * @throws \Exception
      */
-    protected function prepareGroupedProductPriceDataSelect($dimensions, $entityIds = null)
+    private function prepareGroupedProductPriceDataSelect(array $dimensions, array $entityIds)
     {
         $select = $this->getConnection()->select();
 

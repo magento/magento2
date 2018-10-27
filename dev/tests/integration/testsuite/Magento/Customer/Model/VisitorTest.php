@@ -7,6 +7,9 @@ namespace Magento\Customer\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class VisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**

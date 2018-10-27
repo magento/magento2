@@ -102,6 +102,6 @@ class Component extends Template
      */
     public function isButtonContext()
     {
-        return (bool) $this->getData(self::IS_BUTTON_CONTEXT_INDEX);
+        return (bool)$this->getData(self::IS_BUTTON_CONTEXT_INDEX);
     }
 }

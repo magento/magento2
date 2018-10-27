@@ -280,6 +280,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(110, $jsonConfig['prices']['oldPrice']['amount']);
         $this->assertEquals(100, $jsonConfig['prices']['basePrice']['amount']);
         $this->assertEquals(100, $jsonConfig['prices']['finalPrice']['amount']);
+        $this->assertEquals([1], $jsonConfig['positions']);
     }
 
     /**

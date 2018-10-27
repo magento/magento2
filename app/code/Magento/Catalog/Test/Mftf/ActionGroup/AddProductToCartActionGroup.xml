@@ -13,18 +13,16 @@
             <argument name="product" defaultValue="product"/>
         </arguments>
         <amOnPage stepKey="navigateProductPage" url="/{{product.name}}.html"/>
-        <click stepKey="addToCart" selector="{{StorefrontProductPageSection.AddToCartBtn}}"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <click stepKey="addToCart" selector="{{StorefrontProductPageSection.addToCartBtn}}"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
     </actionGroup>.
     <!--Click Add to Cart button in storefront product page-->
     <actionGroup name="addToCartFromStorefrontProductPage">
         <arguments>
             <argument name="productName"/>
         </arguments>
-        <click selector="{{StorefrontProductPageSection.AddToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAdding"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
         <waitForElementNotVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAdded"/>
         <waitForElementNotVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAddToCart}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAddToCart"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

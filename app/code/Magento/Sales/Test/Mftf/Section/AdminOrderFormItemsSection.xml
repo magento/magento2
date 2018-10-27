@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminOrderFormItemsSection">
+        <element name="addProducts" type="button" selector="//section[@id='order-items']/div/div/button/span[text() = 'Add Products']" timeout="30"/>
+        <element name="search" type="button" selector="#sales_order_create_search_grid [data-action='grid-filter-apply']" timeout="30"/>
+        <element name="skuFilter" type="input" selector="#sales_order_create_search_grid_filter_sku"/>
+        <element name="rowCheck" type="checkbox" selector="#sales_order_create_search_grid_table > tbody tr:nth-of-type({{row}}) td.col-select [type=checkbox]" parameterized="true"/>
+        <element name="rowQty" type="input" selector="#sales_order_create_search_grid_table > tbody tr:nth-of-type({{row}}) td.col-qty [name='qty']" parameterized="true"/>
+        <element name="addSelected" type="button" selector="#order-search .admin__page-section-title .actions button.action-add" timeout="30"/>
+        <element name="configure" type="button" selector=".product-configure-block button.action-default.scalable" timeout="30"/>
+        <element name="selectProduct" type="checkbox" selector="//td[contains(text(), '{{arg}}')]/following-sibling::td[contains(@class, 'col-select col-in_products')]" parameterized="true"/>
+        <element name="setQuantity" type="checkbox" selector="//td[contains(text(), '{{arg}}')]/following-sibling::td[contains(@class, 'col-qty')]/input" parameterized="true"/>
+        <element name="customPrice" type="checkbox" selector="//span[text()='{{arg}}']/parent::td/following-sibling::td/div//span[contains(text(),'Custom Price')]" parameterized="true"/>
+        <element name="customQuantity" type="input" selector="//span[text()='{{arg}}']/parent::td/following-sibling::td[@class='col-qty']/input" parameterized="true"/>
+        <element name="update" type="button" selector="//span[text()='Update Items and Quantities']"/>
+        <element name="discount" type="text" selector="//span[text()='{{arg}}']/parent::td/following-sibling::td[@class='col-discount col-price']/span" parameterized="true"/>
+        <element name="productPrice" type="text" selector="//span[text()='{{arg}}']/parent::td/following-sibling::td[@class='col-price col-row-subtotal']/span" parameterized="true"/>
+        <element name="removeItems" type="select" selector="//span[text()='{{arg}}']/parent::td/following-sibling::td/select[@class='admin__control-select']" parameterized="true"/>
+        <element name="applyCoupon" type="input" selector="#coupons:code"/>
+    </section>
+</sections>

@@ -7,7 +7,6 @@
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\Collection;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\DataObject as MagentoObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\ObjectManagerInterface;
 

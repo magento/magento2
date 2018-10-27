@@ -74,7 +74,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     public function getStoreId()
     {
         $storeId = $this->getRequest()->getParam('store');
-        return intval($storeId);
+        return (int)$storeId;
     }
 
     /**
