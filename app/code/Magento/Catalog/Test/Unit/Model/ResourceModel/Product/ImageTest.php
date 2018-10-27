@@ -36,7 +36,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     protected $resourceMock;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->connectionMock = $this->createMock(AdapterInterface::class);
@@ -75,7 +75,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * @param int $imagesCount
      * @dataProvider dataProvider
      */
-    public function testGetCountAllProductImages(int $imagesCount): void
+    public function testGetCountAllProductImages(int $imagesCount)
     {
         $selectMock = $this->getVisibleImagesSelectMock();
         $selectMock->expects($this->exactly(2))
@@ -113,7 +113,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * @param int $batchSize
      * @dataProvider dataProvider
      */
-    public function testGetAllProductImages(int $imagesCount, int $batchSize): void
+    public function testGetAllProductImages(int $imagesCount, int $batchSize)
     {
         $this->connectionMock->expects($this->once())
             ->method('select')
