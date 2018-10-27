@@ -91,6 +91,7 @@
         <waitForElementNotVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitForCloseModalWindow"/>
     </actionGroup>
 
+    <!--Set product to website-->
     <actionGroup name="ProductSetWebsite">
         <arguments>
             <argument name="website"/>
@@ -131,13 +132,41 @@
     <!--Switch to New Store view-->
     <actionGroup name="SwitchToTheNewStoreView">
         <arguments>
-            <argument name="storeViewName" type="string"/>
+            <argument name="storeViewName"/>
         </arguments>
-        <scrollTo selector="{{AdminProductContentSection.pageHeader}}" stepKey="scrollToUp"/>
+        <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToUp"/>
         <waitForElementVisible selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="waitForElementBecomeVisible"/>
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher"/>
-        <click selector="{{AdminProductFormActionSection.selectStoreView(storeViewName)}}" stepKey="chooseStoreView"/>
+        <click selector="{{AdminProductFormActionSection.selectStoreView(storeViewName.name)}}" stepKey="chooseStoreView"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!--Select Product In Websites-->
+    <actionGroup name="SelectProductInWebsitesActionGroup">
+        <arguments>
+            <argument name="website" type="string"/>
+        </arguments>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickToOpenProductInWebsite"/>
+        <waitForPageLoad stepKey="waitForPageOpened"/>
+        <checkOption selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
+    </actionGroup>
+
+    <!--Remove product image-->
+    <actionGroup name="RemoveProductImage">
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
+        <waitForPageLoad time="30" stepKey="waitForPageRefresh"/>
+        <click selector="{{AdminProductImagesSection.removeImageButton}}" stepKey="clickRemoveImage"/>
+    </actionGroup>
+
+    <!-- Assert no product image in Admin Product page -->
+    <actionGroup name="AssertProductImageNotInAdminProductPage">
+        <arguments>
+            <argument name="image" defaultValue="MagentoLogo" />
+        </arguments>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <dontSeeElement selector="{{AdminProductImagesSection.imageFile(image.filename)}}" stepKey="seeImage"/>
     </actionGroup>
 </actionGroups>
