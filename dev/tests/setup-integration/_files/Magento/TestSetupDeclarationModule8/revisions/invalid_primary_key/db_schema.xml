@@ -11,7 +11,7 @@
         <column xsi:type="int" name="page_id" nullable="false" identity="true" />
         <column xsi:type="varchar" name="email" nullable="true" />
         <column xsi:type="varchar" name="title" />
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="page_id" />
             <column name="email" />
         </constraint>

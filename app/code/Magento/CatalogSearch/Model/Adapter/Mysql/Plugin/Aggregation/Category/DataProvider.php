@@ -13,11 +13,13 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class DataProvider
 {

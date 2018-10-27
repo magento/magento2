@@ -72,17 +72,17 @@ class MassDelete extends \Magento\Backend\App\Action
                 $this->synGroupRepository->delete($synonymGroup);
                 $deletedItems++;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         }
         if ($deletedItems != 0) {
             if ($collectionSize != $deletedItems) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('Failed to delete %1 synonym group(s).', $collectionSize - $deletedItems)
                 );
             }
 
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('A total of %1 synonym group(s) have been deleted.', $deletedItems)
             );
         }

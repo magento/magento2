@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateAndDeleteBackupsTest">
+        <annotations>
+            <features value="Backup"/>
+            <stories value="Create and delete backups"/>
+            <title value="Create and delete backups"/>
+            <description value="An admin user can create a backup of each type and delete each backup."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-94176"/>
+            <group value="backup"/>
+            <skip>
+                <issueId value="MQE-1187"/>
+                <issueId value="DEVOPS-3512"/>
+            </skip>
+        </annotations>
+
+        <!--Login to admin area-->
+        <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!--Go to backup index page-->
+        <amOnPage url="{{BackupIndexPage.url}}" stepKey="goToBackupPage"/>
+        <waitForPageLoad stepKey="waitForBackupPage"/>
+
+        <!--Create system backup-->
+        <actionGroup ref="createSystemBackup" stepKey="createSystemBackup"/>
+
+        <!--Create database/media backup-->
+        <actionGroup ref="createMediaBackup" stepKey="createMediaBackup"/>
+
+        <!--Create database backup-->
+        <actionGroup ref="createDatabaseBackup" stepKey="createDatabaseBackup"/>
+
+        <!--Delete system backup-->
+        <actionGroup ref="deleteBackup" stepKey="deleteSystemBackup">
+            <argument name="backup" value="SystemBackup"/>
+        </actionGroup>
+
+        <!--Delete database/media backup-->
+        <actionGroup ref="deleteBackup" stepKey="deleteMediaBackup">
+            <argument name="backup" value="MediaBackup"/>
+        </actionGroup>
+
+        <!--Delete database backup-->
+        <actionGroup ref="deleteBackup" stepKey="deleteDatabaseBackup">
+            <argument name="backup" value="DatabaseBackup"/>
+        </actionGroup>
+
+    </test>
+</tests>

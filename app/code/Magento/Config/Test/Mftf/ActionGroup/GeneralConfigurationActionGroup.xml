@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="NavigateToDefaultLayoutsSetting">
+        <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{DefaultLayoutsSection.categoryLayout}}" stepKey="waittForDefaultCategoryLayout" />
+    </actionGroup>
+
+    <actionGroup name="NavigateToConfigurationGeneralPage">
+        <amOnPage url="{{AdminConfigGeneralPage.url}}" stepKey="navigateToConfigGeneralPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="SelectTopDestinationsCountry">
+        <arguments>
+            <argument name="countries" type="countryArray"/>
+        </arguments>
+        <selectOption selector="{{CountryOptionsSection.topDestinations}}" parameterArray="[{{countries.country}}]" stepKey="selectTopDestinationsCountry"/>
+        <click selector="#save" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForSavingConfig"/>
+    </actionGroup>
+
+    <actionGroup name="UnSelectTopDestinationsCountry">
+        <arguments>
+            <argument name="countries" type="countryArray"/>
+        </arguments>
+        <unselectOption selector="{{CountryOptionsSection.topDestinations}}" parameterArray="[{{countries.country}}]" stepKey="unSelectTopDestinationsCountry"/>
+        <click selector="#save" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForSavingConfig"/>
+    </actionGroup>
+</actionGroups>

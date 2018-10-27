@@ -5,6 +5,9 @@
  */
 namespace Magento\Newsletter\Model\ResourceModel;
 
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Newsletter subscriber resource model
  *
@@ -49,27 +52,37 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $mathRandom;
 
     /**
+     * Store manager
+     *
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param string $connectionName
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Math\Random $mathRandom,
-        $connectionName = null
+        $connectionName = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_date = $date;
         $this->mathRandom = $mathRandom;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
         parent::__construct($context, $connectionName);
     }
 
     /**
-     * Initialize resource model
-     * Get tablename from config
+     * Initialize resource model. Get tablename from config
      *
      * @return void
      */
@@ -118,6 +131,9 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function loadByCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
+        $storeId = (int)$customer->getStoreId() ?: $this->storeManager
+            ->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
+
         $select = $this->connection
             ->select()
             ->from($this->getMainTable())
@@ -128,7 +144,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $select,
                 [
                     'customer_id' => $customer->getId(),
-                    'store_id' => $customer->getStoreId()
+                    'store_id' => $storeId
                 ]
             );
 
@@ -146,7 +162,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $select,
                 [
                     'subscriber_email' => $customer->getEmail(),
-                    'store_id' => $customer->getStoreId()
+                    'store_id' => $storeId
                 ]
             );
 

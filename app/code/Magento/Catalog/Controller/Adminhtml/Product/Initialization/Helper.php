@@ -104,7 +104,7 @@ class Helper
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param CustomOptionFactory|null $customOptionFactory
-     * @param ProductLinkFactory |null $productLinkFactory
+     * @param ProductLinkFactory|null $productLinkFactory
      * @param ProductRepositoryInterface|null $productRepository
      * @param LinkTypeProvider|null $linkTypeProvider
      * @param AttributeFilter|null $attributeFilter
@@ -159,6 +159,7 @@ class Helper
         }
 
         $productData = $this->normalize($productData);
+        $productData = $this->convertSpecialFromDateStringToObject($productData);
 
         if (!empty($productData['is_downloadable'])) {
             $productData['product_has_weight'] = 0;
@@ -451,5 +452,20 @@ class Helper
         }
 
         return $product->setOptions($customOptions);
+    }
+
+    /**
+     * Convert string date presentation into object
+     *
+     * @param array $productData
+     * @return array
+     */
+    private function convertSpecialFromDateStringToObject($productData)
+    {
+        if (isset($productData['special_from_date']) && $productData['special_from_date'] != '') {
+            $productData['special_from_date'] = new \DateTime($productData['special_from_date']);
+        }
+
+        return $productData;
     }
 }

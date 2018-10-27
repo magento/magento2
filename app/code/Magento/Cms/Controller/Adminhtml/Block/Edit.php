@@ -5,7 +5,9 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-class Edit extends \Magento\Cms\Controller\Adminhtml\Block
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\Cms\Controller\Adminhtml\Block implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -42,7 +44,7 @@ class Edit extends \Magento\Cms\Controller\Adminhtml\Block
         if ($id) {
             $model->load($id);
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This block no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This block no longer exists.'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('*/*/');

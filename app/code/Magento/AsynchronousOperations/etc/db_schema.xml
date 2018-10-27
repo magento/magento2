@@ -14,20 +14,22 @@
         <column xsi:type="varbinary" name="uuid" nullable="true" length="39"
                 comment="Bulk UUID (can be exposed to reference bulk entity)"/>
         <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="ID of the user that performed an action"/>
+                comment="ID of the WebAPI user that performed an action"/>
+        <column xsi:type="int" name="user_type" nullable="true" comment="Which type of user"/>
         <column xsi:type="varchar" name="description" nullable="true" length="255" comment="Bulk Description"/>
         <column xsi:type="int" name="operation_count" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Total number of operations scheduled within this bulk"/>
         <column xsi:type="timestamp" name="start_time" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Bulk start time"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID" table="magento_bulk"
-                    column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="MAGENTO_BULK_UUID">
+        <constraint xsi:type="unique" referenceId="MAGENTO_BULK_UUID">
             <column name="uuid"/>
         </constraint>
+        <index referenceId="MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID" indexType="btree">
+            <column name="user_id"/>
+        </index>
     </table>
     <table name="magento_operation" resource="default" engine="innodb" comment="Operation entity">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
@@ -45,12 +47,12 @@
                 comment="Code of the error that appeared during operation execution (used to aggregate related failed operations)"/>
         <column xsi:type="varchar" name="result_message" nullable="true" length="255"
                 comment="Operation result message"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="MAGENTO_OPERATION_BULK_UUID_MAGENTO_BULK_UUID" table="magento_operation"
+        <constraint xsi:type="foreign" referenceId="MAGENTO_OPERATION_BULK_UUID_MAGENTO_BULK_UUID" table="magento_operation"
                     column="bulk_uuid" referenceTable="magento_bulk" referenceColumn="uuid" onDelete="CASCADE"/>
-        <index name="MAGENTO_OPERATION_BULK_UUID_ERROR_CODE" indexType="btree">
+        <index referenceId="MAGENTO_OPERATION_BULK_UUID_ERROR_CODE" indexType="btree">
             <column name="bulk_uuid"/>
             <column name="error_code"/>
         </index>
@@ -60,13 +62,13 @@
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Internal ID"/>
         <column xsi:type="varbinary" name="bulk_uuid" nullable="true" length="39" comment="Related Bulk UUID"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="MAGENTO_ACKNOWLEDGED_BULK_BULK_UUID_MAGENTO_BULK_UUID"
+        <constraint xsi:type="foreign" referenceId="MAGENTO_ACKNOWLEDGED_BULK_BULK_UUID_MAGENTO_BULK_UUID"
                     table="magento_acknowledged_bulk" column="bulk_uuid" referenceTable="magento_bulk"
                     referenceColumn="uuid" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="MAGENTO_ACKNOWLEDGED_BULK_BULK_UUID">
+        <constraint xsi:type="unique" referenceId="MAGENTO_ACKNOWLEDGED_BULK_BULK_UUID">
             <column name="bulk_uuid"/>
         </constraint>
     </table>

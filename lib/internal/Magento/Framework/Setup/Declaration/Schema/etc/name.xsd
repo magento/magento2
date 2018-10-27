@@ -16,4 +16,18 @@
             <xs:maxLength value="64" />
         </xs:restriction>
     </xs:simpleType>
+    <xs:simpleType name="referenceIdType">
+        <xs:union memberTypes="nameType">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>
+                        The attribute can contain only [A-Z0-9_].
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Z0-9_]+" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
 </xs:schema>

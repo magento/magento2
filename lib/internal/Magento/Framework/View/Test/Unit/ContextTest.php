@@ -234,6 +234,9 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($acceptType, $this->context->getAcceptType());
     }
 
+    /**
+     * @return array
+     */
     public function getAcceptTypeDataProvider()
     {
         return [

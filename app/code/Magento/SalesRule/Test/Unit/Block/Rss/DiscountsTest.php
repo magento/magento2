@@ -195,6 +195,9 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($isAllowed, $this->block->isAllowed());
     }
 
+    /**
+     * @return array
+     */
     public function isAllowedDataProvider()
     {
         return [

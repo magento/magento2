@@ -46,7 +46,7 @@ class PropertiesLineBreakSniff implements Sniff
         }
 
         if ($tokens[$prevPtr]['line'] === $tokens[$stackPtr]['line']) {
-            $error = 'Each propery must be on a line by itself';
+            $error = 'Each property must be on a line by itself';
             $phpcsFile->addError($error, $stackPtr, 'SameLine');
         }
     }

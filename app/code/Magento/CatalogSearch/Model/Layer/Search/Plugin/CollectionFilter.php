@@ -9,6 +9,9 @@ namespace Magento\CatalogSearch\Model\Layer\Search\Plugin;
 use Magento\Catalog\Model\Category;
 use Magento\Search\Model\QueryFactory;
 
+/**
+ * Catalog search plugin for search collection filter in layered navigation.
+ */
 class CollectionFilter
 {
     /**

@@ -46,6 +46,24 @@ class Collection
             $this->collection = $this->collectionFactory->create();
             $this->collection->addFieldToFilter('is_user_defined', '1');
             $this->collection->addFieldToFilter('attribute_code', ['neq' => 'cost']);
+            $this->collection->addFieldToFilter(
+                [
+                    'is_comparable',
+                    'is_filterable',
+                    'is_filterable_in_search',
+                    'is_visible_on_front',
+                    'used_in_product_listing',
+                    'used_for_sort_by'
+                ],
+                [
+                    ['eq' => '1'],
+                    ['eq' => '1'],
+                    ['eq' => '1'],
+                    ['eq' => '1'],
+                    ['eq' => '1'],
+                    ['eq' => '1']
+                ]
+            );
         }
 
         return $this->collection->load();

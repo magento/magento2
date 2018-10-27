@@ -105,9 +105,11 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve formatted price
+     *
      * @return string
      */
-    public function getFormatedPrice()
+    public function getFormattedPrice()
     {
         if ($option = $this->getOption()) {
             return $this->_formatPrice(
@@ -118,6 +120,17 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
             );
         }
         return '';
+    }
+
+    /**
+     * @return string
+     *
+     * @deprecated
+     * @see getFormattedPrice()
+     */
+    public function getFormatedPrice()
+    {
+        return $this->getFormattedPrice();
     }
 
     /**

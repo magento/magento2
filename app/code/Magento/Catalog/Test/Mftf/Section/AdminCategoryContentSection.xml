@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCategoryContentSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='content']" timeout="30"/>
+        <element name="uploadButton" type="button" selector="//*[@class='file-uploader-area']/label[text()='Upload']"/>
+        <element name="selectFromGalleryButton" type="button" selector="//*[@class='file-uploader-area']/label[text()='Select from Gallery']"/>
+        <element name="uploadImageFile" type="input" selector=".file-uploader-area>input"/>
+        <element name="imageFileName" type="text" selector=".file-uploader-filename"/>
+        <element name="removeImageButton" type="button" selector=".file-uploader-summary .action-remove"/>
+    </section>
+</sections>

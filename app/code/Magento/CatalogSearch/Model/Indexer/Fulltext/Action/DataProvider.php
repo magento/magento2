@@ -12,6 +12,8 @@ use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
 /**
+ * Catalog search full test search data provider.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
@@ -538,7 +540,7 @@ class DataProvider
      * @param array $indexData
      * @param array $productData
      * @param int $storeId
-     * @return string
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @since 100.0.3
      */
