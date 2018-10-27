@@ -6,7 +6,7 @@
 namespace Magento\AsynchronousOperations\Controller\Adminhtml\Bulk;
 
 /**
- * Class View Opertion Details Controller
+ * Class View Operation Details Controller
  */
 class Details extends \Magento\Backend\App\Action
 {

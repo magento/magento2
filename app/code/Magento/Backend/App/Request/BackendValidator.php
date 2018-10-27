@@ -166,7 +166,7 @@ class BackendValidator implements ValidatorInterface
         ActionInterface $action
     ): void {
         if ($action instanceof AbstractAction) {
-            //Abstract Action has build-in validation.
+            //Abstract Action has built-in validation.
             if (!$action->_processUrlKeys()) {
                 throw new InvalidRequestException($action->getResponse());
             }
