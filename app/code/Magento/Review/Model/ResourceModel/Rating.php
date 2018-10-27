@@ -433,10 +433,9 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $data = $connection->fetchAll($select, [':review_id' => $object->getReviewId()]);
 
+        $currentStore = $this->_storeManager->getStore()->setId();
         if ($this->_state->getAreaCode() == "adminhtml") {
             $currentStore = false;
-        } else {
-            $currentStore = $this->_storeManager->getStore()->setId();
         }
 
         if ($onlyForCurrentStore) {
