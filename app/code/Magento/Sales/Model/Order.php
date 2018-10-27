@@ -627,11 +627,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return $this->getForcedCanCreditmemo();
         }
 
-        if ($this->canUnhold() || $this->isPaymentReview()) {
-            return false;
-        }
-
-        if ($this->isCanceled() || $this->getState() === self::STATE_CLOSED) {
+        if ($this->canUnhold() || $this->isPaymentReview() ||
+            $this->isCanceled() || $this->getState() === self::STATE_CLOSED) {
             return false;
         }
 
@@ -641,15 +638,53 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
          * TotalPaid - contains amount, that were not rounded.
          */
         $totalRefunded = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
-        if (abs($totalRefunded) < .0001) {
-            return false;
+        if (abs($this->getGrandTotal()) < .0001) {
+            return $this->canCreditmemoForZeroTotal($totalRefunded);
         }
+
+        return $this->canCreditmemoForZeroTotalRefunded($totalRefunded);
+    }
+
+    /**
+     * Retrieve credit memo for zero total refunded availability.
+     *
+     * @param float $totalRefunded
+     * @return bool
+     */
+    private function canCreditmemoForZeroTotalRefunded($totalRefunded)
+    {
+        $isRefundZero = abs($totalRefunded) < .0001;
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
-        if (abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) {
+        $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
+        $hasActinFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
+        if ($isRefundZero || $hasAdjustmentFee || $hasActinFlag) {
             return false;
         }
 
-        if ($this->getActionFlag(self::ACTION_FLAG_EDIT) === false) {
+        return true;
+    }
+    
+    /**
+     * Retrieve credit memo for zero total availability.
+     *
+     * @param float $totalRefunded
+     * @return bool
+     */
+    public function canCreditmemoForZeroTotal($totalRefunded)
+    {
+        $totalPaid = $this->getTotalPaid();
+        //check if total paid is less than grandtotal
+        $checkAmtTotalPaid = $totalPaid <= $this->getGrandTotal();
+        //case when amount is due for invoice
+        $dueAmountCondition = $this->canInvoice() && ($checkAmtTotalPaid);
+        //case when paid amount is refunded and order has creditmemo created
+
+        $creditmemos = ($this->getCreditmemosCollection() === false) ?
+             true : (count($this->getCreditmemosCollection()) > 0);
+        $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
+        if (($dueAmountCondition || $paidAmtIsRefunded) ||
+            (!$checkAmtTotalPaid &&
+            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)) {
             return false;
         }
         return true;
@@ -1337,7 +1372,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _getItemsRandomCollection($limit, $nonChildrenOnly = false)
     {
-        $collection = $this->_orderItemCollectionFactory->create()->setOrderFilter($this)->setRandomOrder();
+        $collection = $this->_orderItemCollectionFactory->create()
+            ->setOrderFilter($this)
+            ->setRandomOrder()
+            ->setPageSize($limit);
 
         if ($nonChildrenOnly) {
             $collection->filterByParent();
@@ -1351,9 +1389,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $products
         )->setVisibility(
             $this->_productVisibility->getVisibleInSiteIds()
-        )->addPriceData()->setPageSize(
-            $limit
-        )->load();
+        )->addPriceData()->load();
 
         foreach ($collection as $item) {
             $product = $productsCollection->getItemById($item->getProductId());
@@ -2116,6 +2152,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * Return applied_rule_ids
+     *
+     * Rules are comma separated if there are more than one.
      *
      * @return string|null
      */
