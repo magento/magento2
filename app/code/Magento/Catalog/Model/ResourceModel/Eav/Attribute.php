@@ -462,7 +462,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         $backendType = $this->getOrigData('backend_type');
         $frontendInput = $this->getOrigData('frontend_input');
 
-        if ($backendType == 'int' && $frontendInput == 'select') {
+        if ($backendType == 'int' && ($frontendInput == 'select' || $frontendInput == 'boolean')) {
             return true;
         } elseif ($backendType == 'varchar' && $frontendInput == 'multiselect') {
             return true;

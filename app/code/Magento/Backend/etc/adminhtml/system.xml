@@ -218,6 +218,7 @@
                 <field id="destinations" translate="label" type="multiselect" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Top destinations</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <can_be_empty>1</can_be_empty>
                 </field>
             </group>
             <group id="locale" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -321,15 +322,26 @@
             </group>
             <group id="upload_configuration" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Images Upload Configuration</label>
-                <field id="max_width" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="enable_resize" translate="label" type="select" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Enable Frontend Resize</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Resize performed via javascript before file upload.</comment>
+                </field>
+                <field id="max_width" translate="label comment" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Maximum Width</label>
                     <validate>validate-greater-than-zero validate-number required-entry</validate>
                     <comment>Maximum allowed width for uploaded image.</comment>
+                    <depends>
+                        <field id="enable_resize">1</field>
+                    </depends>
                 </field>
-                <field id="max_height" translate="label comment" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="max_height" translate="label comment" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Maximum Height</label>
                     <validate>validate-greater-than-zero validate-number required-entry</validate>
                     <comment>Maximum allowed height for uploaded image.</comment>
+                    <depends>
+                        <field id="enable_resize">1</field>
+                    </depends>
                 </field>
             </group>
         </section>

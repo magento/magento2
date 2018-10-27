@@ -341,6 +341,12 @@ class FlatTableBuilder
                     if (!empty($changedIds)) {
                         $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
                     }
+
+                    /*
+                     * According to \Magento\Framework\DB\SelectRendererInterface select rendering may be updated
+                     * so we need to trigger select renderer for correct update
+                     */
+                    $select->assemble();
                     $sql = $select->crossUpdateFromSelect(['et' => $temporaryFlatTableName]);
                     $this->_connection->query($sql);
                 }
@@ -355,6 +361,7 @@ class FlatTableBuilder
                     if (!empty($changedIds)) {
                         $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
                     }
+                    $select->assemble();
                     $sql = $select->crossUpdateFromSelect(['et' => $temporaryFlatTableName]);
                     $this->_connection->query($sql);
                 }
