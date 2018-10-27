@@ -27,16 +27,16 @@
         <column xsi:type="varchar" name="orig_template_code" nullable="true" length="200"
                 comment="Original Template Code"/>
         <column xsi:type="text" name="orig_template_variables" nullable="true" comment="Original Template Variables"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="template_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="EMAIL_TEMPLATE_TEMPLATE_CODE">
+        <constraint xsi:type="unique" referenceId="EMAIL_TEMPLATE_TEMPLATE_CODE">
             <column name="template_code"/>
         </constraint>
-        <index name="EMAIL_TEMPLATE_ADDED_AT" indexType="btree">
+        <index referenceId="EMAIL_TEMPLATE_ADDED_AT" indexType="btree">
             <column name="added_at"/>
         </index>
-        <index name="EMAIL_TEMPLATE_MODIFIED_AT" indexType="btree">
+        <index referenceId="EMAIL_TEMPLATE_MODIFIED_AT" indexType="btree">
             <column name="modified_at"/>
         </index>
     </table>
