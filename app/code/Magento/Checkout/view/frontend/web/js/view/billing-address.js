@@ -90,8 +90,15 @@ function (
                 if (quote.isVirtual()) {
                     this.isAddressSameAsShipping(false);
                 } else {
+                    var toCheck = true;
+                    if (window.isbothAddressSame == false) {
+                        toCheck = false;
+                    } else {
+                        toCheck = true;
+                    }
                     this.isAddressSameAsShipping(
                         newAddress != null &&
+                        toCheck && 
                         newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() //eslint-disable-line eqeqeq
                     );
                 }
@@ -124,11 +131,12 @@ function (
          */
         useShippingAddress: function () {
             if (this.isAddressSameAsShipping()) {
+                window.isbothAddressSame = true;
                 selectBillingAddress(quote.shippingAddress());
-
                 this.updateAddresses();
                 this.isAddressDetailsVisible(true);
             } else {
+                window.isbothAddressSame = false;
                 lastSelectedBillingAddress = quote.billingAddress();
                 quote.billingAddress(null);
                 this.isAddressDetailsVisible(false);
