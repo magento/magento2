@@ -47,6 +47,10 @@ class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $blockClass
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function createBlock($blockClass)

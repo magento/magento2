@@ -478,7 +478,11 @@ class Processor
     public function saveReport($reportData)
     {
         $this->reportData = $reportData;
+<<<<<<< HEAD
         $this->reportId   = abs(intval(microtime(true) * random_int(100, 1000)));
+=======
+        $this->reportId   = abs((int)microtime(true) * random_int(100, 1000));
+>>>>>>> upstream/2.2-develop
         $this->_reportFile = $this->_reportDir . '/' . $this->reportId;
         $this->_setReportData($reportData);
 

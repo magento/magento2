@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\SalesRule\Test\Unit\Model;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -49,7 +52,11 @@ class DeltaPriceRoundTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @dataProvider roundDataProvider
      */
+<<<<<<< HEAD
     public function testRound(array $prices, array $roundedPrices): void
+=======
+    public function testRound(array $prices, array $roundedPrices)
+>>>>>>> upstream/2.2-develop
     {
         foreach ($prices as $key => $price) {
             $roundedPrice = $this->model->round($price, 'test');
@@ -62,7 +69,11 @@ class DeltaPriceRoundTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function roundDataProvider(): array
+=======
+    public function roundDataProvider()
+>>>>>>> upstream/2.2-develop
     {
         return [
             [
@@ -79,7 +90,11 @@ class DeltaPriceRoundTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testReset(): void
+=======
+    public function testReset()
+>>>>>>> upstream/2.2-develop
     {
         $this->assertEquals(1.44, $this->model->round(1.444, 'test'));
         $this->model->reset('test');
@@ -89,7 +104,11 @@ class DeltaPriceRoundTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testResetAll(): void
+=======
+    public function testResetAll()
+>>>>>>> upstream/2.2-develop
     {
         $this->assertEquals(1.44, $this->model->round(1.444, 'test1'));
         $this->assertEquals(1.44, $this->model->round(1.444, 'test2'));

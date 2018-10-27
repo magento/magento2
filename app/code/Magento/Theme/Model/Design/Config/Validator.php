@@ -99,6 +99,10 @@ class Validator
         }
         return false;
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
     /**
      * Load template text in configured scope
      *

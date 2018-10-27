@@ -66,7 +66,11 @@ class CaseSearch extends Form
      *
      * @return void
      */
+<<<<<<< HEAD
     private function resetFilters(): void
+=======
+    private function resetFilters()
+>>>>>>> upstream/2.2-develop
     {
         $filters = $this->_rootElement->getElements($this->appliedFilters);
         if (!empty($filters)) {
@@ -82,7 +86,11 @@ class CaseSearch extends Form
      *
      * @return void
      */
+<<<<<<< HEAD
     private function waitLoadingSpinner(): void
+=======
+    private function waitLoadingSpinner()
+>>>>>>> upstream/2.2-develop
     {
         $this->waitForElementNotVisible($this->spinner);
     }
@@ -92,7 +100,11 @@ class CaseSearch extends Form
      *
      * @return bool
      */
+<<<<<<< HEAD
     public function isAnyCaseVisible(): bool
+=======
+    public function isAnyCaseVisible()
+>>>>>>> upstream/2.2-develop
     {
         return $this->_rootElement->find($this->selectCaseLink)->isVisible();
     }

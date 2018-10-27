@@ -79,9 +79,12 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+<<<<<<< HEAD
     /**
      * Test for getAllowedCountries
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function testGetAllowedCountriesDefaultScope()
     {
         $this->storeManagerMock->expects($this->never())

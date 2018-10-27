@@ -19,7 +19,11 @@ interface ConfiguredPriceInterface
     const CONFIGURED_PRICE_CODE = 'configured_price';
 
     /**
+<<<<<<< HEAD
      * Regular price type configured.
+=======
+     * Regular price type configured
+>>>>>>> upstream/2.2-develop
      */
     const CONFIGURED_REGULAR_PRICE_CODE = 'configured_regular_price';
 

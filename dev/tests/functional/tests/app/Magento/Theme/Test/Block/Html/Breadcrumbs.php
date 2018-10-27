@@ -38,6 +38,10 @@ class Breadcrumbs extends Block
     public function getCrumbs()
     {
         $crumbs = $this->_rootElement->getElements($this->crumbSelector);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $result = [];
 
         foreach ($crumbs as $crumb) {

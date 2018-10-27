@@ -19,7 +19,11 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 interface StockStatusInterface extends ExtensibleDataInterface
 {
     /**#@+
+<<<<<<< HEAD
      * Stock Status values.
+=======
+     * Stock Status values
+>>>>>>> upstream/2.2-develop
      */
     const STATUS_OUT_OF_STOCK = 0;
 

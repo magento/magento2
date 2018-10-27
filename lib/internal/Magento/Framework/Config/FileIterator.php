@@ -97,7 +97,7 @@ class FileIterator implements \Iterator, \Countable
      */
     public function valid()
     {
-        return (bool) $this->key();
+        return (bool)$this->key();
     }
 
     /**

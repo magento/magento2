@@ -7,11 +7,18 @@ namespace Magento\Newsletter\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
+<<<<<<< HEAD
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\ObjectManager;
+=======
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Api\DataObjectHelper;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Subscriber model
@@ -99,7 +106,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Date
+<<<<<<< HEAD
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+=======
+     * @var DateTime
+>>>>>>> upstream/2.2-develop
      */
     private $dateTime;
 
@@ -156,7 +167,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+<<<<<<< HEAD
      * @param \Magento\Framework\Stdlib\DateTime\DateTime|null $dateTime
+=======
+     * @param DateTime|null $dateTime
+>>>>>>> upstream/2.2-develop
      * @param CustomerInterfaceFactory|null $customerFactory
      * @param DataObjectHelper|null $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -175,7 +190,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
+<<<<<<< HEAD
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null,
+=======
+        DateTime $dateTime = null,
+>>>>>>> upstream/2.2-develop
         CustomerInterfaceFactory $customerFactory = null,
         DataObjectHelper $dataObjectHelper = null
     ) {
@@ -194,6 +213,9 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
+        $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(DateTime::class);
+        $this->customerFactory = $customerFactory ?: ObjectManager::getInstance()->get(CustomerInterfaceFactory::class);
+        $this->dataObjectHelper = $dataObjectHelper ?: ObjectManager::getInstance()->get(DataObjectHelper::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -597,6 +619,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         } elseif (($this->getStatus() == self::STATUS_UNCONFIRMED) && ($customerData->getConfirmation() === null)) {
             $status = self::STATUS_SUBSCRIBED;
             $sendInformationEmail = true;
+        } elseif (($this->getStatus() == self::STATUS_NOT_ACTIVE) && ($customerData->getConfirmation() === null)) {
+            $status = self::STATUS_NOT_ACTIVE;
         } else {
             $status = self::STATUS_UNSUBSCRIBED;
         }

@@ -8,6 +8,7 @@ namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
 use Magento\User\Model\Spi\NotificationExceptionInterface;
@@ -106,7 +107,11 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
             $this->_redirect('adminhtml/*/');
+<<<<<<< HEAD
         } catch (NotificationExceptionInterface $exception) {
+=======
+        } catch (MailException $exception) {
+>>>>>>> upstream/2.2-develop
             $this->messageManager->addErrorMessage($exception->getMessage());
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
             $this->messageManager->addError(

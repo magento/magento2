@@ -110,7 +110,11 @@ class AbstractAction
     public function getMainStoreTable($storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
     {
         if (is_string($storeId)) {
+<<<<<<< HEAD
             $storeId = (int) $storeId;
+=======
+            $storeId = (int)$storeId;
+>>>>>>> upstream/2.2-develop
         }
 
         $suffix = sprintf('store_%d', $storeId);

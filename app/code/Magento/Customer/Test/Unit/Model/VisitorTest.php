@@ -79,7 +79,12 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
     {
         $oldSessionId = 'asdfhasdfjhkj2198sadf8sdf897';
         $newSessionId = 'bsdfhasdfjhkj2198sadf8sdf897';
+<<<<<<< HEAD
         $this->session->expects($this->any())->method('getSessionId')->willReturn($newSessionId);
+=======
+        $this->session->expects($this->any())->method('getSessionId')
+            ->will($this->returnValue($newSessionId));
+>>>>>>> upstream/2.2-develop
         $this->session->expects($this->atLeastOnce())->method('getVisitorData')
             ->willReturn(['session_id' => $oldSessionId]);
         $this->visitor->initByRequest(null);

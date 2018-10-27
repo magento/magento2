@@ -15,12 +15,12 @@ class SubtractQtyFromQuotesObserverTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\ResourceModel\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_observerMock;
 

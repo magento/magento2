@@ -6,15 +6,15 @@
 
 namespace Magento\Framework\Crontab\Test\Unit;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Crontab\CrontabManager;
 use Magento\Framework\Crontab\CrontabManagerInterface;
-use Magento\Framework\ShellInterface;
-use Magento\Framework\Phrase;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Phrase;
+use Magento\Framework\ShellInterface;
 
 class CrontabManagerTest extends \PHPUnit\Framework\TestCase
 {
@@ -200,8 +200,12 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
         $baseDirMock = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
         $baseDirMock->expects($this->never())
+<<<<<<< HEAD
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/');
+=======
+            ->method('getAbsolutePath');
+>>>>>>> upstream/2.2-develop
         $logDirMock = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
         $logDirMock->expects($this->never())
@@ -335,6 +339,20 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
                 'content' => $content,
                 'contentToSave' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
                     . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
+<<<<<<< HEAD
+                    . '* * * * * ' . PHP_BINARY . ' /var/www/magento2/run.php'
+                    . ' %% cron:run | grep -v \"Ran \'jobs\' by schedule\"' . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
+            ],
+            [
+                'tasks' => [
+                    ['command' => '{magentoRoot}run.php % cron:run | grep -v "Ran \'jobs\' by schedule"']
+                ],
+                'content' => '* * * * * /bin/php /var/www/cron.php',
+                'contentToSave' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
+=======
+>>>>>>> upstream/2.2-develop
                     . '* * * * * ' . PHP_BINARY . ' /var/www/magento2/run.php'
                     . ' %% cron:run | grep -v \"Ran \'jobs\' by schedule\"' . PHP_EOL
                     . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
@@ -349,7 +367,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
                     . '* * * * * ' . PHP_BINARY . ' /var/www/magento2/run.php'
                     . ' %% cron:run | grep -v \"Ran \'jobs\' by schedule\"' . PHP_EOL
                     . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
-            ],
+                ],
         ];
     }
 }

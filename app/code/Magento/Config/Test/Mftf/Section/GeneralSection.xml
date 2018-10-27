@@ -7,7 +7,11 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+=======
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+>>>>>>> upstream/2.2-develop
     <section name="ContentManagementSection">
         <element name="WYSIWYGOptions" type="button" selector="#cms_wysiwyg-head"/>
         <element name="CheckIfTabExpand" type="button" selector="#cms_wysiwyg-head:not(.open)"/>
@@ -15,7 +19,10 @@
         <element name="EnableWYSIWYG" type="button" selector="#cms_wysiwyg_enabled"/>
         <element name="SwitcherSystemValue" type="button" selector="#cms_wysiwyg_editor_inherit"/>
         <element name="Switcher" type="button" selector="#cms_wysiwyg_editor" />
+<<<<<<< HEAD
         <element name="StaticURL" type="button" selector="#cms_wysiwyg_use_static_urls_in_catalog" />
+=======
+>>>>>>> upstream/2.2-develop
         <element name="Save" type="button" selector="#save" timeout="30"/>
     </section>
     <section name="WebSection">
@@ -33,9 +40,12 @@
         <element name="addStoreCodeToUrl" type="select" selector="#web_url_use_store"/>
         <element name="systemValueForStoreCode" type="checkbox" selector="#web_url_use_store_inherit"/>
     </section>
+<<<<<<< HEAD
     <section name="CountryOptionsSection">
         <element name="countryOptions" type="button" selector="#general_country-head"/>
         <element name="countryOptionsOpen" type="button" selector="#general_country-head.open"/>
         <element name="topDestinations" type="select" selector="#general_country_destinations"/>
     </section>
+=======
+>>>>>>> upstream/2.2-develop
 </sections>

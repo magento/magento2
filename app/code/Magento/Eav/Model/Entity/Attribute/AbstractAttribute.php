@@ -167,7 +167,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+<<<<<<< HEAD
      * @param \Magento\Eav\Api\Data\AttributeExtensionFactory|null $eavExtensionFactory
+=======
+>>>>>>> upstream/2.2-develop
      * @param FrontendLabelFactory|null $frontendLabelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
@@ -188,7 +191,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
+<<<<<<< HEAD
         \Magento\Eav\Api\Data\AttributeExtensionFactory $eavExtensionFactory = null,
+=======
+>>>>>>> upstream/2.2-develop
         FrontendLabelFactory $frontendLabelFactory = null
     ) {
         parent::__construct(
@@ -208,8 +214,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->optionDataFactory = $optionDataFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
+<<<<<<< HEAD
         $this->eavExtensionFactory = $eavExtensionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Eav\Api\Data\AttributeExtensionFactory::class);
+=======
+>>>>>>> upstream/2.2-develop
         $this->frontendLabelFactory = $frontendLabelFactory
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(FrontendLabelFactory::class);
     }
@@ -416,9 +425,13 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+<<<<<<< HEAD
      * Returns default value
      *
      * @return string|int|bool|float
+=======
+     * @return string|null
+>>>>>>> upstream/2.2-develop
      * @codeCoverageIgnore
      */
     public function getDefaultValue()

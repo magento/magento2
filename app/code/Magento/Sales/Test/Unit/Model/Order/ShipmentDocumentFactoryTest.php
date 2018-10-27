@@ -19,7 +19,10 @@ use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory\ExtensionAttributesProcessor;
 
 /**
+<<<<<<< HEAD
  * Class ShipmentDocumentFactoryTest
+=======
+>>>>>>> upstream/2.2-develop
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
@@ -140,6 +143,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
         $packages = [];
         $items = [1 => 10];
 
+<<<<<<< HEAD
         $this->extensionAttributeProcessorMock->expects($this->never())->method('execute');
         $this->itemMock->expects($this->once())->method('getOrderItemId')->willReturn(1);
         $this->itemMock->expects($this->once())->method('getQty')->willReturn(10);
@@ -151,6 +155,10 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('getQty')
             ->willReturn(10);
 
+=======
+        $this->itemMock->expects($this->once())->method('getOrderItemId')->willReturn(1);
+        $this->itemMock->expects($this->once())->method('getQty')->willReturn(10);
+>>>>>>> upstream/2.2-develop
         $this->shipmentFactoryMock->expects($this->once())
             ->method('create')
             ->with(

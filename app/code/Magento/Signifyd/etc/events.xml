@@ -12,7 +12,10 @@
     <event name="paypal_express_place_order_success">
         <observer name="signifyd_place_order_paypal_express_observer" instance="Magento\Signifyd\Observer\PlaceOrder"/>
     </event>
+<<<<<<< HEAD
     <event name="paypal_checkout_success">
         <observer name="signifyd_place_order_checkout_success_observer" instance="Magento\Signifyd\Observer\PlaceOrder" />
     </event>
+=======
+>>>>>>> upstream/2.2-develop
 </config>

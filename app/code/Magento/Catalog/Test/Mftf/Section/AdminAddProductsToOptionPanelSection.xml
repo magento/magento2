@@ -7,6 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminAddProductsToOptionPanel">
         <element name="addSelectedProducts" type="button" selector=".product_form_product_form_bundle-items_modal button.action-primary" timeout="30"/>
@@ -17,3 +18,11 @@
         <element name="nthCheckbox" type="input" selector="//tr[{{var}}]//input[@data-action='select-row']" parameterized="true"/>
     </section>
 </sections>
+=======
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminAddProductsToOptionPanelSection">
+        <element name="addSelectedProducts" type="button" selector=".product_form_product_form_bundle-items_modal button.action-primary" timeout="30"/>
+        <element name="firstCheckbox" type="input" selector="tr[data-repeat-index='0'] .admin__control-checkbox"/>
+    </section>
+</sections>
+>>>>>>> upstream/2.2-develop

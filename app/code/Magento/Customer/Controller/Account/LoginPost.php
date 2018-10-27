@@ -209,10 +209,14 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                         . 'Please wait and try again later.'
                     );
                 } catch (AuthenticationException $e) {
+<<<<<<< HEAD
                     $message = __(
                         'The account sign-in was incorrect or your account is disabled temporarily. '
                         . 'Please wait and try again later.'
                     );
+=======
+                    $message = __('You did not sign in correctly or your account is temporarily disabled.');
+>>>>>>> upstream/2.2-develop
                 } catch (LocalizedException $e) {
                     $message = $e->getMessage();
                 } catch (\Exception $e) {

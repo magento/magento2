@@ -106,7 +106,10 @@
                 <item name="dev_template_hints_enable" xsi:type="object">Magento\Developer\Console\Command\TemplateHintsEnableCommand</item>
                 <item name="dev_profiler_disable" xsi:type="object">Magento\Developer\Console\Command\ProfilerDisableCommand</item>
                 <item name="dev_profiler_enable" xsi:type="object">Magento\Developer\Console\Command\ProfilerEnableCommand</item>
+<<<<<<< HEAD
                 <item name="dev_generate_patch" xsi:type="object">Magento\Developer\Console\Command\GeneratePatchCommand</item>
+=======
+>>>>>>> upstream/2.2-develop
             </argument>
         </arguments>
     </type>
@@ -238,6 +241,12 @@
             <argument name="environment" xsi:type="array">
                 <item name="dev/restrict/allow_ips" xsi:type="string">1</item>
             </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Developer\Model\TemplateEngine\Plugin\DebugHints">
+        <arguments>
+            <argument name="debugHintsPath" xsi:type="string">dev/debug/template_hints_storefront</argument>
         </arguments>
     </type>
 </config>

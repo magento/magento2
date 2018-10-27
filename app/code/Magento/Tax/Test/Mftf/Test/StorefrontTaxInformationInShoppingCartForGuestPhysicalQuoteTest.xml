@@ -7,6 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontTaxInformationInShoppingCartForGuestPhysicalQuoteTest">
         <annotations>
@@ -21,6 +22,18 @@
             <skip>
                 <issueId value="MAGETWO-90966"/>
             </skip>
+=======
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontTaxInformationInShoppingCartForGuestPhysicalQuoteTest">
+        <annotations>
+            <features value="Tax information in shopping cart for Guest (physical quote)"/>
+            <title value="Tax information are updating/recalculating on fly in shopping cart for Guest (physical quote)"/>
+            <description value="Tax information are updating/recalculating on fly in shopping cart for Guest (physical quote)"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-78959"/>
+            <group value="checkout"/>
+            <group value="tax"/>
+>>>>>>> upstream/2.2-develop
         </annotations>
         <before>
             <!-- Preconditions  -->
@@ -44,7 +57,11 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
                 <argument name="product" value="$$createSimpleProduct$$"/>
+<<<<<<< HEAD
              </actionGroup>
+=======
+            </actionGroup>
+>>>>>>> upstream/2.2-develop
             <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
@@ -58,10 +75,17 @@
                 <argument name="stateForFPT" value="New York"/>
                 <argument name="valueForFPT" value="20"/>
             </actionGroup>
+<<<<<<< HEAD
             <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
             <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
+=======
+            <actionGroup ref="SaveProductOnProductPageOnAdmin" stepKey="saveProduct"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+            <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
+>>>>>>> upstream/2.2-develop
         </before>
         <after>
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
@@ -75,7 +99,11 @@
         <!--  Test Steps  -->
         <!--  Step 1: Go to Storefront as Guest -->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+<<<<<<< HEAD
         <waitForPageLoad stepKey="waitForPageLoad"/>
+=======
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+>>>>>>> upstream/2.2-develop
         <!--  Step 2: Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
@@ -84,6 +112,7 @@
             <argument name="productCount" value="1"/>
         </actionGroup>
         <!--  Step 3: Go to Shopping Cart -->
+<<<<<<< HEAD
         <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
         <!--  Step 4: Open Estimate Shipping and Tax section -->
         <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
@@ -112,5 +141,35 @@
         <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.84" stepKey="checkTaxAmountNY" />
         <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY" />
         <see selector="{{CheckoutCartSummarySection.amountFPT}}" userInput="$20" stepKey="checkFPTAmountNY" />
+=======
+        <actionGroup ref="StorefrontViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <!--  Step 4: Open Estimate Shipping and Tax section -->
+        <conditionalClick  selector="{{StorefrontCheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{StorefrontCheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <see selector="{{StorefrontCheckoutCartSummarySection.amountFPT}}" userInput="$10" stepKey="checkAmountFPTCA" />
+        <see selector="{{StorefrontCheckoutCartSummarySection.taxAmount}}" userInput="$0.83" stepKey="checkTaxAmountCA" />
+        <scrollTo selector="{{StorefrontCheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
+        <click selector="{{StorefrontCheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary"/>
+        <see selector="{{StorefrontCheckoutCartSummarySection.rate}}" userInput="US-CA-*-Rate 1 (8.25%)" stepKey="checkRateCA" />
+        <!--  Step 5: Change Data -->
+        <selectOption selector="{{StorefrontCheckoutCartSummarySection.country}}" userInput="Switzerland" stepKey="selectSwitzerlandCountry"/>
+        <selectOption selector="{{StorefrontCheckoutCartSummarySection.region}}" userInput="Aargau" stepKey="selectAargauRegion"/>
+        <fillField selector="{{StorefrontCheckoutCartSummarySection.postcode}}" userInput="1234" stepKey="inputPostCode"/>
+        <!--  Step 6: Select shipping rate again(it need for get new totals request - performance reason) -->
+        <click selector="{{StorefrontCheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectflatRateShippingMethodShippingMethod"/>
+        <scrollTo selector="{{StorefrontCheckoutCartSummarySection.taxAmount}}" stepKey="scrollToTaxSummary2" />
+        <see selector="{{StorefrontCheckoutCartSummarySection.taxAmount}}" userInput="$0.00" stepKey="checkTaxAmount" />
+        <dontSeeElement selector="{{StorefrontCheckoutCartSummarySection.amountFPT}}" stepKey="checkFPTIsNotDisplayed" />
+        <!--  Step 7: Change Data -->
+        <selectOption selector="{{StorefrontCheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUnitedStatesCountry"/>
+        <selectOption selector="{{StorefrontCheckoutCartSummarySection.region}}" userInput="New York" stepKey="selectNewYorkRegion"/>
+        <fillField selector="{{StorefrontCheckoutCartSummarySection.postcode}}" userInput="12345" stepKey="inputPostCode2"/>
+        <!--  Step 8: Select shipping rate again(it need for get new totals request - performance reason) -->
+        <click selector="{{StorefrontCheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectflatRateShippingMethodShippingMethod2"/>
+        <scrollTo selector="{{StorefrontCheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary3" />
+        <click selector="{{StorefrontCheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary2"/>
+        <see selector="{{StorefrontCheckoutCartSummarySection.taxAmount}}" userInput="$0.84" stepKey="checkTaxAmountNY" />
+        <see selector="{{StorefrontCheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY" />
+        <see selector="{{StorefrontCheckoutCartSummarySection.amountFPT}}" userInput="$20" stepKey="checkAmountFPTNY" />
+>>>>>>> upstream/2.2-develop
     </test>
 </tests>

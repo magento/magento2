@@ -369,8 +369,11 @@ class Config
     }
 
     /**
+<<<<<<< HEAD
      * Set meta title
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @param string $title
      */
     public function setMetaTitle($title)

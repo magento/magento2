@@ -6,7 +6,10 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\PageRepositoryInterface;
+<<<<<<< HEAD
 use Magento\Framework\App\ResourceConnection;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
@@ -90,10 +93,14 @@ class PageTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Cms\Model\Page $page */
         $page = $objectManager->create(\Magento\Cms\Model\Page::class);
         $page->setData(['title' => 'Test', 'stores' => [1]]);
+<<<<<<< HEAD
         $beforeTimestamp = $db->fetchCol('SELECT UNIX_TIMESTAMP()')[0];
+=======
+>>>>>>> upstream/2.2-develop
         $page->save();
         $afterTimestamp = $db->fetchCol('SELECT UNIX_TIMESTAMP()')[0];
         $page = $objectManager->get(PageRepositoryInterface::class)->getById($page->getId());
+<<<<<<< HEAD
         $pageTimestamp = strtotime($page->getUpdateTime());
 
         /*
@@ -101,6 +108,10 @@ class PageTest extends \PHPUnit\Framework\TestCase
          */
         $this->assertGreaterThanOrEqual($beforeTimestamp, $pageTimestamp);
         $this->assertLessThanOrEqual($afterTimestamp, $pageTimestamp);
+=======
+        $date = $objectManager->get(DateTime::class)->date();
+        $this->assertEquals($date, $page->getUpdateTime());
+>>>>>>> upstream/2.2-develop
     }
 
     public function generateIdentifierFromTitleDataProvider() : array

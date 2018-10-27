@@ -12,6 +12,7 @@ namespace Magento\Framework\Session {
 
     use Magento\Framework\App\Filesystem\DirectoryList;
 
+<<<<<<< HEAD
     // @codingStandardsIgnoreEnd
 
     /**
@@ -20,6 +21,71 @@ namespace Magento\Framework\Session {
      * @return string
      */
     function ini_get($varName)
+=======
+    /** @var \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject */
+    protected $deploymentConfigMock;
+
+    protected function setUp()
+    {
+        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $sessionManager \Magento\Framework\Session\SessionManager */
+        $sessionManager = $this->_objectManager->create(\Magento\Framework\Session\SessionManager::class);
+        if ($sessionManager->isSessionExists()) {
+            $sessionManager->writeClose();
+        }
+        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->deploymentConfigMock
+            ->method('get')
+            ->willReturnCallback(function ($configPath) {
+                switch ($configPath) {
+                    case Config::PARAM_SESSION_SAVE_METHOD:
+                        return 'files';
+                    case Config::PARAM_SESSION_CACHE_LIMITER:
+                        return $this->_cacheLimiter;
+                    default:
+                        return null;
+                }
+            });
+
+        $this->_model = $this->_objectManager->create(
+            \Magento\Framework\Session\Config::class,
+            ['deploymentConfig' => $this->deploymentConfigMock]
+        );
+        $this->defaultSavePath = $this->_objectManager
+            ->get(\Magento\Framework\Filesystem\DirectoryList::class)
+            ->getPath(DirectoryList::SESSION);
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testDefaultConfiguration()
+    {
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Filesystem::class
+        );
+        $path = ini_get('session.save_path') ?:
+            $filesystem->getDirectoryRead(DirectoryList::SESSION)->getAbsolutePath();
+
+        $this->assertEquals(
+            $path,
+            $this->_model->getSavePath()
+        );
+        $this->assertEquals(
+            \Magento\Framework\Session\Config::COOKIE_LIFETIME_DEFAULT,
+            $this->_model->getCookieLifetime()
+        );
+        $this->assertEquals($this->_cacheLimiter, $this->_model->getCacheLimiter());
+        $this->assertEquals('/', $this->_model->getCookiePath());
+        $this->assertEquals('localhost', $this->_model->getCookieDomain());
+        $this->assertEquals(false, $this->_model->getCookieSecure());
+        $this->assertEquals(true, $this->_model->getCookieHttpOnly());
+        $this->assertEquals($this->_model->getSavePath(), $this->_model->getOption('save_path'));
+    }
+
+    public function testSetOptionsInvalidValue()
+>>>>>>> upstream/2.2-develop
     {
         global $mockPHPFunctions;
         if ($mockPHPFunctions == 1) {
@@ -296,6 +362,7 @@ namespace Magento\Framework\Session {
             $this->assertEquals('', $model->getOption('referer_check'));
         }
 
+<<<<<<< HEAD
         public function testSetSavePath()
         {
             $model = $this->getModel();
@@ -354,6 +421,29 @@ namespace Magento\Framework\Session {
             global $mockPHPFunctions;
             $mockPHPFunctions = false;
         }
+=======
+        $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $deploymentConfigMock
+            ->method('get')
+            ->willReturnCallback(function ($configPath) use ($given) {
+                switch ($configPath) {
+                    case Config::PARAM_SESSION_SAVE_METHOD:
+                        return 'files';
+                    case Config::PARAM_SESSION_CACHE_LIMITER:
+                        return $this->_cacheLimiter;
+                    case Config::PARAM_SESSION_SAVE_PATH:
+                        return $given;
+                    default:
+                        return null;
+                }
+            });
+
+        $model = $this->_objectManager->create(
+            \Magento\Framework\Session\Config::class,
+            ['deploymentConfig' => $deploymentConfigMock]
+        );
+        $this->assertEquals($expected, $model->getOption('save_path'));
+>>>>>>> upstream/2.2-develop
 
         public function constructorDataProvider()
         {

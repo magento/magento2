@@ -153,6 +153,7 @@
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
     <type name="Magento\Backend\Model\Search\Config\Result\Builder">
         <arguments>
             <argument name="structureElementTypes" xsi:type="array">
@@ -168,4 +169,27 @@
         </arguments>
     </type>
     <preference for="CsrfRequestValidator" type="Magento\Backend\App\Request\BackendValidator" />
+=======
+    <type name="Magento\Framework\View\Layout\Generator\Block">
+        <arguments>
+            <argument name="defaultClass" xsi:type="string">Magento\Backend\Block\Template</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Block\GlobalSearch">
+        <arguments>
+            <argument name="entityResources" xsi:type="array">
+                <item name="Products" xsi:type="string">Magento_Catalog::products</item>
+                <item name="Orders" xsi:type="string">Magento_Sales::sales_order</item>
+                <item name="Customers" xsi:type="string">Magento_Customer::manage</item>
+                <item name="Pages" xsi:type="string">Magento_Cms::page</item>
+            </argument>
+            <argument name="entityPaths" xsi:type="array">
+                <item name="Products" xsi:type="string">catalog/product/index/</item>
+                <item name="Orders" xsi:type="string">sales/order/index/</item>
+                <item name="Customers" xsi:type="string">customer/index/index</item>
+                <item name="Pages" xsi:type="string">cms/page/index/</item>
+            </argument>
+        </arguments>
+    </type>
+>>>>>>> upstream/2.2-develop
 </config>

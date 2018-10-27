@@ -15,10 +15,21 @@ use Magento\Framework\App\ObjectManager;
  */
 class ItemResolverComposite implements ItemResolverInterface
 {
+<<<<<<< HEAD
     /** @var string[] */
     private $itemResolvers = [];
 
     /** @var ItemResolverInterface[] */
+=======
+    /**
+     * @var string[]
+     */
+    private $itemResolvers = [];
+
+    /**
+     * @var ItemResolverInterface[]
+     */
+>>>>>>> upstream/2.2-develop
     private $itemResolversInstances = [];
 
     /**
@@ -32,9 +43,16 @@ class ItemResolverComposite implements ItemResolverInterface
     /**
      * {@inheritdoc}
      */
+<<<<<<< HEAD
     public function getFinalProduct(ItemInterface $item) : ProductInterface
     {
         $finalProduct = $item->getProduct();
+=======
+    public function getFinalProduct(ItemInterface $item): ProductInterface
+    {
+        $finalProduct = $item->getProduct();
+
+>>>>>>> upstream/2.2-develop
         foreach ($this->itemResolvers as $resolver) {
             $resolvedProduct = $this->getItemResolverInstance($resolver)->getFinalProduct($item);
             if ($resolvedProduct !== $finalProduct) {
@@ -42,6 +60,10 @@ class ItemResolverComposite implements ItemResolverInterface
                 break;
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         return $finalProduct;
     }
 
@@ -51,11 +73,19 @@ class ItemResolverComposite implements ItemResolverInterface
      * @param string $className
      * @return ItemResolverInterface
      */
+<<<<<<< HEAD
     private function getItemResolverInstance(string $className) : ItemResolverInterface
+=======
+    private function getItemResolverInstance(string $className): ItemResolverInterface
+>>>>>>> upstream/2.2-develop
     {
         if (!isset($this->itemResolversInstances[$className])) {
             $this->itemResolversInstances[$className] = ObjectManager::getInstance()->get($className);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         return $this->itemResolversInstances[$className];
     }
 }

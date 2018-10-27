@@ -8,7 +8,10 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 use Magento\Backend\Model\Session\Quote;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+<<<<<<< HEAD
 use Magento\Framework\App\Request\Http;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -39,7 +42,10 @@ class SaveTest extends AbstractBackendController
                 'email' => $email
             ]
         ];
+<<<<<<< HEAD
         $this->getRequest()->setMethod(Http::METHOD_POST);
+=======
+>>>>>>> upstream/2.2-develop
         $this->getRequest()->setPostValue(['order' => $data]);
 
         /** @var OrderService|MockObject $orderService */

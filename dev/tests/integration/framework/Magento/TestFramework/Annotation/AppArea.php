@@ -26,7 +26,10 @@ class AppArea
         \Magento\Framework\App\Area::AREA_WEBAPI_REST,
         \Magento\Framework\App\Area::AREA_WEBAPI_SOAP,
         \Magento\Framework\App\Area::AREA_CRONTAB,
+<<<<<<< HEAD
         \Magento\Framework\App\Area::AREA_GRAPHQL
+=======
+>>>>>>> upstream/2.2-develop
     ];
 
     /**

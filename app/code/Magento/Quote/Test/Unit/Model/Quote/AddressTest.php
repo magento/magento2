@@ -170,9 +170,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+<<<<<<< HEAD
         $this->attributeList = $this->createMock(
             \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface::class
         );
+=======
+        $this->attributeList = $this->createMock(\Magento\Quote\Model\Quote\Address\CustomAttributeListInterface::class);
+>>>>>>> upstream/2.2-develop
         $this->attributeList->method('getAttributes')->willReturn([]);
 
         $this->address = $objectManager->getObject(

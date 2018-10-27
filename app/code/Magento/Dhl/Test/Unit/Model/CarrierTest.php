@@ -268,9 +268,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $rawPostData = $reflectionClass->getProperty('raw_post_data');
         $rawPostData->setAccessible(true);
 
+<<<<<<< HEAD
         $this->logger->expects($this->once())
             ->method('debug')
             ->with($this->stringContains('<SiteID>****</SiteID><Password>****</Password>'));
+=======
+        $this->logger->expects(self::once())
+            ->method('debug')
+            ->with(self::stringContains('<SiteID>****</SiteID><Password>****</Password>'));
+>>>>>>> upstream/2.2-develop
 
         self::assertNotEmpty($this->model->collectRates($request)->getAllRates());
         self::assertContains('<Weight>18.223</Weight>', $rawPostData->getValue($this->httpClient));
@@ -373,7 +379,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($shipment);
 
         $this->logger->method('debug')
+<<<<<<< HEAD
             ->with($this->stringContains('<SiteID>****</SiteID><Password>****</Password>'));
+=======
+            ->with(self::stringContains('<SiteID>****</SiteID><Password>****</Password>'));
+>>>>>>> upstream/2.2-develop
 
         $result = $this->model->requestToShipment($this->request);
 
@@ -386,23 +396,140 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Data provider to testRequestToShipment
+     * Test that shipping label request for origin country from AP region doesn't contain restricted fields.
+     */
+    public function testShippingLabelRequestForAsiaPacificRegion()
+    {
+        $this->scope->method('getValue')
+            ->willReturnMap(
+                [
+                    ['shipping/origin/country_id', ScopeInterface::SCOPE_STORE, null, 'SG'],
+                    ['carriers/dhl/gateway_url', ScopeInterface::SCOPE_STORE, null, 'https://xmlpi-ea.dhl.com'],
+                ]
+            );
+
+        $this->httpResponse->method('getBody')
+            ->willReturn(utf8_encode(file_get_contents(__DIR__ . '/_files/response_shipping_label.xml')));
+
+        $packages = [
+            'package' => [
+                'params' => [
+                    'width' => '1',
+                    'length' => '1',
+                    'height' => '1',
+                    'dimension_units' => 'INCH',
+                    'weight_units' => 'POUND',
+                    'weight' => '0.45',
+                    'customs_value' => '10.00',
+                    'container' => Carrier::DHL_CONTENT_TYPE_NON_DOC,
+                ],
+                'items' => [
+                    'item1' => [
+                        'name' => 'item_name',
+                    ],
+                ],
+            ]
+        ];
+
+        $this->request->method('getPackages')->willReturn($packages);
+        $this->request->method('getOrigCountryId')->willReturn('SG');
+        $this->request->method('setPackages')->willReturnSelf();
+        $this->request->method('setPackageWeight')->willReturnSelf();
+        $this->request->method('setPackageValue')->willReturnSelf();
+        $this->request->method('setValueWithDiscount')->willReturnSelf();
+        $this->request->method('setPackageCustomsValue')->willReturnSelf();
+
+        $result = $this->model->requestToShipment($this->request);
+
+        $reflectionClass = new \ReflectionObject($this->httpClient);
+        $rawPostData = $reflectionClass->getProperty('raw_post_data');
+        $rawPostData->setAccessible(true);
+
+        $this->assertNotNull($result);
+        $requestXml = $rawPostData->getValue($this->httpClient);
+
+        $this->assertNotContains(
+            'NewShipper',
+            $requestXml,
+            'NewShipper is restricted field for AP region'
+        );
+        $this->assertNotContains(
+            'Division',
+            $requestXml,
+            'Division is restricted field for AP region'
+        );
+        $this->assertNotContains(
+            'RegisteredAccount',
+            $requestXml,
+            'RegisteredAccount is restricted field for AP region'
+        );
+    }
+
+    /**
+     * @dataProvider dhlProductsDataProvider
      *
+     * @param string $docType
+     * @param array $products
+     */
+    public function testGetDhlProducts(string $docType, array $products)
+    {
+        $this->assertEquals($products, $this->model->getDhlProducts($docType));
+    }
+
+    /**
      * @return array
      */
-    public function requestToShipmentDataProvider()
+    public function dhlProductsDataProvider() : array
     {
         return [
-            [
-                'GB'
+            'doc' => [
+                'docType' => Carrier::DHL_CONTENT_TYPE_DOC,
+                'products' => [
+                    '2' => 'Easy shop',
+                    '5' => 'Sprintline',
+                    '6' => 'Secureline',
+                    '7' => 'Express easy',
+                    '9' => 'Europack',
+                    'B' => 'Break bulk express',
+                    'C' => 'Medical express',
+                    'D' => 'Express worldwide',
+                    'U' => 'Express worldwide',
+                    'K' => 'Express 9:00',
+                    'L' => 'Express 10:30',
+                    'G' => 'Domestic economy select',
+                    'W' => 'Economy select',
+                    'I' => 'Domestic express 9:00',
+                    'N' => 'Domestic express',
+                    'O' => 'Others',
+                    'R' => 'Globalmail business',
+                    'S' => 'Same day',
+                    'T' => 'Express 12:00',
+                    'X' => 'Express envelope',
+                ]
             ],
-            [
-                null
+            'non-doc' => [
+                'docType' => Carrier::DHL_CONTENT_TYPE_NON_DOC,
+                'products' => [
+                    '1' => 'Domestic express 12:00',
+                    '3' => 'Easy shop',
+                    '4' => 'Jetline',
+                    '8' => 'Express easy',
+                    'P' => 'Express worldwide',
+                    'Q' => 'Medical express',
+                    'E' => 'Express 9:00',
+                    'F' => 'Freight worldwide',
+                    'H' => 'Economy select',
+                    'J' => 'Jumbo box',
+                    'M' => 'Express 10:30',
+                    'V' => 'Europack',
+                    'Y' => 'Express 12:00',
+                ]
             ]
         ];
     }
 
     /**
+<<<<<<< HEAD
      * Test that shipping label request for origin country from AP region doesn't contain restricted fields.
      *
      * @return void
@@ -538,6 +665,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * Creates mock for XML factory.
      *
      * @return ElementFactory|MockObject
@@ -671,7 +800,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $carrierHelper = $this->objectManager->getObject(
             CarrierHelper::class,
             [
+<<<<<<< HEAD
                 'localeResolver' => $localeResolver,
+=======
+                'localeResolver' => $localeResolver
+>>>>>>> upstream/2.2-develop
             ]
         );
 

@@ -21,9 +21,12 @@ $product->setTypeId(
     4
 )->setCustomAttribute(
     'tax_class_id',
+<<<<<<< HEAD
     1
 )->setCustomAttribute(
     'tax_class_id',
+=======
+>>>>>>> upstream/2.2-develop
     1
 )->setWebsiteIds(
     [1]

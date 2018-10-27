@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
@@ -124,8 +127,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\App\CacheInterface::class
         )->save(
             'test',
-            'catalog_product_999',
-            ['catalog_product_999']
+            'cat_p_999',
+            ['cat_p_999']
         );
         // potential bug: it cleans by cache tags, generated from its ID, which doesn't make much sense
         $this->_model->setId(999)->cleanCache();
@@ -133,7 +136,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Framework\App\CacheInterface::class
             )->load(
-                'catalog_product_999'
+                'cat_p_999'
             )
         );
     }
@@ -591,17 +594,63 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * Check stock status changing if backorders functionality enabled.
+=======
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
+     */
+    public function testSaveWithDifferentQty()
+    {
+        //if save (out of stock product with qty 0) with new qty > 0 it should become in stock.
+        //if set out of stock for product with qty > 0 it should become out of stock
+        $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->assertEquals(false, $stockItem->getIsInStock());
+        $stockData = [
+            'qty'                       => 5,
+            'is_in_stock'               => 0,
+        ];
+        $product->setStockData($stockData);
+        $product->save();
+
+        /** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
+        $stockRegistryStorage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
+        $stockRegistryStorage->removeStockItem($product->getId());
+        $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->assertEquals(true, $stockItem->getIsInStock());
+        $stockData = [
+            'qty'                       => 3,
+            'is_in_stock'               => 0,
+        ];
+        $product->setStockData($stockData);
+        $product->save();
+
+        $stockRegistryStorage->removeStockItem($product->getId());
+        $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->assertEquals(false, $stockItem->getIsInStock());
+    }
+
+    /**
+     * Check stock status changing if backorders functionality enabled
+>>>>>>> upstream/2.2-develop
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
      * @dataProvider productWithBackordersDataProvider
      * @param int $qty
      * @param int $stockStatus
      * @param bool $expectedStockStatus
+<<<<<<< HEAD
      *
      * @return void
      */
     public function testSaveWithBackordersEnabled(int $qty, int $stockStatus, bool $expectedStockStatus): void
+=======
+     */
+    public function testSaveWithBackordersEnabled(int $qty, int $stockStatus, bool $expectedStockStatus)
+>>>>>>> upstream/2.2-develop
     {
         $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
         $stockItem = $product->getExtensionAttributes()->getStockItem();
@@ -609,7 +658,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $stockData = [
             'backorders' => 1,
             'qty' => $qty,
+<<<<<<< HEAD
             'is_in_stock' => $stockStatus,
+=======
+            'is_in_stock' => $stockStatus
+>>>>>>> upstream/2.2-develop
         ];
         $product->setStockData($stockData);
         $product->save();

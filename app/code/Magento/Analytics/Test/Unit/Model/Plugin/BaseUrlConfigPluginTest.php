@@ -14,6 +14,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class BaseUrlConfigPluginTest
+ */
+>>>>>>> upstream/2.2-develop
 class BaseUrlConfigPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**

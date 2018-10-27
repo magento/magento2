@@ -41,11 +41,14 @@ define([
 
         afterEach(function () {
             $('#product_addtocart_form').remove();
+<<<<<<< HEAD
 
             try {
                 injector.clean();
                 injector.remove();
             } catch (e) {}
+=======
+>>>>>>> upstream/2.2-develop
         });
 
         it('Check initialized data.', function () {

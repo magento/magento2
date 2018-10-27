@@ -42,7 +42,10 @@ class AddressSave extends Order
      * @var RegionFactory
      */
     private $regionFactory;
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
     /**
      * @param Context $context
      * @param Registry $coreRegistry
@@ -117,7 +120,11 @@ class AddressSave extends Order
                 $this->messageManager->addSuccessMessage(__('You updated the order address.'));
                 return $resultRedirect->setPath('sales/*/view', ['order_id' => $address->getParentId()]);
             } catch (LocalizedException $e) {
+<<<<<<< HEAD
                 $this->messageManager->addErrorMessage($e->getMessage());
+=======
+                $this->messageManager->addError($e->getMessage());
+>>>>>>> upstream/2.2-develop
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('We can\'t update the order address right now.'));
             }
@@ -126,7 +133,11 @@ class AddressSave extends Order
             return $resultRedirect->setPath('sales/*/');
         }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/2.2-develop
     /**
      * Update region data
      *

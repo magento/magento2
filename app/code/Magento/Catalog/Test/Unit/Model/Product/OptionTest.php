@@ -8,6 +8,9 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 use \Magento\Catalog\Model\Product\Option;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Tests \Magento\Catalog\Model\Product\Option.
+ */
 class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -74,14 +77,21 @@ class OptionTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $rawExtensions
      * @param string $expectedExtensions
+<<<<<<< HEAD
      * @dataProvider cleanFileExtensionsDataProvider
      */
     public function testCleanFileExtensions(string $rawExtensions, string $expectedExtensions)
+=======
+     * @dataProvider beforeSaveFileOptionDataProvider
+     */
+    public function testBeforeSaveFileOption($rawExtensions, $expectedExtensions)
+>>>>>>> upstream/2.2-develop
     {
         $this->model->setType(Option::OPTION_GROUP_FILE);
         $this->model->setFileExtension($rawExtensions);
         $this->model->beforeSave();
         $actualExtensions = $this->model->getFileExtension();
+<<<<<<< HEAD
         $this->assertEquals($expectedExtensions, $actualExtensions);
     }
 
@@ -91,6 +101,20 @@ class OptionTest extends \PHPUnit\Framework\TestCase
      * @return array
      */
     public function cleanFileExtensionsDataProvider()
+=======
+        $this->assertEquals(
+            $expectedExtensions,
+            $actualExtensions
+        );
+    }
+
+    /**
+     * Data provider for testBeforeSaveFileOption.
+     *
+     * @return array
+     */
+    public function beforeSaveFileOptionDataProvider()
+>>>>>>> upstream/2.2-develop
     {
         return [
             ['JPG, PNG, GIF', 'jpg, png, gif'],

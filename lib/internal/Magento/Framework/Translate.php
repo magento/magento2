@@ -175,15 +175,22 @@ class Translate implements \Magento\Framework\TranslateInterface
         $this->directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_csvParser = $csvParser;
         $this->packDictionary = $packDictionary;
+<<<<<<< HEAD
         $this->fileDriver = $fileDriver
             ?? ObjectManager::getInstance()->get(File::class);
+=======
+>>>>>>> upstream/2.2-develop
 
         $this->_config = [
             self::CONFIG_AREA_KEY => null,
             self::CONFIG_LOCALE_KEY => null,
             self::CONFIG_SCOPE_KEY => null,
             self::CONFIG_THEME_KEY => null,
+<<<<<<< HEAD
             self::CONFIG_MODULE_KEY => null,
+=======
+            self::CONFIG_MODULE_KEY => null
+>>>>>>> upstream/2.2-develop
         ];
     }
 
@@ -193,6 +200,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      * @param string|null $area
      * @param bool $forceReload
      * @return $this
+     * @throws Exception\LocalizedException
      */
     public function loadData($area = null, $forceReload = false)
     {
@@ -207,8 +215,12 @@ class Translate implements \Magento\Framework\TranslateInterface
         );
 
         if (!$forceReload) {
+<<<<<<< HEAD
             $data = $this->_loadCache();
             if (false !== $data) {
+=======
+            if (false !== $data = $this->_loadCache()) {
+>>>>>>> upstream/2.2-develop
                 $this->_data = $data;
                 return $this;
             }
@@ -476,6 +488,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Retrieve cache identifier
      *
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function getCacheId()
     {

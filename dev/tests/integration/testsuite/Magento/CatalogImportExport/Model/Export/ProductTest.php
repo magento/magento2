@@ -326,9 +326,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+<<<<<<< HEAD
      * @return void
      */
     public function testExportWithCustomOptions(): void
+=======
+     */
+    public function testExportWithCustomOptions()
+>>>>>>> upstream/2.2-develop
     {
         $storeCode = 'default';
         $expectedData = [];
@@ -360,7 +365,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product->setOptions($newCustomOptions);
         $productRepository->save($product);
         $this->model->setWriter(
+<<<<<<< HEAD
             $this->objectManager->create(\Magento\ImportExport\Model\Export\Adapter\Csv::class)
+=======
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+>>>>>>> upstream/2.2-develop
         );
         $exportData = $this->model->export();
         /** @var $varDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
@@ -377,15 +388,25 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 $customOptionData[$storeCode] = $this->parseExportedCustomOption($data[2][$columnNumber]);
             }
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         self::assertSame($expectedData, $customOptionData);
     }
 
     /**
+<<<<<<< HEAD
      * @param string $exportedCustomOption
      * @return array
      */
     private function parseExportedCustomOption(string $exportedCustomOption): array
+=======
+     * @param $exportedCustomOption
+     * @return array
+     */
+    private function parseExportedCustomOption($exportedCustomOption)
+>>>>>>> upstream/2.2-develop
     {
         $customOptions = explode('|', $exportedCustomOption);
         $optionItems = [];
@@ -406,7 +427,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 $optionItems[$optionName] = [];
             }
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return $optionItems;
     }
 }

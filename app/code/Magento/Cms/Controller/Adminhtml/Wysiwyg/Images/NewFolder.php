@@ -28,6 +28,10 @@ class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\App\Filesystem\DirectoryResolver|null $directoryResolver
+<<<<<<< HEAD
+=======
+     * @throws \RuntimeException
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

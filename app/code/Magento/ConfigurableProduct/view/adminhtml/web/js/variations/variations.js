@@ -357,12 +357,20 @@ define([
             var element;
 
             _.each(this.disabledAttributes, function (attribute) {
+<<<<<<< HEAD
                 registry.get('inputName = ' + 'product[' + attribute + ']').disabled(false);
+=======
+                registry.get('code = ' + attribute, 'index = ' + attribute).disabled(false);
+>>>>>>> upstream/2.2-develop
             });
             this.disabledAttributes = [];
 
             _.each(attributes, function (attribute) {
+<<<<<<< HEAD
                 element = registry.get('inputName = ' + 'product[' + attribute.code + ']');
+=======
+                element = registry.get('code = ' + attribute.code, 'index = ' + attribute.code);
+>>>>>>> upstream/2.2-develop
 
                 if (!_.isUndefined(element)) {
                     element.disabled(true);

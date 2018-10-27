@@ -67,6 +67,15 @@ define([
             return this;
         },
 
+        /** @inheritdoc */
+        initConfig: function () {
+            this._super();
+
+            this.isPasswordVisible = this.resolveInitialPasswordVisibility();
+
+            return this;
+        },
+
         /**
          * Callback on changing email property
          */

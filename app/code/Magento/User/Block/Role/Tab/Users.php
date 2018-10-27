@@ -45,7 +45,11 @@ class Users extends \Magento\Backend\Block\Widget\Tabs
         $roleId = $this->getRequest()->getParam('rid', false);
         /** @var \Magento\User\Model\ResourceModel\User\Collection $users */
         $users = $this->_userCollectionFactory->create()->load();
+<<<<<<< HEAD
         $this->setTemplate('Magento_User::role/users.phtml')
+=======
+        $this->setTemplate('role/users.phtml')
+>>>>>>> upstream/2.2-develop
              ->assign('users', $users->getItems())
              ->assign('roleId', $roleId);
     }

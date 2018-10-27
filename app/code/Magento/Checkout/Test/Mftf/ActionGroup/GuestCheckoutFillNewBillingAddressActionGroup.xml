@@ -27,11 +27,16 @@
 
     <actionGroup name="LoggedInCheckoutFillNewBillingAddressActionGroup">
         <arguments>
+<<<<<<< HEAD
             <argument name="Address"/>
+=======
+            <argument name="customerAddress"/>
+>>>>>>> upstream/2.2-develop
             <!-- the classPrefix argument is to specifically select the inputs of the correct form
                  this is to prevent having 3 action groups doing essentially the same thing -->
             <argument name="classPrefix" type="string" defaultValue=""/>
         </arguments>
+<<<<<<< HEAD
         <fillField stepKey="fillFirstName" selector="{{classPrefix}} {{CheckoutShippingSection.firstName}}" userInput="{{Address.firstname}}"/>
         <fillField stepKey="fillLastName" selector="{{classPrefix}} {{CheckoutShippingSection.lastName}}" userInput="{{Address.lastname}}"/>
         <fillField stepKey="fillCompany" selector="{{classPrefix}} {{CheckoutShippingSection.company}}" userInput="{{Address.company}}"/>
@@ -45,4 +50,30 @@
         <waitForPageLoad stepKey="waitForFormUpdate2"/>
     </actionGroup>
 
+=======
+        <fillField stepKey="fillFirstName" selector="{{classPrefix}} {{CheckoutShippingSection.firstName}}" userInput="{{customerAddress.firstname}}"/>
+        <fillField stepKey="fillLastName" selector="{{classPrefix}} {{CheckoutShippingSection.lastName}}" userInput="{{customerAddress.lastname}}"/>
+        <fillField stepKey="fillPhoneNumber" selector="{{classPrefix}} {{CheckoutShippingSection.telephone}}" userInput="{{customerAddress.telephone}}"/>
+        <fillField stepKey="fillStreetAddress1" selector="{{classPrefix}} {{CheckoutShippingSection.street}}" userInput="{{customerAddress.street[0]}}"/>
+        <fillField stepKey="fillCityName" selector="{{classPrefix}} {{CheckoutShippingSection.city}}" userInput="{{customerAddress.city}}"/>
+        <selectOption stepKey="selectState" selector="{{classPrefix}} {{CheckoutShippingSection.region}}" userInput="{{customerAddress.state}}"/>
+        <fillField stepKey="fillZip" selector="{{classPrefix}} {{CheckoutShippingSection.postcode}}" userInput="{{customerAddress.postcode}}"/>
+        <selectOption stepKey="selectCounty" selector="{{classPrefix}} {{CheckoutShippingSection.country}}" userInput="{{customerAddress.country_id}}"/>
+        <waitForPageLoad stepKey="waitForFormUpdate2"/>
+    </actionGroup>
+
+    <actionGroup name="clearCheckoutAddressPopupFieldsActionGroup">
+        <arguments>
+            <argument name="classPrefix" type="string" defaultValue=""/>
+        </arguments>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.firstName}}" stepKey="clearFieldFirstName"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.lastName}}" stepKey="clearFieldLastName"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.street}}" stepKey="clearFieldStreetAddress1"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.city}}" stepKey="clearFieldCityName"/>
+        <selectOption selector="{{classPrefix}} {{CheckoutShippingSection.region}}" userInput="" stepKey="clearFieldRegion"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.postcode}}"  stepKey="clearFieldZip"/>
+        <selectOption selector="{{classPrefix}} {{CheckoutShippingSection.country}}" userInput="" stepKey="clearFieldCounty"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.telephone}}" stepKey="clearFieldPhoneNumber"/>
+    </actionGroup>
+>>>>>>> upstream/2.2-develop
 </actionGroups>

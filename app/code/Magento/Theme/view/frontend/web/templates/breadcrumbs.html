@@ -10,9 +10,15 @@
         <% if (crumb.link) { %>
         <a href="<%= crumb.link %>" title="<%- crumb.title %>"><%- crumb.label %></a>
         <% } else if (crumb.last) { %>
+<<<<<<< HEAD
         <strong><%= crumb.label %></strong>
         <% } else { %>
         <%= crumb.label %>
+=======
+        <strong><%- crumb.label %></strong>
+        <% } else { %>
+        <%- crumb.label %>
+>>>>>>> upstream/2.2-develop
         <% } %>
     </li>
 <% }); %>

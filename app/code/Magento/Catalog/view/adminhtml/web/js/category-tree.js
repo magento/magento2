@@ -89,6 +89,7 @@ define([
             if (!node) {
                 return result;
             }
+
             result = {
                 data: {
                     title: utils.unescape(node.name) + ' (' + node['product_count'] + ')'

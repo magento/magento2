@@ -5,12 +5,20 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+<<<<<<< HEAD
 use Magento\Framework\App\Action\HttpPostActionInterface;
+=======
+use Magento\Framework\Exception\NotFoundException;
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Api\OrderManagementInterface;
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Request\Http as HttpRequest;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Class MassUnhold, change status for select orders
@@ -48,6 +56,23 @@ class MassUnhold extends AbstractMassAction implements HttpPostActionInterface
         $this->orderManagement = $orderManagement ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Sales\Api\OrderManagementInterface::class
         );
+<<<<<<< HEAD
+=======
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function execute()
+    {
+        /** @var HttpRequest $request */
+        $request = $this->getRequest();
+        if (!$request->isPost()) {
+            throw new NotFoundException(__('Page not found.'));
+        }
+
+        return parent::execute();
+>>>>>>> upstream/2.2-develop
     }
 
     /**

@@ -14,7 +14,11 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Model\Order;
+<<<<<<< HEAD
 use Psr\Log\LoggerInterface;
+=======
+use Magento\Store\Model\StoreManagerInterface;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Order create model
@@ -243,6 +247,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $dataObjectConverter;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+>>>>>>> upstream/2.2-develop
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -273,6 +285,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param ExtensibleDataObjectConverter|null $dataObjectConverter
+<<<<<<< HEAD
+=======
+     * @param StoreManagerInterface $storeManager
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -305,7 +321,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+<<<<<<< HEAD
         ExtensibleDataObjectConverter $dataObjectConverter = null
+=======
+        ExtensibleDataObjectConverter $dataObjectConverter = null,
+        StoreManagerInterface $storeManager = null
+>>>>>>> upstream/2.2-develop
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -339,6 +360,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         parent::__construct($data);
         $this->dataObjectConverter = $dataObjectConverter ?: ObjectManager::getInstance()
             ->get(ExtensibleDataObjectConverter::class);
+<<<<<<< HEAD
+=======
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -416,7 +441,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
     /**
      * Recollect totals for customer cart.
-     * Set recollect totals flag for quote
+     *
+     * Set recollect totals flag for quote.
      *
      * @return $this
      */
@@ -680,7 +706,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function getCustomerWishlist($cacheReload = false)
     {
+<<<<<<< HEAD
         if ($this->_wishlist !== null && !$cacheReload) {
+=======
+        if (($this->_wishlist !== null) && !$cacheReload) {
+>>>>>>> upstream/2.2-develop
             return $this->_wishlist;
         }
 
@@ -808,7 +838,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                     break;
                 case 'cart':
                     $cart = $this->getCustomerCart();
+<<<<<<< HEAD
                     if ($cart && $item->getOptionByCode('additional_options') === null) {
+=======
+                    if ($cart && ($item->getOptionByCode('additional_options') === null)) {
+>>>>>>> upstream/2.2-develop
                         //options and info buy request
                         $product = $this->_objectManager->create(
                             \Magento\Catalog\Model\Product::class
@@ -1333,6 +1367,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
     /**
      * Set and validate Quote address
+     *
      * All errors added to _errors
      *
      * @param \Magento\Quote\Model\Quote\Address $address
@@ -1471,11 +1506,19 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         if (!is_array($address)) {
             return $this;
         }
+<<<<<<< HEAD
 
         $billingAddress = $this->_objectManager->create(Address::class)
             ->setData($address)
             ->setAddressType(Address::TYPE_BILLING);
 
+=======
+
+        $billingAddress = $this->_objectManager->create(Address::class)
+            ->setData($address)
+            ->setAddressType(Address::TYPE_BILLING);
+
+>>>>>>> upstream/2.2-develop
         $this->_setQuoteAddress($billingAddress, $address);
 
         /**
@@ -1489,7 +1532,18 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
             $address['save_in_address_book'] = 0;
             $this->setShippingAddress($address);
+<<<<<<< HEAD
         }
+
+        // not assigned billing address should be saved as new
+        // but if quote already has the billing address it won't be overridden
+        if (empty($billingAddress->getCustomerAddressId())) {
+            $billingAddress->setCustomerAddressId(null);
+            $quote->getBillingAddress()->setCustomerAddressId(null);
+=======
+>>>>>>> upstream/2.2-develop
+        }
+        $quote->setBillingAddress($billingAddress);
 
         // not assigned billing address should be saved as new
         // but if quote already has the billing address it won't be overridden
@@ -1536,6 +1590,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function collectShippingRates()
     {
+        $store = $this->getQuote()->getStore();
+        $this->storeManager->setCurrentStore($store);
         $this->getQuote()->getShippingAddress()->setCollectShippingRates(true);
         $this->collectRates();
 
@@ -1997,7 +2053,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             /** @var LoggerInterface $logger */
             $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
             foreach ($this->_errors as $error) {
+<<<<<<< HEAD
                 $logger->error($error);
+=======
+>>>>>>> upstream/2.2-develop
                 $this->messageManager->addErrorMessage($error);
             }
 

@@ -24,7 +24,11 @@ class ServiceShellUser
             return $userFromArgument;
         }
 
+<<<<<<< HEAD
         $user = "echo \$USER";
+=======
+        $user = `echo \$USER`;
+>>>>>>> upstream/2.2-develop
         if ($user) {
             return $user;
         }

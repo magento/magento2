@@ -7,6 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Reset the product grid to the default view-->
     <actionGroup name="resetProductGridToDefaultView">
@@ -65,6 +66,9 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
+=======
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <!--Filter the product grid by new from date filter-->
     <actionGroup name="filterProductGridBySetNewFromDate">
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
@@ -74,6 +78,7 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
+<<<<<<< HEAD
     <!--Filter the product grid by a price range-->
     <actionGroup name="filterProductGridByPriceRange">
         <arguments>
@@ -142,6 +147,18 @@
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{product.name}}"  stepKey="seeProductNameInGrid"/>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" userInput="{{product.price}}"  stepKey="seeProductPriceInGrid"/>
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
+=======
+    <!--Filter the product grid by the SKU field-->
+    <actionGroup name="filterProductGridBySku">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
+>>>>>>> upstream/2.2-develop
     </actionGroup>
 
     <!--Delete a product by filtering grid and using delete action-->
@@ -163,6 +180,7 @@
         <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+<<<<<<< HEAD
     </actionGroup>
 
     <!--Delete a product by filtering grid and using delete action-->
@@ -205,5 +223,9 @@
     <actionGroup name="sortProductsByIdAscending">
         <conditionalClick selector="{{AdminProductGridTableHeaderSection.id('descend')}}" dependentSelector="{{AdminProductGridTableHeaderSection.id('ascend')}}" visible="false" stepKey="sortById"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+=======
+        <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) have been deleted." stepKey="seeSuccessMessage"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
+>>>>>>> upstream/2.2-develop
     </actionGroup>
 </actionGroups>

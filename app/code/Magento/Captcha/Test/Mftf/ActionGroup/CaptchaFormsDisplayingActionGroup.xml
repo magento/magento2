@@ -7,6 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CaptchaFormsDisplayingActionGroup">
         <click selector="{{CaptchaFormsDisplayingSection.store}}" stepKey="ClickToGoStores"/>
@@ -19,5 +20,19 @@
         <click selector="{{CaptchaFormsDisplayingSection.customerConfig}}" stepKey="ClickToGoCustomerConfiguration"/>
         <scrollTo selector="{{CaptchaFormsDisplayingSection.captcha}}" stepKey="scrollToCaptcha"/>
         <conditionalClick selector="{{CaptchaFormsDisplayingSection.captcha}}" dependentSelector="{{CaptchaFormsDisplayingSection.dependent}}" visible="false" stepKey="ClickToOpenCaptcha"/>
+=======
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CaptchaFormsDisplayingActionGroup">
+        <click selector="{{AdminCaptchaFormsDisplayingSection.store}}" stepKey="clickToGoStores"/>
+        <waitForPageLoad stepKey="waitForStoresLoaded"/>
+        <click selector="{{AdminCaptchaFormsDisplayingSection.config}}" stepKey="clickToGoConfiguration"/>
+        <waitForPageLoad stepKey="waitForConfigurationsLoaded"/>
+        <scrollTo selector="{{AdminCaptchaFormsDisplayingSection.customer}}" x="0" y="-100" stepKey="scrollToCustomers"/>
+        <click selector="{{AdminCaptchaFormsDisplayingSection.customer}}" stepKey="clickToCustomers"/>
+        <waitForPageLoad stepKey="waitForCustomerConfigurationsLoaded"/>
+        <click selector="{{AdminCaptchaFormsDisplayingSection.customerConfig}}" stepKey="clickToGoCustomerConfiguration"/>
+        <scrollTo selector="{{AdminCaptchaFormsDisplayingSection.captcha}}" stepKey="scrollToCaptcha"/>
+        <conditionalClick selector="{{AdminCaptchaFormsDisplayingSection.captcha}}" dependentSelector="{{AdminCaptchaFormsDisplayingSection.dependent}}" visible="false" stepKey="clickToOpenCaptcha"/>
+>>>>>>> upstream/2.2-develop
     </actionGroup>
 </actionGroups>

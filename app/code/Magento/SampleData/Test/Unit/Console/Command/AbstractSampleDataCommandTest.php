@@ -83,9 +83,12 @@ abstract class AbstractSampleDataCommandTest extends TestCase
         $additionalComposerArgs = []
     ) {
         $this->directoryReadMock->expects($this->any())->method('getAbsolutePath')->willReturn($pathToComposerJson);
+<<<<<<< HEAD
         $this->directoryReadMock->expects($this->any())->method('readFile')->with('composer.json')->willReturn(
             '{"version": "0.0.1"}'
         );
+=======
+>>>>>>> upstream/2.2-develop
         $this->filesystemMock->expects($this->any())->method('getDirectoryRead')->with(DirectoryList::ROOT)->willReturn(
             $this->directoryReadMock
         );

@@ -19,7 +19,11 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
      */
     public function execute()
     {
+<<<<<<< HEAD
         if (!$this->isRequestAllowed()) {
+=======
+        if (!$this->requestAllowed()) {
+>>>>>>> upstream/2.2-develop
             return $this->_redirect('*/*/index');
         }
 
@@ -112,7 +116,11 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
      *
      * @return bool
      */
+<<<<<<< HEAD
     private function isRequestAllowed()
+=======
+    private function requestAllowed()
+>>>>>>> upstream/2.2-develop
     {
         return $this->getRequest()->isAjax() && $this->getRequest()->isPost();
     }

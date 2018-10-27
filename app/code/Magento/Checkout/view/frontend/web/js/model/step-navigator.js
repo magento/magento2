@@ -117,7 +117,11 @@ define([
         getActiveItemIndex: function () {
             var activeIndex = 0;
 
+<<<<<<< HEAD
             steps().sort(this.sortItems).some(function (element, index) {
+=======
+            steps.sort(this.sortItems).some(function (element, index) {
+>>>>>>> upstream/2.2-develop
                 if (element.isVisible()) {
                     activeIndex = index;
 

@@ -68,7 +68,11 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         $this->rowCustomizerMock = $this->objectManagerHelper->getObject(
             \Magento\BundleImportExport\Model\Export\RowCustomizer::class,
             [
+<<<<<<< HEAD
                 'scopeResolver' => $this->scopeResolver,
+=======
+                'scopeResolver' => $this->scopeResolver
+>>>>>>> upstream/2.2-develop
             ]
         );
         $this->productResourceCollection = $this->createPartialMock(
@@ -157,7 +161,12 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     public function testPrepareData()
     {
         $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)->getMockForAbstractClass();
+<<<<<<< HEAD
         $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
+=======
+        $this->scopeResolver->expects($this->any())->method('getScope')
+            ->willReturn($scope);
+>>>>>>> upstream/2.2-develop
         $result = $this->rowCustomizerMock->prepareData($this->productResourceCollection, [1]);
         $this->assertNotNull($result);
     }
@@ -186,7 +195,12 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     public function testAddData()
     {
         $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)->getMockForAbstractClass();
+<<<<<<< HEAD
         $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
+=======
+        $this->scopeResolver->expects($this->any())->method('getScope')
+            ->willReturn($scope);
+>>>>>>> upstream/2.2-develop
         $preparedData = $this->rowCustomizerMock->prepareData($this->productResourceCollection, [1]);
         $attributes = 'attribute=1,sku_type=1,attribute2="Text",price_type=1,price_view=1,weight_type=1,'
             . 'values=values,shipment_type=1,attribute3=One,Two,Three';

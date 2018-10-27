@@ -27,6 +27,10 @@ class Test
 
     /**
      * Test constructor.
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @param \Magento\SomeModule\Module\Factory $factory
      * @param \Magento\SomeModule\Element\Factory $elementFactory
      * @param \Magento\SomeModule\ElementFactory $rightElementFactory

@@ -47,6 +47,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
      * @var BatchSizeCalculator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $batchSizeCalculator;
+<<<<<<< HEAD
 
     /**
      * @var ActiveTableSwitcher|\PHPUnit_Framework_MockObject_MockObject
@@ -73,6 +74,31 @@ class FullTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+=======
+
+    /**
+     * @var ActiveTableSwitcher|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $activeTableSwitcher;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfig;
+
+    protected function setUp()
+    {
+        $this->eavDecimalFactory = $this->createPartialMock(DecimalFactory::class, ['create']);
+        $this->eavSourceFactory = $this->createPartialMock(SourceFactory::class, ['create']);
+        $this->metadataPool = $this->createMock(MetadataPool::class);
+        $this->batchProvider = $this->getMockForAbstractClass(BatchProviderInterface::class);
+        $this->batchSizeCalculator = $this->createMock(BatchSizeCalculator::class);
+        $this->activeTableSwitcher = $this->createMock(ActiveTableSwitcher::class);
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+>>>>>>> upstream/2.2-develop
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             \Magento\Catalog\Model\Indexer\Product\Eav\Action\Full::class,
@@ -151,10 +177,13 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $this->model->execute();
     }
 
+<<<<<<< HEAD
     /**
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function testExecuteWithDisabledEavIndexer()
     {
         $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(0);

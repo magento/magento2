@@ -52,7 +52,11 @@ class AssertCartPerCustomer extends AbstractConstraint
                     \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
                     ['customer' => $customer]
                 )->run();
+<<<<<<< HEAD
                 \PHPUnit\Framework\Assert::assertEquals(
+=======
+                \PHPUnit_Framework_Assert::assertEquals(
+>>>>>>> upstream/2.2-develop
                     sprintf(
                         self::WELCOME_MESSAGE,
                         $customer->getFirstname() . ' ' . $customer->getLastname()

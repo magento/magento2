@@ -119,13 +119,21 @@ class StockStateProvider implements StockStateProviderInterface
         $result->setItemIsQtyDecimal($stockItem->getIsQtyDecimal());
         if (!$stockItem->getIsQtyDecimal()) {
             $result->setHasQtyOptionUpdate(true);
+<<<<<<< HEAD
             $qty = (int) $qty;
+=======
+            $qty = (int)$qty;
+>>>>>>> upstream/2.2-develop
             /**
              * Adding stock data to quote item
              */
             $result->setItemQty($qty);
             $qty = $this->getNumber($qty);
+<<<<<<< HEAD
             $origQty = (int) $origQty;
+=======
+            $origQty = (int)$origQty;
+>>>>>>> upstream/2.2-develop
             $result->setOrigQty($origQty);
         }
 

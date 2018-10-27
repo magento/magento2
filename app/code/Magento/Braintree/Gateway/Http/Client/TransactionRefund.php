@@ -17,6 +17,11 @@ class TransactionRefund extends AbstractTransaction
     protected function process(array $data)
     {
         $storeId = $data['store_id'] ?? null;
+<<<<<<< HEAD
+=======
+        // sending store id and other additional keys are restricted by Braintree API
+        unset($data['store_id']);
+>>>>>>> upstream/2.2-develop
 
         return $this->adapterFactory->create($storeId)
             ->refund($data['transaction_id'], $data[PaymentDataBuilder::AMOUNT]);

@@ -6,6 +6,10 @@
 
 namespace Magento\Braintree\Gateway\Command;
 
+<<<<<<< HEAD
+=======
+use Exception;
+>>>>>>> upstream/2.2-develop
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;

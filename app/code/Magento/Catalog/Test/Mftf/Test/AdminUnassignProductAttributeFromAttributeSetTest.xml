@@ -7,11 +7,16 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+=======
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <test name="AdminUnassignProductAttributeFromAttributeSetTest">
         <annotations>
             <features value="Catalog"/>
             <stories value="Add/Update attribute set"/>
+<<<<<<< HEAD
             <title value="Admin should be able to unassign attributes from an attribute set"/>
             <description value="Admin should be able to unassign attributes from an attribute set"/>
             <severity value="CRITICAL"/>
@@ -20,41 +25,84 @@
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="attribute"/>
+=======
+            <title value="Assign/Unassign attributes to/from Attribute Set"/>
+            <description value="Assign/Unassign attributes to/from Attribute Set"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-76299"/>
+            <group value="catalog"/>
+            <group value="attributeSet"/>
+        </annotations>
+        <before>
+            <createData entity="productAttributeWithDropdownTwoOptions" stepKey="attribute"/>
+
+>>>>>>> upstream/2.2-develop
             <createData entity="productAttributeOption1" stepKey="option1">
                 <requiredEntity createDataKey="attribute"/>
             </createData>
             <createData entity="productAttributeOption2" stepKey="option2">
                 <requiredEntity createDataKey="attribute"/>
             </createData>
+<<<<<<< HEAD
             <createData entity="AddToDefaultSet" stepKey="addToDefaultSet">
                 <requiredEntity createDataKey="attribute"/>
             </createData>
             <createData entity="ApiProductWithDescription" stepKey="product"/>
+=======
+
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultSet">
+                <requiredEntity createDataKey="attribute"/>
+            </createData>
+
+            <createData entity="ApiProductWithDescription" stepKey="product"/>
+
+>>>>>>> upstream/2.2-develop
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
+<<<<<<< HEAD
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Assert attribute presence in storefront product additional information -->
         <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage1"/>
         <waitForPageLoad stepKey="wait1"/>
         <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkAttributeInMoreInformationTab">
+=======
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Assert attribute presence in storefront product additional information -->
+        <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="CheckAttributeInAdditionalInformationTabActionGroup" stepKey="checkAttributeInMoreInformationTab">
+>>>>>>> upstream/2.2-develop
             <argument name="attributeLabel" value="$$attribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="attributeValue" value="$$option2.option[store_labels][0][label]$$"/>
         </actionGroup>
         <!-- Go to default attribute set edit page -->
+<<<<<<< HEAD
         <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
         <!-- Assert created attribute in a group -->
         <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
         <!-- Unassign attribute from group -->
         <actionGroup ref="UnassignAttributeFromGroup" stepKey="UnassignAttributeFromGroup">
+=======
+        <amOnPage url="{{AdminProductAttributeSetEditPage.url(AddToDefaultSet.attributeSetId)}}" stepKey="onAttributeSetEdit"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <!-- Assert created attribute in a group -->
+        <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
+        <!-- Unassign attribute from group -->
+        <actionGroup ref="UnassignAttributeFromGroup" stepKey="unAssignAttributeFromGroup">
+>>>>>>> upstream/2.2-develop
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="$$attribute.attribute_code$$"/>
         </actionGroup>
         <!-- Assert attribute in unassigned section -->
         <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
         <!-- Save attribute set -->
+<<<<<<< HEAD
         <actionGroup ref="SaveAttributeSet" stepKey="SaveAttributeSet"/>
         <!-- Clear cache -->
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearPageCacheActionGroup"/>
@@ -68,5 +116,20 @@
         <waitForPageLoad stepKey="wait3"/>
         <dontSeeElement selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="dontSeeProductAttribute"/>
         <dontSee userInput="$$attribute.attribute[frontend_labels][0][label]$$" selector="{{StorefrontProductMoreInformationSection.moreInformationTextArea}}" stepKey="dontSeeAttributeLabel"/>
+=======
+        <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
+        <!-- Go to create new product page -->
+        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <!-- Assert attribute not present in product creation -->
+        <dontSeeElement selector="{{AdminProductFormSection.attributeLabelByText($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="dontSeeAttributeLabel"/>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
+        <!-- Assert removed attribute not presence in storefront product additional information -->
+        <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage2"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <actionGroup ref="CheckAttributeNotInAdditionalInformationTabActionGroup" stepKey="checkAttributeNotInMoreInformationTab">
+            <argument name="attributeLabel" value="$$attribute.attribute[frontend_labels][0][label]$$"/>
+        </actionGroup>
+>>>>>>> upstream/2.2-develop
     </test>
 </tests>

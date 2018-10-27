@@ -54,7 +54,11 @@ class DeleteOutdatedPriceValues
      */
     public function execute()
     {
+<<<<<<< HEAD
         if (!$this->isPriceScopeSetToGlobal()) {
+=======
+        if ($this->isPriceScopeSetToGlobal() === false) {
+>>>>>>> upstream/2.2-develop
             return;
         }
 

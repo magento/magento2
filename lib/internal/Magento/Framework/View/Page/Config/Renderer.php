@@ -143,10 +143,11 @@ class Renderer implements RendererInterface
      *
      * @param string $name
      * @param string $content
-     * @return mixed
+     * @return string
      */
     protected function processMetadataContent($name, $content)
     {
+<<<<<<< HEAD
         $method = 'get' . $this->string->upperCaseWords($name, '_', '');
         if ($name === 'title') {
             if (!$content) {
@@ -156,8 +157,33 @@ class Renderer implements RendererInterface
         }
         if (method_exists($this->pageConfig, $method)) {
             $content = $this->pageConfig->$method();
+=======
+        switch ($name) {
+            case Config::META_DESCRIPTION:
+                return $this->pageConfig->getDescription();
+
+            case Config::META_CONTENT_TYPE:
+                return $this->pageConfig->getContentType();
+
+            case Config::META_MEDIA_TYPE:
+                return $this->pageConfig->getMediaType();
+
+            case Config::META_CHARSET:
+                return $this->pageConfig->getCharset();
+
+            case Config::META_KEYWORDS:
+                return $this->pageConfig->getKeywords();
+
+            case Config::META_ROBOTS:
+                return $this->pageConfig->getRobots();
+
+            case Config::META_TITLE:
+                return $this->pageConfig->getMetaTitle();
+
+            default:
+                return $content;
+>>>>>>> upstream/2.2-develop
         }
-        return $content;
     }
 
     /**

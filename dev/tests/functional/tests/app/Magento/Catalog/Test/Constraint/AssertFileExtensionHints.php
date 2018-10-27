@@ -37,7 +37,11 @@ class AssertFileExtensionHints extends AbstractAssertForm
         $options = $productForm->getSection('customer-options');
         $fileOptionElements = $options->getFileOptionElements();
         foreach ($fileOptionElements as $fileOptionElement) {
+<<<<<<< HEAD
             \PHPUnit\Framework\Assert::assertEquals(
+=======
+            \PHPUnit_Framework_Assert::assertEquals(
+>>>>>>> upstream/2.2-develop
                 self::EXPECTED_MESSAGE,
                 $fileOptionElement->getText(),
                 'Actual message differ from expected.'

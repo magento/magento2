@@ -7,7 +7,11 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+=======
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+>>>>>>> upstream/2.2-develop
     <section name="AdminProductAttributeSetEditSection">
         <!-- Groups Column -->
         <element name="groupTree" type="block" selector="#tree-div1"/>
@@ -15,11 +19,20 @@
         <element name="attributeGroupExtender" type="button" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']" parameterized="true"/>
         <element name="attributeGroupCollapsed" type="button" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']/parent::*/parent::*[contains(@class, 'collapsed')]" parameterized="true"/>
         <element name="assignedAttribute" type="text" selector="//*[@id='tree-div1']//span[text()='{{attributeName}}']" parameterized="true"/>
+<<<<<<< HEAD
         <element name="xThLineItemYthAttributeGroup" type="text" selector="//*[@id='tree-div1']/ul/div/li[{{y}}]//li[{{x}}]" parameterized="true"/>
         <element name="xThLineItemAttributeGroup" type="text" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']/parent::*/parent::*/parent::*//li[{{x}}]//a/span" parameterized="true"/>
         <!-- Unassigned Attributes Column -->
         <element name="unassignedAttributesTree" type="block" selector="#tree-div2"/>
         <element name="unassignedAttribute" type="text" selector="//*[@id='tree-div2']//span[text()='{{attributeName}}']" parameterized="true"/>
         <element name="xThLineItemUnassignedAttribute" type="text" selector="//*[@id='tree-div2']//li[{{x}}]//a/span" parameterized="true"/>
+=======
+        <element name="lineItemYthAttributeGroup" type="text" selector="//*[@id='tree-div1']/ul/div/li[{{y}}]//li[{{x}}]" parameterized="true"/>
+        <element name="lineItemAttributeGroup" type="text" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']/parent::*/parent::*/parent::*//li[{{x}}]//a/span" parameterized="true"/>
+        <!-- Unassigned Attributes Column -->
+        <element name="unassignedAttributesTree" type="block" selector="#tree-div2"/>
+        <element name="unassignedAttribute" type="text" selector="//*[@id='tree-div2']//span[text()='{{attributeName}}']" parameterized="true"/>
+        <element name="lineItemUnassignedAttribute" type="text" selector="//*[@id='tree-div2']//li[{{x}}]//a/span" parameterized="true"/>
+>>>>>>> upstream/2.2-develop
     </section>
 </sections>

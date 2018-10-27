@@ -54,12 +54,15 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test_increment_id', $this->shipmentModel->getIncrementId());
     }
 
+<<<<<<< HEAD
     /**
      * Test to Retrieves comments collection
      *
      * @return void
      * @throws \ReflectionException
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function testGetCommentsCollection()
     {
         $shipmentId = 1;
@@ -92,12 +95,15 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($this->commentCollection, $actual);
     }
 
+<<<<<<< HEAD
     /**
      * Test to Returns comments
      *
      * @return void
      * @throws \ReflectionException
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function testGetComments()
     {
         $shipmentId = 1;

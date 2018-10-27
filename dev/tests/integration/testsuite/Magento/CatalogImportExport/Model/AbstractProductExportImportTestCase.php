@@ -124,7 +124,6 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
 
         $csvfile = $this->exportProducts();
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
-
         while ($index > 0) {
             $index--;
             $stockRegistryStorage->removeStockItem($ids[$index]);
@@ -321,6 +320,10 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
 
         while ($index > 0) {
             $index--;
+<<<<<<< HEAD
+=======
+            $productRepository->cleanCache();
+>>>>>>> upstream/2.2-develop
             $newProduct = $productRepository->get($skus[$index], false, Store::DEFAULT_STORE_ID, true);
             // check original product is deleted
             $origProduct = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load($ids[$index]);

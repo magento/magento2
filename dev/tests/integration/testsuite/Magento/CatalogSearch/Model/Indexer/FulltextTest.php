@@ -15,6 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/CatalogSearch/_files/indexer_fulltext.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FulltextTest extends \PHPUnit\Framework\TestCase
 {
@@ -186,7 +187,10 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      * Such behavior should enforce parent product to be deleted from the index as its latest child become unavailable
      * and the configurable cannot be sold anymore.
      *
+<<<<<<< HEAD
      * @return void
+=======
+>>>>>>> upstream/2.2-develop
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_with_single_child.php
      */
@@ -213,10 +217,17 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      * Search the text and return result collection
      *
      * @param string $text
+<<<<<<< HEAD
      * @param array|null $visibilityFilter
      * @return Product[]
      */
     protected function search(string $text, $visibilityFilter = null): array
+=======
+     * @param null|array $visibilityFilter
+     * @return Product[]
+     */
+    protected function search($text, $visibilityFilter = null)
+>>>>>>> upstream/2.2-develop
     {
         $query = $this->queryFactory->get();
         $query->unsetData();
@@ -230,7 +241,10 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $collection->addSearchFilter($text);
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         if (null !== $visibilityFilter) {
             $collection->setVisibility($visibilityFilter);
         }

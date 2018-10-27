@@ -279,6 +279,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      *
      * @param bool $skipFraudDetection
      * @return void
+     * @throws LocalizedException
      */
     protected function _registerPaymentCapture($skipFraudDetection = false)
     {
@@ -359,9 +360,13 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
             $this->_registerPaymentAuthorization();
             return;
         }
+<<<<<<< HEAD
         if ('order' === $reason) {
             throw new Exception('The "order" authorizations aren\'t implemented.');
         }
+=======
+
+>>>>>>> upstream/2.2-develop
         // case when was placed using PayPal standard
         if (\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT == $this->_order->getState()
             && !$this->getRequestData('transaction_entity')
@@ -373,7 +378,13 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         $this->_importPaymentInformation();
 
         $this->_order->getPayment()
+<<<<<<< HEAD
             ->setPreparedMessage($this->_createIpnComment($this->_paypalInfo->explainPendingReason($reason)))
+=======
+            ->setPreparedMessage(
+                $this->_createIpnComment($this->_paypalInfo->explainPendingReason($reason))
+            )
+>>>>>>> upstream/2.2-develop
             ->setTransactionId($this->getRequestData('txn_id'))
             ->setIsTransactionClosed(0)
             ->update(false);
@@ -458,7 +469,13 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         $reason = $this->getRequestData('reason_code');
         $isRefundFinal = !$this->_paypalInfo->isReversalDisputable($reason);
         $payment = $this->_order->getPayment()
+<<<<<<< HEAD
             ->setPreparedMessage($this->_createIpnComment($this->_paypalInfo->explainReasonCode($reason)))
+=======
+            ->setPreparedMessage(
+                $this->_createIpnComment($this->_paypalInfo->explainReasonCode($reason))
+            )
+>>>>>>> upstream/2.2-develop
             ->setTransactionId($this->getRequestData('txn_id'))
             ->setParentTransactionId($this->getRequestData('parent_txn_id'))
             ->setIsTransactionClosed($isRefundFinal)

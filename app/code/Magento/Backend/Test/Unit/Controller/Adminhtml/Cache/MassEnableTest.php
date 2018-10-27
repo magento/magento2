@@ -157,7 +157,11 @@ class MassEnableTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
+<<<<<<< HEAD
             ->with('These cache type(s) don\'t exist: someCache')
+=======
+            ->with('Specified cache type(s) don\'t exist: someCache')
+>>>>>>> upstream/2.2-develop
             ->willReturnSelf();
 
         $this->assertSame($this->redirectMock, $this->controller->execute());

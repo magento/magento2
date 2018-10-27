@@ -1002,6 +1002,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         /**
          * Store and website identifiers specified from StoreManager
          */
+        $request->setQuoteStoreId($this->getQuote()->getStoreId());
         $request->setStoreId($this->storeManager->getStore()->getId());
         $request->setWebsiteId($this->storeManager->getWebsite()->getId());
         $request->setFreeShipping($this->getFreeShipping());

@@ -7,7 +7,11 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <entity name="productAttributeOption1" type="ProductAttributeOption">
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <data key="label" unique="suffix">option1</data>
@@ -24,7 +28,14 @@
         <requiredEntity type="StoreLabel">Option2Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option2Store1</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="productAttributeOption3" type="ProductAttributeOption">
+=======
+    <entity name="ProductAttributeOptionGetter" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+    </entity>
+    <entity name="ProductAttributeOption3" type="ProductAttributeOption">
+>>>>>>> upstream/2.2-develop
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <data key="label" unique="suffix">option3</data>
         <data key="is_default">false</data>
@@ -32,7 +43,11 @@
         <requiredEntity type="StoreLabel">Option3Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option3Store1</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="productAttributeOption4" type="ProductAttributeOption">
+=======
+    <entity name="ProductAttributeOption4" type="ProductAttributeOption">
+>>>>>>> upstream/2.2-develop
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <data key="label" unique="suffix">option4</data>
         <data key="is_default">false</data>
@@ -40,7 +55,11 @@
         <requiredEntity type="StoreLabel">Option4Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option4Store1</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="productAttributeOption5" type="ProductAttributeOption">
+=======
+    <entity name="ProductAttributeOption5" type="ProductAttributeOption">
+>>>>>>> upstream/2.2-develop
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <data key="label" unique="suffix">option5</data>
         <data key="is_default">false</data>
@@ -48,7 +67,11 @@
         <requiredEntity type="StoreLabel">Option5Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option5Store1</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="productAttributeOption6" type="ProductAttributeOption">
+=======
+    <entity name="ProductAttributeOption6" type="ProductAttributeOption">
+>>>>>>> upstream/2.2-develop
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <data key="label" unique="suffix">option6</data>
         <data key="is_default">false</data>
@@ -56,6 +79,7 @@
         <requiredEntity type="StoreLabel">Option6Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option6Store1</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="ProductAttributeOptionGetter" type="ProductAttributeOption">
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
     </entity>
@@ -65,4 +89,6 @@
         <data key="is_default">false</data>
         <data key="sort_order">0</data>
     </entity>
+=======
+>>>>>>> upstream/2.2-develop
 </entities>

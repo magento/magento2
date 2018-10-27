@@ -8,14 +8,19 @@ namespace Magento\Framework;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
+<<<<<<< HEAD
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+=======
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+>>>>>>> upstream/2.2-develop
 
 /**
  * @magentoAppIsolation enabled
  * @magentoCache all disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TranslateTest extends \PHPUnit\Framework\TestCase
+class TranslateTest extends TestCase
 {
     /**
      * @var \Magento\Framework\Translate
@@ -27,7 +32,11 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+<<<<<<< HEAD
         /** @var \Magento\Framework\View\FileSystem|MockObject $viewFileSystem */
+=======
+        /** @var \Magento\Framework\View\FileSystem | PHPUnit_Framework_MockObject_MockObject $viewFileSystem */
+>>>>>>> upstream/2.2-develop
         $viewFileSystem = $this->createPartialMock(
             \Magento\Framework\View\FileSystem::class,
             ['getLocaleFileName']
@@ -41,7 +50,11 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
                 )
             );
 
+<<<<<<< HEAD
         /** @var \Magento\Framework\View\Design\ThemeInterface|MockObject $theme */
+=======
+        /** @var \Magento\Framework\View\Design\ThemeInterface | PHPUnit_Framework_MockObject_MockObject $theme */
+>>>>>>> upstream/2.2-develop
         $theme = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->any())->method('getThemePath')->will($this->returnValue('Magento/luma'));
 
@@ -62,7 +75,11 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             dirname(__DIR__) . '/Translation/Model/_files/Magento/Catalog/i18n'
         );
 
+<<<<<<< HEAD
         /** @var \Magento\Theme\Model\View\Design|MockObject $designModel */
+=======
+        /** @var \Magento\Theme\Model\View\Design | \PHPUnit_Framework_MockObject_MockObject $designModel */
+>>>>>>> upstream/2.2-develop
         $designModel = $this->getMockBuilder(\Magento\Theme\Model\View\Design::class)
             ->setMethods(['getDesignTheme'])
             ->setConstructorArgs(
@@ -103,10 +120,15 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoCache all disabled
      * @dataProvider translateDataProvider
+<<<<<<< HEAD
      *
      * @param string $inputText
      * @param string $expectedTranslation
      * @return void
+=======
+     * @param string $inputText
+     * @param string $expectedTranslation
+>>>>>>> upstream/2.2-develop
      * @throws Exception\LocalizedException
      */
     public function testTranslate($inputText, $expectedTranslation)
@@ -136,12 +158,21 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
                 'Phrase in Magento_Catalog module that doesn\'t need translation',
             ],
             [
+<<<<<<< HEAD
                 'Magento_Store module phrase will be overridden by theme translation',
                 'Magento_Store module phrase is overridden by theme translation',
             ],
             [
                 'Magento_Catalog module phrase will be overridden by theme translation',
                 'Magento_Catalog module phrase is overridden by theme translation',
+=======
+                'Magento_Store module phrase will be override by theme translation',
+                'Magento_Store module phrase is override by theme translation',
+            ],
+            [
+                'Magento_Catalog module phrase will be override by theme translation',
+                'Magento_Catalog module phrase is override by theme translation',
+>>>>>>> upstream/2.2-develop
             ],
         ];
     }

@@ -141,11 +141,16 @@ class Builder
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+<<<<<<< HEAD
     protected function _getMappedSqlCondition(
         AbstractCondition $condition,
         string $value = '',
         bool $isDefaultStoreUsed = true
     ): string {
+=======
+    protected function _getMappedSqlCondition(AbstractCondition $condition, $value = '', $isDefaultStoreUsed = true)
+    {
+>>>>>>> upstream/2.2-develop
         $argument = $condition->getMappedSqlField();
 
         // If rule hasn't valid argument - create negative expression to prevent incorrect rule behavior.
@@ -160,6 +165,7 @@ class Builder
         }
 
         $defaultValue = 0;
+<<<<<<< HEAD
         //operator 'contains {}' is mapped to 'IN()' query that cannot work with substrings
         // adding mapping to 'LIKE %%'
         if ($condition->getInputType() === 'string'
@@ -191,6 +197,27 @@ class Builder
                 );
             }
         }
+=======
+        $sql = str_replace(
+            ':field',
+            $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), $defaultValue),
+            $this->_conditionOperatorMap[$conditionOperator]
+        );
+>>>>>>> upstream/2.2-develop
+
+        $bindValue = $condition->getBindArgumentValue();
+        $expression = $value . $this->_connection->quoteInto($sql, $bindValue);
+
+        // values for multiselect attributes can be saved in comma separated format
+        // below is a solution for matching such conditions with selected values
+        if (in_array($conditionOperator, ['()', '{}']) && is_array($bindValue)) {
+            foreach ($bindValue as $item) {
+                $expression .= $this->_connection->quoteInto(
+                    " OR (FIND_IN_SET (?, {$this->_connection->quoteIdentifier($argument)}) > 0)",
+                    $item
+                );
+            }
+        }
 
         return $this->_expressionFactory->create(
             ['expression' => $expression]
@@ -207,11 +234,16 @@ class Builder
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+<<<<<<< HEAD
     protected function _getMappedSqlCombination(
         Combine $combine,
         string $value = '',
         bool $isDefaultStoreUsed = true
     ): string {
+=======
+    protected function _getMappedSqlCombination(Combine $combine, $value = '', $isDefaultStoreUsed = true)
+    {
+>>>>>>> upstream/2.2-develop
         $out = (!empty($value) ? $value : '');
         $value = ($combine->getValue() ? '' : ' NOT ');
         $getAggregator = $combine->getAggregator();

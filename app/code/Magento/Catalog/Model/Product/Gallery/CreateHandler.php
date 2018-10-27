@@ -459,10 +459,15 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+<<<<<<< HEAD
      * Process media attribute
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param string $mediaAttrCode
+=======
+     * @param \Magento\Catalog\Model\Product $product
+     * @param $mediaAttrCode
+>>>>>>> upstream/2.2-develop
      * @param array $clearImages
      * @param array $newImages
      */
@@ -490,10 +495,15 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+<<<<<<< HEAD
      * Process media attribute label
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param string $mediaAttrCode
+=======
+     * @param \Magento\Catalog\Model\Product $product
+     * @param $mediaAttrCode
+>>>>>>> upstream/2.2-develop
      * @param array $clearImages
      * @param array $newImages
      * @param array $existImages

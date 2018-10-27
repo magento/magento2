@@ -131,9 +131,12 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function loadByCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
+<<<<<<< HEAD
         $storeId = (int)$customer->getStoreId() ?: $this->storeManager
             ->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
 
+=======
+>>>>>>> upstream/2.2-develop
         $select = $this->connection
             ->select()
             ->from($this->getMainTable())
@@ -144,7 +147,11 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $select,
                 [
                     'customer_id' => $customer->getId(),
+<<<<<<< HEAD
                     'store_id' => $storeId
+=======
+                    'store_id' => $customer->getStoreId()
+>>>>>>> upstream/2.2-develop
                 ]
             );
 
@@ -162,7 +169,11 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $select,
                 [
                     'subscriber_email' => $customer->getEmail(),
+<<<<<<< HEAD
                     'store_id' => $storeId
+=======
+                    'store_id' => $customer->getStoreId()
+>>>>>>> upstream/2.2-develop
                 ]
             );
 

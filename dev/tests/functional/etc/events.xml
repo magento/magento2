@@ -48,6 +48,7 @@
             <tag name="webapi_failed" />
         </observer>
     </preset>
+<<<<<<< HEAD
     <preset name="detailed" extends="base">
         <observer class="Magento\Mtf\System\Observer\ClientError">
             <tag name="page_changed" />
@@ -74,6 +75,39 @@
             <tag name="click_before" />
             <tag name="page_changed" />
             <tag name="exception" />
+=======
+    <preset name="debug" extends="base">
+        <observer class="Magento\Mtf\System\Observer\Screenshot">
+            <tag name="exception"/>
+            <tag name="failure"/>
+            <tag name="click_after"/>
+            <tag name="accept_alert_after"/>
+            <tag name="dismiss_alert_after"/>
+            <tag name="open_after"/>
+            <tag name="forward"/>
+            <tag name="back"/>
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\SourceCode">
+            <tag name="exception"/>
+            <tag name="failure"/>
+            <tag name="click_after"/>
+            <tag name="accept_alert_after"/>
+            <tag name="dismiss_alert_after"/>
+            <tag name="open_after"/>
+            <tag name="forward"/>
+            <tag name="back"/>
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\Log">
+            <tag name="exception"/>
+            <tag name="failure"/>
+            <tag name="click_before"/>
+            <tag name="click_after"/>
+            <tag name="accept_alert_after"/>
+            <tag name="dismiss_alert_after"/>
+            <tag name="open_after"/>
+            <tag name="forward"/>
+            <tag name="back"/>
+>>>>>>> upstream/2.2-develop
         </observer>
     </preset>
 </config>

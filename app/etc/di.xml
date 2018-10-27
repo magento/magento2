@@ -179,6 +179,7 @@
     <preference for="Magento\Framework\App\FeedInterface" type="Magento\Framework\App\Feed" />
     <preference for="Magento\Framework\App\FeedFactoryInterface" type="Magento\Framework\App\FeedFactory" />
     <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
+<<<<<<< HEAD
     <preference for="Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface" type="Magento\Eav\Model\TypeLocator\ComplexType"/>
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaReader" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
@@ -206,6 +207,8 @@
     <preference for="Magento\Framework\MessageQueue\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\Bulk\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory" />
+=======
+>>>>>>> upstream/2.2-develop
     <preference for="Magento\Framework\Search\Request\IndexScopeResolverInterface" type="Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver"/>
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
@@ -1408,6 +1411,7 @@
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
     <type name="Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory">
         <arguments>
             <argument name="typeFactories" xsi:type="array">
@@ -1709,11 +1713,14 @@
     </type>
     <!-- \Magento\Framework\MessageQueue\Bulk\PublisherPool is @api -->
     <virtualType name="Magento\Framework\MessageQueue\Bulk\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool" />
+=======
+>>>>>>> upstream/2.2-develop
     <type name="Magento\Framework\Session\Config">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
         </arguments>
     </type>
+<<<<<<< HEAD
     <virtualType name="CsrfRequestValidator" type="Magento\Framework\App\Request\CsrfValidator" />
     <virtualType name="RequestValidator" type="Magento\Framework\App\Request\CompositeValidator">
         <arguments>
@@ -1742,4 +1749,6 @@
             </argument>
         </arguments>
     </type>
+=======
+>>>>>>> upstream/2.2-develop
 </config>

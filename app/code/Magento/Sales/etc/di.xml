@@ -476,6 +476,10 @@
             <argument name="entityRelationComposite" xsi:type="object">CreditmemoRelationsComposite</argument>
         </arguments>
     </type>
+<<<<<<< HEAD
+=======
+    
+>>>>>>> upstream/2.2-develop
     <virtualType name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedOrderDataProvider" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">

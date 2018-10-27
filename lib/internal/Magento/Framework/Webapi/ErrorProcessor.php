@@ -317,7 +317,11 @@ class ErrorProcessor
     protected function _saveFatalErrorReport($reportData)
     {
         $this->directoryWrite->create('report/api');
+<<<<<<< HEAD
         $reportId = abs((int)(microtime(true) * random_int(100, 1000)));
+=======
+        $reportId = abs((int)microtime(true) * random_int(100, 1000));
+>>>>>>> upstream/2.2-develop
         $this->directoryWrite->writeFile('report/api/' . $reportId, $this->serializer->serialize($reportData));
         return $reportId;
     }

@@ -6,6 +6,7 @@
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
 
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+<<<<<<< HEAD
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -13,6 +14,16 @@ class RemoteAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\HttpRequest
+=======
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
+class RemoteAddressTest extends TestCase
+{
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|HttpRequest
+>>>>>>> upstream/2.2-develop
      */
     protected $_request;
 
@@ -26,8 +37,14 @@ class RemoteAddressTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+<<<<<<< HEAD
         $this->_request = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()
+=======
+        $this->_request = $this->getMockBuilder(
+            HttpRequest::class
+        )->disableOriginalConstructor()
+>>>>>>> upstream/2.2-develop
             ->setMethods(['getServer'])
             ->getMock();
 
@@ -40,7 +57,11 @@ class RemoteAddressTest extends \PHPUnit\Framework\TestCase
      * @param string|bool $expected
      * @param bool $ipToLong
      * @param string[]|null $trustedProxies
+<<<<<<< HEAD
      * @return void
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @dataProvider getRemoteAddressProvider
      */
     public function testGetRemoteAddress(
@@ -49,13 +70,21 @@ class RemoteAddressTest extends \PHPUnit\Framework\TestCase
         $expected,
         bool $ipToLong,
         array $trustedProxies = null
+<<<<<<< HEAD
     ): void {
+=======
+    ) {
+>>>>>>> upstream/2.2-develop
         $remoteAddress = $this->_objectManager->getObject(
             RemoteAddress::class,
             [
                 'httpRequest' => $this->_request,
                 'alternativeHeaders' => $alternativeHeaders,
+<<<<<<< HEAD
                 'trustedProxies' => $trustedProxies,
+=======
+                'trustedProxies' => $trustedProxies
+>>>>>>> upstream/2.2-develop
             ]
         );
         $this->_request->expects($this->any())
@@ -151,12 +180,20 @@ class RemoteAddressTest extends \PHPUnit\Framework\TestCase
                     [
                         'REMOTE_ADDR',
                         null,
+<<<<<<< HEAD
                         '192.168.0.2, 192.168.0.1, 192.168.0.3',
+=======
+                        '192.168.0.2, 192.168.0.1, 192.168.0.3'
+>>>>>>> upstream/2.2-develop
                     ],
                     [
                         'REMOTE_ADDR',
                         false,
+<<<<<<< HEAD
                         '192.168.0.2, 192.168.0.1, 192.168.0.3',
+=======
+                        '192.168.0.2, 192.168.0.1, 192.168.0.3'
+>>>>>>> upstream/2.2-develop
                     ],
                 ],
                 'expected' => '192.168.0.1',
@@ -169,12 +206,20 @@ class RemoteAddressTest extends \PHPUnit\Framework\TestCase
                     [
                         'REMOTE_ADDR',
                         null,
+<<<<<<< HEAD
                         '192.168.0.2, 192.168.0.1, 192.168.0.3',
+=======
+                        '192.168.0.2, 192.168.0.1, 192.168.0.3'
+>>>>>>> upstream/2.2-develop
                     ],
                     [
                         'REMOTE_ADDR',
                         false,
+<<<<<<< HEAD
                         '192.168.0.2, 192.168.0.1, 192.168.0.3',
+=======
+                        '192.168.0.2, 192.168.0.1, 192.168.0.3'
+>>>>>>> upstream/2.2-develop
                     ],
                 ],
                 'expected' => '192.168.0.3',

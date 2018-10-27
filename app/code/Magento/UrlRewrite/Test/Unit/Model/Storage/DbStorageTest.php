@@ -445,7 +445,6 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
         $urlSecond = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         // delete
-
         $urlFirst->expects($this->any())
             ->method('getEntityType')
             ->willReturn('product');
@@ -455,6 +454,7 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
         $urlFirst->expects($this->any())
             ->method('getStoreId')
             ->willReturn('store_id_1');
+<<<<<<< HEAD
 
         $urlSecond->expects($this->any())
             ->method('getEntityType')
@@ -463,6 +463,15 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityId')
             ->willReturn('entity_2');
         $urlSecond->expects($this->any())
+=======
+        $urlSecond->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn('category');
+        $urlSecond->expects($this->any())
+            ->method('getEntityId')
+            ->willReturn('entity_2');
+        $urlSecond->expects($this->any())
+>>>>>>> upstream/2.2-develop
             ->method('getStoreId')
             ->willReturn('store_id_2');
 

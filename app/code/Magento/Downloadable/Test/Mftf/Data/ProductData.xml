@@ -8,6 +8,7 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+<<<<<<< HEAD
     <entity name="DownloadableProduct" type="product">
         <data key="sku" unique="suffix">downloadableproduct</data>
         <data key="type_id">downloadable</data>
@@ -19,6 +20,8 @@
         <data key="status">1</data>
         <data key="urlKey" unique="suffix">downloadableproduct</data>
     </entity>
+=======
+>>>>>>> upstream/2.2-develop
     <entity name="ApiDownloadableProduct" type="product">
         <data key="sku" unique="suffix">api-downloadable-product</data>
         <data key="type_id">downloadable</data>

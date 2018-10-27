@@ -33,7 +33,11 @@ class Unhold extends \Magento\Sales\Controller\Adminhtml\Order
                     throw new \Magento\Framework\Exception\LocalizedException(__('Can\'t unhold order.'));
                 }
                 $this->orderManagement->unHold($order->getEntityId());
+<<<<<<< HEAD
                 $this->messageManager->addSuccessMessage(__('You released the order from holding status.'));
+=======
+                $this->messageManager->addSuccess(__('You released the order from holding status.'));
+>>>>>>> upstream/2.2-develop
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {

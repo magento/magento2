@@ -35,10 +35,15 @@ class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notificatio
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
+<<<<<<< HEAD
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __("We couldn't remove the messages because of an error.")
                 );
+=======
+                $this->messageManager
+                    ->addExceptionMessage($e, __("We couldn't remove the messages because of an error."));
+>>>>>>> upstream/2.2-develop
             }
 
             $this->_redirect('adminhtml/*/');

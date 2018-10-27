@@ -10,10 +10,23 @@
         "sort-packages": true
     },
     "require": {
+<<<<<<< HEAD
         "php": "~7.1.3||~7.2.0",
         "codeception/codeception": "~2.3.4 || ~2.4.0",
         "consolidation/robo": "^1.0.0",
         "vlucas/phpdotenv": "^2.4"
+=======
+        "php": "~7.0.13|~7.1.0",
+        "codeception/codeception": "~2.3.4",
+        "consolidation/robo": "^1.0.0",
+        "vlucas/phpdotenv": "^2.4",
+        "doctrine/instantiator": "<=1.0.5",
+        "myclabs/deep-copy": "<=1.7.0",
+        "symfony/filesystem": "<=3.4.12",
+        "symfony/finder": "<=3.4.12",
+        "symfony/process": "<=3.4.12",
+        "symfony/yaml": "<=3.4.12"
+>>>>>>> upstream/2.2-develop
     },
     "autoload": {
         "psr-4": {

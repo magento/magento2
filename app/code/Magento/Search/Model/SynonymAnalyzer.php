@@ -67,7 +67,11 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
             $synonyms = [$word];
 
             if ($synonymGroups) {
+<<<<<<< HEAD
                 $pattern = $this->getSearchPattern(\array_slice($words, $offset));
+=======
+                $pattern = $this->getSearchPattern(array_slice($words, $offset));
+>>>>>>> upstream/2.2-develop
                 $position = $this->findInArray($pattern, $synonymGroups);
                 if ($position !== null) {
                     $synonyms = explode(',', $synonymGroups[$position]);
@@ -99,7 +103,10 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
             }
             $position++;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return null;
     }
 
@@ -136,7 +143,11 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
     {
         $patterns = [];
         for ($lastItem = count($words); $lastItem > 0; $lastItem--) {
+<<<<<<< HEAD
             $phrase = implode("\s+", \array_slice($words, 0, $lastItem));
+=======
+            $phrase = implode("\s+", array_slice($words, 0, $lastItem));
+>>>>>>> upstream/2.2-develop
             $patterns[] = '^' . $phrase . ',';
             $patterns[] = ',' . $phrase . ',';
             $patterns[] = ',' . $phrase . '$';
@@ -153,13 +164,19 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
      *
      * @param string $phrase
      * @return string[]
+<<<<<<< HEAD
      * @throws \Magento\Framework\Exception\LocalizedException
+=======
+>>>>>>> upstream/2.2-develop
      */
     private function getSynonymGroupsByPhrase(string $phrase): array
     {
         $result = [];
 
+<<<<<<< HEAD
         /** @var array $synonymGroups */
+=======
+>>>>>>> upstream/2.2-develop
         $synonymGroups = $this->synReaderModel->loadByPhrase($phrase)->getData();
         foreach ($synonymGroups as $row) {
             $result[] = $row['synonyms'];

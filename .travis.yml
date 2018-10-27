@@ -17,7 +17,12 @@ services:
 language: php
 php:
   - 7.1
+<<<<<<< HEAD
   - 7.2
+=======
+git:
+  depth: 5
+>>>>>>> upstream/2.2-develop
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
@@ -41,7 +46,11 @@ matrix:
       env: TEST_SUITE=js GRUNT_COMMAND=spec
     - php: 7.1
       env: TEST_SUITE=js GRUNT_COMMAND=static
+<<<<<<< HEAD
     - php: 7.1
+=======
+    - php: 7.0
+>>>>>>> upstream/2.2-develop
       env: TEST_SUITE=functional
 cache:
   apt: true

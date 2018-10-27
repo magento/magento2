@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Store\Model\StoreManagerInterface;

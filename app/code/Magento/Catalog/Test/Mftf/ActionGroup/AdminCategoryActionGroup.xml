@@ -7,7 +7,12 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+=======
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+
+>>>>>>> upstream/2.2-develop
     <!--Create a new category-->
     <actionGroup name="CreateCategory">
         <arguments>
@@ -25,6 +30,7 @@
         <seeElement selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="seeCategoryInTree"/>
     </actionGroup>
 
+<<<<<<< HEAD
     <!-- Go to create new root or sub category page -->
     <actionGroup name="goToCreateCategoryPage">
         <arguments>
@@ -122,6 +128,8 @@
         <seeInTitle userInput="{{categoryEntity.name}}" stepKey="seeCategoryNameInTitle"/>
     </actionGroup>
 
+=======
+>>>>>>> upstream/2.2-develop
     <!--Actions to delete category-->
     <actionGroup name="DeleteCategory">
         <arguments>
@@ -140,6 +148,7 @@
         <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="dontSeeCategoryInTree"/>
     </actionGroup>
 
+<<<<<<< HEAD
     <!-- Actions to fill out a new category from the product page-->
     <!-- The action assumes that you are already on an admin product configuration page -->
     <actionGroup name="FillNewProductCategory" >
@@ -240,5 +249,49 @@
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(Category.Name)}}" stepKey="navigateToCreatedCategory" />
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSpinner" />
+=======
+    <!--Actions to switch store view in category edit page-->
+    <actionGroup name="switchCategoryStoreView">
+        <arguments>
+            <argument name="store"/>
+            <argument name="catName"/>
+        </arguments>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(catName)}}" stepKey="navigateToCreatedCategory"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <scrollToTopOfPage stepKey="scrollToToggle"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewDropdownToggle}}" stepKey="openStoreViewDropDown"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewOption(store)}}" stepKey="selectStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}" stepKey="selectStoreViewAccept"/>
+        <waitForPageLoad stepKey="waitForStoreViewChangeLoad"/>
+    </actionGroup>
+
+    <!-- Go to admin category page by id -->
+    <actionGroup name="goToAdminCategoryPageById">
+        <arguments>
+            <argument name="id" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminCategoryEditPage.url(id)}}" stepKey="amOnAdminCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="{{id}}" stepKey="seeCategoryPageTitle"/>
+    </actionGroup>
+
+    <!--Open tab "Products in Category" if she closed-->
+    <actionGroup name="OpenProductsInCategorySection">
+        <scrollTo selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="scrollToSection"/>
+        <conditionalClick selector="{{AdminCategoryProductsSection.sectionHeader}}" dependentSelector="{{AdminCategoryProductsSection.tabProductClosed}}" visible="true" stepKey="openProductsInCategory"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="SeeProductInProductCategoryGridForCurrentCategory">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <see selector="{{AdminCategoryProductsGridSection.nameColumn}}" userInput="{{product.name}}" stepKey="seeProductNameInGrid"/>
+        <see selector="{{AdminCategoryProductsGridSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
+        <see selector="{{AdminCategoryProductsGridSection.priceColumn}}" userInput="{{product.price}}" stepKey="seeProductPriceInGrid"/>
+>>>>>>> upstream/2.2-develop
     </actionGroup>
 </actionGroups>

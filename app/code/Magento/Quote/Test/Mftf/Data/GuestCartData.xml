@@ -8,6 +8,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
 
     <entity name="GuestCart" type="GuestCart">
@@ -24,5 +25,9 @@
     <entity name="GuestOrderPaymentMethod" type="PaymentInformation">
         <requiredEntity type="payment_method">PaymentMethodCheckMoneyOrder</requiredEntity>
         <requiredEntity type="billing_address">BillingAddressTX</requiredEntity>
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="guestCart" type="guestCart">
+>>>>>>> upstream/2.2-develop
     </entity>
 </entities>

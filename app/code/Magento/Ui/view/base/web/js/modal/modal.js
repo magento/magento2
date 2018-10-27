@@ -340,12 +340,15 @@ define([
             var zIndex = this.modal.zIndex(),
                 baseIndex = zIndex + this._getVisibleCount();
 
+<<<<<<< HEAD
             if (this.modal.data('active')) {
                 return;
             }
 
             this.modal.data('active', true);
 
+=======
+>>>>>>> upstream/2.2-develop
             this.overlay.zIndex(++baseIndex);
             this.prevOverlayIndex = this.overlay.zIndex();
             this.modal.zIndex(this.overlay.zIndex() + 1);
@@ -363,7 +366,18 @@ define([
             this.modal.data('active', false);
 
             if (this.overlay) {
+<<<<<<< HEAD
                 this.overlay.zIndex(this.prevOverlayIndex - 1);
+=======
+                // In cases when one modal is closed but there is another modal open (e.g. admin notifications)
+                // to avoid collisions between overlay and modal zIndexes
+                // overlay zIndex is set to be less than modal one
+                if (this._getVisibleCount() === 1) {
+                    this.overlay.zIndex(this.prevOverlayIndex - 1);
+                } else {
+                    this.overlay.zIndex(this.prevOverlayIndex);
+                }
+>>>>>>> upstream/2.2-develop
             }
         },
 

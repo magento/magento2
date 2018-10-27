@@ -51,6 +51,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
+<<<<<<< HEAD
     /**
      * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -64,6 +65,14 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
+=======
+    /** @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $sessionConfigMock;
+
+    /** @var int */
+    private $cookieLifeTime = 3600;
+
+>>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -95,7 +104,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
                 'context' => $this->contextMock,
                 'dateTime' => $this->dateTimeMock,
+<<<<<<< HEAD
                 'sessionConfig' => $this->sessionConfigMock,
+=======
+                'sessionConfig' => $this->sessionConfigMock
+>>>>>>> upstream/2.2-develop
             ]
         );
         $this->model->headersSentThrowsException = false;

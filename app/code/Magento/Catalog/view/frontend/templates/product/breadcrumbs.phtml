@@ -7,9 +7,13 @@
 /** @var \Magento\Catalog\ViewModel\Product\Breadcrumbs $viewModel */
 $viewModel = $block->getData('viewModel');
 ?>
+<<<<<<< HEAD
 <div class="breadcrumbs"></div>
 <script type="text/x-magento-init">
         {
             ".breadcrumbs": <?= $viewModel->getJsonConfigurationHtmlEscaped() ?>
         }
 </script>
+=======
+<div class="breadcrumbs" data-mage-init='<?= /* @escapeNotVerified */ $viewModel->getJsonConfiguration() ?>'></div>
+>>>>>>> upstream/2.2-develop

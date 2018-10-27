@@ -14,12 +14,17 @@
         "[data-role=swatch-options]": {
             "Magento_Swatches/js/swatch-renderer": {
                 "jsonConfig": <?= /* @escapeNotVerified */ $swatchOptions = $block->getJsonConfig() ?>,
-                "jsonSwatchConfig": <?php /* @escapeNotVerified */
-                    echo $swatchOptions = $block->getJsonSwatchConfig(); ?>,
+                "jsonSwatchConfig": <?php /* @noEscape */ echo $block->getJsonSwatchConfig(); ?>,
                 "mediaCallback": "<?= /* @escapeNotVerified */ $block->getMediaCallback() ?>",
                 "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
                     'Magento_ConfigurableProduct') ?: 'replace'; ?>",
                 "jsonSwatchImageSizeConfig": <?php /* @noEscape */ echo $block->getJsonSwatchSizeConfig() ?>
+<<<<<<< HEAD
+=======
+            },
+            "Magento_Swatches/js/configurable-customer-data": {
+                    "swatchOptions": <?php /* @noEscape */ echo $swatchOptions ?>
+>>>>>>> upstream/2.2-develop
             }
         },
         "*" : {

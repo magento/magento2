@@ -84,9 +84,12 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     private $variationPricesMock;
 
+<<<<<<< HEAD
     /**
      * {@inheritDoc}
      */
+=======
+>>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->mockContextObject();
@@ -318,6 +321,23 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->localeFormat->expects($this->any())
             ->method('getNumber')
             ->willReturnArgument(0);
+
+        $this->variationPricesMock->expects($this->once())
+            ->method('getFormattedPrices')
+            ->with($priceInfoMock)
+            ->willReturn(
+                [
+                    'oldPrice' => [
+                        'amount' => $amount,
+                    ],
+                    'basePrice' => [
+                        'amount' => $amount,
+                    ],
+                    'finalPrice' => [
+                        'amount' => $amount,
+                    ],
+                ]
+            );
 
         $this->variationPricesMock->expects($this->once())
             ->method('getFormattedPrices')

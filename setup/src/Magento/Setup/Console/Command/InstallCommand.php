@@ -18,7 +18,11 @@ use Magento\Framework\Setup\ConsoleLogger;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+<<<<<<< HEAD
 use Symfony\Component\Console\Input\ArrayInput;
+=======
+use Magento\Setup\Model\ConfigModel;
+>>>>>>> upstream/2.2-develop
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -45,6 +49,7 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_USE_SAMPLE_DATA = 'use-sample-data';
 
     /**
+<<<<<<< HEAD
      * List of comma-separated module names. That must be enabled during installation.
      * Available magic param all.
      */
@@ -64,6 +69,8 @@ class InstallCommand extends AbstractSetupCommand
     const CONVERT_OLD_SCRIPTS_KEY = 'convert-old-scripts';
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * Parameter indicating command for interactive setup
      */
     const INPUT_KEY_INTERACTIVE_SETUP = 'interactive';
@@ -74,6 +81,7 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT = 'i';
 
     /**
+<<<<<<< HEAD
      * Parameter says that in this mode all destructive operations, like column removal will be dumped
      */
     const INPUT_KEY_SAFE_INSTALLER_MODE = 'safe-mode';
@@ -84,6 +92,8 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_DATA_RESTORE = 'data-restore';
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * Regex for sales_order_increment_prefix validation.
      */
     const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
@@ -159,6 +169,7 @@ class InstallCommand extends AbstractSetupCommand
                 'Use sample data'
             ),
             new InputOption(
+<<<<<<< HEAD
                 self::INPUT_KEY_ENABLE_MODULES,
                 null,
                 InputOption::VALUE_OPTIONAL,
@@ -180,11 +191,14 @@ class InstallCommand extends AbstractSetupCommand
                 false
             ),
             new InputOption(
+=======
+>>>>>>> upstream/2.2-develop
                 self::INPUT_KEY_INTERACTIVE_SETUP,
                 self::INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT,
                 InputOption::VALUE_NONE,
                 'Interactive Magento instalation'
             ),
+<<<<<<< HEAD
             new InputOption(
                 OperationsExecutor::KEY_SAFE_MODE,
                 null,
@@ -204,6 +218,8 @@ class InstallCommand extends AbstractSetupCommand
                 'Magento Installation will be run in dry-run mode',
                 false
             ),
+=======
+>>>>>>> upstream/2.2-develop
         ]);
         $this->setName('setup:install')
             ->setDescription('Installs the Magento application')
@@ -241,9 +257,21 @@ class InstallCommand extends AbstractSetupCommand
                 if (array_key_exists($option->getName(), $inputOptions)) {
                     $configOptionsToValidate[$option->getName()] = $inputOptions[$option->getName()];
                 }
+<<<<<<< HEAD
+=======
             }
         }
 
+        if ($inputOptions['interactive']) {
+            $command = '';
+            foreach ($configOptionsToValidate as $key => $value) {
+                $command .= " --{$key}={$value}";
+>>>>>>> upstream/2.2-develop
+            }
+            $output->writeln("<comment>Try re-running command: php bin/magento setup:install{$command}</comment>");
+        }
+
+<<<<<<< HEAD
         if ($inputOptions['interactive']) {
             $command = '';
             foreach ($configOptionsToValidate as $key => $value) {
@@ -252,6 +280,8 @@ class InstallCommand extends AbstractSetupCommand
             $output->writeln("<comment>Try re-running command: php bin/magento setup:install{$command}</comment>");
         }
 
+=======
+>>>>>>> upstream/2.2-develop
         $errors = $this->configModel->validate($configOptionsToValidate);
         $errors = array_merge($errors, $this->validateAdmin($input));
         $errors = array_merge($errors, $this->validate($input));
@@ -294,7 +324,11 @@ class InstallCommand extends AbstractSetupCommand
      * @param OutputInterface $output
      * @return string[] Array of inputs
      */
+<<<<<<< HEAD
     private function interactiveQuestions(InputInterface $input, OutputInterface $output) : array
+=======
+    private function interactiveQuestions(InputInterface $input, OutputInterface $output)
+>>>>>>> upstream/2.2-develop
     {
         $helper = $this->getHelper('question');
         $configOptionsToValidate = [];
@@ -322,7 +356,11 @@ class InstallCommand extends AbstractSetupCommand
 
         $output->writeln("");
 
+<<<<<<< HEAD
         foreach ($this->adminUser->getOptionsList(InputOption::VALUE_OPTIONAL) as $option) {
+=======
+        foreach ($this->adminUser->getOptionsList() as $option) {
+>>>>>>> upstream/2.2-develop
             $configOptionsToValidate[$option->getName()] = $this->askQuestion(
                 $input,
                 $output,
@@ -413,6 +451,7 @@ class InstallCommand extends AbstractSetupCommand
 
         return $value;
     }
+<<<<<<< HEAD
 
     /**
      * Performs validation of admin options if at least one of them was set.
@@ -433,4 +472,6 @@ class InstallCommand extends AbstractSetupCommand
 
         return [];
     }
+=======
+>>>>>>> upstream/2.2-develop
 }

@@ -181,7 +181,11 @@ class ShippingMethodManagement implements
      * @param string $methodCode The shipping method code.
      * @return void
      * @throws InputException The shipping method is not valid for an empty cart.
+<<<<<<< HEAD
      * @throws NoSuchEntityException CThe Cart includes virtual product(s) only, so a shipping address is not used.
+=======
+     * @throws NoSuchEntityException Cart contains only virtual products. Shipping method is not applicable.
+>>>>>>> upstream/2.2-develop
      * @throws StateException The billing or shipping address is not set.
      * @throws \Exception
      */
@@ -203,7 +207,11 @@ class ShippingMethodManagement implements
         if (!$shippingAddress->getCountryId()) {
             // Remove empty quote address
             $this->quoteAddressResource->delete($shippingAddress);
+<<<<<<< HEAD
             throw new StateException(__('The shipping address is missing. Set the address and try again.'));
+=======
+            throw new StateException(__('Shipping address is not set'));
+>>>>>>> upstream/2.2-develop
         }
         $shippingAddress->setShippingMethod($carrierCode . '_' . $methodCode);
     }

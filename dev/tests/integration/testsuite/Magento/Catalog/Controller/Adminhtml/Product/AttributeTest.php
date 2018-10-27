@@ -6,7 +6,10 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Framework\Exception\LocalizedException;
+<<<<<<< HEAD
 use Magento\Framework\App\Request\Http as HttpRequest;
+=======
+>>>>>>> upstream/2.2-develop
 
 /**
  * @magentoAppArea adminhtml
@@ -245,7 +248,11 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      *
      * @return array
      */
+<<<<<<< HEAD
     private function getLargeOptionsSetAttributeData()
+=======
+    private function getLargeOptionsSetAttributeData(): array
+>>>>>>> upstream/2.2-develop
     {
         return [
             'frontend_label' => [
@@ -286,6 +293,10 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
 
     /**
      * Test attribute saving with large amount of options exceeding maximum allowed by max_input_vars limit.
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return void
      */
     public function testLargeOptionsDataSet()
@@ -298,6 +309,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $optionsData = [];
         $expectedOptionsLabels = [];
         for ($i = 0; $i < $optionsCount; $i++) {
+<<<<<<< HEAD
             $expectedOptionLabelOnStoreView = 'value_' . $i . '_store_1';
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
             $optionId = 'option_' . $i;
@@ -310,6 +322,17 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         }
         $attributeData['serialized_options'] = json_encode($optionsData);
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+=======
+            $order = $i + 1;
+            $expectedOptionLabelOnStoreView = "value_{$i}_store_1";
+            $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
+            $optionsData []= "option[order][option_{$i}]={$order}";
+            $optionsData []= "option[value][option_{$i}][0]=value_{$i}_admin";
+            $optionsData []= "option[value][option_{$i}][1]={$expectedOptionLabelOnStoreView}";
+            $optionsData []= "option[delete][option_{$i}=";
+        }
+        $attributeData['serialized_options'] = json_encode($optionsData);
+>>>>>>> upstream/2.2-develop
         $this->getRequest()->setPostValue($attributeData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $entityTypeId = $this->_objectManager->create(

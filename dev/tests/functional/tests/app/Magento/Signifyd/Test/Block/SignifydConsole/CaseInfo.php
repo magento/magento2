@@ -108,7 +108,11 @@ class CaseInfo extends Block
      *
      * @var string
      */
+<<<<<<< HEAD
     private $shippingPrice = '[ng-if="shipment.shippingPrice"]';
+=======
+    private $shippingPrice = '[ng-if$="caseOrderSummary.shipments[0].shippingPrice"]';
+>>>>>>> upstream/2.2-develop
 
     /**
      * Check if device data are present.

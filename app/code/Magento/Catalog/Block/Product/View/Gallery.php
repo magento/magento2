@@ -142,8 +142,13 @@ class Gallery extends AbstractView
                 'img' => $image->getData('medium_image_url'),
                 'full' => $image->getData('large_image_url'),
                 'caption' => ($image->getLabel() ?: $this->getProduct()->getName()),
+<<<<<<< HEAD
                 'position' => $image->getData('position'),
                 'isMain'   => $this->isMainImage($image),
+=======
+                'position' => $image->getPosition(),
+                'isMain' => $this->isMainImage($image),
+>>>>>>> upstream/2.2-develop
                 'type' => str_replace('external-', '', $image->getMediaType()),
                 'videoUrl' => $image->getVideoUrl(),
             ]);

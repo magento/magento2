@@ -184,7 +184,11 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 'prodAttrColFac' => $this->prodAttrColFac,
                 'resource' => $this->resource,
                 'params' => $this->params,
+<<<<<<< HEAD
                 'scopeResolver' => $this->scopeResolver,
+=======
+                'scopeResolver' => $this->scopeResolver
+>>>>>>> upstream/2.2-develop
             ]
         );
 

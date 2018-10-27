@@ -424,8 +424,11 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+<<<<<<< HEAD
      * Return stores by website, group and store id
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */

@@ -68,7 +68,11 @@ class PreProcessor implements PreProcessorInterface
         $this->dataProvider = $dataProvider;
         $this->areaList = $areaList;
         $this->translate = $translate;
+<<<<<<< HEAD
         $this->viewDesign = $viewDesign ?? ObjectManager::getInstance()->get(DesignInterface::class);
+=======
+        $this->viewDesign = $viewDesign ?: ObjectManager::getInstance()->get(DesignInterface::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -76,6 +80,7 @@ class PreProcessor implements PreProcessorInterface
      *
      * @param Chain $chain
      * @return void
+     * @throws \Exception
      */
     public function process(Chain $chain)
     {
@@ -90,6 +95,13 @@ class PreProcessor implements PreProcessorInterface
                 $areaCode = $context->getAreaCode();
 
                 $this->viewDesign->setDesignTheme($themePath, $areaCode);
+<<<<<<< HEAD
+=======
+
+                $this->translate
+                    ->setLocale($context->getLocale())
+                    ->loadData($areaCode);
+>>>>>>> upstream/2.2-develop
             }
 
             $area = $this->areaList->getArea($areaCode);

@@ -5,11 +5,19 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+<<<<<<< HEAD
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+=======
+use Magento\Framework\Exception\NotFoundException;
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Request\Http as HttpRequest;
+>>>>>>> upstream/2.2-develop
 use Magento\Sales\Api\OrderManagementInterface;
 
 class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction implements HttpPostActionInterface
@@ -41,6 +49,23 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
         $this->orderManagement = $orderManagement ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Sales\Api\OrderManagementInterface::class
         );
+<<<<<<< HEAD
+=======
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function execute()
+    {
+        /** @var HttpRequest $request */
+        $request = $this->getRequest();
+        if (!$request->isPost()) {
+            throw new NotFoundException(__('Page not found.'));
+        }
+
+        return parent::execute();
+>>>>>>> upstream/2.2-develop
     }
 
     /**

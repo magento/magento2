@@ -11,6 +11,12 @@ use Magento\Analytics\Model\EncodedContext;
 use Magento\Analytics\Model\EncodedContextFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class CryptographerTest
+ */
+>>>>>>> upstream/2.2-develop
 class CryptographerTest extends \PHPUnit\Framework\TestCase
 {
     /**

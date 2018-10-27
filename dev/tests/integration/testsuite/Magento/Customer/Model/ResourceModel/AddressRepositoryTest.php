@@ -20,6 +20,7 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoAppIsolation enabled
  */
 class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -169,12 +170,15 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedNewAddress = $this->expectedAddresses[1];
         $expectedNewAddress->setId($savedAddress->getId());
         $expectedNewAddress->setRegion($this->expectedAddresses[1]->getRegion());
+<<<<<<< HEAD
 
         $this->assertEquals($expectedNewAddress->getExtensionAttributes(), $savedAddress->getExtensionAttributes());
         $this->assertEquals(
             $expectedNewAddress->getRegion()->getExtensionAttributes(),
             $savedAddress->getRegion()->getExtensionAttributes()
         );
+=======
+>>>>>>> upstream/2.2-develop
         $this->assertEquals($expectedNewAddress, $savedAddress);
     }
 

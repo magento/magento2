@@ -219,7 +219,11 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * @param Quote $quote
      * @return Checkout
      */
+<<<<<<< HEAD
     protected function getCheckout(Quote $quote)
+=======
+    private function getCheckout(Quote $quote)
+>>>>>>> upstream/2.2-develop
     {
         return $this->objectManager->create(
             Checkout::class,
@@ -293,8 +297,13 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     /**
      * The case when handling address data from Paypal button.
      * System's address fields are replacing from export Paypal data.
+<<<<<<< HEAD
      * Billing and Shipping address are the same
+=======
+     * Billing and Shipping address are the same.
+>>>>>>> upstream/2.2-develop
      *
+     * @return void
      * @magentoDataFixture Magento/Paypal/_files/quote_payment_express_with_customer.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
@@ -322,6 +331,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($exportedShippingData['city'], $billingAddress->getCity());
         $this->assertEquals($exportedShippingData['telephone'], $billingAddress->getTelephone());
         $this->assertEquals($exportedShippingData['email'], $billingAddress->getEmail());
+<<<<<<< HEAD
     }
 
     /**
@@ -361,6 +371,8 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($exportedBillingData['city'], $billingAddress->getCity());
         $this->assertEquals($exportedBillingData['telephone'], $billingAddress->getTelephone());
         $this->assertEquals($exportedBillingData['email'], $billingAddress->getEmail());
+=======
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -368,6 +380,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * System's address fields are not replacing from export PayPal data.
      * Billing and Shipping address are the same
      *
+     * @return void
      * @magentoDataFixture Magento/Paypal/_files/quote_payment_express_with_customer.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
@@ -403,6 +416,10 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * System's address fields are replacing billing address from export PayPal data.
      * Billing and Shipping address are different
      *
+<<<<<<< HEAD
+=======
+     * @return void
+>>>>>>> upstream/2.2-develop
      * @magentoDataFixture Magento/Paypal/_files/quote_payment_express_with_customer.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
@@ -421,6 +438,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $originalShippingAddress = $quote->getShippingAddress();
 
         $this->checkoutModel->returnFromPaypal('token');
+<<<<<<< HEAD
 
         $shippingAddress = $quote->getShippingAddress();
         $billingAddress = $quote->getBillingAddress();
@@ -454,6 +472,40 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->prepareCheckoutModel($quote);
         $quote->getPayment()->setAdditionalInformation(Checkout::PAYMENT_INFO_BUTTON, 0);
 
+=======
+
+        $shippingAddress = $quote->getShippingAddress();
+        $billingAddress = $quote->getBillingAddress();
+        $exportedBillingData = $this->getExportedData()['billing'];
+
+        $this->assertEquals($originalShippingAddress->getStreet(), $shippingAddress->getStreet());
+        $this->assertEquals($originalShippingAddress->getFirstname(), $shippingAddress->getFirstname());
+        $this->assertEquals($originalShippingAddress->getCity(), $shippingAddress->getCity());
+        $this->assertEquals($originalShippingAddress->getTelephone(), $shippingAddress->getTelephone());
+
+        $this->assertEquals([$prefix . $exportedBillingData['street']], $billingAddress->getStreet());
+        $this->assertEquals($prefix . $exportedBillingData['firstname'], $billingAddress->getFirstname());
+        $this->assertEquals($prefix . $exportedBillingData['city'], $billingAddress->getCity());
+        $this->assertEquals($prefix . $exportedBillingData['telephone'], $billingAddress->getTelephone());
+    }
+
+    /**
+     * Test case when customer doesn't have either billing or shipping addresses.
+     * Customer add virtual product to quote and place order using PayPal Express method.
+     * After return from PayPal quote billing address have to be updated by PayPal Express address.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Paypal/_files/virtual_quote_with_empty_billing_address.php
+     * @magentoConfigFixture current_store payment/paypal_express/active 1
+     * @magentoDbIsolation enabled
+     */
+    public function testReturnFromPaypalForCustomerWithEmptyAddresses()
+    {
+        $quote = $this->getFixtureQuote();
+        $this->prepareCheckoutModel($quote);
+        $quote->getPayment()->setAdditionalInformation(Checkout::PAYMENT_INFO_BUTTON, 0);
+
+>>>>>>> upstream/2.2-develop
         $this->checkoutModel->returnFromPaypal('token');
 
         $billingAddress = $quote->getBillingAddress();
@@ -473,10 +525,15 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store general/country/default US
      *
      * @magentoDbIsolation enabled
+<<<<<<< HEAD
      *
      * @return void
      */
     public function testPaymentValidationWithAllowedSpecificCountry(): void
+=======
+     */
+    public function testPaymentValidationWithAllowedSpecificCountry()
+>>>>>>> upstream/2.2-develop
     {
         $quote = $this->getFixtureQuote();
         $this->prepareCheckoutModel($quote);
@@ -498,6 +555,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation enabled
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage You can't use the payment type you selected to make payments to the billing country.
+<<<<<<< HEAD
      *
      * @return void
      */
@@ -505,6 +563,14 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     {
         $quote = $this->getFixtureQuote();
         $this->prepareCheckoutModel($quote);
+=======
+     */
+    public function testPaymentValidationWithAllowedSpecificCountryNegative()
+    {
+        $quote = $this->getFixtureQuote();
+        $this->prepareCheckoutModel($quote);
+
+>>>>>>> upstream/2.2-develop
         $quote->getPayment()->getMethodInstance()->validate();
     }
 
@@ -515,6 +581,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * @param array $expected
      * @return void
      */
+<<<<<<< HEAD
     private function performQuoteAddressAssertions(Address $address, array $expected): void
     {
         foreach ($expected as $key => $item) {
@@ -523,6 +590,15 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
                 $item = [$item];
             }
 
+=======
+    private function performQuoteAddressAssertions(Address $address, array $expected)
+    {
+        foreach ($expected as $key => $item) {
+            $methodName = 'get' . ucfirst($key);
+            if ($key == 'street') {
+                $item = [$item];
+            }
+>>>>>>> upstream/2.2-develop
             $this->assertEquals($item, $address->$methodName(), 'The "'. $key . '" does not match.');
         }
     }
@@ -531,6 +607,8 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * Initialize a checkout model mock.
      *
      * @param Quote $quote
+     * @param string $prefix
+     * @return void
      */
     private function prepareCheckoutModel(Quote $quote, $prefix = '')
     {
@@ -545,11 +623,19 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
 
         $exportedBillingAddress = $this->getExportedAddressFixture($this->getExportedData()['billing'], $prefix);
         $this->api->method('getExportedBillingAddress')
+<<<<<<< HEAD
             ->willReturn($exportedBillingAddress);
 
         $exportedShippingAddress = $this->getExportedAddressFixture($this->getExportedData()['shipping'], $prefix);
         $this->api->method('getExportedShippingAddress')
             ->willReturn($exportedShippingAddress);
+=======
+            ->will($this->returnValue($exportedBillingAddress));
+
+        $exportedShippingAddress = $this->getExportedAddressFixture($this->getExportedData()['shipping'], $prefix);
+        $this->api->method('getExportedShippingAddress')
+            ->will($this->returnValue($exportedShippingAddress));
+>>>>>>> upstream/2.2-develop
 
         $this->paypalInfo->method('importToPayment')
             ->with($this->api, $quote->getPayment());
@@ -573,7 +659,11 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
                 'city'       => 'Denver',
                 'street'     => '66 Pearl St',
                 'postcode'   => '80203',
+<<<<<<< HEAD
                 'telephone'  => '555-555-555'
+=======
+                'telephone'  => '555-555-555',
+>>>>>>> upstream/2.2-develop
             ],
             'billing' => [
                 'email'      => 'customer@example.com',
@@ -585,7 +675,11 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
                 'city'       => 'Austin',
                 'street'     => '1100 Congress Ave',
                 'postcode'   => '78701',
+<<<<<<< HEAD
                 'telephone'  => '555-555-555'
+=======
+                'telephone'  => '555-555-555',
+>>>>>>> upstream/2.2-develop
             ]
         ];
     }
@@ -664,7 +758,11 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * @param string $prefix
      * @return \Magento\Framework\DataObject
      */
+<<<<<<< HEAD
     private function getExportedAddressFixture(array $addressData, string $prefix = ''): \Magento\Framework\DataObject
+=======
+    private function getExportedAddressFixture(array $addressData, string $prefix = '') :\Magento\Framework\DataObject
+>>>>>>> upstream/2.2-develop
     {
         $addressDataKeys = [
             'country',
@@ -676,7 +774,11 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
             'postcode',
             'region',
             'region_id',
+<<<<<<< HEAD
             'email',
+=======
+            'email'
+>>>>>>> upstream/2.2-develop
         ];
         $result = [];
         foreach ($addressDataKeys as $key) {
@@ -697,7 +799,11 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      *
      * @return Quote
      */
+<<<<<<< HEAD
     private function getFixtureQuote(): Quote
+=======
+    private function getFixtureQuote()
+>>>>>>> upstream/2.2-develop
     {
         /** @var Collection $quoteCollection */
         $quoteCollection = $this->objectManager->create(Collection::class);

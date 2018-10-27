@@ -19,7 +19,11 @@
         </createData>
 
         <!-- Create attribute with 2 options to be used in children products -->
+<<<<<<< HEAD
         <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+=======
+        <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttribute"/>
+>>>>>>> upstream/2.2-develop
         <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
             <requiredEntity createDataKey="createConfigProductAttribute"/>
         </createData>

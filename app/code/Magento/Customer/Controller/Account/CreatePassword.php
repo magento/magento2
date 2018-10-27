@@ -65,7 +65,14 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
         }
 
         try {
+<<<<<<< HEAD
             $this->accountManagement->validateResetPasswordLinkToken(null, $resetPasswordToken);
+=======
+            $this->accountManagement->validateResetPasswordLinkToken(
+                0,
+                $resetPasswordToken
+            );
+>>>>>>> upstream/2.2-develop
 
             if ($isDirectLink) {
                 $this->session->setRpToken($resetPasswordToken);

@@ -46,9 +46,17 @@ class ProductIdentitiesExtender
      */
     public function afterGetIdentities(Product $subject, array $identities): array
     {
+<<<<<<< HEAD
         foreach ($this->configurableType->getParentIdsByChild($subject->getId()) as $parentId) {
             $parentProduct = $this->productRepository->getById($parentId);
             $identities = array_merge($identities, $parentProduct->getIdentities());
+=======
+        $identities = (array) $identities;
+
+        foreach ($this->configurableType->getParentIdsByChild($subject->getId()) as $parentId) {
+            $parentProduct = $this->productRepository->getById($parentId);
+            $identities = array_merge($identities, (array) $parentProduct->getIdentities());
+>>>>>>> upstream/2.2-develop
         }
 
         return array_unique($identities);

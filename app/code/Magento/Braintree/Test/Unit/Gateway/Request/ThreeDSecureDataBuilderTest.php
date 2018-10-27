@@ -19,6 +19,11 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @var int
+     */
+    private static $storeId = 1;
+
+    /**
      * @var ThreeDSecureDataBuilder
      */
     private $builder;
@@ -26,7 +31,7 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Config|MockObject
      */
-    private $configMock;
+    private $config;
 
     /**
      * @var PaymentDataObjectInterface|MockObject
@@ -43,6 +48,7 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $billingAddressMock;
 
+<<<<<<< HEAD
     /**
      * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -56,27 +62,29 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
+=======
+>>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->initOrderMock();
 
         $this->paymentDOMock = $this->getMockBuilder(PaymentDataObjectInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrder', 'getPayment'])
             ->getMock();
+<<<<<<< HEAD
         $this->paymentDOMock->expects(static::once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
+=======
+        $this->paymentDO->method('getOrder')
+            ->willReturn($this->order);
+>>>>>>> upstream/2.2-develop
 
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['isVerify3DSecure', 'getThresholdAmount', 'get3DSecureSpecificCountries'])
+        $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $this->builder = new ThreeDSecureDataBuilder($this->configMock, $this->subjectReaderMock);
+        $this->builder = new ThreeDSecureDataBuilder($this->config, new SubjectReader());
     }
 
     /**
@@ -85,7 +93,6 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
      * @param string $countryId
      * @param array $countries
      * @param array $expected
-     * @covers \Magento\Braintree\Gateway\Request\ThreeDSecureDataBuilder::build
      * @dataProvider buildDataProvider
      */
     public function testBuild($verify, $thresholdAmount, $countryId, array $countries, array $expected)
@@ -95,6 +102,7 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
             'amount' => 25,
         ];
 
+<<<<<<< HEAD
         $this->configMock->expects(static::once())
             ->method('isVerify3DSecure')
             ->with(self::equalTo($this->storeId))
@@ -123,6 +131,23 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($buildSubject)
             ->willReturn(25);
 
+=======
+        $this->config->method('isVerify3DSecure')
+            ->with(self::equalTo(self::$storeId))
+            ->willReturn($verify);
+
+        $this->config->method('getThresholdAmount')
+            ->with(self::equalTo(self::$storeId))
+            ->willReturn($thresholdAmount);
+
+        $this->config->method('get3DSecureSpecificCountries')
+            ->with(self::equalTo(self::$storeId))
+            ->willReturn($countries);
+
+        $this->billingAddress->method('getCountryId')
+            ->willReturn($countryId);
+
+>>>>>>> upstream/2.2-develop
         $result = $this->builder->build($buildSubject);
         self::assertEquals($expected, $result);
     }
@@ -158,18 +183,21 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Creates mock object for order adapter.
+<<<<<<< HEAD
      *
      * @return void
+=======
+>>>>>>> upstream/2.2-develop
      */
     private function initOrderMock()
     {
         $this->billingAddressMock = $this->getMockBuilder(AddressAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCountryId'])
             ->getMock();
 
         $this->orderMock = $this->getMockBuilder(OrderAdapter::class)
             ->disableOriginalConstructor()
+<<<<<<< HEAD
             ->setMethods(['getBillingAddress', 'getStoreId'])
             ->getMock();
 
@@ -178,5 +206,13 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->billingAddressMock);
         $this->orderMock->method('getStoreId')
             ->willReturn($this->storeId);
+=======
+            ->getMock();
+
+        $this->order->method('getBillingAddress')
+            ->willReturn($this->billingAddress);
+        $this->order->method('getStoreId')
+            ->willReturn(self::$storeId);
+>>>>>>> upstream/2.2-develop
     }
 }

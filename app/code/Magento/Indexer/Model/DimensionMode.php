@@ -24,7 +24,11 @@ class DimensionMode
 
     /**
      * @param string $name
+<<<<<<< HEAD
      * @param array $dimensions
+=======
+     * @param array  $dimensions
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(string $name, array $dimensions)
     {

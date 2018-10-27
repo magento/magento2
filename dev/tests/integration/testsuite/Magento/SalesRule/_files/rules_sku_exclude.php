@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 /** @var \Magento\Eav\Api\AttributeRepositoryInterface $repository */
 $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Eav\Api\AttributeRepositoryInterface::class);
@@ -35,8 +38,13 @@ $salesRule->setData(
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Store\Model\StoreManagerInterface::class
+<<<<<<< HEAD
             )->getWebsite()->getId(),
         ],
+=======
+            )->getWebsite()->getId()
+        ]
+>>>>>>> upstream/2.2-develop
     ]
 );
 
@@ -49,6 +57,7 @@ $salesRule->getConditions()->loadArray([
     'aggregator' => 'all',
     'conditions' =>
         [
+<<<<<<< HEAD
             [
                 'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                 'attribute' => null,
@@ -67,6 +76,26 @@ $salesRule->getConditions()->loadArray([
                         ],
                     ],
             ],
+=======
+                [
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                    'attribute' => null,
+                    'operator' => null,
+                    'value' => '1',
+                    'is_value_processed' => null,
+                    'aggregator' => 'all',
+                    'conditions' =>
+                        [
+                                [
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                                    'attribute' => 'sku',
+                                    'operator' => '!=',
+                                    'value' => 'product-bundle',
+                                    'is_value_processed' => false,
+                                ],
+                        ],
+                ],
+>>>>>>> upstream/2.2-develop
         ],
 ]);
 

@@ -201,12 +201,23 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
             ->method('dispatch');
         $this->bundleMock->expects($this->exactly(2))
             ->method('getData')
+<<<<<<< HEAD
             ->willReturnMap(
                 [
                     ['qty', null, 1],
                     ['final_price', null, 100],
                     ['price', null, 100],
                 ]
+=======
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['qty', null, 1],
+                        ['final_price', null, 100],
+                        ['price', null, 100],
+                    ]
+                )
+>>>>>>> upstream/2.2-develop
             );
         $this->productMock->expects($this->once())
             ->method('getSelectionPriceType')

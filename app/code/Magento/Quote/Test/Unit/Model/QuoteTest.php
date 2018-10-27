@@ -146,7 +146,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     private $itemProcessor;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Sales\Model\OrderIncrementIdChecker|\PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var \PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
      */
     private $orderIncrementIdChecker;
 
@@ -254,6 +258,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->itemProcessor = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
         $this->extensionAttributesJoinProcessorMock = $this->createMock(
             \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class
         );
@@ -262,6 +267,13 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
         $this->orderIncrementIdChecker = $this->createMock(\Magento\Sales\Model\OrderIncrementIdChecker::class);
+=======
+        $this->extensionAttributesJoinProcessorMock = $this->createMock(\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class);
+        $this->customerDataFactoryMock = $this->createPartialMock(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class, ['create']);
+        $this->orderIncrementIdChecker = $this->getMockBuilder(\Magento\Sales\Model\OrderIncrementIdChecker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+>>>>>>> upstream/2.2-develop
         $this->quote = (new ObjectManager($this))
             ->getObject(
                 \Magento\Quote\Model\Quote::class,
@@ -1259,7 +1271,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function reservedOrderIdDataProvider(): array
+=======
+    public function reservedOrderIdDataProvider()
+>>>>>>> upstream/2.2-develop
     {
         return [
             'id_already_in_use' => [true, 100002],

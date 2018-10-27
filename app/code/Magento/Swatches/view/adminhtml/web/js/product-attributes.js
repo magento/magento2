@@ -417,11 +417,15 @@ define([
             };
 
         $(function () {
+<<<<<<< HEAD
             var editForm = $('#edit_form'),
                 swatchVisualPanel = $('#swatch-visual-options-panel'),
                 swatchTextPanel = $('#swatch-text-options-panel'),
                 tableBody = $(),
                 activePanel = $();
+=======
+            var editForm = $('#edit_form');
+>>>>>>> upstream/2.2-develop
 
             $('#frontend_input').bind('change', function () {
                 swatchProductAttributes.bindAttributeInputType();
@@ -437,6 +441,7 @@ define([
                 .collapsable()
                 .collapse('hide');
 
+<<<<<<< HEAD
             editForm.on('beforeSubmit', function () {
                 var optionContainer, optionsValues;
 
@@ -467,6 +472,32 @@ define([
                     activePanel.find('table').append(tableBody);
                     $('input[name="serialized_options"]').remove();
                 }
+=======
+            editForm.on('submit', function () {
+                var activePanel,
+                    swatchValues = [],
+                    swatchVisualPanel = $('#swatch-visual-options-panel'),
+                    swatchTextPanel = $('#swatch-text-options-panel');
+
+                activePanel = swatchTextPanel.is(':visible') ? swatchTextPanel : swatchVisualPanel;
+
+                activePanel.find('table input')
+                    .each(function () {
+                        swatchValues.push(this.name + '=' + $(this).val());
+                    });
+
+                $('<input>').attr({
+                        type: 'hidden',
+                        name: 'serialized_swatch_values'
+                    })
+                    .val(JSON.stringify(swatchValues))
+                    .prependTo(editForm);
+
+                [swatchVisualPanel, swatchTextPanel].forEach(function (el) {
+                    $(el).find('table')
+                        .replaceWith($('<div>').text($.mage.__('Sending swatch values as package.')));
+                });
+>>>>>>> upstream/2.2-develop
             });
         });
 

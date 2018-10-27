@@ -44,15 +44,19 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         );
         $this->orderItemMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
                 'isDummy', 'getDiscountInvoiced', 'getBaseDiscountInvoiced', 'getQtyInvoiced', 'getQty',
-                'getDiscountRefunded', 'getQtyRefunded'
+                'getDiscountRefunded', 'getQtyRefunded',
             ]);
         $this->creditmemoMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, [
                 'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice',
+<<<<<<< HEAD
                 'setDiscountAmount', 'setBaseDiscountAmount', 'getBaseShippingInclTax', 'getBaseShippingTaxAmount'
+=======
+                'setDiscountAmount', 'setBaseDiscountAmount', 'getBaseShippingInclTax', 'getBaseShippingTaxAmount',
+>>>>>>> upstream/2.2-develop
             ]);
         $this->creditmemoItemMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo\Item::class, [
                 'getHasChildren', 'getBaseCost', 'getQty', 'getOrderItem', 'setDiscountAmount',
-                'setBaseDiscountAmount', 'isLast'
+                'setBaseDiscountAmount', 'isLast',
             ]);
         $this->total = new \Magento\Sales\Model\Order\Creditmemo\Total\Discount();
     }
@@ -197,7 +201,11 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap(
                 [
                     [1, 'regular', true, 1],
+<<<<<<< HEAD
                     [1, 'base', true, 1]
+=======
+                    [1, 'base', true, 1],
+>>>>>>> upstream/2.2-develop
                 ]
             );
         $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));

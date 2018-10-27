@@ -7,6 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateCmsPageTest">
         <annotations>
@@ -28,6 +29,30 @@
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateCmsPageTest">
+        <annotations>
+            <features value="CMS Page Creation"/>
+            <stories value="Create a CMS Page via the Admin"/>
+            <title value="Create a CMS Page"/>
+            <description value="You should be able to create a CMS Page via the Admin."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-25580"/>
+            <group value="cms"/>
+            <skip>
+                <issueId value="MQE-282"/>
+            </skip>
+        </annotations>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{CmsPagesPageActionsSection.addNewPage}}" stepKey="clickAddNewPage"/>
+>>>>>>> upstream/2.2-develop
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
         <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{_defaultCmsPage.content_heading}}" stepKey="fillFieldContentHeading"/>
@@ -35,9 +60,12 @@
         <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{_defaultCmsPage.content}}" stepKey="fillFieldContent"/>
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+<<<<<<< HEAD
         <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
         <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
         <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
+=======
+>>>>>>> upstream/2.2-develop
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
@@ -45,6 +73,7 @@
         <see userInput="{{_defaultCmsPage.content_heading}}" stepKey="seeContentHeading"/>
         <see userInput="{{_defaultCmsPage.content}}" stepKey="seeContent"/>
     </test>
+<<<<<<< HEAD
     <test name="AdminConfigDefaultCMSPageLayoutFromConfigurationSettingTest">
         <annotations>
             <features value="Cms"/>
@@ -116,4 +145,6 @@
         <see userInput="You saved the page." stepKey="seeSavedCMSPageMsgOnGrid"/>
         <seeElement selector="div[data-role='grid-wrapper']" stepKey="seeGridPage" />
     </test>
+=======
+>>>>>>> upstream/2.2-develop
 </tests>

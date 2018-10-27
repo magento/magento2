@@ -16,7 +16,10 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
 use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
+<<<<<<< HEAD
 use Magento\Sales\Model\Order\ShipmentDocumentFactory\ExtensionAttributesProcessor;
+=======
+>>>>>>> upstream/2.2-develop
 
 /**
  * Class ShipmentDocumentFactory
@@ -99,10 +102,13 @@ class ShipmentDocumentFactory
             $shipmentItems
         );
 
+<<<<<<< HEAD
         if (null !== $arguments) {
             $this->extensionAttributesProcessor->execute($shipment, $arguments);
         }
 
+=======
+>>>>>>> upstream/2.2-develop
         foreach ($tracks as $track) {
             $hydrator = $this->hydratorPool->getHydrator(
                 \Magento\Sales\Api\Data\ShipmentTrackCreationInterface::class

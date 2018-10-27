@@ -163,12 +163,19 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
                 $attributeHtml = nl2br($attributeHtml);
             }
         }
+<<<<<<< HEAD
         if ($attributeHtml !== null
             && $attribute->getIsHtmlAllowedOnFront()
             && $attribute->getIsWysiwygEnabled()
             && $this->isDirectivesExists($attributeHtml)
         ) {
             $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
+=======
+        if ($attribute->getIsHtmlAllowedOnFront() || $attribute->getIsWysiwygEnabled()) {
+            if ($this->_catalogData->isUrlDirectivesParsingAllowed()) {
+                $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
+            }
+>>>>>>> upstream/2.2-develop
         }
 
         $attributeHtml = $this->process(

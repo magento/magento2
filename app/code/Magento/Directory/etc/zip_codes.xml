@@ -227,7 +227,7 @@
     </zip>
     <zip countryCode="KR">
         <codes>
-            <code id="pattern_1" active="true" example="123-456">^[0-9]{3}-[0-9]{3}$</code>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
         </codes>
     </zip>
     <zip countryCode="KG">

@@ -5,6 +5,7 @@
         "sort-packages": true
     },
     "require": {
+<<<<<<< HEAD
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-authorization": "*",
@@ -17,6 +18,21 @@
         "magento/module-customer": "*"
     },
     "type": "magento2-module",
+=======
+        "php": "~7.0.13|~7.1.0",
+        "magento/module-store": "100.2.*",
+        "magento/module-authorization": "100.2.*",
+        "magento/module-integration": "100.2.*",
+        "magento/module-backend": "100.2.*",
+        "magento/framework": "101.0.*"
+    },
+    "suggest": {
+        "magento/module-user": "101.0.*",
+        "magento/module-customer": "101.0.*"
+    },
+    "type": "magento2-module",
+    "version": "100.2.4",
+>>>>>>> upstream/2.2-develop
     "license": [
         "OSL-3.0",
         "AFL-3.0"

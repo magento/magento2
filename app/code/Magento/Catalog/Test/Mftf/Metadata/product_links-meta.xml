@@ -14,8 +14,11 @@
             <value>product_link</value>
         </array>
     </operation>
+<<<<<<< HEAD
     <operation name="UpdateProductLinks" dataType="product_links" type="update" auth="adminOauth" url="/V1/products/{sku}/links" method="PUT">
         <contentType>application/json</contentType>
         <field key="entity">product_link</field>
     </operation>
+=======
+>>>>>>> upstream/2.2-develop
 </operations>

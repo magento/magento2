@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
 use Magento\Eav\Model\Config as EavConfig;
@@ -1011,6 +1014,10 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $subConditions
      * @param $aggregator
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockForCombinedCondition($subConditions, $aggregator)
@@ -1029,6 +1036,10 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $attribute
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockForSimpleCondition($attribute)

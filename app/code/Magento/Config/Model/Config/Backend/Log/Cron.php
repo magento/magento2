@@ -81,7 +81,7 @@ class Cron extends \Magento\Framework\App\Config\Value
                 '*',                                              # Month of the Year
                 $frequency == $frequencyWeekly ? '1' : '*',        # Day of the Week
             ];
-            $cronExprString = join(' ', $cronExprArray);
+            $cronExprString = implode(' ', $cronExprArray);
         } else {
             $cronExprString = '';
         }

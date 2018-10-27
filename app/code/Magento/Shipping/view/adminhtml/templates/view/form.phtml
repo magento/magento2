@@ -36,7 +36,11 @@ $order = $block->getShipment()->getOrder();
                 <div class="shipping-description-wrapper">
                     <?php if ($block->getShipment()->getTracksCollection()->count()): ?>
                         <p>
+<<<<<<< HEAD
                             <a href="#" id="linkId" onclick="popWin('<?= $block->escapeUrl($this->helper(\Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($block->getShipment())); ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')"
+=======
+                            <a href="#" id="linkId" onclick="popWin('<?= $block->escapeUrl($this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($block->getShipment())); ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')"
+>>>>>>> upstream/2.2-develop
                                title="<?= $block->escapeHtml(__('Track this shipment')); ?>">
                                 <?= $block->escapeHtml(__('Track this shipment')); ?>
                             </a>
@@ -48,7 +52,11 @@ $order = $block->getShipment()->getOrder();
 
                     <?= $block->escapeHtml(__('Total Shipping Charges')); ?>:
 
+<<<<<<< HEAD
                     <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingPriceIncludingTax()): ?>
+=======
+                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
+>>>>>>> upstream/2.2-develop
                         <?php $excl = $block->displayShippingPriceInclTax($order); ?>
                     <?php else: ?>
                         <?php $excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
@@ -56,7 +64,11 @@ $order = $block->getShipment()->getOrder();
                     <?php $incl = $block->displayShippingPriceInclTax($order); ?>
 
                     <?= /* @noEscape */ $excl; ?>
+<<<<<<< HEAD
                     <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $incl != $excl): ?>
+=======
+                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $incl != $excl): ?>
+>>>>>>> upstream/2.2-develop
                         (<?= $block->escapeHtml(__('Incl. Tax')); ?> <?= /* @noEscape */ $incl; ?>)
                     <?php endif; ?>
                 </div>

@@ -1,6 +1,10 @@
 {
     "name": "magento/language-es_es",
     "description": "Spanish (Spain) language",
+<<<<<<< HEAD
+=======
+    "version": "100.2.0",
+>>>>>>> upstream/2.2-develop
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -9,7 +13,11 @@
         "sort-packages": true
     },
     "require": {
+<<<<<<< HEAD
         "magento/framework": "*"
+=======
+        "magento/framework": "101.0.*"
+>>>>>>> upstream/2.2-develop
     },
     "type": "magento2-language",
     "autoload": {

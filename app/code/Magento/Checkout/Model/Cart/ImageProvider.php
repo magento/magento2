@@ -29,6 +29,11 @@ class ImageProvider
     protected $customerDataItem;
 
     /**
+     * @var \Magento\Checkout\CustomerData\DefaultItem
+     */
+    private $customerDataItem;
+
+    /**
      * @param \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository
      * @param \Magento\Checkout\CustomerData\ItemPoolInterface $itemPool
      * @param DefaultItem|null $customerDataItem
@@ -57,6 +62,7 @@ class ImageProvider
             $allData = $this->customerDataItem->getItemData($cartItem);
             $itemData[$cartItem->getItemId()] = $allData['product_image'];
         }
+
         return $itemData;
     }
 }

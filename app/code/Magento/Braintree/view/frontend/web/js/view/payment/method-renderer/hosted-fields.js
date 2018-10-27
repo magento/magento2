@@ -151,7 +151,11 @@ define([
         },
 
         /**
+<<<<<<< HEAD
          * Trigger order placing
+=======
+         * Triggers order placing
+>>>>>>> upstream/2.2-develop
          */
         placeOrderClick: function () {
             if (this.validateCardType()) {

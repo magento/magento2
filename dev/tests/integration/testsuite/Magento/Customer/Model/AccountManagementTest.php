@@ -364,10 +364,19 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         $token = 'randomStr123';
         $this->setResetPasswordData($token, 'Y-m-d H:i:s');
+<<<<<<< HEAD
         $this->assertTrue(
             $this->accountManagement->validateResetPasswordLinkToken(null, $token)
         );
     }
+=======
+
+        $this->assertTrue(
+            $this->accountManagement->validateResetPasswordLinkToken(0, $token)
+        );
+    }
+
+>>>>>>> upstream/2.2-develop
     /**
      * @magentoDataFixture Magento/Customer/_files/two_customers.php
      * @expectedException \Magento\Framework\Exception\State\ExpiredException
@@ -377,7 +386,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $token = 'randomStr123';
         $this->setResetPasswordData($token, 'Y-m-d H:i:s', 1);
         $this->setResetPasswordData($token, 'Y-m-d H:i:s', 2);
+<<<<<<< HEAD
         $this->accountManagement->validateResetPasswordLinkToken(null, $token);
+=======
+
+        $this->accountManagement->validateResetPasswordLinkToken(0, $token);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -542,11 +556,21 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
+<<<<<<< HEAD
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
         $this->assertTrue(
             $this->accountManagement->resetPassword(null, $resetToken, $password)
         );
     }
+=======
+
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
+        $this->assertTrue(
+            $this->accountManagement->resetPassword('', $resetToken, $password)
+        );
+    }
+
+>>>>>>> upstream/2.2-develop
     /**
      * @magentoDataFixture Magento/Customer/_files/two_customers.php
      * @expectedException \Magento\Framework\Exception\State\ExpiredException
@@ -555,9 +579,16 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
+<<<<<<< HEAD
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 1);
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 2);
         $this->accountManagement->resetPassword(null, $resetToken, $password);
+=======
+
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 1);
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 2);
+        $this->accountManagement->resetPassword('', $resetToken, $password);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -1009,7 +1040,10 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      * @param $resetToken
      * @param $date
      * @param int $customerIdFromFixture Which customer to use.
+<<<<<<< HEAD
      * @throws \Exception
+=======
+>>>>>>> upstream/2.2-develop
      */
     protected function setResetPasswordData(
         $resetToken,

@@ -6,11 +6,16 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+=======
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <actionGroup name="SignUpNewUserFromStorefrontActionGroup">
         <arguments>
             <argument name="Customer"/>
         </arguments>
+<<<<<<< HEAD
         <amOnPage stepKey="amOnStorefrontPage"  url="/"/>
         <waitForPageLoad stepKey="waitForStorefrontPage"/>
         <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
@@ -45,5 +50,20 @@
         <selectOption stepKey="selectCounty" selector="{{StorefrontCustomerAddressSection.country}}" userInput="{{Address.country_id}}"/>
         
         <click stepKey="saveAddress" selector="{{StorefrontCustomerAddressSection.saveAddress}}"/>
+=======
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPage"/>
+        <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickOnCreateAccountLink"/>
+        <fillField userInput="{{Customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{Customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" stepKey="fillLastName"/>
+        <fillField userInput="{{Customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}" stepKey="fillEmail"/>
+        <fillField userInput="{{Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}" stepKey="fillPassword"/>
+        <fillField userInput="{{Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" stepKey="fillConfirmPassword"/>
+        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
+        <see userInput="Thank you for registering with Main Website Store." stepKey="seeThankYouMessage"/>
+        <see userInput="{{Customer.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeFirstName"/>
+        <see userInput="{{Customer.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeLastName"/>
+        <see userInput="{{Customer.email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeEmail"/>
+>>>>>>> upstream/2.2-develop
     </actionGroup>
 </actionGroups>

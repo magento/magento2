@@ -104,10 +104,14 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+<<<<<<< HEAD
     /**
      * @return void
      */
     public function testUploadFile(): void
+=======
+    public function testUploadFile()
+>>>>>>> upstream/2.2-develop
     {
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
@@ -130,9 +134,14 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage File validation failed.
+<<<<<<< HEAD
      * @return void
      */
     public function testUploadFileWithWrongExtension(): void
+=======
+     */
+    public function testUploadFileWithWrongExtension()
+>>>>>>> upstream/2.2-develop
     {
         $fileName = 'text.txt';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
@@ -155,9 +164,14 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage File validation failed.
+<<<<<<< HEAD
      * @return void
      */
     public function testUploadFileWithWrongFile(): void
+=======
+     */
+    public function testUploadFileWithWrongFile()
+>>>>>>> upstream/2.2-develop
     {
         $fileName = 'file.gif';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);

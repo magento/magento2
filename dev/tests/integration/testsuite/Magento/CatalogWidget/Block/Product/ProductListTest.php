@@ -68,12 +68,78 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
             . '`attribute`:`multiselect_attribute`,`operator`:`^[^]`,'
             . '`value`:[`' . implode(',', $multiselectAttributeOptionIds) . '`]^]^]';
         $this->block->setData('conditions_encoded', $encodedConditions);
+        //Both products satisfy because product #1 has the 1st option selected,
+        //#2 - other 3.
+        $this->performAssertions(2);
+    }
 
+    /**
+     * Test product list widget can process condition with multiple product sku.
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     */
+    public function testCreateCollectionWithMultipleSkuCondition()
+    {
+        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,' .
+            '`aggregator`:`all`,`value`:`1`,`new_child`:``^],`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule|' .
+            '|Condition||Product`,`attribute`:`sku`,`operator`:`==`,`value`:`simple1, simple2`^]^]';
+        $this->block->setData('conditions_encoded', $encodedConditions);
+        $this->performAssertions(2);
+    }
+
+<<<<<<< HEAD
         // Load products collection filtered using specified conditions and perform assertions
+=======
+    /**
+     * Test product list widget can process condition with dropdown type of attribute
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/products_with_dropdown_attribute.php
+     */
+    public function testCreateCollectionWithDropdownAttribute()
+    {
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
+        );
+        $attribute->load('dropdown_attribute', 'attribute_code');
+        $dropdownAttributeOptionIds = [];
+        foreach ($attribute->getOptions() as $option) {
+            if ($option->getValue()) {
+                $dropdownAttributeOptionIds[] = $option->getValue();
+            }
+        }
+        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,' .
+            '`aggregator`:`any`,`value`:`1`,`new_child`:``^],`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule|' .
+            '|Condition||Product`,`attribute`:`dropdown_attribute`,`operator`:`==`,`value`:`'
+            . $dropdownAttributeOptionIds[0] . '`^],`1--2`:^[`type`:`Magento||CatalogWidget||Model||Rule|' .
+            '|Condition||Product`,`attribute`:`dropdown_attribute`,`operator`:`==`,`value`:`'
+            . $dropdownAttributeOptionIds[1] . '`^]^]';
+        $this->block->setData('conditions_encoded', $encodedConditions);
+        $this->performAssertions(2);
+        $attribute->setUsedInProductListing(0);
+        $attribute->save();
+        $this->performAssertions(2);
+        $attribute->setIsGlobal(1);
+        $attribute->save();
+        $this->performAssertions(2);
+    }
+
+    /**
+     * Check product collection includes correct amount of products.
+     *
+     * @param int $count
+     * @return void
+     */
+    private function performAssertions(int $count)
+    {
+        // Load products collection filtered using specified conditions and perform assertions.
+>>>>>>> upstream/2.2-develop
         $productCollection = $this->block->createCollection();
         $productCollection->load();
         $this->assertEquals(
-            1,
+            $count,
             $productCollection->count(),
             "Product collection was not filtered according to the widget condition."
         );

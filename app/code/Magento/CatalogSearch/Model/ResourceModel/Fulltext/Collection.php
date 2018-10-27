@@ -399,8 +399,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+<<<<<<< HEAD
      * Render filters.
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @return $this
      */
     protected function _renderFilters()

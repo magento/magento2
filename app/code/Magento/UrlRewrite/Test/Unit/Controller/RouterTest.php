@@ -28,7 +28,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Store|\PHPUnit_Framework_MockObject_MockObject */
     protected $store;
 
     /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -95,6 +95,10 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $currentStoreId = 'current-store-id';
         $rewriteEntityType = 'entity-type';
         $rewriteEntityId = 42;
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $this->request
             ->expects($this->any())
             ->method('getParam')
@@ -104,6 +108,10 @@ class RouterTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getPathInfo')
             ->willReturn($initialRequestPath);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $oldStore = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -114,10 +122,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getId')
             ->willReturn($currentStoreId);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $this->storeManager
             ->expects($this->any())
             ->method('getStore')
             ->willReturnMap([[$oldStoreAlias, $oldStore], [null, $this->store]]);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $oldUrlRewrite = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -136,6 +152,10 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $urlRewrite->expects($this->any())
             ->method('getRequestPath')
             ->willReturn($newRequestPath);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $this->urlFinder
             ->expects($this->any())
             ->method('findOneByData')
@@ -148,10 +168,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
                     $urlRewrite,
                 ]
             ]);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $this->actionFactory
             ->expects($this->once())
             ->method('create')
             ->with(Forward::class);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $this->router->match($this->request);
     }
 

@@ -75,22 +75,34 @@ class Menu extends \Magento\Backend\Block\Template
     private $anchorRenderer;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Framework\App\Route\ConfigInterface
+=======
+     * @var ConfigInterface
+>>>>>>> upstream/2.2-develop
      */
     private $routeConfig;
 
     /**
+<<<<<<< HEAD
      * @param \Magento\Backend\Block\Template\Context $context
+=======
+     * @param Template\Context $context
+>>>>>>> upstream/2.2-develop
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param array $data
      * @param MenuItemChecker|null $menuItemChecker
      * @param AnchorRenderer|null $anchorRenderer
+<<<<<<< HEAD
      * @param \Magento\Framework\App\Route\ConfigInterface|null $routeConfig
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -218,7 +230,11 @@ class Menu extends \Magento\Backend\Block\Template
     {
         $routeId = $this->routeConfig->getRouteByFrontName($match[1]);
         return \Magento\Backend\Model\UrlInterface::SECRET_KEY_PARAM_NAME . '/' . $this->_url->getSecretKey(
+<<<<<<< HEAD
             $routeId ?: $match[1],
+=======
+            $routeId,
+>>>>>>> upstream/2.2-develop
             $match[2],
             $match[3]
         );

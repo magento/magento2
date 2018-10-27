@@ -10,10 +10,15 @@
 namespace Magento\Store\Block;
 
 use Magento\Directory\Helper\Data;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Group;
+<<<<<<< HEAD
 use Magento\Store\Model\Store;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 
 /**
@@ -40,6 +45,11 @@ class Switcher extends \Magento\Framework\View\Element\Template
     private $urlHelper;
 
     /**
+<<<<<<< HEAD
+=======
+     * Constructs
+     *
+>>>>>>> upstream/2.2-develop
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
@@ -252,7 +262,11 @@ class Switcher extends \Magento\Framework\View\Element\Template
      */
     public function getTargetStorePostData(Store $store, $data = [])
     {
+<<<<<<< HEAD
         $data[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME] = $store->getCode();
+=======
+        $data[\Magento\Store\Api\StoreResolverInterface::PARAM_NAME] = $store->getCode();
+>>>>>>> upstream/2.2-develop
         $data['___from_store'] = $this->_storeManager->getStore()->getCode();
 
         $urlOnTargetStore = $store->getCurrentUrl(false);

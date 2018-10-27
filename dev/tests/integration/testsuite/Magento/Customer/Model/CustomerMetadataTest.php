@@ -11,6 +11,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\CacheCleaner;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerRepositoryInterface */
@@ -230,13 +233,19 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $this->assertNotEmpty($attributes);
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         // remove odd extension attributes
         $allAtrributes = $expectAttrsWithVals;
         $allAtrributes['created_at'] = $attributes['created_at'];
         $allAtrributes['updated_at'] = $attributes['updated_at'];
         $attributes = array_intersect_key($attributes, $allAtrributes);
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         foreach ($attributes as $attributeCode => $attributeValue) {
             $this->assertNotNull($attributeCode);
             $this->assertNotNull($attributeValue);

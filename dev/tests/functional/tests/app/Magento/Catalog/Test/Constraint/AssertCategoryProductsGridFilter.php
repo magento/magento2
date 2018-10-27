@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\Category;
@@ -53,6 +56,7 @@ class AssertCategoryProductsGridFilter extends AbstractConstraint
      * @param array $categoryProducts
      * @param CatalogCategoryEdit $catalogCategoryEdit
      * @param string $filterField
+<<<<<<< HEAD
      * @return void
      */
     private function testGridFilter(array $categoryProducts, CatalogCategoryEdit $catalogCategoryEdit, $filterField)
@@ -81,6 +85,42 @@ class AssertCategoryProductsGridFilter extends AbstractConstraint
             $actualProducts,
             "Category products grid filter '$filterField' does not work correctly"
         );
+=======
+     */
+    private function testGridFilter(array $categoryProducts, CatalogCategoryEdit $catalogCategoryEdit, $filterField)
+    {
+        $productsByFilter = [];
+        foreach ($categoryProducts as $product) {
+            $filterValue = $product->getData($filterField);
+            if (!isset($productsByFilter[$filterValue])) {
+                $productsByFilter[$filterValue] = [];
+            }
+            $productsByFilter[$filterValue][] = $product;
+        }
+
+        $productsFieldset = $catalogCategoryEdit->getEditForm()->getSection('category_products');
+        foreach ($productsByFilter as $filterValue => $products) {
+            $productsFieldset->getProductGrid()->search([
+                'in_category' => 'Yes',
+                $filterField => $filterValue,
+            ]);
+
+            $expectedRows = [];
+            foreach ($products as $product) {
+                $expectedRows[] = $product->getName();
+            }
+            $gridRows = $productsFieldset->getProductGrid()->getRowsData(['name']);
+            $actualRows = array_column($gridRows, 'name');
+            sort($expectedRows);
+            sort($actualRows);
+
+            \PHPUnit_Framework_Assert::assertEquals(
+                $expectedRows,
+                $actualRows,
+                "Category products grid filter '$filterField' does not work correctly"
+            );
+        }
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -88,7 +128,11 @@ class AssertCategoryProductsGridFilter extends AbstractConstraint
      *
      * @return string
      */
+<<<<<<< HEAD
     public function toString() : string
+=======
+    public function toString()
+>>>>>>> upstream/2.2-develop
     {
         return 'Category products grid filter works correctly';
     }

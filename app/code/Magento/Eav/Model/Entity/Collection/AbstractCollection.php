@@ -1711,7 +1711,11 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @return void
      */
+<<<<<<< HEAD
     private function invalidateSize(): void
+=======
+    private function invalidateSize()
+>>>>>>> upstream/2.2-develop
     {
         $this->_totalRecords = null;
     }

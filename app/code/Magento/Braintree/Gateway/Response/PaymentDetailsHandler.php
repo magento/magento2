@@ -6,6 +6,10 @@
 namespace Magento\Braintree\Gateway\Response;
 
 use Magento\Braintree\Observer\DataAssignObserver;
+<<<<<<< HEAD
+=======
+use Magento\Payment\Gateway\Helper\ContextHelper;
+>>>>>>> upstream/2.2-develop
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;

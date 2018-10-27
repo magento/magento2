@@ -69,7 +69,11 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+<<<<<<< HEAD
     public function prepareAttributesWithDefaultValueForSaveDataProvider(): array
+=======
+    public function prepareAttributesWithDefaultValueForSaveDataProvider()
+>>>>>>> upstream/2.2-develop
     {
         return [
             'Updating existing product with attributes that do not have default values' => [
@@ -190,6 +194,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Test cleaning imported attribute data from empty values (note '0' is not empty).
      *
+<<<<<<< HEAD
      * @magentoDbIsolation  enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture  Magento/CatalogImportExport/Model/Import/_files/custom_attributes.php
@@ -197,6 +202,12 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      * @param array $rowData
      * @param array $expectedAttributes
      * @return void
+=======
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/CatalogImportExport/Model/Import/_files/custom_attributes.php
+     * @dataProvider clearEmptyDataDataProvider
+>>>>>>> upstream/2.2-develop
      */
     public function testClearEmptyData(array $rowData, array $expectedAttributes): void
     {
@@ -212,7 +223,11 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
+<<<<<<< HEAD
     public function clearEmptyDataDataProvider(): array
+=======
+    public function clearEmptyDataDataProvider()
+>>>>>>> upstream/2.2-develop
     {
         // We use sku attribute to test static attributes.
         return [

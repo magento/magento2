@@ -21,9 +21,12 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 /**
  * Strategy which processes exclusions from general rules
  *
+<<<<<<< HEAD
  * @deprecated
  * @see \Magento\ElasticSearch
  *
+=======
+>>>>>>> upstream/2.2-develop
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExclusionStrategy implements FilterStrategyInterface

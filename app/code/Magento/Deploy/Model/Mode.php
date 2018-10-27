@@ -178,7 +178,11 @@ class Mode
     }
 
     /**
+<<<<<<< HEAD
      * Enable Default mode.
+=======
+     * Enable Default mode
+>>>>>>> upstream/2.2-develop
      *
      * @return void
      */

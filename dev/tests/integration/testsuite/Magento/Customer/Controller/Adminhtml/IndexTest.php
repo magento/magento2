@@ -404,7 +404,11 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             'change_email_template',
             [
                 'name' => 'CustomerSupport',
+<<<<<<< HEAD
                 'email' => 'support@example.com',
+=======
+                'email' => 'support@example.com'
+>>>>>>> upstream/2.2-develop
             ],
             $customerId,
             $newEmail
@@ -454,7 +458,11 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             'change_email_template',
             [
                 'name' => 'CustomerSupport',
+<<<<<<< HEAD
                 'email' => 'support@example.com',
+=======
+                'email' => 'support@example.com'
+>>>>>>> upstream/2.2-develop
             ],
             $customerId,
             $newEmail

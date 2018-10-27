@@ -10,7 +10,10 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Action\Context;
+<<<<<<< HEAD
 use Magento\Framework\App\Action\HttpPostActionInterface;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\PopularSearchTerms;
@@ -81,12 +84,21 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
 
         $storeId = $this->_storeManager->getStore()->getId();
         $query->setStoreId($storeId);
+<<<<<<< HEAD
 
         $queryText = $query->getQueryText();
 
         if ($queryText != '') {
             $catalogSearchHelper = $this->_objectManager->get(\Magento\CatalogSearch\Helper\Data::class);
 
+=======
+
+        $queryText = $query->getQueryText();
+
+        if ($queryText != '') {
+            $catalogSearchHelper = $this->_objectManager->get(\Magento\CatalogSearch\Helper\Data::class);
+
+>>>>>>> upstream/2.2-develop
             $getAdditionalRequestParameters = $this->getRequest()->getParams();
             unset($getAdditionalRequestParameters[QueryFactory::QUERY_VAR_NAME]);
 
@@ -118,9 +130,15 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
                 return;
             }
         }
+<<<<<<< HEAD
 
         $catalogSearchHelper->checkNotes();
 
+=======
+
+        $catalogSearchHelper->checkNotes();
+
+>>>>>>> upstream/2.2-develop
         $this->_view->loadLayout();
         $this->_view->renderLayout();
     }

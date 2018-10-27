@@ -15,6 +15,10 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total as AddressTotal;
 use Magento\Sales\Model\Status;
 use Magento\Framework\App\ObjectManager;
+<<<<<<< HEAD
+=======
+use Magento\Sales\Model\OrderIncrementIdChecker;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Quote model
@@ -400,7 +404,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+<<<<<<< HEAD
      * @param \Magento\Sales\Model\OrderIncrementIdChecker|null $orderIncrementIdChecker
+=======
+     * @param OrderIncrementIdChecker|null $orderIncrementIdChecker
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -444,7 +452,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
+<<<<<<< HEAD
         \Magento\Sales\Model\OrderIncrementIdChecker $orderIncrementIdChecker = null
+=======
+        OrderIncrementIdChecker $orderIncrementIdChecker = null
+>>>>>>> upstream/2.2-develop
     ) {
         $this->quoteValidator = $quoteValidator;
         $this->_catalogProduct = $catalogProduct;
@@ -480,7 +492,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->shippingFactory = $shippingFactory;
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
         $this->orderIncrementIdChecker = $orderIncrementIdChecker ?: ObjectManager::getInstance()
+<<<<<<< HEAD
             ->get(\Magento\Sales\Model\OrderIncrementIdChecker::class);
+=======
+            ->get(OrderIncrementIdChecker::class);
+>>>>>>> upstream/2.2-develop
         parent::__construct(
             $context,
             $registry,
@@ -1324,8 +1340,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $address = null)
     {
+<<<<<<< HEAD
         $old = $this->getAddressesCollection()->getItemById($address->getId())
             ?? $this->getBillingAddress();
+=======
+        $old = $this->getAddressesCollection()->getItemById($address->getId()) ?? $this->getBillingAddress();
+>>>>>>> upstream/2.2-develop
         if (!empty($old)) {
             $old->addData($address->getData());
         } else {
@@ -1346,8 +1366,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if ($this->getIsMultiShipping()) {
             $this->addAddress($address->setAddressType(Address::TYPE_SHIPPING));
         } else {
+<<<<<<< HEAD
             $old = $this->getAddressesCollection()->getItemById($address->getId())
                 ?? $this->getShippingAddress();
+=======
+            $old = $this->getAddressesCollection()->getItemById($address->getId()) ?? $this->getShippingAddress();
+>>>>>>> upstream/2.2-develop
             if (!empty($old)) {
                 $old->addData($address->getData());
             } else {

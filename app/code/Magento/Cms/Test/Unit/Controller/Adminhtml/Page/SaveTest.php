@@ -187,7 +187,11 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap(
                 [
                     ['page_id', null, 1],
+<<<<<<< HEAD
                     ['back', null, 'close'],
+=======
+                    ['back', null, false],
+>>>>>>> upstream/2.2-develop
                 ]
             );
 

@@ -37,7 +37,11 @@ class BraintreeAdapter
         $this->publicKey($publicKey);
         $this->privateKey($privateKey);
 
+<<<<<<< HEAD
         if ($environment === Environment::ENVIRONMENT_PRODUCTION) {
+=======
+        if ($environment == Environment::ENVIRONMENT_PRODUCTION) {
+>>>>>>> upstream/2.2-develop
             $this->environment(Environment::ENVIRONMENT_PRODUCTION);
         } else {
             $this->environment(Environment::ENVIRONMENT_SANDBOX);
@@ -48,7 +52,11 @@ class BraintreeAdapter
      * Initializes credentials.
      *
      * @return void
+<<<<<<< HEAD
      * @deprecated is not used anymore
+=======
+     * @deprecated 100.2.2 is not used anymore
+>>>>>>> upstream/2.2-develop
      */
     protected function initCredentials()
     {

@@ -92,6 +92,9 @@ class WysiwygTest extends AbstractElementTest
         return Wysiwyg::class;
     }
 
+    /**
+     * @return mixed|void
+     */
     public function testGetComponentName()
     {
         $this->assertSame(Wysiwyg::NAME, $this->getModel()->getComponentName());

@@ -22,7 +22,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\Response;
 use Zend\Stdlib\Parameters;
+<<<<<<< HEAD
 use Magento\Framework\App\Request\Http as HttpRequest;
+=======
+>>>>>>> upstream/2.2-develop
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -37,9 +40,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected function login($customerId)
     {
-        /** @var \Magento\Customer\Model\Session $session */
+        /** @var Session $session */
         $session = Bootstrap::getObjectManager()
-            ->get(\Magento\Customer\Model\Session::class);
+            ->get(Session::class);
         $session->loginById($customerId);
     }
 
@@ -161,8 +164,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer->changeResetPasswordLinkToken($token);
         $customer->save();
 
-        /** @var \Magento\Customer\Model\Session $customer */
-        $session = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Session::class);
+        /** @var Session $customer */
+        $session = Bootstrap::getObjectManager()->get(Session::class);
         $session->setRpToken($token);
         $session->setRpCustomerId($customer->getId());
 
@@ -685,6 +688,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testLoginPostRedirect($redirectDashboard, string $redirectUrl)
     {
         if (isset($redirectDashboard)) {
+<<<<<<< HEAD
             $this->_objectManager->get(ScopeConfigInterface::class)->setValue(
                 'customer/startup/redirect_dashboard',
                 $redirectDashboard
@@ -697,6 +701,21 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $request = $this->prepareRequest();
         $app = $this->_objectManager->create(Http::class, ['_request' => $request]);
         $response = $app->launch();
+=======
+            $this->_objectManager->get(ScopeConfigInterface::class)->setValue('customer/startup/redirect_dashboard', $redirectDashboard);
+        }
+
+        $this->_objectManager->get(Redirect::class)->setRedirectCookie('test');
+
+        $configValue = $this->_objectManager->create(Value::class);
+        $configValue->load('web/unsecure/base_url', 'path');
+        $baseUrl = $configValue->getValue() ?: 'http://localhost/';
+
+        $request = $this->prepareRequest();
+        $app = $this->_objectManager->create(Http::class, ['_request' => $request]);
+        $response = $app->launch();
+
+>>>>>>> upstream/2.2-develop
         $this->assertResponseRedirect($response, $baseUrl . $redirectUrl);
         $this->assertTrue($this->_objectManager->get(Session::class)->isLoggedIn());
     }
@@ -716,7 +735,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+<<<<<<< HEAD
      * @param string $email
+=======
+>>>>>>> upstream/2.2-develop
      * @return void
      */
     private function fillRequestWithAccountData($email)

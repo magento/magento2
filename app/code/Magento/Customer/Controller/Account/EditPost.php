@@ -26,8 +26,12 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
+<<<<<<< HEAD
 use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
+=======
+use Magento\Framework\Escaper;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Class EditPost
@@ -80,6 +84,9 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      */
     private $customerMapper;
 
+    /** @var Escaper */
+    private $escaper;
+
     /**
      * @var Escaper
      */
@@ -101,7 +108,11 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
         CustomerExtractor $customerExtractor,
+<<<<<<< HEAD
         ?Escaper $escaper = null
+=======
+        Escaper $escaper = null
+>>>>>>> upstream/2.2-develop
     ) {
         parent::__construct($context);
         $this->session = $customerSession;

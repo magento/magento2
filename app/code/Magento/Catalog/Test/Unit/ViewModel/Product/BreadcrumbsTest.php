@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
+=======
+>>>>>>> upstream/2.2-develop
 
 namespace Magento\Catalog\Test\Unit\ViewModel\Product;
 
@@ -41,7 +44,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
+<<<<<<< HEAD
     protected function setUp() : void
+=======
+    protected function setUp()
+>>>>>>> upstream/2.2-develop
     {
         $this->catalogHelper = $this->getMockBuilder(CatalogHelper::class)
             ->setMethods(['getProduct'])
@@ -53,14 +60,20 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+<<<<<<< HEAD
         $escaper = $this->getObjectManager()->getObject(\Magento\Framework\Escaper::class);
 
+=======
+>>>>>>> upstream/2.2-develop
         $this->viewModel = $this->getObjectManager()->getObject(
             Breadcrumbs::class,
             [
                 'catalogData' => $this->catalogHelper,
                 'scopeConfig' => $this->scopeConfig,
+<<<<<<< HEAD
                 'escaper' => $escaper
+=======
+>>>>>>> upstream/2.2-develop
             ]
         );
     }
@@ -68,7 +81,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testGetCategoryUrlSuffix() : void
+=======
+    public function testGetCategoryUrlSuffix()
+>>>>>>> upstream/2.2-develop
     {
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
@@ -81,7 +98,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testIsCategoryUsedInProductUrl() : void
+=======
+    public function testIsCategoryUsedInProductUrl()
+>>>>>>> upstream/2.2-develop
     {
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
@@ -98,7 +119,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedName
      * @return void
      */
+<<<<<<< HEAD
     public function testGetProductName($product, string $expectedName) : void
+=======
+    public function testGetProductName($product, $expectedName)
+>>>>>>> upstream/2.2-develop
     {
         $this->catalogHelper->expects($this->atLeastOnce())
             ->method('getProduct')
@@ -110,7 +135,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function productDataProvider() : array
+=======
+    public function productDataProvider()
+>>>>>>> upstream/2.2-develop
     {
         return [
             [$this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test']]), 'Test'],
@@ -119,6 +148,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * @dataProvider productJsonEncodeDataProvider
      *
      * @param Product|null $product
@@ -175,6 +205,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
      * @return ObjectManager
      */
     private function getObjectManager() : ObjectManager
+=======
+     * @return ObjectManager
+     */
+    private function getObjectManager()
+>>>>>>> upstream/2.2-develop
     {
         if (null === $this->objectManager) {
             $this->objectManager = new ObjectManager($this);

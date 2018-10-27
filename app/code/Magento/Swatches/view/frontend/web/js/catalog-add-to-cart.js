@@ -16,6 +16,7 @@ require([
         $(data.form).find('[name*="super"]').each(function (index, item) {
             var $item = $(item),
                 attr;
+<<<<<<< HEAD
 
             if ($item.attr('data-attr-name')) {
                 attr = $item.attr('data-attr-name');
@@ -24,6 +25,15 @@ require([
             }
             data.redirectParameters.push(attr + '=' + $item.val());
 
+=======
+
+            if ($item.attr('data-attr-name')) {
+                attr = $item.attr('data-attr-name');
+            } else {
+                attr = $item.parent().attr('attribute-code');
+            }
+            data.redirectParameters.push(attr + '=' + $item.val());
+>>>>>>> upstream/2.2-develop
         });
     });
 });

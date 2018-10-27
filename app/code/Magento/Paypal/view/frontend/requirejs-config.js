@@ -7,6 +7,10 @@ var config = {
     map: {
         '*': {
             orderReview: 'Magento_Paypal/js/order-review',
+<<<<<<< HEAD
+=======
+            'Magento_Paypal/order-review': 'Magento_Paypal/js/order-review',
+>>>>>>> upstream/2.2-develop
             paypalCheckout: 'Magento_Paypal/js/paypal-checkout'
         }
     },

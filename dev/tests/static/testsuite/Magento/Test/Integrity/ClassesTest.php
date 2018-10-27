@@ -111,7 +111,11 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      * @param array &$classes
      * @return void
      */
+<<<<<<< HEAD
     private function collectResourceHelpersPhp(string $contents, array &$classes): void
+=======
+    private function collectResourceHelpersPhp($contents, &$classes)
+>>>>>>> upstream/2.2-develop
     {
         $regex = '/(?:\:\:|\->)getResourceHelper\(\s*\'([a-z\d\\\\]+)\'\s*\)/ix';
         $matches = Classes::getAllMatches($contents, $regex);
@@ -184,7 +188,11 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
+<<<<<<< HEAD
     private function assertClassesExist(array $classes, string $path): void
+=======
+    private function assertClassesExist($classes, $path)
+>>>>>>> upstream/2.2-develop
     {
         if (!$classes) {
             return;
@@ -269,7 +277,11 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      * @param string $className
      * @return void
      */
+<<<<<<< HEAD
     private function assertClassNamespace(string $file, string $relativePath, string $contents, string $className): void
+=======
+    private function assertClassNamespace($file, $relativePath, $contents, $className)
+>>>>>>> upstream/2.2-develop
     {
         $namespacePattern = '/(Magento|Zend)\/[a-zA-Z]+[^\.]+/';
         $formalPattern = '/^namespace\s[a-zA-Z]+(\\\\[a-zA-Z0-9]+)*/m';
@@ -405,7 +417,11 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      * @param array $badClasses
      * @return array
      */
+<<<<<<< HEAD
     private function handleAliasClasses(array $aliasClasses, array $badClasses): array
+=======
+    private function handleAliasClasses($aliasClasses, $badClasses)
+>>>>>>> upstream/2.2-develop
     {
         foreach ($aliasClasses as $aliasClass) {
             foreach ($badClasses as $badClass) {
@@ -424,7 +440,11 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      * @param array $classes
      * @return array
      */
+<<<<<<< HEAD
     private function referenceBlacklistFilter(array $classes): array
+=======
+    private function referenceBlacklistFilter($classes)
+>>>>>>> upstream/2.2-develop
     {
         // exceptions made for the files from the blacklist
         $classes = $this->getReferenceBlacklist();
@@ -442,7 +462,11 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
+<<<<<<< HEAD
     private function getReferenceBlacklist(): array
+=======
+    private function getReferenceBlacklist()
+>>>>>>> upstream/2.2-develop
     {
         if (!isset($this->referenceBlackList)) {
             $this->referenceBlackList = file(
@@ -463,7 +487,11 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      * @param string $namespacePath
      * @return array
      */
+<<<<<<< HEAD
     private function removeSpecialCases(array $badClasses, string $file, string $contents, string $namespacePath): array
+=======
+    private function removeSpecialCases($badClasses, $file, $contents, $namespacePath)
+>>>>>>> upstream/2.2-develop
     {
         foreach ($badClasses as $badClass) {
             // Remove valid usages of Magento modules from the list
@@ -556,7 +584,11 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      * @param string $badClass
      * @return null|string
      */
+<<<<<<< HEAD
     private function getLibraryDirByPath(string $namespacePath, string $badClass)
+=======
+    private function getLibraryDirByPath($namespacePath, $badClass)
+>>>>>>> upstream/2.2-develop
     {
         $libraryDir = null;
         $fullPath = null;
@@ -604,7 +636,11 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      * @param array $badClasses
      * @return bool
      */
+<<<<<<< HEAD
     private function removeSpecialCasesForAllOthers(string $namespacePath, string $badClass, array &$badClasses): bool
+=======
+    private function removeSpecialCasesForAllOthers($namespacePath, $badClass, &$badClasses)
+>>>>>>> upstream/2.2-develop
     {
         // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
         $directories = [
@@ -641,7 +677,11 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      * @param string $file
      * @return void
      */
+<<<<<<< HEAD
     private function assertClassReferences(array $badClasses, string $file): void
+=======
+    private function assertClassReferences($badClasses, $file)
+>>>>>>> upstream/2.2-develop
     {
         if (empty($badClasses)) {
             return;

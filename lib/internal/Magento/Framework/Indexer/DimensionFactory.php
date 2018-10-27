@@ -11,8 +11,11 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Dimension Factory
+<<<<<<< HEAD
  *
  * @api
+=======
+>>>>>>> upstream/2.2-develop
  */
 class DimensionFactory
 {

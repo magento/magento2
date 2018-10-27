@@ -92,7 +92,14 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostAc
                 $this->blockRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the block.'));
                 $this->dataPersistor->clear('cms_block');
+<<<<<<< HEAD
                 return $this->processBlockReturn($model, $data, $resultRedirect);
+=======
+                if ($this->getRequest()->getParam('back')) {
+                    return $resultRedirect->setPath('*/*/edit', ['block_id' => $model->getId()]);
+                }
+                return $resultRedirect->setPath('*/*/');
+>>>>>>> upstream/2.2-develop
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {

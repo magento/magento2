@@ -15,11 +15,18 @@ use Magento\Quote\Model\Quote;
 class ResetQuoteAddresses
 {
     /**
+<<<<<<< HEAD
      * Clears the quote addresses when all the items are removed from the cart
      *
      * @param Quote $quote
      * @param Quote $result
      * @param mixed $itemId
+=======
+     * @param Quote $quote
+     * @param Quote $result
+     * @param mixed $itemId
+     *
+>>>>>>> upstream/2.2-develop
      * @return Quote
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -29,10 +36,13 @@ class ResetQuoteAddresses
             foreach ($result->getAllAddresses() as $address) {
                 $result->removeAddress($address->getId());
             }
+<<<<<<< HEAD
             $extensionAttributes = $result->getExtensionAttributes();
             if (!$result->isVirtual() && $extensionAttributes && $extensionAttributes->getShippingAssignments()) {
                 $extensionAttributes->setShippingAssignments([]);
             }
+=======
+>>>>>>> upstream/2.2-develop
         }
 
         return $result;

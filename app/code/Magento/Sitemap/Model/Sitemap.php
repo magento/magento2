@@ -162,6 +162,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected $_cacheTag = true;
 
     /**
+<<<<<<< HEAD
      * Item resolver
      *
      * @var ItemProviderInterface
@@ -183,6 +184,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     private $sitemapItemFactory;
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * Last mode min timestamp value
      *
      * @var int
@@ -305,6 +308,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         /** @var $helper \Magento\Sitemap\Helper\Data */
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
+        $this->_storeManager->setCurrentStore($storeId);
 
         $this->addSitemapItem(new DataObject(
             [

@@ -1236,10 +1236,18 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $expectedFileName = '';
             $this->_logger->expects($this->once())->method('critical')->with($exception);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $fileUploaderMock = $this
             ->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $fileUploaderMock
             ->expects($this->once())
             ->method('move')
@@ -1251,16 +1259,28 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                     return ['file' => $name];
                 }
             );
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $this->setPropertyValue(
             $this->importProduct,
             '_fileUploader',
             $fileUploaderMock
         );
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $actualFileName = $this->invokeMethod(
             $this->importProduct,
             'uploadMediaFiles',
             [$fileName]
         );
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $this->assertEquals(
             $expectedFileName,
             $actualFileName

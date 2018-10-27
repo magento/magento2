@@ -279,7 +279,11 @@ class Configuration implements StockConfigurationInterface
      */
     public function getEnableQtyIncrements($store = null)
     {
+<<<<<<< HEAD
         return $this->scopeConfig->isSetFlag(
+=======
+        return (bool)$this->scopeConfig->getValue(
+>>>>>>> upstream/2.2-develop
             self::XML_PATH_ENABLE_QTY_INCREMENTS,
             ScopeInterface::SCOPE_STORE,
             $store

@@ -125,8 +125,13 @@ class RateQuery
     }
 
     /**
+<<<<<<< HEAD
      * Returns the entire postcode if it contains no dash or the part of it prior to the dash in the other case
      *
+=======
+     * Returns the entire postcode if it contains no dash
+     * or the part of it prior to the dash in the other case
+>>>>>>> upstream/2.2-develop
      * @return string
      */
     private function getDestPostcodePrefix()

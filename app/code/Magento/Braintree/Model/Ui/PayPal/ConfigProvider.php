@@ -41,11 +41,11 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve assoc array of checkout configuration
+     * Retrieve assoc array of checkout configuration.
      *
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         $requireBillingAddressAll = \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
         
@@ -63,7 +63,11 @@ class ConfigProvider implements ConfigProviderInterface
                     'skipOrderReview' => $this->config->isSkipOrderReview(),
                     'paymentIcon' => $this->config->getPayPalIcon(),
                     'isRequiredBillingAddress' =>
+<<<<<<< HEAD
                         (int)$this->config->isRequiredBillingAddress() === $requireBillingAddressAll
+=======
+                        (int)$this->config->isRequiredBillingAddress() === $requireBillingAddressAll,
+>>>>>>> upstream/2.2-develop
                 ]
             ]
         ];

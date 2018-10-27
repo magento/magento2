@@ -7,7 +7,11 @@
 -->
 <!-- Admin creates new custom website -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+=======
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <actionGroup name="AdminCreateWebsiteActionGroup">
         <arguments>
             <argument name="newWebsiteName" type="string"/>
@@ -16,10 +20,18 @@
         <amOnPage url="{{AdminSystemStoreWebsitePage.url}}" stepKey="navigateToNewWebsitePage"/>
         <waitForPageLoad stepKey="waitForStoresPageLoad"/>
         <!--Create Website-->
+<<<<<<< HEAD
+=======
+        <waitForElementVisible selector="{{AdminNewWebsiteSection.name}}" stepKey="waitForWebsiteFormAppeared" />
+>>>>>>> upstream/2.2-develop
         <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{newWebsiteName}}" stepKey="enterWebsiteName" />
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{websiteCode}}" stepKey="enterWebsiteCode" />
         <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveWebsite" />
         <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload"/>
         <see userInput="You saved the website." stepKey="seeSavedMessage" />
     </actionGroup>
+<<<<<<< HEAD
 </actionGroups>
+=======
+</actionGroups>
+>>>>>>> upstream/2.2-develop

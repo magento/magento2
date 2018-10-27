@@ -23,56 +23,80 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @var BraintreeAdapter|MockObject
      */
-    private $braintreeAdapterMock;
+    private $braintreeAdapter;
 
     /**
      * @var BraintreeAdapterFactory|MockObject
+<<<<<<< HEAD
      */
     private $adapterFactoryMock;
 
     /**
      * @var EntityFactoryInterface|MockObject
+=======
+>>>>>>> upstream/2.2-develop
      */
-    private $entityFactoryMock;
+    private $adapterFactory;
 
     /**
+<<<<<<< HEAD
      * @var FilterMapper|MockObject
+=======
+     * @var EntityFactoryInterface|MockObject
+>>>>>>> upstream/2.2-develop
      */
-    private $filterMapperMock;
+    private $entityFactory;
+
+    /**
+<<<<<<< HEAD
+     * @var DocumentInterface|MockObject
+=======
+     * @var FilterMapper|MockObject
+>>>>>>> upstream/2.2-develop
+     */
+    private $filterMapper;
 
     /**
      * @var DocumentInterface|MockObject
      */
-    private $transactionMapMock;
+    private $transactionMap;
 
     /**
      * Setup
      */
     protected function setUp()
     {
-        $this->transactionMapMock = $this->getMockBuilder(DocumentInterface::class)
+        $this->transactionMap = $this->getMockBuilder(DocumentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->entityFactoryMock = $this->getMockBuilder(EntityFactoryInterface::class)
+        $this->entityFactory = $this->getMockBuilder(EntityFactoryInterface::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filterMapperMock = $this->getMockBuilder(FilterMapper::class)
+        $this->filterMapper = $this->getMockBuilder(FilterMapper::class)
             ->setMethods(['getFilter'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->braintreeAdapterMock = $this->getMockBuilder(BraintreeAdapter::class)
+        $this->braintreeAdapter = $this->getMockBuilder(BraintreeAdapter::class)
             ->setMethods(['search'])
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
         $this->adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->adapterFactoryMock->method('create')
             ->willReturn($this->braintreeAdapterMock);
+=======
+        $this->adapterFactory = $this->getMockBuilder(BraintreeAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->adapterFactory->method('create')
+            ->willReturn($this->braintreeAdapter);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -80,28 +104,32 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItems()
     {
-        $this->filterMapperMock->expects($this->once())
-            ->method('getFilter')
+        $this->filterMapper->method('getFilter')
             ->willReturn(new BraintreeSearchNodeStub());
 
-        $this->braintreeAdapterMock->expects($this->once())
-            ->method('search')
+        $this->braintreeAdapter->method('search')
             ->willReturn(['transaction1', 'transaction2']);
 
-        $this->entityFactoryMock->expects($this->exactly(2))
+        $this->entityFactory->expects(self::exactly(2))
             ->method('create')
-            ->willReturn($this->transactionMapMock);
+            ->willReturn($this->transactionMap);
 
         $collection = new TransactionsCollection(
+<<<<<<< HEAD
             $this->entityFactoryMock,
             $this->adapterFactoryMock,
             $this->filterMapperMock
+=======
+            $this->entityFactory,
+            $this->adapterFactory,
+            $this->filterMapper
+>>>>>>> upstream/2.2-develop
         );
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(2, count($items));
-        $this->assertInstanceOf(DocumentInterface::class, $items[1]);
+        self::assertEquals(2, count($items));
+        self::assertInstanceOf(DocumentInterface::class, $items[1]);
     }
 
     /**
@@ -109,27 +137,31 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemsEmptyCollection()
     {
-        $this->filterMapperMock->expects($this->once())
-            ->method('getFilter')
+        $this->filterMapper->method('getFilter')
             ->willReturn(new BraintreeSearchNodeStub());
 
-        $this->braintreeAdapterMock->expects($this->once())
-            ->method('search')
+        $this->braintreeAdapter->method('search')
             ->willReturn(null);
 
-        $this->entityFactoryMock->expects($this->never())
+        $this->entityFactory->expects(self::never())
             ->method('create')
-            ->willReturn($this->transactionMapMock);
+            ->willReturn($this->transactionMap);
 
         $collection = new TransactionsCollection(
+<<<<<<< HEAD
             $this->entityFactoryMock,
             $this->adapterFactoryMock,
             $this->filterMapperMock
+=======
+            $this->entityFactory,
+            $this->adapterFactory,
+            $this->filterMapper
+>>>>>>> upstream/2.2-develop
         );
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(0, count($items));
+        self::assertEquals(0, count($items));
     }
 
     /**
@@ -139,29 +171,39 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $transactions = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
 
-        $this->filterMapperMock->expects($this->once())
-            ->method('getFilter')
+        $this->filterMapper->method('getFilter')
             ->willReturn(new BraintreeSearchNodeStub());
 
+<<<<<<< HEAD
         $this->braintreeAdapterMock->expects($this->once())
             ->method('search')
             ->willReturn($transactions);
+=======
+        $this->braintreeAdapter->method('search')
+            ->willReturn($transations);
+>>>>>>> upstream/2.2-develop
 
-        $this->entityFactoryMock->expects($this->exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
+        $this->entityFactory->expects(self::exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
             ->method('create')
-            ->willReturn($this->transactionMapMock);
+            ->willReturn($this->transactionMap);
 
         $collection = new TransactionsCollection(
+<<<<<<< HEAD
             $this->entityFactoryMock,
             $this->adapterFactoryMock,
             $this->filterMapperMock
+=======
+            $this->entityFactory,
+            $this->adapterFactory,
+            $this->filterMapper
+>>>>>>> upstream/2.2-develop
         );
         $collection->setPageSize(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT);
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
-        $this->assertInstanceOf(DocumentInterface::class, $items[1]);
+        self::assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
+        self::assertInstanceOf(DocumentInterface::class, $items[1]);
     }
 
     /**
@@ -171,29 +213,39 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $transactions = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
 
-        $this->filterMapperMock->expects($this->once())
-            ->method('getFilter')
+        $this->filterMapper->method('getFilter')
             ->willReturn(new BraintreeSearchNodeStub());
 
+<<<<<<< HEAD
         $this->braintreeAdapterMock->expects($this->once())
             ->method('search')
             ->willReturn($transactions);
+=======
+        $this->braintreeAdapter->method('search')
+            ->willReturn($transations);
+>>>>>>> upstream/2.2-develop
 
-        $this->entityFactoryMock->expects($this->exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
+        $this->entityFactory->expects(self::exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
             ->method('create')
-            ->willReturn($this->transactionMapMock);
+            ->willReturn($this->transactionMap);
 
         $collection = new TransactionsCollection(
+<<<<<<< HEAD
             $this->entityFactoryMock,
             $this->adapterFactoryMock,
             $this->filterMapperMock
+=======
+            $this->entityFactory,
+            $this->adapterFactory,
+            $this->filterMapper
+>>>>>>> upstream/2.2-develop
         );
         $collection->setPageSize(null);
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
-        $this->assertInstanceOf(DocumentInterface::class, $items[1]);
+        self::assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
+        self::assertInstanceOf(DocumentInterface::class, $items[1]);
     }
 
     /**
@@ -203,18 +255,24 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddToFilter($field, $condition, $filterMapperCall, $expectedCondition)
     {
-        $this->filterMapperMock->expects(static::exactly($filterMapperCall))
+        $this->filterMapper->expects(self::exactly($filterMapperCall))
             ->method('getFilter')
             ->with($field, $expectedCondition)
             ->willReturn(new BraintreeSearchNodeStub());
 
         $collection = new TransactionsCollection(
+<<<<<<< HEAD
             $this->entityFactoryMock,
             $this->adapterFactoryMock,
             $this->filterMapperMock
+=======
+            $this->entityFactory,
+            $this->adapterFactory,
+            $this->filterMapper
+>>>>>>> upstream/2.2-develop
         );
 
-        static::assertInstanceOf(
+        self::assertInstanceOf(
             TransactionsCollection::class,
             $collection->addFieldToFilter($field, $condition)
         );

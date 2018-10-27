@@ -206,6 +206,10 @@ class CreationServiceTest extends TestCase
     /**
      * @param $orderId
      * @param array $caseData
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return MockObject
      */
     private function withCaseEntityExistsForOrderId($orderId, array $caseData = [])

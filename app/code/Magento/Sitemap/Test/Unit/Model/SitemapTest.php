@@ -267,6 +267,8 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             $expectedWrites,
             null
         );
+        $this->storeManagerMock->expects($this->once())->method('setCurrentStore')->with(1);
+
         $model->generateXml();
 
         $this->assertCount(count($expectedFile), $actualData, 'Number of generated files is incorrect');
@@ -374,6 +376,8 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             $expectedWrites,
             $robotsInfo
         );
+        $this->storeManagerMock->expects($this->once())->method('setCurrentStore')->with(1);
+
         $model->generateXml();
     }
 
@@ -520,6 +524,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             $methods[] = 'beforeSave';
         }
 
+<<<<<<< HEAD
         $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
 
         $this->itemProviderMock->expects($this->any())
@@ -536,6 +541,41 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                     new DataObject([
                         'collection' => [
                             new DataObject(
+=======
+        $this->_sitemapCategoryMock->expects(
+            $this->any()
+        )->method(
+            'getCollection'
+        )->will(
+            $this->returnValue(
+                [
+                    new \Magento\Framework\DataObject(
+                        ['url' => 'category.html', 'updated_at' => '2012-12-21 00:00:00']
+                    ),
+                    new \Magento\Framework\DataObject(
+                        ['url' => '/category/sub-category.html', 'updated_at' => '2012-12-21 00:00:00']
+                    ),
+                ]
+            )
+        );
+
+        $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/10f519365b01716ddb90abc57de5a837/';
+        $this->_sitemapProductMock->expects(
+            $this->any()
+        )->method(
+            'getCollection'
+        )->will(
+            $this->returnValue(
+                [
+                    new \Magento\Framework\DataObject(
+                        ['url' => 'product.html', 'updated_at' => '0000-00-00 00:00:00']
+                    ),
+                    new \Magento\Framework\DataObject(
+                        [
+                            'url' => 'product2.html',
+                            'updated_at' => '2012-12-21 00:00:00',
+                            'images' => new \Magento\Framework\DataObject(
+>>>>>>> upstream/2.2-develop
                                 [
                                     'url' => $storeBaseMediaUrl . 'i/m/image1.png',
                                     'caption' => 'caption & > title < "'

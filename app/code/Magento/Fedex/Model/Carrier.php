@@ -724,7 +724,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {
+<<<<<<< HEAD
             $debugData = ['request' => $this->filterDebugData($request)];
+=======
+            $debugData = ['request' => parent::filterDebugData($request)];
+>>>>>>> upstream/2.2-develop
             try {
                 $url = $this->getConfigData('gateway_url');
                 if (!$url) {
@@ -739,7 +743,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $responseBody = curl_exec($ch);
                 curl_close($ch);
 
+<<<<<<< HEAD
                 $debugData['result'] = $this->filterDebugData($responseBody);
+=======
+                $debugData['result'] = parent::filterDebugData($responseBody);
+>>>>>>> upstream/2.2-develop
                 $this->_setCachedQuotes($request, $responseBody);
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];

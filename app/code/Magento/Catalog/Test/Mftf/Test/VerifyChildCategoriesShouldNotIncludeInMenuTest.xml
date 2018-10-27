@@ -7,6 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="VerifyChildCategoriesShouldNotIncludeInMenuTest">
         <annotations>
@@ -16,6 +17,16 @@
             <description value="Customer should not see categories that are not included in the menu"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-72238"/>
+=======
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="VerifyChildCategoriesShouldNotIncludeInMenuTest">
+        <annotations>
+            <features value="Test child categories should not include in menu"/>
+            <title value="Test child categories should not include in menu."/>
+            <description value="Test child categories should not include in menu."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-75843"/>
+>>>>>>> upstream/2.2-develop
             <group value="category"/>
         </annotations>
         <after>

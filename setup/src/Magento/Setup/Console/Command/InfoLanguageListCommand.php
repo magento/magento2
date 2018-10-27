@@ -64,7 +64,11 @@ class InfoLanguageListCommand extends Command
             $tableHelper->addRow([$locale, $key]);
         }
 
+<<<<<<< HEAD
         $tableHelper->render();
+=======
+        $table->render($output);
+>>>>>>> upstream/2.2-develop
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

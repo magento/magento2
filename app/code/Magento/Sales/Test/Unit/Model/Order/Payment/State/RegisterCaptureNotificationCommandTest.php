@@ -40,6 +40,7 @@ class RegisterCaptureNotificationCommandTest extends \PHPUnit\Framework\TestCase
      * @dataProvider commandResultDataProvider
      */
     public function testExecute(
+<<<<<<< HEAD
         bool $isTransactionPending,
         bool $isFraudDetected,
         $currentState,
@@ -47,6 +48,15 @@ class RegisterCaptureNotificationCommandTest extends \PHPUnit\Framework\TestCase
         string $expectedStatus,
         string $expectedMessage
     ): void {
+=======
+        $isTransactionPending,
+        $isFraudDetected,
+        $currentState,
+        $expectedState,
+        $expectedStatus,
+        $expectedMessage
+    ) {
+>>>>>>> upstream/2.2-develop
         $order = $this->getOrder($currentState);
         $actualReturn = (new RegisterCaptureNotificationCommand($this->getStatusResolver()))->execute(
             $this->getPayment($isTransactionPending, $isFraudDetected),
@@ -70,7 +80,11 @@ class RegisterCaptureNotificationCommandTest extends \PHPUnit\Framework\TestCase
                 Order::STATE_COMPLETE,
                 Order::STATE_COMPLETE,
                 $this->newOrderStatus,
+<<<<<<< HEAD
                 'Registered notification about captured amount of %1.',
+=======
+                'Registered notification about captured amount of %1.'
+>>>>>>> upstream/2.2-develop
             ],
             [
                 false,

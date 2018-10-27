@@ -133,9 +133,14 @@ class IndexBuilder
     private $pricesPersistor;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     * @var TableSwapper
      */
-    private $activeTableSwitcher;
+    private $tableSwapper;
+
+    /**
+     * @var ProductLoader
+     */
+    private $productLoader;
 
     /**
      * @var TableSwapper
@@ -168,6 +173,7 @@ class IndexBuilder
      * @param ProductLoader|null $productLoader
      * @param TableSwapper|null $tableSwapper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         RuleCollectionFactory $ruleCollectionFactory,
@@ -220,12 +226,18 @@ class IndexBuilder
         $this->pricesPersistor = $pricesPersistor ?? ObjectManager::getInstance()->get(
             RuleProductPricesPersistor::class
         );
+<<<<<<< HEAD
         $this->activeTableSwitcher = $activeTableSwitcher ?? ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
         );
         $this->productLoader = $productLoader ?? ObjectManager::getInstance()->get(
             ProductLoader::class
         );
+=======
+        $this->productLoader = $productLoader ?? ObjectManager::getInstance()->get(
+            ProductLoader::class
+        );
+>>>>>>> upstream/2.2-develop
         $this->tableSwapper = $tableSwapper ??
             ObjectManager::getInstance()->get(TableSwapper::class);
     }

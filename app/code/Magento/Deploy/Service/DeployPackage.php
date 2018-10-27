@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Service;
 
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Deploy\Console\InputValidator;
+use Magento\Framework\View\Design\Theme\ListInterface;
+use Magento\Framework\View\DesignInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -91,6 +95,7 @@ class DeployPackage
      * @param array $options
      * @param bool $skipLogging
      * @return bool true on success
+     * @throws \Exception
      */
     public function deploy(Package $package, array $options, $skipLogging = false)
     {
@@ -199,6 +204,7 @@ class DeployPackage
     private function checkIfCanCopy(PackageFile $file, Package $package, Package $parentPackage = null)
     {
         return $parentPackage
+<<<<<<< HEAD
         && $file->getOrigPackage() !== $package
         && (
             $file->getArea() !== $package->getArea()
@@ -207,6 +213,16 @@ class DeployPackage
         )
         && $file->getOrigPackage() === $parentPackage
         && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+=======
+            && $file->getOrigPackage() !== $package
+            && (
+                $file->getArea() !== $package->getArea()
+                || $file->getTheme() !== $package->getTheme()
+                || $file->getLocale() !== $package->getLocale()
+            )
+            && $file->getOrigPackage() === $parentPackage
+            && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+>>>>>>> upstream/2.2-develop
     }
 
     /**

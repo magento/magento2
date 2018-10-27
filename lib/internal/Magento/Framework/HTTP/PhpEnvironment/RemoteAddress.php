@@ -74,8 +74,11 @@ class RemoteAddress
     }
 
     /**
+<<<<<<< HEAD
      * Filter addresses by trusted proxies list.
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @param string $remoteAddress
      * @return string|null
      */
@@ -117,7 +120,11 @@ class RemoteAddress
      *
      * @return string IPv4|long
      */
+<<<<<<< HEAD
     public function getRemoteAddress(bool $ipToLong = false)
+=======
+    public function getRemoteAddress($ipToLong = false)
+>>>>>>> upstream/2.2-develop
     {
         if ($this->remoteAddress !== null) {
             return $this->remoteAddress;
@@ -126,6 +133,7 @@ class RemoteAddress
         $remoteAddress = $this->readAddress();
         if (!$remoteAddress) {
             $this->remoteAddress = false;
+<<<<<<< HEAD
 
             return false;
         }
@@ -139,6 +147,20 @@ class RemoteAddress
             $this->remoteAddress = $remoteAddress;
 
             return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
+=======
+            return false;
+        }
+        $remoteAddress = $this->filterAddress($remoteAddress);
+
+        if (!$remoteAddress) {
+            $this->remoteAddress = false;
+            return false;
+        } else {
+            $this->remoteAddress = $remoteAddress;
+
+            return $ipToLong ? ip2long($this->remoteAddress)
+                : $this->remoteAddress;
+>>>>>>> upstream/2.2-develop
         }
     }
 

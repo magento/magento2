@@ -7,7 +7,10 @@ namespace Magento\ConfigurableProduct\Test\Block\Product;
 
 use Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions;
 use Magento\Mtf\Client\Locator;
+<<<<<<< HEAD
 use Magento\ConfigurableProduct\Test\Block\Product\Price;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
@@ -29,7 +32,11 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     public function getPriceBlock(FixtureInterface $product = null)
     {
         return $this->blockFactory->create(
+<<<<<<< HEAD
             Price::class,
+=======
+            'Magento\ConfigurableProduct\Test\Block\Product\Price',
+>>>>>>> upstream/2.2-develop
             ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
         );
     }

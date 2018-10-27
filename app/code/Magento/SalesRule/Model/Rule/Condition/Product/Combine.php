@@ -9,6 +9,10 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
  * Combine conditions for product.
+<<<<<<< HEAD
+=======
+ *
+>>>>>>> upstream/2.2-develop
  * @api
  * @since 100.0.2
  */
@@ -101,7 +105,11 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
 
         foreach ($this->getConditions() as $cond) {
             if ($entity instanceof \Magento\Framework\Model\AbstractModel) {
+<<<<<<< HEAD
                 $validated = $this->validateEntity($cond, $entity);
+=======
+                $validated = $this->validateEntity($entity, $cond);
+>>>>>>> upstream/2.2-develop
             } else {
                 $validated = $cond->validateByEntityId($entity);
             }
@@ -111,12 +119,17 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
                 return true;
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         return $all ? true : false;
     }
 
     /**
      * Validate entity.
      *
+<<<<<<< HEAD
      * @param object $cond
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return bool
@@ -126,6 +139,17 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         $true = (bool)$this->getValue();
         $validated = !$true;
         foreach ($this->retrieveValidateEntities($cond->getAttributeScope(), $entity) as $validateEntity) {
+=======
+     * @param \Magento\Framework\Model\AbstractModel $entity
+     * @param mixed $cond
+     * @return bool
+     */
+    private function validateEntity(\Magento\Framework\Model\AbstractModel $entity, $cond): bool
+    {
+        $true = (bool)$this->getValue();
+        $validated = !$true;
+        foreach ($this->retrieveValidateEntities($entity, $cond->getAttributeScope()) as $validateEntity) {
+>>>>>>> upstream/2.2-develop
             $validated = $cond->validate($validateEntity);
             if ($validated === $true) {
                 break;
@@ -138,12 +162,23 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     /**
      * Retrieve entities for validation by attribute scope
      *
+<<<<<<< HEAD
      * @param string $attributeScope
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return \Magento\Framework\Model\AbstractModel[]
      */
     private function retrieveValidateEntities($attributeScope, \Magento\Framework\Model\AbstractModel $entity)
     {
+=======
+     * @param \Magento\Framework\Model\AbstractModel $entity
+     * @param string|null $attributeScope
+     * @return \Magento\Framework\Model\AbstractModel[]
+     */
+    private function retrieveValidateEntities(
+        \Magento\Framework\Model\AbstractModel $entity,
+        $attributeScope
+    ): array {
+>>>>>>> upstream/2.2-develop
         if ($attributeScope === 'parent') {
             $validateEntities = [$entity];
         } elseif ($attributeScope === 'children') {

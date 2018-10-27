@@ -353,7 +353,11 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         );
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
+<<<<<<< HEAD
             $this->equalTo(['The "Name" attribute value is empty. Set the attribute and try again.']),
+=======
+            $this->equalTo(['The value of attribute "Name" must be set']),
+>>>>>>> upstream/2.2-develop
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

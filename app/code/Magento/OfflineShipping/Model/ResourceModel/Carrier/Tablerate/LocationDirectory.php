@@ -74,7 +74,7 @@ class LocationDirectory
     }
 
     /**
-     * Load directory countries
+     * Load directory countries.
      *
      * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
      */
@@ -106,6 +106,7 @@ class LocationDirectory
     public function hasCountryId($countryCode)
     {
         $this->loadCountries();
+
         return isset($this->iso2Countries[$countryCode]) || isset($this->iso3Countries[$countryCode]);
     }
 
@@ -119,6 +120,7 @@ class LocationDirectory
     public function hasRegionId($countryId, $regionCode)
     {
         $this->loadRegions();
+
         return isset($this->regions[$countryId][$regionCode]);
     }
 
@@ -160,10 +162,12 @@ class LocationDirectory
     public function getRegionId($countryId, $regionCode)
     {
         $this->loadRegions();
+
         return $this->regions[$countryId][$regionCode];
     }
 
     /**
+<<<<<<< HEAD
      * Return region ids for country and region
      *
      * @param int $countryId
@@ -173,6 +177,18 @@ class LocationDirectory
     public function getRegionIds($countryId, $regionCode)
     {
         $this->loadRegions();
+=======
+     * Return region ids for country and region.
+     *
+     * @param string $countryId
+     * @param string $regionCode
+     * @return array
+     */
+    public function getRegionIds(string $countryId, string $regionCode): array
+    {
+        $this->loadRegions();
+
+>>>>>>> upstream/2.2-develop
         return $this->regionsByCode[$countryId][$regionCode];
     }
 }

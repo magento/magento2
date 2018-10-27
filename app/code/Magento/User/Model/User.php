@@ -7,7 +7,9 @@
 namespace Magento\User\Model;
 
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\MailException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -135,12 +137,16 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     private $serializer;
 
     /**
+<<<<<<< HEAD
      * @var NotificatorInterface
      */
     private $notificator;
 
     /**
      * @deprecated
+=======
+     * @var DeploymentConfig
+>>>>>>> upstream/2.2-develop
      */
     private $deploymentConfig;
 
@@ -160,7 +166,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param array $data
      * @param Json $serializer
      * @param DeploymentConfig|null $deploymentConfig
+<<<<<<< HEAD
      * @param NotificatorInterface|null $notificator
+=======
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -178,8 +187,12 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         Json $serializer = null,
+<<<<<<< HEAD
         DeploymentConfig $deploymentConfig = null,
         ?NotificatorInterface $notificator = null
+=======
+        DeploymentConfig $deploymentConfig = null
+>>>>>>> upstream/2.2-develop
     ) {
         $this->_encryptor = $encryptor;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -190,12 +203,18 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->validationRules = $validationRules;
+<<<<<<< HEAD
         $this->serializer = $serializer
             ?: ObjectManager::getInstance()->get(Json::class);
         $this->deploymentConfig = $deploymentConfig
             ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->notificator = $notificator
             ?: ObjectManager::getInstance()->get(NotificatorInterface::class);
+=======
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->deploymentConfig = $deploymentConfig
+            ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -439,16 +458,67 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
+<<<<<<< HEAD
      * Send email with reset password confirmation link.
      *
      * @deprecated
      * @see NotificatorInterface::sendForgotPassword()
+=======
+     * Send a notification to an admin.
+     *
+     * @param string $templateConfigId
+     * @param array $templateVars
+     * @param string|null $toEmail
+     * @param string|null $toName
+     * @throws MailException
+     *
+     * @return void
+     */
+    private function sendNotification(
+        string $templateConfigId,
+        array $templateVars,
+        string $toEmail = null,
+        string $toName = null
+    ) {
+        $toEmail = $toEmail ?? $this->getEmail();
+        $toName = $toName ?? $this->getName();
+        $this->_transportBuilder
+            ->setTemplateIdentifier($this->_config->getValue($templateConfigId))
+            ->setTemplateModel(\Magento\Email\Model\BackendTemplate::class)
+            ->setTemplateOptions([
+                'area' => FrontNameResolver::AREA_CODE,
+                'store' => Store::DEFAULT_STORE_ID
+            ])
+            ->setTemplateVars($templateVars)
+            ->setFrom(
+                $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
+            )
+            ->addTo($toEmail, $toName)
+            ->getTransport()
+            ->sendMessage();
+    }
+
+    /**
+     * Send email with reset password confirmation link
+>>>>>>> upstream/2.2-develop
      *
      * @return $this
      */
     public function sendPasswordResetConfirmationEmail()
     {
+<<<<<<< HEAD
         $this->notificator->sendForgotPassword($this);
+=======
+        $this->sendNotification(
+            self::XML_PATH_FORGOT_EMAIL_TEMPLATE,
+            [
+                'user' => $this,
+                'store' => $this->_storeManager->getStore(
+                    Store::DEFAULT_STORE_ID
+                )
+            ]
+        );
+>>>>>>> upstream/2.2-develop
 
         return $this;
     }
@@ -467,20 +537,77 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
+<<<<<<< HEAD
      * Check changes and send notification emails.
      *
      * @throws NotificationExceptionInterface
+=======
+     * Send notification about a new user created.
+     *
+     * @throws MailException
+     * @return void
+     */
+    private function sendNewUserNotificationEmail()
+    {
+        $toEmails = [];
+
+        $generalEmail = $this->_config->getValue(
+            'trans_email/ident_general/email'
+        );
+        if ($generalEmail) {
+            $toEmails[] = $generalEmail;
+        }
+
+        if ($adminEmail = $this->deploymentConfig->get('user_admin_email')) {
+            $toEmails[] = $adminEmail;
+        }
+
+        foreach ($toEmails as $toEmail) {
+            $this->sendNotification(
+                'admin/emails/new_user_notification_template',
+                [
+                    'user'  => $this,
+                    'store' => $this->_storeManager->getStore(
+                        Store::DEFAULT_STORE_ID
+                    )
+                ],
+                $toEmail,
+                'Administrator'
+            );
+        }
+    }
+
+    /**
+     * Check changes and send notification emails
+     *
+     * @throws MailException
+>>>>>>> upstream/2.2-develop
      * @return $this
      * @since 100.1.0
      */
     public function sendNotificationEmailsIfRequired()
     {
         if ($this->isObjectNew()) {
+<<<<<<< HEAD
             //Notification about a new user.
             $this->notificator->sendCreated($this);
         } elseif ($changes = $this->createChangesDescriptionString()) {
             //User changed.
             $this->notificator->sendUpdated($this, explode(', ', $changes));
+=======
+            //Notification about a new user
+            $this->sendNewUserNotificationEmail();
+        } elseif ($changes = $this->createChangesDescriptionString()) {
+            if ($this->getEmail() != $this->getOrigData('email')
+                && $this->getOrigData('email')
+            ) {
+                $this->sendUserNotificationEmail(
+                    $changes,
+                    $this->getOrigData('email')
+                );
+            }
+            $this->sendUserNotificationEmail($changes);
+>>>>>>> upstream/2.2-develop
         }
 
         return $this;
@@ -518,7 +645,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @param string $changes
      * @param string $email
+<<<<<<< HEAD
      * @throws NotificationExceptionInterface
+=======
+     * @throws MailException
+>>>>>>> upstream/2.2-develop
      * @return $this
      * @since 100.1.0
      * @deprecated
@@ -527,7 +658,21 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     protected function sendUserNotificationEmail($changes, $email = null)
     {
+<<<<<<< HEAD
         $this->notificator->sendUpdated($this, explode(', ', $changes));
+=======
+        $this->sendNotification(
+            self::XML_PATH_USER_NOTIFICATION_TEMPLATE,
+            [
+                'user' => $this,
+                'store' => $this->_storeManager->getStore(
+                    Store::DEFAULT_STORE_ID
+                ),
+                'changes' => $changes
+            ],
+            $email
+        );
+>>>>>>> upstream/2.2-develop
 
         return $this;
     }

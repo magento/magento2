@@ -27,9 +27,12 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
      */
     private $scopeConfig;
 
+<<<<<<< HEAD
     /**
      * @return void
      */
+=======
+>>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->_eavDecimalFactoryMock = $this->createPartialMock(
@@ -147,14 +150,22 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
      * @param array $ids
      * @param array $parentIds
      * @param array $childIds
+<<<<<<< HEAD
      * @return void
+=======
+     * @throws \Exception
+>>>>>>> upstream/2.2-develop
      * @dataProvider reindexEntitiesDataProvider
      */
     public function testReindexWithNotNullArgumentExecutesReindexEntities(
         array $ids,
         array $parentIds,
         array $childIds
+<<<<<<< HEAD
     ) : void {
+=======
+    ) {
+>>>>>>> upstream/2.2-develop
         $reindexIds = array_unique(array_merge($ids, $parentIds, $childIds));
 
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
@@ -211,6 +222,7 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->_model->reindex($ids);
     }
 
+<<<<<<< HEAD
     /**
      * @return void
      * @throws \Exception
@@ -220,18 +232,37 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(0);
         $this->_eavSourceFactoryMock->expects($this->never())->method('create');
         $this->_eavDecimalFactoryMock->expects($this->never())->method('create');
+=======
+    public function testReindexWithDisabledEavIndexer()
+    {
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(0);
+
+        $this->_eavSourceFactoryMock->expects($this->never())->method('create');
+        $this->_eavDecimalFactoryMock->expects($this->never())->method('create');
+
+>>>>>>> upstream/2.2-develop
         $this->_model->reindex();
     }
 
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function reindexEntitiesDataProvider() : array
+=======
+    public function reindexEntitiesDataProvider()
+>>>>>>> upstream/2.2-develop
     {
         return [
             [[4], [], [1, 2, 3]],
             [[3], [4], []],
+<<<<<<< HEAD
             [[5], [], []],
+=======
+            [[5], [], []]
+>>>>>>> upstream/2.2-develop
         ];
     }
 }

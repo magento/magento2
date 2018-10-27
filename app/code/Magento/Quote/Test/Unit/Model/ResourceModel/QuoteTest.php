@@ -7,6 +7,7 @@
 namespace Magento\Quote\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\DB\Sequence\SequenceInterface;
+<<<<<<< HEAD
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
@@ -15,6 +16,14 @@ use Magento\SalesSequence\Model\Manager;
 /**
  * Unit test for \Magento\Quote\Model\ResourceModel\Quote.
  */
+=======
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Quote\Model\Quote;
+use Magento\SalesSequence\Model\Manager;
+
+>>>>>>> upstream/2.2-develop
 class QuoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -33,6 +42,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     private $sequenceMock;
 
     /**
+<<<<<<< HEAD
      * @var QuoteResource
      */
     private $model;
@@ -51,10 +61,46 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             [
                 'sequenceManager' => $this->sequenceManagerMock,
             ]
+=======
+     * @var \Magento\Quote\Model\ResourceModel\Quote
+     */
+    private $quote;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $context = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $snapshot = $this->getMockBuilder(Snapshot::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $relationComposite = $this->getMockBuilder(RelationComposite::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->sequenceManagerMock = $this->getMockBuilder(Manager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->sequenceMock = $this->getMockBuilder(SequenceInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quote = new \Magento\Quote\Model\ResourceModel\Quote(
+            $context,
+            $snapshot,
+            $relationComposite,
+            $this->sequenceManagerMock,
+            null
+>>>>>>> upstream/2.2-develop
         );
     }
 
     /**
+<<<<<<< HEAD
      * @param string $entityType
      * @param int $storeId
      * @param string $reservedOrderId
@@ -62,6 +108,14 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      * @dataProvider getReservedOrderIdDataProvider
      */
     public function testGetReservedOrderId(string $entityType, int $storeId, string $reservedOrderId): void
+=======
+     * @param $entityType
+     * @param $storeId
+     * @param $reservedOrderId
+     * @dataProvider getReservedOrderIdDataProvider
+     */
+    public function testGetReservedOrderId($entityType, $storeId, $reservedOrderId)
+>>>>>>> upstream/2.2-develop
     {
         $this->sequenceManagerMock->expects($this->once())
             ->method('getSequence')
@@ -74,7 +128,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->method('getNextValue')
             ->willReturn($reservedOrderId);
 
+<<<<<<< HEAD
         $this->assertEquals($reservedOrderId, $this->model->getReservedOrderId($this->quoteMock));
+=======
+        $this->assertEquals($reservedOrderId, $this->quote->getReservedOrderId($this->quoteMock));
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -85,7 +143,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         return [
             [\Magento\Sales\Model\Order::ENTITY, 1, '1000000001'],
             [\Magento\Sales\Model\Order::ENTITY, 2, '2000000001'],
+<<<<<<< HEAD
             [\Magento\Sales\Model\Order::ENTITY, 3, '3000000001'],
+=======
+            [\Magento\Sales\Model\Order::ENTITY, 3, '3000000001']
+>>>>>>> upstream/2.2-develop
         ];
     }
 }

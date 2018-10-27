@@ -380,7 +380,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
+<<<<<<< HEAD
         $this->assertEquals(true, $this->model->isSafeMethod());
+=======
+        $this->assertEquals(true, $this->_model->isSafeMethod());
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -392,7 +396,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
+<<<<<<< HEAD
         $this->assertEquals(false, $this->model->isSafeMethod());
+=======
+        $this->assertEquals(false, $this->_model->isSafeMethod());
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -468,6 +476,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->model->getOriginalPathInfo());
     }
 
+<<<<<<< HEAD
     public function testSetPathInfo()
     {
         $requestUri = 'http://svr.com//module/route/mypage/myproduct?param1=1';
@@ -481,6 +490,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->model->getOriginalPathInfo());
     }
 
+=======
+>>>>>>> upstream/2.2-develop
     /**
      * @return array
      */

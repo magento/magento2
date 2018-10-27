@@ -14,6 +14,10 @@ use Magento\Framework\Api\ObjectFactory;
  * Builder for FilterGroup Data.
  *
  * @api
+<<<<<<< HEAD
+=======
+ * @since 100.0.2
+>>>>>>> upstream/2.2-develop
  */
 class FilterGroupBuilder extends AbstractSimpleObjectBuilder
 {

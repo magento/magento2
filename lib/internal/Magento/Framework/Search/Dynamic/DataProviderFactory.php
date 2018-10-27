@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Search\Dynamic;
 
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Config\ScopeConfigInterface;
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 

@@ -3,24 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type\Multishipping;
 
 use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderPool;
 
+<<<<<<< HEAD
 /**
  * Tests Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderPool.
  */
+=======
+>>>>>>> upstream/2.2-develop
 class PlaceOrderPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $paymentProviderCode
      * @param PlaceOrderInterface[] $placeOrderList
      * @param PlaceOrderInterface|null $expectedResult
+<<<<<<< HEAD
      * @return void
+=======
+>>>>>>> upstream/2.2-develop
      *
      * @dataProvider getDataProvider
      */

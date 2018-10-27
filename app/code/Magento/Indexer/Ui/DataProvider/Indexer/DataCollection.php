@@ -24,6 +24,11 @@ class DataCollection extends Collection
     private $indexerRegistry;
 
     /**
+<<<<<<< HEAD
+=======
+     * DataCollection constructor.
+     *
+>>>>>>> upstream/2.2-develop
      * @param EntityFactoryInterface $entityFactory
      * @param ConfigInterface $config
      * @param IndexerRegistry $indexerRegistry

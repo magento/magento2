@@ -11,7 +11,10 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\User\Model\UserValidationRules;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\QuestionHelper;
+<<<<<<< HEAD
 use Symfony\Component\Console\Input\InputOption;
+=======
+>>>>>>> upstream/2.2-develop
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -129,12 +132,16 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+<<<<<<< HEAD
     /**
      * @param int $mode
      * @param string $description
      * @dataProvider getOptionListDataProvider
      */
     public function testGetOptionsList($mode, $description)
+=======
+    public function testGetOptionsList()
+>>>>>>> upstream/2.2-develop
     {
         /* @var $argsList \Symfony\Component\Console\Input\InputArgument[] */
         $argsList = $this->command->getOptionsList($mode);

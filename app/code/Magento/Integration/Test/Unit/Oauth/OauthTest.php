@@ -156,6 +156,10 @@ class OauthTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $amendments
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return array
      */
     protected function _getRequestTokenParams($amendments = [])
@@ -863,6 +867,10 @@ class OauthTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $amendments
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return array
      */
     protected function _getAccessTokenRequiredParams($amendments = [])
@@ -884,6 +892,10 @@ class OauthTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $length
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return bool|string
      */
     private function _generateRandomString($length)

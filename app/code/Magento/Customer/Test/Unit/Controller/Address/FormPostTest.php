@@ -605,7 +605,11 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function dataProviderTestExecute(): array
+=======
+    public function dataProviderTestExecute()
+>>>>>>> upstream/2.2-develop
     {
         return [
             [1, 1, 1, null, '', null, '', null, ''],

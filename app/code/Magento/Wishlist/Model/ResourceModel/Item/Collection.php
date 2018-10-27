@@ -481,7 +481,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         if (isset($constraints['to'])) {
             $firstDay = new \DateTime();
+<<<<<<< HEAD
             $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . ((int)($constraints['to']) + 1) . ' day');
+=======
+            $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . ((int)$constraints['to'] + 1) . ' day');
+>>>>>>> upstream/2.2-develop
             $filter['from'] = $firstDay;
         }
 

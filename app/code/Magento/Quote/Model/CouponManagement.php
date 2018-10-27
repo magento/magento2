@@ -50,10 +50,14 @@ class CouponManagement implements CouponManagementInterface
      */
     public function set($cartId, $couponCode)
     {
+        $couponCode = trim($couponCode);
         /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->getItemsCount()) {
             throw new NoSuchEntityException(__('The "%1" Cart doesn\'t contain products.', $cartId));
+        }
+        if (!$quote->getStoreId()) {
+            throw new NoSuchEntityException(__('Cart isn\'t assigned to correct store'));
         }
         if (!$quote->getStoreId()) {
             throw new NoSuchEntityException(__('Cart isn\'t assigned to correct store'));

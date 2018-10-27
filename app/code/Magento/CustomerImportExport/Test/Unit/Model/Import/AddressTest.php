@@ -7,6 +7,7 @@
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\Customer\Model\ResourceModel\Address\Attribute as AddressAttribute;
+<<<<<<< HEAD
 use Magento\CustomerImportExport\Model\Import\Address;
 use Magento\ImportExport\Model\Import\AbstractEntity;
 use Magento\Framework\DB\Select;
@@ -15,6 +16,11 @@ use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
+=======
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
+use Magento\ImportExport\Model\Import\AbstractEntity;
+use Magento\CustomerImportExport\Model\Import\Address;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Tests Magento\CustomerImportExport\Model\Import\Address.
@@ -120,7 +126,12 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $errorAggregator;
 
     /**
+<<<<<<< HEAD
      * @var AddressAttribute\Source\CountryWithWebsites|\PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var AddressAttribute\Source\CountryWithWebsites
+     * |\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
      */
     private $countryWithWebsites;
 
@@ -261,10 +272,17 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(
                 function ($email, $websiteId) {
                     foreach ($this->_customers as $customerData) {
+<<<<<<< HEAD
                         if ($customerData['email'] === $email
                             && $customerData['website_id'] === $websiteId
                         ) {
                             return $customerData['entity_id'];
+=======
+                        if ($customerData['email'] == $email
+                            && $customerData['website_id'] == $websiteId
+                        ) {
+                            return $customerData['id'];
+>>>>>>> upstream/2.2-develop
                         }
                     }
 

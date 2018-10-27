@@ -9,7 +9,11 @@ namespace Magento\Backend\Block\Media;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
+<<<<<<< HEAD
 use Magento\Framework\Image\Adapter\UploadConfigInterface;
+=======
+use Magento\Framework\Image\Adapter\ConfigInterface;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Adminhtml media library uploader
@@ -39,7 +43,11 @@ class Uploader extends \Magento\Backend\Block\Widget
     private $jsonEncoder;
 
     /**
+<<<<<<< HEAD
      * @var UploadConfigInterface
+=======
+     * @var ConfigInterface
+>>>>>>> upstream/2.2-develop
      */
     private $imageConfig;
 
@@ -48,18 +56,30 @@ class Uploader extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\File\Size $fileSize
      * @param array $data
      * @param Json $jsonEncoder
+<<<<<<< HEAD
      * @param UploadConfigInterface $imageConfig
+=======
+     * @param ConfigInterface $imageConfig
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
         array $data = [],
         Json $jsonEncoder = null,
+<<<<<<< HEAD
         UploadConfigInterface $imageConfig = null
     ) {
         $this->_fileSizeService = $fileSize;
         $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
         $this->imageConfig = $imageConfig ?: ObjectManager::getInstance()->get(UploadConfigInterface::class);
+=======
+        ConfigInterface $imageConfig = null
+    ) {
+        $this->_fileSizeService = $fileSize;
+        $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
+        $this->imageConfig = $imageConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
+>>>>>>> upstream/2.2-develop
 
         parent::__construct($context, $data);
     }
@@ -105,7 +125,11 @@ class Uploader extends \Magento\Backend\Block\Widget
     }
 
     /**
+<<<<<<< HEAD
      * Get Image Upload Maximum Width Config.
+=======
+     * Get Image Upload Maximum Width Config
+>>>>>>> upstream/2.2-develop
      *
      * @return int
      */
@@ -115,7 +139,11 @@ class Uploader extends \Magento\Backend\Block\Widget
     }
 
     /**
+<<<<<<< HEAD
      * Get Image Upload Maximum Height Config.
+=======
+     * Get Image Upload Maximum Height Config
+>>>>>>> upstream/2.2-develop
      *
      * @return int
      */

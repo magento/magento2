@@ -269,6 +269,10 @@ class SubResourceModelAddress extends \Magento\Customer\Model\ResourceModel\Addr
 
     /**
      * @param null $object
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return \Magento\Customer\Model\ResourceModel\Address|\Magento\Eav\Model\Entity\AbstractEntity
      */
     public function loadAllAttributes($object = null)

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
 namespace Magento\Bundle\Block\Catalog\Product\View\Type;
@@ -10,6 +11,11 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 /**
  * Test for Magento\Bundle\Block\Catalog\Product\View\Type\Bundle
  *
+=======
+namespace Magento\Bundle\Block\Catalog\Product\View\Type;
+
+/**
+>>>>>>> upstream/2.2-develop
  * @magentoDataFixture Magento/Bundle/_files/product.php
  * @magentoDbIsolation disabled
  * @magentoAppArea frontend
@@ -73,6 +79,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(5, $selection['prices']['basePrice']['amount']);
         $this->assertEquals(5, $selection['prices']['finalPrice']['amount']);
     }
+<<<<<<< HEAD
 
     /**
      * Tear Down
@@ -81,4 +88,6 @@ class BundleTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager->get(\Magento\Framework\Registry::class)->unregister('product');
     }
+=======
+>>>>>>> upstream/2.2-develop
 }

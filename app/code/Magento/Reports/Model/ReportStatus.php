@@ -21,8 +21,11 @@ class ReportStatus
     private $scopeConfig;
 
     /**
+<<<<<<< HEAD
      * ReportStatus constructor.
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(ScopeConfigInterface $scopeConfig)
@@ -39,6 +42,7 @@ class ReportStatus
      */
     public function isReportEnabled(string $reportEventType): bool
     {
+<<<<<<< HEAD
         return $this->scopeConfig->isSetFlag('reports/options/enabled')
             && $this->scopeConfig->isSetFlag($this->getConfigPathByEventType($reportEventType));
     }
@@ -46,6 +50,13 @@ class ReportStatus
     /**
      * Get Config Path By Event Type
      *
+=======
+        return (bool)$this->scopeConfig->getValue('reports/options/enabled')
+            && (bool)$this->scopeConfig->getValue($this->getConfigPathByEventType($reportEventType));
+    }
+
+    /**
+>>>>>>> upstream/2.2-develop
      * @param string $reportEventType
      * @return string
      * @throws InputException

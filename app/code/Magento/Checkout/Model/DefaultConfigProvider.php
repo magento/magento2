@@ -27,7 +27,11 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+<<<<<<< HEAD
  * Default Config Provider
+=======
+ * Default Config Provider.
+>>>>>>> upstream/2.2-develop
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -268,10 +272,14 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return configuration array
      *
      * @return array|mixed
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+=======
+     * @inheritdoc
+>>>>>>> upstream/2.2-develop
      */
     public function getConfig()
     {
@@ -284,7 +292,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['selectedShippingMethod'] = $this->getSelectedShippingMethod();
         $output['storeCode'] = $this->getStoreCode();
         $output['isGuestCheckoutAllowed'] = $this->isGuestCheckoutAllowed();
-        $output['isCustomerLoginRequired'] = $this->isCustomerLoginRequired();
         $output['registerUrl'] = $this->getRegisterUrl();
         $output['checkoutUrl'] = $this->getCheckoutUrl();
         $output['defaultSuccessPageUrl'] = $this->getDefaultSuccessPageUrl();
@@ -323,7 +330,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Is autocomplete enabled for storefront
+     * Is autocomplete enabled for storefront.
      *
      * @return string
      * @codeCoverageIgnore
@@ -337,7 +344,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve customer data
+     * Retrieve customer data.
      *
      * @return array
      */
@@ -378,7 +385,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Set additional customer address data
+=======
+     * Set additional customer address data.
+>>>>>>> upstream/2.2-develop
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
@@ -393,7 +404,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve quote data
+     * Retrieve quote data.
      *
      * @return array
      */
@@ -418,7 +429,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve quote item data
+     * Retrieve quote item data.
      *
      * @return array
      */
@@ -441,7 +452,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve formatted item options view
+     * Retrieve formatted item options view.
      *
      * @param \Magento\Quote\Api\Data\CartItemInterface $item
      * @return array
@@ -465,7 +476,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve customer registration URL
+     * Retrieve customer registration URL.
      *
      * @return string
      * @codeCoverageIgnore
@@ -476,7 +487,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve checkout URL
+     * Retrieve checkout URL.
      *
      * @return string
      * @codeCoverageIgnore
@@ -487,7 +498,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve checkout URL
+     * Retrieve checkout URL.
      *
      * @return string
      * @codeCoverageIgnore
@@ -498,7 +509,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve default success page URL
+     * Retrieve default success page URL.
      *
      * @return string
      * @codeCoverageIgnore
@@ -509,7 +520,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve selected shipping method
+     * Retrieve selected shipping method.
      *
      * @return array|null
      */
@@ -529,7 +540,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve store code
+     * Retrieve store code.
      *
      * @return string
      * @codeCoverageIgnore
@@ -540,7 +551,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Check if guest checkout is allowed
+     * Check if guest checkout is allowed.
      *
      * @return bool
      * @codeCoverageIgnore
@@ -551,7 +562,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Check if customer is logged in
+     * Check if customer is logged in.
      *
      * @return bool
      * @codeCoverageIgnore
@@ -562,18 +573,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Check if customer must be logged in to proceed with checkout
-     *
-     * @return bool
-     * @codeCoverageIgnore
-     */
-    private function isCustomerLoginRequired()
-    {
-        return $this->checkoutHelper->isCustomerMustBeLogged();
-    }
-
-    /**
-     * Return forgot password URL
+     * Return forgot password URL.
      *
      * @return string
      * @codeCoverageIgnore
@@ -595,7 +595,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return quote totals data
+=======
+     * Return quote totals data.
+>>>>>>> upstream/2.2-develop
      *
      * @return array
      */
@@ -627,7 +631,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Returns active carriers codes
+=======
+     * Returns active carriers codes.
+>>>>>>> upstream/2.2-develop
      *
      * @return array
      */
@@ -641,7 +649,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Returns origin country code
+=======
+     * Returns origin country code.
+>>>>>>> upstream/2.2-develop
      *
      * @return string
      */
@@ -655,10 +667,16 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Returns array of payment methods
      *
      * @return array $paymentMethods
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+=======
+     * Returns array of payment methods.
+     *
+     * @return array
+>>>>>>> upstream/2.2-develop
      */
     private function getPaymentMethods()
     {
@@ -676,12 +694,19 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Set Labels to custom Attributes
      *
      * @param array $customAttributes
      * @return array $customAttributes
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
+=======
+     * Set Labels to custom Attributes.
+     *
+     * @param array $customAttributes
+     * @return array
+>>>>>>> upstream/2.2-develop
      */
     private function setLabelsToAttributes(array $customAttributes) : array
     {
@@ -698,6 +723,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get Labels by CustomAttribute and CustomAttributeCode
      *
      * @param array $customAttribute
@@ -705,6 +731,13 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @return array $attributeOptionLabels
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
+=======
+     * Get Labels by CustomAttribute and CustomAttributeCode.
+     *
+     * @param array $customAttribute
+     * @param string $customAttributeCode
+     * @return array
+>>>>>>> upstream/2.2-develop
      */
     private function getAttributeLabels(array $customAttribute, string $customAttributeCode) : array
     {

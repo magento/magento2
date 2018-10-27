@@ -58,8 +58,13 @@ class CollectionProvider
         }
 
         usort($sorterItems, function ($itemA, $itemB) {
+<<<<<<< HEAD
             $posA = (int)$itemA['position'];
             $posB = (int)$itemB['position'];
+=======
+            $posA = intval($itemA['position']);
+            $posB = intval($itemB['position']);
+>>>>>>> upstream/2.2-develop
 
             return $posA <=> $posB;
         });

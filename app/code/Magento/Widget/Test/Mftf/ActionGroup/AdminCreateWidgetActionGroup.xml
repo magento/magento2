@@ -17,7 +17,11 @@
       <waitForLoadingMaskToDisappear stepKey="waitForWidgets" />
       <click selector="{{AdminMenuSection.widgets}}" stepKey="clickWidgets"/>
       <waitForPageLoad stepKey="waitForWidgetsLoad"/>
+<<<<<<< HEAD
       <click selector="{{AdminGridMainControls.add}}" stepKey="addNewWidget"/>
+=======
+      <click selector="{{AdminMainActionsSection.add}}" stepKey="addNewWidget"/>
+>>>>>>> upstream/2.2-develop
       <selectOption selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}" stepKey="setWidgetType"/>
       <selectOption selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}" stepKey="setWidgetDesignTheme"/>
       <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
@@ -35,7 +39,15 @@
       <waitForElement selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitRuleParameter"/>
       <click selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="clickRuleParameter"/>
       <click selector="{{AdminNewWidgetSection.openChooser}}" stepKey="clickChooser"/>
+<<<<<<< HEAD
       <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+=======
+      <waitForLoadingMaskToDisappear stepKey="waitForLoadChooser"/>
+      <click selector="{{AdminNewWidgetSection.sortById}}" stepKey="clickSortById"/>
+      <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear"/>
+      <click selector="{{AdminNewWidgetSection.sortByIdAscend}}" stepKey="clickSortByIdAscend"/>
+      <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+>>>>>>> upstream/2.2-develop
       <click selector="{{AdminNewWidgetSection.selectAll}}" stepKey="clickSelectAll"/>
       <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyRuleParameter"/>
       <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
@@ -55,7 +67,10 @@
       <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickDelete"/>
       <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
       <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+<<<<<<< HEAD
       <waitForPageLoad stepKey="waitForDeleteLoad"/>
+=======
+>>>>>>> upstream/2.2-develop
       <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been deleted" stepKey="seeSuccess"/>
     </actionGroup>
 </actionGroups>

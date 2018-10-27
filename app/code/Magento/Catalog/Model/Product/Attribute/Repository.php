@@ -118,6 +118,12 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setAttributeId($existingModel->getAttributeId());
             $attribute->setIsUserDefined($existingModel->getIsUserDefined());
             $attribute->setFrontendInput($existingModel->getFrontendInput());
+<<<<<<< HEAD
+=======
+            if ($attribute->getIsUserDefined()) {
+                $this->processAttributeData($attribute);
+            }
+>>>>>>> upstream/2.2-develop
 
             $this->updateDefaultFrontendLabel($attribute, $existingModel);
         } else {
@@ -135,15 +141,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $this->validateCode($attribute->getAttributeCode());
             $this->validateFrontendInput($attribute->getFrontendInput());
 
-            $attribute->setBackendType(
-                $attribute->getBackendTypeByInput($attribute->getFrontendInput())
-            );
-            $attribute->setSourceModel(
-                $this->productHelper->getAttributeSourceModelByInputType($attribute->getFrontendInput())
-            );
-            $attribute->setBackendModel(
-                $this->productHelper->getAttributeBackendModelByInputType($attribute->getFrontendInput())
-            );
+            $this->processAttributeData($attribute);
             $attribute->setEntityTypeId(
                 $this->eavConfig
                     ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
@@ -256,6 +254,28 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Process attribute data based on attribute frontend input type.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @return void
+     */
+    private function processAttributeData(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
+    {
+        $attribute->setBackendType(
+            $attribute->getBackendTypeByInput($attribute->getFrontendInput())
+        );
+        $attribute->setSourceModel(
+            $this->productHelper->getAttributeSourceModelByInputType($attribute->getFrontendInput())
+        );
+        $attribute->setBackendModel(
+            $this->productHelper->getAttributeBackendModelByInputType($attribute->getFrontendInput())
+        );
+    }
+
+    /**
+>>>>>>> upstream/2.2-develop
      * This method sets default frontend value using given default frontend value or frontend value from admin store
      * if default frontend value is not presented.
      * If both default frontend label and admin store frontend label are not given it throws exception

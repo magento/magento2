@@ -13,6 +13,10 @@ use Magento\Framework\Phrase;
  * Data object for sort order.
  *
  * @api
+<<<<<<< HEAD
+=======
+ * @since 100.0.2
+>>>>>>> upstream/2.2-develop
  */
 class SortOrder extends AbstractSimpleObject
 {
@@ -147,7 +151,11 @@ class SortOrder extends AbstractSimpleObject
      * @return void
      * @throws InputException
      */
+<<<<<<< HEAD
     private function validateField(string $field): void
+=======
+    private function validateField(string $field)
+>>>>>>> upstream/2.2-develop
     {
         if (preg_match('/[^a-z0-9\_]/i', $field)) {
             throw new InputException(

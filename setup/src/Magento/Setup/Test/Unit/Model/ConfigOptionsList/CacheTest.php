@@ -139,7 +139,11 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         ];
         $this->validatorMock->expects($this->once())
             ->method('isValidConnection')
+<<<<<<< HEAD
             ->with(['host'=>'localhost', 'db'=>'', 'port'=>'', 'password'=>''])
+=======
+            ->with(['host'=>'localhost', 'db'=>'', 'port'=>'', 'password'=> ''])
+>>>>>>> upstream/2.2-develop
             ->willReturn(true);
 
         $errors = $this->configOptionsList->validate($options, $this->deploymentConfigMock);

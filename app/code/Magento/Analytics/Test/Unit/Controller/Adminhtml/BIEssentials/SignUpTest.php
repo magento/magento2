@@ -11,6 +11,12 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class SignupTest
+ */
+>>>>>>> upstream/2.2-develop
 class SignUpTest extends \PHPUnit\Framework\TestCase
 {
     /**

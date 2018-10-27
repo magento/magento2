@@ -21,7 +21,10 @@ use Magento\Store\Model\StoreSwitcherInterface;
 
 /**
  * Handles store switching url and makes redirect.
+<<<<<<< HEAD
  *
+=======
+>>>>>>> upstream/2.2-develop
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitchAction extends Action
@@ -77,7 +80,11 @@ class SwitchAction extends Action
         $this->storeRepository = $storeRepository;
         $this->storeManager = $storeManager;
         $this->messageManager = $context->getMessageManager();
+<<<<<<< HEAD
         $this->storeSwitcher = $storeSwitcher ?: ObjectManager::getInstance()->get(StoreSwitcherInterface::class);
+=======
+        $this->storeSwitcher = $storeSwitcher ?: ObjectManager::getInstance()->get(StoreSwitcher::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -89,6 +96,7 @@ class SwitchAction extends Action
     public function execute()
     {
         $targetStoreCode = $this->_request->getParam(
+<<<<<<< HEAD
             \Magento\Store\Model\StoreManagerInterface::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
@@ -97,6 +105,16 @@ class SwitchAction extends Action
         $requestedUrlToRedirect = $this->_redirect->getRedirectUrl();
         $redirectUrl = $requestedUrlToRedirect;
 
+=======
+            StoreResolver::PARAM_NAME,
+            $this->storeCookieManager->getStoreCodeFromCookie()
+        );
+        $fromStoreCode = $this->_request->getParam('___from_store');
+
+        $requestedUrlToRedirect = $this->_redirect->getRedirectUrl();
+        $redirectUrl = $requestedUrlToRedirect;
+
+>>>>>>> upstream/2.2-develop
         $error = null;
         try {
             $fromStore = $this->storeRepository->get($fromStoreCode);
@@ -104,7 +122,11 @@ class SwitchAction extends Action
         } catch (StoreIsInactiveException $e) {
             $error = __('Requested store is inactive');
         } catch (NoSuchEntityException $e) {
+<<<<<<< HEAD
             $error = __("The store that was requested wasn't found. Verify the store and try again.");
+=======
+            $error = __('Requested store is not found');
+>>>>>>> upstream/2.2-develop
         }
         if ($error !== null) {
             $this->messageManager->addErrorMessage($error);

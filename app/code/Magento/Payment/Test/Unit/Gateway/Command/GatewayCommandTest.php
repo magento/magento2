@@ -133,6 +133,7 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
             __('Failure #1'),
             __('Failure #2'),
         ];
+<<<<<<< HEAD
         $errorCodes = ['401'];
 
         $this->processRequest($commandSubject, false, $validationFailures, $errorCodes);
@@ -154,6 +155,26 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
                 [self::equalTo('Payment Error: Failure #2')]
             );
 
+=======
+
+        $this->processRequest($commandSubject, false, $validationFailures);
+
+        $this->errorMessageMapper->method('getMessage')
+            ->willReturnMap(
+                [
+                    ['Failure #1', 'Failure Mapped'],
+                    ['Failure #2', null]
+                ]
+            );
+
+        $this->logger->expects(self::exactly(count($validationFailures)))
+            ->method('critical')
+            ->withConsecutive(
+                [self::equalTo('Payment Error: Failure Mapped')],
+                [self::equalTo('Payment Error: Failure #2')]
+            );
+
+>>>>>>> upstream/2.2-develop
         $this->command->execute($commandSubject);
     }
 
@@ -163,6 +184,7 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
      * @param array $commandSubject
      * @param bool $validationResult
      * @param array $validationFailures
+<<<<<<< HEAD
      * @param array $errorCodes
      */
     private function processRequest(
@@ -171,6 +193,11 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
         array $validationFailures = [],
         array $errorCodes = []
     ) {
+=======
+     */
+    private function processRequest(array $commandSubject, bool $validationResult, array $validationFailures = [])
+    {
+>>>>>>> upstream/2.2-develop
         $request = [
             'request_field1' => 'request_value1',
             'request_field2' => 'request_value2'
@@ -201,7 +228,10 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturn($validationResult);
         $result->method('getFailsDescription')
             ->willReturn($validationFailures);
+<<<<<<< HEAD
         $result->method('getErrorCodes')
             ->willReturn($errorCodes);
+=======
+>>>>>>> upstream/2.2-develop
     }
 }

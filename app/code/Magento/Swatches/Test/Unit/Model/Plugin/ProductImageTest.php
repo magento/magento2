@@ -101,6 +101,7 @@ class ProductImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $expected
      */
+<<<<<<< HEAD
     protected function getFilterArray($expected)
     {
         $this->eavConfigMock
@@ -122,6 +123,8 @@ class ProductImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $expected
      */
+=======
+>>>>>>> upstream/2.2-develop
     protected function canReplaceImageWithSwatch($expected)
     {
         $this->swatchesHelperMock

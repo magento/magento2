@@ -7,7 +7,11 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <entity name="CustomerEntityOne" type="customer">
         <data key="group_id">0</data>
         <data key="default_billing">defaultBillingValue</data>
@@ -39,12 +43,16 @@
         <data key="email" unique="prefix">John.Doe@example.com</data>
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
+<<<<<<< HEAD
         <data key="fullname">John Doe</data>
+=======
+>>>>>>> upstream/2.2-develop
         <data key="password">pwdTest123!</data>
         <data key="store_id">0</data>
         <data key="website_id">0</data>
         <requiredEntity type="address">US_Address_TX</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="Simple_US_Customer_Multiple_Addresses" type="customer">
         <data key="group_id">0</data>
         <data key="default_billing">true</data>
@@ -74,6 +82,14 @@
     </entity>
     <entity name="Simple_US_Customer_CA" type="customer">
         <data key="group_id">0</data>
+=======
+    <entity name="Simple_US_Customer_For_Update" type="customer">
+        <var key="id" entityKey="id" entityType="customer"/>
+        <data key="firstname">Jane</data>
+    </entity>
+    <entity name="Simple_US_CA_Customer" type="customer">
+        <data key="group_id">1</data>
+>>>>>>> upstream/2.2-develop
         <data key="default_billing">true</data>
         <data key="default_shipping">true</data>
         <data key="email" unique="prefix">John.Doe@example.com</data>
@@ -85,11 +101,15 @@
         <data key="website_id">0</data>
         <requiredEntity type="address">US_Address_CA</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="Simple_US_Customer_For_Update" type="customer">
         <var key="id" entityKey="id" entityType="customer"/>
         <data key="firstname">Jane</data>
     </entity>
     <entity name="Simple_US_CA_Customer" type="customer">
+=======
+    <entity name="Simple_US_NY_Customer" type="customer">
+>>>>>>> upstream/2.2-develop
         <data key="group_id">1</data>
         <data key="default_billing">true</data>
         <data key="default_shipping">true</data>
@@ -100,6 +120,10 @@
         <data key="password">pwdTest123!</data>
         <data key="store_id">0</data>
         <data key="website_id">0</data>
+<<<<<<< HEAD
         <requiredEntity type="address">US_Address_CA</requiredEntity>
+=======
+        <requiredEntity type="address">US_Address_NY</requiredEntity>
+>>>>>>> upstream/2.2-develop
     </entity>
 </entities>

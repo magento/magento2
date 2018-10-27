@@ -108,10 +108,15 @@ class SourceTest extends \PHPUnit\Framework\TestCase
         $product2->setStatus(Status::STATUS_ENABLED);
         $productRepository->save($product2);
 
+<<<<<<< HEAD
         $statusSelect = clone $select;
         $statusSelect->reset(\Magento\Framework\DB\Select::COLUMNS)
             ->columns(new \Magento\Framework\DB\Sql\Expression('COUNT(*)'));
         $this->assertEquals(1, $connection->fetchOne($statusSelect));
+=======
+        $result = $connection->fetchAll($select);
+        $this->assertCount(1, $result);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -144,8 +149,8 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Model\Product $product2 **/
         $product2 = $productRepository->getById($product2Id);
-        $product1->setSpecialFromDate(date('Y-m-d H:i:s'));
-        $product1->setNewsFromDate(date('Y-m-d H:i:s'));
+        $product2->setSpecialFromDate(date('Y-m-d H:i:s'));
+        $product2->setNewsFromDate(date('Y-m-d H:i:s'));
         $productRepository->save($product2);
 
         $this->_eavIndexerProcessor->reindexAll();
@@ -155,6 +160,7 @@ class SourceTest extends \PHPUnit\Framework\TestCase
             ->where('attribute_id = ?', $attr->getId());
 
         $result = $connection->fetchAll($select);
-        $this->assertCount(3, $result);
+        //Product #1 has 1st option selected, #2 has other 3.
+        $this->assertCount(4, $result);
     }
 }

@@ -69,6 +69,7 @@ class TokenUserContext implements UserContextInterface
     /**
      * Initialize dependencies.
      *
+     * TokenUserContext constructor.
      * @param Request $request
      * @param TokenFactory $tokenFactory
      * @param IntegrationServiceInterface $integrationService
@@ -140,7 +141,10 @@ class TokenUserContext implements UserContextInterface
         if ($this->dateTime->strToTime($token->getCreatedAt()) < ($this->date->gmtTimestamp() - $tokenTtl * 3600)) {
             return true;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return false;
     }
 

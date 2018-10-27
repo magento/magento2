@@ -7,33 +7,37 @@
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
 use Magento\Quote\Model\QuoteValidator;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class QuoteValidatorTest
  */
 class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
 {
+    private static $storeId = 2;
+
     /**
      * @var \Magento\Quote\Model\QuoteValidator
      */
-    protected $quoteValidator;
+    private $quoteValidator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Quote\Model\Quote
+     * @var Quote|MockObject
      */
-    protected $quoteMock;
+    private $quote;
 
     /**
-     * @var AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
+     * @var AllowedCountries|MockObject
      */
     private $allowedCountryReader;
 
     /**
-     * @var OrderAmountValidationMessage|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderAmountValidationMessage|MockObject
      */
     private $orderAmountValidationMessage;
 
@@ -49,13 +53,13 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->quoteValidator = new \Magento\Quote\Model\QuoteValidator(
+        $this->quoteValidator = new QuoteValidator(
             $this->allowedCountryReader,
             $this->orderAmountValidationMessage
         );
 
-        $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
+        $this->quote = $this->createPartialMock(
+            Quote::class,
             [
                 'getShippingAddress',
                 'getBillingAddress',
@@ -66,13 +70,16 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
                 'isVirtual',
                 'validateMinimumAmount',
                 'getIsMultiShipping',
-                '__wakeup'
+                'getStoreId'
             ]
         );
+        $this->quote->method('getStoreId')
+            ->willReturn(self::$storeId);
     }
 
     public function testCheckQuoteAmountExistingError()
     {
+<<<<<<< HEAD
         $this->quoteMock->expects($this->once())
             ->method('getHasError')
             ->will($this->returnValue(true));
@@ -86,6 +93,20 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(
             $this->quoteValidator,
             $this->quoteValidator->validateQuoteAmount($this->quoteMock, QuoteValidator::MAXIMUM_AVAILABLE_NUMBER + 1)
+=======
+        $this->quote->method('getHasError')
+            ->willReturn(true);
+
+        $this->quote->expects(self::never())
+            ->method('setHasError');
+
+        $this->quote->expects(self::never())
+            ->method('addMessage');
+
+        self::assertSame(
+            $this->quoteValidator,
+            $this->quoteValidator->validateQuoteAmount($this->quote, QuoteValidator::MAXIMUM_AVAILABLE_NUMBER + 1)
+>>>>>>> upstream/2.2-develop
         );
     }
 }

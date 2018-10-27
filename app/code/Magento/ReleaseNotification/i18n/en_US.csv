@@ -1,6 +1,7 @@
 "Next >","Next >"
 "< Back","< Back"
 "Done","Done"
+<<<<<<< HEAD
 "Sorry, we had a problem loading our “What’s new” content.","Sorry, we had a problem loading our “What’s new” content."
 "<![CDATA[
     <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
@@ -13,3 +14,9 @@
     <a href=""http://devdocs.magento.com/magento-release-information.html""
     target=""_blank"">DevDocs' Release Information</a>.
     </p>]]>"
+=======
+"Flexible Payment Terms","Flexible Payment Terms"
+"Trusted Payment Options","Trusted Payment Options"
+"Sales and Use Tax Automation","Sales and Use Tax Automation"
+"What&#8217;s new with Magento 2.2.4","What&#8217;s new with Magento 2.2.4"
+>>>>>>> upstream/2.2-develop

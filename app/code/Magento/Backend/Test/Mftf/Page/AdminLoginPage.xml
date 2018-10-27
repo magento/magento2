@@ -6,8 +6,12 @@
   */
 -->
 
+<<<<<<< HEAD
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+=======
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+>>>>>>> upstream/2.2-develop
     <page name="AdminLoginPage" url="admin" area="admin" module="Magento_Backend">
         <section name="AdminLoginFormSection"/>
     </page>

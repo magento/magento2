@@ -57,7 +57,54 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         $stores = $this->storeManager->getStores();
 
         foreach ($stores as $store) {
+<<<<<<< HEAD
             $this->reindexStore($store, $entityIds, $useTempTable);
+=======
+            $tableName = $this->getTableNameByStore($store, $useTempTable);
+
+            if (!$this->connection->isTableExists($tableName)) {
+                continue;
+            }
+
+            /** @TODO Do something with chunks */
+            $categoriesIdsChunks = array_chunk($entityIds, 500);
+            foreach ($categoriesIdsChunks as $categoriesIdsChunk) {
+                $categoriesIdsChunk = $this->filterIdsByStore($categoriesIdsChunk, $store);
+
+                $attributesData = $this->getAttributeValues($categoriesIdsChunk, $store->getId());
+                $linkField = $this->categoryMetadata->getLinkField();
+                $data = [];
+                foreach ($categoriesIdsChunk as $categoryId) {
+                    try {
+                        $category = $this->categoryRepository->get($categoryId);
+                    } catch (NoSuchEntityException $e) {
+                        continue;
+                    }
+
+                    $categoryData = $category->getData();
+                    if (!isset($attributesData[$categoryData[$linkField]])) {
+                        continue;
+                    }
+
+                    $data[] = $this->prepareValuesToInsert(
+                        array_merge(
+                            $categoryData,
+                            $attributesData[$categoryData[$linkField]],
+                            ['store_id' => $store->getId()]
+                        )
+                    );
+                }
+
+                foreach ($data as $row) {
+                    $updateFields = [];
+                    foreach (array_keys($row) as $key) {
+                        $updateFields[$key] = $key;
+                    }
+                    $this->connection->insertOnDuplicate($tableName, $row, $updateFields);
+                }
+            }
+            $this->deleteNonStoreCategories($store, $useTempTable);
+>>>>>>> upstream/2.2-develop
         }
 
         return $this;

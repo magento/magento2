@@ -31,19 +31,33 @@ class ConfiguredRegularPrice extends AbstractPrice implements ConfiguredPriceInt
      * @param ItemInterface $item
      * @return $this
      */
+<<<<<<< HEAD
     public function setItem(ItemInterface $item): ConfiguredRegularPrice
     {
         $this->item = $item;
 
+=======
+    public function setItem(ItemInterface $item)
+    {
+        $this->item = $item;
+>>>>>>> upstream/2.2-develop
         return $this;
     }
 
     /**
+<<<<<<< HEAD
      * Calculate configured price.
      *
      * @return float
      */
     protected function calculatePrice(): float
+=======
+     * Calculate configured price
+     *
+     * @return float
+     */
+    protected function calculatePrice()
+>>>>>>> upstream/2.2-develop
     {
         $value = 0.;
         /** @var \Magento\GroupedProduct\Model\Product\Type\Grouped $typeInstance */
@@ -65,12 +79,19 @@ class ConfiguredRegularPrice extends AbstractPrice implements ConfiguredPriceInt
                 ->getValue();
             $value += $finalPrice * ($customOption->getValue() ?: 1);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return $value;
     }
 
     /**
+<<<<<<< HEAD
      * Price value of product with configured options.
+=======
+     * Price value of product with configured options
+>>>>>>> upstream/2.2-develop
      *
      * @return bool|float
      */
@@ -84,7 +105,10 @@ class ConfiguredRegularPrice extends AbstractPrice implements ConfiguredPriceInt
                 $priceInCurrentCurrency = $this->priceCurrency->convertAndRound($price);
                 $this->value = $priceInCurrentCurrency ? (float)$priceInCurrentCurrency : false;
             }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
             return $this->value;
         }
     }

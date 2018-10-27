@@ -1127,7 +1127,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Get SQL for get record count
      *
+<<<<<<< HEAD
      * @param Select $select
+=======
+     * @param \Magento\Framework\DB\Select $select
+>>>>>>> upstream/2.2-develop
      * @param bool $resetLeftJoins
      * @return Select
      */
@@ -1670,7 +1674,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function addFilterByRequiredOptions()
     {
-        $this->addAttributeToFilter('required_options', [['neq' => 1], ['null' => true]], 'left');
+        $this->addAttributeToFilter('required_options', [['neq' => 1]], 'left');
         return $this;
     }
 

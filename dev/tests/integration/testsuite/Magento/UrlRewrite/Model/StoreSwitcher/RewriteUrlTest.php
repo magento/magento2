@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -52,7 +55,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      * @throws StoreSwitcher\CannotSwitchStoreException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+<<<<<<< HEAD
     public function testSwitchToNonExistingPage(): void
+=======
+    public function testSwitchToNonExistingPage()
+>>>>>>> upstream/2.2-develop
     {
         $fromStoreCode = 'default';
         /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
@@ -80,7 +87,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      * @throws StoreSwitcher\CannotSwitchStoreException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+<<<<<<< HEAD
     public function testSwitchToExistingPage(): void
+=======
+    public function testSwitchToExistingPage()
+>>>>>>> upstream/2.2-develop
     {
         $fromStoreCode = 'default';
         /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
@@ -103,7 +114,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      * @param StoreInterface $targetStore
      * @return void
      */
+<<<<<<< HEAD
     private function setBaseUrl(StoreInterface $targetStore): void
+=======
+    private function setBaseUrl(StoreInterface $targetStore)
+>>>>>>> upstream/2.2-develop
     {
         $configValue = $this->objectManager->create(Value::class);
         $configValue->load('web/unsecure/base_url', 'path');

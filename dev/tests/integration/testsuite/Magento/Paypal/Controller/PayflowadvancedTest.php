@@ -53,6 +53,7 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
         $searchCriteriaBuilder = $this->_objectManager->get(SearchCriteriaBuilder::class);
         $searchCriteria = $searchCriteriaBuilder->addFilters($filters)
             ->create();
+<<<<<<< HEAD
 
         $this->orderRepository = $this->_objectManager->get(OrderRepositoryInterface::class);
         $orders = $this->orderRepository->getList($searchCriteria)
@@ -72,6 +73,27 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
         $this->order->setQuoteId($quote->getId());
         $this->orderRepository->save($this->order);
 
+=======
+
+        $this->orderRepository = $this->_objectManager->get(OrderRepositoryInterface::class);
+        $orders = $this->orderRepository->getList($searchCriteria)
+            ->getItems();
+
+        /** @var OrderInterface $order */
+        $this->order = array_pop($orders);
+        $this->order->getPayment()->setMethod(Config::METHOD_PAYFLOWLINK);
+
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->_objectManager->create(Quote::class)
+            ->setStoreid($this->order->getStoreid());
+
+        $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
+        $this->quoteRepository->save($quote);
+
+        $this->order->setQuoteId($quote->getId());
+        $this->orderRepository->save($this->order);
+
+>>>>>>> upstream/2.2-develop
         $session = $this->_objectManager->get(Session::class);
         $session->setLastRealOrderId($this->order->getRealOrderId())->setLastQuoteId($this->order->getQuoteId());
     }

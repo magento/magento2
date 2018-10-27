@@ -175,7 +175,40 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Bundle\Api\Data\OptionInterface $option
     ) {
+<<<<<<< HEAD
         $savedOption = $this->optionSave->save($product, $option);
+=======
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+
+        $option->setStoreId($product->getStoreId());
+        $parentId = $product->getData($metadata->getLinkField());
+        $option->setParentId($parentId);
+
+        $optionId = $option->getOptionId();
+        $linksToAdd = [];
+        $optionCollection = $this->type->getOptionsCollection($product);
+        $optionCollection->setIdFilter($option->getOptionId());
+        $optionCollection->setProductLinkFilter($parentId);
+
+        /** @var \Magento\Bundle\Model\Option $existingOption */
+        $existingOption = $optionCollection->getFirstItem();
+        if (!$optionId) {
+            $option->setOptionId(null);
+        }
+        if (!$optionId || $existingOption->getParentId() != $parentId) {
+            $option->setDefaultTitle($option->getTitle());
+            if (is_array($option->getProductLinks())) {
+                $linksToAdd = $option->getProductLinks();
+            }
+        } else {
+            if (!$existingOption->getOptionId()) {
+                throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
+            }
+
+            $option->setData(array_merge($existingOption->getData(), $option->getData()));
+            $this->updateOptionSelection($product, $option);
+        }
+>>>>>>> upstream/2.2-develop
 
         $productToSave = $this->productRepository->get($product->getSku());
         $this->productRepository->save($productToSave);
@@ -231,6 +264,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getProduct($sku)
     {

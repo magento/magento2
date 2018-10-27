@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
 namespace Magento\Config\Block\System\Config;
 
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;

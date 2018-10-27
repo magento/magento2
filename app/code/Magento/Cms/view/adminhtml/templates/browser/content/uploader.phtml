@@ -8,6 +8,7 @@
 
 /** @var $block \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content\Uploader */
 
+<<<<<<< HEAD
 $filters = $block->getConfig()->getFilters() ?? [];
 $allowedExtensions = [];
 
@@ -17,6 +18,15 @@ foreach ($filters as $media_type) {
     }, $media_type['files']));
 }
 
+=======
+$resizeConfig = $block->getImageUploadConfigData()->getIsResizeEnabled()
+    ? "{action: 'resize', maxWidth: "
+        . $block->getImageUploadMaxWidth()
+        . ", maxHeight: "
+        . $block->getImageUploadMaxHeight()
+        . "}"
+    : "{action: 'resize'}";
+>>>>>>> upstream/2.2-develop
 ?>
 
 <div id="<?= $block->getHtmlId() ?>" class="uploader">
@@ -145,11 +155,17 @@ require([
             action: 'load',
             fileTypes: /^image\/(gif|jpeg|png)$/,
             maxFileSize: <?= (int) $block->getFileSizeService()->getMaxFileSize() ?> * 10
+<<<<<<< HEAD
         }, {
             action: 'resize',
             maxWidth: <?= /* @escapeNotVerified */ $block->getImageUploadMaxWidth()  ?> ,
             maxHeight: <?= /* @escapeNotVerified */ $block->getImageUploadMaxHeight()  ?>
         }, {
+=======
+        },
+        <?= $block->escapeHtml($resizeConfig) ?>,
+        {
+>>>>>>> upstream/2.2-develop
             action: 'save'
         }]
     });

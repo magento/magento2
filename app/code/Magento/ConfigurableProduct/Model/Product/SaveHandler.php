@@ -78,7 +78,11 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+<<<<<<< HEAD
      * Save only newly created attributes for configurable product.
+=======
+     * Save only newly created attributes for configurable product
+>>>>>>> upstream/2.2-develop
      *
      * @param ProductInterface $product
      * @param array $attributes
@@ -100,12 +104,15 @@ class SaveHandler implements ExtensionInterface
                 $ids[] = $this->optionRepository->save($product->getSku(), $attribute);
             }
         }
-
         return $ids;
     }
 
     /**
+<<<<<<< HEAD
      * Remove product attributes which no longer used.
+=======
+     * Remove product attributes which no longer used
+>>>>>>> upstream/2.2-develop
      *
      * @param ProductInterface $product
      * @return void
@@ -122,7 +129,27 @@ class SaveHandler implements ExtensionInterface
             ) {
                 $this->optionRepository->deleteById($product->getSku(), $option->getId());
             }
+<<<<<<< HEAD
+=======
         }
+    }
+
+    /**
+     * Check if existing option is changed
+     *
+     * @param OptionInterface $option
+     * @param Attribute $attribute
+     * @return bool
+     */
+    private function isOptionChanged(OptionInterface $option, Attribute $attribute)
+    {
+        if ($option->getLabel() == $attribute->getLabel()
+            && $option->getPosition() == $attribute->getPosition()
+        ) {
+            return false;
+>>>>>>> upstream/2.2-develop
+        }
+        return true;
     }
 
     /**

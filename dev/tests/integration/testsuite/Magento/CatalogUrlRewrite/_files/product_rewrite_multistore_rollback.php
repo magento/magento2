@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
 declare(strict_types=1);
 
@@ -28,6 +29,12 @@ try {
 }
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+=======
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+
+$objectManager = Bootstrap::getObjectManager();
+>>>>>>> upstream/2.2-develop
 
 require __DIR__ . '/../../Store/_files/store_rollback.php';
 require __DIR__ . '/../../Store/_files/second_store_rollback.php';

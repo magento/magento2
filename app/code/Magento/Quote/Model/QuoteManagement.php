@@ -233,6 +233,10 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         try {
             $quote->getShippingAddress()->setCollectShippingRates(true);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__("The quote can't be created."));

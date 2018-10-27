@@ -534,7 +534,11 @@ class Application
         );
 
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
+<<<<<<< HEAD
         if (!$db->isDbDumpExists() && $this->dumpDb) {
+=======
+        if (!$db->isDbDumpExists() || $cleanup) {
+>>>>>>> upstream/2.2-develop
             $this->getDbInstance()->storeDbDump();
         }
     }
@@ -682,7 +686,10 @@ class Application
             \Magento\Framework\App\Area::AREA_WEBAPI_REST,
             \Magento\Framework\App\Area::AREA_WEBAPI_SOAP,
             \Magento\Framework\App\Area::AREA_CRONTAB,
+<<<<<<< HEAD
             \Magento\Framework\App\Area::AREA_GRAPHQL
+=======
+>>>>>>> upstream/2.2-develop
         ];
         if (in_array($areaCode, $areasForPartialLoading, true)) {
             $app->getArea($areaCode)->load(\Magento\Framework\App\Area::PART_CONFIG);

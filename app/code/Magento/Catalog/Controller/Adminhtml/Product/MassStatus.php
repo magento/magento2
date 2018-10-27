@@ -94,7 +94,11 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implement
         try {
             $this->_validateMassStatus($productIds, $status);
             $this->_objectManager->get(\Magento\Catalog\Model\Product\Action::class)
+<<<<<<< HEAD
                 ->updateAttributes($productIds, ['status' => $status], (int) $storeId);
+=======
+                ->updateAttributes($productIds, ['status' => $status], $storeId);
+>>>>>>> upstream/2.2-develop
             $this->messageManager->addSuccessMessage(
                 __('A total of %1 record(s) have been updated.', count($productIds))
             );

@@ -39,12 +39,18 @@ class Index extends Action implements HttpGetActionInterface
      */
     public function execute()
     {
+<<<<<<< HEAD
         $version = $this->productMetadata->getVersion();
         $versionParts = explode('.', $version);
         if ((!isset($versionParts[0]) || !isset($versionParts[1]))
             || $this->isGitBasedInstallation($version)
         ) {
             return;
+=======
+        $versionParts = explode('.', $this->productMetadata->getVersion());
+        if (!isset($versionParts[0]) || !isset($versionParts[1])) {
+            return; // Major and minor version are not set - return empty response
+>>>>>>> upstream/2.2-develop
         }
         $majorMinorVersion = $versionParts[0] . '.' . $versionParts[1];
         $this->getResponse()->setBody(

@@ -6,6 +6,11 @@ tests/_output/*
 tests/functional.suite.yml
 tests/functional/Magento/FunctionalTest/_generated
 vendor/*
+<<<<<<< HEAD
 mftf.log
 /.credentials.example
 /utils/
+=======
+mftf.logm
+/utils/
+>>>>>>> upstream/2.2-develop

@@ -99,6 +99,17 @@ class Method extends Block
     }
 
     /**
+     * @deprecated
+     * @see isShippingMethodAvailable
+     * @param array $method
+     * @return bool
+     */
+    public function isShippingMethodAvaiable(array $method)
+    {
+        return $this->isShippingMethodAvailable($method);
+    }
+
+    /**
      * Click continue button.
      *
      * @return void

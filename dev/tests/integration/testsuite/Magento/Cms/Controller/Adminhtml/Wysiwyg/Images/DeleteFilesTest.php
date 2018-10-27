@@ -31,11 +31,14 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @var string
      */
+<<<<<<< HEAD
     private $fullDirectoryPath;
 
     /**
      * @var string
      */
+=======
+>>>>>>> upstream/2.2-develop
     private $fileName = 'magento_small_image.jpg';
 
     /**
@@ -54,16 +57,22 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+<<<<<<< HEAD
         $directoryName = 'directory1';
+=======
+>>>>>>> upstream/2.2-develop
         $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+<<<<<<< HEAD
         $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/' . $directoryName;
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
         $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
         copy($fixtureDir . '/' . $this->fileName, $filePath);
+=======
+>>>>>>> upstream/2.2-develop
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::class);
     }
 
@@ -75,6 +84,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
+<<<<<<< HEAD
         $this->model->getRequest()->setMethod('POST')
             ->setPostValue('files', [$this->imagesHelper->idEncode($this->fileName)]);
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
@@ -83,11 +93,28 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(
             $this->mediaDirectory->isExist(
                 $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . $this->fileName)
+=======
+        $directoryName = 'directory1';
+        $fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/' . $directoryName;
+        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($fullDirectoryPath));
+        $filePath =  $fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
+        $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
+        copy($fixtureDir . '/' . $this->fileName, $filePath);
+
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('files', [$this->imagesHelper->idEncode($this->fileName)]);
+        $this->model->getStorage()->getSession()->setCurrentPath($fullDirectoryPath);
+        $this->model->execute();
+        $this->assertFalse(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($fullDirectoryPath . '/' . $this->fileName)
+>>>>>>> upstream/2.2-develop
             )
         );
     }
 
     /**
+<<<<<<< HEAD
      * Execute method with traversal file path to check that there is no ability to remove file which is not
      * under media directory.
      *
@@ -105,6 +132,8 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * Execute method with correct directory path and file name to check that files under linked media directory
      * can be removed.
      *

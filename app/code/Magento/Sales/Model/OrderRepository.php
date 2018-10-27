@@ -6,7 +6,9 @@
 
 namespace Magento\Sales\Model;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
@@ -16,8 +18,11 @@ use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFact
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Model\ResourceModel\Metadata;
+<<<<<<< HEAD
 use Magento\Framework\App\ObjectManager;
 use Magento\Tax\Api\OrderTaxManagementInterface;
+=======
+>>>>>>> upstream/2.2-develop
 
 /**
  * Repository class
@@ -57,9 +62,15 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     protected $registry = [];
 
     /**
+<<<<<<< HEAD
      * @var OrderTaxManagementInterface
      */
     private $orderTaxManagement;
+=======
+     * @var JoinProcessorInterface
+     */
+    private $extensionAttributesJoinProcessor;
+>>>>>>> upstream/2.2-develop
 
     /**
      * Constructor
@@ -68,14 +79,22 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface|null $collectionProcessor
      * @param \Magento\Sales\Api\Data\OrderExtensionFactory|null $orderExtensionFactory
+<<<<<<< HEAD
      * @param OrderTaxManagementInterface|null $orderTaxManagement
+=======
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
         Metadata $metadata,
         SearchResultFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory = null,
+<<<<<<< HEAD
         OrderTaxManagementInterface $orderTaxManagement = null
+=======
+        JoinProcessorInterface $extensionAttributesJoinProcessor = null
+>>>>>>> upstream/2.2-develop
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
@@ -83,8 +102,13 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             ->get(\Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class);
         $this->orderExtensionFactory = $orderExtensionFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Sales\Api\Data\OrderExtensionFactory::class);
+<<<<<<< HEAD
         $this->orderTaxManagement = $orderTaxManagement ?: ObjectManager::getInstance()
             ->get(OrderTaxManagementInterface::class);
+=======
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor
+            ?: ObjectManager::getInstance()->get(JoinProcessorInterface::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -149,6 +173,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         /** @var \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
         $this->collectionProcessor->process($searchCriteria, $searchResult);
+        $this->extensionAttributesJoinProcessor->process($searchResult);
         $searchResult->setSearchCriteria($searchCriteria);
         foreach ($searchResult->getItems() as $order) {
             $this->setShippingAssignments($order);

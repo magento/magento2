@@ -5,12 +5,20 @@
  */
 namespace Magento\Backend\Model;
 
+<<<<<<< HEAD
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+=======
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Escaper;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Test class for \Magento\Backend\Model\UrlInterface.
@@ -39,9 +47,14 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+<<<<<<< HEAD
         $this->objectManager = Bootstrap::getObjectManager();
         $this->request = $this->objectManager->get(RequestInterface::class);
         $this->_model = $this->objectManager->create(UrlInterface::class);
+=======
+        $this->request = Bootstrap::getObjectManager()->get(RequestInterface::class);
+        $this->_model = Bootstrap::getObjectManager()->create(UrlInterface::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -51,8 +64,11 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @param array $requestParams
      * @param string $expectedResult
      * @param array|null $routeParams
+<<<<<<< HEAD
      * @return void
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @dataProvider getUrlDataProvider
      * @magentoAppIsolation enabled
      */
@@ -60,11 +76,18 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         string $routePath,
         array $requestParams,
         string $expectedResult,
+<<<<<<< HEAD
         $routeParams = null
     ): void {
         $this->request->setParams($requestParams);
         $url = $this->_model->getUrl($routePath, $routeParams);
 
+=======
+        array $routeParams = null
+    ) {
+        $this->request->setParams($requestParams);
+        $url = $this->_model->getUrl($routePath, $routeParams);
+>>>>>>> upstream/2.2-develop
         $this->assertContains($expectedResult, $url);
     }
 
@@ -73,7 +96,11 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
+<<<<<<< HEAD
     public function getUrlDataProvider(): array
+=======
+    public function getUrlDataProvider()
+>>>>>>> upstream/2.2-develop
     {
         /** @var $escaper Escaper */
         $escaper = Bootstrap::getObjectManager()->get(Escaper::class);
@@ -117,7 +144,11 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 'expectedResult' => '/param3/' . $escaper->encodeUrlParam('a3==') . '/',
                 'routeParams' => [
                     '_escape_params' => true,
+<<<<<<< HEAD
                     'param3' => 'a3==',
+=======
+                    'param3' => 'a3=='
+>>>>>>> upstream/2.2-develop
                 ],
             ],
             [
@@ -149,6 +180,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSecretKey(string $routeName, string $controller, string $action, string $expectedHash): void
     {
+<<<<<<< HEAD
         $this->request->setControllerName('default_controller')
             ->setActionName('default_action')
             ->setRouteName('default_router');
@@ -156,6 +188,23 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->_model->setRequest($this->request);
         $this->objectManager->get(SessionManagerInterface::class)->setData('_form_key', 'salt');
 
+=======
+        $this->request->setControllerName(
+            'default_controller'
+        )->setActionName(
+            'default_action'
+        )->setRouteName(
+            'default_router'
+        );
+
+        $this->_model->setRequest($this->request);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Session\SessionManagerInterface::class
+        )->setData(
+            '_form_key',
+            'salt'
+        );
+>>>>>>> upstream/2.2-develop
         $this->assertEquals($expectedHash, $this->_model->getSecretKey($routeName, $controller, $action));
     }
 
@@ -221,13 +270,26 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     public function testGetSecretKeyForwarded(): void
     {
         /** @var $encryptor EncryptorInterface */
+<<<<<<< HEAD
         $encryptor = $this->objectManager->get(EncryptorInterface::class);
+=======
+        $encryptor = Bootstrap::getObjectManager()->get(EncryptorInterface::class);
+>>>>>>> upstream/2.2-develop
 
         $this->request->setControllerName('controller')->setActionName('action');
         $this->request->initForward()->setControllerName(uniqid())->setActionName(uniqid());
         $this->_model->setRequest($this->request);
+<<<<<<< HEAD
         $this->objectManager->get(SessionManagerInterface::class)->setData('_form_key', 'salt');
 
+=======
+        Bootstrap::getObjectManager()->get(
+            SessionManagerInterface::class
+        )->setData(
+            '_form_key',
+            'salt'
+        );
+>>>>>>> upstream/2.2-develop
         $this->assertEquals($encryptor->getHash('controller' . 'action' . 'salt'), $this->_model->getSecretKey());
     }
 

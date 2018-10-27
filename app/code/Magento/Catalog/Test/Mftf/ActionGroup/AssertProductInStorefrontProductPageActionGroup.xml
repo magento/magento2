@@ -8,6 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<<<<<<< HEAD
     <actionGroup name="AssertProductInStorefrontProductPage">
         <arguments>
             <argument name="product"/>
@@ -31,6 +32,8 @@
         <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
     </actionGroup>
+=======
+>>>>>>> upstream/2.2-develop
     <actionGroup name="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey">
         <arguments>
             <argument name="product"/>

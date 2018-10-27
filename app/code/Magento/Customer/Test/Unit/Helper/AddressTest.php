@@ -328,9 +328,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->addressConfig->expects($this->once())
             ->method('getFormatByCode')
             ->with($code)
-            ->will($this->returnValue(
-                new \Magento\Framework\DataObject($result !== null ? ['renderer' => $result] : [])
-            ));
+            ->will(
+                $this->returnValue(
+                    new \Magento\Framework\DataObject($result !== null ? ['renderer' => $result] : [])
+                )
+            );
         $this->assertEquals($result, $this->helper->getFormatTypeRenderer($code));
     }
 
@@ -343,7 +345,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         return [
             ['valid_code', $renderer],
-            ['invalid_code', null]
+            ['invalid_code', null],
         ];
     }
 
@@ -364,9 +366,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->addressConfig->expects($this->once())
             ->method('getFormatByCode')
             ->with($code)
-            ->will($this->returnValue(
-                new \Magento\Framework\DataObject(!empty($result) ? ['renderer' => $renderer] : [])
-            ));
+            ->will(
+                $this->returnValue(
+                    new \Magento\Framework\DataObject(!empty($result) ? ['renderer' => $renderer] : [])
+                )
+            );
 
         $this->assertEquals($result, $this->helper->getFormat($code));
     }
@@ -378,7 +382,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['valid_code', ['key' => 'value']],
-            ['invalid_code', '']
+            ['invalid_code', ''],
         ];
     }
 
@@ -411,7 +415,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['fax', true],
-            ['invalid_code', false]
+            ['invalid_code', false],
         ];
     }
 

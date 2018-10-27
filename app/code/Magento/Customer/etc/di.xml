@@ -433,6 +433,7 @@
             <argument name="sessionManager" xsi:type="object">Magento\Framework\Session\SessionManagerInterface\Proxy</argument>
         </arguments>
     </type>
+<<<<<<< HEAD
     <type name="Magento\Customer\Model\Address\CompositeValidator">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -449,6 +450,8 @@
             <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Group</argument>
         </arguments>
     </type>
+=======
+>>>>>>> upstream/2.2-develop
     <preference
             for="Magento\Customer\Api\AccountDelegationInterface"
             type="Magento\Customer\Model\Delegation\AccountDelegation" />

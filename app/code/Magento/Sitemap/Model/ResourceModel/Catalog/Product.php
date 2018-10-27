@@ -91,6 +91,13 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Catalog\Helper\Image
      */
     private $catalogImageHelper;
+    
+    /**
+     * Scope Config
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @var UrlBuilder
@@ -120,7 +127,10 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Image $catalogImageHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $scopeConfig
+<<<<<<< HEAD
      * @param UrlBuilder $urlBuilder
+=======
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -136,8 +146,12 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connectionName = null,
         \Magento\Catalog\Model\Product $productModel = null,
         \Magento\Catalog\Helper\Image $catalogImageHelper = null,
+<<<<<<< HEAD
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
         UrlBuilder $urlBuilder = null
+=======
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null
+>>>>>>> upstream/2.2-develop
     ) {
         $this->_productResource = $productResource;
         $this->_storeManager = $storeManager;
@@ -154,7 +168,10 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->get(\Magento\Catalog\Helper\Image::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         parent::__construct($context, $connectionName);
     }
 
@@ -223,7 +240,10 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $storeId
      * @param string $attributeCode
      * @param string $column Add attribute value to given column
+<<<<<<< HEAD
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -253,13 +273,21 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 []
             );
             // Store scope attribute value
+<<<<<<< HEAD
             $columnValue = $this->getConnection()->getIfNullSql('t2_'  . $attributeCode . '.value', $columnValue);
+=======
+            $columnValue = $this->getConnection()->getIfNullSql('t2_' . $attributeCode . '.value', $columnValue);
+>>>>>>> upstream/2.2-develop
         }
 
         // Add attribute value to result set if needed
         if (isset($column)) {
             $this->_select->columns([
+<<<<<<< HEAD
                $column => $columnValue
+=======
+                $column => $columnValue
+>>>>>>> upstream/2.2-develop
             ]);
         }
     }
@@ -341,6 +369,10 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $imageIncludePolicy = $this->_sitemapData->getProductImageIncludePolicy($store->getId());
         if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_NONE != $imageIncludePolicy) {
             $this->_joinAttribute($store->getId(), 'name', 'name');
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
             if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_ALL == $imageIncludePolicy) {
                 $this->_joinAttribute($store->getId(), 'thumbnail', 'thumbnail');
             } elseif (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_BASE == $imageIncludePolicy) {
@@ -479,7 +511,11 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+<<<<<<< HEAD
      * Get product image URL from image filename
+=======
+     * Get product image URL from image filename and path
+>>>>>>> upstream/2.2-develop
      *
      * @param string $image
      * @return string
@@ -499,6 +535,22 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private function isCategoryProductURLsConfig($storeId)
     {
         return $this->scopeConfig->isSetFlag(
+            HelperProduct::XML_PATH_PRODUCT_URL_USE_CATEGORY,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Return Use Categories Path for Product URLs config value
+     *
+     * @param $storeId
+     *
+     * @return bool
+     */
+    private function isCategoryProductURLsConfig($storeId)
+    {
+        return (bool)$this->scopeConfig->getValue(
             HelperProduct::XML_PATH_PRODUCT_URL_USE_CATEGORY,
             ScopeInterface::SCOPE_STORE,
             $storeId

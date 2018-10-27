@@ -24,22 +24,20 @@ class InstallerFactory
     protected $serviceLocator;
 
     /**
-     * @var ResourceFactory
-     */
-    private $resourceFactory;
-
-    /**
      * Constructor
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @param ResourceFactory $resourceFactory
      */
+<<<<<<< HEAD
     public function __construct(
         ServiceLocatorInterface $serviceLocator,
         ResourceFactory $resourceFactory
     ) {
+=======
+    public function __construct(ServiceLocatorInterface $serviceLocator)
+    {
+>>>>>>> upstream/2.2-develop
         $this->serviceLocator = $serviceLocator;
-        $this->resourceFactory = $resourceFactory;
         // For Setup Wizard we are using our customized error handler
         $handler = new ErrorHandler();
         set_error_handler([$handler, 'handler']);
@@ -66,11 +64,6 @@ class InstallerFactory
             $this->serviceLocator->get(\Magento\Framework\App\MaintenanceMode::class),
             $this->serviceLocator->get(\Magento\Framework\Filesystem::class),
             $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class),
-            new \Magento\Framework\Model\ResourceModel\Db\Context(
-                $this->getResource(),
-                $this->serviceLocator->get(\Magento\Framework\Model\ResourceModel\Db\TransactionManager::class),
-                $this->serviceLocator->get(\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class)
-            ),
             $this->serviceLocator->get(\Magento\Setup\Model\ConfigModel::class),
             $this->serviceLocator->get(\Magento\Framework\App\State\CleanupFiles::class),
             $this->serviceLocator->get(\Magento\Setup\Validator\DbValidator::class),
@@ -80,16 +73,5 @@ class InstallerFactory
             new \Magento\Framework\Component\ComponentRegistrar(),
             $this->serviceLocator->get(\Magento\Setup\Model\PhpReadinessCheck::class)
         );
-    }
-
-    /**
-     * creates Resource Factory
-     *
-     * @return Resource
-     */
-    private function getResource()
-    {
-        $deploymentConfig = $this->serviceLocator->get(\Magento\Framework\App\DeploymentConfig::class);
-        return $this->resourceFactory->create($deploymentConfig);
     }
 }

@@ -167,7 +167,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         array $weeeTaxCalculationsByEntity,
         $websitePassed,
         string $expectedFptLabel
+<<<<<<< HEAD
     ): void {
+=======
+    ) {
+>>>>>>> upstream/2.2-develop
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $website = $this->createMock(\Magento\Store\Model\Website::class);
         $store = $this->createMock(\Magento\Store\Model\Store::class);

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Controller\Adminhtml\Design\Config;
 
 use Magento\Backend\App\Action;
@@ -78,6 +79,9 @@ class Save extends Action
         $data = $this->getRequestData();
 
         try {
+            if (!$this->getRequest()->isPost()) {
+                throw new LocalizedException(__('Wrong request.'));
+            }
             $designConfigData = $this->configFactory->create($scope, $scopeId, $data);
             $this->designConfigRepository->save($designConfigData);
             $this->messageManager->addSuccessMessage(__('You saved the configuration.'));
@@ -120,7 +124,7 @@ class Save extends Action
             $this->getRequest()->getFiles()->toArray()
         );
         $data = array_filter($data, function ($param) {
-            return isset($param['error']) && $param['error'] > 0 ? false : true;
+            return !(isset($param['error']) && $param['error'] > 0);
         });
 
         /**

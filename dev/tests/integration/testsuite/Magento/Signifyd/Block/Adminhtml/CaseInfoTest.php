@@ -8,6 +8,10 @@ namespace Magento\Signifyd\Block\Adminhtml;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template\Context;
+<<<<<<< HEAD
+=======
+use Magento\Framework\View\LayoutInterface;
+>>>>>>> upstream/2.2-develop
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -24,9 +28,15 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
     private $order;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $layoutFactory;
+=======
+     * @var LayoutInterface
+     */
+    private $layout;
+>>>>>>> upstream/2.2-develop
 
     /**
      * @inheritdoc
@@ -35,7 +45,11 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->order = $this->objectManager->create(Order::class);
+<<<<<<< HEAD
         $this->layoutFactory = $this->objectManager->get(\Magento\Framework\View\LayoutFactory::class);
+=======
+        $this->layout = $this->objectManager->get(LayoutInterface::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -95,12 +109,19 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
      */
     private function getBlock()
     {
+<<<<<<< HEAD
         $layout = $this->layoutFactory->create();
 
         $layout->addContainer('order_additional_info', 'Container');
 
         /** @var CaseInfo $block */
         $block = $layout->addBlock(CaseInfo::class, 'order_case_info', 'order_additional_info');
+=======
+        $this->layout->addContainer('order_additional_info', 'Container');
+
+        /** @var CaseInfo $block */
+        $block = $this->layout->addBlock(CaseInfo::class, 'order_case_info', 'order_additional_info');
+>>>>>>> upstream/2.2-develop
         $block->setAttribute('context', $this->getContext());
         $block->setTemplate('Magento_Signifyd::case_info.phtml');
 

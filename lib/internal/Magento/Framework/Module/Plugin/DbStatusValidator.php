@@ -100,10 +100,18 @@ class DbStatusValidator
     private function formatVersionTooHighErrors($errorsData)
     {
         $formattedErrors = [];
+<<<<<<< HEAD
         foreach ($errorsData as $error) {
             $formattedErrors[] = $error[DbVersionInfo::KEY_MODULE] . ' ' . $error[DbVersionInfo::KEY_TYPE]
                 . ': code version - ' . $error[DbVersionInfo::KEY_REQUIRED]
                 . ', database version - ' . $error[DbVersionInfo::KEY_CURRENT];
+=======
+
+        foreach ($errorsData as $error) {
+            $formattedErrors[] = $error[DbVersionInfo::KEY_MODULE] . ' db ' . $error[DbVersionInfo::KEY_TYPE]
+                . ' version: defined in codebase - ' . $error[DbVersionInfo::KEY_REQUIRED]
+                . ', currently installed - ' . $error[DbVersionInfo::KEY_CURRENT];
+>>>>>>> upstream/2.2-develop
         }
 
         return $formattedErrors;
@@ -121,7 +129,11 @@ class DbStatusValidator
             (array)$allDbVersionErrors,
             function ($carry, $item) {
                 if ($item[DbVersionInfo::KEY_CURRENT] === 'none'
+<<<<<<< HEAD
                     || version_compare($item[DbVersionInfo::KEY_CURRENT], $item[DbVersionInfo::KEY_REQUIRED], '<')
+=======
+                    || $item[DbVersionInfo::KEY_CURRENT] < $item[DbVersionInfo::KEY_REQUIRED]
+>>>>>>> upstream/2.2-develop
                 ) {
                     $carry['version_too_low'][] = $item;
                 } else {

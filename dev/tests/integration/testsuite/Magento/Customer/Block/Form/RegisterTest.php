@@ -154,7 +154,11 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      * @param Template $block
      * @return void
      */
+<<<<<<< HEAD
     private function setAttributeDataProvider(Template $block): void
+=======
+    private function setAttributeDataProvider(Template $block)
+>>>>>>> upstream/2.2-develop
     {
         $attributeData = Bootstrap::getObjectManager()->get(AddressAttributeData::class);
         $block->setAttributeData($attributeData);

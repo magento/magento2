@@ -9,6 +9,10 @@ namespace Magento\Store\App\Action\Plugin;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
+<<<<<<< HEAD
+=======
+use Magento\Framework\Phrase;
+>>>>>>> upstream/2.2-develop
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -104,8 +108,13 @@ class Context
     /**
      * Take action in case of invalid store requested.
      *
+<<<<<<< HEAD
      * @param \Throwable|null $previousException
      * @return void
+=======
+     * @param \Throwable|null  $previousException
+     *
+>>>>>>> upstream/2.2-develop
      * @throws NotFoundException
      */
     private function processInvalidStoreRequested(
@@ -126,6 +135,7 @@ class Context
      * Update context accordingly to the store found.
      *
      * @param StoreInterface $store
+<<<<<<< HEAD
      * @return void
      */
     private function updateContext(StoreInterface $store)
@@ -134,6 +144,17 @@ class Context
             StoreManagerInterface::CONTEXT_STORE,
             $store->getCode(),
             $this->storeManager->getDefaultStoreView()->getCode()
+=======
+     */
+    private function updateContext(StoreInterface $store)
+    {
+        /** @var StoreInterface $defaultStore */
+        $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
+        $this->httpContext->setValue(
+            StoreManagerInterface::CONTEXT_STORE,
+            $store->getCode(),
+            $defaultStore->getCode()
+>>>>>>> upstream/2.2-develop
         );
 
         /** @var StoreInterface $defaultStore */
@@ -147,7 +168,11 @@ class Context
     }
 
     /**
+<<<<<<< HEAD
      * Check if there is a need to find the current store.
+=======
+     * Check if there a need to find the current store.
+>>>>>>> upstream/2.2-develop
      *
      * @return bool
      */

@@ -12,6 +12,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NotFoundException;
 
 class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
 {
@@ -55,9 +56,15 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws NotFoundException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\StateException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $productDeleted = 0;
         /** @var \Magento\Catalog\Model\Product $product */

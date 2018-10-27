@@ -16,9 +16,12 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+<<<<<<< HEAD
 /**
  * Tests \Magento\Braintree\Controller\Adminhtml\Payment\GetClientToken
  */
+=======
+>>>>>>> upstream/2.2-develop
 class GetClientTokenTest extends AbstractBackendController
 {
     /**
@@ -116,6 +119,7 @@ class GetClientTokenTest extends AbstractBackendController
         );
     }
 
+<<<<<<< HEAD
     /**
      * Perform test.
      *
@@ -124,13 +128,19 @@ class GetClientTokenTest extends AbstractBackendController
      * @param string $privateKey
      * @return void
      */
+=======
+>>>>>>> upstream/2.2-develop
     private function perform($merchantId, $publicKey, $privateKey)
     {
         $args = [
             'merchantId' => $merchantId,
             'publicKey' => $publicKey,
             'privateKey' => $privateKey,
+<<<<<<< HEAD
             'environment' => 'sandbox',
+=======
+            'environment' => 'sandbox'
+>>>>>>> upstream/2.2-develop
         ];
 
         $adapter = $this->getMockBuilder(BraintreeAdapter::class)
@@ -152,6 +162,7 @@ class GetClientTokenTest extends AbstractBackendController
         $this->performAsserts($decoded['clientToken'], $merchantId, $publicKey, $privateKey);
     }
 
+<<<<<<< HEAD
     /**
      * Perform Asserts.
      *
@@ -161,6 +172,8 @@ class GetClientTokenTest extends AbstractBackendController
      * @param string $privateKey
      * @return void
      */
+=======
+>>>>>>> upstream/2.2-develop
     private function performAsserts($clientToken, $merchantId, $publicKey, $privateKey)
     {
         self::assertEquals('client_token', $clientToken);

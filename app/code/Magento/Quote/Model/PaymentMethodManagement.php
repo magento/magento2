@@ -67,9 +67,13 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
             $address = $quote->getShippingAddress();
             // check if shipping address is set
             if ($address->getCountryId() === null) {
+<<<<<<< HEAD
                 throw new InvalidTransitionException(
                     __('The shipping address is missing. Set the address and try again.')
                 );
+=======
+                throw new InvalidTransitionException(__('Shipping address is not set'));
+>>>>>>> upstream/2.2-develop
             }
             $address->setCollectShippingRates(true);
         }

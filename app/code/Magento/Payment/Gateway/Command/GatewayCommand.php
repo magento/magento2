@@ -7,7 +7,10 @@ namespace Magento\Payment\Gateway\Command;
 
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapperInterface;
+<<<<<<< HEAD
 use Magento\Payment\Gateway\Http\ClientException;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\ConverterException;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;
@@ -131,6 +134,7 @@ class GatewayCommand implements CommandInterface
     private function processErrors(ResultInterface $result)
     {
         $messages = [];
+<<<<<<< HEAD
         $errorsSource = array_merge($result->getErrorCodes(), $result->getFailsDescription());
         foreach ($errorsSource as $errorCodeOrMessage) {
             $errorCodeOrMessage = (string) $errorCodeOrMessage;
@@ -144,6 +148,20 @@ class GatewayCommand implements CommandInterface
                 }
             }
             $this->logger->critical('Payment Error: ' . $errorCodeOrMessage);
+=======
+        foreach ($result->getFailsDescription() as $failPhrase) {
+            $message = (string) $failPhrase;
+
+            // error messages mapper can be not configured if payment method doesn't have custom error messages.
+            if ($this->errorMessageMapper !== null) {
+                $mapped = (string) $this->errorMessageMapper->getMessage($message);
+                if (!empty($mapped)) {
+                    $messages[] = $mapped;
+                    $message = $mapped;
+                }
+            }
+            $this->logger->critical('Payment Error: ' . $message);
+>>>>>>> upstream/2.2-develop
         }
 
         throw new CommandException(

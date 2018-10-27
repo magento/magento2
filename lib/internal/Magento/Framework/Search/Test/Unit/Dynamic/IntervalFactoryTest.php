@@ -8,7 +8,11 @@ namespace Magento\Framework\Search\Test\Unit\Dynamic;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\Dynamic\IntervalInterface;
+<<<<<<< HEAD
 use Magento\Framework\Search\EngineResolverInterface;
+=======
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+>>>>>>> upstream/2.2-develop
 
 class IntervalFactoryTest extends \PHPUnit\Framework\TestCase
 {

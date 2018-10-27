@@ -178,7 +178,11 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
+<<<<<<< HEAD
      * Validates if credit memo is available for refund.
+=======
+     * Checks if credit memo is available for refund.
+>>>>>>> upstream/2.2-develop
      *
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
      * @return bool
@@ -202,7 +206,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'The most money available to refund is %1.',
-                    $creditmemo->getOrder()->formatBasePrice($baseAvailableRefund)
+                    $creditmemo->getOrder()->formatPriceTxt($baseAvailableRefund)
                 )
             );
         }
@@ -210,7 +214,11 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
+<<<<<<< HEAD
      * Gets the instance of RefundAdapterInterface
+=======
+     * Initializes RefundAdapterInterface dependency.
+>>>>>>> upstream/2.2-develop
      *
      * @return \Magento\Sales\Model\Order\RefundAdapterInterface
      * @deprecated 100.1.3
@@ -225,7 +233,11 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
+<<<<<<< HEAD
      * Gets instance of ResourceConnection.
+=======
+     * Initializes ResourceConnection dependency.
+>>>>>>> upstream/2.2-develop
      *
      * @return \Magento\Framework\App\ResourceConnection|mixed
      * @deprecated 100.1.3
@@ -240,7 +252,11 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
+<<<<<<< HEAD
      * Gets instance of OrderRepositoryInterface.
+=======
+     * Initializes OrderRepositoryInterface dependency.
+>>>>>>> upstream/2.2-develop
      *
      * @return \Magento\Sales\Api\OrderRepositoryInterface
      * @deprecated 100.1.3
@@ -255,7 +271,11 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
+<<<<<<< HEAD
      * Gets instance of InvoiceRepositoryInterface
+=======
+     * Initializes InvoiceRepositoryInterface dependency.
+>>>>>>> upstream/2.2-develop
      *
      * @return \Magento\Sales\Api\InvoiceRepositoryInterface
      * @deprecated 100.1.3

@@ -235,4 +235,26 @@ interface CurrencyInterface
      * @return boolean
      */
     public function isLess($value, $currency = null);
+<<<<<<< HEAD
+=======
+
+    /**
+     * Returns the set service class
+     *
+     * @return \Zend_Currency_CurrencyInterface
+     * @deprecated 101.0.1
+     * @see \Magento\Directory\Model\Currency\Import\ImportInterface
+     */
+    public function getService();
+
+    /**
+     * Sets a new exchange service
+     *
+     * @param string|\Zend_Currency_CurrencyInterface $service Service class
+     * @return \Zend_Currency_CurrencyInterface
+     * @deprecated 101.0.1
+     * @see \Magento\Directory\Model\Currency\Import\ImportInterface
+     */
+    public function setService($service);
+>>>>>>> upstream/2.2-develop
 }

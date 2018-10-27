@@ -549,6 +549,10 @@ define([
                         columnsHeaderClasses: cell.config.columnsHeaderClasses,
                         sortOrder: cell.config.sortOrder
                     });
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
                     labels.push(data);
                 }, this);
                 this.labels(_.sortBy(labels, 'sortOrder'));

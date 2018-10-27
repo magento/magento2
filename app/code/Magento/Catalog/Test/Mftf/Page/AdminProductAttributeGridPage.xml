@@ -6,8 +6,15 @@
   */
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminProductAttributeGridPage" url="catalog/product_attribute" area="admin" module="Catalog">
         <section name="AdminProductAttributeGridSection"/>
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+    <page name="AdminProductAttributeGridPage" url="catalog/product_attribute" area="admin" module="Catalog">
+        <section name="AdminProductAttributeGridSection"/>
+        <section name="AdminDataGridHeaderSection"/>
+>>>>>>> upstream/2.2-develop
     </page>
 </pages>

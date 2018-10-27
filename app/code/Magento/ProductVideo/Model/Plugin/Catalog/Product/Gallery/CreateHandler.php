@@ -262,10 +262,17 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+<<<<<<< HEAD
      * @param array $item
      * @return bool
      */
     private function isVideoItem(array $item): bool
+=======
+     * @param $item
+     * @return bool
+     */
+    private function isVideoItem($item): bool
+>>>>>>> upstream/2.2-develop
     {
         return !empty($item['media_type'])
             && empty($item['removed'])
@@ -273,10 +280,17 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+<<<<<<< HEAD
      * @param array $item
      * @return bool
      */
     private function isNewVideo(array $item): bool
+=======
+     * @param $item
+     * @return bool
+     */
+    private function isNewVideo($item): bool
+>>>>>>> upstream/2.2-develop
     {
         return !isset($item['video_url_default'], $item['video_title_default'])
             || empty($item['video_url_default'])

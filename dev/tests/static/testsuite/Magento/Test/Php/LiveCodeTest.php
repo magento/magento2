@@ -261,7 +261,13 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testCodeStyle()
     {
+<<<<<<< HEAD
         $isFullScan = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1';
+=======
+        $whiteList = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1'
+            ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']);
+
+>>>>>>> upstream/2.2-develop
         $reportFile = self::$reportDir . '/phpcs_report.txt';
         if (!file_exists($reportFile)) {
             touch($reportFile);
@@ -271,8 +277,13 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $report = file_get_contents($reportFile);
         $this->assertEquals(
             0,
+<<<<<<< HEAD
             $result,
             "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . $report
+=======
+            $result = $codeSniffer->run($whiteList),
+            "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . file_get_contents($reportFile)
+>>>>>>> upstream/2.2-develop
         );
     }
 

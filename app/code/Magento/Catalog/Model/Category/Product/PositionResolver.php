@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\Catalog\Model\Category\Product;
 
 /**
@@ -13,6 +16,20 @@ namespace Magento\Catalog\Model\Category\Product;
 class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+<<<<<<< HEAD
+=======
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param string $connectionName
+     */
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        $connectionName = null
+    ) {
+        parent::__construct($context, $connectionName);
+    }
+
+    /**
+>>>>>>> upstream/2.2-develop
      * Initialize resource model
      *
      * @return void
@@ -28,7 +45,11 @@ class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * @param int $categoryId
      * @return array
      */
+<<<<<<< HEAD
     public function getPositions(int $categoryId): array
+=======
+    public function getPositions(int $categoryId)
+>>>>>>> upstream/2.2-develop
     {
         $connection = $this->getConnection();
 

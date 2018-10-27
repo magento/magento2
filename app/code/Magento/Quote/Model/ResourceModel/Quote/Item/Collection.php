@@ -353,7 +353,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @return void
      */
+<<<<<<< HEAD
     private function removeItemsWithAbsentProducts(): void
+=======
+    private function removeItemsWithAbsentProducts()
+>>>>>>> upstream/2.2-develop
     {
         if (count($this->_productIds) === 0) {
             return;

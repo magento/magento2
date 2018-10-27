@@ -7,6 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateCustomerTest">
         <annotations>
@@ -14,11 +15,21 @@
             <stories value="Create a Customer via the Admin"/>
             <title value="Admin should be able to create a customer"/>
             <description value="Admin should be able to create a customer"/>
+=======
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCustomerTest">
+        <annotations>
+            <features value="Customer Creation"/>
+            <stories value="Create a Customer via the Admin"/>
+            <title value="You should be able to create a customer in the Admin back-end."/>
+            <description value="You should be able to create a customer in the Admin back-end."/>
+>>>>>>> upstream/2.2-develop
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-72095"/>
             <group value="customer"/>
             <group value="create"/>
         </annotations>
+<<<<<<< HEAD
         <after>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
@@ -32,6 +43,22 @@
         <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
+=======
+        <before>
+            <magentoCLI command="indexer:reindex customer_grid" stepKey="reindexCustomerGrid"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <amOnPage url="{{AdminNewCustomerPage.url}}" stepKey="navigateToCreateCustomer"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+        <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminNewCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminNewCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
+        <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminNewCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
+        <click selector="{{AdminNewCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
+>>>>>>> upstream/2.2-develop
         <waitForElementNotVisible selector="div [data-role='spinner']" time="10" stepKey="waitForSpinner1"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilter"/>

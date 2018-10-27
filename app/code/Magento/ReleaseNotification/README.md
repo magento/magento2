@@ -4,6 +4,7 @@ The **Release Notification Module** serves to provide a notification delivery pl
 
 ## Purpose and Content
 
+<<<<<<< HEAD
 * Provides a method of notifying administrators of changes, features, and functionality being introduced in a Magento release.
 * Displays a modal containing a high level overview of the features included in the installed or upgraded release of Magento upon the initial login of each administrator into the Admin Panel for a given Magento version.
 * The modal is enabled with pagination functionality to allow for easy navigation between each modal page.
@@ -51,3 +52,10 @@ A clickable link to internal or external content in any text field will be creat
 ### Link Format Example:
 
 The text: `http://devdocs.magento.com/ [Magento DevDocs].` will appear as [Magento DevDocs](http://devdocs.magento.com/).
+=======
+* Provides a method of notifying administrators of changes, features, and functionality being introduced in a Magento release
+* Displays a modal containing a high level overview of the features included in the installed or upgraded release of Magento upon the initial login of each administrator into the Admin Panel for a given Magento version
+* The modal is enabled with pagination functionality to allow for easy navigation between each modal page
+* Each modal page includes detailed information about a highlighted feature of the Magento release or other notification
+* Release Notification modal content is determined and provided by Magento Marketing
+>>>>>>> upstream/2.2-develop

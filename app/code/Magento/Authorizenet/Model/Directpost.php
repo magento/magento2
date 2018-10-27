@@ -171,7 +171,11 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         \Magento\Authorizenet\Helper\Data $dataHelper,
         \Magento\Authorizenet\Model\Directpost\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Directpost\Response\Factory $responseFactory,
+<<<<<<< HEAD
         \Magento\Authorizenet\Model\TransactionService $transactionService,
+=======
+        TransactionService $transactionService,
+>>>>>>> upstream/2.2-develop
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,

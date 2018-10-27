@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Glob;
 
 /**
  * Class File
+ *
  * @package Magento\Framework\Filesystem\Driver
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -409,7 +410,14 @@ class File implements DriverInterface
                 $this->deleteFile($entity->getPathname());
             }
         }
-        $result = @rmdir($this->getScheme() . $path);
+
+        $fullPath = $this->getScheme() . $path;
+        if (is_link($fullPath)) {
+            $result = @unlink($fullPath);
+        } else {
+            $result = @rmdir($fullPath);
+        }
+
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -532,7 +540,7 @@ class File implements DriverInterface
     public function filePutContents($path, $content, $mode = null)
     {
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode);
-        if (!$result) {
+        if ($result === false) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
                     'The specified "%1" file couldn\'t be written. %2',
@@ -843,6 +851,8 @@ class File implements DriverInterface
     }
 
     /**
+     * Returns an absolute path for the given one.
+     *
      * @param string $basePath
      * @param string $path
      * @param string|null $scheme
@@ -879,7 +889,8 @@ class File implements DriverInterface
     }
 
     /**
-     * Fixes path separator
+     * Fixes path separator.
+     *
      * Utility method.
      *
      * @param string $path

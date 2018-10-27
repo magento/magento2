@@ -128,7 +128,11 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $attribute = $this->getAttributeObject();
 
         if ($collection->isEnabledFlat()) {
+<<<<<<< HEAD
             if ($attribute->isEnabledInFlat()) {
+=======
+            if ($this->isEnabledInFlat($attribute)) {
+>>>>>>> upstream/2.2-develop
                 $alias = array_keys($collection->getSelect()->getPart('from'))[0];
                 $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.' . $attribute->getAttributeCode();
             } else {
@@ -265,5 +269,16 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function collectValidatedAttributes($productCollection)
     {
         return $this->addToCollection($productCollection);
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $attribute
+     * @return bool
+     */
+    private function isEnabledInFlat(\Magento\Framework\DataObject $attribute): bool
+    {
+        return $attribute->getData('backend_type') === 'static'
+            || (int) $attribute->getData('used_in_product_listing') === 1
+            || (int) $attribute->getData('used_for_sort_by') === 1;
     }
 }

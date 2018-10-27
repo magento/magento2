@@ -7,7 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <test name="StorefrontCustomerCheckoutTest">
         <annotations>
             <features value="Checkout"/>
@@ -32,6 +36,7 @@
             <deleteData createDataKey="simpleuscustomer" stepKey="deleteCustomer"/>
         </after>
 
+<<<<<<< HEAD
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
             <argument name="Customer" value="$$simpleuscustomer$$" />
         </actionGroup>
@@ -45,6 +50,24 @@
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
 
+=======
+        <amOnPage stepKey="s1"  url="customer/account/login/"/>
+        <fillField  stepKey="s3" userInput="$$simpleuscustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+        <fillField  stepKey="s5" userInput="$$simpleuscustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+        <click stepKey="s7" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+        <waitForPageLoad stepKey="s9"/>
+
+        <amOnPage stepKey="s11" url="/$$simplecategory.name$$.html" />
+        <moveMouseOver stepKey="s15" selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" />
+        <click stepKey="s17" selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" />
+        <waitForElementVisible stepKey="s21" selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" />
+        <see stepKey="s23" selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart."/>
+        <see stepKey="s25" selector="{{StorefrontMiniCartSection.quantity}}" userInput="1" />
+        <click stepKey="s27" selector="{{StorefrontMiniCartSection.show}}" />
+        <click stepKey="s31" selector="{{StorefrontMiniCartSection.goToCheckout}}" />
+        <waitForPageLoad stepKey="s33"/>
+        <waitForLoadingMaskToDisappear stepKey="s34"/>
+>>>>>>> upstream/2.2-develop
         <click stepKey="s35" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="s36" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
         <click stepKey="s37" selector="{{CheckoutShippingMethodsSection.next}}" />
@@ -60,6 +83,7 @@
 
         <amOnPage stepKey="s67" url="{{AdminOrdersPage.url}}"/>
         <waitForPageLoad stepKey="s75"/>
+<<<<<<< HEAD
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFiltersIfPresent"/>
         <fillField stepKey="s77" selector="{{AdminOrdersGridSection.search}}" userInput="{$s53}" />
         <waitForPageLoad stepKey="s78"/>
@@ -74,6 +98,20 @@
         <see stepKey="s93" selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
         <see stepKey="s95" selector="{{AdminOrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$" />
 
+=======
+        <fillField stepKey="s77" selector="{{OrdersGridSection.search}}" userInput="{$s53}" />
+        <waitForPageLoad stepKey="s78"/>
+
+        <click stepKey="s81" selector="{{OrdersGridSection.submitSearch22}}" />
+        <waitForPageLoad stepKey="s831"/>
+        <click stepKey="s84" selector="{{OrdersGridSection.firstRow}}" />
+        <see stepKey="s85" selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Pending" />
+        <see stepKey="s87" selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="Customer" />
+        <see stepKey="s89" selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$" />
+        <see stepKey="s91" selector="{{OrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
+        <see stepKey="s93" selector="{{OrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
+        <see stepKey="s95" selector="{{OrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$" />
+>>>>>>> upstream/2.2-develop
         <amOnPage stepKey="s96" url="{{AdminCustomerPage.url}}"/>
         <waitForPageLoad stepKey="s97"/>
         <click stepKey="s98" selector="{{AdminCustomerFiltersSection.filtersButton}}"/>
@@ -81,6 +119,7 @@
         <click stepKey="s100" selector="{{AdminCustomerFiltersSection.apply}}"/>
         <click stepKey="s101" selector="{{AdminCustomerGridSection.firstRowEditLink}}"/>
         <click stepKey="s102" selector="{{AdminEditCustomerInformationSection.orders}}"/>
+<<<<<<< HEAD
         <see stepKey="s103" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$simpleuscustomer.firstname$$ $$simpleuscustomer.lastname$$" />
     </test>
     <test name="StorefrontCustomerCheckoutTestWithMultipleAddressesAndTaxRates">
@@ -257,5 +296,9 @@
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
+=======
+        <see stepKey="s103" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="{$s53}" />
+        <see stepKey="s104" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$simpleuscustomer.firstname$$ $$simpleuscustomer.lastname$$" />
+>>>>>>> upstream/2.2-develop
     </test>
 </tests>

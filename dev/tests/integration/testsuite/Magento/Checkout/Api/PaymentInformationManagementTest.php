@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\Checkout\Api;
 
 use Braintree\Result\Error;
@@ -12,7 +15,10 @@ use Magento\Braintree\Gateway\Http\Client\TransactionSale;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\State;
+<<<<<<< HEAD
 use Magento\Framework\App\Area;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
@@ -21,11 +27,14 @@ use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+<<<<<<< HEAD
 /**
  * Class PaymentInformationManagementTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+=======
+>>>>>>> upstream/2.2-develop
 class PaymentInformationManagementTest extends TestCase
 {
     /**
@@ -70,6 +79,7 @@ class PaymentInformationManagementTest extends TestCase
      * @magentoConfigFixture current_store payment/braintree/active 1
      * @dataProvider getErrorPerAreaDataProvider
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+<<<<<<< HEAD
      * @param string $area
      * @param array $testErrorCodes
      * @param string $expectedOutput
@@ -80,6 +90,11 @@ class PaymentInformationManagementTest extends TestCase
         array $testErrorCodes,
         string $expectedOutput
     ) {
+=======
+     */
+    public function testSavePaymentInformationAndPlaceOrderWithErrors(string $area, string $errorMessage)
+    {
+>>>>>>> upstream/2.2-develop
         /** @var State $state */
         $state = $this->objectManager->get(State::class);
         $state->setAreaCode($area);
@@ -90,18 +105,44 @@ class PaymentInformationManagementTest extends TestCase
         $payment = $this->objectManager->create(PaymentInterface::class);
         $payment->setMethod(ConfigProvider::CODE);
 
+<<<<<<< HEAD
         $errors = ['errors' => []];
 
         foreach ($testErrorCodes as $testErrorCode) {
             array_push($errors['errors'], ['code' => $testErrorCode]);
         }
 
+=======
+        $errors = [
+            'errors' => [
+                [
+                    'code' => 'fake_code',
+                    'attribute' => 'base',
+                    'message' => 'Error message should not be mapped.'
+                ],
+                [
+                    'code' => 81802,
+                    'attribute' => 'base',
+                    'message' => 'Company is too long.'
+                ],
+                [
+                    'code' => 91511,
+                    'attribute' => 'base',
+                    'message' => 'Customer does not have any credit cards.'
+                ]
+            ]
+        ];
+>>>>>>> upstream/2.2-develop
         $response = new Error(['errors' => $errors]);
 
         $this->client->method('placeRequest')
             ->willReturn(['object' => $response]);
 
+<<<<<<< HEAD
         $this->expectExceptionMessage($expectedOutput);
+=======
+        $this->expectExceptionMessage($errorMessage);
+>>>>>>> upstream/2.2-develop
 
         /** @var PaymentInformationManagementInterface $paymentInformationManagement */
         $paymentInformationManagement = $this->objectManager->get(PaymentInformationManagementInterface::class);
@@ -118,6 +159,7 @@ class PaymentInformationManagementTest extends TestCase
      */
     public function getErrorPerAreaDataProvider()
     {
+<<<<<<< HEAD
         $testErrorGlobal = ['code' => 81802, 'message' => 'Company is too long.'];
         $testErrorAdmin = ['code' => 91511, 'message' => 'Customer does not have any credit cards.'];
         $testErrorFake = ['code' => 'fake_code', 'message' => 'Error message should not be mapped.'];
@@ -136,6 +178,12 @@ class PaymentInformationManagementTest extends TestCase
                 [$testErrorGlobal['code'], $testErrorAdmin['code'], $testErrorFake['code']],
                 $testErrorGlobal['message'] . PHP_EOL . $testErrorAdmin['message']
             ],
+=======
+        $globalAreaError = 'Company is too long.';
+        return [
+            ['area' => 'frontend', 'error' => $globalAreaError],
+            ['area' => 'adminhtml', 'error' => $globalAreaError . PHP_EOL . 'Customer does not have any credit cards.'],
+>>>>>>> upstream/2.2-develop
         ];
     }
 
@@ -145,7 +193,11 @@ class PaymentInformationManagementTest extends TestCase
      * @param string $reservedOrderId
      * @return CartInterface
      */
+<<<<<<< HEAD
     private function getQuote(string $reservedOrderId): CartInterface
+=======
+    private function getQuote(string $reservedOrderId) : CartInterface
+>>>>>>> upstream/2.2-develop
     {
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);

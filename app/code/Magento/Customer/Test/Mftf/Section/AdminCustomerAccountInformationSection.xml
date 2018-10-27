@@ -1,15 +1,24 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
+=======
+>>>>>>> upstream/2.2-develop
 <!--
  /**
   * Copyright © Magento, Inc. All rights reserved.
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerAccountInformationSection">
         <element name="statusInactive" type="button" selector=".admin__actions-switch-label"/>
+=======
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerAccountInformationSection">
+>>>>>>> upstream/2.2-develop
         <element name="accountInformationTitle" type="text" selector=".admin__page-nav-title"/>
         <element name="accountInformationButton" type="text" selector="//a/span[text()='Account Information']"/>
         <element name="firstName" type="input" selector="input[name='customer[firstname]']"/>
@@ -17,8 +26,13 @@
         <element name="email" type="input" selector="input[name='customer[email]']"/>
         <element name="group" type="select" selector="[name='customer[group_id]']"/>
         <element name="groupValue" type="button" selector="//span[text()='{{groupValue}}']" parameterized="true"/>
+<<<<<<< HEAD
         <element name="associateToWebsite" type="select" selector="//select[@name='customer[website_id]']"/>
         <element name="saveCustomer" type="button" selector="//button[@title='Save Customer']"/>
         <element name="storeView" type="select" selector="//select[@name='customer[sendemail_store_id]']"/>
+=======
+        <element name="associateToWebsite" type="select" selector="select[name='customer[website_id]']"/>
+        <element name="storeView" type="select" selector="select[name='customer[sendemail_store_id]']"/>
+>>>>>>> upstream/2.2-develop
     </section>
 </sections>

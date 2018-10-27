@@ -68,14 +68,28 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         /** @var CustomerInterface $customer2 */
         $customer2 = $customerRepository->get('customer2@example.com');
 
+<<<<<<< HEAD
+=======
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+
+>>>>>>> upstream/2.2-develop
         $params = [
             'selected' => [
                 $customer1->getId(),
                 $customer2->getId(),
             ],
             'namespace' => 'customer_listing',
+<<<<<<< HEAD
         ];
         $this->getRequest()->setParams($params);
+=======
+            'form_key' => $formKey->getFormKey()
+        ];
+
+        $this->getRequest()->setParams($params);
+        $this->getRequest()->setMethod('POST');
+>>>>>>> upstream/2.2-develop
 
         $this->dispatch('backend/customer/index/massSubscribe');
 
@@ -105,16 +119,33 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
      */
     public function testMassSubscriberActionNoSelection()
     {
+<<<<<<< HEAD
         $params = [
             'namespace' => 'customer_listing'
         ];
 
         $this->getRequest()->setParams($params);
+=======
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+
+        $params = [
+            'namespace' => 'customer_listing',
+            'form_key' => $formKey->getFormKey()
+        ];
+
+        $this->getRequest()->setParams($params);
+        $this->getRequest()->setMethod('POST');
+>>>>>>> upstream/2.2-develop
         $this->dispatch('backend/customer/index/massSubscribe');
 
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
         $this->assertSessionMessages(
+<<<<<<< HEAD
             self::equalTo(['An item needs to be selected. Select and try again.']),
+=======
+            self::equalTo(['Please select item(s).']),
+>>>>>>> upstream/2.2-develop
             MessageInterface::TYPE_ERROR
         );
     }

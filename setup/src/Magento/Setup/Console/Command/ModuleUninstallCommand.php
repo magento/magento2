@@ -24,6 +24,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Magento\Framework\Console\Cli;
 
 /**
  * Command for uninstalling modules
@@ -40,7 +41,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     const INPUT_KEY_BACKUP_CODE = 'backup-code';
     const INPUT_KEY_BACKUP_MEDIA = 'backup-media';
     const INPUT_KEY_BACKUP_DB = 'backup-db';
+<<<<<<< HEAD
     const INPUT_KEY_NON_COMPOSER_MODULE = 'non-composer';
+=======
+>>>>>>> upstream/2.2-develop
 
     /**
      * Deployment Configuration
@@ -111,11 +115,14 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $maintenanceModeEnabler;
 
     /**
+<<<<<<< HEAD
      * @var PatchApplier
      */
     private $patchApplier;
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * Constructor
      *
      * @param ComposerInformation $composer
@@ -153,6 +160,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->moduleRegistryUninstaller = $moduleRegistryUninstaller;
         $this->maintenanceModeEnabler =
             $maintenanceModeEnabler ?: $this->objectManager->get(MaintenanceModeEnabler::class);
+<<<<<<< HEAD
     }
 
     /**
@@ -166,6 +174,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         }
 
         return $this->patchApplier;
+=======
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -297,7 +307,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                     $this->moduleRegistryUninstaller->removeModulesFromDeploymentConfig($output, $modules);
                     $this->moduleUninstaller->uninstallCode($output, $modules);
                     $this->cleanup($input, $output);
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
                     return Cli::RETURN_SUCCESS;
                 } catch (\Exception $e) {
                     $output->writeln('<error>' . $e->getMessage() . '</error>');

@@ -87,7 +87,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
                 'cartManagement' => $this->cartManagementMock,
                 'cartRepository' => $this->cartRepositoryMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
+<<<<<<< HEAD
                 'connectionPool' => $this->resourceConnectionMock,
+=======
+                'connectionPull' => $this->resourceConnectionMock,
+>>>>>>> upstream/2.2-develop
             ]
         );
         $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
@@ -271,10 +275,15 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject $billingAddressMock
      * @return void
      */
+<<<<<<< HEAD
     private function getMockForAssignBillingAddress(
         int $cartId,
         \PHPUnit_Framework_MockObject_MockObject  $billingAddressMock
     ) : void {
+=======
+    private function getMockForAssignBillingAddress($cartId, $billingAddressMock)
+    {
+>>>>>>> upstream/2.2-develop
         $quoteIdMask = $this->createPartialMock(QuoteIdMask::class, ['getQuoteId', 'load']);
         $this->quoteIdMaskFactoryMock->method('create')
             ->willReturn($quoteIdMask);

@@ -3,15 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\CatalogSearch\Plugin;
 
 /**
  * Enable Product EAV indexer in configuration for MySQL search engine
+<<<<<<< HEAD
  *
  * @deprecated
  * @see \Magento\ElasticSearch
+=======
+>>>>>>> upstream/2.2-develop
  */
 class EnableEavIndexer
 {

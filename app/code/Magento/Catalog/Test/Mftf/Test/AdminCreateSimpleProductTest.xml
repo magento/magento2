@@ -7,6 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateSimpleProductTest">
         <annotations>
@@ -14,6 +15,15 @@
             <stories value="Create a Simple Product via Admin"/>
             <title value="Admin should be able to create a Simple Product"/>
             <description value="Admin should be able to create a Simple Product"/>
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductTest">
+        <annotations>
+            <features value="Product Creation"/>
+            <stories value="Create a Simple Product via Admin"/>
+            <title value="You should be able to create a Simple Product in the admin back-end."/>
+            <description value="You should be able to create a Simple Product in the admin back-end."/>
+>>>>>>> upstream/2.2-develop
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-23414"/>
             <group value="product"/>
@@ -27,6 +37,7 @@
         </after>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+<<<<<<< HEAD
         <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="_defaultProduct"/>
@@ -108,5 +119,38 @@
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="-42" stepKey="fillPrice"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
         <see selector="{{AdminProductFormSection.priceFieldError}}" userInput="Please enter a number 0 or greater in this field." stepKey="seePriceValidationError"/>
+=======
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createPreReqCategory.name$$]" stepKey="searchAndSelectCategory"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
+        <seeInField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="assertFieldName"/>
+        <seeInField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="assertFieldSku"/>
+        <seeInField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="assertFieldPrice"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSectionAssert"/>
+        <seeInField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="assertFieldUrlKey"/>
+
+        <!-- Go to storefront category page, assert product visibility -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createPreReqCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <see userInput="{{_defaultProduct.name}}" stepKey="assertProductPresent"/>
+        <see userInput="{{_defaultProduct.price}}" stepKey="assertProductPricePresent"/>
+
+        <!-- Go to storefront product page, assert product visibility -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <seeInTitle userInput="{{_defaultProduct.name}}" stepKey="assertProductNameTitle"/>
+        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see userInput="{{_defaultProduct.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+        <see userInput="{{_defaultProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+>>>>>>> upstream/2.2-develop
     </test>
 </tests>

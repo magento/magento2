@@ -13,6 +13,12 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class ReportValidatorTest
+ */
+>>>>>>> upstream/2.2-develop
 class ReportValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -79,9 +85,15 @@ class ReportValidatorTest extends \PHPUnit\Framework\TestCase
      * @dataProvider errorDataProvider
      * @param string $reportName
      * @param array $result
+<<<<<<< HEAD
      * @param \PHPUnit\Framework\MockObject\Stub $queryReturnStub
      */
     public function testValidate($reportName, $result, \PHPUnit\Framework\MockObject\Stub $queryReturnStub)
+=======
+     * @param \PHPUnit_Framework_MockObject_Stub $queryReturnStub
+     */
+    public function testValidate($reportName, $result, \PHPUnit_Framework_MockObject_Stub $queryReturnStub)
+>>>>>>> upstream/2.2-develop
     {
         $connectionName = 'testConnection';
         $this->queryFactoryMock->expects($this->once())

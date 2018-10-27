@@ -267,7 +267,11 @@ define([
         },
 
         /**
+<<<<<<< HEAD
          * Is billing address required from PayPal side
+=======
+         * Is billing address required from PayPal side.
+>>>>>>> upstream/2.2-develop
          * @returns {Boolean}
          */
         isRequiredBillingAddress: function () {

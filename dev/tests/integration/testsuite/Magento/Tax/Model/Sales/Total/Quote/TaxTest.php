@@ -31,9 +31,12 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      */
     private $totalsCollector;
 
+<<<<<<< HEAD
     /**
      * test setup
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function setUp()
     {
         /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */

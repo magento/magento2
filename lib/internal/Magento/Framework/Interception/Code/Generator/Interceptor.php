@@ -113,6 +113,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         $methodInfo = [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,
+<<<<<<< HEAD
             'body' => str_replace(
                 [
                     '%methodName%',
@@ -134,6 +135,17 @@ if (!$pluginInfo) {
 METHOD_BODY
             ),
             'returnType' => $returnTypeValue,
+=======
+            'body' => "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
+                "if (!\$pluginInfo) {\n" .
+                "    return parent::{$method->getName()}({$this->_getParameterList(
+                $parameters
+            )});\n" .
+            "} else {\n" .
+            "    return \$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
+            "}",
+            'returnType' => $this->getReturnTypeValue($method->getReturnType()),
+>>>>>>> upstream/2.2-develop
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
 
@@ -220,6 +232,7 @@ METHOD_BODY
      * @param mixed $returnType
      * @return null|string
      */
+<<<<<<< HEAD
     private function getReturnTypeValue($returnType): ?string
     {
         $returnTypeValue = null;
@@ -229,6 +242,18 @@ METHOD_BODY
                 ? $this->getSourceClassName()
                 : $returnType->getName();
         }
+=======
+    private function getReturnTypeValue($returnType)
+    {
+        $returnTypeValue = null;
+
+        if ($returnType) {
+            $returnTypeValue = ((string)$returnType === 'self')
+                ? $this->getSourceClassName()
+                : (string)$returnType;
+        }
+
+>>>>>>> upstream/2.2-develop
         return $returnTypeValue;
     }
 }

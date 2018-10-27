@@ -37,7 +37,10 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
      */
     public function testConfigurableShipOrder()
     {
+<<<<<<< HEAD
         $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/1335');
+=======
+>>>>>>> upstream/2.2-develop
         $productsQuantity = 1;
 
         /** @var \Magento\Sales\Model\Order $existingOrder */
@@ -133,6 +136,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
+<<<<<<< HEAD
      * Tests that not providing a tracking number produces the correct error. See MAGETWO-95429
      * @expectedException \Exception
      * @codingStandardsIgnoreStart
@@ -166,6 +170,8 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * @magentoApiDataFixture Magento/Bundle/_files/order_with_bundle_shipped_separately.php
      */
     public function testPartialShipOrderWithBundleShippedSeparately()

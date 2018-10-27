@@ -322,15 +322,8 @@
         <IfVersion >= 2.4>
             Require all denied
         </IfVersion>
-    </Files>
-    <Files magento_umask>
-        <IfVersion < 2.4>
-            order allow,deny
-            deny from all
-        </IfVersion>
-        <IfVersion >= 2.4>
-            Require all denied
-        </IfVersion>
+<<<<<<< HEAD
+=======
     </Files>
     <Files auth.json>
         <IfVersion < 2.4>
@@ -340,6 +333,28 @@
         <IfVersion >= 2.4>
             Require all denied
         </IfVersion>
+>>>>>>> upstream/2.2-develop
+    </Files>
+    <Files magento_umask>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+<<<<<<< HEAD
+    </Files>
+    <Files auth.json>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+=======
+>>>>>>> upstream/2.2-develop
     </Files>
 
 # For 404s and 403s that aren't handled by the application, show plain 404 response

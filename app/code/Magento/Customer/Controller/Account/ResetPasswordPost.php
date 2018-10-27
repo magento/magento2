@@ -74,20 +74,38 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount imp
 
         if ($password !== $passwordConfirmation) {
             $this->messageManager->addError(__("New Password and Confirm New Password values didn't match."));
+<<<<<<< HEAD
             $resultRedirect->setPath('*/*/createPassword', ['token' => $resetPasswordToken]);
 
+=======
+            $resultRedirect->setPath(
+                '*/*/createPassword',
+                ['token' => $resetPasswordToken]
+            );
+>>>>>>> upstream/2.2-develop
             return $resultRedirect;
         }
         if (iconv_strlen($password) <= 0) {
             $this->messageManager->addError(__('Please enter a new password.'));
+<<<<<<< HEAD
             $resultRedirect->setPath('*/*/createPassword', ['token' => $resetPasswordToken]);
 
+=======
+            $resultRedirect->setPath(
+                '*/*/createPassword',
+                ['token' => $resetPasswordToken]
+            );
+>>>>>>> upstream/2.2-develop
             return $resultRedirect;
         }
 
         try {
             $this->accountManagement->resetPassword(
+<<<<<<< HEAD
                 null,
+=======
+                '',
+>>>>>>> upstream/2.2-develop
                 $resetPasswordToken,
                 $password
             );
@@ -104,8 +122,16 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount imp
         } catch (\Exception $exception) {
             $this->messageManager->addError(__('Something went wrong while saving the new password.'));
         }
+<<<<<<< HEAD
         $resultRedirect->setPath('*/*/createPassword', ['token' => $resetPasswordToken]);
 
+=======
+
+        $resultRedirect->setPath(
+            '*/*/createPassword',
+            ['token' => $resetPasswordToken]
+        );
+>>>>>>> upstream/2.2-develop
         return $resultRedirect;
     }
 }

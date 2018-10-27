@@ -29,6 +29,10 @@
                 <enable_charts>1</enable_charts>
             </dashboard>
             <upload_configuration>
+<<<<<<< HEAD
+=======
+                <enable_resize>1</enable_resize>
+>>>>>>> upstream/2.2-develop
                 <max_width>1920</max_width>
                 <max_height>1200</max_height>
             </upload_configuration>

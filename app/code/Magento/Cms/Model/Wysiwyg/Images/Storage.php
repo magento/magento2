@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Model\Wysiwyg\Images;
 
 use Magento\Cms\Helper\Wysiwyg\Images;
@@ -478,6 +480,7 @@ class Storage extends \Magento\Framework\DataObject
      * @param string $type Type of storage, e.g. image, media etc.
      * @return array File info Array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     public function uploadFile($targetPath, $type = null)
     {
@@ -748,7 +751,11 @@ class Storage extends \Magento\Framework\DataObject
     }
 
     /**
+<<<<<<< HEAD
      * Prepare mime types config settings.
+=======
+     * Prepare mime types config settings
+>>>>>>> upstream/2.2-develop
      *
      * @param string|null $type Type of storage, e.g. image, media etc.
      * @return array Array of allowed file extensions
@@ -761,7 +768,11 @@ class Storage extends \Magento\Framework\DataObject
     }
 
     /**
+<<<<<<< HEAD
      * Get list of allowed file extensions with mime type in values.
+=======
+     * Get list of allowed file extensions with mime type in values
+>>>>>>> upstream/2.2-develop
      *
      * @param string|null $type
      * @return array
@@ -773,7 +784,10 @@ class Storage extends \Magento\Framework\DataObject
         } else {
             $allowed = $this->_extensions['allowed'];
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return $allowed;
     }
 }

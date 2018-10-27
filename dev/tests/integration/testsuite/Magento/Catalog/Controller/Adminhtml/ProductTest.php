@@ -6,8 +6,14 @@
 namespace Magento\Catalog\Controller\Adminhtml;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
+<<<<<<< HEAD
 use Magento\Framework\Message\Manager;
 use Magento\Framework\App\Request\Http as HttpRequest;
+=======
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Message\Manager;
+use Magento\TestFramework\Helper\Bootstrap;
+>>>>>>> upstream/2.2-develop
 
 /**
  * @magentoAppArea adminhtml
@@ -174,13 +180,19 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionWithAlreadyExistingUrlKey(array $postData)
     {
         $this->getRequest()->setPostValue($postData);
+<<<<<<< HEAD
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+=======
+>>>>>>> upstream/2.2-develop
         $this->dispatch('backend/catalog/product/save');
         /** @var Manager $messageManager */
         $messageManager = $this->_objectManager->get(Manager::class);
         $messages = $messageManager->getMessages();
         $errors = $messages->getItemsByType('error');
+<<<<<<< HEAD
         $this->assertNotEmpty($errors);
+=======
+>>>>>>> upstream/2.2-develop
         $message = array_shift($errors);
         $this->assertSame('URL key for specified store already exists.', $message->getText());
         $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
@@ -248,6 +260,10 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
                             'thumbnail' => '/m/a//magento_image.jpg.tmp',
                             'swatch_image' => '/m/a//magento_image.jpg.tmp',
                         ],
+<<<<<<< HEAD
+=======
+                    'form_key' => Bootstrap::getObjectManager()->get(FormKey::class)->getFormKey(),
+>>>>>>> upstream/2.2-develop
                 ]
             ]
         ];

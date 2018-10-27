@@ -208,7 +208,11 @@ class ProductScopeRewriteGenerator
     public function isCategoryProperForGenerating(Category $category, $storeId)
     {
         $parentIds = $category->getParentIds();
+<<<<<<< HEAD
         if (is_array($parentIds) && count($parentIds) >= 2) {
+=======
+        if (count($parentIds) >= 2) {
+>>>>>>> upstream/2.2-develop
             $rootCategoryId = $parentIds[1];
             return $rootCategoryId == $this->storeManager->getStore($storeId)->getRootCategoryId();
         }

@@ -8,6 +8,7 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+<<<<<<< HEAD
     <entity name="GroupedProduct" type="product">
         <data key="sku" unique="suffix">groupedproduct</data>
         <data key="type_id">grouped</data>
@@ -17,6 +18,8 @@
         <data key="urlKey" unique="suffix">groupedproduct</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
+=======
+>>>>>>> upstream/2.2-develop
     <entity name="ApiGroupedProduct" type="product3">
         <data key="sku" unique="suffix">api-grouped-product</data>
         <data key="type_id">grouped</data>

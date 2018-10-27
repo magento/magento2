@@ -29,6 +29,25 @@
 
     <!--Clear all filters in grid-->
     <actionGroup name="clearFiltersAdminDataGrid">
+<<<<<<< HEAD
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
     </actionGroup>
+=======
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+    </actionGroup>
+
+    <actionGroup name="AdminGridFilterSearchResultsByInput">
+        <arguments>
+            <argument name="inputName" type="string" defaultValue="name"/>
+            <argument name="value" type="string"/>
+        </arguments>
+        <!--Clear all filters in grid if they present-->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearTheFiltersIfPresent"/>
+
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
+        <fillField userInput="{{value}}" selector="{{AdminDataGridHeaderSection.filterFieldInput('inputName')}}" stepKey="fillCodeField"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOnApplyFilters"/>
+    </actionGroup>
+>>>>>>> upstream/2.2-develop
 </actionGroups>

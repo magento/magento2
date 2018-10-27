@@ -100,7 +100,11 @@ class ApiDataFixture
      * Execute single fixture script
      *
      * @param string|array $fixture
+<<<<<<< HEAD
      * @throws \Throwable
+=======
+     * @throws \Exception
+>>>>>>> upstream/2.2-develop
      */
     protected function _applyOneFixture($fixture)
     {

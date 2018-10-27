@@ -57,7 +57,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     /**
      * @var ResourceConnection
      */
+<<<<<<< HEAD
     private $connectionPool;
+=======
+    private $connectionPull;
+>>>>>>> upstream/2.2-develop
 
     /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
@@ -76,7 +80,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository,
+<<<<<<< HEAD
         ResourceConnection $connectionPool = null
+=======
+        ResourceConnection $connectionPull = null
+>>>>>>> upstream/2.2-develop
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -84,7 +92,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $this->paymentInformationManagement = $paymentInformationManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->cartRepository = $cartRepository;
+<<<<<<< HEAD
         $this->connectionPool = $connectionPool ?: ObjectManager::getInstance()->get(ResourceConnection::class);
+=======
+        $this->connectionPull = $connectionPull ?: ObjectManager::getInstance()->get(ResourceConnection::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -96,8 +108,13 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
+<<<<<<< HEAD
         $salesConnection = $this->connectionPool->getConnection('sales');
         $checkoutConnection = $this->connectionPool->getConnection('checkout');
+=======
+        $salesConnection = $this->connectionPull->getConnection('sales');
+        $checkoutConnection = $this->connectionPull->getConnection('checkout');
+>>>>>>> upstream/2.2-develop
         $salesConnection->beginTransaction();
         $checkoutConnection->beginTransaction();
 
@@ -124,7 +141,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             $checkoutConnection->rollBack();
             throw $e;
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> upstream/2.2-develop
         return $orderId;
     }
 
@@ -186,7 +207,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @return void
      * @see \Magento\Shipping\Model\Shipping::collectRates
      */
+<<<<<<< HEAD
     private function limitShippingCarrier(Quote $quote) : void
+=======
+    private function limitShippingCarrier(Quote $quote)
+>>>>>>> upstream/2.2-develop
     {
         $shippingAddress = $quote->getShippingAddress();
         if ($shippingAddress && $shippingAddress->getShippingMethod()) {

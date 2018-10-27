@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\Eav\Model\Entity;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -28,9 +31,12 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     private $_localeResolver;
 
+<<<<<<< HEAD
     /**
      * {@inheritdoc}
      */
+=======
+>>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -38,9 +44,12 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->_localeResolver = $this->objectManager->get(ResolverInterface::class);
     }
 
+<<<<<<< HEAD
     /**
      * {@inheritdoc}
      */
+=======
+>>>>>>> upstream/2.2-develop
     protected function tearDown()
     {
         $this->attribute = null;
@@ -66,11 +75,14 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->attribute->getDefaultValue());
     }
 
+<<<<<<< HEAD
     /**
      * Data provider for beforeSaveData.
      *
      * @return array
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function beforeSaveDataProvider()
     {
         return [
@@ -102,11 +114,14 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage($expected);
     }
 
+<<<<<<< HEAD
     /**
      * Data provider for beforeSaveData with error result.
      *
      * @return array
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function beforeSaveErrorDataDataProvider()
     {
         return [

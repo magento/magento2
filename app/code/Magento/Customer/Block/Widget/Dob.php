@@ -211,12 +211,24 @@ class Dob extends AbstractWidget
     public function getHtmlExtraParams()
     {
         $validators = [];
+<<<<<<< HEAD
         if ($this->isRequired()) {
             $validators['required'] = true;
         }
         $validators['validate-date'] = [
             'dateFormat' => $this->getDateFormat()
         ];
+=======
+
+        if ($this->isRequired()) {
+            $validators['required'] = true;
+        }
+
+        $validators['validate-date'] = [
+            'dateFormat' => $this->getDateFormat()
+        ];
+
+>>>>>>> upstream/2.2-develop
         return 'data-validate="' . $this->_escaper->escapeHtml(json_encode($validators)) . '"';
     }
 

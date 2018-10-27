@@ -72,8 +72,11 @@ class ValidatorFile extends Validator
     private $random;
 
     /**
+<<<<<<< HEAD
      * Constructor method
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\File\Size $fileSize

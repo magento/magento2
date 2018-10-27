@@ -150,12 +150,20 @@ class DbStorage extends AbstractStorage
     }
 
     /**
+<<<<<<< HEAD
      * Delete old URLs from DB.
      *
      * @param UrlRewrite[] $urls
      * @return void
      */
     private function deleteOldUrls(array $urls): void
+=======
+     * @param UrlRewrite[] $urls
+     *
+     * @return void
+     */
+    private function deleteOldUrls(array $urls)
+>>>>>>> upstream/2.2-develop
     {
         $oldUrlsSelect = $this->connection->select();
         $oldUrlsSelect->from(
@@ -217,8 +225,13 @@ class DbStorage extends AbstractStorage
             foreach ($urls as $url) {
                 $urlFound = $this->doFindOneByData(
                     [
+<<<<<<< HEAD
                         UrlRewrite::REQUEST_PATH => $url->getRequestPath(),
                         UrlRewrite::STORE_ID => $url->getStoreId(),
+=======
+                        UrlRewriteData::REQUEST_PATH => $url->getRequestPath(),
+                        UrlRewriteData::STORE_ID => $url->getStoreId(),
+>>>>>>> upstream/2.2-develop
                     ]
                 );
                 if (isset($urlFound[UrlRewrite::URL_REWRITE_ID])) {

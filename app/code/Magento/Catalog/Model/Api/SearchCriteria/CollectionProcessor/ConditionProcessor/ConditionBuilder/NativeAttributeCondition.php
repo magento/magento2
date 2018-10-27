@@ -34,9 +34,12 @@ class NativeAttributeCondition implements CustomConditionInterface
     }
 
     /**
+<<<<<<< HEAD
      * Build condition to filter product collection by product native attribute
      * "native" attribute means attribute that is in catalog_product_entity table
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @param Filter $filter
      * @return string
      * @throws \DomainException

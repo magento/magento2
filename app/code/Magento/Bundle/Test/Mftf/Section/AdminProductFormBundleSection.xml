@@ -7,6 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormBundleSection">
         <element name="bundleItemsToggle" type="button" selector="//span[text()='Bundle Items']"/>
@@ -93,5 +94,16 @@
         <element name="selectCategory" type="multiselect" selector="//div[@class='action-menu _active']//label[@class='admin__action-multiselect-label']"/>
         <element name="categoriesLabel" type="text" selector="//div[@class='action-menu _active']//button[@data-action='close-advanced-select']"/>
         <element name="userDefinedQuantity" type="checkbox" selector="[name='bundle_options[bundle_options][{{option}}][bundle_selections][{{product}}][selection_can_change_qty]'][type='checkbox']" parameterized="true"/>
+=======
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormBundleSection">
+        <element name="bundleItemsToggle" type="button" selector="//span[text()='Bundle Items']"/>
+        <element name="addOption" type="button" selector="button[data-index='add_button']"/>
+        <element name="bundleOptionXTitle" type="input" selector="[name='bundle_options[bundle_options][{{x}}][title]']" parameterized="true"/>
+        <element name="bundleOptionXInputType" type="select" selector="[name='bundle_options[bundle_options][{{x}}][type]']" parameterized="true"/>
+        <element name="addProductsToOption" type="button" selector="[data-index='modal_set']" timeout="30"/>
+        <element name="bundleOptionXProductYQuantity" type="input" selector="[name='bundle_options[bundle_options][{{x}}][bundle_selections][{{y}}][selection_qty]']" parameterized="true"/>
+        <element name="bundledItems" type="block" selector="[data-index=bundle-items]"/>
+>>>>>>> upstream/2.2-develop
     </section>
 </sections>

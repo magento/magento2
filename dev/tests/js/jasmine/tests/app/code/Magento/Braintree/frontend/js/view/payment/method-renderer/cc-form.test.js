@@ -54,6 +54,7 @@ define([
 
                 done();
             });
+<<<<<<< HEAD
         });
 
         afterEach(function () {
@@ -61,6 +62,8 @@ define([
                 injector.clean();
                 injector.remove();
             } catch (e) {}
+=======
+>>>>>>> upstream/2.2-develop
         });
 
         it('Check if payment code and message container are restored after onActiveChange call.', function () {

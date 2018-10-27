@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <?php declare(strict_types=1);
+=======
+<?php
+>>>>>>> upstream/2.2-develop
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +10,25 @@
 
 namespace Magento\Framework\Config;
 
+<<<<<<< HEAD
+=======
+use Magento\Framework\ObjectManagerInterface;
+
+>>>>>>> upstream/2.2-develop
 /**
  * Tests Magento\Framework\Config\Convert
  */
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
+<<<<<<< HEAD
+=======
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+>>>>>>> upstream/2.2-develop
      * @var Converter
      */
     private $converter;
@@ -42,10 +59,17 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function parseVarElementDataProvider()
     {
+<<<<<<< HEAD
         $sourceString = <<<'XML'
 <?xml version="1.0"?>
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+=======
+        // @codingStandardsIgnoreStart
+        $sourceString = <<<'XML'
+<?xml version="1.0"?>
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+>>>>>>> upstream/2.2-develop
     <vars module="Magento_Test">    
         <var name="str">some string</var>  
         <var name="int-1">1</var>        
@@ -55,6 +79,10 @@ xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
     </vars>
  </view>
 XML;
+<<<<<<< HEAD
+=======
+        // @codingStandardsIgnoreEnd
+>>>>>>> upstream/2.2-develop
         $expectedResult = [
             'vars' => [
                 'Magento_Test' => [
@@ -80,7 +108,12 @@ XML;
      */
     protected function setUp()
     {
+<<<<<<< HEAD
         $this->converter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
               ->create(\Magento\Framework\Config\Converter::class);
+=======
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->converter = $this->objectManager->get(Converter::class);
+>>>>>>> upstream/2.2-develop
     }
 }

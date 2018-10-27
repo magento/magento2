@@ -2,6 +2,10 @@
     "name": "magento/framework",
     "description": "N/A",
     "type": "magento2-library",
+<<<<<<< HEAD
+=======
+    "version": "101.0.6",
+>>>>>>> upstream/2.2-develop
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -10,8 +14,13 @@
         "sort-packages": true
     },
     "require": {
+<<<<<<< HEAD
         "php": "~7.1.3||~7.2.0",
         "ext-curl": "*",
+=======
+        "php": "~7.0.13|~7.1.0",
+        "ext-spl": "*",
+>>>>>>> upstream/2.2-develop
         "ext-dom": "*",
         "ext-gd": "*",
         "ext-hash": "*",
@@ -21,6 +30,7 @@
         "ext-spl": "*",
         "ext-xsl": "*",
         "ext-bcmath": "*",
+<<<<<<< HEAD
         "lib-libxml": "*",
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
         "composer/composer": "^1.6",
@@ -44,6 +54,23 @@
             "Bulk",
             "MessageQueue"
         ]
+=======
+        "symfony/process": "~2.1",
+        "colinmollenhour/php-redis-session-abstract": "1.3.4",
+        "composer/composer": "^1.4",
+        "monolog/monolog": "^1.17",
+        "oyejorge/less.php": "~1.7.0",
+        "symfony/console": "~2.3, !=2.7.0",
+        "tedivm/jshrink": "~1.3.0",
+        "zendframework/zend-code": "~3.1.0",
+        "zendframework/zend-crypt": "^2.6.0",
+        "zendframework/zend-mvc": "~2.7.12",
+        "zendframework/zend-uri": "^2.5.1",
+        "zendframework/zend-validator": "^2.6.0",
+        "zendframework/zend-stdlib": "^2.7.7",
+        "zendframework/zend-http": "^2.6.0",
+        "magento/zendframework1": "~1.13.0"
+>>>>>>> upstream/2.2-develop
     },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"

@@ -353,12 +353,18 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @var \Magento\Eav\Model\Config
      */
     private $eavConfig;
+<<<<<<< HEAD
     /**
      * @var FilterProductCustomAttribute|null
      */
     private $filterCustomAttribute;
 
     /**
+=======
+
+    /**
+     * Product constructor.
+>>>>>>> upstream/2.2-develop
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -395,7 +401,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
      * @param \Magento\Eav\Model\Config|null $config
+<<<<<<< HEAD
      * @param FilterProductCustomAttribute|null $filterCustomAttribute
+=======
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -435,8 +444,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = [],
+<<<<<<< HEAD
         \Magento\Eav\Model\Config $config = null,
         FilterProductCustomAttribute $filterCustomAttribute = null
+=======
+        \Magento\Eav\Model\Config $config = null
+>>>>>>> upstream/2.2-develop
     ) {
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -476,8 +489,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             $data
         );
         $this->eavConfig = $config ?? ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
+<<<<<<< HEAD
         $this->filterCustomAttribute = $filterCustomAttribute
             ?? ObjectManager::getInstance()->get(FilterProductCustomAttribute::class);
+=======
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -503,15 +519,21 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+<<<<<<< HEAD
      * Get a list of custom attribute codes that belongs to product attribute set.
      *
      * If attribute set not specified for product will return all product attribute codes
+=======
+     * Get a list of custom attribute codes that belongs to product attribute set. If attribute set not specified for
+     * product will return all attribute codes
+>>>>>>> upstream/2.2-develop
      *
      * @return string[]
      */
     protected function getCustomAttributesCodes()
     {
         if ($this->customAttributesCodes === null) {
+<<<<<<< HEAD
             $this->customAttributesCodes = array_diff(
                 array_keys(
                     $this->filterCustomAttribute->execute(
@@ -523,6 +545,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 ),
                 ProductInterface::ATTRIBUTES
             );
+=======
+            $this->customAttributesCodes = array_keys($this->eavConfig->getEntityAttributes(
+                self::ENTITY,
+                $this
+            ));
+            $this->customAttributesCodes = array_diff($this->customAttributesCodes, $this->interfaceAttributes);
+>>>>>>> upstream/2.2-develop
         }
 
         return $this->customAttributesCodes;
@@ -1094,12 +1123,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Clear cache related with product id
      *
+     * @deprecated
+     * @see \Magento\Framework\Model\AbstractModel::cleanModelCache
      * @return $this
      */
     public function cleanCache()
     {
-        $this->_cacheManager->clean('catalog_product_' . $this->getId());
-        return $this;
+        return $this->cleanModelCache();
     }
 
     /**
@@ -2344,7 +2374,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getIdentities()
     {
-        $identities = [self::CACHE_TAG . '_' . $this->getId()];
+        $identities = [];
+
+        if ($this->getId()) {
+            $identities[] = self::CACHE_TAG . '_' . $this->getId();
+        }
+
         if ($this->getIsChangedCategories()) {
             foreach ($this->getAffectedCategoryIds() as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
@@ -2356,6 +2391,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
+
         if ($this->_appState->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
             $identities[] = self::CACHE_TAG;
         }
@@ -2781,5 +2817,19 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $this->setData('stock_data', $stockData);
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCacheTags()
+    {
+        //Preferring individual tags over broad ones.
+        $individualTags = $this->getIdentities();
+        if ($individualTags) {
+            return $individualTags;
+        }
+
+        return parent::getCacheTags();
     }
 }

@@ -322,7 +322,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
 
         //for UPS, puero rico state for US will assume as puerto rico country
         if ($destCountry == self::USA_COUNTRY_ID && ($request->getDestPostcode() == '00912' ||
-            $request->getDestRegionCode() == self::PUERTORICO_COUNTRY_ID)
+                $request->getDestRegionCode() == self::PUERTORICO_COUNTRY_ID)
         ) {
             $destCountry = self::PUERTORICO_COUNTRY_ID;
         }
@@ -826,6 +826,7 @@ XMLRequest;
                 foreach ($arr as $shipElement) {
                     $code = (string)$shipElement->Service->Code;
                     if (in_array($code, $allowedMethods)) {
+<<<<<<< HEAD
                         //The location of tax information is in a different place
                         // depending on whether we are using negotiated rates or not
                         if ($negotiatedActive) {
@@ -848,22 +849,51 @@ XMLRequest;
                                 );
                             } else {
                                 $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
+=======
+                        //The location of tax information is in a different place depending on whether we are using negotiated rates or not
+                        if ($negotiatedActive) {
+                            $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates/NetSummaryCharges/TotalChargesWithTaxes");
+                            $includeTaxesActive = $this->getConfigFlag(
+                                    'include_taxes'
+                                ) && !empty($includeTaxesArr);
+                            if ($includeTaxesActive) {
+                                $cost = $shipElement->NegotiatedRates->NetSummaryCharges->TotalChargesWithTaxes->MonetaryValue;
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->NegotiatedRates->NetSummaryCharges->TotalChargesWithTaxes->CurrencyCode
+                                );
+                            }
+                            else {
+                                $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;                            
+>>>>>>> upstream/2.2-develop
                                 $responseCurrencyCode = $this->mapCurrencyCode(
                                     (string)$shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->CurrencyCode
                                 );
                             }
                         } else {
+<<<<<<< HEAD
                             $includeTaxesArr = $xml->getXpath(
                                 "//RatingServiceSelectionResponse/RatedShipment/TotalChargesWithTaxes"
                             );
                             $includeTaxesActive = $this->getConfigFlag('include_taxes') && !empty($includeTaxesArr);
+=======
+                            $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/TotalChargesWithTaxes");
+                            $includeTaxesActive = $this->getConfigFlag(
+                                    'include_taxes'
+                                ) && !empty($includeTaxesArr);                              
+>>>>>>> upstream/2.2-develop
                             if ($includeTaxesActive) {
                                 $cost = $shipElement->TotalChargesWithTaxes->MonetaryValue;
                                 $responseCurrencyCode = $this->mapCurrencyCode(
                                     (string)$shipElement->TotalChargesWithTaxes->CurrencyCode
                                 );
+<<<<<<< HEAD
                             } else {
                                 $cost = $shipElement->TotalCharges->MonetaryValue;
+=======
+                            }
+                            else {
+                                $cost = $shipElement->TotalCharges->MonetaryValue;                            
+>>>>>>> upstream/2.2-develop
                                 $responseCurrencyCode = $this->mapCurrencyCode(
                                     (string)$shipElement->TotalCharges->CurrencyCode
                                 );
@@ -1020,6 +1050,10 @@ XMLAuth;
         $url = $this->getConfigData('tracking_xml_url');
 
         foreach ($trackings as $tracking) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
             /**
              * RequestOption==>'1' to request all activities
              */
@@ -1034,13 +1068,21 @@ XMLAuth;
     <IncludeFreight>01</IncludeFreight>
 </TrackRequest>
 XMLAuth;
+<<<<<<< HEAD
             $debugData['request'] = $this->filterDebugData($this->_xmlAccessRequest) . $xmlRequest;
+=======
+            $debugData['request'] = parent::filterDebugData($this->_xmlAccessRequest) . $xmlRequest;
+>>>>>>> upstream/2.2-develop
             try {
                 $client = $this->httpClientFactory->create();
                 $client->post($url, $this->_xmlAccessRequest . $xmlRequest);
                 $xmlResponse = $client->getBody();
                 $debugData['result'] = $xmlResponse;
+<<<<<<< HEAD
             } catch (\Throwable $e) {
+=======
+            } catch (\Exception $e) {
+>>>>>>> upstream/2.2-develop
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $xmlResponse = '';
             }
@@ -1413,10 +1455,17 @@ XMLAuth;
             ->addChild('BillShipper')
             ->addChild('AccountNumber', $this->getConfigData('shipper_number'));
 
+<<<<<<< HEAD
         if ($request->getPackagingType() != $this->configHelper->getCode('container', 'ULE')
             && $request->getShipperAddressCountryCode() == self::USA_COUNTRY_ID
             && ($request->getRecipientAddressCountryCode() == 'CA'
                 || $request->getRecipientAddressCountryCode() == 'PR')
+=======
+        if ($request->getPackagingType() != $this->configHelper->getCode('container', 'ULE') &&
+            $request->getShipperAddressCountryCode() == self::USA_COUNTRY_ID &&
+            ($request->getRecipientAddressCountryCode() == 'CA' ||
+                $request->getRecipientAddressCountryCode() == 'PR')
+>>>>>>> upstream/2.2-develop
         ) {
             $invoiceLineTotalPart = $shipmentPart->addChild('InvoiceLineTotal');
             $invoiceLineTotalPart->addChild('CurrencyCode', $request->getBaseCurrencyCode());
@@ -1444,7 +1493,11 @@ XMLAuth;
         $request = $xmlRequest->addChild('Request');
         $request->addChild('RequestAction', 'ShipAccept');
         $xmlRequest->addChild('ShipmentDigest', $shipmentConfirmResponse->ShipmentDigest);
+<<<<<<< HEAD
         $debugData = ['request' => $this->filterDebugData($this->_xmlAccessRequest) . $xmlRequest->asXML()];
+=======
+        $debugData = ['request' => parent::filterDebugData($this->_xmlAccessRequest) . $xmlRequest->asXML()];
+>>>>>>> upstream/2.2-develop
 
         try {
             $client = $this->httpClientFactory->create();
@@ -1511,7 +1564,11 @@ XMLAuth;
         $xmlResponse = $this->_getCachedQuotes($xmlRequest);
 
         if ($xmlResponse === null) {
+<<<<<<< HEAD
             $debugData['request'] = $this->filterDebugData($this->_xmlAccessRequest) . $rawXmlRequest;
+=======
+            $debugData['request'] = parent::filterDebugData($this->_xmlAccessRequest) . $rawXmlRequest;
+>>>>>>> upstream/2.2-develop
             $url = $this->getShipConfirmUrl();
             $client = $this->httpClientFactory->create();
             try {
@@ -1519,7 +1576,11 @@ XMLAuth;
                 $xmlResponse = $client->getBody();
                 $debugData['result'] = $xmlResponse;
                 $this->_setCachedQuotes($xmlRequest, $xmlResponse);
+<<<<<<< HEAD
             } catch (\Throwable $e) {
+=======
+            } catch (\Exception $e) {
+>>>>>>> upstream/2.2-develop
                 $debugData['result'] = ['code' => $e->getCode(), 'error' => $e->getMessage()];
             }
         }
@@ -1532,7 +1593,14 @@ XMLAuth;
         }
 
         if (isset($response->Response->Error)
+<<<<<<< HEAD
             && in_array($response->Response->Error->ErrorSeverity, ['Hard', 'Transient'])
+=======
+            && in_array(
+                $response->Response->Error->ErrorSeverity,
+                ['Hard', 'Transient']
+            )
+>>>>>>> upstream/2.2-develop
         ) {
             $result->setErrors((string)$response->Response->Error->ErrorDescription);
         }
@@ -1600,20 +1668,20 @@ XMLAuth;
                     ];
                 }
                 $containerTypes = $containerTypes + [
-                    '03' => __('UPS Tube'),
-                    '04' => __('PAK'),
-                    '2a' => __('Small Express Box'),
-                    '2b' => __('Medium Express Box'),
-                    '2c' => __('Large Express Box'),
-                ];
+                        '03' => __('UPS Tube'),
+                        '04' => __('PAK'),
+                        '2a' => __('Small Express Box'),
+                        '2b' => __('Medium Express Box'),
+                        '2c' => __('Large Express Box'),
+                    ];
             }
 
             return ['00' => __('Customer Packaging')] + $containerTypes;
         } elseif ($countryShipper == self::USA_COUNTRY_ID &&
             $countryRecipient == self::PUERTORICO_COUNTRY_ID &&
             ($method == '03' ||
-            $method == '02' ||
-            $method == '01')
+                $method == '02' ||
+                $method == '01')
         ) {
             // Container types should be the same as for domestic
             $params->setCountryRecipient(self::USA_COUNTRY_ID);

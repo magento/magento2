@@ -100,7 +100,10 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     public function getValue()
     {
         $basePrice = parent::getValue();
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return $this->item
             ? $basePrice + $this->configuredOptions->getItemOptionsValue($basePrice, $this->item)
             : $basePrice;

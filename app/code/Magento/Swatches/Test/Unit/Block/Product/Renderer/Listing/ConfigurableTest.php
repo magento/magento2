@@ -61,6 +61,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $variationPricesMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $variationPricesMock;
+
     public function setUp()
     {
         $this->arrayUtils = $this->createMock(\Magento\Framework\Stdlib\ArrayUtils::class);
@@ -78,7 +81,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->typeInstance = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
         $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->imageHelper = $this->createMock(\Magento\Catalog\Helper\Image::class);
+<<<<<<< HEAD
         $this->imageUrlBuilder = $this->createMock(\Magento\Catalog\Model\Product\Image\UrlBuilder::class);
+=======
+        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+>>>>>>> upstream/2.2-develop
         $this->variationPricesMock = $this->createMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
         );

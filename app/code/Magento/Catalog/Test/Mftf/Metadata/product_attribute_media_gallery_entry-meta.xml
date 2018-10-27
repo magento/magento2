@@ -7,6 +7,7 @@
 -->
 
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
             xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateProductAttributeMediaGalleryEntry" dataType="ProductAttributeMediaGalleryEntry" type="create" auth="adminOauth" url="/V1/products/{sku}/media" method="POST">
         <contentType>application/json</contentType>
@@ -42,5 +43,25 @@
     </operation>
     <operation name="DeleteProductAttributeMediaGalleryEntry" dataType="ProductAttributeMediaGalleryEntry" type="delete" auth="adminOauth" url="/V1/products/{sku}/media/{id}" method="DELETE">
         <contentType>application/json</contentType>
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductAttributeMediaGalleryEntry" dataType="media_gallery_entries" type="create">
+        <field key="id">integer</field>
+        <field key="media_type" required="true">string</field>
+        <field key="label" required="true">string</field>
+        <field key="position" required="true">integer</field>
+        <field key="disabled" required="true">boolean</field>
+        <array key="types">
+            <value>string</value>
+        </array>
+        <field key="file">string</field>
+        <field key="content">image_content</field>
+        <field key="extension_attributes">empty_extension_attribute</field>
+    </operation>
+    <operation name="CreateImageContent" dataType="image_content" type="create">
+        <field key="base64_Encoded_data">string</field>
+        <field key="type" required="true">string</field>
+        <field key="name" required="true">string</field>
+>>>>>>> upstream/2.2-develop
     </operation>
 </operations>

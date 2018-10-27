@@ -49,6 +49,7 @@ define([
             }, function (element) {
                 this.$wysiwygEditorButton = this.$wysiwygEditorButton ?
                     this.$wysiwygEditorButton.add($(element)) : $(element);
+<<<<<<< HEAD
             }.bind(this));
 
             // disable editor completely after initialization is field is disabled
@@ -56,6 +57,8 @@ define([
                 if (this.disabled()) {
                     this.setDisabled(true);
                 }
+=======
+>>>>>>> upstream/2.2-develop
             }.bind(this));
 
             return this;
@@ -116,6 +119,7 @@ define([
             }
 
             /* eslint-disable no-undef */
+<<<<<<< HEAD
             if (typeof wysiwyg !== 'undefined' && wysiwyg.activeEditor()) {
                 if (wysiwyg && disabled) {
                     wysiwyg.setEnabledStatus(false);
@@ -124,6 +128,14 @@ define([
                     wysiwyg.setEnabledStatus(true);
                     wysiwyg.getPluginButtons().removeProp('disabled');
                 }
+=======
+            if (tinyMCE && tinyMCE.activeEditor) {
+                _.each(tinyMCE.activeEditor.controlManager.controls, function (property, index, controls) {
+                    controls[property.id].setDisabled(status);
+                });
+
+                tinyMCE.activeEditor.getBody().setAttribute('contenteditable', !status);
+>>>>>>> upstream/2.2-develop
             }
         }
     });

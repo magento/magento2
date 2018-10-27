@@ -21,9 +21,12 @@ use Zend\Http\Header\ContentType;
  */
 class CreatePdfFileTest extends \PHPUnit\Framework\TestCase
 {
+<<<<<<< HEAD
     /**
      * @throws \Exception
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function testGenerateFileFromString()
     {
         $objectManager = Bootstrap::getObjectManager();

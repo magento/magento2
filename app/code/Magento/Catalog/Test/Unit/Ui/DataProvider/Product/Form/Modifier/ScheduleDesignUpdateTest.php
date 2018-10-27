@@ -22,6 +22,9 @@ class ScheduleDesignUpdateTest extends AbstractModifierTest
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testModifyMeta()
     {
         $this->arrayManagerMock->expects($this->any())

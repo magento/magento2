@@ -347,6 +347,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * @deprecated use \Magento\Directory\Helper\Data::getCountriesWithStatesRequired() instead
+     *
      * Get list of countries with required states
      *
      * @return \Magento\Directory\Model\Country[]

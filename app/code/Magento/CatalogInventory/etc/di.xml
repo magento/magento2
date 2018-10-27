@@ -132,6 +132,10 @@
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="priceIndexUpdater" type="Magento\CatalogInventory\Model\Plugin\PriceIndexUpdater" />
     </type>

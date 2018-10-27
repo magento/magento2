@@ -36,13 +36,20 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+<<<<<<< HEAD
         /** @var LoggerInterface|MockObject $criticalLoggerMock */
         $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->loggerMock = $this->getMockBuilder(Logger::class)
+=======
+        /** @var LoggerInterface|MockObject $criticalLogger */
+        $criticalLogger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->getMockBuilder(Logger::class)
+>>>>>>> upstream/2.2-develop
             ->disableOriginalConstructor()
             ->setMethods(['debug'])
             ->getMock();
 
+<<<<<<< HEAD
         $this->adapterMock = $this->getMockBuilder(BraintreeAdapter::class)
             ->disableOriginalConstructor()
             ->setMethods(['submitForSettlement'])
@@ -58,19 +65,39 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
             $criticalLoggerMock,
             $this->loggerMock,
             $adapterFactoryMock
+=======
+        $this->adapter = $this->getMockBuilder(BraintreeAdapter::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['submitForSettlement'])
+            ->getMock();
+        /** @var BraintreeAdapterFactory|MockObject $adapterFactory */
+        $adapterFactory = $this->getMockBuilder(BraintreeAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $adapterFactory->method('create')
+            ->willReturn($this->adapter);
+
+        $this->client = new TransactionSubmitForSettlement(
+            $criticalLogger,
+            $this->logger,
+            $adapterFactory
+>>>>>>> upstream/2.2-develop
         );
     }
 
     /**
-     * @covers \Magento\Braintree\Gateway\Http\Client\TransactionSubmitForSettlement::placeRequest
      * @expectedException \Magento\Payment\Gateway\Http\ClientException
      * @expectedExceptionMessage Transaction has been declined
      */
     public function testPlaceRequestWithException()
     {
         $exception = new \Exception('Transaction has been declined');
+<<<<<<< HEAD
         $this->adapterMock->expects(static::once())
             ->method('submitForSettlement')
+=======
+        $this->adapter->method('submitForSettlement')
+>>>>>>> upstream/2.2-develop
             ->willThrowException($exception);
 
         /** @var TransferInterface|MockObject $transferObject */
@@ -78,14 +105,15 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
         $this->client->placeRequest($transferObject);
     }
 
-    /**
-     * @covers \Magento\Braintree\Gateway\Http\Client\TransactionSubmitForSettlement::process
-     */
     public function testPlaceRequest()
     {
         $data = new Successful(['success'], [true]);
+<<<<<<< HEAD
         $this->adapterMock->expects(static::once())
             ->method('submitForSettlement')
+=======
+        $this->adapter->method('submitForSettlement')
+>>>>>>> upstream/2.2-develop
             ->willReturn($data);
 
         /** @var TransferInterface|MockObject $transferObject */
@@ -103,8 +131,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
     private function getTransferObjectMock()
     {
         $mock = $this->createMock(TransferInterface::class);
-        $mock->expects($this->once())
-            ->method('getBody')
+        $mock->method('getBody')
             ->willReturn([
                 'transaction_id' => 'vb4c6b',
                 'amount' => 124.00,

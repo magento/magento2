@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Translation\Test\Unit\Model\Json;
 
 use Magento\Translation\Model\Js\Config;
@@ -46,8 +47,20 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
         $this->configMock = $this->createMock(\Magento\Translation\Model\Js\Config::class);
         $this->dataProviderMock = $this->createMock(\Magento\Translation\Model\Js\DataProvider::class);
         $this->areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
+<<<<<<< HEAD
         $this->translateMock = $this->getMockForAbstractClass(\Magento\Framework\TranslateInterface::class);
         $this->designMock = $this->getMockForAbstractClass(\Magento\Framework\View\DesignInterface::class);
+=======
+        $this->translateMock = $this->getMockBuilder(\Magento\Framework\Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->translateMock
+            ->expects($this->once())
+            ->method('setLocale')
+            ->willReturn($this->translateMock);
+
+>>>>>>> upstream/2.2-develop
         $this->model = new PreProcessor(
             $this->configMock,
             $this->dataProviderMock,
@@ -109,8 +122,15 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('setContentType')
             ->with('json');
 
+<<<<<<< HEAD
         $this->translateMock->expects($this->once())->method('setLocale')->with('en_US')->willReturnSelf();
         $this->translateMock->expects($this->once())->method('loadData')->with($areaCode, true);
+=======
+        $this->translateMock
+            ->expects($this->once())
+            ->method('loadData')
+            ->willReturn($this->translateMock);
+>>>>>>> upstream/2.2-develop
 
         $this->model->process($chain);
     }

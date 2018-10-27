@@ -122,9 +122,15 @@ class LoginTest extends \PHPUnit\Framework\TestCase
         $this->cookieManager = $this->getMockBuilder(\Magento\Framework\Stdlib\CookieManagerInterface::class)
             ->setMethods(['getCookie', 'deleteCookie'])
             ->getMockForAbstractClass();
+<<<<<<< HEAD
         $this->cookieMetadataFactory = $this->getMockBuilder(
             \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
         )->disableOriginalConstructor()->getMock();
+=======
+        $this->cookieMetadataFactory = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+>>>>>>> upstream/2.2-develop
         $this->cookieMetadata = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();

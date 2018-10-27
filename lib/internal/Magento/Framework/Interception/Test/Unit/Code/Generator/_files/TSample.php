@@ -10,6 +10,7 @@ class TSample
     private $value;
     private $variadicValue;
 
+<<<<<<< HEAD
     public function returnVoid() : void
     {
         // Nothing to do here
@@ -23,6 +24,8 @@ class TSample
         return null;
     }
 
+=======
+>>>>>>> upstream/2.2-develop
     /**
      * @return string
      */

@@ -13,8 +13,12 @@ define([
     'use strict';
 
     describe('Magento_Ui/js/form/element/ui-select', function () {
+<<<<<<< HEAD
         var obj, jq, originaljQueryAjax,
             injector = new Squire(),
+=======
+        var injector = new Squire(),
+>>>>>>> upstream/2.2-develop
             mocks = {
                 'Magento_Ui/js/lib/registry/registry': {
                     /** Method stub. */
@@ -30,15 +34,24 @@ define([
                 },
                 '/mage/utils/wrapper': jasmine.createSpy()
             },
+<<<<<<< HEAD
+=======
+            obj,
+>>>>>>> upstream/2.2-develop
             dataScope = 'abstract';
 
         beforeEach(function (done) {
             injector.mock(mocks);
             injector.require([
                 'Magento_Ui/js/form/element/ui-select',
+<<<<<<< HEAD
                 'jquery',
                 'knockoutjs/knockout-es5'
             ], function (Constr, $) {
+=======
+                'knockoutjs/knockout-es5'
+            ], function (Constr) {
+>>>>>>> upstream/2.2-develop
                 obj = new Constr({
                     provider: 'provName',
                     name: '',
@@ -51,6 +64,7 @@ define([
 
                 obj.value = ko.observableArray([]);
                 obj.cacheOptions.plain = [];
+<<<<<<< HEAD
                 originaljQueryAjax = $.ajax;
                 jq = $;
                 done();
@@ -60,6 +74,11 @@ define([
         afterEach(function () {
             jq.ajax = originaljQueryAjax;
             injector.clean();
+=======
+
+                done();
+            });
+>>>>>>> upstream/2.2-develop
         });
 
         describe('"initialize" method', function () {

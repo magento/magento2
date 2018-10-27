@@ -253,8 +253,13 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
             $selectUnions = [];
 
             // apply date boundaries (before calling $this->_applyDateRangeFilter())
+<<<<<<< HEAD
             $periodFrom = $this->_from !== null ? new \DateTime($this->_from) : null;
             $periodTo = $this->_to !== null ? new \DateTime($this->_to) : null;
+=======
+            $periodFrom = ($this->_from !== null) ? new \DateTime($this->_from) : null;
+            $periodTo = ($this->_to !== null) ? new \DateTime($this->_to) : null;
+>>>>>>> upstream/2.2-develop
             if ('year' == $this->_period) {
                 if ($periodFrom) {
                     // not the first day of the year

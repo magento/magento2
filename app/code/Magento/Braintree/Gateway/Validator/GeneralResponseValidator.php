@@ -19,25 +19,43 @@ class GeneralResponseValidator extends AbstractValidator
     protected $subjectReader;
 
     /**
+<<<<<<< HEAD
      * @var ErrorCodeProvider
      */
     private $errorCodeProvider;
+=======
+     * @var ErrorCodeValidator
+     */
+    private $errorCodeValidator;
+>>>>>>> upstream/2.2-develop
 
     /**
      * Constructor
      *
      * @param ResultInterfaceFactory $resultFactory
      * @param SubjectReader $subjectReader
+<<<<<<< HEAD
      * @param ErrorCodeProvider $errorCodeProvider
+=======
+     * @param ErrorCodeValidator $errorCodeValidator
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
         ResultInterfaceFactory $resultFactory,
         SubjectReader $subjectReader,
+<<<<<<< HEAD
         ErrorCodeProvider $errorCodeProvider
     ) {
         parent::__construct($resultFactory);
         $this->subjectReader = $subjectReader;
         $this->errorCodeProvider = $errorCodeProvider;
+=======
+        ErrorCodeValidator $errorCodeValidator
+    ) {
+        parent::__construct($resultFactory);
+        $this->subjectReader = $subjectReader;
+        $this->errorCodeValidator = $errorCodeValidator;
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -75,7 +93,8 @@ class GeneralResponseValidator extends AbstractValidator
                     property_exists($response, 'success') && $response->success === true,
                     [$response->message ?? __('Braintree error response.')]
                 ];
-            }
+            },
+            $this->errorCodeValidator
         ];
     }
 }

@@ -10,6 +10,10 @@ namespace Magento\Framework\Code\Generator {
 
     /**
      * @param $className
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return bool
      */
     function class_exists($className)

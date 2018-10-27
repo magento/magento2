@@ -595,7 +595,10 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
             $billingCountry = $paymentInfo->getQuote()->getBillingAddress()->getCountryId();
         }
         $billingCountry = $billingCountry ?: $this->directory->getDefaultCountry();
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         if (!$this->canUseForCountry($billingCountry)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('You can\'t use the payment type you selected to make payments to the billing country.')

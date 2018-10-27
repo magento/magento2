@@ -61,12 +61,32 @@ class Crypt
             $handle = @mcrypt_module_open($cipher, '', $mode, '');
             $initVectorSize = @mcrypt_enc_get_iv_size($handle);
             // @codingStandardsIgnoreEnd
+<<<<<<< HEAD
 
             /* Generate a random vector from human-readable characters */
             $allowedCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             $initVector = '';
             for ($i = 0; $i < $initVectorSize; $i++) {
                 $initVector .= $allowedCharacters[rand(0, strlen($allowedCharacters) - 1)];
+=======
+            if (true === $initVector) {
+                /* Generate a random vector from human-readable characters */
+                $abc = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                $initVector = '';
+                for ($i = 0; $i < $initVectorSize; $i++) {
+                    $initVector .= $abc[random_int(0, strlen($abc) - 1)];
+                }
+            } elseif (false === $initVector) {
+                /* Set vector to zero bytes to not use it */
+                $initVector = str_repeat("\0", $initVectorSize);
+            } elseif (!is_string($initVector) || strlen($initVector) != $initVectorSize) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(
+                        'Init vector must be a string of %1 bytes.',
+                        [$initVectorSize]
+                    )
+                );
+>>>>>>> upstream/2.2-develop
             }
             // @codingStandardsIgnoreStart
             @mcrypt_generic_deinit($handle);

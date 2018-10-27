@@ -51,7 +51,11 @@ class BaseUrlChecker
      */
     public function isEnabled()
     {
+<<<<<<< HEAD
         return $this->scopeConfig->isSetFlag(
+=======
+        return (bool)$this->scopeConfig->getValue(
+>>>>>>> upstream/2.2-develop
             'web/url/redirect_to_base',
             ScopeInterface::SCOPE_STORE
         );

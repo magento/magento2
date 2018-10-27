@@ -69,7 +69,11 @@ class FixerIo extends AbstractImport
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> upstream/2.2-develop
      */
     protected function _convert($currencyFrom, $currencyTo)
     {

@@ -537,7 +537,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 foreach ($options as $quoteItemOption) {
                     if ($quoteItemOption->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
                         if ($optionUpdateFlag) {
+<<<<<<< HEAD
                             $quoteItemOption->setValue((int) $quoteItemOption->getValue());
+=======
+                            $quoteItemOption->setValue((int)$quoteItemOption->getValue());
+>>>>>>> upstream/2.2-develop
                         } else {
                             $quoteItemOption->setValue($value);
                         }
@@ -559,7 +563,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function prepareQuoteItemQty($qty, $product)
     {
+<<<<<<< HEAD
         return (int) $qty;
+=======
+        return (int)$qty;
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -588,6 +596,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         foreach ($this->getOptionsCollection($product) as $option) {
             $hasSalable = false;
 
+            /** @var Selections $selectionsCollection */
             $selectionsCollection = $this->_bundleCollection->create();
             $selectionsCollection->addAttributeToSelect('status');
             $selectionsCollection->addQuantityFilter();

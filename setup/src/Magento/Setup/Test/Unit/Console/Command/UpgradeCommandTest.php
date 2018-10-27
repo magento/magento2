@@ -80,7 +80,11 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedString
      * @param array $expectedOptions
      */
+<<<<<<< HEAD
     public function testExecute($options, $deployMode, $expectedString, $expectedOptions)
+=======
+    public function testExecute($options, $deployMode, $expectedString = '')
+>>>>>>> upstream/2.2-develop
     {
         $this->appStateMock->method('getMode')->willReturn($deployMode);
         $this->installerMock->expects($this->at(0))
@@ -102,10 +106,14 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
+<<<<<<< HEAD
                 'options' => [
                     '--magento-init-params' => '',
                     '--convert-old-scripts' => false,
                 ],
+=======
+                'options' => [],
+>>>>>>> upstream/2.2-develop
                 'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
                 'expectedString' => 'Please re-run Magento compile command. Use the command "setup:di:compile"'
                     . PHP_EOL,
@@ -149,6 +157,7 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                 ]
             ],
             [
+<<<<<<< HEAD
                 'options' => ['--magento-init-params' => '', '--convert-old-scripts' => false],
                 'deployMode' => \Magento\Framework\App\State::MODE_DEFAULT,
                 'expectedString' => '',
@@ -160,6 +169,21 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'dry-run' => false,
                     'magento-init-params' => '',
                 ]
+=======
+                'options' => ['--keep-generated' => true],
+                'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
+                'expectedString' => ''
+            ],
+            [
+                'options' => [],
+                'deployMode' => \Magento\Framework\App\State::MODE_DEVELOPER,
+                'expectedString' => ''
+            ],
+            [
+                'options' => [],
+                'deployMode' => \Magento\Framework\App\State::MODE_DEFAULT,
+                'expectedString' => ''
+>>>>>>> upstream/2.2-develop
             ],
         ];
     }

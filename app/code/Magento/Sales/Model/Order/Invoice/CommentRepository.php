@@ -20,6 +20,11 @@ use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
 /**
+<<<<<<< HEAD
+=======
+ * Class CommentRepository
+ *
+>>>>>>> upstream/2.2-develop
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CommentRepository implements InvoiceCommentRepositoryInterface
@@ -137,9 +142,14 @@ class CommentRepository implements InvoiceCommentRepositoryInterface
             $invoice = $this->invoiceRepository->get($entity->getParentId());
             $this->invoiceCommentSender->send($invoice, $entity->getIsCustomerNotified(), $entity->getComment());
         } catch (\Exception $exception) {
+<<<<<<< HEAD
             $this->logger->critical($exception);
         }
 
+=======
+            $this->logger->warning('Something went wrong while sending email.');
+        }
+>>>>>>> upstream/2.2-develop
         return $entity;
     }
 }

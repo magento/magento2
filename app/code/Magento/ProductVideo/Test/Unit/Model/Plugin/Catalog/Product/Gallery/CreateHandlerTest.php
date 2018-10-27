@@ -72,7 +72,11 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedSave
      * @param int $rowSaved
      */
+<<<<<<< HEAD
     public function testAfterExecute($image, $expectedSave, $rowSaved): void
+=======
+    public function testAfterExecute($image, $expectedSave, $rowSaved)
+>>>>>>> upstream/2.2-develop
     {
         $this->product->expects($this->once())
             ->method('getData')
@@ -229,7 +233,11 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests empty media gallery
      */
+<<<<<<< HEAD
     public function testAfterExecuteEmpty(): void
+=======
+    public function testAfterExecuteEmpty()
+>>>>>>> upstream/2.2-develop
     {
         $this->product->expects($this->once())
             ->method('getData')

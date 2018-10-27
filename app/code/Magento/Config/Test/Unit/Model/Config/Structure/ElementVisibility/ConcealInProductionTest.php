@@ -55,8 +55,14 @@ class ConcealInProductionTest extends \PHPUnit\Framework\TestCase
      * @param bool $isDisabled
      * @param bool $isHidden
      * @dataProvider disabledDataProvider
+<<<<<<< HEAD
      */
     public function testCheckVisibility(string $path, string $mageMode, bool $isHidden, bool $isDisabled): void
+=======
+     * @return void
+     */
+    public function testCheckVisibility(string $path, string $mageMode, bool $isHidden, bool $isDisabled)
+>>>>>>> upstream/2.2-develop
     {
         $this->stateMock->expects($this->any())
             ->method('getMode')

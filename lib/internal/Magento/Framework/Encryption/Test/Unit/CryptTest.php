@@ -28,6 +28,10 @@ class CryptTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $length
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return bool|string
      */
     protected function _getRandomString($length)
@@ -51,6 +55,10 @@ class CryptTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $cipherName
      * @param $modeName
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return mixed
      */
     protected function _getKeySize($cipherName, $modeName)
@@ -62,6 +70,10 @@ class CryptTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $cipherName
      * @param $modeName
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return mixed
      */
     protected function _getInitVectorSize($cipherName, $modeName)
@@ -73,7 +85,11 @@ class CryptTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function getCipherModeCombinations(): array
+=======
+    public function getCipherModeCombinations()
+>>>>>>> upstream/2.2-develop
     {
         $result = [];
         foreach (self::SUPPORTED_CIPHER_MODE_COMBINATIONS as $cipher => $modes) {

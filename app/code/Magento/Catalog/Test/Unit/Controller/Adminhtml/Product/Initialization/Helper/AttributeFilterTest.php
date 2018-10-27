@@ -9,7 +9,11 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+<<<<<<< HEAD
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+=======
+use PHPUnit_Framework_MockObject_MockObject;
+>>>>>>> upstream/2.2-develop
 
 class AttributeFilterTest extends \PHPUnit\Framework\TestCase
 {
@@ -19,12 +23,20 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
+<<<<<<< HEAD
      * @var MockObject
+=======
+     * @var PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
      */
     protected $objectManagerMock;
 
     /**
+<<<<<<< HEAD
      * @var Product|MockObject
+=======
+     * @var Product|PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
      */
     protected $productMock;
 
@@ -47,7 +59,11 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
         $expectedProductData,
         $initialProductData
     ) {
+<<<<<<< HEAD
         /** @var MockObject | Product $productMockMap */
+=======
+        /** @var PHPUnit_Framework_MockObject_MockObject | Product $productMockMap */
+>>>>>>> upstream/2.2-develop
         $productMockMap = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData', 'getAttributes'])
@@ -204,7 +220,11 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
                     'sku' => 'testSku3',
                     'price' => '103',
                     'special_price' => '100',
+<<<<<<< HEAD
                     'description' => false,
+=======
+                    'description' => false
+>>>>>>> upstream/2.2-develop
                 ],
                 'initialProductData' => [
                     ['name', null, 'testName2'],
@@ -225,7 +245,11 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
         $returnArray = [];
         foreach ($useDefaults as $attributecode => $isDefault) {
             if ($isDefault === '1') {
+<<<<<<< HEAD
                 /** @var Attribute | MockObject $attribute */
+=======
+                /** @var Attribute | PHPUnit_Framework_MockObject_MockObject $attribute */
+>>>>>>> upstream/2.2-develop
                 $attribute = $this->getMockBuilder(Attribute::class)
                     ->disableOriginalConstructor()
                     ->getMock();

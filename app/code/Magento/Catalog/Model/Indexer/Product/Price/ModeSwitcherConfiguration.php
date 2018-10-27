@@ -38,9 +38,15 @@ class ModeSwitcherConfiguration
     private $indexer;
 
     /**
+<<<<<<< HEAD
      * @param ConfigInterface $configWriter
      * @param TypeListInterface $cacheTypeList
      * @param Indexer $indexer
+=======
+     * @param ConfigInterface   $configWriter
+     * @param TypeListInterface $cacheTypeList
+     * @param Indexer           $indexer
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
         ConfigInterface $configWriter,

@@ -7,7 +7,10 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Api\Data\InvoiceInterface;
+<<<<<<< HEAD
 use Magento\Sales\Model\Order;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
@@ -421,6 +424,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->setMethods(
                 ['getStateDefaultStatus']
             )->getMock();
+<<<<<<< HEAD
 
         $orderConfigMock->expects($this->once())->method('getStateDefaultStatus')
             ->with(Order::STATE_PROCESSING)
@@ -441,6 +445,20 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->model->setState(Invoice::STATE_OPEN);
         $this->model->cancel();
 
+=======
+        $orderConfigMock->expects($this->once())->method('getStateDefaultStatus')
+            ->with(Order::STATE_PROCESSING)
+            ->willReturn(Order::STATE_PROCESSING);
+        $this->order->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
+        $this->order->expects($this->once())->method('getConfig')->willReturn($orderConfigMock);
+        $this->paymentMock->expects($this->once())->method('cancelInvoice')->willReturn($this->paymentMock);
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with('sales_order_invoice_cancel');
+        $this->model->setData(InvoiceInterface::ITEMS, []);
+        $this->model->setState(Invoice::STATE_OPEN);
+        $this->model->cancel();
+>>>>>>> upstream/2.2-develop
         self::assertEquals(Invoice::STATE_CANCELED, $this->model->getState());
     }
 
@@ -458,10 +476,15 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->eventManagerMock->expects($this->never())
             ->method('dispatch')
             ->with('sales_order_invoice_cancel');
+<<<<<<< HEAD
 
         $this->model->setState($initialInvoiceStatus);
         $this->model->cancel();
 
+=======
+        $this->model->setState($initialInvoiceStatus);
+        $this->model->cancel();
+>>>>>>> upstream/2.2-develop
         self::assertEquals($finalInvoiceStatus, $this->model->getState());
     }
 

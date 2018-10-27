@@ -135,7 +135,11 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetValueException($callback, $expectedMessage, $createInstance = false)
     {
+<<<<<<< HEAD
         $option = new Callback($callback, null, $createInstance);
+=======
+        $option = new \Magento\Framework\Validator\Constraint\Option\Callback($callback, null, $createInstance);
+>>>>>>> upstream/2.2-develop
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage($expectedMessage);
         $option->getValue();

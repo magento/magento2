@@ -691,7 +691,11 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @param array $packageModuleMap Mapping package name with module namespace.
      * @return string The corresponding Magento Module e.g. 'Magento\Theme'
      */
+<<<<<<< HEAD
     protected static function convertModuleName(string $jsonName, array $packageModuleMap): string
+=======
+    protected static function convertModuleName($jsonName, array $packageModuleMap)
+>>>>>>> upstream/2.2-develop
     {
         if (isset($packageModuleMap[$jsonName])) {
             return $packageModuleMap[$jsonName];
@@ -761,6 +765,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @param array $packageModuleMap
      *
      * @return void
+<<<<<<< HEAD
      */
     private static function addDependencies(
         string $moduleName,
@@ -794,6 +799,41 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @return void
      */
     private static function addDependency(string $module, string $type, string $mapType, string $dependency): void
+=======
+     */
+    private static function addDependencies(
+        string $moduleName,
+        array $packageNames,
+        string $type,
+        array $packageModuleMap
+    ) {
+        $packageNames = array_filter($packageNames, function ($packageName) use ($packageModuleMap) {
+            return isset($packageModuleMap[$packageName]) ||
+                0 === strpos($packageName, 'magento/') && 'magento/magento-composer-installer' != $packageName;
+        });
+
+        foreach ($packageNames as $packageName) {
+            self::addDependency(
+                $moduleName,
+                $type,
+                self::MAP_TYPE_DECLARED,
+                self::convertModuleName($packageName, $packageModuleMap)
+            );
+        }
+    }
+
+    /**
+     * Add dependency map items.
+     *
+     * @param string $module
+     * @param string $type
+     * @param string $mapType
+     * @param string $dependency
+     *
+     * @return void
+     */
+    private static function addDependency(string $module, string $type, string $mapType, string $dependency)
+>>>>>>> upstream/2.2-develop
     {
         if (isset(self::$mapDependencies[$module][$type][$mapType])) {
             self::$mapDependencies[$module][$type][$mapType][$dependency] = $dependency;
@@ -806,7 +846,11 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @throws \Exception
      */
+<<<<<<< HEAD
     private static function getPackageModuleMapping(): array
+=======
+    private static function getPackageModuleMapping()
+>>>>>>> upstream/2.2-develop
     {
         $jsonFiles = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
 

@@ -40,6 +40,7 @@
             .items {
                 padding: 6px 0;
                 text-align: left;
+<<<<<<< HEAD
                 .item {
                     > span {
                         display: block;
@@ -49,6 +50,18 @@
                 }
                 li {
                     padding: 0;
+=======
+                > .item {
+                    span {
+                        display: block;
+                    }
+
+                    &:last-child {
+                        span {
+                            display: inline;
+                        }
+                    }
+>>>>>>> upstream/2.2-develop
                 }
             }
 
@@ -386,6 +399,16 @@
 
                             &:hover {
                                 .lib-css(background, @collapsible-nav-item-hover);
+                            }
+                        }
+
+                        span {
+                            display: block;
+                        }
+
+                        &:last-child {
+                            span {
+                                display: inline;
                             }
                         }
                     }

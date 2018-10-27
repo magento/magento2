@@ -268,6 +268,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
+<<<<<<< HEAD
         $this->blockFactory->expects($this->at(0))
             ->method('create')
             ->willReturn($this->blockMock);
@@ -308,6 +309,21 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->blockRepository->expects($this->at(2))->method('save')->with($duplicateBlockMock);
 
         $this->messageManagerMock->expects($this->at(0))
+=======
+        $this->blockFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->blockMock);
+
+        $this->blockRepository->expects($this->once())
+            ->method('getById')
+            ->with($this->blockId)
+            ->willReturn($this->blockMock);
+
+        $this->blockMock->expects($this->once())->method('setData');
+        $this->blockRepository->expects($this->once())->method('save')->with($this->blockMock);
+
+        $this->messageManagerMock->expects($this->once())
+>>>>>>> upstream/2.2-develop
             ->method('addSuccessMessage')
             ->with(__('You saved the block.'));
 

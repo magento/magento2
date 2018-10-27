@@ -29,6 +29,11 @@ class ValidationResult
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Check error existence. If any return boolean true else false.
+     *
+>>>>>>> upstream/2.2-develop
      * @return bool
      */
     public function isValid(): bool
@@ -37,6 +42,11 @@ class ValidationResult
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Return list of errors.
+     *
+>>>>>>> upstream/2.2-develop
      * @return array
      */
     public function getErrors(): array

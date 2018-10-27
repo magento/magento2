@@ -14,6 +14,10 @@ use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
+<<<<<<< HEAD
+=======
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Class AbstractAction
@@ -388,7 +392,11 @@ abstract class AbstractAction
             [
                 'cc.entity_id',
                 'ccp.product_id',
+<<<<<<< HEAD
                 'visibility',
+=======
+                'visibility'
+>>>>>>> upstream/2.2-develop
             ]
         );
     }
@@ -411,11 +419,16 @@ abstract class AbstractAction
      * @param int $range
      * @return Select[]
      */
+<<<<<<< HEAD
     protected function prepareSelectsByRange(
         Select $select,
         string $field,
         int $range = self::RANGE_CATEGORY_STEP
     ) {
+=======
+    protected function prepareSelectsByRange(Select $select, $field, $range = self::RANGE_CATEGORY_STEP)
+    {
+>>>>>>> upstream/2.2-develop
         if ($this->isRangingNeeded()) {
             $iterator = $this->queryGenerator->generate(
                 $field,
@@ -480,7 +493,14 @@ abstract class AbstractAction
             'is_anchor'
         )->getId();
         $statusAttributeId = $this->config->getAttribute(Product::ENTITY, 'status')->getId();
+<<<<<<< HEAD
         $visibilityAttributeId = $this->config->getAttribute(Product::ENTITY, 'visibility')->getId();
+=======
+        $visibilityAttributeId = $this->config->getAttribute(
+            Product::ENTITY,
+            'visibility'
+        )->getId();
+>>>>>>> upstream/2.2-develop
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
@@ -659,6 +679,7 @@ abstract class AbstractAction
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {
+<<<<<<< HEAD
         $selects = $this->prepareSelectsByRange(
             $this->connection->select()
                 ->from(
@@ -672,6 +693,25 @@ abstract class AbstractAction
             $values = [];
 
             foreach ($this->connection->fetchAll($select) as $category) {
+=======
+        $offset = 0;
+        $limit = 500;
+
+        $categoryTable = $this->getTable('catalog_category_entity');
+
+        $categoriesSelect = $this->connection->select()
+            ->from(
+                ['c' => $categoryTable],
+                ['entity_id', 'path']
+            )->limit($limit, $offset);
+
+        $categories = $this->connection->fetchAll($categoriesSelect);
+
+        while ($categories) {
+            $values = [];
+
+            foreach ($categories as $category) {
+>>>>>>> upstream/2.2-develop
                 foreach (explode('/', $category['path']) as $parentId) {
                     if ($parentId !== $category['entity_id']) {
                         $values[] = [$parentId, $category['entity_id']];
@@ -682,6 +722,18 @@ abstract class AbstractAction
             if (count($values) > 0) {
                 $this->connection->insertArray($temporaryName, ['parent_id', 'child_id'], $values);
             }
+<<<<<<< HEAD
+=======
+
+            $offset += $limit;
+            $categoriesSelect = $this->connection->select()
+                ->from(
+                    ['c' => $categoryTable],
+                    ['entity_id', 'path']
+                )->limit($limit, $offset);
+
+            $categories = $this->connection->fetchAll($categoriesSelect);
+>>>>>>> upstream/2.2-develop
         }
     }
 
@@ -731,8 +783,19 @@ abstract class AbstractAction
     protected function getAllProducts(Store $store)
     {
         if (!isset($this->productsSelects[$store->getId()])) {
+<<<<<<< HEAD
             $statusAttributeId = $this->config->getAttribute(Product::ENTITY, 'status')->getId();
             $visibilityAttributeId = $this->config->getAttribute(Product::ENTITY, 'visibility')->getId();
+=======
+            $statusAttributeId = $this->config->getAttribute(
+                Product::ENTITY,
+                'status'
+            )->getId();
+            $visibilityAttributeId = $this->config->getAttribute(
+                Product::ENTITY,
+                'visibility'
+            )->getId();
+>>>>>>> upstream/2.2-develop
 
             $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
             $linkField = $metadata->getLinkField();

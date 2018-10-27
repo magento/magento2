@@ -8,7 +8,10 @@ namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Exception\NotEnoughPermissions;
+<<<<<<< HEAD
 use Magento\Framework\Backup\Factory;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\Backup\Filesystem\Helper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;

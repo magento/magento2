@@ -850,6 +850,10 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $optionCode
      * @param array $optionData
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function createOptionMock($optionCode, $optionData = [])

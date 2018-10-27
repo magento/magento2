@@ -49,6 +49,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Note: Some of these messages exceed maximum limit of 120 characters per line. Split up accordingly.
      */
     protected $_messageTemplates = [
+<<<<<<< HEAD
         self::ERROR_ATTRIBUTE_CODE_DOES_NOT_EXIST => 'Column configurable_variations: Attribute with code ' .
             '"%s" does not exist or is missing from product attribute set',
         self::ERROR_ATTRIBUTE_CODE_NOT_GLOBAL_SCOPE => 'Column configurable_variations: Attribute with code ' .
@@ -61,6 +62,18 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
         self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
         self::ERROR_UNIDENTIFIABLE_VARIATION => 'Configurable variation "%s" is unidentifiable',
+=======
+        self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER =>
+            'Attribute with code "%s" is not super',
+        self::ERROR_INVALID_OPTION_VALUE =>
+            'Invalid option value for attribute "%s"',
+        self::ERROR_INVALID_WEBSITE =>
+            'Invalid website code for super attribute',
+        self::ERROR_DUPLICATED_VARIATIONS =>
+            'SKU %s contains duplicated variations',
+        self::ERROR_UNIDENTIFIABLE_VARIATION =>
+            'Configurable variation "%s" is unidentifiable',
+>>>>>>> upstream/2.2-develop
     ];
 
     /**
@@ -558,7 +571,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $additionalRows = [];
         if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
+<<<<<<< HEAD
         } elseif (!empty($rowData['store_view_code'])) {
+=======
+        } elseif(!empty($rowData['store_view_code'])) {
+>>>>>>> upstream/2.2-develop
             throw new LocalizedException(
                 __(
                     'Product with assigned super attributes should not have specified "%1" value',
@@ -575,8 +592,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             foreach ($fieldAndValuePairsText as $nameAndValue) {
                 $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
                 if (!empty($nameAndValue)) {
+<<<<<<< HEAD
                     $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
                     // Ignoring field names' case.
+=======
+                    $value = isset($nameAndValue[1]) ?
+                        trim($nameAndValue[1]) : '';
+                    //Ignoring field names' case.
+>>>>>>> upstream/2.2-develop
                     $fieldName  = strtolower(trim($nameAndValue[0]));
                     if ($fieldName) {
                         $fieldAndValuePairs[$fieldName] = $value;
@@ -599,10 +622,18 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $position += 1;
                 }
             } else {
+<<<<<<< HEAD
                 throw new LocalizedException(
                     __(
                         sprintf(
                             $this->_messageTemplates[self::ERROR_UNIDENTIFIABLE_VARIATION],
+=======
+                $errorCode = self::ERROR_UNIDENTIFIABLE_VARIATION;
+                throw new LocalizedException(
+                    __(
+                        sprintf(
+                            $this->_messageTemplates[$errorCode],
+>>>>>>> upstream/2.2-develop
                             $variation
                         )
                     )

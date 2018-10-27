@@ -5,12 +5,19 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+<<<<<<< HEAD
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 use Magento\Catalog\Model\View\Asset\Image\ContextFactory;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
+<<<<<<< HEAD
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+=======
+use Magento\Framework\App\Config\ScopeConfigInterface as ScopeConfig;
+>>>>>>> upstream/2.2-develop
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -84,9 +91,15 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     private $cacheManager;
 
     /**
+<<<<<<< HEAD
      * @var ParamsBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $paramsBuilder;
+=======
+     * @var ScopeConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfig;
+>>>>>>> upstream/2.2-develop
 
     protected function setUp()
     {
@@ -96,7 +109,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->context->expects($this->any())->method('getCacheManager')->will($this->returnValue($this->cacheManager));
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStore', 'getWebsite'])->getMock();
@@ -105,24 +121,20 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
         $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://magento.com/media/'));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
-
         $this->config = $this->getMockBuilder(\Magento\Catalog\Model\Product\Media\Config::class)
             ->setMethods(['getBaseMediaPath'])->disableOriginalConstructor()->getMock();
         $this->config->expects($this->any())->method('getBaseMediaPath')->will($this->returnValue('catalog/product'));
         $this->coreFileHelper = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
             ->setMethods(['saveFile', 'deleteFolder'])->disableOriginalConstructor()->getMock();
-
         $this->mediaDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Write::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', 'isFile', 'isExist', 'getAbsolutePath'])
             ->getMock();
-
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($this->mediaDirectory));
         $this->factory = $this->createMock(\Magento\Framework\Image\Factory::class);
-
         $this->viewAssetImageFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -148,9 +160,16 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                     return json_decode($value, true);
                 }
             );
+<<<<<<< HEAD
         $this->paramsBuilder = $this->getMockBuilder(ParamsBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
+=======
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfig::class)
+            ->setMethods(['getValue'])->getMockForAbstractClass();
+        $this->scopeConfig->expects($this->any())->method('getValue')
+            ->with('system/upload_configuration/jpeg_quality')->willReturn(80);
+>>>>>>> upstream/2.2-develop
 
         $this->image = $objectManager->getObject(
             \Magento\Catalog\Model\Product\Image::class,
@@ -164,7 +183,11 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'viewAssetImageFactory' => $this->viewAssetImageFactory,
                 'viewAssetPlaceholderFactory' => $this->viewAssetPlaceholderFactory,
                 'serializer' => $this->serializer,
+<<<<<<< HEAD
                 'paramsBuilder' => $this->paramsBuilder
+=======
+                'scopeConfig' => $this->scopeConfig
+>>>>>>> upstream/2.2-develop
             ]
         );
 

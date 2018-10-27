@@ -7,9 +7,14 @@
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
+<<<<<<< HEAD
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
 class UpdatePost extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
+=======
+
+class UpdatePost extends \Magento\Checkout\Controller\Cart
+>>>>>>> upstream/2.2-develop
 {
     /**
      * @var RequestQuantityProcessor

@@ -11,7 +11,11 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\App\ObjectManager;
 
 /**
+<<<<<<< HEAD
  * Bundle option price model with final price.
+=======
+ * Bundle option price model with final price
+>>>>>>> upstream/2.2-develop
  */
 class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterface
 {
@@ -37,7 +41,11 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
     protected $maximalPrice;
 
     /**
+<<<<<<< HEAD
      * @var BundleOptions
+=======
+     * @var \Magento\Bundle\Pricing\Price\BundleOptions
+>>>>>>> upstream/2.2-develop
      */
     private $bundleOptions;
 
@@ -60,7 +68,12 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
         $this->selectionFactory = $bundleSelectionFactory;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->product->setQty($this->quantity);
+<<<<<<< HEAD
         $this->bundleOptions = $bundleOptions ?: ObjectManager::getInstance()->get(BundleOptions::class);
+=======
+        $this->bundleOptions = $bundleOptions ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Bundle\Pricing\Price\BundleOptions::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**

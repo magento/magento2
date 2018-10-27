@@ -81,8 +81,8 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         // draw item Prices
         $i = 0;
         $prices = $this->getItemPricesForDisplay();
-        $feedPrice = 395;
-        $feedSubtotal = $feedPrice + 170;
+        $feedPrice = 375;
+        $feedSubtotal = $feedPrice + 190;
         foreach ($prices as $priceData) {
             if (isset($priceData['label'])) {
                 // draw Price label
@@ -128,7 +128,11 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
                 ];
 
                 // Checking whether option value is not null
+<<<<<<< HEAD
                 if ($option['value'] !== null) {
+=======
+                if ($option['value']!= null) {
+>>>>>>> upstream/2.2-develop
                     if (isset($option['print_value'])) {
                         $printValue = $option['print_value'];
                     } else {

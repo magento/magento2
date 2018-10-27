@@ -165,6 +165,81 @@
             };
         }];
 
+<<<<<<< HEAD
+=======
+    function sanitizeText(chars) {
+        var buf = [];
+        var writer = htmlSanitizeWriter(buf, angular.noop);
+        writer.chars(chars);
+        return buf.join('');
+    }
+
+
+// Regular Expressions for parsing tags and attributes
+    var START_TAG_REGEXP =
+            /^<\s*([\w:-]+)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*>/,
+        END_TAG_REGEXP = /^<\s*\/\s*([\w:-]+)[^>]*>/,
+        ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
+        BEGIN_TAG_REGEXP = /^</,
+        BEGIN_END_TAGE_REGEXP = /^<\s*\//,
+        COMMENT_REGEXP = /<!--(.*?)-->/g,
+        DOCTYPE_REGEXP = /<!DOCTYPE([^>]*?)>/i,
+        CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
+        // Match everything outside of normal chars and " (quote character)
+        NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g;
+
+
+// Good source of info about elements and attributes
+// http://dev.w3.org/html5/spec/Overview.html#semantics
+// http://simon.html5.org/html-elements
+
+// Safe Void Elements - HTML5
+// http://dev.w3.org/html5/spec/Overview.html#void-elements
+    var voidElements = makeMap("area,br,col,hr,img,wbr");
+
+// Elements that you can, intentionally, leave open (and which close themselves)
+// http://dev.w3.org/html5/spec/Overview.html#optional-tags
+    var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
+        optionalEndTagInlineElements = makeMap("rp,rt"),
+        optionalEndTagElements = angular.extend({},
+            optionalEndTagInlineElements,
+            optionalEndTagBlockElements);
+
+// Safe Block Elements - HTML5
+    var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article," +
+        "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
+        "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
+
+// Inline Elements - HTML5
+    var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b," +
+        "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
+        "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
+
+
+// Special Elements (can contain anything)
+    var specialElements = makeMap("script,style");
+
+    var validElements = angular.extend({},
+        voidElements,
+        blockElements,
+        inlineElements,
+        optionalEndTagElements);
+
+//Attributes that have href and hence need to be sanitized
+    var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap");
+    var validAttrs = angular.extend({}, uriAttrs, makeMap(
+        'abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
+        'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
+        'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
+        'scope,scrolling,shape,size,span,start,summary,target,title,type,'+
+        'valign,value,vspace,width'));
+
+    function makeMap(str) {
+        var obj = {}, items = str.split(','), i;
+        for (i = 0; i < items.length; i++) obj[items[i]] = true;
+        return obj;
+    }
+>>>>>>> upstream/2.2-develop
 
         /**
          * @ngdoc method
@@ -224,6 +299,7 @@
             return !!(this.compareDocumentPosition(arg) & 16);
         };
 
+<<<<<<< HEAD
         // Regular Expressions for parsing tags and attributes
         var SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
             // Match everything outside of normal chars and " (quote character)
@@ -312,6 +388,21 @@
             }
             return obj;
         }
+=======
+                    if ( match ) {
+                        html = html.replace( match[0] , '');
+                        chars = false;
+                    }
+                    // end tag
+                } else if ( BEGIN_END_TAGE_REGEXP.test(html) ) {
+                    match = html.match( END_TAG_REGEXP );
+
+                    if ( match ) {
+                        html = html.substring( match[0].length );
+                        match[0].replace( END_TAG_REGEXP, parseEndTag );
+                        chars = false;
+                    }
+>>>>>>> upstream/2.2-develop
 
         /**
          * Create an inert document that contains the dirty HTML that needs sanitizing

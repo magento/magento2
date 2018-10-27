@@ -90,6 +90,7 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
         $this->responseValidator = $responseValidator;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->transparent = $transparent;
+<<<<<<< HEAD
         $this->sessionTransparent = $sessionTransparent ?: $this->_objectManager->get(Session::class);
         $this->paymentFailures = $paymentFailures ?: $this->_objectManager->get(PaymentFailuresInterface::class);
     }
@@ -109,6 +110,10 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
     public function validateForCsrf(RequestInterface $request): ?bool
     {
         return true;
+=======
+        $this->sessionTransparent = $sessionTransparent ? : $this->_objectManager->get(Session::class);
+        $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(PaymentFailuresInterface::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**

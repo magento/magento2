@@ -22,6 +22,8 @@ use Psr\Log\LoggerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
+ * Test for Magento\Framework\App\StaticResource class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StaticResourceTest extends \PHPUnit\Framework\TestCase
@@ -70,6 +72,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
      * @var LoggerInterface|MockObject
      */
     private $loggerMock;
+<<<<<<< HEAD
 
     /**
      * @var DeploymentConfig|MockObject
@@ -79,6 +82,17 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     /**
      * @var StaticResource
      */
+=======
+
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfigMock;
+
+    /**
+     * @var StaticResource
+     */
+>>>>>>> upstream/2.2-develop
     private $object;
 
     protected function setUp()
@@ -256,9 +270,30 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
         $this->requestMock->expects($this->once())
+<<<<<<< HEAD
             ->method('get')
             ->with('resource')
             ->willReturn('short/path.js');
+=======
+            ->method('get')
+            ->with('resource')
+            ->willReturn('short/path.js');
+        $this->object->launch();
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testLaunchPathAbove()
+    {
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_DEVELOPER);
+        $this->requestMock->expects($this->once())
+            ->method('get')
+            ->with('resource')
+            ->willReturn('frontend/..\..\folder_above/././Magento_Ui/template/messages.html');
+>>>>>>> upstream/2.2-develop
         $this->object->launch();
     }
 

@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\CatalogInventory\Test\Unit\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -118,7 +121,11 @@ class StockTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     public function testLockProductsStock(int $websiteId, array $productIds, array $products, array $result)
+=======
+    public function testLockProductsStock($websiteId, array $productIds, array $products, array $result)
+>>>>>>> upstream/2.2-develop
     {
         $this->selectMock->expects($this->exactly(2))
             ->method('from')
@@ -178,7 +185,11 @@ class StockTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function productsDataProvider(): array
+=======
+    public function productsDataProvider()
+>>>>>>> upstream/2.2-develop
     {
         return [
             [

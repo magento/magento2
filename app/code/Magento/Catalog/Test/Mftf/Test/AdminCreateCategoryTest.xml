@@ -7,6 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateCategoryTest">
         <annotations>
@@ -14,6 +15,15 @@
             <stories value="Create a Category via the Admin"/>
             <title value="Admin should be able to create a Category"/>
             <description value="Admin should be able to create a Category"/>
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryTest">
+        <annotations>
+            <features value="Category Creation"/>
+            <stories value="Create a Category via the Admin"/>
+            <title value="You should be able to create a Category in the admin back-end."/>
+            <description value="You should be able to create a Category in the admin back-end."/>
+>>>>>>> upstream/2.2-develop
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-72102"/>
             <group value="category"/>
@@ -35,6 +45,7 @@
         <!-- Literal URL below, need to refactor line + StorefrontCategoryPage when support for variable URL is implemented-->
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertTitle"/>
+<<<<<<< HEAD
         <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="assertInfo1"/>
     </test>
     <test name="AdminConfigDefaultCategoryLayoutFromConfigurationSettingTest">
@@ -99,5 +110,8 @@
     <comment userInput="Check if Layered navigation price field has required indictor icon" stepKey="comment" />
     <executeJS function="{{CategoryDisplaySettingsSection.RequiredFieldIndicator('filter_price_range')}}" stepKey="getRequiredFieldIndicator"/>
     <assertEquals expected='"*"' expectedType="string" actualType="variable" actual="getRequiredFieldIndicator" message="pass" stepKey="assertRequiredFieldIndicator1"/>
+=======
+        <see selector="{{StorefrontCategoryMainSection.categoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="assertInfo1"/>
+>>>>>>> upstream/2.2-develop
     </test>
 </tests>

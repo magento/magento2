@@ -6,6 +6,7 @@
   */
 -->
 
+<<<<<<< HEAD
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCacheManagementSection">
@@ -30,5 +31,10 @@
         <element name="pageCacheCheckbox" type="checkbox" selector="input[value='full_page']"/>
         <element name="webServicesConfigCheckbox" type="checkbox" selector="input[value='config_webservice']"/>
         <element name="translationsCheckbox" type="checkbox" selector="input[value='translate']"/>
+=======
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminCacheManagementSection">
+        <element name="FlushMagentoCache" type="button" selector="#flush_magento"/>
+>>>>>>> upstream/2.2-develop
     </section>
 </sections>

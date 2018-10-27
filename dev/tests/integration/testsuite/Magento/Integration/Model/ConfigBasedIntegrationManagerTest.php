@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\Integration\Model;
 
 /**

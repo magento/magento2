@@ -72,6 +72,10 @@ class RollbackCommand extends AbstractSetupCommand
         MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         $this->objectManager = $objectManagerProvider->get();
+<<<<<<< HEAD
+=======
+        $this->maintenanceModeEnabler = $maintenanceMode;
+>>>>>>> upstream/2.2-develop
         $this->backupRollbackFactory = $this->objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->deploymentConfig = $deploymentConfig;
         $this->maintenanceModeEnabler =
@@ -122,6 +126,10 @@ class RollbackCommand extends AbstractSetupCommand
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $returnValue = $this->maintenanceModeEnabler->executeInMaintenanceMode(
             function () use ($input, $output, &$returnValue) {
                 try {
@@ -133,6 +141,7 @@ class RollbackCommand extends AbstractSetupCommand
                     if (!$helper->ask($input, $output, $question) && $input->isInteractive()) {
                         return \Magento\Framework\Console\Cli::RETURN_FAILURE;
                     }
+<<<<<<< HEAD
                     $questionKeep = new ConfirmationQuestion(
                         '<info>Do you want to keep the backups?[y/N]<info>',
                         false
@@ -140,6 +149,9 @@ class RollbackCommand extends AbstractSetupCommand
                     $keepSourceFile = $helper->ask($input, $output, $questionKeep);
 
                     $this->doRollback($input, $output, $keepSourceFile);
+=======
+                    $this->doRollback($input, $output);
+>>>>>>> upstream/2.2-develop
                     $output->writeln('<info>Please set file permission of bin/magento to executable</info>');
 
                     return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
@@ -152,6 +164,10 @@ class RollbackCommand extends AbstractSetupCommand
             $output,
             false
         );
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         return $returnValue;
     }
 

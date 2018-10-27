@@ -371,7 +371,10 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         ];
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
         $this->getRequest()->setPostValue($postData);
+<<<<<<< HEAD
         $this->getRequest()->setMethod('POST');
+=======
+>>>>>>> upstream/2.2-develop
 
         $this->dispatch('checkout/cart/add');
 
@@ -407,7 +410,10 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         ];
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
         $this->getRequest()->setPostValue($postData);
+<<<<<<< HEAD
         $this->getRequest()->setMethod('POST');
+=======
+>>>>>>> upstream/2.2-develop
 
         $this->dispatch('checkout/cart/add');
 

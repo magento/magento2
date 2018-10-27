@@ -352,9 +352,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('isFlatEnabled')
             ->will($this->returnValue(true));
 
+<<<<<<< HEAD
         $this->flatIndexer->expects($this->exactly(1))
             ->method('isScheduled')
             ->will($this->returnValue($flatScheduled));
+=======
+        $this->flatIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($flatScheduled));
+>>>>>>> upstream/2.2-develop
         $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexList')->with(['123']);
 
         $this->productIndexer->expects($this->exactly(1))
@@ -476,7 +480,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
 
         //Change the attribute value, should reflect in getCustomAttribute
+<<<<<<< HEAD
         $this->category->setCustomAttribute($customAttributeCode, $newCustomAttributeValue);
+=======
+        $this->category->setCustomAttribute($descriptionAttributeCode, "new description");
+>>>>>>> upstream/2.2-develop
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
         $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
@@ -555,5 +563,34 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $result = $model->getImageUrl();
 
         $this->assertEquals('http://www.example.com/catalog/category/myimage', $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetIdentities()
+    {
+        $category = $this->getCategoryModel();
+
+        //Without an ID no identities can be given.
+        $this->assertEmpty($category->getIdentities());
+
+        //Now because ID is set we can get some
+        $category->setId(42);
+
+        $this->assertNotEmpty($category->getIdentities());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetIdentitiesWithAffectedCategories()
+    {
+        $category = $this->getCategoryModel();
+        $expectedIdentities = ['cat_c_1', 'cat_c_2', 'cat_c_3', 'cat_c_p_1'];
+        $category->setId(1);
+        $category->setAffectedCategoryIds([1,2,3]);
+
+        $this->assertEquals($expectedIdentities, $category->getIdentities());
     }
 }

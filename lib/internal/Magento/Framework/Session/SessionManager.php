@@ -514,6 +514,7 @@ class SessionManager implements SessionManagerInterface
             session_regenerate_id();
             $newSessionId = session_id();
             $_SESSION['new_session_id'] = $newSessionId;
+<<<<<<< HEAD
 
             // Set destroy timestamp
             $_SESSION['destroyed'] = time();
@@ -521,6 +522,15 @@ class SessionManager implements SessionManagerInterface
             // Write and close current session;
             session_commit();
 
+=======
+
+            // Set destroy timestamp
+            $_SESSION['destroyed'] = time();
+
+            // Write and close current session;
+            session_commit();
+
+>>>>>>> upstream/2.2-develop
             // Called after destroy()
             $oldSession = $_SESSION;
 

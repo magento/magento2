@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Model\Export;
 
 use Magento\Framework\Api\Search\DocumentInterface;
@@ -79,7 +81,11 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @dataProvider getColumnsDataProvider
      */
+<<<<<<< HEAD
     public function testGetHeaders(array $columnLabels, array $expected): void
+=======
+    public function testGetHeaders(array $columnLabels, array $expected)
+>>>>>>> upstream/2.2-develop
     {
         $componentName = 'component_name';
         $columnName = 'column_name';
@@ -129,11 +135,11 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
      * @return UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function prepareColumns(
-        $componentName,
-        $columnName,
-        $columnLabel,
-        $columnActionsName = 'actions_name',
-        $columnActionsLabel = 'actions_label'
+        string $componentName,
+        string $columnName,
+        string $columnLabel,
+        string $columnActionsName = 'actions_name',
+        string $columnActionsLabel = 'actions_label'
     ) {
         /** @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $component */
         $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
@@ -196,9 +202,10 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
      * @param array $fields
      * @param array $options
      * @param array $expected
+     * @return  void
      * @dataProvider getRowDataProvider
      */
-    public function testGetRowData($key, $fields, $options, $expected)
+    public function testGetRowData(string $key, array $fields, array $options, array $expected)
     {
         /** @var DocumentInterface|\PHPUnit_Framework_MockObject_MockObject $document */
         $document = $this->getMockBuilder(\Magento\Framework\Api\Search\DocumentInterface::class)
@@ -225,7 +232,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getRowDataProvider()
+    public function getRowDataProvider(): array
     {
         return [
             [
@@ -267,9 +274,10 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
      * @param string $filter
      * @param array $options
      * @param array $expected
+     * @return void
      * @dataProvider getOptionsDataProvider
      */
-    public function testGetOptions($filter, $options, $expected)
+    public function testGetOptions(string $filter, array $options, array $expected)
     {
         $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->getMockForAbstractClass();
@@ -318,7 +326,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getOptionsDataProvider()
+    public function getOptionsDataProvider(): array
     {
         return [
             [
@@ -382,6 +390,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * Test for convertDate function
      *
      * @param string $fieldValue
@@ -390,6 +399,17 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
      * @covers       \Magento\Ui\Model\Export\MetadataProvider::convertDate()
      */
     public function testConvertDate($fieldValue, $expected)
+=======
+     * Test for convertDate function.
+     *
+     * @param string $fieldValue
+     * @param string $expected
+     * @return void
+     * @dataProvider convertDateProvider
+     * @covers \Magento\Ui\Model\Export\MetadataProvider::convertDate()
+     */
+    public function testConvertDate(string $fieldValue, string $expected)
+>>>>>>> upstream/2.2-develop
     {
         $componentName = 'component_name';
         /** @var DocumentInterface|\PHPUnit_Framework_MockObject_MockObject $document */
@@ -414,11 +434,19 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * Data provider for testConvertDate
      *
      * @return array
      */
     public function convertDateProvider()
+=======
+     * Data provider for testConvertDate.
+     *
+     * @return array
+     */
+    public function convertDateProvider(): array
+>>>>>>> upstream/2.2-develop
     {
         return [
             [

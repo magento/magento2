@@ -135,11 +135,19 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
     {
         $object = new DataObject();
         $document = new \DOMDocument();
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         try {
             $document->loadXML($content);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Config\Dom\ValidationException($e->getMessage());
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $this->compiler->compile($document->documentElement, $object, $object);
 
         return $document->saveXML();

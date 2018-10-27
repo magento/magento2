@@ -15,7 +15,15 @@ class TransactionVoid extends AbstractTransaction
     protected function process(array $data)
     {
         $storeId = $data['store_id'] ?? null;
+<<<<<<< HEAD
 
         return $this->adapterFactory->create($storeId)->void($data['transaction_id']);
+=======
+        // sending store id and other additional keys are restricted by Braintree API
+        unset($data['store_id']);
+
+        return $this->adapterFactory->create($storeId)
+            ->void($data['transaction_id']);
+>>>>>>> upstream/2.2-develop
     }
 }

@@ -322,6 +322,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     /**
      * {@inheritdoc}
      */
+<<<<<<< HEAD
     public function getSentinelServers()
     {
         return $this->deploymentConfig->get(self::PARAM_SENTINEL_SERVERS);
@@ -354,6 +355,8 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     /**
      * {@inheritdoc}
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function getFailAfter()
     {
         return self::DEFAULT_FAIL_AFTER;

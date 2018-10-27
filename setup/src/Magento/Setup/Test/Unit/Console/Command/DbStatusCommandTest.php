@@ -97,8 +97,74 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
         $tester = new CommandTester($this->command);
         $tester->execute([]);
+<<<<<<< HEAD
         $this->assertStringMatchesFormat('All modules are up to date.', $tester->getDisplay());
         $this->assertSame(0, $tester->getStatusCode());
+=======
+
+        $this->assertStringMatchesFormat($expectedMessage, $tester->getDisplay());
+        $this->assertSame($expectedCode, $tester->getStatusCode());
+    }
+
+    /**
+     * @return array
+     */
+    public function executeDataProvider()
+    {
+        return [
+            'DB is up to date' => [
+                [],
+                'All modules are up to date%a',
+                Cli::RETURN_SUCCESS
+            ],
+            'DB is outdated' => [
+                [
+                    [
+                        DbVersionInfo::KEY_MODULE => 'module_a',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => '1.0.0',
+                        DbVersionInfo::KEY_REQUIRED => '2.0.0'
+                    ]
+                ],
+                '%amodule_a%aschema%a1%a->%a2'
+                . "%aRun 'setup:upgrade' to update your DB schema and data%a",
+                DbStatusCommand::EXIT_CODE_UPGRADE_REQUIRED,
+            ],
+            'code is outdated' => [
+                [
+                    [
+                        DbVersionInfo::KEY_MODULE => 'module_a',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => '2.0.0',
+                        DbVersionInfo::KEY_REQUIRED => '1.0.0'
+                    ]
+                ],
+                '%amodule_a%adata%a2.0.0%a->%a1.0.0'
+                . '%aSome modules use code versions newer or older than the database%a',
+                Cli::RETURN_FAILURE,
+            ],
+            'both DB and code is outdated' => [
+                [
+                    [
+                        DbVersionInfo::KEY_MODULE => 'module_a',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => '1.0.0',
+                        DbVersionInfo::KEY_REQUIRED => '2.0.0'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'module_b',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => '2.0.0',
+                        DbVersionInfo::KEY_REQUIRED => '1.0.0'
+                    ]
+                ],
+                '%amodule_a%aschema%a1.0.0%a->%a2.0.0'
+                . '%amodule_b%adata%a2.0.0%a->%a1.0.0'
+                . '%aSome modules use code versions newer or older than the database%a',
+                Cli::RETURN_FAILURE,
+            ],
+        ];
+>>>>>>> upstream/2.2-develop
     }
 
     public function testExecuteNotInstalled()

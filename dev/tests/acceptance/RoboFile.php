@@ -31,7 +31,11 @@ class RoboFile extends \Robo\Tasks
      *
      * @param array $tests
      * @param array $opts
+<<<<<<< HEAD
      * @return \Robo\Result
+=======
+     * @return void
+>>>>>>> upstream/2.2-develop
      */
     function generateTests(array $tests, $opts = [
         'config' => null,
@@ -56,7 +60,11 @@ class RoboFile extends \Robo\Tasks
             $baseCmd .= ' --force';
         }
 
+<<<<<<< HEAD
         return $this->taskExec($baseCmd)->args($tests)->run();
+=======
+        $this->taskExec($baseCmd)->args($tests)->run();
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -64,7 +72,11 @@ class RoboFile extends \Robo\Tasks
      *
      * @param array $args
      * @throws Exception
+<<<<<<< HEAD
      * @return \Robo\Result
+=======
+     * @return void
+>>>>>>> upstream/2.2-develop
      */
     function generateSuite(array $args)
     {
@@ -72,20 +84,32 @@ class RoboFile extends \Robo\Tasks
             throw new Exception("Please provide suite name(s) after generate:suite command");
         }
         $baseCmd = $this->getBaseCmd("generate:suite");
+<<<<<<< HEAD
         return $this->taskExec($baseCmd)->args($args)->run();
+=======
+        $this->taskExec($baseCmd)->args($args)->run();
+>>>>>>> upstream/2.2-develop
     }
 
     /**
      * Run all Tests with the specified @group tag'.
      *
      * @param array $args
+<<<<<<< HEAD
      * @return \Robo\Result
+=======
+     * @return void
+>>>>>>> upstream/2.2-develop
      */
     function group(array $args)
     {
         $args = array_merge($args, ['-k']);
         $baseCmd = $this->getBaseCmd("run:group");
+<<<<<<< HEAD
         return $this->taskExec($baseCmd)->args($args)->run();
+=======
+        $this->taskExec($baseCmd)->args($args)->run();
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -111,52 +135,84 @@ class RoboFile extends \Robo\Tasks
     /**
      * Open the HTML Allure report - Allure v1.4.X
      *
+<<<<<<< HEAD
      * @return \Robo\Result
      */
     function allure1Open()
     {
         return $this->_exec('allure report open --report-dir tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+=======
+     * @return void
+     */
+    function allure1Open()
+    {
+        $this->_exec('allure report open --report-dir tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+>>>>>>> upstream/2.2-develop
     }
 
     /**
      * Open the HTML Allure report - Allure v2.3.X
      *
+<<<<<<< HEAD
      * @return \Robo\Result
      */
     function allure2Open()
     {
         return $this->_exec('allure open --port 0 tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+=======
+     * @return void
+     */
+    function allure2Open()
+    {
+        $this->_exec('allure open --port 0 tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+>>>>>>> upstream/2.2-develop
     }
 
     /**
      * Generate and open the HTML Allure report - Allure v1.4.X
      *
+<<<<<<< HEAD
      * @return \Robo\Result
+=======
+     * @return void
+>>>>>>> upstream/2.2-develop
      */
     function allure1Report()
     {
         $result1 = $this->allure1Generate();
 
         if ($result1->wasSuccessful()) {
+<<<<<<< HEAD
             return $this->allure1Open();
         } else {
             return $result1;
+=======
+            $this->allure1Open();
+>>>>>>> upstream/2.2-develop
         }
     }
 
     /**
      * Generate and open the HTML Allure report - Allure v2.3.X
      *
+<<<<<<< HEAD
      * @return \Robo\Result
+=======
+     * @return void
+>>>>>>> upstream/2.2-develop
      */
     function allure2Report()
     {
         $result1 = $this->allure2Generate();
 
         if ($result1->wasSuccessful()) {
+<<<<<<< HEAD
             return $this->allure2Open();
         } else {
             return $result1;
+=======
+            $this->allure2Open();
+>>>>>>> upstream/2.2-develop
         }
     }
 
@@ -172,4 +228,8 @@ class RoboFile extends \Robo\Tasks
         chdir(__DIR__);
         return realpath('../../../vendor/bin/mftf') . " $command";
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> upstream/2.2-develop

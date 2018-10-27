@@ -76,6 +76,26 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Category Store Id
      */
     const STORE_ID = 'store_id';
+<<<<<<< HEAD
+=======
+
+    /**#@+
+     * Constants
+     */
+    const KEY_PARENT_ID = 'parent_id';
+    const KEY_NAME = 'name';
+    const KEY_IS_ACTIVE = 'is_active';
+    const KEY_POSITION = 'position';
+    const KEY_LEVEL = 'level';
+    const KEY_UPDATED_AT = 'updated_at';
+    const KEY_CREATED_AT = 'created_at';
+    const KEY_PATH = 'path';
+    const KEY_AVAILABLE_SORT_BY = 'available_sort_by';
+    const KEY_INCLUDE_IN_MENU = 'include_in_menu';
+    const KEY_PRODUCT_COUNT = 'product_count';
+    const KEY_CHILDREN_DATA = 'children_data';
+    /**#@-*/
+>>>>>>> upstream/2.2-develop
 
     /**#@-*/
     protected $_eventPrefix = 'catalog_category';
@@ -317,8 +337,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+<<<<<<< HEAD
      * Returns model resource
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @deprecated because resource models should be used directly
@@ -717,7 +740,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             return $parentId;
         }
         $parentIds = $this->getParentIds();
+<<<<<<< HEAD
         return (int) array_pop($parentIds);
+=======
+        return (int)array_pop($parentIds);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -1149,15 +1176,25 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getIdentities()
     {
-        $identities = [
-            self::CACHE_TAG . '_' . $this->getId(),
-        ];
-        if (!$this->getId() || $this->hasDataChanges()
-            || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)
-        ) {
-            $identities[] = self::CACHE_TAG;
-            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+        $identities = [];
+        if ($this->getId()) {
+            if ($this->getAffectedCategoryIds()) {
+                foreach (array_unique($this->getAffectedCategoryIds()) as $affectedCategoryId) {
+                    $identities[] = self::CACHE_TAG . '_' . $affectedCategoryId;
+                }
+            } else {
+                $identities[] = self::CACHE_TAG . '_' . $this->getId();
+            }
+
+            if ($this->hasDataChanges() || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)) {
+                $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+            }
+            
+            if ($this->isObjectNew()) {
+                $identities[] = self::CACHE_TAG;
+            }
         }
+
         return $identities;
     }
 

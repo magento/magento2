@@ -34,6 +34,7 @@ define([
         });
     });
 
+<<<<<<< HEAD
     afterEach(function () {
         try {
             injector.clean();
@@ -41,6 +42,8 @@ define([
         } catch (e) {}
     });
 
+=======
+>>>>>>> upstream/2.2-develop
     describe('Magento_CheckoutAgreements/js/model/place-order-mixin', function () {
         it('mixin is applied to Magento_Checkout/js/action/place-order', function () {
             var placeOrderMixins = defaultContext.config.config.mixins['Magento_Checkout/js/action/place-order'];

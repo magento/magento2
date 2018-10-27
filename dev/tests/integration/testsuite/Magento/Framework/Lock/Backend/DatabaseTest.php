@@ -3,13 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
 namespace Magento\Framework\Lock\Backend;
+=======
+>>>>>>> upstream/2.2-develop
 
 /**
  * \Magento\Framework\Lock\Backend\Database test case
  */
+<<<<<<< HEAD
+=======
+namespace Magento\Framework\Lock\Backend;
+
+>>>>>>> upstream/2.2-develop
 class DatabaseTest extends \PHPUnit\Framework\TestCase
 {
     /**

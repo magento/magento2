@@ -1,6 +1,7 @@
 {
     "name": "magento/module-robots",
     "description": "N/A",
+<<<<<<< HEAD
     "config": {
         "sort-packages": true
     },
@@ -13,6 +14,18 @@
         "magento/module-theme": "*"
     },
     "type": "magento2-module",
+=======
+    "require": {
+        "php": "~7.0.13|~7.1.0",
+        "magento/framework": "101.0.*",
+        "magento/module-store": "100.2.*"
+    },
+    "suggest": {
+        "magento/module-theme": "100.2.*"
+    },
+    "type": "magento2-module",
+    "version": "100.2.3",
+>>>>>>> upstream/2.2-develop
     "license": [
         "OSL-3.0",
         "AFL-3.0"

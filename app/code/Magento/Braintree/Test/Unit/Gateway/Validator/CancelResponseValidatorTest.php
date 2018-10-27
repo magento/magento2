@@ -16,9 +16,12 @@ use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+<<<<<<< HEAD
 /**
  * Tests \Magento\Braintree\Gateway\Validator\CancelResponseValidator class.
  */
+=======
+>>>>>>> upstream/2.2-develop
 class CancelResponseValidatorTest extends TestCase
 {
     /**
@@ -58,6 +61,7 @@ class CancelResponseValidatorTest extends TestCase
 
     /**
      * Checks a case when response is successful and additional validation doesn't needed.
+<<<<<<< HEAD
      *
      * @return void
      */
@@ -70,11 +74,26 @@ class CancelResponseValidatorTest extends TestCase
         $actual = $this->validator->validate([]);
 
         $this->assertSame($result, $actual);
+=======
+     */
+    public function testValidateSuccessfulTransaction()
+    {
+        /** @var ResultInterface|MockObject $result */
+        $result = $this->getMockForAbstractClass(ResultInterface::class);$result->method('isValid')
+            ->willReturn(true);
+
+        $this->generalValidator->method('validate')
+            ->willReturn($result);
+
+        $actual = $this->validator->validate([]);
+        self::assertSame($result, $actual);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
      * Checks a case when response contains error related to expired authorization transaction and
      * validator should return positive result.
+<<<<<<< HEAD
      *
      * @return void
      */
@@ -95,12 +114,32 @@ class CancelResponseValidatorTest extends TestCase
                     'errorCodes' => []
                 ]
             )->willReturn($expected);
+=======
+     */
+    public function testValidateExpiredTransaction()
+    {
+        /** @var ResultInterface|MockObject $result */
+        $result = $this->getMockForAbstractClass(ResultInterface::class);
+        $result->method('isValid')
+            ->willReturn(false);
+
+        $this->generalValidator->method('validate')
+            ->willReturn($result);
+
+        $expected = $this->getMockForAbstractClass(ResultInterface::class);
+        $expected->method('isValid')
+            ->willReturn(true);
+        $this->resultFactory->method('create')
+            ->with(['isValid' => true, 'failsDescription' => ['Transaction is cancelled offline.']])
+            ->willReturn($expected);
+>>>>>>> upstream/2.2-develop
 
         $errors = [
             'errors' => [
                 [
                     'code' => 91504,
                     'message' => 'Transaction can only be voided if status is authorized.',
+<<<<<<< HEAD
                 ],
             ],
         ];
@@ -113,12 +152,26 @@ class CancelResponseValidatorTest extends TestCase
         $actual = $this->validator->validate($buildSubject);
 
         $this->assertSame($expected, $actual);
+=======
+                ]
+            ]
+        ];
+        $buildSubject = [
+            'response' => [
+                'object' => new Error(['errors' => $errors])
+            ]
+        ];
+
+        $actual = $this->validator->validate($buildSubject);
+        self::assertSame($expected, $actual);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
      * Checks a case when response contains multiple errors and validator should return negative result.
      *
      * @param array $responseErrors
+<<<<<<< HEAD
      * @return void
      * @dataProvider getErrorsDataProvider
      */
@@ -138,12 +191,39 @@ class CancelResponseValidatorTest extends TestCase
         $buildSubject = [
             'response' => [
                 'object' => new Error(['errors' => $errors]),
+=======
+     * @dataProvider getErrorsDataProvider
+     */
+    public function testValidateWithMultipleErrors(array $responseErrors)
+    {
+        /** @var ResultInterface|MockObject $result */
+        $result = $this->getMockForAbstractClass(ResultInterface::class);
+        $result->method('isValid')
+            ->willReturn(false);
+
+        $this->generalValidator->method('validate')
+            ->willReturn($result);
+
+        $this->resultFactory->expects(self::never())
+            ->method('create');
+
+        $errors = [
+            'errors' => $responseErrors
+        ];
+        $buildSubject = [
+            'response' => [
+                'object' => new Error(['errors' => $errors])
+>>>>>>> upstream/2.2-develop
             ]
         ];
 
         $actual = $this->validator->validate($buildSubject);
+<<<<<<< HEAD
 
         $this->assertSame($result, $actual);
+=======
+        self::assertSame($result, $actual);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -163,8 +243,13 @@ class CancelResponseValidatorTest extends TestCase
                     [
                         'code' => 91504,
                         'message' => 'Transaction can only be voided if status is authorized.',
+<<<<<<< HEAD
                     ],
                 ],
+=======
+                    ]
+                ]
+>>>>>>> upstream/2.2-develop
             ],
             [
                 'errors' => [
@@ -172,8 +257,13 @@ class CancelResponseValidatorTest extends TestCase
                         'code' => 91734,
                         'message' => 'Credit card type is not accepted by this merchant account.',
                     ],
+<<<<<<< HEAD
                 ],
             ],
+=======
+                ]
+            ]
+>>>>>>> upstream/2.2-develop
         ];
     }
 }

@@ -7,7 +7,11 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+>>>>>>> upstream/2.2-develop
     <section name="AdminProductFormConfigurationsSection">
         <element name="sectionHeader" type="text" selector=".admin__collapsible-block-wrapper[data-index='configurable']"/>
         <element name="createConfigurations" type="button" selector="button[data-index='create_configurable_products_button']" timeout="30"/>
@@ -23,6 +27,7 @@
         <element name="disableProductBtn" type="button" selector="//a[text()='Disable Product']"/>
         <element name="enableProductBtn" type="button" selector="//a[text()='Enable Product']"/>
     </section>
+<<<<<<< HEAD
     <section name="AdminConfigurableProductFormSection">
         <element name="productWeight" type="input" selector=".admin__control-text[name='product[weight]']"/>
         <element name="productQuantity" type="input" selector=".admin__control-text[name='product[quantity_and_stock_status][qty]']"/>
@@ -35,4 +40,6 @@
     <section name="StorefrontConfigurableProductPage">
         <element name="productAttributeDropDown" type="select" selector="select[id*='attribute']"/>
     </section>
+=======
+>>>>>>> upstream/2.2-develop
 </sections>

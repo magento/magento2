@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\Paypal\Controller\Adminhtml\Express;
 
 use Magento\Framework\App\RequestInterface;
@@ -19,8 +22,11 @@ use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\Order\Validation\CanInvoice;
 
 /**
+<<<<<<< HEAD
  * Makes a test of the payment authorization for Paypal Express when payment action is order.
  *
+=======
+>>>>>>> upstream/2.2-develop
  * @magentoAppArea adminhtml
  */
 class AuthorizationTest extends \Magento\TestFramework\TestCase\AbstractBackendController
@@ -39,8 +45,11 @@ class AuthorizationTest extends \Magento\TestFramework\TestCase\AbstractBackendC
 
     /**
      * Negative scenario for controller calls.
+<<<<<<< HEAD
      *
      * @return void
+=======
+>>>>>>> upstream/2.2-develop
      */
     public function testNoOrderPassed()
     {
@@ -55,7 +64,10 @@ class AuthorizationTest extends \Magento\TestFramework\TestCase\AbstractBackendC
      * @magentoConfigFixture current_store payment/paypal_express/payment_action Order
      * @magentoDataFixture Magento/Paypal/_files/order_express_payment_action_order.php
      * @magentoDbIsolation enabled
+<<<<<<< HEAD
      * @return void
+=======
+>>>>>>> upstream/2.2-develop
      */
     public function testAuthorization()
     {

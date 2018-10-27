@@ -333,6 +333,10 @@ class BundleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $price
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getPriceInfoMock($price)
@@ -361,6 +365,10 @@ class BundleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $prices
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getPriceMock($prices)

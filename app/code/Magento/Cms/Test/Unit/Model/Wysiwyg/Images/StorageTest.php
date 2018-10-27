@@ -111,7 +111,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         'jpg' => 'image/jpg',
         'jpeg' => 'image/jpeg',
         'png' => 'image/png',
+<<<<<<< HEAD
         'gif' => 'image/png',
+=======
+        'gif' => 'image/png'
+>>>>>>> upstream/2.2-develop
     ];
 
     /**
@@ -184,6 +188,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
             ->setMethods(
+<<<<<<< HEAD
                 [
                     'getCurrentPath',
                     'getName',
@@ -192,6 +197,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                     'getCookiePath',
                     'getCookieDomain',
                 ]
+=======
+                ['getCurrentPath', 'getName', 'getSessionId', 'getCookieLifetime', 'getCookiePath', 'getCookieDomain']
+>>>>>>> upstream/2.2-develop
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -202,7 +210,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $allowedExtensions = [
             'allowed' => $this->allowedImageExtensions,
+<<<<<<< HEAD
             'image_allowed' => $this->allowedImageExtensions,
+=======
+            'image_allowed' => $this->allowedImageExtensions
+>>>>>>> upstream/2.2-develop
         ];
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -225,9 +237,15 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                 'resizeParameters' => $this->resizeParameters,
                 'dirs' => [
                     'exclude' => [],
+<<<<<<< HEAD
                     'include' => [],
                 ],
                 'extensions' => $allowedExtensions,
+=======
+                    'include' => []
+                ],
+                'extensions' => $allowedExtensions
+>>>>>>> upstream/2.2-develop
             ]
         );
     }
@@ -255,6 +273,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteDirectoryOverRoot()
     {
+<<<<<<< HEAD
+=======
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class,
+            sprintf('Directory %s is not under storage root path.', self::INVALID_DIRECTORY_OVER_ROOT)
+        );
+>>>>>>> upstream/2.2-develop
         $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
     }
@@ -266,6 +291,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteRootDirectory()
     {
+<<<<<<< HEAD
+=======
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class,
+            sprintf('We can\'t delete root directory %s right now.', self::STORAGE_ROOT_DIR)
+        );
+>>>>>>> upstream/2.2-develop
         $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
         $this->imagesStorage->deleteDirectory(self::STORAGE_ROOT_DIR);
     }
@@ -451,7 +483,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                     'setFilesDispersion',
                     'checkMimeType',
                     'save',
+<<<<<<< HEAD
                     'getUploadedFileName',
+=======
+                    'getUploadedFileName'
+>>>>>>> upstream/2.2-develop
                 ]
             )
             ->getMock();
@@ -471,21 +507,33 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             [
                 [$realPath, $realPath],
                 [$thumbnailTargetPath, $thumbnailTargetPath],
+<<<<<<< HEAD
                 [$thumbnailDestination, $thumbnailDestination],
+=======
+                [$thumbnailDestination, $thumbnailDestination]
+>>>>>>> upstream/2.2-develop
             ]
         );
         $this->directoryMock->expects($this->atLeastOnce())->method('isFile')
             ->willReturnMap(
                 [
                     [$realPath, true],
+<<<<<<< HEAD
                     [$thumbnailDestination, true],
+=======
+                    [$thumbnailDestination, true]
+>>>>>>> upstream/2.2-develop
                 ]
             );
         $this->directoryMock->expects($this->atLeastOnce())->method('isExist')
             ->willReturnMap(
                 [
                     [$realPath, true],
+<<<<<<< HEAD
                     [$thumbnailTargetPath, true],
+=======
+                    [$thumbnailTargetPath, true]
+>>>>>>> upstream/2.2-develop
                 ]
             );
 

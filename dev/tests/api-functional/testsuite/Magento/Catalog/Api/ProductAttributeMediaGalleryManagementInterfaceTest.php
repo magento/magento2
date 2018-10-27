@@ -611,9 +611,13 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         ];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $this->expectException('SoapFault');
+<<<<<<< HEAD
             $this->expectExceptionMessage(
                 "The product that was requested doesn't exist. Verify the product and try again."
             );
+=======
+            $this->expectExceptionMessage('Requested product doesn\'t exist');
+>>>>>>> upstream/2.2-develop
         } else {
             $this->expectException('Exception');
             $this->expectExceptionCode(404);

@@ -98,6 +98,11 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     private $itemResolver;
 
     /**
+     * @var ItemResolverInterface
+     */
+    private $itemResolver;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession

@@ -1,8 +1,16 @@
 <?php
 /**
+<<<<<<< HEAD
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+=======
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+>>>>>>> upstream/2.2-develop
 declare(strict_types=1);
 
 namespace Magento\Customer\Model\Delegation;
@@ -88,8 +96,15 @@ class Storage
      *
      * @return void
      */
+<<<<<<< HEAD
     public function storeNewOperation(CustomerInterface $customer, array $delegatedData): void
     {
+=======
+    public function storeNewOperation(
+        CustomerInterface $customer,
+        array $delegatedData
+    ) {
+>>>>>>> upstream/2.2-develop
         /** @var Customer $customer */
         $customerData = $customer->__toArray();
         $addressesData = [];
@@ -103,7 +118,11 @@ class Storage
         $this->session->setDelegatedNewCustomerData([
             'customer' => $customerData,
             'addresses' => $addressesData,
+<<<<<<< HEAD
             'delegated_data' => $delegatedData,
+=======
+            'delegated_data' => $delegatedData
+>>>>>>> upstream/2.2-develop
         ]);
     }
 
@@ -120,7 +139,11 @@ class Storage
             $this->logger->error($exception);
             $serialized = null;
         }
+<<<<<<< HEAD
         if ($serialized === null) {
+=======
+        if (!$serialized) {
+>>>>>>> upstream/2.2-develop
             return null;
         }
 
@@ -145,7 +168,11 @@ class Storage
             'customer' => $this->customerFactory->create(
                 ['data' => $customerData]
             ),
+<<<<<<< HEAD
             'additionalData' => $serialized['delegated_data'],
+=======
+            'additionalData' => $serialized['delegated_data']
+>>>>>>> upstream/2.2-develop
         ]);
     }
 }

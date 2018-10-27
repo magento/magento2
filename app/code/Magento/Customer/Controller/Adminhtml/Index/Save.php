@@ -17,7 +17,11 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+<<<<<<< HEAD
 class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpPostActionInterface
+=======
+class Save extends \Magento\Customer\Controller\Adminhtml\Index
+>>>>>>> upstream/2.2-develop
 {
     /**
      * @var EmailNotificationInterface

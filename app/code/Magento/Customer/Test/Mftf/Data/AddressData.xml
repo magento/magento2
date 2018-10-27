@@ -7,7 +7,11 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <entity name="CustomerAddressSimple" type="address">
         <data key="id">0</data>
         <data key="customer_id">12</data>
@@ -49,6 +53,7 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionTX</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="US_Address_NY" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
@@ -95,6 +100,49 @@
         <data key="province">JS</data>
     </entity>
     <entity name="UK_Not_Default_Address" type="address">
+=======
+    <!--If required other field can be added to UK_Address entity, don't modify any existing data-->
+    <entity name="UK_Address" type="address">
+        <data key="country_id">GB</data>
+    </entity>
+    <entity name="US_Address_CA" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">qa</data>
+        <data key="telephone">13456768768</data>
+        <data key="fax">987654321</data>
+        <array key="street">
+            <item>Main st1</item>
+            <item>ap.66</item>
+        </array>
+        <data key="city">Culver City</data>
+        <data key="state">California</data>
+        <data key="postcode">90230</data>
+        <data key="country_id">US</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionCA</requiredEntity>
+    </entity>
+    <entity name="US_Address_NY" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">qa</data>
+        <data key="telephone">13456768768</data>
+        <data key="fax">987654321</data>
+        <array key="street">
+            <item>Main st1</item>
+            <item>ap.66</item>
+        </array>
+        <data key="city">New York</data>
+        <data key="state">New York</data>
+        <data key="postcode">11001</data>
+        <data key="country_id">US</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionNY</requiredEntity>
+    </entity>
+    <entity name="UK_Default_Address" type="address">
+>>>>>>> upstream/2.2-develop
         <data key="firstname">Jane</data>
         <data key="lastname">Doe</data>
         <data key="company">Magento</data>
@@ -102,6 +150,10 @@
             <item>172, Westminster Bridge Rd</item>
         </array>
         <data key="city">London</data>
+<<<<<<< HEAD
+=======
+        <data key="state"></data>
+>>>>>>> upstream/2.2-develop
         <data key="postcode">SE1 7RW</data>
         <data key="country_id">GB</data>
         <data key="telephone">444-44-444-44</data>

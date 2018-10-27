@@ -70,6 +70,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->imageHelperMock = $this->createMock(\Magento\Catalog\Helper\Image::class);
+        $this->imageHelperMock->expects($this->any())
+            ->method('init')
+            ->willReturn($this->imageHelperMock);
         $this->productCollectionFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
             ['create']
@@ -263,7 +266,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     'swatch_image' => '/m/a/magento.png', //important
                 ],
                 \Magento\Catalog\Model\Product::class,
+<<<<<<< HEAD
                 ['color' => 31],
+=======
+                ['color' => 31]
+>>>>>>> upstream/2.2-develop
             ],
             [
                 [
@@ -329,7 +336,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     'swatch_image' => '/m/a/magento.png',
                 ],
                 \Magento\Catalog\Model\Product::class,
+<<<<<<< HEAD
                 ['color' => 31],
+=======
+                ['color' => 31]
+>>>>>>> upstream/2.2-develop
             ],
             [
                 [
@@ -381,6 +392,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ->willReturn(++$id);
 
             $mediaGalleryEntries[] = $mediaGalleryEntryMock;
+<<<<<<< HEAD
             $mediaUrls[] = [$mediaFile, 'product_swatch_image_large', 'http://full_path_to_image' . $mediaFile];
             $mediaUrls[] = [$mediaFile, 'product_swatch_image_medium' ,'http://full_path_to_image' . $mediaFile];
             $mediaUrls[] = [$mediaFile, 'product_swatch_image_small','http://full_path_to_image' . $mediaFile];
@@ -396,6 +408,41 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ->willReturnMap($mediaUrls);
         }
 
+=======
+            $mediaUrls[] = ['http://full_path_to_image' . $mediaFile]; //large
+            $mediaUrls[] = ['http://full_path_to_image' . $mediaFile]; //medium
+            $mediaUrls[] = ['http://full_path_to_image' . $mediaFile]; //small
+        }
+        $this->productMock->expects($this->once())
+            ->method('getMediaGalleryEntries')
+            ->willReturn($mediaGalleryEntries);
+
+        if ($mediaGallery) {
+            $this->imageHelperMock->expects($this->atLeastOnce())
+                ->method('init')
+                ->willReturnMap([
+                    [$this->productMock, 'product_page_image_large', [], $this->imageHelperMock],
+                    [$this->productMock, 'product_page_image_medium', [], $this->imageHelperMock],
+                    [$this->productMock, 'product_page_image_small', [], $this->imageHelperMock],
+                ]);
+            $this->imageHelperMock->expects($this->any())
+                ->method('setImageFile')
+                ->willReturnSelf();
+            $this->imageHelperMock->expects($this->any())
+                ->method('constrainOnly')
+                ->willReturnSelf();
+            $this->imageHelperMock->expects($this->any())
+                ->method('keepAspectRatio')
+                ->willReturnSelf();
+            $this->imageHelperMock->expects($this->any())
+                ->method('keepFrame')
+                ->willReturnSelf();
+            $this->imageHelperMock->expects($this->any())
+                ->method('getUrl')
+                ->willReturnMap($mediaUrls);
+        }
+
+>>>>>>> upstream/2.2-develop
         $productMediaGallery = $this->swatchHelperObject->getProductMediaGallery($this->productMock);
         if ($mediaGallery) {
             $this->assertContains($image, $productMediaGallery['large']);
@@ -463,6 +510,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ->disableOriginalConstructor()
                 ->setMethods(['hasData', 'getMediaGalleryEntries'])
                 ->getMock();
+<<<<<<< HEAD
+=======
+
+           /* $simpleProduct = $this->getMock(
+                \Magento\Catalog\Model\Product::class,
+                ['hasData', 'getMediaGalleryEntries'],
+                [],
+                '',
+                false
+            );*/
+>>>>>>> upstream/2.2-develop
             $simpleProduct->setData($attributes);
 
             $mediaGalleryEntries = [];

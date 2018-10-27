@@ -120,9 +120,12 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+<<<<<<< HEAD
     /**
      * return void
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function testGetFrontendLabels()
     {
         $attributeId = 1;

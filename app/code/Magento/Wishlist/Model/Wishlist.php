@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
+=======
+>>>>>>> upstream/2.2-develop
 
 namespace Magento\Wishlist\Model;
 
@@ -217,9 +220,14 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     public function getName()
     {
         $name = $this->_getData('name');
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         if ($name === null || !strlen($name)) {
             return $this->_wishlistData->getDefaultWishlistName();
         }
+
         return $name;
     }
 

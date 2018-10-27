@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\Paypal\Plugin;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -37,13 +40,21 @@ class ValidatorCanInvoice
      * Checks a possibility to invoice of PayPal Express payments when payment action is "order".
      *
      * @param CanInvoice $subject
+<<<<<<< HEAD
      * @param array $result
+=======
+     * @param $result
+>>>>>>> upstream/2.2-develop
      * @param OrderInterface $order
      * @return array
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+<<<<<<< HEAD
     public function afterValidate(CanInvoice $subject, array $result, OrderInterface $order): array
+=======
+    public function afterValidate(CanInvoice $subject, $result, OrderInterface $order): array
+>>>>>>> upstream/2.2-develop
     {
         if ($this->express->isOrderAuthorizationAllowed($order->getPayment())) {
             $result[] = __('An invoice cannot be created when none of authorization transactions available.');

@@ -12,6 +12,12 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\AbstractComponent;
 
+<<<<<<< HEAD
+=======
+/**
+ * Provide validation of allowed massaction for user.
+ */
+>>>>>>> upstream/2.2-develop
 class MassAction extends AbstractComponent
 {
     const NAME = 'massaction';
@@ -22,8 +28,11 @@ class MassAction extends AbstractComponent
     private $authorization;
 
     /**
+<<<<<<< HEAD
      * Constructor
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @param AuthorizationInterface $authorization
      * @param ContextInterface $context
      * @param UiComponentInterface[] $components
@@ -40,9 +49,15 @@ class MassAction extends AbstractComponent
     }
 
     /**
+<<<<<<< HEAD
      * {@inheritdoc}
      */
     public function prepare() : void
+=======
+     * @inheritdoc
+     */
+    public function prepare()
+>>>>>>> upstream/2.2-develop
     {
         $config = $this->getConfiguration();
 
@@ -64,26 +79,43 @@ class MassAction extends AbstractComponent
     }
 
     /**
+<<<<<<< HEAD
      * {@inheritdoc}
      */
     public function getComponentName() : string
+=======
+     * @inheritdoc
+     */
+    public function getComponentName(): string
+>>>>>>> upstream/2.2-develop
     {
         return static::NAME;
     }
 
     /**
+<<<<<<< HEAD
      * Check if the given type of action is allowed
+=======
+     * Check if the given type of action is allowed.
+>>>>>>> upstream/2.2-develop
      *
      * @param string $actionType
      * @return bool
      */
+<<<<<<< HEAD
     public function isActionAllowed($actionType) : bool
+=======
+    public function isActionAllowed(string $actionType): bool
+>>>>>>> upstream/2.2-develop
     {
         $isAllowed = true;
         switch ($actionType) {
             case 'delete':
+<<<<<<< HEAD
                 $isAllowed = $this->authorization->isAllowed('Magento_Catalog::products');
                 break;
+=======
+>>>>>>> upstream/2.2-develop
             case 'status':
                 $isAllowed = $this->authorization->isAllowed('Magento_Catalog::products');
                 break;
@@ -93,6 +125,10 @@ class MassAction extends AbstractComponent
             default:
                 break;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         return $isAllowed;
     }
 }

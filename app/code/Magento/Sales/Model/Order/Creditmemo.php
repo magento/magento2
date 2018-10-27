@@ -13,7 +13,10 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 use Magento\Sales\Model\Order\InvoiceFactory;
+<<<<<<< HEAD
 use Magento\Framework\App\Config\ScopeConfigInterface;
+=======
+>>>>>>> upstream/2.2-develop
 
 /**
  * Order creditmemo model
@@ -127,11 +130,14 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     private $invoiceFactory;
 
     /**
+<<<<<<< HEAD
      * @var ScopeConfigInterface;
      */
     private $scopeConfig;
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -148,7 +154,10 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param InvoiceFactory $invoiceFactory
+<<<<<<< HEAD
      * @param ScopeConfigInterface $scopeConfig
+=======
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -167,8 +176,12 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
+<<<<<<< HEAD
         InvoiceFactory $invoiceFactory = null,
         ScopeConfigInterface $scopeConfig = null
+=======
+        InvoiceFactory $invoiceFactory = null
+>>>>>>> upstream/2.2-develop
     ) {
         $this->_creditmemoConfig = $creditmemoConfig;
         $this->_orderFactory = $orderFactory;
@@ -179,7 +192,10 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->priceCurrency = $priceCurrency;
         $this->invoiceFactory = $invoiceFactory ?: ObjectManager::getInstance()->get(InvoiceFactory::class);
+<<<<<<< HEAD
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+=======
+>>>>>>> upstream/2.2-develop
         parent::__construct(
             $context,
             $registry,

@@ -17,6 +17,7 @@ class Js extends \Magento\Backend\Block\Template
      *
      * @var string
      */
+<<<<<<< HEAD
   
     protected $_template = 'Magento_Eav::attribute/edit/js.phtml';
 
@@ -65,4 +66,7 @@ class Js extends \Magento\Backend\Block\Template
     {
         return $this->inputtype->getInputTypeHints();
     }
+=======
+    protected $_template = 'Magento_Eav::attribute/edit/js.phtml';
+>>>>>>> upstream/2.2-develop
 }

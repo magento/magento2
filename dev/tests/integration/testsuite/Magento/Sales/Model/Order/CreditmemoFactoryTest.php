@@ -12,7 +12,6 @@ use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test for CreditmemoFactory class.
  * @magentoDbIsolation enabled
  */
 class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
@@ -33,7 +32,11 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
     private $creditmemoFactory;
 
     /**
+<<<<<<< HEAD
      * {@inheritdoc}
+=======
+     * @inheritdoc
+>>>>>>> upstream/2.2-develop
      */
     protected function setUp()
     {
@@ -60,7 +63,11 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function createByOrderDataProvider(): array
+=======
+    public function createByOrderDataProvider()
+>>>>>>> upstream/2.2-develop
     {
         return [
             [
@@ -68,9 +75,15 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
                     'qtys' => [
                         self::ORDER_ITEM_ID_PLACEHOLDER . '2' => 2,
                         self::ORDER_ITEM_ID_PLACEHOLDER . '3' => 10,
+<<<<<<< HEAD
                     ],
                 ],
                 'expectedQty' => 12,
+=======
+                    ]
+                ],
+                'expectedQty' => 12
+>>>>>>> upstream/2.2-develop
             ],
             [
                 'creditmemoData' => [
@@ -78,10 +91,17 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
                         self::ORDER_ITEM_ID_PLACEHOLDER . '1' => 2,
                         self::ORDER_ITEM_ID_PLACEHOLDER . '2' => 2,
                         self::ORDER_ITEM_ID_PLACEHOLDER . '3' => 10,
+<<<<<<< HEAD
                     ],
                 ],
                 'expectedQty' => 14,
             ],
+=======
+                    ]
+                ],
+                'expectedQty' => 14
+            ]
+>>>>>>> upstream/2.2-develop
         ];
     }
 
@@ -89,8 +109,11 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
      * Checks a case when creditmemo created from the invoice.
      *
      * @magentoDataFixture Magento/Sales/_files/invoice_with_bundle.php
+<<<<<<< HEAD
      *
      * @return void
+=======
+>>>>>>> upstream/2.2-develop
      */
     public function testCreateByInvoice()
     {
@@ -106,7 +129,11 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
      * @param array $creditmemoData
      * @return array
      */
+<<<<<<< HEAD
     private function prepareCreditMemoData(Order $order, array $creditmemoData): array
+=======
+    private function prepareCreditMemoData(Order $order, array $creditmemoData)
+>>>>>>> upstream/2.2-develop
     {
         $result = [];
         $orderItems = $order->getAllItems();
@@ -140,7 +167,10 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
         /** @var Order $order */
         $order = $this->objectManager->create(Order::class);
         $order->loadByIncrementId($incrementId);
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return $order;
     }
 
@@ -160,7 +190,10 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
         /** @var InvoiceRepositoryInterface $repository */
         $repository = $this->objectManager->get(InvoiceRepositoryInterface::class);
         $items = $repository->getList($searchCriteria)->getItems();
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return array_pop($items);
     }
 }

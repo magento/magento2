@@ -10,6 +10,12 @@ use Magento\Analytics\ReportXml\SelectHydrator as selectHydrator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class QueryTest
+ */
+>>>>>>> upstream/2.2-develop
 class QueryTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -46,7 +52,11 @@ class QueryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+<<<<<<< HEAD
         $this->selectHydratorMock = $this->getMockBuilder(selectHydrator::class)
+=======
+        $this->selectHydratorMock = $this->getMockBuilder(SelectHydrator::class)
+>>>>>>> upstream/2.2-develop
             ->disableOriginalConstructor()
             ->getMock();
 

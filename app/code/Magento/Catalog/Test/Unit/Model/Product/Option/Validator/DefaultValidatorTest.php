@@ -71,12 +71,21 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * @param string $title
      * @param string $type
      * @param string $priceType
      * @param \Magento\Framework\DataObject $product
      * @param array $messages
      * @param bool $result
+=======
+     * @param $title
+     * @param $type
+     * @param $priceType
+     * @param $product
+     * @param $messages
+     * @param $result
+>>>>>>> upstream/2.2-develop
      * @dataProvider isValidTitleDataProvider
      */
     public function testIsValidTitle($title, $type, $priceType, $product, $messages, $result)

@@ -12,6 +12,10 @@ use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
+<<<<<<< HEAD
+=======
+use Magento\Framework\Mail\TransportInterface;
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
@@ -53,7 +57,7 @@ class TransportBuilder
     /**
      * Mail Transport
      *
-     * @var \Magento\Framework\Mail\TransportInterface
+     * @var TransportInterface
      */
     protected $transport;
 
@@ -67,31 +71,35 @@ class TransportBuilder
     /**
      * Object Manager
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
      * Message
      *
-     * @var \Magento\Framework\Mail\Message
+     * @var MessageInterface
      */
     protected $message;
 
     /**
      * Sender resolver
      *
-     * @var \Magento\Framework\Mail\Template\SenderResolverInterface
+     * @var SenderResolverInterface
      */
     protected $_senderResolver;
 
     /**
-     * @var \Magento\Framework\Mail\TransportInterfaceFactory
+     * @var TransportInterfaceFactory
      */
     protected $mailTransportFactory;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Framework\Mail\MessageInterfaceFactory
+=======
+     * @var MessageInterfaceFactory
+>>>>>>> upstream/2.2-develop
      */
     private $messageFactory;
 
@@ -101,7 +109,11 @@ class TransportBuilder
      * @param SenderResolverInterface $senderResolver
      * @param ObjectManagerInterface $objectManager
      * @param TransportInterfaceFactory $mailTransportFactory
+<<<<<<< HEAD
      * @param MessageInterfaceFactory $messageFactory
+=======
+     * @param MessageInterfaceFactory|null $messageFactory
+>>>>>>> upstream/2.2-develop
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -236,7 +248,7 @@ class TransportBuilder
     /**
      * Get mail transport
      *
-     * @return \Magento\Framework\Mail\TransportInterface
+     * @return TransportInterface
      */
     public function getTransport()
     {

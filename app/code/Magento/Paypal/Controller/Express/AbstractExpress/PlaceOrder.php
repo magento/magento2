@@ -9,6 +9,7 @@ namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
+use Magento\Sales\Api\PaymentFailuresInterface;
 
 /**
  * Class PlaceOrder
@@ -22,7 +23,11 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
     protected $agreementsValidator;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Sales\Api\PaymentFailuresInterface
+=======
+     * @var PaymentFailuresInterface
+>>>>>>> upstream/2.2-develop
      */
     private $paymentFailures;
 
@@ -36,7 +41,11 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
+<<<<<<< HEAD
      * @param \Magento\Sales\Api\PaymentFailuresInterface|null $paymentFailures
+=======
+     * @param PaymentFailuresInterface|null $paymentFailures
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -49,7 +58,11 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
+<<<<<<< HEAD
         \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null
+=======
+        PaymentFailuresInterface $paymentFailures = null
+>>>>>>> upstream/2.2-develop
     ) {
         parent::__construct(
             $context,
@@ -63,9 +76,13 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
         );
 
         $this->agreementsValidator = $agreementValidator;
+<<<<<<< HEAD
         $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(
             \Magento\Sales\Api\PaymentFailuresInterface::class
         );
+=======
+        $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(PaymentFailuresInterface::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -146,7 +163,11 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      *
      * @return void
      */
+<<<<<<< HEAD
     private function processException(\Exception $exception, string $message): void
+=======
+    private function processException(\Exception $exception, string $message)
+>>>>>>> upstream/2.2-develop
     {
         $this->messageManager->addExceptionMessage($exception, __($message));
         $this->_redirect('*/*/review');

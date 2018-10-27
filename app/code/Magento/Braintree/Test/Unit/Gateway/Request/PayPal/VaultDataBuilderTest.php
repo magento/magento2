@@ -18,6 +18,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
+<<<<<<< HEAD
      * @var SubjectReader|MockObject
      */
     private $subjectReaderMock;
@@ -26,6 +27,11 @@ class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
      * @var PaymentDataObjectInterface|MockObject
      */
     private $paymentDataObjectMock;
+=======
+     * @var PaymentDataObjectInterface|MockObject
+     */
+    private $paymentDO;
+>>>>>>> upstream/2.2-develop
 
     /**
      * @var InfoInterface|MockObject
@@ -39,16 +45,24 @@ class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+<<<<<<< HEAD
         $this->paymentDataObjectMock = $this->createMock(PaymentDataObjectInterface::class);
+=======
+        $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+>>>>>>> upstream/2.2-develop
 
         $this->paymentInfoMock = $this->createMock(InfoInterface::class);
 
+<<<<<<< HEAD
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->setMethods(['readPayment'])
             ->getMock();
 
         $this->builder = new VaultDataBuilder($this->subjectReaderMock);
+=======
+        $this->builder = new VaultDataBuilder(new SubjectReader());
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -60,6 +74,7 @@ class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuild(array $additionalInfo, array $expected)
     {
         $subject = [
+<<<<<<< HEAD
             'payment' => $this->paymentDataObjectMock,
         ];
 
@@ -74,10 +89,19 @@ class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->paymentInfoMock->expects(static::once())
             ->method('getAdditionalInformation')
+=======
+            'payment' => $this->paymentDO
+        ];
+
+        $this->paymentDO->method('getPayment')
+            ->willReturn($this->paymentInfo);
+
+        $this->paymentInfo->method('getAdditionalInformation')
+>>>>>>> upstream/2.2-develop
             ->willReturn($additionalInfo);
 
         $actual = $this->builder->build($subject);
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**

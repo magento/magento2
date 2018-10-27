@@ -369,6 +369,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param RowCustomizerInterface $rowCustomizer
      * @param array $dateAttrCodes
      * @throws \Magento\Framework\Exception\LocalizedException
+<<<<<<< HEAD
+=======
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -545,7 +549,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 'mgv.label',
                 'mgv.position',
                 'mgv.disabled',
+<<<<<<< HEAD
                 'mgv.store_id',
+=======
+                'mgv.store_id'
+>>>>>>> upstream/2.2-develop
             ]
         )->where(
             "mgvte.$productEntityJoinField IN (?)",
@@ -699,7 +707,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Get header columns
      *
+<<<<<<< HEAD
      * @return string[]
+=======
+     * {@inheritdoc}
+>>>>>>> upstream/2.2-develop
      */
     public function _getHeaderColumns()
     {
@@ -760,8 +772,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Get entity collection
      *
+<<<<<<< HEAD
      * @param bool $resetCollection
      * @return \Magento\Framework\Data\Collection\AbstractDb
+=======
+     * {@inheritdoc}
+>>>>>>> upstream/2.2-develop
      */
     protected function _getEntityCollection($resetCollection = false)
     {
@@ -806,9 +822,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             // Maximal Products limit
             $maxProductsLimit = 5000;
 
+<<<<<<< HEAD
             $this->_itemsPerPage = (int)(
                 ($memoryLimit * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct
             );
+=======
+            $this->_itemsPerPage = (int)
+                ($memoryLimit * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct;
+>>>>>>> upstream/2.2-develop
             if ($this->_itemsPerPage < $minProductsLimit) {
                 $this->_itemsPerPage = $minProductsLimit;
             }
@@ -832,9 +853,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Export process
-     *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function export()
     {
@@ -872,6 +892,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @since 100.2.0
      */
     protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
@@ -935,8 +959,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Load products' data from the collection and filter it (if needed).
      *
+<<<<<<< HEAD
      * @return array Keys are product IDs, values arrays with keys as store IDs
      *               and values as store-specific versions of Product entity.
+=======
+     * @return array Keys are product IDs, values arrays with keys as store ID
+     * and values as store-specific versions of Product entity.
+>>>>>>> upstream/2.2-develop
      */
     protected function loadCollection(): array
     {
@@ -948,8 +977,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             foreach ($collection as $itemId => $item) {
                 $data[$itemId][$storeId] = $item;
             }
+<<<<<<< HEAD
         }
         $collection->clear();
+=======
+            $collection->clear();
+        }
+>>>>>>> upstream/2.2-develop
 
         return $data;
     }
@@ -966,11 +1000,19 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $data = [];
         $items = $this->loadCollection();
 
+<<<<<<< HEAD
         /**
          * @var int $itemId
          * @var ProductEntity[] $itemByStore
          */
         foreach ($items as $itemId => $itemByStore) {
+=======
+        foreach ($items as $itemId => $itemByStore) {
+            /**
+             * @var int           $itemId
+             * @var ProductEntity $item
+             */
+>>>>>>> upstream/2.2-develop
             foreach ($this->_storeIdToCode as $storeId => $storeCode) {
                 $item = $itemByStore[$storeId];
                 $additionalAttributes = [];
@@ -1204,7 +1246,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         unset($dataRow[self::COL_STORE]);
         unset($dataRow[self::COL_ATTR_SET]);
         unset($dataRow[self::COL_TYPE]);
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         if (Store::DEFAULT_STORE_ID == $storeId) {
             $this->updateDataWithCategoryColumns($dataRow, $multiRawData['rowCategories'], $productId);
             if (!empty($multiRawData['rowWebsites'][$productId])) {
@@ -1305,7 +1350,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $dataRow[self::COL_SKU] = $sku;
         $dataRow[self::COL_ATTR_SET] = $attributeSet;
         $dataRow[self::COL_TYPE] = $type;
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> upstream/2.2-develop
         return $dataRow;
     }
 
@@ -1393,6 +1442,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
             $options = $this->_optionColFactory->create();
+<<<<<<< HEAD
             /* @var Collection $options*/
             $options->reset()
                 ->addOrder('sort_order', Collection::SORT_ORDER_ASC)
@@ -1400,6 +1450,21 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 ->addPriceToResult($storeId)
                 ->addProductToFilter($productIds)
                 ->addValuesToResult($storeId);
+=======
+            /* @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options*/
+            $options->reset()->addOrder(
+                'sort_order',
+                \Magento\Catalog\Model\ResourceModel\Product\Option\Collection::SORT_ORDER_ASC
+            )->addTitleToResult(
+                $storeId
+            )->addPriceToResult(
+                $storeId
+            )->addProductToFilter(
+                $productIds
+            )->addValuesToResult(
+                $storeId
+            );
+>>>>>>> upstream/2.2-develop
 
             foreach ($options as $option) {
                 $row = [];

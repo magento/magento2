@@ -7,7 +7,11 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+>>>>>>> upstream/2.2-develop
     <section name="AdminCategoryBasicFieldSection">
         <element name="IncludeInMenu" type="checkbox" selector="input[name='include_in_menu']"/>
         <element name="includeInMenuLabel" type="text" selector="input[name='include_in_menu']+label"/>
@@ -16,6 +20,7 @@
         <element name="enableCategoryLabel" type="text" selector="input[name='is_active']+label"/>
         <element name="enableUseDefault" type="checkbox" selector="input[name='use_default[is_active]']"/>
         <element name="CategoryNameInput" type="input" selector="input[name='name']"/>
+<<<<<<< HEAD
         <element name="RequiredFieldIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
         <element name="RequiredFieldIndicatorColor" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('color');"/>
         <element name="categoryNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
@@ -38,6 +43,9 @@
         <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
         <element name="filterPriceRangeUseConfig" type="checkbox" selector="input[name='use_config[filter_price_range]']"/>
         <element name="RequiredFieldIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index={{arg1}}]&gt;.admin__field-label span'), ':after').getPropertyValue('content');" parameterized="true"/>
+=======
+        <element name="categoryNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
+>>>>>>> upstream/2.2-develop
     </section>
     <section name="CatalogWYSIWYGSection">
         <element name="ShowHideBtn" type="button" selector="#togglecategory_form_description"/>

@@ -60,7 +60,10 @@ define([
             });
 
             it('Check method call with undefined as parameter.', function () {
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
                 expect(obj.setPrepareToSendData(undefined)).toBeUndefined();
                 expect(obj.source.set).toHaveBeenCalledWith(dataScope + '-prepared-for-send', '');
             });

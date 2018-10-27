@@ -47,9 +47,10 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Run test getConfig method
+     * Run test getConfig method.
      *
      * @param array $expected
+     * @return void
      * @dataProvider getConfigDataProvider
      */
     public function testGetConfig($expected)
@@ -86,7 +87,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getConfigDataProvider()
+    public function getConfigDataProvider(): array
     {
         return [
             [
@@ -105,7 +106,11 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'paymentIcon' => [
                                 'width' => 30, 'height' => 26, 'url' => 'https://icon.test.url'
                             ],
+<<<<<<< HEAD
                             'isRequiredBillingAddress' => true
+=======
+                            'isRequiredBillingAddress' => true,
+>>>>>>> upstream/2.2-develop
                         ]
                     ]
                 ]

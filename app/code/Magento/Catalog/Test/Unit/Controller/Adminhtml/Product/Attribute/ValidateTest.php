@@ -295,6 +295,20 @@ class ValidateTest extends AttributeTest
                     ],
                 ], false
             ],
+            'empty and deleted' => [
+                [
+                    'value' => [
+                        "option_0" => [1, 0],
+                        "option_1" => [2, 0],
+                        "option_2" => ["", ""],
+                    ],
+                    'delete' => [
+                        "option_0" => "",
+                        "option_1" => "",
+                        "option_2" => "1",
+                    ]
+                ], false
+            ],
         ];
     }
 
@@ -381,6 +395,7 @@ class ValidateTest extends AttributeTest
             ],
             'empty admin scope options and deleted' => [
                 [
+<<<<<<< HEAD
                     'option' => [
                         'value' => [
                             "option_0" => [''],
@@ -388,6 +403,13 @@ class ValidateTest extends AttributeTest
                         'delete' => [
                             'option_0' => '1',
                         ],
+=======
+                    'value' => [
+                        "option_0" => [''],
+                    ],
+                    'delete' => [
+                        'option_0' => '1',
+>>>>>>> upstream/2.2-develop
                     ],
                 ],
                 (object) [
@@ -396,6 +418,7 @@ class ValidateTest extends AttributeTest
             ],
             'empty admin scope options and not deleted' => [
                 [
+<<<<<<< HEAD
                     'option' => [
                         'value' => [
                             "option_0" => [''],
@@ -403,6 +426,13 @@ class ValidateTest extends AttributeTest
                         'delete' => [
                             'option_0' => '0',
                         ],
+=======
+                    'value' => [
+                        "option_0" => [''],
+                    ],
+                    'delete' => [
+                        'option_0' => '0',
+>>>>>>> upstream/2.2-develop
                     ],
                 ],
                 (object) [

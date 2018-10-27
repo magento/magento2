@@ -14,8 +14,13 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
+<<<<<<< HEAD
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+=======
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Login controller
@@ -99,10 +104,19 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
         $this->customerAccountManagement = $customerAccountManagement;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
+<<<<<<< HEAD
         $this->cookieManager = $cookieManager ?:
             ObjectManager::getInstance()->get(CookieManagerInterface::class);
         $this->cookieMetadataFactory = $cookieMetadataFactory ?:
             ObjectManager::getInstance()->get(CookieMetadataFactory::class);
+=======
+        $this->cookieManager = $cookieManager ?: ObjectManager::getInstance()->get(
+            CookieManagerInterface::class
+        );
+        $this->cookieMetadataFactory = $cookieMetadataFactory ?: ObjectManager::getInstance()->get(
+            CookieMetadataFactory::class
+        );
+>>>>>>> upstream/2.2-develop
     }
 
     /**

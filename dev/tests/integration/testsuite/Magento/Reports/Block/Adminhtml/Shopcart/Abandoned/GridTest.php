@@ -42,7 +42,11 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testPageSizeIsSetToNullWhenExportCsvFile(): void
+=======
+    public function testPageSizeIsSetToNullWhenExportCsvFile()
+>>>>>>> upstream/2.2-develop
     {
         /** @var LayoutInterface $layout */
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);

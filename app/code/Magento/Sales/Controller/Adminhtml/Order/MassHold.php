@@ -5,12 +5,17 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+<<<<<<< HEAD
 use Magento\Framework\App\Action\HttpPostActionInterface;
+=======
+use Magento\Framework\Exception\NotFoundException;
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * Class MassHold
@@ -42,6 +47,20 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
         parent::__construct($context, $filter);
         $this->collectionFactory = $collectionFactory;
         $this->orderManagement = $orderManagement;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function execute()
+    {
+        /** @var HttpRequest $request */
+        $request = $this->getRequest();
+        if (!$request->isPost()) {
+            throw new NotFoundException(__('Page not found.'));
+        }
+
+        return parent::execute();
     }
 
     /**

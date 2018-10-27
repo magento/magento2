@@ -309,6 +309,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param array $data
      * @param ResolverInterface $localeResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -349,7 +350,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_productVisibility = $productVisibility;
         $this->invoiceManagement = $invoiceManagement;
         $this->_currencyFactory = $currencyFactory;
-        $this->_eavConfig = $eavConfig;
         $this->_orderHistoryFactory = $orderHistoryFactory;
         $this->_addressCollectionFactory = $addressCollectionFactory;
         $this->_paymentCollectionFactory = $paymentCollectionFactory;
@@ -1065,9 +1065,14 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
     
     /**
+<<<<<<< HEAD
      * Add a comment to order status history.
      *
      * Different or default status may be specified.
+=======
+     * Add a comment to order status history
+     * Different or default status may be specified
+>>>>>>> upstream/2.2-develop
      *
      * @param string $comment
      * @param bool|string $status

@@ -7,7 +7,11 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <entity name="SampleBraintreeConfig" type="braintree_config_state">
         <requiredEntity type="title">SampleTitle</requiredEntity>
         <requiredEntity type="payment_action">SamplePaymentAction</requiredEntity>
@@ -35,6 +39,7 @@
         <data key="value">somePrivateKey</data>
     </entity>
 
+<<<<<<< HEAD
     <entity name="BraintreeConfig" type="braintree_config_state">
         <requiredEntity type="title">BraintreeTitle</requiredEntity>
         <requiredEntity type="payment_action">PaymentAction</requiredEntity>
@@ -62,6 +67,8 @@
         <data key="value">67de364080b1b4e2492d7a3de413a572</data>
     </entity>
 
+=======
+>>>>>>> upstream/2.2-develop
     <!-- default configuration used to restore Magento config -->
     <entity name="DefaultBraintreeConfig" type="braintree_config_state">
         <requiredEntity type="title">DefaultTitle</requiredEntity>
@@ -70,15 +77,27 @@
         <requiredEntity type="merchant_id">DefaultMerchantId</requiredEntity>
         <requiredEntity type="public_key">DefaultPublicKey</requiredEntity>
         <requiredEntity type="private_key">DefaultPrivateKey</requiredEntity>
+<<<<<<< HEAD
+=======
+        <requiredEntity type="active">DefaultActive</requiredEntity>
+        <requiredEntity type="merchant_account_id">DefaultMerchantAccountId</requiredEntity>
+>>>>>>> upstream/2.2-develop
     </entity>
     <entity name="DefaultTitle" type="title">
         <data key="value"/>
     </entity>
     <entity name="DefaultPaymentAction" type="payment_action">
+<<<<<<< HEAD
         <data key="value"/>
     </entity>
     <entity name="DefaultEnvironment" type="environment">
         <data key="value"/>
+=======
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="DefaultEnvironment" type="environment">
+        <data key="value">sandbox</data>
+>>>>>>> upstream/2.2-develop
     </entity>
     <entity name="DefaultMerchantId" type="merchant_id">
         <data key="value"/>
@@ -89,6 +108,7 @@
     <entity name="DefaultPrivateKey" type="private_key">
         <data key="value"/>
     </entity>
+<<<<<<< HEAD
 
     <entity name="CustomBraintreeConfigurationData" type="custom_braintree_config_state">
         <requiredEntity type="braintree_cc_vault_active">BraintreeValuteActive</requiredEntity>
@@ -145,6 +165,56 @@
         <data key="privateKey">67de364080b1b4e2492d7a3de413a572</data>
         <data key="merchantAccountID">Magneto</data>
         <data key="titleForPayPalThroughBraintree">PayPal (Braintree)</data>
+=======
+    <entity name="DefaultActive" type="active">
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultMerchantAccountId" type="merchant_account_id">
+        <data key="value"/>
+    </entity>
+
+    <entity name="SandboxBraintreeConfig" type="braintree_config_state">
+        <requiredEntity type="title">EnabledTitle</requiredEntity>
+        <requiredEntity type="payment_action">AuthorizePaymentAction</requiredEntity>
+        <requiredEntity type="environment">SandboxEnvironment</requiredEntity>
+        <requiredEntity type="merchant_id">EnabledMerchantId</requiredEntity>
+        <requiredEntity type="public_key">EnabledPublicKey</requiredEntity>
+        <requiredEntity type="private_key">EnabledPrivateKey</requiredEntity>
+        <requiredEntity type="active">EnabledActive</requiredEntity>
+        <requiredEntity type="merchant_account_id">EnabledMerchantAccountId</requiredEntity>
+    </entity>
+    <entity name="EnabledTitle" type="title">
+        <data key="value">Credit Card (Braintree)</data>
+    </entity>
+    <entity name="AuthorizePaymentAction" type="payment_action">
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="SandboxEnvironment" type="environment">
+        <data key="value">sandbox</data>
+    </entity>
+    <entity name="EnabledMerchantId" type="merchant_id">
+        <data key="value">d4pdjhxgjfrsmzbf</data>
+    </entity>
+    <entity name="EnabledPublicKey" type="public_key">
+        <data key="value">m7q4wmh43xrgyrst</data>
+    </entity>
+    <entity name="EnabledPrivateKey" type="private_key">
+        <data key="value">67de364080b1b4e2492d7a3de413a572</data>
+    </entity>
+    <entity name="EnabledActive" type="active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnabledMerchantAccountId" type="merchant_account_id">
+        <data key="value">Magneto</data>
+    </entity>
+
+    <entity name="BraintreeCard" type="creditCard">
+        <data key="cc_type">MasterCard</data>
+        <data key="card_number">5105105105105100</data>
+        <data key="exp_month">12</data>
+        <data key="exp_year">20</data>
+        <data key="cvv">113</data>
+>>>>>>> upstream/2.2-develop
     </entity>
 
 </entities>

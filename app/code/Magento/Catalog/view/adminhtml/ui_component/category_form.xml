@@ -463,7 +463,11 @@
                 </imports>
             </settings>
         </field>
+<<<<<<< HEAD
         <field name="page_layout" sortOrder="190" formElement="select" component="Magento_Catalog/js/components/use-parent-settings/select" class="Magento\Catalog\Ui\Component\Form\Field\Category\PageLayout">
+=======
+        <field name="page_layout" component="Magento_Catalog/js/components/use-parent-settings/select" sortOrder="190" formElement="select">
+>>>>>>> upstream/2.2-develop
             <settings>
                 <dataType>string</dataType>
                 <label translate="true">Layout</label>

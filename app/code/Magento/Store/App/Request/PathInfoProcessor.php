@@ -5,7 +5,12 @@
  */
 declare(strict_types=1);
 
+<<<<<<< HEAD
 namespace Magento\Store\App\Request;
+=======
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Processes the path and looks for the store in the url and removes it and modifies the path accordingly.
@@ -45,6 +50,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
      */
     public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo) : string
     {
+<<<<<<< HEAD
         //can store code be used in url
         if ((bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)) {
             $storeCode = $this->storePathInfoValidator->getValidStoreCode($request, $pathInfo);
@@ -55,6 +61,26 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
                     //no route in case we're trying to access a store that has the same code as a direct access
                     $request->setActionName(\Magento\Framework\App\Router\Base::NO_ROUTE);
                 }
+=======
+        $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
+        $storeCode = $pathParts[0];
+
+        try {
+            /** @var \Magento\Store\Api\Data\StoreInterface $store */
+            $store = $this->storeManager->getStore($storeCode);
+        } catch (NoSuchEntityException $e) {
+            return $pathInfo;
+        }
+
+        if ($store->isUseStoreInUrl()) {
+            if (!$request->isDirectAccessFrontendName($storeCode) && $storeCode != Store::ADMIN_CODE) {
+                $this->storeManager->setCurrentStore($store->getCode());
+                $pathInfo = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
+                return $pathInfo;
+            } elseif (!empty($storeCode)) {
+                $request->setActionName('noroute');
+                return $pathInfo;
+>>>>>>> upstream/2.2-develop
             }
         }
         return $pathInfo;

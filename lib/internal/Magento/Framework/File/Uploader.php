@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\File;
 
+<<<<<<< HEAD
+=======
+use Magento\Framework\Image\Adapter\UploadConfigInterface;
+
+>>>>>>> upstream/2.2-develop
 /**
  * File upload class
  *
@@ -138,14 +143,22 @@ class Uploader
     /**
      * Maximum Image Width resolution in pixels. For image resizing on client side
      * @deprecated
+<<<<<<< HEAD
      * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
+=======
+     * @see UploadConfigInterface::getMaxWidth()
+>>>>>>> upstream/2.2-develop
      */
     const MAX_IMAGE_WIDTH = 4096;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated
+<<<<<<< HEAD
      * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
+=======
+     * @see UploadConfigInterface::getMaxHeight()
+>>>>>>> upstream/2.2-develop
      */
     const MAX_IMAGE_HEIGHT = 2160;
 
@@ -161,7 +174,11 @@ class Uploader
      * Init upload
      *
      * @param string|array $fileId
+<<<<<<< HEAD
      * @param \Magento\Framework\File\Mime|null $fileMime
+=======
+     * @param null|\Magento\Framework\File\Mime $fileMime
+>>>>>>> upstream/2.2-develop
      * @throws \Exception
      */
     public function __construct(

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
 
 use Magento\Braintree\Gateway\Http\Client\TransactionRefund;
@@ -16,12 +17,33 @@ use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 
 /**
  * Tests \Magento\Braintree\Gateway\Http\Client\TransactionRefund.
+=======
+declare(strict_types=1);
+
+namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
+
+use Braintree\Result\Successful;
+use Magento\Braintree\Gateway\Http\Client\TransactionRefund;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
+use Magento\Payment\Gateway\Http\ClientException;
+use Magento\Payment\Gateway\Http\ConverterException;
+use Magento\Payment\Gateway\Http\TransferInterface;
+use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
+use Magento\Payment\Model\Method\Logger;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Psr\Log\LoggerInterface;
+
+/**
+ * Class TransactionRefundTest
+>>>>>>> upstream/2.2-develop
  */
 class TransactionRefundTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TransactionRefund
      */
+<<<<<<< HEAD
     private $client;
 
     /**
@@ -31,10 +53,17 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var BraintreeAdapter|MockObject
+=======
+    private $transactionRefundModel;
+
+    /**
+     * @var BraintreeAdapter|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
      */
     private $adapterMock;
 
     /**
+<<<<<<< HEAD
      * @var string
      */
     private $transactionId = 'px4kpev5';
@@ -45,13 +74,20 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
     private $paymentAmount = '100.00';
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * @inheritdoc
      */
     protected function setUp()
     {
         /** @var LoggerInterface|MockObject $criticalLoggerMock */
         $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+<<<<<<< HEAD
         $this->loggerMock = $this->getMockBuilder(Logger::class)
+=======
+        /** @var Logger|\PHPUnit_Framework_MockObject_MockObject $loggerMock */
+        $loggerMock = $this->getMockBuilder(Logger::class)
+>>>>>>> upstream/2.2-develop
             ->disableOriginalConstructor()
             ->getMock();
         $this->adapterMock = $this->getMockBuilder(BraintreeAdapter::class)
@@ -61,6 +97,7 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
         $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
         $adapterFactoryMock->expects(self::once())
             ->method('create')
             ->willReturn($this->adapterMock);
@@ -151,5 +188,40 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
             'transaction_id' => $this->transactionId,
             PaymentDataBuilder::AMOUNT => $this->paymentAmount,
         ];
+=======
+        $adapterFactoryMock->method('create')
+            ->willReturn($this->adapterMock);
+
+        $this->transactionRefundModel = new TransactionRefund($criticalLoggerMock, $loggerMock, $adapterFactoryMock);
+    }
+
+    /**
+     * @throws ClientException
+     * @throws ConverterException
+     */
+    public function testRefundRequestWithStoreId()
+    {
+        $transactionId = '11223344';
+        $refundAmount = 10;
+        $data = [
+            'store_id' => 0,
+            'transaction_id' => $transactionId,
+            PaymentDataBuilder::AMOUNT => $refundAmount
+        ];
+        $successfulResponse = new Successful();
+
+        /** @var TransferInterface|\PHPUnit_Framework_MockObject_MockObject $transferObjectMock */
+        $transferObjectMock = $this->createMock(TransferInterface::class);
+        $transferObjectMock->method('getBody')
+            ->willReturn($data);
+        $this->adapterMock->expects($this->once())
+            ->method('refund')
+            ->with($transactionId, $refundAmount)
+            ->willReturn($successfulResponse);
+
+        $response = $this->transactionRefundModel->placeRequest($transferObjectMock);
+
+        self::assertEquals($successfulResponse, $response['object']);
+>>>>>>> upstream/2.2-develop
     }
 }

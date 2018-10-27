@@ -61,6 +61,11 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
         }
 
         $needle = 'block_id="' . $this->getId() . '"';
+
+        if ($this->hasDataChanges()) {
+            $this->setUpdateTime(null);
+        }
+
         if (false == strstr($this->getContent(), $needle)) {
             return parent::beforeSave();
         }

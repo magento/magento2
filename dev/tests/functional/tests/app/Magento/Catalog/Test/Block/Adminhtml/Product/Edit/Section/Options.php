@@ -90,6 +90,13 @@ class Options extends Section
     protected $sortRowsData = [];
 
     /**
+     * Locator for file_extension field.
+     *
+     * @var string
+     */
+    private $hintMessage = "div[data-index='file_extension'] div[id^='notice']";
+
+    /**
      * Fill custom options form on tab.
      *
      * @param array $fields

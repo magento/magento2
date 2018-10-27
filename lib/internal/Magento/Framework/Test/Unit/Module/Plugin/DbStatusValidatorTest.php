@@ -157,35 +157,61 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
                     [
                         DbVersionInfo::KEY_MODULE => 'Magento_Module4',
                         DbVersionInfo::KEY_TYPE => 'data',
+<<<<<<< HEAD
                         DbVersionInfo::KEY_CURRENT => '1.0.10',
                         DbVersionInfo::KEY_REQUIRED => '1.0.9'
+=======
+                        DbVersionInfo::KEY_CURRENT => '1.0.1',
+                        DbVersionInfo::KEY_REQUIRED => '1.0.0'
+>>>>>>> upstream/2.2-develop
                     ],
                 ],
                 'expectedMessage' => "Please update your modules: "
                     . "Run \"composer install\" from the Magento root directory.\n"
                     . "The following modules are outdated:\n"
+<<<<<<< HEAD
                     . "Magento_Module3 schema: code version - 1.0.0, database version - 2.0.0\n"
                     . "Magento_Module4 data: code version - 1.0.9, database version - 1.0.10",
+=======
+                    . "Magento_Module3 db schema version: defined in codebase - 1.0.0, currently installed - 2.0.0\n"
+                    . "Magento_Module4 db data version: defined in codebase - 1.0.0, currently installed - 1.0.1",
+>>>>>>> upstream/2.2-develop
             ],
             'some versions too high, some too low' => [
                 'errors' => [
                     [
+<<<<<<< HEAD
                         DbVersionInfo::KEY_MODULE => 'Magento_Module2',
                         DbVersionInfo::KEY_TYPE => 'schema',
                         DbVersionInfo::KEY_CURRENT => '1.9.0',
                         DbVersionInfo::KEY_REQUIRED => '1.12.0'
                     ],
                     [
+=======
+>>>>>>> upstream/2.2-develop
                         DbVersionInfo::KEY_MODULE => 'Magento_Module1',
                         DbVersionInfo::KEY_TYPE => 'schema',
                         DbVersionInfo::KEY_CURRENT => '2.0.0',
                         DbVersionInfo::KEY_REQUIRED => '1.0.0'
                     ],
+<<<<<<< HEAD
+=======
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Magento_Module2',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => '1.0.0',
+                        DbVersionInfo::KEY_REQUIRED => '2.0.0'
+                    ],
+>>>>>>> upstream/2.2-develop
                 ],
                 'expectedMessage' => "Please update your modules: "
                     . "Run \"composer install\" from the Magento root directory.\n"
                     . "The following modules are outdated:\n"
+<<<<<<< HEAD
                     . "Magento_Module1 schema: code version - 1.0.0, database version - 2.0.0"
+=======
+                    . "Magento_Module1 db schema version: defined in codebase - 1.0.0, currently installed - 2.0.0"
+>>>>>>> upstream/2.2-develop
             ]
         ];
     }

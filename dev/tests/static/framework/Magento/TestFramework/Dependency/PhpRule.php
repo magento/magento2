@@ -88,6 +88,7 @@ class PhpRule implements RuleInterface
             return [];
         }
 
+<<<<<<< HEAD
         $dependenciesInfo = [];
         $dependenciesInfo = $this->considerCaseDependencies(
             $dependenciesInfo,
@@ -125,6 +126,12 @@ class PhpRule implements RuleInterface
         if (!preg_match_all($pattern, $contents, $matches)) {
             return [];
         }
+=======
+        $pattern = '~\b(?<class>(?<module>(' . implode(
+            '[_\\\\]|',
+            Files::init()->getNamespaces()
+        ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
+>>>>>>> upstream/2.2-develop
 
         $dependenciesInfo = [];
         $matches['module'] = array_unique($matches['module']);

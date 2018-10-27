@@ -38,17 +38,29 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+<<<<<<< HEAD
     private $checkoutSession;
+=======
+    private  $_checkoutSession;
+>>>>>>> upstream/2.2-develop
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+<<<<<<< HEAD
     private $scopeConfig;
+=======
+    private  $_scopeConfig;
+>>>>>>> upstream/2.2-develop
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+<<<<<<< HEAD
     private $eventManager;
+=======
+    private $_eventManager;
+>>>>>>> upstream/2.2-develop
 
     /**
      * @inheritdoc
@@ -141,7 +153,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $quoteMock->expects($this->any())->method('getId')->willReturn(1);
 
+<<<<<<< HEAD
         $this->assertSame($this->helper, $this->helper->sendPaymentFailedEmail($quoteMock, 'test message'));
+=======
+        $this->assertSame($this->_helper, $this->_helper->sendPaymentFailedEmail($quoteMock, 'test message'));
+>>>>>>> upstream/2.2-develop
     }
 
     /**

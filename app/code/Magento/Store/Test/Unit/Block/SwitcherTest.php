@@ -28,9 +28,12 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $store;
 
+<<<<<<< HEAD
     /**
      * @return void
      */
+=======
+>>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();

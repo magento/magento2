@@ -20,6 +20,10 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
+<<<<<<< HEAD
+=======
+use Magento\Webapi\Model\Rest\Swagger\Generator;
+>>>>>>> upstream/2.2-develop
 use Magento\Webapi\Controller\Rest\RequestProcessorPool;
 
 /**
@@ -113,6 +117,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $requestProcessorPool;
 
     /**
+     * @var RequestProcessorPool
+     */
+    protected $requestProcessorPool;
+
+    /**
      * @var StoreManagerInterface
      * @deprecated 100.1.0
      */
@@ -165,7 +174,37 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->areaList = $areaList;
         $this->paramsOverrider = $paramsOverrider;
         $this->storeManager = $storeManager;
+<<<<<<< HEAD
         $this->requestProcessorPool = $requestProcessorPool;
+=======
+        $this->requestProcessorPool = $this->_objectManager->get(RequestProcessorPool::class);
+    }
+
+    /**
+     * Get deployment config
+     *
+     * @return DeploymentConfig
+     */
+    private function getDeploymentConfig()
+    {
+        if (!$this->deploymentConfig instanceof \Magento\Framework\App\DeploymentConfig) {
+            $this->deploymentConfig = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
+    }
+
+    /**
+     * Set deployment config
+     *
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @return void
+     * @deprecated 100.1.0
+     */
+    public function setDeploymentConfig(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
+    {
+        $this->deploymentConfig = $deploymentConfig;
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -240,6 +279,63 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Execute schema request
+     *
+     * @return void
+     */
+    protected function processSchemaRequest()
+    {
+        $requestedServices = $this->_request->getRequestedServices('all');
+        $requestedServices = $requestedServices == Request::ALL_SERVICES
+            ? $this->swaggerGenerator->getListOfServices()
+            : $requestedServices;
+        $responseBody = $this->swaggerGenerator->generate(
+            $requestedServices,
+            $this->_request->getScheme(),
+            $this->_request->getHttpHost(false),
+            $this->_request->getRequestUri()
+        );
+        $this->_response->setBody($responseBody)->setHeader('Content-Type', 'application/json');
+    }
+
+    /**
+     * Execute API request
+     *
+     * @return void
+     * @throws AuthorizationException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Webapi\Exception
+     */
+    protected function processApiRequest()
+    {
+        $inputParams = $this->getInputParamsResolver()->resolve();
+
+        $route = $this->getInputParamsResolver()->getRoute();
+        $serviceMethodName = $route->getServiceMethod();
+        $serviceClassName = $route->getServiceClass();
+
+        $service = $this->_objectManager->get($serviceClassName);
+        /** @var \Magento\Framework\Api\AbstractExtensibleObject $outputData */
+        $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
+        $outputData = $this->serviceOutputProcessor->process(
+            $outputData,
+            $serviceClassName,
+            $serviceMethodName
+        );
+        if ($this->_request->getParam(FieldsFilter::FILTER_PARAMETER) && is_array($outputData)) {
+            $outputData = $this->fieldsFilter->filter($outputData);
+        }
+        $header = $this->getDeploymentConfig()->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT);
+        if ($header) {
+            $this->_response->setHeader('X-Frame-Options', $header);
+        }
+        $this->_response->prepareResponse($outputData);
+    }
+
+    /**
+>>>>>>> upstream/2.2-develop
      * Validate request
      *
      * @throws AuthorizationException

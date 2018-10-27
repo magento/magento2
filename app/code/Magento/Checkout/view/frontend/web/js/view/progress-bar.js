@@ -26,7 +26,11 @@ define([
             var stepsValue;
 
             this._super();
+<<<<<<< HEAD
             window.addEventListener('hashchange', _.bind(stepNavigator.handleHash, stepNavigator));
+=======
+            $(window).hashchange(_.bind(stepNavigator.handleHash, stepNavigator));
+>>>>>>> upstream/2.2-develop
 
             if (!window.location.hash) {
                 stepsValue = stepNavigator.steps();

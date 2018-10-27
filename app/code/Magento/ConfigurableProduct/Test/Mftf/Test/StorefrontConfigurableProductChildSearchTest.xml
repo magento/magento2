@@ -7,16 +7,27 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+=======
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <test name="StorefrontConfigurableProductChildSearchTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="View configurable product details in storefront"/>
             <title value="Guest customer should be able to search configurable product by attributes of child products"/>
             <description value="Guest customer should be able to search configurable product by attributes of child products"/>
+<<<<<<< HEAD
             <severity value="MAJOR"/>
             <testCaseId value="MC-249"/>
             <group value="ConfigurableProduct"/>
+=======
+                <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-75997"/>
+            <group value="configurable"/>
+            <group value="product"/>
+>>>>>>> upstream/2.2-develop
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
@@ -29,13 +40,18 @@
             </createData>
 
             <!-- Create an attribute with two options to be used in the first child product -->
+<<<<<<< HEAD
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+=======
+            <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttribute"/>
+>>>>>>> upstream/2.2-develop
             <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
             <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
+<<<<<<< HEAD
 
             <!-- Create an attribute with two options to be used in the second child product -->
             <createData entity="productAttributeMultiselectTwoOptions" stepKey="createConfigProductAttributeMultiSelect"/>
@@ -43,6 +59,15 @@
                 <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
             </createData>
             <createData entity="productAttributeOption4" stepKey="createConfigProductAttributeOption2Multiselect">
+=======
+            
+            <!-- Create an attribute with two options to be used in the second child product -->
+            <createData entity="ProductAttributeMultiselectTwoOptions" stepKey="createConfigProductAttributeMultiSelect"/>
+            <createData entity="ProductAttributeOption3" stepKey="createConfigProductAttributeOption1Multiselect">
+                <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
+            </createData>
+            <createData entity="ProductAttributeOption4" stepKey="createConfigProductAttributeOption2Multiselect">
+>>>>>>> upstream/2.2-develop
                 <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
             </createData>
 
@@ -71,10 +96,16 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption1"/>
             </createData>
+<<<<<<< HEAD
             <updateData entity="ApiSimpleProductUpdateDescription" stepKey="updateSimpleProduct1" createDataKey="createConfigChildProduct1"/>
 
             <!-- Create a simple product and give it the attribute with the second option -->
             <createData entity="ApiSimpleTwoHidden" stepKey="createConfigChildProduct2">
+=======
+
+            <!-- Create a simple product and give it the attribute with the second option -->
+            <createData entity="ApiSimpleOneHidden" stepKey="createConfigChildProduct2">
+>>>>>>> upstream/2.2-develop
                 <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
             </createData>
@@ -99,12 +130,27 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
+<<<<<<< HEAD
             <!-- Create an attribute with two options to be used in the first child product (in the UI) -->
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttributeSelect"/>
             <createData entity="productAttributeOption5" stepKey="createConfigProductAttributeSelectOption1">
                 <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
             </createData>
             <createData entity="productAttributeOption6" stepKey="createConfigProductAttributeSelectOption2">
+=======
+            <!-- Fill Short Description for first simple product -->
+            <updateData entity="ApiSimpleProductUpdateDescription" createDataKey="createConfigChildProduct1" stepKey="updateSimpleProduct1Description" />
+
+            <!-- Fill Short Description for first simple product -->
+            <updateData entity="ApiSimpleProductUpdateName" createDataKey="createConfigChildProduct1" stepKey="updateSimpleProduct1Name"/>
+
+            <!-- Create an attribute with two options to be used in the first child product (in the UI) -->
+            <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttributeSelect"/>
+            <createData entity="ProductAttributeOption5" stepKey="createConfigProductAttributeSelectOption1">
+                <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
+            </createData>
+            <createData entity="ProductAttributeOption6" stepKey="createConfigProductAttributeSelectOption2">
+>>>>>>> upstream/2.2-develop
                 <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
             </createData>
 
@@ -116,6 +162,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
 
             <!-- Go to the product page for the first product -->
+<<<<<<< HEAD
             <amOnPage stepKey="goToProductGrid" url="{{ProductCatalogPage.url}}"/>
             <waitForPageLoad stepKey="waitForProductGridLoad"/>
             <actionGroup stepKey="searchForSimpleProduct" ref="filterProductGridBySku2">
@@ -132,6 +179,41 @@
 
         <after>
             <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+=======
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductGrid"/>
+            <waitForPageLoad stepKey="waitForProductGridLoad"/>
+            <actionGroup ref="filterProductGridBySku" stepKey="searchForSimpleProduct">
+                <argument name="product" value="$$createConfigChildProduct1$$"/>
+            </actionGroup>
+            <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+            <!-- Edit the attribute for the first simple product -->
+            <selectOption selector="{{AdminModifyAttributesSection.dropDownAttributeByName($$createConfigProductAttributeSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$" stepKey="editSelectAttribute"/>
+            <scrollToTopOfPage stepKey="scrollToTop"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+            <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
+
+            <!-- Go to the product page for the second product -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductGrid2"/>
+            <waitForPageLoad stepKey="waitForProductGridLoad2"/>
+            <actionGroup ref="filterProductGridBySku" stepKey="searchForSimpleProduct2">
+                <argument name="product" value="$$createConfigChildProduct2$$"/>
+            </actionGroup>
+            <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit2"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+            <!-- Edit the attribute for the first second product -->
+            <selectOption selector="{{AdminModifyAttributesSection.dropDownAttributeByName($$createConfigProductAttributeMultiSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeOption2Multiselect.option[store_labels][0][label]$$" stepKey="editSelectAttribute2"/>
+            <scrollToTopOfPage stepKey="scrollToTop2"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
+            <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess2"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
+            <waitForPageLoad time="30" stepKey="waitForProductIndexPageLoad"/>
+            <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
+        </before>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+>>>>>>> upstream/2.2-develop
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
@@ -142,6 +224,7 @@
         </after>
 
         <!-- Quick search the storefront for the first attribute option -->
+<<<<<<< HEAD
         <amOnPage stepKey="goToStoreFront" url="{{StorefrontHomePage.url}}"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
         <submitForm selector="#search_mini_form" parameterArray="['q' => $$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$]" stepKey="searchStorefront1" />
@@ -156,3 +239,27 @@
         <seeElement stepKey="seeProduct3" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
     </test>
 </tests>
+=======
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStoreFront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$" stepKey="searchStorefront1"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch1"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct1"/>
+
+        <!-- Quick search the storefront for the second attribute option -->
+        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeOption2Multiselect.option[store_labels][0][label]$$" stepKey="searchStorefront2"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch2"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct2"/>
+
+        <!-- Quick search the storefront for the first product description -->
+        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="'$$createConfigChildProduct1.custom_attributes[short_description]$$'" stepKey="searchStorefront3"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch3"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct3"/>
+
+        <!-- Quick search the storefront for the first product name -->
+        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="'$$createConfigChildProduct1.name$$'" stepKey="searchStorefront4"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch4"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct4"/>
+    </test>
+</tests>
+>>>>>>> upstream/2.2-develop

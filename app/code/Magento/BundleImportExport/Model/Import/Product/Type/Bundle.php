@@ -8,20 +8,29 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
+<<<<<<< HEAD
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\App\ObjectManager;
 use Magento\Bundle\Model\Product\Price as BundlePrice;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\CatalogImportExport\Model\Import\Product;
+<<<<<<< HEAD
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\StoreManagerInterface;
+=======
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Bundle\Model\ResourceModel\Bundle as BundleResourceModel;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Class Bundle
  * @package Magento\BundleImportExport\Model\Import\Product\Type
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -152,29 +161,57 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     private $storeCodeToId = [];
 
     /**
+<<<<<<< HEAD
      * @param AttributeSetCollectionFactory $attrSetColFac
      * @param AttributeCollectionFactory $prodAttrColFac
      * @param ResourceConnection $resource
+=======
+     * @var BundleResourceModel
+     */
+    private $bundleResourceModel;
+
+    /**
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param \Magento\Framework\App\ResourceConnection $resource
+>>>>>>> upstream/2.2-develop
      * @param array $params
      * @param MetadataPool|null $metadataPool
      * @param Bundle\RelationsDataSaver|null $relationsDataSaver
+<<<<<<< HEAD
      * @param StoreManagerInterface|null $storeManager
+=======
+     * @param StoreManagerInterface $storeManager
+     * @param BundleResourceModel $bundleResourceModel
+     * @throws \Magento\Framework\Exception\LocalizedException
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
         AttributeSetCollectionFactory $attrSetColFac,
         AttributeCollectionFactory $prodAttrColFac,
         ResourceConnection $resource,
         array $params,
+<<<<<<< HEAD
         MetadataPool $metadataPool = null,
         Bundle\RelationsDataSaver $relationsDataSaver = null,
         StoreManagerInterface $storeManager = null
+=======
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        Bundle\RelationsDataSaver $relationsDataSaver = null,
+        StoreManagerInterface $storeManager = null,
+        BundleResourceModel $bundleResourceModel = null
+>>>>>>> upstream/2.2-develop
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
-
         $this->relationsDataSaver = $relationsDataSaver
             ?: ObjectManager::getInstance()->get(Bundle\RelationsDataSaver::class);
         $this->storeManager = $storeManager
             ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+<<<<<<< HEAD
+=======
+        $this->bundleResourceModel = $bundleResourceModel
+            ?: ObjectManager::getInstance()->get(BundleResourceModel::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -286,7 +323,11 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected function populateOptionValueTemplate(array $option, int $optionId, int $storeId = 0): array
     {
         $optionValues = [];
+<<<<<<< HEAD
         if (isset($option['name'], $option['parent_id']) && $optionId) {
+=======
+        if (isset($option['name']) && isset($option['parent_id']) && $optionId) {
+>>>>>>> upstream/2.2-develop
             $pattern = '/^name[_]?(.*)/';
             $keys = array_keys($option);
             $optionNames = preg_grep($pattern, $keys);
@@ -302,7 +343,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 ];
             }
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return $optionValues;
     }
 
@@ -404,14 +448,19 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if ($this->_type != $productData['type_id']) {
                         continue;
                     }
-                    $this->parseSelections($rowData, $productData[$this->getProductEntityLinkField()]);
+                    $productId = $productData[$this->getProductEntityLinkField()];
+                    $this->parseSelections($rowData, $productId);
                 }
                 if (!empty($this->_cachedOptions)) {
                     $this->retrieveProductsByCachedSkus();
                     $this->populateExistingOptions();
                     $this->insertOptions();
                     $this->insertSelections();
+<<<<<<< HEAD
                     $this->insertParentChildRelations();
+=======
+                    $this->insertProductRelations();
+>>>>>>> upstream/2.2-develop
                     $this->clear();
                 }
             }
@@ -622,7 +671,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 }
             }
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return $optionValues;
     }
 
@@ -661,16 +713,25 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+<<<<<<< HEAD
      * Insert parent/child product relations
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     private function insertParentChildRelations()
+=======
+     * Insert product relations.
+     *
+     * @return void
+     */
+    private function insertProductRelations()
+>>>>>>> upstream/2.2-develop
     {
         foreach ($this->_cachedOptions as $productId => $options) {
             $childIds = [];
             foreach ($options as $option) {
                 foreach ($option['selections'] as $selection) {
+<<<<<<< HEAD
                     if (!isset($selection['parent_product_id'])) {
                         if (!isset($this->_cachedSkuToProducts[$selection['sku']])) {
                             continue;
@@ -684,6 +745,18 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         }
 
         return $this;
+=======
+                    if (isset($this->_cachedSkuToProducts[$selection['sku']])) {
+                        $childIds[] = $this->_cachedSkuToProducts[$selection['sku']];
+                    }
+                }
+            }
+            if (!empty($childIds)) {
+                $childIds = array_unique($childIds);
+                $this->bundleResourceModel->saveProductRelations($productId, $childIds);
+            }
+        }
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -785,7 +858,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 $this->storeCodeToId[$store->getCode()] = $store->getId();
             }
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return $this->storeCodeToId[$storeCode];
     }
 }

@@ -289,7 +289,11 @@ class Categories extends AbstractModifier
                                     'source' => 'product_details',
                                     'displayArea' => 'insideGroup',
                                     'sortOrder' => 20,
+<<<<<<< HEAD
                                     'dataScope'  => $fieldCode,
+=======
+                                    'dataScope' => $fieldCode,
+>>>>>>> upstream/2.2-develop
                                 ],
                             ],
                         ]

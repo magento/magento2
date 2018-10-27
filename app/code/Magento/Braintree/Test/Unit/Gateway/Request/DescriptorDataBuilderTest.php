@@ -6,15 +6,16 @@
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\Request\DescriptorDataBuilder;
 use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Braintree\Gateway\Request\DescriptorDataBuilder;
+<<<<<<< HEAD
+use Magento\Braintree\Gateway\SubjectReader;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-/**
- * Class DescriptorDataBuilderTest
- */
 class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -42,7 +43,11 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+<<<<<<< HEAD
         $this->builder = new DescriptorDataBuilder($this->configMock, $this->subjectReaderMock);
+=======
+        $this->builder = new DescriptorDataBuilder($this->config, new SubjectReader());
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -52,6 +57,7 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuild(array $descriptors, array $expected)
     {
+<<<<<<< HEAD
         $paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
         $buildSubject = [
             'payment' => $paymentDOMock,
@@ -69,6 +75,17 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->configMock->method('getDynamicDescriptors')->willReturn($descriptors);
 
         $actual = $this->builder->build(['payment' => $paymentDOMock]);
+=======
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $order = $this->createMock(OrderAdapterInterface::class);
+        $paymentDO->method('getOrder')
+            ->willReturn($order);
+
+        $this->config->method('getDynamicDescriptors')
+            ->willReturn($descriptors);
+
+        $actual = $this->builder->build(['payment' => $paymentDO]);
+>>>>>>> upstream/2.2-develop
         static::assertEquals($expected, $actual);
     }
 

@@ -93,6 +93,10 @@ class DateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $exactly
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFormMock($exactly)

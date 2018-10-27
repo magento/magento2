@@ -195,7 +195,11 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             $transactionSave->save();
 
             if (!empty($data['do_shipment'])) {
+<<<<<<< HEAD
                 $this->messageManager->addSuccessMessage(__('You created the invoice and shipment.'));
+=======
+                $this->messageManager->addSuccess(__('You created the invoice and shipment.'));
+>>>>>>> upstream/2.2-develop
             } else {
                 $this->messageManager->addSuccessMessage(__('The invoice has been created.'));
             }

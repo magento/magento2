@@ -65,6 +65,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      * @param $merchantApiLogin
      * @param $amount
      * @param $transactionId
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return string
      */
     protected function generateHash($merchantMd5, $merchantApiLogin, $amount, $transactionId)

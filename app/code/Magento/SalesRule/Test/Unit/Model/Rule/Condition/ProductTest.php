@@ -134,7 +134,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
         $this->format = new Format(
+=======
+        $this->formatMock = new Format(
+>>>>>>> upstream/2.2-develop
             $this->getMockBuilder(ScopeResolverInterface::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(ResolverInterface::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(CurrencyFactory::class)->disableOriginalConstructor()->getMock()

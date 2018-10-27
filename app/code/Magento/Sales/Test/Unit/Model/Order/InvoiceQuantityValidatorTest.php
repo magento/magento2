@@ -159,6 +159,10 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $orderItemId
      * @param $qty
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getInvoiceItemMock($orderItemId, $qty)
@@ -176,6 +180,10 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
      * @param $id
      * @param $qtyToInvoice
      * @param $isDummy
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getOrderItemMock($id, $qtyToInvoice, $isDummy)

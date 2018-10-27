@@ -547,7 +547,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param IndexTableStructure $finalPriceTable
      * @return void
      */
+<<<<<<< HEAD
     private function modifyPriceIndex(IndexTableStructure $finalPriceTable) : void
+=======
+    private function modifyPriceIndex(IndexTableStructure $finalPriceTable)
+>>>>>>> upstream/2.2-develop
     {
         foreach ($this->priceModifiers as $priceModifier) {
             $priceModifier->modifyPrice($finalPriceTable);
@@ -862,11 +866,14 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         );
     }
 
+<<<<<<< HEAD
     /**
      * @param string $tableAlias
      * @param \Zend_Db_Expr $priceExpression
      * @return \Zend_Db_Expr
      */
+=======
+>>>>>>> upstream/2.2-develop
     private function getTierPriceExpressionForTable($tableAlias, \Zend_Db_Expr $priceExpression)
     {
         return $this->getConnection()->getCheckSql(

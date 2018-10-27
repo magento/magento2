@@ -753,7 +753,11 @@ class TypeProcessor
      * @param ParameterReflection $param
      * @return ParamTag
      */
+<<<<<<< HEAD
     private function getParamDocBlockTag(ParameterReflection $param): ParamTag
+=======
+    private function getParamDocBlockTag(ParameterReflection $param)
+>>>>>>> upstream/2.2-develop
     {
         $docBlock = $param->getDeclaringFunction()
             ->getDocBlock();

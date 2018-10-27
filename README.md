@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 [![Build Status](https://travis-ci.org/magento/magento2.svg?branch=2.3-develop)](https://travis-ci.org/magento/magento2)
+=======
+[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=2.2-develop)](https://travis-ci.org/magento/magento2)
+>>>>>>> upstream/2.2-develop
 [![Open Source Helpers](https://www.codetriage.com/magento/magento2/badges/users.svg)](https://www.codetriage.com/magento/magento2)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.svg)](https://crowdin.com/project/magento-2)
@@ -6,11 +10,19 @@
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting-edge, feature-rich eCommerce solution that gets results.
 
 ## Magento system requirements
+<<<<<<< HEAD
 [Magento system requirements](https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements2.html).
+=======
+[Magento system requirements](http://devdocs.magento.com/guides/v2.2/install-gde/system-requirements2.html)
+>>>>>>> upstream/2.2-develop
 
 ## Install Magento
 
+<<<<<<< HEAD
 *	[Installation guide](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
+=======
+*	[Installation guide](http://devdocs.magento.com/guides/v2.2/install-gde/bk-install-guide.html)
+>>>>>>> upstream/2.2-develop
 
 <h2>Contributing to the Magento 2 code base</h2>
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
@@ -21,8 +33,13 @@ To learn about issues, click [here][2]. To open an issue, click [here][3].
 
 To suggest documentation improvements, click [here][4].
 
+<<<<<<< HEAD
 [1]: <https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html>
 [2]: <https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#report>
+=======
+[1]: <http://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html>
+[2]: <http://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html#report>
+>>>>>>> upstream/2.2-develop
 [3]: <https://github.com/magento/magento2/issues>
 [4]: <https://devdocs.magento.com>
 
@@ -41,7 +58,11 @@ Magento is thankful for any contribution that can improve our code base, documen
 
 <h3>Labels applied by the Magento team</h3>
 We apply labels to public Pull Requests and Issues to help other participants retrieve additional information about current progress, component assignments, Magento release lines, and much more. 
+<<<<<<< HEAD
 Please review the <a href="https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#labels">Code Contributions guide</a> for detailed information on labels used in Magento 2 repositories.
+=======
+Please review the <a href="https://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html#labels">Code Contributions guide</a> for detailed information on labels used in Magento 2 repositories.
+>>>>>>> upstream/2.2-develop
 
 <h2>Reporting security issues</h2>
 

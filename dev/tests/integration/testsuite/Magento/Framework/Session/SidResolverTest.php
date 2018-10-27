@@ -175,6 +175,7 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
      * @return array
      */
     public function dataProviderSessionInUrl()
+<<<<<<< HEAD
     {
         return [
             [true],
@@ -196,6 +197,29 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'isSetFlag'
+=======
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
+
+    /**
+     * Testing "Use SID in URLs" flag.
+     * Checking that the method returns config value if not explicitly
+     * overridden.
+     *
+     * @param bool $configValue Use SID on frontend config value.
+     * @dataProvider dataProviderSessionInUrl
+     */
+    public function testSetGetUseSessionInUrl($configValue)
+    {
+        $this->scopeConfig->expects(
+            $this->any()
+        )->method(
+            'getValue'
+>>>>>>> upstream/2.2-develop
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE

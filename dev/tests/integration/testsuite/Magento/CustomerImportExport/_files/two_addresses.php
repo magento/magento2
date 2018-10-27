@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
+=======
+>>>>>>> upstream/2.2-develop
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Model\Address;
@@ -84,8 +87,15 @@ $customerAddress->setData(
         'parent_id' => 1,
         'region_id' => 1,
     ]
+<<<<<<< HEAD
 )->setCustomerId(1)
     ->setStoreId(1)
+=======
+)->setCustomerId(
+    1
+);
+$customerAddress->setStoreId(1)
+>>>>>>> upstream/2.2-develop
     ->setWebsiteId(1);
 $customerAddress->save();
 //Address for the 2nd customer
@@ -106,7 +116,14 @@ $customerAddress->setData(
         'parent_id' => 1,
         'region_id' => 1,
     ]
+<<<<<<< HEAD
 )->setCustomerId(2)
     ->setStoreId($secondStore->getId())
+=======
+)->setCustomerId(
+    2
+);
+$customerAddress->setStoreId($secondStore->getId())
+>>>>>>> upstream/2.2-develop
     ->setWebsiteId($secondWebsite->getId());
 $customerAddress->save();

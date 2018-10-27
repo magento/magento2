@@ -7,14 +7,22 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+=======
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <test name="AdminFilteringCategoryProductsUsingScopeSelectorTest">
         <annotations>
             <features value="Catalog"/>
             <title value="Filtering Category Products using scope selector"/>
             <description value="Filtering Category Products using scope selector"/>
             <severity value="MAJOR"/>
+<<<<<<< HEAD
             <testCaseId value="MAGETWO-48850"/>
+=======
+            <testCaseId value="MAGETWO-78408"/>
+>>>>>>> upstream/2.2-develop
             <group value="catalog"/>
         </annotations>
         <before>
@@ -26,12 +34,21 @@
             </actionGroup>
             <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateStore">
                 <argument name="website" value="secondWebsite"/>
+<<<<<<< HEAD
                 <argument name="storeGroupName" value="secondStore"/>
                 <argument name="storeGroupCode" value="second_store"/>
             </actionGroup>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="adminCreateStoreView">
                 <argument name="StoreGroup" value="customStoreTierPrice"/>
                 <argument name="customStore" value="customStoreView"/>
+=======
+                <argument name="storeGroupName" value="Second Store"/>
+                <argument name="storeGroupCode" value="second_store"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="adminCreateStoreView">
+                <argument name="storeGroup" value="secondStoreGroup"/>
+                <argument name="customStore" value="secondStore"/>
+>>>>>>> upstream/2.2-develop
             </actionGroup>
 
             <!--Create Simple Product and Category -->
@@ -99,7 +116,11 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
+<<<<<<< HEAD
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
+=======
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductFilters"/>
+>>>>>>> upstream/2.2-develop
             <deleteData createDataKey="createProduct0" stepKey="deleteProduct"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
@@ -124,6 +145,7 @@
 
         <!-- Step 3: Set scope selector to Website1( Storeview for the Website 1) -->
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+<<<<<<< HEAD
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}"
                stepKey="clickStoresList"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad1"/>
@@ -134,6 +156,16 @@
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}" stepKey="clickActionAccept"/>
         <waitForElementNotVisible selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
                                   stepKey="waitForNotVisibleModalAccept"/>
+=======
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewDropdownToggle}}"
+               stepKey="clickStoresList"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad1"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewOption('Default Store View')}}"
+               stepKey="clickStoreView"/>
+        <waitForElementVisible selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}"
+                               stepKey="waitForPopup1"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}" stepKey="clickActionAccept"/>
+>>>>>>> upstream/2.2-develop
         <waitForPageLoad stepKey="waitForCategoryPageLoad2"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection1"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct1.name$$)}}"
@@ -147,6 +179,7 @@
 
         <!-- Step 4: Set scope selector to Website2 ( StopreView for Website 2) -->
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+<<<<<<< HEAD
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}"
                stepKey="clickStoresList1"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad3"/>
@@ -158,6 +191,17 @@
                stepKey="clickActionAccept1"/>
         <waitForElementNotVisible selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
                                   stepKey="waitForNotVisibleModalAccept1"/>
+=======
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewDropdownToggle}}"
+               stepKey="clickStoresList1"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad3"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewOption(secondStore.name)}}"
+               stepKey="clickStoreView1"/>
+        <waitForElementVisible selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}"
+               stepKey="waitForPopup2"/>
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}"
+               stepKey="clickActionAccept1"/>
+>>>>>>> upstream/2.2-develop
         <waitForPageLoad stepKey="waitForCategoryPageLoad4"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection2"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"

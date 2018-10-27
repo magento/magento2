@@ -19,7 +19,11 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Integration\Model\Integration;
 
 /**
+<<<<<<< HEAD
  * Tests for TokenUserContext.
+=======
+ * Tests TokenUserContext
+>>>>>>> upstream/2.2-develop
  */
 class TokenUserContextTest extends \PHPUnit\Framework\TestCase
 {
@@ -242,7 +246,11 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                     'getCustomerId',
                     'getAdminId',
                     '__wakeup',
+<<<<<<< HEAD
                     'getCreatedAt',
+=======
+                    'getCreatedAt'
+>>>>>>> upstream/2.2-develop
                 ]
             )->getMock();
         $this->tokenFactory->expects($this->once())
@@ -331,6 +339,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * @param array $tokenData
      * @param int $tokenTtl
      * @param int $currentTime
@@ -346,6 +355,12 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
         $expectedUserType,
         $expectedUserId
     ) {
+=======
+     * @dataProvider getExpiredTestTokenData
+     */
+    public function testExpiredToken($tokenData, $tokenTtl, $currentTime, $expectedUserType, $expectedUserId)
+    {
+>>>>>>> upstream/2.2-develop
         $bearerToken = 'bearer1234';
 
         $this->dateMock->expects($this->any())

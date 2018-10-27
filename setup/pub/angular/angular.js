@@ -12086,7 +12086,11 @@
                  *    - **timeout** – `{number|Promise}` – timeout in milliseconds, or {@link ng.$q promise}
                  *      that should abort the request when resolved.
                  *    - **withCredentials** - `{boolean}` - whether to set the `withCredentials` flag on the
+<<<<<<< HEAD
                  *      XHR object. See [requests with credentials](https://developer.mozilla.org/docs/Web/HTTP/Access_control_CORS#Requests_with_credentials)
+=======
+                 *      XHR object. See [requests with credentials]https://developer.mozilla.org/en/http_access_control#section_5
+>>>>>>> upstream/2.2-develop
                  *      for more information.
                  *    - **responseType** - `{string}` - see
                  *      [XMLHttpRequest.responseType](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest#xmlhttprequest-responsetype).

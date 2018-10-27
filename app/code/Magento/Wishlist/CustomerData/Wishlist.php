@@ -5,6 +5,10 @@
  */
 namespace Magento\Wishlist\CustomerData;
 
+<<<<<<< HEAD
+=======
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
+>>>>>>> upstream/2.2-develop
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\App\ObjectManager;
@@ -40,7 +44,11 @@ class Wishlist implements SectionSourceInterface
     protected $block;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface
+=======
+     * @var ItemResolverInterface
+>>>>>>> upstream/2.2-develop
      */
     private $itemResolver;
 
@@ -49,22 +57,34 @@ class Wishlist implements SectionSourceInterface
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
      * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
      * @param \Magento\Framework\App\ViewInterface $view
+<<<<<<< HEAD
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface|null $itemResolver
+=======
+     * @param ItemResolverInterface|null $itemResolver
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
         \Magento\Catalog\Helper\ImageFactory $imageHelperFactory,
         \Magento\Framework\App\ViewInterface $view,
+<<<<<<< HEAD
         \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
+=======
+        ItemResolverInterface $itemResolver = null
+>>>>>>> upstream/2.2-develop
     ) {
         $this->wishlistHelper = $wishlistHelper;
         $this->imageHelperFactory = $imageHelperFactory;
         $this->block = $block;
         $this->view = $view;
+<<<<<<< HEAD
         $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
         );
+=======
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -134,8 +154,11 @@ class Wishlist implements SectionSourceInterface
         $product = $wishlistItem->getProduct();
         return [
             'image' => $this->getImageData($this->itemResolver->getFinalProduct($wishlistItem)),
+<<<<<<< HEAD
             'product_sku' => $product->getSku(),
             'product_id' => $product->getId(),
+=======
+>>>>>>> upstream/2.2-develop
             'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
             'product_name' => $product->getName(),
             'product_price' => $this->block->getProductPriceHtml(

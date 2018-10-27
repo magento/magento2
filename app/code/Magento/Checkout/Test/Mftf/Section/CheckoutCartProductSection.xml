@@ -7,6 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutCartProductSection">
         <element name="ProductLinkByName" type="button"
@@ -31,5 +32,32 @@
         <element name="nthBundleOptionName" type="text" selector=".product-item-details .item-options:nth-of-type({{numOption}}) dt" parameterized="true"/>
         <element name="productSubtotalByName" type="input" selector="//main//table[@id='shopping-cart-table']//tbody//tr[..//strong[contains(@class, 'product-item-name')]//a/text()='{{var1}}'][1]//td[contains(@class, 'subtotal')]//span[@class='price']" parameterized="true"/>
         <element name="updateShoppingCartButton" type="button" selector="#form-validate button[type='submit'].update" timeout="30"/>
+=======
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CheckoutCartProductSection">
+        <element name="itemOptionsBlock" type="block"
+                 selector=".item:nth-of-type({{numElement}}) .item-options"
+                 parameterized="true"/>
+        <element name="editItemParametersButton" type="block"
+                 selector=".item:nth-of-type({{numElement}}) .action-edit"
+                 parameterized="true"/>
+        <element name="productQuantityByName" type="input"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr[..//strong[contains(@class, 'product-item-name')]//a/text()='{{var1}}'][1]//td[contains(@class, 'qty')]//input[contains(@class, 'qty')]"
+                 parameterized="true"/>
+        <element name="productSubtotalByName" type="input"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr[..//strong[contains(@class, 'product-item-name')]//a/text()='{{var1}}'][1]//td[contains(@class, 'subtotal')]//span[@class='price']"
+                 parameterized="true"/>
+        <element name="updateShoppingCartButton" type="button"
+                 selector="#form-validate button[type='submit'].update"
+                 timeout="30"/>
+        <element name="productLinkByName" type="button"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr//strong[contains(@class, 'product-item-name')]//a[contains(text(), '{{var1}}')]"
+                 parameterized="true"/>
+        <element name="productOptionByNameAndAttribute" type="input"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr[.//strong[contains(@class, 'product-item-name')]//a[contains(text(), '{{var1}}')]]//dl[@class='item-options']//dt[.='{{var2}}']/following-sibling::dd[1]"
+                 parameterized="true"/>
+        <element name="removeItem" type="button"
+                 selector="//table[@id='shopping-cart-table']//tbody//tr[contains(@class,'item-actions')]//a[contains(@class,'action-delete')]"/>
+>>>>>>> upstream/2.2-develop
     </section>
 </sections>

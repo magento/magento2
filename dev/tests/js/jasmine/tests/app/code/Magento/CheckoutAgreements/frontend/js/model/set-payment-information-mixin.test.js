@@ -34,6 +34,7 @@ define([
         });
     });
 
+<<<<<<< HEAD
     afterEach(function () {
         try {
             injector.clean();
@@ -41,6 +42,8 @@ define([
         } catch (e) {}
     });
 
+=======
+>>>>>>> upstream/2.2-develop
     describe('Magento_CheckoutAgreements/js/model/set-payment-information-mixin', function () {
         it('mixin is applied to Magento_Checkout/js/action/set-payment-information', function () {
             var placeOrderMixins = defaultContext

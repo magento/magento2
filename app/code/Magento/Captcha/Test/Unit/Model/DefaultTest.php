@@ -360,7 +360,11 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
         return [
             [true, 'contact_us'],
             [false, 'user_create'],
+<<<<<<< HEAD
             [false, 'user_forgotpassword']
+=======
+            [false, 'user_forgotpassword'],
+>>>>>>> upstream/2.2-develop
         ];
     }
 }

@@ -9,7 +9,11 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
+<<<<<<< HEAD
  * Provider of the information on whether the page is cacheable, so that AJAX-based logging of terms can be triggered
+=======
+ * Class for logging search terms on cached pages
+>>>>>>> upstream/2.2-develop
  */
 class SearchTermsLog implements ArgumentInterface
 {

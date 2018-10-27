@@ -176,6 +176,11 @@ class Multishipping extends \Magento\Framework\DataObject
     private $dataObjectHelper;
 
     /**
+<<<<<<< HEAD
+=======
+     * Constructor
+     *
+>>>>>>> upstream/2.2-develop
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -200,9 +205,14 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param array $data
      * @param \Magento\Quote\Api\Data\CartExtensionFactory|null $cartExtensionFactory
      * @param AllowedCountries|null $allowedCountryReader
+<<<<<<< HEAD
      * @param Multishipping\PlaceOrderFactory|null $placeOrderFactory
      * @param LoggerInterface|null $logger
      * @param \Magento\Framework\Api\DataObjectHelper|null $dataObjectHelper
+=======
+     * @param Multishipping\PlaceOrderFactory $placeOrderFactory
+     * @param LoggerInterface $logger
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -899,13 +909,21 @@ class Multishipping extends \Magento\Framework\DataObject
      */
     public function validateMinimumAmount()
     {
-        return !($this->_scopeConfig->isSetFlag(
+        $minimumOrderActive = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/active',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) && $this->_scopeConfig->isSetFlag(
+        );
+
+        if ($this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) && !$this->getQuote()->validateMinimumAmount());
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+        ) {
+            $result = !($minimumOrderActive && !$this->getQuote()->validateMinimumAmount());
+        } else {
+            $result = !($minimumOrderActive && !$this->validateMinimumAmountForAddressItems());
+        }
+
+        return $result;
     }
 
     /**
@@ -1124,6 +1142,46 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Validate minimum amount for "Checkout with Multiple Addresses" when
+     * "Validate Each Address Separately in Multi-address Checkout" is No.
+     *
+     * @return bool
+     */
+    private function validateMinimumAmountForAddressItems()
+    {
+        $result = true;
+        $storeId = $this->getQuote()->getStoreId();
+
+        $minAmount = $this->_scopeConfig->getValue(
+            'sales/minimum_order/amount',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        $taxInclude = $this->_scopeConfig->getValue(
+            'sales/minimum_order/tax_including',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
+        $addresses = $this->getQuote()->getAllAddresses();
+
+        $baseTotal = 0;
+        foreach ($addresses as $address) {
+            $taxes = $taxInclude ? $address->getBaseTaxAmount() : 0;
+            $baseTotal += $address->getBaseSubtotalWithDiscount() + $taxes;
+        }
+
+        if ($baseTotal < $minAmount) {
+            $result = false;
+        }
+
+        return $result;
+    }
+
+    /**
+>>>>>>> upstream/2.2-develop
      * Remove successfully placed items from quote.
      *
      * @param \Magento\Quote\Model\Quote\Address[] $shippingAddresses
@@ -1194,11 +1252,18 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
+<<<<<<< HEAD
      * Get quote address errors.
      *
      * @param OrderInterface[] $orders
      * @param \Magento\Quote\Model\Quote\Address[] $addresses
      * @param \Exception[] $exceptionList
+=======
+     * @param OrderInterface[] $orders
+     * @param \Magento\Quote\Model\Quote\Address[] $addresses
+     * @param \Exception[] $exceptionList
+     *
+>>>>>>> upstream/2.2-develop
      * @return string[]
      * @throws NotFoundException
      */

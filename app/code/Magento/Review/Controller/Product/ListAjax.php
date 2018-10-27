@@ -18,7 +18,11 @@ class ListAjax extends ProductController implements HttpGetActionInterface
     /**
      * Show list of product's reviews
      *
+<<<<<<< HEAD
      * @return ResponseInterface|ResultInterface|Layout
+=======
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Layout
+>>>>>>> upstream/2.2-develop
      */
     public function execute()
     {

@@ -68,7 +68,11 @@ class SampleDataDeployCommand extends Command
     protected function configure()
     {
         $this->setName('sampledata:deploy')
+<<<<<<< HEAD
             ->setDescription('Deploy sample data modules for composer-based Magento installations');
+=======
+            ->setDescription('Deploy sample data modules');
+>>>>>>> upstream/2.2-develop
         $this->addOption(
             self::OPTION_NO_UPDATE,
             null,

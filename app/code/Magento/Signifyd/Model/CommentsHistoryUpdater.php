@@ -22,6 +22,10 @@ class CommentsHistoryUpdater
 
     /**
      * @var OrderStatusHistoryRepositoryInterface
+<<<<<<< HEAD
+=======
+     * @since 2.2.0
+>>>>>>> upstream/2.2-develop
      */
     private $historyRepository;
 

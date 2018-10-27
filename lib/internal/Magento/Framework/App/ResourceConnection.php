@@ -7,7 +7,11 @@ namespace Magento\Framework\App;
 
 use Magento\Framework\App\ResourceConnection\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+<<<<<<< HEAD
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
+=======
+use Magento\Framework\DB\Adapter\AdapterInterface;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Application provides ability to configure multiple connections to persistent storage.

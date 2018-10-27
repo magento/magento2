@@ -29,11 +29,14 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
     private $mediaDirectory;
 
     /**
+<<<<<<< HEAD
      * @var string
      */
     private $fullDirectoryPath;
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
@@ -48,13 +51,17 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
+<<<<<<< HEAD
         $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot();
+=======
+>>>>>>> upstream/2.2-develop
         $this->model = $objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFolder::class);
     }
 
     /**
      * Execute method with correct directory path to check that directories under WYSIWYG media directory
      * can be removed.
+<<<<<<< HEAD
      *
      * @return void
      * @magentoAppIsolation enabled
@@ -72,6 +79,22 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
             $this->mediaDirectory->isExist(
                 $this->mediaDirectory->getRelativePath(
                     $this->fullDirectoryPath . $directoryName
+=======
+     */
+    public function testExecute()
+    {
+        $fullDirectoryPath = $this->imagesHelper->getStorageRoot();
+        $directoryName = DIRECTORY_SEPARATOR . 'NewDirectory';
+        $this->mediaDirectory->create(
+            $this->mediaDirectory->getRelativePath($fullDirectoryPath . $directoryName)
+        );
+        $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
+        $this->model->execute();
+        $this->assertFalse(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath(
+                    $fullDirectoryPath . $directoryName
+>>>>>>> upstream/2.2-develop
                 )
             )
         );
@@ -93,6 +116,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         $linkedDirectory->create(
             $linkedDirectory->getRelativePath($linkedDirectoryPath . DIRECTORY_SEPARATOR . $directoryName)
         );
+<<<<<<< HEAD
         $this->model->getRequest()->setParams(
             ['node' => $this->imagesHelper->idEncode('wysiwyg' . DIRECTORY_SEPARATOR . $directoryName)]
         );
@@ -113,6 +137,11 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         $this->model->execute();
 
         $this->assertFileExists($this->fullDirectoryPath . $directoryName);
+=======
+        $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
+        $this->model->execute();
+        $this->assertFalse(is_dir($linkedDirectoryPath . DIRECTORY_SEPARATOR . $directoryName));
+>>>>>>> upstream/2.2-develop
     }
 
     /**

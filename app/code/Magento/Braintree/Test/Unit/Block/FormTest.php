@@ -57,11 +57,14 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var Data|MockObject
+<<<<<<< HEAD
      */
     private $paymentDataHelperMock;
 
     /**
      * @var string
+=======
+>>>>>>> upstream/2.2-develop
      */
     private $storeId = '1';
 
@@ -71,7 +74,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->initSessionQuoteMock();
         $this->initGatewayConfigMock();
 
+<<<<<<< HEAD
         $this->paymentDataHelperMock = $this->getMockBuilder(Data::class)
+=======
+        $this->paymentDataHelper = $this->getMockBuilder(Data::class)
+>>>>>>> upstream/2.2-develop
             ->disableOriginalConstructor()
             ->setMethods(['getMethodInstance'])
             ->getMock();
@@ -79,15 +86,20 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $managerHelper = new ObjectManager($this);
         $this->block = $managerHelper->getObject(Form::class, [
             'paymentConfig' => $managerHelper->getObject(Config::class),
+<<<<<<< HEAD
             'sessionQuote' => $this->sessionQuoteMock,
             'gatewayConfig' => $this->gatewayConfigMock,
             'ccType' => $this->ccTypeMock,
             'paymentDataHelper' =>$this->paymentDataHelperMock,
+=======
+            'sessionQuote' => $this->sessionQuote,
+            'gatewayConfig' => $this->gatewayConfig,
+            'ccType' => $this->ccType
+>>>>>>> upstream/2.2-develop
         ]);
     }
 
     /**
-     * @covers \Magento\Braintree\Block\Form::getCcAvailableTypes
      * @param string $countryId
      * @param array $availableTypes
      * @param array $expected
@@ -95,6 +107,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCcAvailableTypes($countryId, array $availableTypes, array $expected)
     {
+<<<<<<< HEAD
         $this->sessionQuoteMock->expects(static::once())
             ->method('getCountryId')
             ->willReturn($countryId);
@@ -107,10 +120,20 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->gatewayConfigMock->expects(static::once())
             ->method('getCountryAvailableCardTypes')
             ->with($countryId, $this->storeId)
+=======
+        $this->sessionQuote->method('getCountryId')
+            ->willReturn($countryId);
+
+        $this->gatewayConfig->method('getAvailableCardTypes')
+            ->willReturn(self::$configCardTypes);
+
+        $this->gatewayConfig->method('getCountryAvailableCardTypes')
+            ->with($countryId)
+>>>>>>> upstream/2.2-develop
             ->willReturn($availableTypes);
 
         $result = $this->block->getCcAvailableTypes();
-        static::assertEquals($expected, array_values($result));
+        self::assertEquals($expected, array_values($result));
     }
 
     /**
@@ -127,11 +150,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @covers \Magento\Braintree\Block\Form::isVaultEnabled
-     */
     public function testIsVaultEnabled()
     {
+<<<<<<< HEAD
         $vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
         $this->paymentDataHelperMock->expects(static::once())
             ->method('getMethodInstance')
@@ -141,9 +162,20 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $vaultPayment->expects(static::once())
             ->method('isActive')
             ->with($this->storeId)
+=======
+        $storeId = 1;
+
+        $vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
+        $this->paymentDataHelper->method('getMethodInstance')
+            ->with(ConfigProvider::CC_VAULT_CODE)
+            ->willReturn($vaultPayment);
+
+        $vaultPayment->method('isActive')
+            ->with(self::equalTo($storeId))
+>>>>>>> upstream/2.2-develop
             ->willReturn(true);
 
-        static::assertTrue($this->block->isVaultEnabled());
+        self::assertTrue($this->block->isVaultEnabled());
     }
 
     /**
@@ -156,8 +188,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCcTypeLabelMap'])
             ->getMock();
 
+<<<<<<< HEAD
         $this->ccTypeMock->expects(static::any())
             ->method('getCcTypeLabelMap')
+=======
+        $this->ccType->method('getCcTypeLabelMap')
+>>>>>>> upstream/2.2-develop
             ->willReturn(self::$baseCardTypes);
     }
 
@@ -168,6 +204,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $this->sessionQuoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
+<<<<<<< HEAD
             ->setMethods(['getQuote', 'getBillingAddress', 'getCountryId', '__wakeup', 'getStoreId'])
             ->getMock();
 
@@ -180,6 +217,17 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->sessionQuoteMock->expects(static::any())
             ->method('getStoreId')
             ->willReturn($this->storeId);
+=======
+            ->setMethods(['getQuote', 'getBillingAddress', 'getCountryId', 'getStoreId'])
+            ->getMock();
+
+        $this->sessionQuote->method('getQuote')
+            ->willReturnSelf();
+        $this->sessionQuote->method('getBillingAddress')
+            ->willReturnSelf();
+        $this->sessionQuote->method('getStoreId')
+            ->willReturn(1);
+>>>>>>> upstream/2.2-develop
     }
 
     /**

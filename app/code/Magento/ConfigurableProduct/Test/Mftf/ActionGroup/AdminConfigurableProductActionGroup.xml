@@ -7,6 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Filter the product grid and view expected products-->
     <actionGroup name="viewConfigurableProductInAdminGrid">
@@ -36,6 +37,9 @@
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
     </actionGroup>
 
+=======
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+>>>>>>> upstream/2.2-develop
     <!--
 
     Create a configurable product with three options for color: red, white, and blue
@@ -60,13 +64,20 @@
         <fillField userInput="{{product.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
         <fillField userInput="{{product.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{category.name}}]" stepKey="fillCategory"/>
+<<<<<<< HEAD
         <selectOption userInput="{{product.visibility}}" selector="{{AdminProductFormSection.visibility}}" stepKey="fillVisibility"/>
+=======
+>>>>>>> upstream/2.2-develop
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="{{product.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
 
         <!-- create configurations for colors the product is available in -->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
+<<<<<<< HEAD
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
+=======
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
+>>>>>>> upstream/2.2-develop
         <waitForPageLoad stepKey="waitForIFrame"/>
         <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
         <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{colorProductAttribute.default_label}}" stepKey="fillDefaultLabel"/>
@@ -74,6 +85,7 @@
         <waitForPageLoad stepKey="waitForSaveAttribute"/>
         <switchToIFrame stepKey="switchOutOfIFrame"/>
         <waitForPageLoad stepKey="waitForFilters"/>
+<<<<<<< HEAD
         <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickOnFilters"/>
         <fillField userInput="{{colorProductAttribute.default_label}}" selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
@@ -124,4 +136,36 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
     </actionGroup>
+=======
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.filters}}" stepKey="clickOnFilters"/>
+        <fillField userInput="{{colorProductAttribute.default_label}}" selector="{{AdminCreateProductConfigurationsPanelSection.attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
+        <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanelSection.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.createNewValue}}" stepKey="clickOnCreateNewValue2"/>
+        <fillField userInput="{{colorProductAttribute2.name}}" selector="{{AdminCreateProductConfigurationsPanelSection.attributeName}}" stepKey="fillFieldForNewAttribute2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.saveAttribute}}" stepKey="clickOnSaveNewAttribute2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.createNewValue}}" stepKey="clickOnCreateNewValue3"/>
+        <fillField userInput="{{colorProductAttribute3.name}}" selector="{{AdminCreateProductConfigurationsPanelSection.attributeName}}" stepKey="fillFieldForNewAttribute3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.saveAttribute}}" stepKey="clickOnSaveNewAttribute3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.selectAll}}" stepKey="clickOnSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.applyUniquePricesByAttributeToEachSku}}" stepKey="clickOnApplyUniquePricesByAttributeToEachSku"/>
+        <selectOption selector="{{AdminCreateProductConfigurationsPanelSection.selectAttribute}}" userInput="{{colorProductAttribute.default_label}}" stepKey="selectAttributes"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanelSection.attribute('0')}}" userInput="{{colorProductAttribute1.price}}" stepKey="fillAttributePrice1"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanelSection.attribute('1')}}" userInput="{{colorProductAttribute2.price}}" stepKey="fillAttributePrice2"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanelSection.attribute('2')}}" userInput="{{colorProductAttribute3.price}}" stepKey="fillAttributePrice3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanelSection.quantity}}" userInput="1" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.next}}" stepKey="clickOnNextButton4"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <click selector="{{AdminChooseAffectedAttributeSetSection.confirm}}" stepKey="clickOnConfirmInPopup"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+        <seeInTitle userInput="{{product.name}}" stepKey="seeProductNameInTitle"/>
+    </actionGroup>
+>>>>>>> upstream/2.2-develop
 </actionGroups>

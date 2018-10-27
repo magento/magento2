@@ -125,6 +125,7 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     /**
      * Test method
      *
+<<<<<<< HEAD
      * @param mixed $arg1
      * @param string $arg2
      * @param int|null $arg3
@@ -159,6 +160,8 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     /**
      * Test method
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @param bool $arg
      * @return SourceClassWithNamespace
      *

@@ -173,15 +173,24 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     }
 
     /**
+<<<<<<< HEAD
      * Update confirmation value. Method set confirmation text value to match what is shown in grid
      *
+=======
+     * Update confirmation value
+     * Method set confirmation text value to match what is shown in grid
+>>>>>>> upstream/2.2-develop
      * @return void
      */
     private function setConfirmationValue()
     {
         $value = $this->getData(self::$confirmationAttributeCode);
         $websiteId = $this->getData(self::$websiteIdAttributeCode) ?: $this->getData(self::$websiteAttributeCode);
+<<<<<<< HEAD
         $isConfirmRequired = $this->scopeConfig->isSetFlag(
+=======
+        $isConfirmRequired = (bool)$this->scopeConfig->getValue(
+>>>>>>> upstream/2.2-develop
             AccountManagement::XML_PATH_IS_CONFIRM,
             ScopeInterface::SCOPE_WEBSITES,
             $websiteId
@@ -196,8 +205,13 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     }
 
     /**
+<<<<<<< HEAD
      * Update lock expires value. Method set account lock text value to match what is shown in grid
      *
+=======
+     * Update lock expires value
+     * Method set account lock text value to match what is shown in grid
+>>>>>>> upstream/2.2-develop
      * @return void
      */
     private function setAccountLockValue()

@@ -34,6 +34,54 @@ class AttributeFilter
         foreach ($productData as $attributeCode => $attributeValue) {
             if ($this->isAttributeShouldNotBeUpdated($product, $useDefaults, $attributeCode, $attributeValue)) {
                 unset($productData[$attributeCode]);
+<<<<<<< HEAD
+=======
+            }
+
+            if (isset($useDefaults[$attributeCode]) && $useDefaults[$attributeCode] === '1') {
+                $productData = $this->prepareDefaultData($attributeList, $attributeCode, $productData);
+                $productData = $this->prepareConfigData($product, $attributeCode, $productData);
+            }
+        }
+
+        return $productData;
+    }
+
+    /**
+     * @param Product $product
+     * @param string $attributeCode
+     * @param array $productData
+     * @return array
+     */
+    private function prepareConfigData(Product $product, $attributeCode, array $productData): array
+    {
+        // UI component sends value even if field is disabled, so 'Use Config Settings' must be reset to false
+        if ($product->hasData('use_config_' . $attributeCode)) {
+            $productData['use_config_' . $attributeCode] = false;
+        }
+
+        return $productData;
+    }
+
+    /**
+     * @param array $attributeList
+     * @param string $attributeCode
+     * @param array $productData
+     * @return array
+     */
+    private function prepareDefaultData(array $attributeList, $attributeCode, array $productData): array
+    {
+        if (isset($attributeList[$attributeCode])) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+            $attribute = $attributeList[$attributeCode];
+            $attributeType = $attribute->getBackendType();
+            // For non-numberic types set the attributeValue to 'false' to trigger their removal from the db
+            if ($attributeType === 'varchar' || $attributeType === 'text' || $attributeType === 'datetime') {
+                $attribute->setIsRequired(false);
+                $productData[$attributeCode] = false;
+            } else {
+                $productData[$attributeCode] = null;
+>>>>>>> upstream/2.2-develop
             }
 
             if (isset($useDefaults[$attributeCode]) && $useDefaults[$attributeCode] === '1') {
@@ -62,6 +110,7 @@ class AttributeFilter
     }
 
     /**
+<<<<<<< HEAD
      * @param array $attributeList
      * @param string $attributeCode
      * @param array $productData
@@ -93,6 +142,15 @@ class AttributeFilter
      * @return bool
      */
     private function isAttributeShouldNotBeUpdated(Product $product, array $useDefaults, $attribute, $value): bool
+=======
+     * @param Product $product
+     * @param $useDefaults
+     * @param $attribute
+     * @param $value
+     * @return bool
+     */
+    private function isAttributeShouldNotBeUpdated(Product $product, $useDefaults, $attribute, $value): bool
+>>>>>>> upstream/2.2-develop
     {
         $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === '1';
 

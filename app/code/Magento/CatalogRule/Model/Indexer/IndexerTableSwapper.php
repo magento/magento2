@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
+=======
+>>>>>>> upstream/2.2-develop
 
 namespace Magento\CatalogRule\Model\Indexer;
 
@@ -40,6 +43,10 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
      * @param string $originalTableName
      *
      * @return string Created table name.
+<<<<<<< HEAD
+=======
+     * @throws \Throwable
+>>>>>>> upstream/2.2-develop
      */
     private function createTemporaryTable(string $originalTableName): string
     {
@@ -75,7 +82,12 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
     {
         $originalTable = $this->resourceConnection->getTableName($originalTable);
         if (!array_key_exists($originalTable, $this->temporaryTables)) {
+<<<<<<< HEAD
             $this->temporaryTables[$originalTable] = $this->createTemporaryTable($originalTable);
+=======
+            $this->temporaryTables[$originalTable]
+                = $this->createTemporaryTable($originalTable);
+>>>>>>> upstream/2.2-develop
         }
 
         return $this->temporaryTables[$originalTable];
@@ -101,11 +113,19 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
             $temporaryTableName = $this->getWorkingTableName($tableName);
             $toRename[] = [
                 'oldName' => $tableName,
+<<<<<<< HEAD
                 'newName' => $temporaryOriginalName,
             ];
             $toRename[] = [
                 'oldName' => $temporaryTableName,
                 'newName' => $tableName,
+=======
+                'newName' => $temporaryOriginalName
+            ];
+            $toRename[] = [
+                'oldName' => $temporaryTableName,
+                'newName' => $tableName
+>>>>>>> upstream/2.2-develop
             ];
             $toDrop[] = $temporaryOriginalName;
             $temporaryTablesRenamed[] = $tableName;

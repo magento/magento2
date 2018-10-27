@@ -40,6 +40,7 @@ return [
     'md5' => [
         'replacement' => '',
         'exclude' => [
+<<<<<<< HEAD
             /*
              * Usage of md5 in MessageQueue key generation algorithm
              * added to exclude list to avoid backward incompatible changes
@@ -65,6 +66,10 @@ return [
                 'path' => 'Model/ResourceModel/System/Message/Collection/Synchronized/Plugin.php'
             ]
         ]
+=======
+            ['type' => 'library', 'name' => 'magento/framework', 'path' => 'App/Utility/Files.php'],
+        ],
+>>>>>>> upstream/2.2-develop
     ],
     'srand' => [
         'replacement' => '',

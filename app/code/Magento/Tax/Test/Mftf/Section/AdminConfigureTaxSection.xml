@@ -7,9 +7,14 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminConfigureTaxSection">
         <!-- on page /admin/admin/system_config/edit/section/tax/ -->
+=======
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminConfigureTaxSection">
+>>>>>>> upstream/2.2-develop
         <element name="taxClasses" type="block" selector="#tax_classes-head" timeout="30"/>
 
         <element name="taxCalculationSettings" type="block" selector="#tax_calculation-head" timeout="30"/>
@@ -24,16 +29,20 @@
         <element name="taxCalculationPricesDisabled" type="select" selector="#tax_calculation_price_includes_tax[disabled='disabled']"/>
         <element name="taxCalculationPricesInherit" type="checkbox" selector="#tax_calculation_price_includes_tax_inherit"/>
 
+<<<<<<< HEAD
         <element name="defaultDestination" type="block" selector="#tax_defaults-head" timeout="30"/>
         <element name="systemValueDefaultState" type="checkbox" selector="#row_tax_defaults_region input[type='checkbox']"/>
         <element name="dropdownDefaultState" type="select" selector="#row_tax_defaults_region select"/>
         <element name="defaultPostCode" type="checkbox" selector="#tax_defaults_postcode"/>
         
+=======
+>>>>>>> upstream/2.2-develop
         <element name="taxPriceDisplaySettings" type="block" selector="#tax_display-head" timeout="30"/>
         <element name="taxPriceDisplaySettingsOpened" type="block" selector="#tax_display-head.open" timeout="30"/>
         <element name="taxDisplayProductPrices" type="select" selector="#tax_display_type"/>
         <element name="taxDisplayProductPricesDisabled" type="select" selector="#tax_display_type[disabled='disabled']"/>
         <element name="taxDisplayProductPricesInherit" type="checkbox" selector="#tax_display_type_inherit"/>
+<<<<<<< HEAD
 
         <element name="taxSalesDisplay" type="block" selector=".config.admin__collapsible-block#tax_sales_display" timeout="30"/>
         <element name="shoppingCartDisplay" type="block" selector="#tax_cart_display-head" timeout="30"/>
@@ -52,5 +61,7 @@
         <element name="systemValueDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax input[type='checkbox']"/>
         <element name="dropdownDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax select"/>
         <element name="fixedProductTaxes" type="block" selector="#tax_weee-head" timeout="30"/>
+=======
+>>>>>>> upstream/2.2-develop
     </section>
 </sections>

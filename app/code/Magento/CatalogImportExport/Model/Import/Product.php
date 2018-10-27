@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
+<<<<<<< HEAD
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Product\Visibility;
@@ -19,6 +20,16 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Intl\DateTimeFactory;
+=======
+use Magento\Catalog\Model\Config as CatalogConfig;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
@@ -27,6 +38,11 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Store\Model\Store;
+<<<<<<< HEAD
+=======
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Import entity product model
@@ -711,6 +727,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $catalogConfig;
 
     /**
+<<<<<<< HEAD
      * Stock Item Importer
      *
      * @var StockItemImporterInterface
@@ -723,6 +740,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $imageTypeProcessor;
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * Provide ability to process and save images during import.
      *
      * @var MediaGalleryProcessor
@@ -730,11 +749,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $mediaProcessor;
 
     /**
+<<<<<<< HEAD
      * @var DateTimeFactory
      */
     private $dateTimeFactory;
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * @var ProductRepositoryInterface
      */
     private $productRepository;
@@ -779,11 +801,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $data
      * @param array $dateAttrCodes
      * @param CatalogConfig $catalogConfig
+<<<<<<< HEAD
      * @param ImageTypeProcessor $imageTypeProcessor
      * @param MediaGalleryProcessor $mediaProcessor
      * @param StockItemImporterInterface|null $stockItemImporter
      * @param DateTimeFactory $dateTimeFactory
      * @param ProductRepositoryInterface|null $productRepository
+=======
+     * @param MediaGalleryProcessor $mediaProcessor
+     * @param ProductRepositoryInterface|null $productRepository
+     * @throws \Magento\Framework\Exception\LocalizedException
+     *
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -827,10 +856,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         array $data = [],
         array $dateAttrCodes = [],
         CatalogConfig $catalogConfig = null,
+<<<<<<< HEAD
         ImageTypeProcessor $imageTypeProcessor = null,
         MediaGalleryProcessor $mediaProcessor = null,
         StockItemImporterInterface $stockItemImporter = null,
         DateTimeFactory $dateTimeFactory = null,
+=======
+        MediaGalleryProcessor $mediaProcessor = null,
+>>>>>>> upstream/2.2-develop
         ProductRepositoryInterface $productRepository = null
     ) {
         $this->_eventManager = $eventManager;
@@ -862,11 +895,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->scopeConfig = $scopeConfig;
         $this->productUrl = $productUrl;
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
+<<<<<<< HEAD
         $this->catalogConfig = $catalogConfig ?: ObjectManager::getInstance()->get(CatalogConfig::class);
         $this->imageTypeProcessor = $imageTypeProcessor ?: ObjectManager::getInstance()->get(ImageTypeProcessor::class);
         $this->mediaProcessor = $mediaProcessor ?: ObjectManager::getInstance()->get(MediaGalleryProcessor::class);
         $this->stockItemImporter = $stockItemImporter ?: ObjectManager::getInstance()
             ->get(StockItemImporterInterface::class);
+=======
+        $this->catalogConfig = $catalogConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(CatalogConfig::class);
+        $this->mediaProcessor = $mediaProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(MediaGalleryProcessor::class);
+>>>>>>> upstream/2.2-develop
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -884,8 +924,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ->_initSkus()
             ->initImagesArrayKeys();
         $this->validator->init($this);
+<<<<<<< HEAD
         $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
+=======
+        $this->productRepository = $productRepository ?? \Magento\Framework\App\ObjectManager::getInstance()
+>>>>>>> upstream/2.2-develop
                 ->get(ProductRepositoryInterface::class);
     }
 
@@ -1811,12 +1855,20 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             if (isset($existingImages[$rowSku][$uploadedFile])) {
                                 $currentFileData = $existingImages[$rowSku][$uploadedFile];
                                 if (isset($rowLabels[$column][$columnImageKey])
+<<<<<<< HEAD
                                     && $rowLabels[$column][$columnImageKey] !=
                                     $currentFileData['label']
                                 ) {
                                     $labelsForUpdate[] = [
                                         'label' => $rowLabels[$column][$columnImageKey],
                                         'imageData' => $currentFileData
+=======
+                                    && $rowLabels[$column][$columnImageKey] != $currentFileData['label']
+                                ) {
+                                    $labelsForUpdate[] = [
+                                        'label' => $rowLabels[$column][$columnImageKey],
+                                        'imageData' => $currentFileData,
+>>>>>>> upstream/2.2-develop
                                     ];
                                 }
 
@@ -1825,7 +1877,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 ) {
                                     $imagesForChangeVisibility[] = [
                                         'disabled' => $imageHiddenStates[$uploadedFile],
+<<<<<<< HEAD
                                         'imageData' => $currentFileData
+=======
+                                        'imageData' => $currentFileData,
+>>>>>>> upstream/2.2-develop
                                     ];
                                 }
                             } else {
@@ -1835,8 +1891,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 $mediaGallery[$storeId][$rowSku][$uploadedFile] = [
                                     'attribute_id' => $this->getMediaGalleryAttributeId(),
                                     'label' => isset($rowLabels[$column][$columnImageKey])
+<<<<<<< HEAD
                                         ? $rowLabels[$column][$columnImageKey]
                                         : '',
+=======
+                                        ? $rowLabels[$column][$columnImageKey] : '',
+>>>>>>> upstream/2.2-develop
                                     'position' => ++$position,
                                     'disabled' => isset($imageHiddenStates[$columnImage])
                                         ? $imageHiddenStates[$columnImage] : '0',
@@ -1980,11 +2040,19 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      * @return array
      */
+<<<<<<< HEAD
     private function getImagesHiddenStates($rowData)
     {
         $statesArray = [];
         $mappingArray = [
             '_media_is_disabled' => '1'
+=======
+    private function getImagesHiddenStates(array $rowData): array
+    {
+        $statesArray = [];
+        $mappingArray = [
+            '_media_is_disabled' => '1',
+>>>>>>> upstream/2.2-develop
         ];
 
         foreach ($mappingArray as $key => $value) {
@@ -2031,6 +2099,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $categoryIds = $product->getCategoryIds();
             }
         }
+
         return $categoryIds;
     }
 
@@ -2166,8 +2235,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Return a new file name if the same file is already exists.
      *
      * @param string $fileName
+<<<<<<< HEAD
      * @param bool $renameFileOff [optional] boolean to pass.
      * Default is false which will set not to rename the file after import.
+=======
+     * @param bool $renameFileOff
+>>>>>>> upstream/2.2-develop
      * @return string
      */
     protected function uploadMediaFiles($fileName, $renameFileOff = false)
@@ -2559,8 +2632,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
             && (empty($rowData[self::COL_VISIBILITY])
-            || $rowData[self::COL_VISIBILITY]
-            !== (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
+                || $rowData[self::COL_VISIBILITY]
+                !== (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
     }
 
     /**
@@ -2780,9 +2853,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+<<<<<<< HEAD
      * Validate data rows and save bunches to DB
      *
      * @return $this|AbstractEntity
+=======
+     * {@inheritdoc}
+>>>>>>> upstream/2.2-develop
      */
     protected function _saveValidatedBunches()
     {
@@ -2959,6 +3036,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!empty($labels)) {
             $this->mediaProcessor->updateMediaGalleryLabels($labels);
         }
+<<<<<<< HEAD
+=======
+        $this->mediaProcessor->updateMediaGalleryLabels($labels);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -2967,7 +3048,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $images
      * @return $this
      */
+<<<<<<< HEAD
     private function updateMediaGalleryVisibility(array $images)
+=======
+    private function updateMediaGalleryVisibility(array $images): Product
+>>>>>>> upstream/2.2-develop
     {
         if (!empty($images)) {
             $this->mediaProcessor->updateMediaGalleryVisibility($images);
@@ -3014,12 +3099,20 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+<<<<<<< HEAD
      * Format row data to DB compatible values.
+=======
+     * Format row data to DB compatible values
+>>>>>>> upstream/2.2-develop
      *
      * @param array $rowData
      * @return array
      */
+<<<<<<< HEAD
     private function formatStockDataForRow(array $rowData): array
+=======
+    private function formatStockDataForRow(array $rowData)
+>>>>>>> upstream/2.2-develop
     {
         $sku = $rowData[self::COL_SKU];
         $row['product_id'] = $this->skuProcessor->getNewSku($sku)['entity_id'];
@@ -3036,6 +3129,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $row
         );
 
+<<<<<<< HEAD
         if ($this->stockConfiguration->isQty($this->skuProcessor->getNewSku($sku)['type_id'])) {
             $stockItemDo->setData($row);
             $row['is_in_stock'] = isset($row['is_in_stock']) && $stockItemDo->getBackorders()
@@ -3046,6 +3140,24 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $row['low_stock_date'] = $date->format(DateTime::DATETIME_PHP_FORMAT);
             }
             $row['stock_status_changed_auto'] = (int)!$this->stockStateProvider->verifyStock($stockItemDo);
+=======
+        if ($this->stockConfiguration->isQty(
+            $this->skuProcessor->getNewSku($sku)['type_id']
+        )
+        ) {
+            $stockItemDo->setData($row);
+            $row['is_in_stock'] = $stockItemDo->getBackorders() && isset($row['is_in_stock'])
+                ? $row['is_in_stock']
+                : $this->stockStateProvider->verifyStock($stockItemDo);
+            if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
+                $row['low_stock_date'] = $this->dateTime->gmDate(
+                    'Y-m-d H:i:s',
+                    (new \DateTime())->getTimestamp()
+                );
+            }
+            $row['stock_status_changed_auto'] =
+                (int)!$this->stockStateProvider->verifyStock($stockItemDo);
+>>>>>>> upstream/2.2-develop
         } else {
             $row['qty'] = 0;
         }
@@ -3059,13 +3171,21 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface|null
      */
+<<<<<<< HEAD
     private function retrieveProductBySku($sku)
+=======
+    private function retrieveProductBySku(string $sku)
+>>>>>>> upstream/2.2-develop
     {
         try {
             $product = $this->productRepository->get($sku);
         } catch (NoSuchEntityException $e) {
             return null;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         return $product;
     }
 }

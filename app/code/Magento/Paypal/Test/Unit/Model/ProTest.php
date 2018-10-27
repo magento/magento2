@@ -239,7 +239,11 @@ class ProTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
             ->disableOriginalConstructor()
             ->setMethods([
+<<<<<<< HEAD
                 'getParentTransactionId', 'getOrder', 'getShouldCloseParentTransaction', 'isCaptureFinal',
+=======
+                'getParentTransactionId', 'getOrder', 'getShouldCloseParentTransaction', 'isCaptureFinal'
+>>>>>>> upstream/2.2-develop
             ])
             ->getMock();
         $parentTransactionId = 43;

@@ -11,16 +11,22 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 
 /**
  * @magentoAppArea adminhtml
+<<<<<<< HEAD
  * @magentoDbIsolation disabled
+=======
+>>>>>>> upstream/2.2-develop
  */
 class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
+<<<<<<< HEAD
     /**
      * Set up
      */
+=======
+>>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

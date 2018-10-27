@@ -55,8 +55,11 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     }
 
     /**
+<<<<<<< HEAD
      * Creation admin user in interaction mode.
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
@@ -134,8 +137,11 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     }
 
     /**
+<<<<<<< HEAD
      * Add not empty validator.
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @param \Symfony\Component\Console\Question\Question $question
      * @return void
      */
@@ -151,7 +157,11 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> upstream/2.2-develop
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

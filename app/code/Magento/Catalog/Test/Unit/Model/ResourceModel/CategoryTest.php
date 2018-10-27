@@ -142,7 +142,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             $this->collectionFactoryMock,
             $this->indexerProcessorMock,
             [],
-            $this->serializerMock
+            $this->serializerMock,
+            $this->indexerProcessorMock
         );
     }
 

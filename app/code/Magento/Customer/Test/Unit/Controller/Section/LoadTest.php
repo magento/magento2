@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\Customer\Test\Unit\Controller\Section;
 
 use Magento\Customer\Controller\Section\Load;
@@ -83,6 +86,7 @@ class LoadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * @param $sectionNames
      * @param $updateSectionID
      * @param $sectionNamesAsArray
@@ -90,6 +94,15 @@ class LoadTest extends \PHPUnit\Framework\TestCase
      * @dataProvider executeDataProvider
      */
     public function testExecute($sectionNames, $updateSectionID, $sectionNamesAsArray, $updateIds)
+=======
+     * @param string $sectionNames
+     * @param bool $forceNewSectionTimestamp
+     * @param string[] $sectionNamesAsArray
+     * @param bool $forceNewTimestamp
+     * @dataProvider executeDataProvider
+     */
+    public function testExecute($sectionNames, $forceNewSectionTimestamp, $sectionNamesAsArray, $forceNewTimestamp)
+>>>>>>> upstream/2.2-develop
     {
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
@@ -103,12 +116,21 @@ class LoadTest extends \PHPUnit\Framework\TestCase
 
         $this->httpRequestMock->expects($this->exactly(2))
             ->method('getParam')
+<<<<<<< HEAD
             ->withConsecutive(['sections'], ['update_section_id'])
             ->willReturnOnConsecutiveCalls($sectionNames, $updateSectionID);
 
         $this->sectionPoolMock->expects($this->once())
             ->method('getSectionsData')
             ->with($sectionNamesAsArray, $updateIds)
+=======
+            ->withConsecutive(['sections'], ['force_new_section_timestamp'])
+            ->willReturnOnConsecutiveCalls($sectionNames, $forceNewSectionTimestamp);
+
+        $this->sectionPoolMock->expects($this->once())
+            ->method('getSectionsData')
+            ->with($sectionNamesAsArray, $forceNewTimestamp)
+>>>>>>> upstream/2.2-develop
             ->willReturn([
                 'message' => 'some message',
                 'someKey' => 'someValue'
@@ -133,6 +155,7 @@ class LoadTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'sectionNames' => 'sectionName1,sectionName2,sectionName3',
+<<<<<<< HEAD
                 'updateSectionID' => 'updateSectionID',
                 'sectionNamesAsArray' => ['sectionName1', 'sectionName2', 'sectionName3'],
                 'updateIds' => true
@@ -142,6 +165,17 @@ class LoadTest extends \PHPUnit\Framework\TestCase
                 'updateSectionID' => null,
                 'sectionNamesAsArray' => null,
                 'updateIds' => false
+=======
+                'forceNewSectionTimestamp' => 'forceNewSectionTimestamp',
+                'sectionNamesAsArray' => ['sectionName1', 'sectionName2', 'sectionName3'],
+                'forceNewTimestamp' => true
+            ],
+            [
+                'sectionNames' => null,
+                'forceNewSectionTimestamp' => null,
+                'sectionNamesAsArray' => null,
+                'forceNewTimestamp' => false
+>>>>>>> upstream/2.2-develop
             ],
         ];
     }

@@ -9,6 +9,7 @@
     <type name="Magento\Framework\View\TemplateEngineFactory">
         <plugin name="debug_hints" type="Magento\Developer\Model\TemplateEngine\Plugin\DebugHints" sortOrder="10"/>
     </type>
+<<<<<<< HEAD
     <type name="Magento\Developer\Model\TemplateEngine\Plugin\DebugHints">
         <arguments>
             <argument name="debugHintsPath" xsi:type="string">dev/debug/template_hints_storefront</argument>
@@ -16,4 +17,6 @@
             <argument name="debugHintsParameter" xsi:type="string">dev/debug/template_hints_parameter_value</argument>
         </arguments>
     </type>
+=======
+>>>>>>> upstream/2.2-develop
 </config>

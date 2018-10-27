@@ -322,7 +322,10 @@ class Full
 
         $select = $connection
             ->select()
-            ->from(['relation' => $this->getTable('catalog_product_relation')], [])
+            ->from(
+                ['relation' => $this->getTable('catalog_product_relation')],
+                []
+            )
             ->distinct(true)
             ->where('child_id IN (?)', $entityIds)
             ->join(
@@ -330,7 +333,10 @@ class Full
                 'relation.parent_id = cpe.' . $linkField,
                 ['cpe.entity_id']
             );
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return $connection->fetchCol($select);
     }
 

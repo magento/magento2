@@ -207,7 +207,11 @@
                 <item name="grandTotal" xsi:type="string">565.00</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
+<<<<<<< HEAD
             <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
+=======
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerRedirectToDashboard" />
+>>>>>>> upstream/2.2-develop
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation9" summary="One Page Checkout Products with different shipping/billing address and Tier Prices" ticketId="MAGETWO-42604">

@@ -8,6 +8,11 @@ declare(strict_types=1);
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+<<<<<<< HEAD
+=======
+use Magento\Downloadable\Model\Link;
+use Magento\Store\Model\Store;
+>>>>>>> upstream/2.2-develop
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Downloadable\Model\Link;
 use Magento\Store\Model\Store;
@@ -22,6 +27,7 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @magentoAppIsolation enabled
@@ -50,6 +56,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         [
             ProductInterface::SKU => 'simple_with_cross',
             ProductInterface::NAME => 'Simple Product With Related Product',
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 10
+        ],
+        [
+            ProductInterface::SKU => [
+                'rest' => 'sku%252fwith%252fslashes',
+                'soap' => 'sku%2fwith%2fslashes'
+            ],
+            ProductInterface::NAME => 'Simple Product with Sku with Slashes',
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 10
         ],
@@ -142,6 +157,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+<<<<<<< HEAD
      * Load website by website code
      *
      * @param $websiteCode
@@ -149,6 +165,30 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     private function loadWebsiteByCode($websiteCode)
     {
+=======
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_sku_with_slash.php
+     */
+    public function testGetBySkuWithSlash()
+    {
+        $productData = $this->productData[2];
+        $response = $this->getProduct($productData[ProductInterface::SKU][TESTS_WEB_API_ADAPTER]);
+        $productData[ProductInterface::SKU] = rawurldecode($productData[ProductInterface::SKU]['soap']);
+        foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
+            $this->assertEquals($productData[$key], $response[$key]);
+        }
+        $this->assertEquals([1], $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]);
+    }
+
+    /**
+     * Load website by website code
+     *
+     * @param string $websiteCode
+     * @return Website
+     */
+    private function loadWebsiteByCode(string $websiteCode): Website
+    {
+        /** @var WebsiteRepository $websiteRepository */
+>>>>>>> upstream/2.2-develop
         $websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepository::class);
         try {
             $website = $websiteRepository->get($websiteCode);
@@ -183,7 +223,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'attribute_set_id' => 4,
                 'name' =>  "Test API 1",
                 'price' =>  254.13,
+<<<<<<< HEAD
                 'sku' => '1234'
+=======
+                'sku' => '1234',
+>>>>>>> upstream/2.2-develop
             ]
         ];
         $product2 = [
@@ -191,7 +235,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'attribute_set_id' => 4,
                 'name' =>  "Test API 1",
                 'price' =>  254.13,
+<<<<<<< HEAD
                 'sku' => '1235'
+=======
+                'sku' => '1235',
+>>>>>>> upstream/2.2-develop
             ]
         ];
 
@@ -267,7 +315,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productBuilder[ProductInterface::TYPE_ID] = 'simple';
         /** @var Website $website */
         $website = $this->loadWebsiteByCode('test_website');
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         $websitesData = [
             'website_ids' => [
                 1,
@@ -445,6 +496,32 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test that Product Repository can correctly create simple product, if product type not specified in request.
+     *
+     * @return void
+     */
+    public function testCreateWithoutSpecifiedType()
+    {
+        $price = 3.62;
+        $weight = 12.2;
+        $sku = 'simple_product_without_specified_type';
+        $product = [
+            'sku' => $sku,
+            'name' => 'Simple Product Without Specified Type',
+            'price' => $price,
+            'weight' => $weight,
+            'attribute_set_id' => 4,
+        ];
+        $response = $this->saveProduct($product);
+        $this->assertSame($sku, $response[ProductInterface::SKU]);
+        $this->assertSame(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, $response[ProductInterface::TYPE_ID]);
+        $this->assertSame($price, $response[ProductInterface::PRICE]);
+        $this->assertSame($weight, $response[ProductInterface::WEIGHT]);
+        //Clean up.
+        $this->deleteProduct($product[ProductInterface::SKU]);
+    }
+
+    /**
      * @param array $fixtureProduct
      *
      * @dataProvider productCreationProvider
@@ -455,9 +532,13 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $sku = $fixtureProduct[ProductInterface::SKU];
         $this->saveProduct($fixtureProduct);
         $this->expectException('Exception');
+<<<<<<< HEAD
         $this->expectExceptionMessage(
             "The product that was requested doesn't exist. Verify the product and try again."
         );
+=======
+        $this->expectExceptionMessage('Requested product doesn\'t exist');
+>>>>>>> upstream/2.2-develop
 
         // Delete all with 'all' store code
         $this->deleteProduct($sku);
@@ -760,7 +841,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
+<<<<<<< HEAD
     public function testUpdateWithExtensionAttributes(): void
+=======
+    public function testUpdateWithExtensionAttributes()
+>>>>>>> upstream/2.2-develop
     {
         $sku = 'downloadable-product';
         $linksKey = 'downloadable_product_links';
@@ -888,6 +973,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * @return void
+>>>>>>> upstream/2.2-develop
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testGetListWithAdditionalParams()
@@ -906,7 +995,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria) . '&fields=' .
                     $additionalParams,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+<<<<<<< HEAD
             ]
+=======
+            ],
+>>>>>>> upstream/2.2-develop
         ];
 
         $response = $this->_webApiCall($serviceInfo, $searchCriteria);
@@ -923,7 +1016,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertNotNull($response['items'][0]['custom_attributes'][$indexDescription]['attribute_code']);
         $this->assertNotNull($response['items'][0]['custom_attributes'][$indexDescription]['value']);
+<<<<<<< HEAD
         $this->assertTrue(count($response['items'][0]['custom_attributes']) == 1);
+=======
+        $this->assertCount(1, $response['items'][0]['custom_attributes']);
+>>>>>>> upstream/2.2-develop
     }
 
     /**

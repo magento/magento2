@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Backup\Filesystem\Rollback;
 
+<<<<<<< HEAD
 use Magento\Framework\Backup\Exception\CantLoadSnapshot;
 use Magento\Framework\Backup\Exception\FtpConnectionFailed;
 use Magento\Framework\Backup\Exception\FtpValidationFailed;
@@ -12,6 +13,8 @@ use Magento\Framework\Backup\Filesystem\Helper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
+=======
+>>>>>>> upstream/2.2-develop
 /**
  * Rollback worker for rolling back via ftp
  *

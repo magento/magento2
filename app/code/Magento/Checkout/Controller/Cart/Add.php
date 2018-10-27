@@ -208,8 +208,11 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
     }
 
     /**
+<<<<<<< HEAD
      * Returns cart url
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @return string
      */
     private function getCartUrl()
@@ -218,8 +221,11 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
     }
 
     /**
+<<<<<<< HEAD
      * Is redirect should be performed after the product was added to cart.
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @return bool
      */
     private function shouldRedirectToCart()

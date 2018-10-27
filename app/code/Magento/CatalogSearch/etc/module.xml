@@ -11,8 +11,11 @@
             <module name="Magento_Search"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Indexer"/>
+<<<<<<< HEAD
             <module name="Magento_CatalogRule" />
             <module name="Magento_CatalogInventory" />
+=======
+>>>>>>> upstream/2.2-develop
         </sequence>
     </module>
 </config>

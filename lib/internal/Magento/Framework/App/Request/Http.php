@@ -152,11 +152,51 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
+<<<<<<< HEAD
      * Return the path info
+=======
+     * Set the PATH_INFO string
+     * Set the ORIGINAL_PATH_INFO string
+     *
+     * @param string|null $pathInfo
+     * @return $this
+     */
+    public function setPathInfo($pathInfo = null)
+    {
+        if ($pathInfo === null) {
+            $requestUri = $this->getRequestUri();
+            if ('/' === $requestUri) {
+                return $this;
+            }
+
+            $requestUri = $this->removeRepeatedSlashes($requestUri);
+            $parsedRequestUri = explode('?', $requestUri, 2);
+            $queryString = !isset($parsedRequestUri[1]) ? '' : '?' . $parsedRequestUri[1];
+            $baseUrl = $this->getBaseUrl();
+            $pathInfo = (string)substr($parsedRequestUri[0], (int)strlen($baseUrl));
+
+            if ($this->isNoRouteUri($baseUrl, $pathInfo)) {
+                $pathInfo = 'noroute';
+            }
+            $pathInfo = $this->pathInfoProcessor->process($this, $pathInfo);
+            $this->originalPathInfo = (string)$pathInfo;
+            $this->requestString = $pathInfo . $queryString;
+        }
+        $this->pathInfo = (string)$pathInfo;
+        return $this;
+    }
+
+    /**
+     * Remove repeated slashes from the start of the path.
+>>>>>>> upstream/2.2-develop
      *
      * @return string
      */
+<<<<<<< HEAD
     public function getPathInfo()
+=======
+    private function removeRepeatedSlashes($pathInfo)
+>>>>>>> upstream/2.2-develop
     {
         if (empty($this->pathInfo)) {
             $this->pathInfo = $this->getOriginalPathInfo();

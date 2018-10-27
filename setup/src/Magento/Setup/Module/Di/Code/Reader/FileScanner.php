@@ -129,6 +129,10 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
             //goto no break needed
 
             case T_NAMESPACE:
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
                 $infos[$infoIndex] = [
                     'type' => 'namespace',
                     'tokenStart' => $macroTokenLogicalStartIndex(),
@@ -173,6 +177,10 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
             //goto no break needed
 
             case T_USE:
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
                 $infos[$infoIndex] = [
                     'type' => 'use',
                     'tokenStart' => $macroTokenLogicalStartIndex(),
@@ -286,6 +294,10 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
             case T_CLASS:
             case T_INTERFACE:
             case T_TRAIT:
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
                 $infos[$infoIndex] = [
                     'type' => ($this->tokenType === T_FUNCTION) ? 'function' : 'class',
                     'tokenStart' => $macroTokenLogicalStartIndex(),

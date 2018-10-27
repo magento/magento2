@@ -12,7 +12,11 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+<<<<<<< HEAD
  */
+=======
+ */ 
+>>>>>>> upstream/2.2-develop
 class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -80,9 +84,13 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->any())->method('getStores')->willReturn([$this->store]);
         $this->flatItemEraser = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class);
         $this->flatItemWriter = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class);
+<<<<<<< HEAD
         $this->flatTableBuilder = $this->createMock(
             \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class
         );
+=======
+        $this->flatTableBuilder = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class);
+>>>>>>> upstream/2.2-develop
         $this->productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
         $statusAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
@@ -119,6 +127,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $productMetadata->expects($this->any())->method('getLinkField')->willReturn('entity_id');
 
         $this->model = $objectManager->getObject(
+<<<<<<< HEAD
             \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class,
             [
                 'resource'         => $this->resource,
@@ -129,6 +138,16 @@ class RowTest extends \PHPUnit\Framework\TestCase
                 'flatTableBuilder' => $this->flatTableBuilder,
             ]
         );
+=======
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class, [
+            'resource'         => $this->resource,
+            'storeManager'     => $this->storeManager,
+            'productHelper'    => $this->productIndexerHelper,
+            'flatItemEraser'   => $this->flatItemEraser,
+            'flatItemWriter'   => $this->flatItemWriter,
+            'flatTableBuilder' => $this->flatTableBuilder,
+        ]);
+>>>>>>> upstream/2.2-develop
 
         $objectManager->setBackwardCompatibleProperty($this->model, 'metadataPool', $metadataPool);
     }

@@ -19,6 +19,8 @@ use Magento\Framework\View\Asset\LocalInterface;
  */
 class Image implements LocalInterface
 {
+    private $sourceContentType;
+
     /**
      * Image type of image (thumbnail,small_image,image,swatch_image,swatch_thumb)
      *
@@ -74,7 +76,11 @@ class Image implements LocalInterface
         $filePath,
         array $miscParams
     ) {
+<<<<<<< HEAD
         if (isset($miscParams['image_type'])) {
+=======
+        if (array_key_exists('image_type', $miscParams)) {
+>>>>>>> upstream/2.2-develop
             $this->sourceContentType = $miscParams['image_type'];
             unset($miscParams['image_type']);
         } else {

@@ -128,6 +128,39 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoDbIsolation disabled
+     */
+    public function testGetProductsWithSpecialPrice()
+    {
+        $product = $this->productRepository->get('simple');
+        $originalFinalPrice = $product->getFinalPrice();
+
+        $specialPrice = 9;
+        $product->setSpecialPrice($specialPrice);
+        $product = $this->productRepository->save($product);
+        /** @var \Magento\Catalog\Model\Product $item */
+        $item = $this->collection->addIdFilter($product->getId())
+            ->addPriceData()
+            ->getFirstItem();
+        $item->setPriceCalculation(false);
+        $this->assertEquals($specialPrice, $item->getFinalPrice());
+
+        $product->setSpecialPrice(null);
+        $product = $this->productRepository->save($product);
+        /** @var \Magento\Catalog\Model\Product $item */
+        $item = $this->collection->clear()
+            ->addIdFilter($product->getId())
+            ->addPriceData()
+            ->getFirstItem();
+        $item->setPriceCalculation(false);
+        $this->assertEquals($originalFinalPrice, $item->getFinalPrice());
+    }
+
+    /**
+>>>>>>> upstream/2.2-develop
      * Test addAttributeToSort() with attribute 'is_saleable' works properly on frontend.
      *
      * @dataProvider addAttributeToSortDataProvider
@@ -192,7 +225,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
      * @magentoDbIsolation enabled
      */
+<<<<<<< HEAD
     public function testAddAttributeToFilterAffectsGetSize(): void
+=======
+    public function testAddAttributeToFilterAffectsGetSize()
+>>>>>>> upstream/2.2-develop
     {
         $this->assertEquals(10, $this->collection->getSize());
         $this->collection->addAttributeToFilter('sku', 'Product1');

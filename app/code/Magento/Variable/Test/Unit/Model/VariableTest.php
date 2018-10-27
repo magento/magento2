@@ -8,35 +8,58 @@ namespace Magento\Variable\Test\Unit\Model;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
 
+/**
+ * Unit test for class Magento\Variable\Model\Variable.
+ */
 class VariableTest extends \PHPUnit\Framework\TestCase
 {
     /**
+<<<<<<< HEAD
      * @var  \Magento\Variable\Model\Variable
+=======
+     * @var \Magento\Variable\Model\Variable
+>>>>>>> upstream/2.2-develop
      */
     private $model;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var \PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
      */
     private $escaperMock;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Variable\Model\ResourceModel\Variable|\PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var \PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
      */
     private $resourceMock;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Variable\Model\ResourceModel\Variable\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceCollectionMock;
 
     /**
      * @var  \Magento\Framework\Phrase
+=======
+     * @var \Magento\Framework\Phrase
+>>>>>>> upstream/2.2-develop
      */
     private $validationFailedPhrase;
 
     /**
+<<<<<<< HEAD
      * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+=======
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+>>>>>>> upstream/2.2-develop
      */
     private $objectManager;
 
@@ -118,6 +141,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->validate($variableArray));
     }
 
+<<<<<<< HEAD
     public function testGetVariablesOptionArrayNoGroup()
     {
         $origOptions = [
@@ -163,6 +187,8 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray(true));
     }
 
+=======
+>>>>>>> upstream/2.2-develop
     /**
      * @return array
      */

@@ -39,7 +39,10 @@ define([
             turnOffInlineTranslation = function () {
                 manageInlineTranslation(false);
             },
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
             storedConfig;
 
         beforeEach(function () {

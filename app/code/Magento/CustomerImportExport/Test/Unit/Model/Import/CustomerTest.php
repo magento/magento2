@@ -91,9 +91,14 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
                     '_saveCustomerAttributes',
                     '_deleteCustomerEntities',
                     'getErrorAggregator',
+<<<<<<< HEAD
                     'getCustomerStorage',
                 ]
             )
+=======
+                    'getCustomerStorage'
+                ])
+>>>>>>> upstream/2.2-develop
             ->getMock();
 
         $errorAggregator = $this->createPartialMock(
@@ -109,9 +114,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $dataSourceModelMock = $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\Import\Data::class)
             ->disableOriginalConstructor()
             ->setMethods([
-                    'getNextBunch',
-                    '__wakeup',
-                ])
+                'getNextBunch',
+                '__wakeup',
+            ])
             ->getMock();
 
         $dataSourceModelMock->expects($this->at(0))

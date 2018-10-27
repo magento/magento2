@@ -128,8 +128,11 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
     }
 
     /**
+<<<<<<< HEAD
      * Is redirect should be performed after the product was added to cart.
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @return bool
      */
     private function shouldRedirectToCart()

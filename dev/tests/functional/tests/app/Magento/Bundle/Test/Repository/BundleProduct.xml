@@ -548,6 +548,7 @@
             </field>
         </dataset>
 
+<<<<<<< HEAD
         <dataset name="fixed_with_one_simple_product_and_custom_option">
             <field name="name" xsi:type="string">Bundle fixed product %isolation%</field>
             <field name="url_key" xsi:type="string">bundle-fixed-product-%isolation%</field>
@@ -579,6 +580,8 @@
             </field>
         </dataset>
 
+=======
+>>>>>>> upstream/2.2-develop
         <dataset name="with_special_price_and_custom_options">
             <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
             <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>

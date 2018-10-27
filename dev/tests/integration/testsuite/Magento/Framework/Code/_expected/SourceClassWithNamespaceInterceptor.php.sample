@@ -57,6 +57,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     /**
      * {@inheritdoc}
      */
+<<<<<<< HEAD
     public function public71($arg1, string $arg2, ?int $arg3, ?int $arg4 = null) : void
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'public71');
@@ -83,6 +84,8 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     /**
      * {@inheritdoc}
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function publicWithSelf($arg = false) : \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicWithSelf');
@@ -96,7 +99,11 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     /**
      * {@inheritdoc}
      */
+<<<<<<< HEAD
     public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
+=======
+    public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = array())
+>>>>>>> upstream/2.2-develop
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicParentMethod');
         if (!$pluginInfo) {

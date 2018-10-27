@@ -187,7 +187,11 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> upstream/2.2-develop
      */
     public function getEntityIdField()
     {

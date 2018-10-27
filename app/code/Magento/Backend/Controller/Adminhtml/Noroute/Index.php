@@ -12,6 +12,13 @@ namespace Magento\Backend\Controller\Adminhtml\Noroute;
 class Index extends \Magento\Backend\App\Action
 {
     /**
+     * Array of actions which can be processed without secret key validation
+     *
+     * @var string[]
+     */
+    protected $_publicActions = ['index'];
+
+    /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;

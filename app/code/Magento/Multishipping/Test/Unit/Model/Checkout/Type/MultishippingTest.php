@@ -123,6 +123,14 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     private $quoteRepositoryMock;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
+>>>>>>> upstream/2.2-develop
      * @var OrderFactory|PHPUnit_Framework_MockObject_MockObject
      */
     private $orderFactoryMock;
@@ -173,7 +181,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->customerSessionMock = $this->createSimpleMock(CustomerSession::class);
         $this->orderFactoryMock = $this->createSimpleMock(OrderFactory::class);
         $eventManagerMock = $this->createSimpleMock(ManagerInterface::class);
+<<<<<<< HEAD
         $scopeConfigMock = $this->createSimpleMock(ScopeConfigInterface::class);
+=======
+        $this->scopeConfigMock = $this->createSimpleMock(ScopeConfigInterface::class);
+>>>>>>> upstream/2.2-develop
         $this->sessionMock = $this->createSimpleMock(Generic::class);
         $addressFactoryMock = $this->createSimpleMock(AddressFactory::class);
         $this->toOrderMock = $this->createSimpleMock(ToOrder::class);
@@ -224,7 +236,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             $this->orderFactoryMock,
             $this->addressRepositoryMock,
             $eventManagerMock,
+<<<<<<< HEAD
             $scopeConfigMock,
+=======
+            $this->scopeConfigMock,
+>>>>>>> upstream/2.2-develop
             $this->sessionMock,
             $addressFactoryMock,
             $this->toOrderMock,
@@ -428,7 +444,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testCreateOrders(): void
+=======
+    public function testCreateOrders()
+>>>>>>> upstream/2.2-develop
     {
         $addressTotal = 5;
         $productType = \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE;
@@ -614,10 +634,15 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @param string $paymentProviderCode
      * @param Address|PHPUnit_Framework_MockObject_MockObject $shippingAddressMock
      * @param Address|PHPUnit_Framework_MockObject_MockObject $billingAddressMock
+<<<<<<< HEAD
      *
      * @return void
      */
     private function setQuoteMockData(string $paymentProviderCode, $shippingAddressMock, $billingAddressMock): void
+=======
+     */
+    private function setQuoteMockData(string $paymentProviderCode, $shippingAddressMock, $billingAddressMock)
+>>>>>>> upstream/2.2-develop
     {
         $quoteId = 1;
         $paymentMock = $this->getPaymentMock($paymentProviderCode);
@@ -808,5 +833,38 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         return $this->getMockBuilder($className)
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    public function testValidateMinimumAmountMultiAddressTrue()
+    {
+        $this->scopeConfigMock->expects($this->exactly(2))->method('isSetFlag')->withConsecutive(
+            ['sales/minimum_order/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            ['sales/minimum_order/multi_address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+        )->willReturnOnConsecutiveCalls(true, true);
+
+        $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->willReturn(false);
+        $this->assertFalse($this->model->validateMinimumAmount());
+    }
+
+    public function testValidateMinimumAmountMultiAddressFalse()
+    {
+        $addressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $this->scopeConfigMock->expects($this->exactly(2))->method('isSetFlag')->withConsecutive(
+            ['sales/minimum_order/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            ['sales/minimum_order/multi_address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+        )->willReturnOnConsecutiveCalls(true, false);
+
+        $this->scopeConfigMock->expects($this->exactly(2))->method('getValue')->withConsecutive(
+            ['sales/minimum_order/amount', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            ['sales/minimum_order/tax_including', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+        )->willReturnOnConsecutiveCalls(100, false);
+
+        $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn(1);
+        $this->quoteMock->expects($this->once())->method('getAllAddresses')->willReturn([$addressMock]);
+        $addressMock->expects($this->once())->method('getBaseSubtotalWithDiscount')->willReturn(101);
+
+        $this->assertTrue($this->model->validateMinimumAmount());
     }
 }

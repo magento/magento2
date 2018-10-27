@@ -42,6 +42,10 @@ class ParentClass
 
     /**
      * ParentClass constructor.
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> upstream/2.2-develop
      * @param ContextObject $contextObject
      * @param ParentRequiredObject $parentRequiredObject
      * @param array $parentRequiredScalar

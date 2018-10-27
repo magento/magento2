@@ -24,9 +24,15 @@ class UrlRewriteTest extends AbstractController
      * @dataProvider requestDataProvider
      */
     public function testMatchUrlRewrite(
+<<<<<<< HEAD
         string $request,
         string $redirect,
         int $expectedCode = 301
+=======
+        $request,
+        $redirect,
+        $expectedCode = 301
+>>>>>>> upstream/2.2-develop
     ) {
         $this->dispatch($request);
         /** @var HttpResponse $response */
@@ -35,11 +41,15 @@ class UrlRewriteTest extends AbstractController
         $location = $response->getHeader('Location')->getFieldValue();
 
         $this->assertEquals($expectedCode, $code, 'Invalid response code');
+<<<<<<< HEAD
         $this->assertStringEndsWith(
             $redirect,
             $location,
             'Invalid location header'
         );
+=======
+        $this->assertStringEndsWith($redirect, $location, 'Invalid location header');
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -71,7 +81,7 @@ class UrlRewriteTest extends AbstractController
             'Use Case #6: Rewrite: page-similar/ --(301)--> page-b; Request: page-similar/ --(301)--> page-b' => [
                 'request' => '/page-similar/',
                 'redirect' => '/page-b',
-            ],
+            ]
         ];
     }
 }

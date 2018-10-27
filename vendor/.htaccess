@@ -5,4 +5,7 @@
 <IfVersion >= 2.4>
     Require all denied
 </IfVersion>
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop

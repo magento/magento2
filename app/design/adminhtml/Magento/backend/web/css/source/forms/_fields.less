@@ -60,7 +60,11 @@
 
 .abs-field-no-label {
     /**
+<<<<<<< HEAD
      *@codingStandardsIgnoreStart
+=======
+     * @codingStandardsIgnoreStart
+>>>>>>> upstream/2.2-develop
      */
     #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
     //@codingStandardsIgnoreEnd
@@ -221,7 +225,7 @@
             overflow: hidden;
         }
 
-        span {
+        label {
             display: inline-block;
             line-height: @field-label__line-height;
             vertical-align: middle;
@@ -239,7 +243,11 @@
 
     .required > &, // ToDo UI: change classes 'required' to '_required'.
     ._required > & {
+<<<<<<< HEAD
         span {
+=======
+        > label {
+>>>>>>> upstream/2.2-develop
             &:after {
                 color: @validation__color;
                 content: '*';
@@ -526,7 +534,7 @@
                 position: absolute;
                 top: 0;
 
-                span {
+                label {
                     &:before {
                         display: block;
                     }
@@ -541,7 +549,7 @@
         }
 
         & > .admin__field-label {
-            span {
+            label {
                 &:before {
                     display: none;
                 }

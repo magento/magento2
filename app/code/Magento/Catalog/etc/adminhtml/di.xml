@@ -92,7 +92,10 @@
                 <item name="store_id" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddStoreFieldToCollection</item>
             </argument>
             <argument name="collectionFactory" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory</argument>
+<<<<<<< HEAD
             <argument name="modifiersPool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool</argument>
+=======
+>>>>>>> upstream/2.2-develop
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
@@ -195,6 +198,7 @@
     <type name="Magento\Eav\Api\AttributeSetRepositoryInterface">
         <plugin name="remove_products" type="Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts"/>
     </type>
+<<<<<<< HEAD
     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav\CompositeConfigProcessor">
         <arguments>
             <argument name="eavWysiwygDataProcessors" xsi:type="array">
@@ -220,6 +224,8 @@
             <argument name="filter" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddSearchKeyConditionToCollection</argument>
         </arguments>
     </type>
+=======
+>>>>>>> upstream/2.2-develop
     <type name="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Attributes">
         <arguments>
             <argument name="excludeFields" xsi:type="array">

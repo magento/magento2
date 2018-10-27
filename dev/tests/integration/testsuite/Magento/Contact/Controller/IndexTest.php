@@ -6,7 +6,11 @@
 
 namespace Magento\Contact\Controller;
 
+<<<<<<< HEAD
 use Magento\Framework\App\Request\Http as HttpRequest;
+=======
+use Zend\Http\Request;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Contact index controller test
@@ -24,7 +28,12 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             'email' => 'user@example.com',
             'hideit' => '',
         ];
+<<<<<<< HEAD
         $this->getRequest()->setPostValue($params)->setMethod(HttpRequest::METHOD_POST);
+=======
+        $this->getRequest()->setPostValue($params);
+        $this->getRequest()->setMethod(Request::METHOD_POST);
+>>>>>>> upstream/2.2-develop
 
         $this->dispatch('contact/index/post');
         $this->assertRedirect($this->stringContains('contact/index'));
@@ -46,7 +55,12 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testInvalidPostAction($params, $expectedMessage)
     {
+<<<<<<< HEAD
         $this->getRequest()->setPostValue($params)->setMethod(HttpRequest::METHOD_POST);
+=======
+        $this->getRequest()->setPostValue($params);
+        $this->getRequest()->setMethod(Request::METHOD_POST);
+>>>>>>> upstream/2.2-develop
 
         $this->dispatch('contact/index/post');
         $this->assertRedirect($this->stringContains('contact/index'));

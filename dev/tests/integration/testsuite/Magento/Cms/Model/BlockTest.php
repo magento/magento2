@@ -5,12 +5,20 @@
  */
 namespace Magento\Cms\Model;
 
+<<<<<<< HEAD
 use Magento\Cms\Model\ResourceModel\Block;
 use Magento\Cms\Model\BlockFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone;
+=======
+use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Cms\Model\BlockFactory;
+use Magento\Cms\Model\ResourceModel\Block;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+>>>>>>> upstream/2.2-develop
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +27,10 @@ use PHPUnit\Framework\TestCase;
  */
 class BlockTest extends TestCase
 {
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
     /**
      * @var ObjectManagerInterface
      */
@@ -36,9 +47,15 @@ class BlockTest extends TestCase
     private $blockFactory;
 
     /**
+<<<<<<< HEAD
      * @var GetBlockByIdentifier
      */
     private $blockIdentifier;
+=======
+     * @var BlockRepositoryInterface
+     */
+    private $blockRepository;
+>>>>>>> upstream/2.2-develop
 
     protected function setUp()
     {
@@ -46,6 +63,7 @@ class BlockTest extends TestCase
 
         /** @var BlockFactory $blockFactory */
         /** @var Block $blockResource */
+<<<<<<< HEAD
         /** @var GetBlockByIdentifier $getBlockByIdentifierCommand */
         $this->blockResource   = $this->objectManager->create(Block::class);
         $this->blockFactory    = $this->objectManager->create(BlockFactory::class);
@@ -113,6 +131,38 @@ class BlockTest extends TestCase
      * @return array
      */
     public function testGetByIdentifierDataProvider(): array
+=======
+        $this->blockResource   = $this->objectManager->create(Block::class);
+        $this->blockFactory    = $this->objectManager->create(BlockFactory::class);
+        $this->blockRepository = $this->objectManager->create(BlockRepositoryInterface::class);
+    }
+
+    /**
+     * Test UpdateTime
+     * @param array $blockData
+     * @throws \Exception
+     * @magentoDbIsolation enabled
+     * @dataProvider testUpdateTimeDataProvider
+     */
+    public function testUpdateTime(array $blockData)
+    {
+        # Prepare and save the temporary block
+        $tempBlock = $this->blockFactory->create();
+        $tempBlock->setData($blockData);
+        $this->blockResource->save($tempBlock);
+
+        # Load previously created block and compare update_time field
+        $block = $this->blockRepository->getById($tempBlock->getId());
+        $date  = $this->objectManager->get(DateTime::class)->date();
+        $this->assertEquals($date, $block->getUpdateTime());
+    }
+
+    /**
+     * Data provider "testUpdateTime" method
+     * @return array
+     */
+    public function testUpdateTimeDataProvider()
+>>>>>>> upstream/2.2-develop
     {
         return [
             [

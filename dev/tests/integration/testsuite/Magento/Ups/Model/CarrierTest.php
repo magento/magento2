@@ -78,6 +78,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $rateRequest->setFreeMethodWeight(0);
         $rateRequest->setLimitCarrier($this->carrier::CODE);
         $rateRequest->setFreeShipping(true);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $rateResult = $this->carrier->collectRates($rateRequest);
         $result = $rateResult->asArray();
         $methods = $result[$this->carrier::CODE]['methods'];

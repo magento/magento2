@@ -45,8 +45,13 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      * @param Action\Context $context
      * @param PostDataProcessor $dataProcessor
      * @param DataPersistorInterface $dataPersistor
+<<<<<<< HEAD
      * @param \Magento\Cms\Model\PageFactory|null $pageFactory
      * @param \Magento\Cms\Api\PageRepositoryInterface|null $pageRepository
+=======
+     * @param \Magento\Cms\Model\PageFactory $pageFactory
+     * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
         Action\Context $context,

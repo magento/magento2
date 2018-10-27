@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
+=======
+>>>>>>> upstream/2.2-develop
 
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
@@ -38,7 +41,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
+<<<<<<< HEAD
     protected function setUp()
+=======
+    public function setUp()
+>>>>>>> upstream/2.2-develop
     {
         $this->objectManager = new ObjectManager($this);
         $this->templateFactory = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterfaceFactory::class)
@@ -67,7 +74,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testGetDefaultTemplateTextDefaultScope(): void
+=======
+    public function testGetDefaultTemplateTextDefaultScope()
+>>>>>>> upstream/2.2-develop
     {
         $templateId = 'email_template';
         $designData = [
@@ -113,7 +124,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      * @param array $data
      * @return \Magento\Theme\Model\Data\Design\Config\Data
      */
+<<<<<<< HEAD
     private function getDesignConfigData(array $data = []): \Magento\Theme\Model\Data\Design\Config\Data
+=======
+    private function getDesignConfigData(array $data = [])
+>>>>>>> upstream/2.2-develop
     {
         return $this->objectManager->getObject(
             \Magento\Theme\Model\Data\Design\Config\Data::class,

@@ -117,6 +117,7 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
+<<<<<<< HEAD
     public function public71($arg1, string $arg2, ?int $arg3, ?int $arg4 = null) : void
     {
         $this->_getSubject()->public71($arg1, $arg2, $arg3, $arg4);
@@ -133,6 +134,8 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
+=======
+>>>>>>> upstream/2.2-develop
     public function publicWithSelf($arg = false) : \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
     {
         return $this->_getSubject()->publicWithSelf($arg);
@@ -141,7 +144,11 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
+<<<<<<< HEAD
     public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
+=======
+    public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = array())
+>>>>>>> upstream/2.2-develop
     {
         return $this->_getSubject()->publicParentMethod($docBlockGenerator, $param1, $param2, $param3, $array);
     }

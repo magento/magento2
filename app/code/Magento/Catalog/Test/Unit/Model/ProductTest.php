@@ -203,6 +203,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $extensionAttributes;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cacheInterfaceMock;
+
+    /**
+>>>>>>> upstream/2.2-develop
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     private $eavConfig;
@@ -253,8 +261,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Model\ActionValidator\RemoveAction::class
         );
         $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $cacheInterfaceMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
-
+        $this->cacheInterfaceMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
         $contextMock = $this->createPartialMock(
             \Magento\Framework\Model\Context::class,
             ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'],
@@ -268,7 +275,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->eventManagerMock));
         $contextMock->expects($this->any())
             ->method('getCacheManager')
-            ->will($this->returnValue($cacheInterfaceMock));
+            ->will($this->returnValue($this->cacheInterfaceMock));
         $contextMock->expects($this->any())
             ->method('getActionValidator')
             ->will($this->returnValue($actionValidatorMock));
@@ -413,8 +420,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 '_filesystem' => $this->filesystemMock,
                 '_collectionFactory' => $this->collectionFactoryMock,
                 'data' => ['id' => 1],
+<<<<<<< HEAD
                 'eavConfig' => $this->eavConfig,
                 'filterCustomAttribute' => $this->filterCustomAttribute
+=======
+                'eavConfig' => $this->eavConfig
+>>>>>>> upstream/2.2-develop
             ]
         );
     }
@@ -1282,10 +1293,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetCustomAttributes()
     {
         $priceCode = 'price';
+<<<<<<< HEAD
         $customAttributeCode = 'color';
         $initialCustomAttributeValue = 'red';
         $newCustomAttributeValue = 'blue';
         $customAttributesMetadata = [$priceCode => 'attribute1', $customAttributeCode => 'attribute2'];
+=======
+        $colorAttributeCode = 'color';
+        $customAttributesMetadata = [$priceCode => 'attribute1', $colorAttributeCode => 'attribute2'];
+
+>>>>>>> upstream/2.2-develop
         $this->metadataServiceMock->expects($this->never())->method('getCustomAttributesMetadata');
         $this->eavConfig->expects($this->once())
             ->method('getEntityAttributes')
@@ -1296,12 +1313,17 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $this->model->getCustomAttributes());
 
         //Set the color attribute;
+<<<<<<< HEAD
         $this->model->setData($customAttributeCode, $initialCustomAttributeValue);
+=======
+        $this->model->setData($colorAttributeCode, 'red');
+>>>>>>> upstream/2.2-develop
         $attributeValue = new \Magento\Framework\Api\AttributeValue();
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
+<<<<<<< HEAD
         $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
             $initialCustomAttributeValue,
@@ -1316,6 +1338,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $newCustomAttributeValue,
             $this->model->getCustomAttribute($customAttributeCode)->getValue()
         );
+=======
+        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
+        $this->assertEquals('red', $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+
+        //Change the attribute value, should reflect in getCustomAttribute
+        $this->model->setCustomAttribute($colorAttributeCode, 'blue');
+        $this->assertEquals(1, count($this->model->getCustomAttributes()));
+        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
+        $this->assertEquals('blue', $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -1418,12 +1450,20 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $productTypePriceMock->expects($this->any())
             ->method('getFinalPrice')
             ->with($qty, $this->model)
+<<<<<<< HEAD
             ->willReturn($finalPrice);
+=======
+            ->will($this->returnValue($finalPrice));
+>>>>>>> upstream/2.2-develop
 
         $this->productTypeInstanceMock->expects($this->any())
             ->method('priceFactory')
             ->with($this->model->getTypeId())
+<<<<<<< HEAD
             ->willReturn($productTypePriceMock);
+=======
+            ->will($this->returnValue($productTypePriceMock));
+>>>>>>> upstream/2.2-develop
 
         $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
     }
@@ -1464,5 +1504,18 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetOptionByIdForProductWithoutOptions()
     {
         $this->assertNull($this->model->getOptionById(100));
+    }
+
+    public function testGetCacheTags()
+    {
+        //If entity is identified getCacheTags has to return the same values
+        //as getIdentities
+        $this->model->setId(null);
+        $this->assertEquals([Product::CACHE_TAG], $this->model->getCacheTags());
+        $this->model->setId(1);
+        $this->assertEquals(
+            $this->model->getIdentities(),
+            $this->model->getCacheTags()
+        );
     }
 }

@@ -70,7 +70,7 @@ class Cron extends \Magento\Framework\App\Config\Value
             $frequency == $frequencyWeekly ? '1' : '*',        # Day of the Week
         ];
 
-        $cronExprString = join(' ', $cronExprArray);
+        $cronExprString = implode(' ', $cronExprArray);
 
         try {
             /** @var $configValue \Magento\Framework\App\Config\ValueInterface */

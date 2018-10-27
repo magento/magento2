@@ -62,6 +62,13 @@
 //  Common
 //  _____________________________________________
 
+.page-wrapper {
+    .ie9 & {
+        .lib-css(background-color, @page__background-color);
+        min-height: 0;
+    }
+}
+
 & when (@media-common = true) {
     body {
         .lib-css(background-color, @page__background-color);
@@ -335,7 +342,10 @@
         .widget.block {
             .lib-css(margin, @indent__base 0);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         .links .widget.block {
             margin: 0;
         }

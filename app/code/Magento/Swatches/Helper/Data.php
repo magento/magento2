@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Swatches\Helper;
 
 use Magento\Catalog\Api\Data\ProductInterface as Product;
@@ -95,11 +96,14 @@ class Data
     private $swatchTypeChecker;
 
     /**
+<<<<<<< HEAD
      * @var UrlBuilder
      */
     private $imageUrlBuilder;
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * @param CollectionFactory $productCollectionFactory
      * @param ProductRepositoryInterface $productRepository
      * @param StoreManagerInterface $storeManager
@@ -128,7 +132,10 @@ class Data
             ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
         $this->swatchTypeChecker = $swatchTypeChecker
             ?: ObjectManager::getInstance()->create(SwatchAttributeType::class);
+<<<<<<< HEAD
         $this->imageUrlBuilder = $urlBuilder;
+=======
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -321,24 +328,42 @@ class Data
                 continue;
             }
 
+<<<<<<< HEAD
             if (in_array('image', $mediaEntry->getTypes(), true) || !$baseImage) {
                 $baseImage = $mediaEntry->getFile();
             }
 
             $gallery[$mediaEntry->getId()] = $this->getAllSizeImages($mediaEntry->getFile());
+=======
+            if (in_array('image', $mediaEntry->getTypes(), true)) {
+                $baseImage = $mediaEntry->getFile();
+            } elseif (!$baseImage) {
+                $baseImage = $mediaEntry->getFile();
+            }
+
+            $gallery[$mediaEntry->getId()] = $this->getAllSizeImages($product, $mediaEntry->getFile());
+>>>>>>> upstream/2.2-develop
         }
 
         if (!$baseImage) {
             return [];
         }
 
+<<<<<<< HEAD
         $resultGallery = $this->getAllSizeImages($baseImage);
+=======
+        $resultGallery = $this->getAllSizeImages($product, $baseImage);
+>>>>>>> upstream/2.2-develop
         $resultGallery['gallery'] = $gallery;
 
         return $resultGallery;
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * @param ModelProduct $product
+>>>>>>> upstream/2.2-develop
      * @param string $imageFile
      * @return array
      */
@@ -484,10 +509,19 @@ class Data
     {
         $currentStoreId = $this->storeManager->getStore()->getId();
         foreach ($fallbackValues as $optionId => $optionsArray) {
+<<<<<<< HEAD
             if (isset($optionsArray[$currentStoreId]['type'], $swatches[$optionId]['type'])
                 && $swatches[$optionId]['type'] === $optionsArray[$currentStoreId]['type']
             ) {
                 $swatches[$optionId] = $optionsArray[$currentStoreId];
+=======
+            if (isset($optionsArray[$currentStoreId], $swatches[$optionId]['type'])
+                && $swatches[$optionId]['type'] === $optionsArray[$currentStoreId]['type']
+            ) {
+                $swatches[$optionId] = $optionsArray[$currentStoreId];
+            } elseif (isset($optionsArray[$currentStoreId])) {
+                $swatches[$optionId] = $optionsArray[$currentStoreId];
+>>>>>>> upstream/2.2-develop
             } elseif (isset($optionsArray[self::DEFAULT_STORE_ID])) {
                 $swatches[$optionId] = $optionsArray[self::DEFAULT_STORE_ID];
             }

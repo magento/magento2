@@ -101,4 +101,20 @@ namespace Magento\Developer\Console\Command {
             );
         }
     }
+
+    public function testPassArgumentsToPHPUnit()
+    {
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(
+            [
+                DevTestsRunCommand::INPUT_ARG_TYPE                    => 'unit',
+                '-' . DevTestsRunCommand::INPUT_OPT_COMMAND_ARGUMENTS_SHORT => '--list-suites',
+            ]
+        );
+        $this->assertContains(
+            'phpunit  --list-suites',
+            $commandTester->getDisplay(),
+            'Parameters should be passed to PHPUnit'
+        );
+    }
 }

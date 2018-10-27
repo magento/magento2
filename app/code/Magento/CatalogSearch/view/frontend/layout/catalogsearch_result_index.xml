@@ -36,7 +36,11 @@
                 <action method="setListModes"/>
                 <action method="setListCollection"/>
             </block>
+<<<<<<< HEAD
             <block class="Magento\Framework\View\Element\Template" name="search.search_terms_log" template="Magento_CatalogSearch::search_terms_log.phtml">
+=======
+            <block name="search.search_terms_log" template="Magento_CatalogSearch::search_terms_log.phtml">
+>>>>>>> upstream/2.2-develop
                 <arguments>
                     <argument name="search_terms_log" xsi:type="object">Magento\CatalogSearch\Block\SearchTermsLog</argument>
                 </arguments>

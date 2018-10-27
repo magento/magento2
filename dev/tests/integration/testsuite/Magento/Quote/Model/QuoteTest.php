@@ -18,7 +18,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartRepositoryInterface;
+<<<<<<< HEAD
 use Magento\Framework\Api\ExtensibleDataInterface;
+=======
+>>>>>>> upstream/2.2-develop
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,11 +41,15 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
     }
 
+<<<<<<< HEAD
     /**
      * @param ExtensibleDataInterface $entity
      * @return array
      */
     private function convertToArray(ExtensibleDataInterface $entity): array
+=======
+    private function convertToArray($entity)
+>>>>>>> upstream/2.2-develop
     {
         return $this->objectManager
             ->create(\Magento\Framework\Api\ExtensibleDataObjectConverter::class)
@@ -374,13 +381,22 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      * Customer with two addresses created. First address is default billing, second is default shipping.
      *
      * @param Quote $quote
+<<<<<<< HEAD
      * @return CustomerInterface
+=======
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+>>>>>>> upstream/2.2-develop
      */
     protected function _prepareQuoteForTestAssignCustomerWithAddressChange(Quote $quote): CustomerInterface
     {
+<<<<<<< HEAD
         $customerRepository = $this->objectManager->create(
             CustomerRepositoryInterface::class
         );
+=======
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+>>>>>>> upstream/2.2-develop
         $fixtureCustomerId = 1;
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class);
@@ -425,6 +441,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     protected function _getCustomerDataArray(): array
     {
         return [
+<<<<<<< HEAD
             Customer::CONFIRMATION => 'test',
             Customer::CREATED_AT => '2/3/2014',
             Customer::CREATED_IN => 'Default',
@@ -443,6 +460,27 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             Customer::SUFFIX => 'Jr.',
             Customer::TAXVAT => 1,
             Customer::WEBSITE_ID => 1
+=======
+            \Magento\Customer\Model\Data\Customer::CONFIRMATION => 'test',
+            \Magento\Customer\Model\Data\Customer::CREATED_AT => '2/3/2014',
+            \Magento\Customer\Model\Data\Customer::CREATED_IN => 'Default',
+            \Magento\Customer\Model\Data\Customer::DEFAULT_BILLING => 'test',
+            \Magento\Customer\Model\Data\Customer::DEFAULT_SHIPPING => 'test',
+            \Magento\Customer\Model\Data\Customer::DOB => '2014-02-03 00:00:00',
+            \Magento\Customer\Model\Data\Customer::EMAIL => 'qa@example.com',
+            \Magento\Customer\Model\Data\Customer::FIRSTNAME => 'Joe',
+            \Magento\Customer\Model\Data\Customer::GENDER => 0,
+            \Magento\Customer\Model\Data\Customer::GROUP_ID =>
+                \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
+            \Magento\Customer\Model\Data\Customer::ID => 1,
+            \Magento\Customer\Model\Data\Customer::LASTNAME => 'Dou',
+            \Magento\Customer\Model\Data\Customer::MIDDLENAME => 'Ivan',
+            \Magento\Customer\Model\Data\Customer::PREFIX => 'Dr.',
+            \Magento\Customer\Model\Data\Customer::STORE_ID => 1,
+            \Magento\Customer\Model\Data\Customer::SUFFIX => 'Jr.',
+            \Magento\Customer\Model\Data\Customer::TAXVAT => 1,
+            \Magento\Customer\Model\Data\Customer::WEBSITE_ID => 1
+>>>>>>> upstream/2.2-develop
         ];
     }
 
@@ -523,7 +561,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @dataProvider giftMessageDataProvider
      * @throws LocalizedException
+<<<<<<< HEAD
      * @return void
+=======
+>>>>>>> upstream/2.2-develop
      */
     public function testMerge(
         $guestItemGiftMessageId,
@@ -532,7 +573,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $customerOrderGiftMessageId,
         $expectedItemGiftMessageId,
         $expectedOrderGiftMessageId
+<<<<<<< HEAD
     ): void {
+=======
+    ) {
+>>>>>>> upstream/2.2-develop
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $product = $productRepository->get('simple', false, null, true);
 
@@ -593,7 +638,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      * @param string $reservedOrderId
      * @return Quote
      */
+<<<<<<< HEAD
     private function getQuote(string $reservedOrderId): Quote
+=======
+    private function getQuote($reservedOrderId)
+>>>>>>> upstream/2.2-develop
     {
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);

@@ -49,6 +49,11 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      */
     private $processManager;
 
+    /**
+     * @var \Magento\Indexer\Model\ProcessManager
+     */
+    private $processManager;
+
     protected function setUp()
     {
         $this->fullAction = $this->getClassMock(\Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class);
@@ -71,9 +76,16 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['switchIndex'])
             ->getMock();
 
+<<<<<<< HEAD
         $this->dimensionProviderMock = $this->getMockBuilder(DimensionProviderInterface::class)->getMock();
         $stateMock = $this->getMockBuilder(\Magento\CatalogSearch\Model\Indexer\Scope\State::class)
             ->getMock();
+=======
+        $this->processManager = new \Magento\Indexer\Model\ProcessManager(
+            $this->getClassMock(\Magento\Framework\App\ResourceConnection::class)
+        );
+
+>>>>>>> upstream/2.2-develop
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->processManager = new \Magento\Indexer\Model\ProcessManager(
@@ -88,8 +100,11 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
                 'fulltextResource' => $this->fulltextResource,
                 'data' => [],
                 'indexSwitcher' => $this->indexSwitcher,
+<<<<<<< HEAD
                 'dimensionProvider' => $this->dimensionProviderMock,
                 'indexScopeState' => $stateMock,
+=======
+>>>>>>> upstream/2.2-develop
                 'processManager' => $this->processManager,
             ]
         );

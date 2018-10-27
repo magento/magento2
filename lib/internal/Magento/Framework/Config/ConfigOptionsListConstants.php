@@ -46,11 +46,14 @@ class ConfigOptionsListConstants
      */
     const CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION = 'static_content_on_demand_in_production';
 
+<<<<<<< HEAD
     /**
      * Paramater for forcing HTML minification even if file is already minified.
      */
     const CONFIG_PATH_FORCE_HTML_MINIFICATION = 'force_html_minification';
 
+=======
+>>>>>>> upstream/2.2-develop
     /**#@+
      * Input keys for the options
      */

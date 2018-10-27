@@ -21,6 +21,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const XML_PATH_GUEST_CHECKOUT = 'checkout/options/guest_checkout';
 
+    /**
+     * @deprecated
+     */
     const XML_PATH_CUSTOMER_MUST_BE_LOGGED = 'checkout/options/customer_must_be_logged';
 
     /**
@@ -59,8 +62,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     private $paymentFailures;
 
     /**
+<<<<<<< HEAD
      * Data constructor.
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -227,7 +233,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Quote\Model\Quote $checkout,
         string $message,
         string $checkoutType = 'onepage'
+<<<<<<< HEAD
     ): Data {
+=======
+    ): \Magento\Checkout\Helper\Data {
+>>>>>>> upstream/2.2-develop
         $this->paymentFailures->handle((int)$checkout->getId(), $message, $checkoutType);
 
         return $this;
@@ -301,6 +311,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return boolean
      * @codeCoverageIgnore
+     * @deprecated
      */
     public function isCustomerMustBeLogged()
     {

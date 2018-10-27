@@ -71,6 +71,7 @@ define([
             });
         });
     });
+<<<<<<< HEAD
 
     describe('validate-color', function () {
         it('Should accept empty value', function () {
@@ -111,4 +112,6 @@ define([
             expect(rules['validate-color'].handler('hsv(25, 25%, 65%)')).toEqual(true);
         });
     });
+=======
+>>>>>>> upstream/2.2-develop
 });

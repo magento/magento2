@@ -146,7 +146,7 @@ class StockItemRepository implements StockItemRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(\Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem)
+    public function save(StockItemInterface $stockItem)
     {
         try {
             /** @var \Magento\Catalog\Model\Product $product */
@@ -162,10 +162,7 @@ class StockItemRepository implements StockItemRepositoryInterface
             $typeId = $product->getTypeId() ?: $product->getTypeInstance()->getTypeId();
             $isQty = $this->stockConfiguration->isQty($typeId);
             if ($isQty) {
-                $isInStock = $this->stockStateProvider->verifyStock($stockItem);
-                if ($stockItem->getManageStock() && !$isInStock) {
-                    $stockItem->setIsInStock(false)->setStockStatusChangedAutomaticallyFlag(true);
-                }
+                $this->changeIsInStockIfNecessary($stockItem);
                 // if qty is below notify qty, update the low stock date to today date otherwise set null
                 $stockItem->setLowStockDate(null);
                 if ($this->stockStateProvider->verifyNotification($stockItem)) {
@@ -265,5 +262,30 @@ class StockItemRepository implements StockItemRepositoryInterface
                 ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
         }
         return $this->stockRegistryStorage;
+    }
+
+    /**
+     * Change is_in_stock value if necessary.
+     *
+     * @param StockItemInterface $stockItem
+     *
+     * @return void
+     */
+    private function changeIsInStockIfNecessary(StockItemInterface $stockItem)
+    {
+        $isInStock = $this->stockStateProvider->verifyStock($stockItem);
+        if ($stockItem->getManageStock() && !$isInStock) {
+            $stockItem->setIsInStock(false)->setStockStatusChangedAutomaticallyFlag(true);
+        }
+
+        if ($stockItem->getManageStock()
+            && $isInStock
+            && !$stockItem->getIsInStock()
+            && $stockItem->getQty() > 0
+            && $stockItem->getOrigData(\Magento\CatalogInventory\Api\Data\StockItemInterface::QTY) <= 0
+            && $stockItem->getOrigData(\Magento\CatalogInventory\Api\Data\StockItemInterface::QTY) !== null
+        ) {
+            $stockItem->setIsInStock(true)->setStockStatusChangedAutomaticallyFlag(true);
+        }
     }
 }

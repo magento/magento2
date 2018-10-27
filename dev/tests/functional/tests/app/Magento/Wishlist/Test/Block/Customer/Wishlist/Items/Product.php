@@ -214,8 +214,35 @@ class Product extends Form
      */
     private function getPriceBySelector(string $selector, string $currency = '$'): string
     {
+<<<<<<< HEAD
         $price = $this->_rootElement->find($selector)->getText();
 
+=======
+        return $this->getPriceBySelector($this->price, $currency);
+    }
+
+    /**
+     * Returns product regular price.
+     *
+     * @param string $currency
+     * @return string
+     */
+    public function getRegularPrice($currency = '$')
+    {
+        return $this->getPriceBySelector($this->regularPrice, $currency);
+    }
+
+    /**
+     * Returns product price by selector.
+     *
+     * @param string $selector
+     * @param string $currency
+     * @return string
+     */
+    private function getPriceBySelector(string $selector, $currency = '$')
+    {
+        $price = $this->_rootElement->find($selector)->getText();
+>>>>>>> upstream/2.2-develop
         return str_replace($currency, '', $price);
     }
 
@@ -224,7 +251,11 @@ class Product extends Form
      *
      * @return string
      */
+<<<<<<< HEAD
     public function getPriceLabel(): string
+=======
+    public function getPriceLabel()
+>>>>>>> upstream/2.2-develop
     {
         return (string)$this->_rootElement->find($this->regularPriceLabel)->getText();
     }

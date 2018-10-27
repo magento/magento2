@@ -338,7 +338,11 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider checkResponseCodeFailureDataProvider
      */
+<<<<<<< HEAD
     public function testCheckResponseCodeFailure(int $responseCode, int $failuresHandlerCalls): void
+=======
+    public function testCheckResponseCodeFailure(int $responseCode, int $failuresHandlerCalls)
+>>>>>>> upstream/2.2-develop
     {
         $reasonText = 'reason text';
 

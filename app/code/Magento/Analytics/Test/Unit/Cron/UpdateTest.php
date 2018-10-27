@@ -13,6 +13,12 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\FlagManager;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class Update
+ */
+>>>>>>> upstream/2.2-develop
 class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**

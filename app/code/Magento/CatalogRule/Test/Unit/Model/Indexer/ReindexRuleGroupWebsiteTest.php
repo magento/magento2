@@ -27,9 +27,13 @@ class ReindexRuleGroupWebsiteTest extends \PHPUnit\Framework\TestCase
     private $resourceMock;
 
     /**
+<<<<<<< HEAD
      * @var ActiveTableSwitcher|\PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var IndexerTableSwapperInterface|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
      */
-    private $activeTableSwitcherMock;
+    private $tableSwapperMock;
 
     /**
      * @var IndexerTableSwapperInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -44,7 +48,12 @@ class ReindexRuleGroupWebsiteTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
         $this->activeTableSwitcherMock =
+=======
+        /** @var ActiveTableSwitcher|\PHPUnit_Framework_MockObject_MockObject $activeTableSwitcherMock */
+        $activeTableSwitcherMock =
+>>>>>>> upstream/2.2-develop
             $this->getMockBuilder(ActiveTableSwitcher::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -54,7 +63,11 @@ class ReindexRuleGroupWebsiteTest extends \PHPUnit\Framework\TestCase
         $this->model = new \Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite(
             $this->dateTimeMock,
             $this->resourceMock,
+<<<<<<< HEAD
             $this->activeTableSwitcherMock,
+=======
+            $activeTableSwitcherMock,
+>>>>>>> upstream/2.2-develop
             $this->tableSwapperMock
         );
     }
@@ -67,6 +80,7 @@ class ReindexRuleGroupWebsiteTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->at(0))->method('getConnection')->willReturn($connectionMock);
         $this->dateTimeMock->expects($this->once())->method('gmtTimestamp')->willReturn($timeStamp);
 
+<<<<<<< HEAD
         $this->tableSwapperMock->expects($this->any())
             ->method('getWorkingTableName')
             ->willReturnMap(
@@ -75,6 +89,16 @@ class ReindexRuleGroupWebsiteTest extends \PHPUnit\Framework\TestCase
                     ['catalogrule_product', 'catalogrule_product_replica'],
                 ]
             );
+=======
+        $this->tableSwapperMock->expects($this->at(0))
+            ->method('getWorkingTableName')
+            ->with('catalogrule_group_website')
+            ->willReturn('catalogrule_group_website_replica');
+        $this->tableSwapperMock->expects($this->at(1))
+            ->method('getWorkingTableName')
+            ->with('catalogrule_product')
+            ->willReturn('catalogrule_product_replica');
+>>>>>>> upstream/2.2-develop
 
         $this->resourceMock->expects($this->any())
             ->method('getTableName')

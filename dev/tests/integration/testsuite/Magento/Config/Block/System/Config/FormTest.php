@@ -227,7 +227,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block FormStub */
+<<<<<<< HEAD
         $block = Bootstrap::getObjectManager()->get(
+=======
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+>>>>>>> upstream/2.2-develop
             \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
             FormStub::class

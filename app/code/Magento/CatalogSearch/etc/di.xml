@@ -299,6 +299,7 @@
             <argument name="name" xsi:type="string">catalog_view_container</argument>
         </arguments>
     </type>
+<<<<<<< HEAD
     <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy">
         <arguments>
             <!-- @deprecated parameter storeManager has been deprecated and not in used now -->
@@ -316,6 +317,8 @@
             </argument>
         </arguments>
     </type>
+=======
+>>>>>>> upstream/2.2-develop
     <type name="Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy">
         <arguments>
             <argument name="priceTableResolver" xsi:type="object">

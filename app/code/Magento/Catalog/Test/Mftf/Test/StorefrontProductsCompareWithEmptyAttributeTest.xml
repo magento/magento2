@@ -7,6 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontProductsCompareWithEmptyAttributeTest">
         <annotations>
@@ -16,6 +17,15 @@
             <description value="Product attribute should not be visible on the product compare page if it is empty for all products that are being compared, not even displayed as N/A"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-91960"/>
+=======
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontProductsCompareWithEmptyAttributeTest">
+        <annotations>
+            <title value="Product attribute is not visible on product compare page if it is empty"/>
+            <description value="Product attribute should not be visible on the product compare page if it is empty for all products that are being compared, not even displayed as N/A"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-92271"/>
+>>>>>>> upstream/2.2-develop
             <group value="productCompare"/>
         </annotations>
         <before>
@@ -35,6 +45,7 @@
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+<<<<<<< HEAD
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
         <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
@@ -47,18 +58,46 @@
         <!-- View Simple Product 1 -->
         <comment userInput="View simple product 1" stepKey="commentViewSimpleProduct1" after="goProductPageOnStorefront1"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View" after="commentViewSimpleProduct1"/>
+=======
+        <waitForPageLoad stepKey="waitLoginAsAdmin"/>
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
+        <click selector="{{AdminProductAttributeSetGridSection.attributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
+        <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
+        <dragAndDrop selector1="{{AdminProductAttributeUnassignedSection.productAttributeName('$$createProductAttribute.attribute_code$$')}}" selector2="{{AdminProductAttributeGroupSection.folderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
+        <click selector="{{AdminProductAttributeSetSection.save}}" stepKey="saveAttributeSet"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
+        <seeElement selector=".message-success" stepKey="assertSuccess"/>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
+        <waitForPageLoad stepKey="waitClearCache"/>
+        <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="goProductPageOnStorefront1"/>
+        <!-- View Simple Product 1 -->
+        <comment userInput="View simple product 1" stepKey="commentViewSimpleProduct1" after="goProductPageOnStorefront1"/>
+        <click selector="{{StorefrontCategoryProductSection.productTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View" after="commentViewSimpleProduct1"/>
+>>>>>>> upstream/2.2-develop
         <waitForLoadingMaskToDisappear stepKey="waitForSimpleProduct1Viewloaded" after="browseClickCategorySimpleProduct1View"/>
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="compareAddSimpleProduct1ToCompare">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
+<<<<<<< HEAD
         <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="goProductPageOnStorefront2"/>
         <!-- View Simple Product 2 -->
         <comment userInput="View simple product 2" stepKey="commentViewSimpleProduct2" after="goProductPageOnStorefront2"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseClickCategorySimpleProduct2View" after="commentViewSimpleProduct2"/>
+=======
+        <waitForPageLoad stepKey="waitAddSimpleProduct1AddedToCompare"/>
+        <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="goProductPageOnStorefront2"/>
+        <!-- View Simple Product 2 -->
+        <comment userInput="View simple product 2" stepKey="commentViewSimpleProduct2" after="goProductPageOnStorefront2"/>
+        <click selector="{{StorefrontCategoryProductSection.productTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseClickCategorySimpleProduct2View" after="commentViewSimpleProduct2"/>
+>>>>>>> upstream/2.2-develop
         <waitForLoadingMaskToDisappear stepKey="waitForSimpleProduct2Viewloaded" after="browseClickCategorySimpleProduct2View"/>
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="compareAddSimpleProduct2ToCompare">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
+<<<<<<< HEAD
+=======
+        <waitForPageLoad stepKey="waitAddSimpleProduct2AddedToCompare"/>
+>>>>>>> upstream/2.2-develop
         <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="goProductPageOnStorefront3"/>
         <!-- Check products in comparison sidebar -->
         <!-- Check simple product 1 in comparison sidebar -->
@@ -77,7 +116,12 @@
         <actionGroup ref="StorefrontCheckCompareSimpleProductActionGroup" stepKey="compareAssertSimpleProduct1InComparison" after="compareOpenComparePage">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
+<<<<<<< HEAD
         <seeElement selector="//table[@id='product-comparison']/tbody/tr/th/*[contains(text(),'SKU')]" stepKey="seeCompareAttribute1"/>
         <dontSeeElement selector="//table[@id='product-comparison']/tbody/tr/th/*[contains(text(),'testattribute')]" stepKey="seeCompareAttribute2"/>
+=======
+        <seeElement selector="{{StorefrontProductCompareMainSection.productAttributeByName('SKU')}}" stepKey="seeCompareAttributeSku"/>
+        <dontSeeElement selector="{{StorefrontProductCompareMainSection.productAttributeByName('$$createProductAttribute.attribute_code$$')}}" stepKey="dontSeeCompareTestAttribute"/>
+>>>>>>> upstream/2.2-develop
     </test>
 </tests>

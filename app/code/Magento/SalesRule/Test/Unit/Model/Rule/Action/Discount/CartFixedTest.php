@@ -86,6 +86,12 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+<<<<<<< HEAD
+=======
+        $this->priceCurrency = $this->getMockBuilder(
+            \Magento\Framework\Pricing\PriceCurrencyInterface::class
+        )->getMock();
+>>>>>>> upstream/2.2-develop
         $this->model = new \Magento\SalesRule\Model\Rule\Action\Discount\CartFixed(
             $this->validator,
             $dataFactory,

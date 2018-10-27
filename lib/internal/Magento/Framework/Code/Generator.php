@@ -52,7 +52,11 @@ class Generator
      * @param Generator\Io $ioObject
      * @param array $generatedEntities
      * @param DefinedClasses $definedClasses
+<<<<<<< HEAD
      * @param LoggerInterface|null $logger
+=======
+     * @param LoggerInterface $logger
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
         Io $ioObject = null,

@@ -6,6 +6,11 @@
 namespace Magento\Analytics\Api\Data;
 
 /**
+<<<<<<< HEAD
+=======
+ * Interface LinkInterface
+ *
+>>>>>>> upstream/2.2-develop
  * Represents link with collected data and initialized vector for decryption.
  */
 interface LinkInterface

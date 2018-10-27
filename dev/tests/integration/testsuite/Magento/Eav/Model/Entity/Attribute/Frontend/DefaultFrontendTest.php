@@ -80,6 +80,10 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
+<<<<<<< HEAD
+=======
+     * @return void
+>>>>>>> upstream/2.2-develop
      */
     public function testAttributeEntityValueNotSet()
     {
@@ -88,6 +92,10 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
         $entity->load(1);
         $frontEnd = $this->attribute->loadByCode('catalog_product', 'dropdown_attribute');
         $value = $frontEnd->getFrontend()->getValue($entity);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
         $this->assertFalse($value);
     }
 

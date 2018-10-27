@@ -5,11 +5,15 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
-use Magento\Braintree\Gateway\Request\AddressDataBuilder;
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use Magento\Payment\Gateway\Data\OrderAdapterInterface;
-use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Braintree\Gateway\Request\AddressDataBuilder;
+use Magento\Payment\Gateway\Data\AddressAdapterInterface;
+<<<<<<< HEAD
+use Magento\Braintree\Gateway\SubjectReader;
+=======
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+>>>>>>> upstream/2.2-develop
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -20,32 +24,32 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var PaymentDataObjectInterface|MockObject
      */
-    private $paymentDOMock;
+    private $paymentDO;
 
     /**
      * @var OrderAdapterInterface|MockObject
      */
-    private $orderMock;
+    private $order;
 
     /**
      * @var AddressDataBuilder
      */
     private $builder;
 
+<<<<<<< HEAD
     /**
      * @var SubjectReader|MockObject
      */
     private $subjectReaderMock;
 
+=======
+>>>>>>> upstream/2.2-develop
     protected function setUp()
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $this->order = $this->createMock(OrderAdapterInterface::class);
 
-        $this->builder = new AddressDataBuilder($this->subjectReaderMock);
+        $this->builder = new AddressDataBuilder(new SubjectReader());
     }
 
     /**
@@ -57,37 +61,24 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
             'payment' => null,
         ];
 
-        $this->subjectReaderMock->expects(self::once())
-            ->method('readPayment')
-            ->with($buildSubject)
-            ->willThrowException(new \InvalidArgumentException());
-
         $this->builder->build($buildSubject);
     }
 
     public function testBuildNoAddresses()
     {
-        $this->paymentDOMock->expects(static::once())
-            ->method('getOrder')
-            ->willReturn($this->orderMock);
+        $this->paymentDO->method('getOrder')
+            ->willReturn($this->order);
 
-        $this->orderMock->expects(static::once())
-            ->method('getShippingAddress')
+        $this->order->method('getShippingAddress')
             ->willReturn(null);
-        $this->orderMock->expects(static::once())
-            ->method('getBillingAddress')
+        $this->order->method('getBillingAddress')
             ->willReturn(null);
 
         $buildSubject = [
-            'payment' => $this->paymentDOMock,
+            'payment' => $this->paymentDO,
         ];
 
-        $this->subjectReaderMock->expects(self::once())
-            ->method('readPayment')
-            ->with($buildSubject)
-            ->willReturn($this->paymentDOMock);
-
-        static::assertEquals([], $this->builder->build($buildSubject));
+        self::assertEquals([], $this->builder->build($buildSubject));
     }
 
     /**
@@ -98,27 +89,19 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuild($addressData, $expectedResult)
     {
-        $addressMock = $this->getAddressMock($addressData);
+        $address = $this->getAddressMock($addressData);
 
-        $this->paymentDOMock->expects(static::once())
-            ->method('getOrder')
-            ->willReturn($this->orderMock);
+        $this->paymentDO->method('getOrder')
+            ->willReturn($this->order);
 
-        $this->orderMock->expects(static::once())
-            ->method('getShippingAddress')
-            ->willReturn($addressMock);
-        $this->orderMock->expects(static::once())
-            ->method('getBillingAddress')
-            ->willReturn($addressMock);
+        $this->order->method('getShippingAddress')
+            ->willReturn($address);
+        $this->order->method('getBillingAddress')
+            ->willReturn($address);
 
         $buildSubject = [
-            'payment' => $this->paymentDOMock,
+            'payment' => $this->paymentDO,
         ];
-
-        $this->subjectReaderMock->expects(self::once())
-            ->method('readPayment')
-            ->with($buildSubject)
-            ->willReturn($this->paymentDOMock);
 
         self::assertEquals($expectedResult, $this->builder->build($buildSubject));
     }

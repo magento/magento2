@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> upstream/2.2-develop
 namespace Magento\LayeredNavigation\Test\TestCase;
 
 use Magento\Catalog\Test\Fixture\Category;
@@ -15,6 +18,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Preconditions:
+<<<<<<< HEAD
  * 1. Create four categories assigned in ascending order:
  *  - Category 1:
  *      Category name: "Test1"
@@ -42,6 +46,19 @@ use Magento\Mtf\Fixture\FixtureFactory;
  *
  * @group Layered_Navigation
  * @ZephyrId MAGETWO-90123
+=======
+ * 1. Create four categories assigned in ascending order (Default Category->first->second->third->fourth)
+ * first and third categories should not be anchored, second and fourth categories should be anchored
+ * 2. Create configurable product with two configurable options and assign it to category "fourth"
+ *
+ * Steps:
+ * 1. Disable configurable options via massaction or from edit product page
+ * 2. Open created non anchored categories on frontend
+ * 3. Perform assertions
+ *
+ * @group Layered_Navigation
+ * @ZephyrId MAGETWO-82891
+>>>>>>> upstream/2.2-develop
  */
 class ProductsCountInLayeredNavigationTest extends Injectable
 {
@@ -85,15 +102,26 @@ class ProductsCountInLayeredNavigationTest extends Injectable
     }
 
     /**
+<<<<<<< HEAD
      * Test category name and products count displaying in layered navigation after configurable options disabling.
      *
      * @param Category $category
      * @param bool $disableFromProductsGreed
+=======
+     * Test category name and products count displaying in layered navigation after configurable options disabling
+     *
+     * @param Category $category
+     * @param boolean $disableFromProductsGreed
+>>>>>>> upstream/2.2-develop
      * @return array
      */
     public function test(
         Category $category,
+<<<<<<< HEAD
         bool $disableFromProductsGreed = true
+=======
+        $disableFromProductsGreed = true
+>>>>>>> upstream/2.2-develop
     ) {
         // Preconditions
         $category->persist();
@@ -132,9 +160,14 @@ class ProductsCountInLayeredNavigationTest extends Injectable
                 $this->editProductPage->getFormPageActions()->save();
             }
         }
+<<<<<<< HEAD
 
         return [
             'products' => $configurableOptions,
+=======
+        return [
+            'products' => $configurableOptions
+>>>>>>> upstream/2.2-develop
         ];
     }
 }

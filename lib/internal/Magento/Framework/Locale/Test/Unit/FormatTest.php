@@ -97,18 +97,29 @@ class FormatTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      *
      * @param        mixed $value
      * @param        float $expected
      * @dataProvider provideNumbers
      */
     public function testGetNumber($value, $expected): void
+=======
+     * @param float | null $expected
+     * @param string|float|int $value
+     * @dataProvider provideNumbers
+     */
+    public function testGetNumber($value, $expected)
+>>>>>>> upstream/2.2-develop
     {
         $this->assertEquals($expected, $this->formatModel->getNumber($value));
     }
 
     /**
+<<<<<<< HEAD
      *
+=======
+>>>>>>> upstream/2.2-develop
      * @return array
      */
     public function provideNumbers(): array

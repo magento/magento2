@@ -63,7 +63,11 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->order->getPayment()->setMethod(Config::METHOD_PAYFLOWLINK);
 
         /** @var $quote \Magento\Quote\Model\Quote */
+<<<<<<< HEAD
         $quote = $this->_objectManager->create(Quote::class)->setStoreid($this->order->getStoreId());
+=======
+        $quote = $this->_objectManager->create(Quote::class)->setStoreid($this->order->getStoreid());
+>>>>>>> upstream/2.2-develop
 
         $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
         $this->quoteRepository->save($quote);

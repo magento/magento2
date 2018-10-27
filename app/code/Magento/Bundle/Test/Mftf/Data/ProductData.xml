@@ -8,6 +8,7 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+<<<<<<< HEAD
     <entity name="BundleProduct" type="product">
         <data key="name" unique="suffix">BundleProduct</data>
         <data key="name2" unique="suffix">BundleProduct2</data>
@@ -31,6 +32,8 @@
         <data key="fixedPriceFormatted">$10.00</data>
         <data key="defaultAttribute">Default</data>
     </entity>
+=======
+>>>>>>> upstream/2.2-develop
     <entity name="ApiBundleProduct" type="product2">
         <data key="name" unique="suffix">Api Bundle Product</data>
         <data key="sku" unique="suffix">api-bundle-product</data>

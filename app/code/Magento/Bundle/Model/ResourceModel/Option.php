@@ -86,7 +86,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'store_id = ? OR store_id = 0' => $object->getStoreId(),
             'parent_product_id = ?' => $object->getParentId()
         ];
-
         $connection = $this->getConnection();
         $connection->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
 

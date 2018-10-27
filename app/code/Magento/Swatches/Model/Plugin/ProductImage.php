@@ -111,10 +111,18 @@ class ProductImage
      * @param \Magento\Catalog\Model\Product $product
      * @return array
      */
+<<<<<<< HEAD
     private function getFilterArray(array $request, Product $product)
     {
         $filterArray = [];
         $attributes = $this->eavConfig->getEntityAttributes(Product::ENTITY, $product);
+=======
+    private function getFilterArray(array $request, \Magento\Catalog\Model\Product $product)
+    {
+        $filterArray = [];
+        $attributes = $this->eavConfig->getEntityAttributes(\Magento\Catalog\Model\Product::ENTITY, $product);
+
+>>>>>>> upstream/2.2-develop
         foreach ($request as $code => $value) {
             if (isset($attributes[$code])) {
                 $attribute = $attributes[$code];
