@@ -11,30 +11,33 @@ namespace Magento\ImportExport\Model\Source\Export;
  * @api
  * @since 100.0.2
  */
-class Format implements \Magento\Framework\Option\ArrayInterface
-{
-    /**
-     * @var \Magento\ImportExport\Model\Export\ConfigInterface
-     */
-    protected $_exportConfig;
+class Format implements \Magento\Framework\Option\ArrayInterface {
+	/**
+	 * @var \Magento\ImportExport\Model\Export\ConfigInterface
+	 */
+	protected $_exportConfig;
 
-    /**
-     * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
-     */
-    public function __construct(\Magento\ImportExport\Model\Export\ConfigInterface $exportConfig)
-    {
-        $this->_exportConfig = $exportConfig;
-    }
+	/**
+	 * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
+	 */
+	public function __construct(\Magento\ImportExport\Model\Export\ConfigInterface $exportConfig) {
+		$this->_exportConfig = $exportConfig;
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function toOptionArray()
-    {
-        $options = [];
-        foreach ($this->_exportConfig->getFileFormats() as $formatName => $formatConfig) {
-            $options[] = ['value' => $formatName, 'label' => __($formatConfig['label'])];
-        }
-        return $options;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function toOptionArray() {
+		$options = [];
+
+		if (empty($this->_exportConfig->getFileFormats())) {
+			return $options;
+		}
+
+		foreach ($this->_exportConfig->getFileFormats() as $formatName => $formatConfig) {
+			$options[] = ['value' => $formatName, 'label' => __($formatConfig['label'])];
+		}
+
+		return $options;
+	}
 }

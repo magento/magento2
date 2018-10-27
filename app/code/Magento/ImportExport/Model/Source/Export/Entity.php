@@ -11,31 +11,35 @@ namespace Magento\ImportExport\Model\Source\Export;
  * @api
  * @since 100.0.2
  */
-class Entity implements \Magento\Framework\Option\ArrayInterface
-{
-    /**
-     * @var \Magento\ImportExport\Model\Export\ConfigInterface
-     */
-    protected $_exportConfig;
+class Entity implements \Magento\Framework\Option\ArrayInterface {
+	/**
+	 * @var \Magento\ImportExport\Model\Export\ConfigInterface
+	 */
+	protected $_exportConfig;
 
-    /**
-     * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
-     */
-    public function __construct(\Magento\ImportExport\Model\Export\ConfigInterface $exportConfig)
-    {
-        $this->_exportConfig = $exportConfig;
-    }
+	/**
+	 * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
+	 */
+	public function __construct(\Magento\ImportExport\Model\Export\ConfigInterface $exportConfig) {
+		$this->_exportConfig = $exportConfig;
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function toOptionArray()
-    {
-        $options = [];
-        $options[] = ['label' => __('-- Please Select --'), 'value' => ''];
-        foreach ($this->_exportConfig->getEntities() as $entityName => $entityConfig) {
-            $options[] = ['value' => $entityName, 'label' => __($entityConfig['label'])];
-        }
-        return $options;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function toOptionArray() {
+		$options = [];
+
+		$options[] = ['label' => __('-- Please Select --'), 'value' => ''];
+
+		if (empty($this->_exportConfig->getEntities())) {
+			return $options;
+		}
+
+		foreach ($this->_exportConfig->getEntities() as $entityName => $entityConfig) {
+			$options[] = ['value' => $entityName, 'label' => __($entityConfig['label'])];
+		}
+
+		return $options;
+	}
 }
