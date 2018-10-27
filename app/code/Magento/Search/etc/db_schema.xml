@@ -26,24 +26,24 @@
                 default="0" comment="Processed status"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated at"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="query_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SEARCH_QUERY_STORE_ID_STORE_STORE_ID" table="search_query"
+        <constraint xsi:type="foreign" referenceId="SEARCH_QUERY_STORE_ID_STORE_STORE_ID" table="search_query"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="SEARCH_QUERY_QUERY_TEXT_STORE_ID">
+        <constraint xsi:type="unique" referenceId="SEARCH_QUERY_QUERY_TEXT_STORE_ID">
             <column name="query_text"/>
             <column name="store_id"/>
         </constraint>
-        <index name="SEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY" indexType="btree">
+        <index referenceId="SEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY" indexType="btree">
             <column name="query_text"/>
             <column name="store_id"/>
             <column name="popularity"/>
         </index>
-        <index name="SEARCH_QUERY_STORE_ID" indexType="btree">
+        <index referenceId="SEARCH_QUERY_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SEARCH_QUERY_IS_PROCESSED" indexType="btree">
+        <index referenceId="SEARCH_QUERY_IS_PROCESSED" indexType="btree">
             <column name="is_processed"/>
         </index>
     </table>
@@ -55,21 +55,21 @@
                 default="0" comment="Store Id - identifies the store view these synonyms belong to"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website Id - identifies the website id these synonyms belong to"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="group_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SEARCH_SYNONYMS_STORE_ID_STORE_STORE_ID" table="search_synonyms"
+        <constraint xsi:type="foreign" referenceId="SEARCH_SYNONYMS_STORE_ID_STORE_STORE_ID" table="search_synonyms"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="SEARCH_SYNONYMS_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
+        <constraint xsi:type="foreign" referenceId="SEARCH_SYNONYMS_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
                     table="search_synonyms" column="website_id" referenceTable="store_website"
                     referenceColumn="website_id" onDelete="CASCADE"/>
-        <index name="SEARCH_SYNONYMS_SYNONYMS" indexType="fulltext">
+        <index referenceId="SEARCH_SYNONYMS_SYNONYMS" indexType="fulltext">
             <column name="synonyms"/>
         </index>
-        <index name="SEARCH_SYNONYMS_STORE_ID" indexType="btree">
+        <index referenceId="SEARCH_SYNONYMS_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SEARCH_SYNONYMS_WEBSITE_ID" indexType="btree">
+        <index referenceId="SEARCH_SYNONYMS_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
     </table>
