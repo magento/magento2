@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Helper;
 
 /**
@@ -56,11 +58,7 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isAllowed($store = null)
     {
-        if ($this->scopeConfig->getValue(
-            self::XML_PATH_SALES_REORDER_ALLOW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store
-        )) {
+        if ($this->scopeConfig->getValue(self::XML_PATH_SALES_REORDER_ALLOW, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)) {
             return true;
         }
         return false;

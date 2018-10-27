@@ -33,7 +33,7 @@ class AssertOrderGrandTotal extends AbstractConstraint
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             number_format($prices['grandTotal'], 2, '.', ','),
             $salesOrderView->getOrderTotalsBlock()->getGrandTotal(),
             'Grand Total price does not equal to price from data set.'

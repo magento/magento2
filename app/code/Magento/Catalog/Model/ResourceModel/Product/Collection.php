@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -494,10 +496,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _construct()
     {
         if ($this->isEnabledFlat()) {
-            $this->_init(
-                \Magento\Catalog\Model\Product::class,
-                \Magento\Catalog\Model\ResourceModel\Product\Flat::class
-            );
+            $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product\Flat::class);
         } else {
             $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product::class);
         }
@@ -1127,15 +1126,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Get SQL for get record count
      *
-<<<<<<< HEAD
-     * @param Select $select
-=======
      * @param \Magento\Framework\DB\Select $select
->>>>>>> upstream/2.2-develop
      * @param bool $resetLeftJoins
-     * @return Select
+     * @return \Magento\Framework\DB\Select
      */
-    protected function _getSelectCountSql(?Select $select = null, $resetLeftJoins = true)
+    protected function _getSelectCountSql($select = null, $resetLeftJoins = true)
     {
         $this->_renderFilters();
         $countSelect = $select === null ? $this->_getClearSelect() : $this->_buildClearSelect($select);
@@ -1427,13 +1422,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 ['cu' => $this->getTable('catalog_url_rewrite_product_category')],
                 'u.url_rewrite_id=cu.url_rewrite_id'
             )->where('cu.category_id IN (?)', $this->_urlRewriteCategory);
-        } else {
-            $select->joinLeft(
-                ['cu' => $this->getTable('catalog_url_rewrite_product_category')],
-                'u.url_rewrite_id=cu.url_rewrite_id'
-            )->where('cu.url_rewrite_id IS NULL');
         }
-        
+
         // more priority is data with category id
         $urlRewrites = [];
 

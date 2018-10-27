@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Model\Form;
 
 /**
@@ -73,9 +72,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
     public function beforeSave()
     {
         if (!$this->getTypeId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('The form type is invalid. Reset the type and try again.')
-            );
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid form type.'));
         }
         if (!$this->getStoreId() && $this->getLabel()) {
             $this->setStoreLabel($this->getStoreId(), $this->getLabel());

@@ -6,9 +6,6 @@
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
 
-/**
- * Query builder for table rate
- */
 class RateQuery
 {
     /**
@@ -27,8 +24,6 @@ class RateQuery
     }
 
     /**
-     * Prepare select
-     *
      * @param \Magento\Framework\DB\Select $select
      * @return \Magento\Framework\DB\Select
      */
@@ -82,8 +77,6 @@ class RateQuery
     }
 
     /**
-     * Returns query bindings
-     *
      * @return array
      */
     public function getBindings()
@@ -115,8 +108,6 @@ class RateQuery
     }
 
     /**
-     * Returns rate request
-     *
      * @return \Magento\Quote\Model\Quote\Address\RateRequest
      */
     public function getRequest()
@@ -125,13 +116,8 @@ class RateQuery
     }
 
     /**
-<<<<<<< HEAD
-     * Returns the entire postcode if it contains no dash or the part of it prior to the dash in the other case
-     *
-=======
      * Returns the entire postcode if it contains no dash
      * or the part of it prior to the dash in the other case
->>>>>>> upstream/2.2-develop
      * @return string
      */
     private function getDestPostcodePrefix()

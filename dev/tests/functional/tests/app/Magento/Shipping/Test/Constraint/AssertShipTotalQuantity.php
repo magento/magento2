@@ -40,7 +40,7 @@ class AssertShipTotalQuantity extends AbstractAssertOrderOnFrontend
         $orderHistory->getOrderHistoryBlock()->openOrderById($order->getId());
         $customerOrderView->getOrderViewBlock()->openLinkByName('Order Shipments');
         foreach ($ids['shipmentIds'] as $key => $shipmentIds) {
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $totalQty[$key],
                 $shipmentView->getShipmentBlock()->getItemShipmentBlock($shipmentIds)->getTotalQty()
             );

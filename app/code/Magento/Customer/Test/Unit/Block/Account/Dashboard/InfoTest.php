@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Test\Unit\Block\Account\Dashboard;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -62,10 +64,15 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
         $layout = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class, [], '', false);
         $this->_formRegister = $this->createMock(\Magento\Customer\Block\Form\Register::class);
-        $layout->expects($this->any())
-            ->method('getBlockSingleton')
-            ->with(\Magento\Customer\Block\Form\Register::class)
-            ->will($this->returnValue($this->_formRegister));
+        $layout->expects(
+                $this->any()
+            )->method(
+                'getBlockSingleton'
+            )->with(
+                \Magento\Customer\Block\Form\Register::class
+            )->will(
+                $this->returnValue($this->_formRegister)
+            );
 
         $this->_context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()->getMock();
@@ -80,15 +87,16 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->_helperView = $this->getMockBuilder(
             \Magento\Customer\Helper\View::class
         )->disableOriginalConstructor()->getMock();
-        $this->_subscriberFactory = $this->createPartialMock(
-            \Magento\Newsletter\Model\SubscriberFactory::class,
-            ['create']
-        );
+        $this->_subscriberFactory = $this->createPartialMock(\Magento\Newsletter\Model\SubscriberFactory::class, ['create']);
         $this->_subscriber = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
         $this->_subscriber->expects($this->any())->method('loadByEmail')->will($this->returnSelf());
-        $this->_subscriberFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->_subscriber));
+        $this->_subscriberFactory->expects(
+            $this->any()
+        )->method(
+                'create'
+            )->will(
+                $this->returnValue($this->_subscriber)
+            );
 
         $this->_block = new \Magento\Customer\Block\Account\Dashboard\Info(
             $this->_context,
@@ -100,9 +108,13 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomer()
     {
-        $this->currentCustomer->expects($this->once())
-            ->method('getCustomer')
-            ->will($this->returnValue($this->_customer));
+        $this->currentCustomer->expects(
+            $this->once()
+        )->method(
+                'getCustomer'
+            )->will(
+                $this->returnValue($this->_customer)
+            );
 
         $customer = $this->_block->getCustomer();
         $this->assertEquals($customer, $this->_customer);
@@ -128,9 +140,13 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     {
         $expectedValue = 'John Q Doe Jr';
 
-        $this->currentCustomer->expects($this->once())
-            ->method('getCustomer')
-            ->will($this->returnValue($this->_customer));
+        $this->currentCustomer->expects(
+            $this->once()
+        )->method(
+                'getCustomer'
+            )->will(
+                $this->returnValue($this->_customer)
+            );
 
         /**
          * Called three times, once for each attribute (i.e. prefix, middlename, and suffix)
@@ -178,9 +194,13 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsNewsletterEnabled($isNewsletterEnabled, $expectedValue)
     {
-        $this->_formRegister->expects($this->once())
-            ->method('isNewsletterEnabled')
-            ->will($this->returnValue($isNewsletterEnabled));
+        $this->_formRegister->expects(
+            $this->once()
+        )->method(
+                'isNewsletterEnabled'
+            )->will(
+                $this->returnValue($isNewsletterEnabled)
+            );
         $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
     }
 

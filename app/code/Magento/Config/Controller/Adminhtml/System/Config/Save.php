@@ -5,7 +5,6 @@
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
 
 /**
@@ -14,7 +13,7 @@ use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends AbstractConfig implements HttpPostActionInterface
+class Save extends AbstractConfig
 {
     /**
      * Backend Config Model Factory
@@ -160,10 +159,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             /** @var \Magento\Config\Model\Config $configModel  */
             $configModel = $this->_configFactory->create(['data' => $configData]);
             $configModel->save();
-            $this->_eventManager->dispatch('admin_system_config_save', [
-                'configData' => $configData,
-                'request' => $this->getRequest()
-            ]);
+
             $this->messageManager->addSuccess(__('You saved the configuration.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());

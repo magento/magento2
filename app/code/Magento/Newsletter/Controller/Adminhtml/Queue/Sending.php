@@ -17,7 +17,7 @@ class Sending extends \Magento\Newsletter\Controller\Adminhtml\Queue
     {
         // Todo: put it somewhere in config!
         $countOfQueue = 3;
-        $countOfSubscriptions = 20;
+        $countOfSubscritions = 20;
 
         $collection = $this->_objectManager->create(
             \Magento\Newsletter\Model\ResourceModel\Queue\Collection::class
@@ -27,6 +27,6 @@ class Sending extends \Magento\Newsletter\Controller\Adminhtml\Queue
             1
         )->addOnlyForSendingFilter()->load();
 
-        $collection->walk('sendPerSubscriber', [$countOfSubscriptions]);
+        $collection->walk('sendPerSubscriber', [$countOfSubscritions]);
     }
 }

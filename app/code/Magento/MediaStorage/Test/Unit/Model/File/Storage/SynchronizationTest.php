@@ -5,8 +5,6 @@
  */
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 class SynchronizationTest extends \PHPUnit\Framework\TestCase
 {
     public function testSynchronize()
@@ -42,11 +40,7 @@ class SynchronizationTest extends \PHPUnit\Framework\TestCase
             ->with($relativeFileName)
             ->will($this->returnValue($file));
 
-        $objectManager = new ObjectManager($this);
-        $model = $objectManager->getObject(\Magento\MediaStorage\Model\File\Storage\Synchronization::class, [
-            'storageFactory' => $storageFactoryMock,
-            'directory' => $directory,
-        ]);
+        $model = new \Magento\MediaStorage\Model\File\Storage\Synchronization($storageFactoryMock, $directory);
         $model->synchronize($relativeFileName);
     }
 }

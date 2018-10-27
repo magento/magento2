@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Webapi;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -273,13 +275,13 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                                 'type' => 'boolean',
                                 'description' => 'If current entity has a property defined',
                             ],
-                            'custom_attributes' => [
-                                'type' => 'array',
-                                'description' => 'Custom attributes values.',
-                                'items' => [
-                                    '$ref' => '#/definitions/framework-attribute-interface',
-                                ],
+                            'custom_attributes' =>        [
+                            'type' => 'array',
+                            'description' => 'Custom attributes values.',
+                            'items' => [
+                                '$ref' => '#/definitions/framework-attribute-interface',
                             ],
+                        ],
                     ],
                     'required' => [
                         'entity_id',

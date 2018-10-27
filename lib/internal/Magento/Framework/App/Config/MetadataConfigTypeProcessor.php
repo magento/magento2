@@ -11,9 +11,6 @@ use Magento\Framework\App\Config\Data\ProcessorFactory;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Post-process config values using their backend models.
- */
 class MetadataConfigTypeProcessor implements PostProcessorInterface
 {
     /**
@@ -117,14 +114,9 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
         $scopeCode = null
     ) {
         foreach ($this->_metadata as $path => $metadata) {
-            try {
-                $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode);
-                if (!empty($this->configSource->get($configPath))) {
-                    continue;
-                }
-            } catch (\Throwable $exception) {
-                //Failed to load scopes or config source, perhaps config data received is outdated.
-                return $data;
+            $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode);
+            if (!empty($this->configSource->get($configPath))) {
+                continue;
             }
             /** @var \Magento\Framework\App\Config\Data\ProcessorInterface $processor */
             $processor = $this->_processorFactory->get($metadata['backendModel']);

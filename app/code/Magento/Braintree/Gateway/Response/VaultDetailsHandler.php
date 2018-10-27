@@ -8,17 +8,12 @@ namespace Magento\Braintree\Gateway\Response;
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\SubjectReader;
-<<<<<<< HEAD
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\Serializer\Json;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
-use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 
 /**
  * Vault Details Handler
@@ -27,7 +22,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 class VaultDetailsHandler implements HandlerInterface
 {
     /**
-     * @var PaymentTokenFactoryInterface
+     * @var PaymentTokenInterfaceFactory
      */
     protected $paymentTokenFactory;
 
@@ -47,32 +42,33 @@ class VaultDetailsHandler implements HandlerInterface
     protected $config;
 
     /**
-     * @var Json
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
     /**
      * VaultDetailsHandler constructor.
      *
-     * @param PaymentTokenFactoryInterface $paymentTokenFactory
+     * @param PaymentTokenInterfaceFactory $paymentTokenFactory
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param Config $config
      * @param SubjectReader $subjectReader
-     * @param Json|null $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
      */
     public function __construct(
-        PaymentTokenFactoryInterface $paymentTokenFactory,
+        PaymentTokenInterfaceFactory $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         Config $config,
         SubjectReader $subjectReader,
-        Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->config = $config;
         $this->subjectReader = $subjectReader;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -107,7 +103,7 @@ class VaultDetailsHandler implements HandlerInterface
         }
 
         /** @var PaymentTokenInterface $paymentToken */
-        $paymentToken = $this->paymentTokenFactory->create(PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD);
+        $paymentToken = $this->paymentTokenFactory->create();
         $paymentToken->setGatewayToken($token);
         $paymentToken->setExpiresAt($this->getExpirationDate($transaction));
 

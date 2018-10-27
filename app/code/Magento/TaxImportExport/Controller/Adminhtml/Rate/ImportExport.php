@@ -5,10 +5,9 @@
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class ImportExport extends \Magento\TaxImportExport\Controller\Adminhtml\Rate implements HttpGetActionInterface
+class ImportExport extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
     /**
      * Authorization level of a basic admin session

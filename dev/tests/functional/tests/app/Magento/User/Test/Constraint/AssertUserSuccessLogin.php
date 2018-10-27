@@ -28,7 +28,7 @@ class AssertUserSuccessLogin extends AbstractConstraint
             \Magento\User\Test\TestStep\LoginUserOnBackendStep::class,
             ['user' => $user]
         )->run();
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $dashboard->getAdminPanelHeader()->isLoggedIn(),
             'Admin user was not logged in.'
         );

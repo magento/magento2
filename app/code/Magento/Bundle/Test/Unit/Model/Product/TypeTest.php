@@ -1365,7 +1365,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testPrepareForCartAdvancedAllRequiredOption()
+    public function testPrepareForCartAdvancedAllrequiredOption()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
         $group = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Type\DefaultType::class)

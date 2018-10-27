@@ -116,10 +116,10 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         if ($module == 'Magento_Backend' || strpos(
             $blockClass,
             '\\Adminhtml\\'
-        ) !== false || strpos(
+        ) || strpos(
             $blockClass,
             '_Backend_'
-        ) !== false || $class->isSubclassOf(
+        ) || $class->isSubclassOf(
             \Magento\Backend\Block\Template::class
         )
         ) {

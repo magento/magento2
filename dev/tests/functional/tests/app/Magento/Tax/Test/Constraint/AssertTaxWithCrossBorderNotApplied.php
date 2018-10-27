@@ -21,7 +21,7 @@ class AssertTaxWithCrossBorderNotApplied extends AbstractAssertTaxWithCrossBorde
     public function assert($actualPrices)
     {
         //Prices verification
-        \PHPUnit\Framework\Assert::assertNotEmpty(
+        \PHPUnit_Framework_Assert::assertNotEmpty(
             array_diff($actualPrices[0], $actualPrices[1]),
             'Prices for customers should be different.'
         );

@@ -272,77 +272,29 @@ define([
 
         describe('onFileUploaded handler', function () {
             it('calls addFile method if upload was successful', function () {
-                spyOn(component, 'aggregateError');
                 spyOn(component, 'addFile');
 
                 component.onFileUploaded({}, {
-                    files: [{
-                        name: 'hello.jpg'
-                    }],
                     result: {
                         error: false
                     }
                 });
 
-                expect(component.aggregateError).not.toHaveBeenCalled();
                 expect(component.addFile).toHaveBeenCalled();
             });
 
-            it('should call uploaderConfig.stop when number of errors is equal to number of files', function () {
-                var fakeEvent = {
-                        target: document.createElement('input')
-                    },
-                    file = {
-                        name: 'hello.jpg'
-                    },
-                    data = {
-                        files: [file],
-                        originalFiles: [file]
-                    };
+            it('calls notifyError method if upload resulted in error', function () {
+                spyOn(component, 'notifyError');
+                spyOn(component, 'addFile');
 
-                spyOn(component, 'isFileAllowed').and.callFake(function (fileArg) {
-                    expect(fileArg).toBe(file);
-
-                    return {
-                        passed: false,
-                        message: 'Not awesome enough'
-                    };
-                });
-                component.initUploader();
-                spyOn(component.uploaderConfig, 'done');
-                spyOn(component.uploaderConfig, 'stop');
-                component.onBeforeFileUpload(fakeEvent, data);
-                expect(component.uploaderConfig.stop).toHaveBeenCalled();
-            });
-            it('should not call uploaderConfig.stop when number of errors is unequal to number of files', function () {
-                var fakeEvent = {
-                        target: document.createElement('input')
-                    },
-                    file = {
-                        name: 'hello.jpg'
-                    },
-                    otherFileInQueue = {
-                        name: 'world.png'
-                    },
-                    data = {
-                        files: [file],
-                        originalFiles: [file, otherFileInQueue]
-                    };
-
-                component.initUploader();
-                spyOn(component.uploaderConfig, 'done');
-                spyOn(component.uploaderConfig, 'stop');
-                spyOn(component, 'isFileAllowed').and.callFake(function (fileArg) {
-                    expect(fileArg).toBe(file);
-
-                    return {
-                        passed: false,
-                        message: 'Not awesome enough'
-                    };
+                component.onFileUploaded({}, {
+                    result: {
+                        error: true
+                    }
                 });
 
-                component.onBeforeFileUpload(fakeEvent, data);
-                expect(component.uploaderConfig.stop).not.toHaveBeenCalled();
+                expect(component.notifyError).toHaveBeenCalled();
+                expect(component.addFile).not.toHaveBeenCalled();
             });
         });
 
@@ -355,19 +307,6 @@ define([
                 component.onElementRender(input);
 
                 expect(component.initUploader).toHaveBeenCalledWith(input);
-            });
-        });
-
-        describe('aggregateError method', function () {
-            it('should append onto aggregatedErrors array when called', function () {
-                spyOn(component.aggregatedErrors, 'push');
-
-                component.aggregateError('blah.jpg', 'File is too awesome');
-
-                expect(component.aggregatedErrors.push).toHaveBeenCalledWith({
-                    filename: 'blah.jpg',
-                    message: 'File is too awesome'
-                });
             });
         });
     });

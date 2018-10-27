@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Checkout\Test\Unit\Model;
 
 /**
@@ -158,7 +157,7 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The shipping method can't be set for an empty cart. Add an item to cart and try again.
+     * @expectedExceptionMessage Shipping method is not applicable for empty cart
      */
     public function testSaveAddressInformationIfCartIsEmpty()
     {
@@ -239,7 +238,7 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
+     * @expectedExceptionMessage Shipping address is not set
      */
     public function testSaveAddressInformationIfShippingAddressNotSet()
     {
@@ -264,7 +263,7 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The shipping information was unable to be saved. Verify the input data and try again.
+     * @expectedExceptionMessage Unable to save shipping information. Please check input data.
      */
     public function testSaveAddressInformationIfCanNotSaveQuote()
     {

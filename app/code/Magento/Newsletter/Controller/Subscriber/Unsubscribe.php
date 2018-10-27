@@ -1,21 +1,16 @@
 <?php
 /**
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Subscriber;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-/**
- * Controller for unsubscribing customers.
- */
-class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber implements HttpGetActionInterface
+class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
 {
     /**
-     * Unsubscribe newsletter.
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * Unsubscribe newsletter
+     * @return void
      */
     public function execute()
     {
@@ -32,9 +27,6 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber implements H
                 $this->messageManager->addException($e, __('Something went wrong while unsubscribing you.'));
             }
         }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $redirect */
-        $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
-        $redirectUrl = $this->_redirect->getRedirectUrl();
-        return $redirect->setUrl($redirectUrl);
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
     }
 }

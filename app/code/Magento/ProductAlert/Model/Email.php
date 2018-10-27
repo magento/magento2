@@ -1,35 +1,9 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Model;
-
-use Magento\Catalog\Model\Product;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Helper\View;
-use Magento\Framework\App\Area;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\MailException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Mail\Template\TransportBuilder;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Registry;
-use Magento\ProductAlert\Block\Email\AbstractEmail;
-use Magento\ProductAlert\Block\Email\Price;
-use Magento\ProductAlert\Block\Email\Stock;
-use Magento\ProductAlert\Helper\Data;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\App\Emulation;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\Website;
 
 /**
  * ProductAlert Email processor
@@ -40,7 +14,7 @@ use Magento\Store\Model\Website;
  * @api
  * @since 100.0.2
  */
-class Email extends AbstractModel
+class Email extends \Magento\Framework\Model\AbstractModel
 {
     const XML_PATH_EMAIL_PRICE_TEMPLATE = 'catalog/productalert/email_price_template';
 
@@ -58,14 +32,14 @@ class Email extends AbstractModel
     /**
      * Website Model
      *
-     * @var Website
+     * @var \Magento\Store\Model\Website
      */
     protected $_website;
 
     /**
      * Customer model
      *
-     * @var CustomerInterface
+     * @var \Magento\Customer\Api\Data\CustomerInterface
      */
     protected $_customer;
 
@@ -86,83 +60,83 @@ class Email extends AbstractModel
     /**
      * Price block
      *
-     * @var Price
+     * @var \Magento\ProductAlert\Block\Email\Price
      */
     protected $_priceBlock;
 
     /**
      * Stock block
      *
-     * @var Stock
+     * @var \Magento\ProductAlert\Block\Email\Stock
      */
     protected $_stockBlock;
 
     /**
      * Product alert data
      *
-     * @var Data
+     * @var \Magento\ProductAlert\Helper\Data
      */
     protected $_productAlertData = null;
 
     /**
      * Core store config
      *
-     * @var ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var CustomerRepositoryInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
     protected $customerRepository;
 
     /**
-     * @var Emulation
+     * @var \Magento\Store\Model\App\Emulation
      */
     protected $_appEmulation;
 
     /**
-     * @var TransportBuilder
+     * @var \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
 
     /**
-     * @var View
+     * @var \Magento\Customer\Helper\View
      */
     protected $_customerHelper;
 
     /**
-     * @param Context $context
-     * @param Registry $registry
-     * @param Data $productAlertData
-     * @param ScopeConfigInterface $scopeConfig
-     * @param StoreManagerInterface $storeManager
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param View $customerHelper
-     * @param Emulation $appEmulation
-     * @param TransportBuilder $transportBuilder
-     * @param AbstractResource $resource
-     * @param AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\ProductAlert\Helper\Data $productAlertData
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Customer\Helper\View $customerHelper
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
+     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Context $context,
-        Registry $registry,
-        Data $productAlertData,
-        ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager,
-        CustomerRepositoryInterface $customerRepository,
-        View $customerHelper,
-        Emulation $appEmulation,
-        TransportBuilder $transportBuilder,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\ProductAlert\Helper\Data $productAlertData,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Customer\Helper\View $customerHelper,
+        \Magento\Store\Model\App\Emulation $appEmulation,
+        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_productAlertData = $productAlertData;
@@ -179,7 +153,6 @@ class Email extends AbstractModel
      * Set model type
      *
      * @param string $type
-     *
      * @return void
      */
     public function setType($type)
@@ -200,8 +173,7 @@ class Email extends AbstractModel
     /**
      * Set website model
      *
-     * @param Website $website
-     *
+     * @param \Magento\Store\Model\Website $website
      * @return $this
      */
     public function setWebsite(\Magento\Store\Model\Website $website)
@@ -214,9 +186,7 @@ class Email extends AbstractModel
      * Set website id
      *
      * @param int $websiteId
-     *
      * @return $this
-     * @throws LocalizedException
      */
     public function setWebsiteId($websiteId)
     {
@@ -228,10 +198,7 @@ class Email extends AbstractModel
      * Set customer by id
      *
      * @param int $customerId
-     *
      * @return $this
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function setCustomerId($customerId)
     {
@@ -242,8 +209,7 @@ class Email extends AbstractModel
     /**
      * Set customer model
      *
-     * @param CustomerInterface $customer
-     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return $this
      */
     public function setCustomerData($customer)
@@ -269,8 +235,7 @@ class Email extends AbstractModel
     /**
      * Add product (price change) to collection
      *
-     * @param Product $product
-     *
+     * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
     public function addPriceProduct(\Magento\Catalog\Model\Product $product)
@@ -282,8 +247,7 @@ class Email extends AbstractModel
     /**
      * Add product (back in stock) to collection
      *
-     * @param Product $product
-     *
+     * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
     public function addStockProduct(\Magento\Catalog\Model\Product $product)
@@ -295,13 +259,12 @@ class Email extends AbstractModel
     /**
      * Retrieve price block
      *
-     * @return Price
-     * @throws LocalizedException
+     * @return \Magento\ProductAlert\Block\Email\Price
      */
     protected function _getPriceBlock()
     {
         if ($this->_priceBlock === null) {
-            $this->_priceBlock = $this->_productAlertData->createBlock(Price::class);
+            $this->_priceBlock = $this->_productAlertData->createBlock(\Magento\ProductAlert\Block\Email\Price::class);
         }
         return $this->_priceBlock;
     }
@@ -309,13 +272,12 @@ class Email extends AbstractModel
     /**
      * Retrieve stock block
      *
-     * @return Stock
-     * @throws LocalizedException
+     * @return \Magento\ProductAlert\Block\Email\Stock
      */
     protected function _getStockBlock()
     {
         if ($this->_stockBlock === null) {
-            $this->_stockBlock = $this->_productAlertData->createBlock(Stock::class);
+            $this->_stockBlock = $this->_productAlertData->createBlock(\Magento\ProductAlert\Block\Email\Stock::class);
         }
         return $this->_stockBlock;
     }
@@ -324,133 +286,110 @@ class Email extends AbstractModel
      * Send customer email
      *
      * @return bool
-     * @throws MailException
-     * @throws NoSuchEntityException
-     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function send()
     {
         if ($this->_website === null || $this->_customer === null) {
             return false;
         }
-
+        if ($this->_type == 'price' && count(
+            $this->_priceProducts
+        ) == 0 || $this->_type == 'stock' && count(
+            $this->_stockProducts
+        ) == 0
+        ) {
+            return false;
+        }
         if (!$this->_website->getDefaultGroup() || !$this->_website->getDefaultGroup()->getDefaultStore()) {
             return false;
         }
 
-        if (!in_array($this->_type, ['price', 'stock'])) {
-            return false;
+        if ($this->_customer->getStoreId() > 0) {
+            $store = $this->_storeManager->getStore($this->_customer->getStoreId());
+        } else {
+            $store = $this->_website->getDefaultStore();
         }
-
-        $products = $this->getProducts();
-        if (count($products) === 0) {
-            return false;
-        }
-
-        $templateConfigPath = $this->getTemplateConfigPath();
-        if (!$templateConfigPath) {
-            return false;
-        }
-
-        $store = $this->getStore((int) $this->_customer->getStoreId());
         $storeId = $store->getId();
+
+        if ($this->_type == 'price' && !$this->_scopeConfig->getValue(
+            self::XML_PATH_EMAIL_PRICE_TEMPLATE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        )
+        ) {
+            return false;
+        } elseif ($this->_type == 'stock' && !$this->_scopeConfig->getValue(
+            self::XML_PATH_EMAIL_STOCK_TEMPLATE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        )
+        ) {
+            return false;
+        }
+
+        if ($this->_type != 'price' && $this->_type != 'stock') {
+            return false;
+        }
 
         $this->_appEmulation->startEnvironmentEmulation($storeId);
 
-        $block = $this->getBlock();
-        $block->setStore($store)->reset();
-
-        // Add products to the block
-        foreach ($products as $product) {
-            $product->setCustomerGroupId($this->_customer->getGroupId());
-            $block->addProduct($product);
+        if ($this->_type == 'price') {
+            $this->_getPriceBlock()->setStore($store)->reset();
+            foreach ($this->_priceProducts as $product) {
+                $product->setCustomerGroupId($this->_customer->getGroupId());
+                $this->_getPriceBlock()->addProduct($product);
+            }
+            $block = $this->_getPriceBlock();
+            $templateId = $this->_scopeConfig->getValue(
+                self::XML_PATH_EMAIL_PRICE_TEMPLATE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
+        } else {
+            $this->_getStockBlock()->setStore($store)->reset();
+            foreach ($this->_stockProducts as $product) {
+                $product->setCustomerGroupId($this->_customer->getGroupId());
+                $this->_getStockBlock()->addProduct($product);
+            }
+            $block = $this->_getStockBlock();
+            $templateId = $this->_scopeConfig->getValue(
+                self::XML_PATH_EMAIL_STOCK_TEMPLATE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
         }
 
-        $templateId = $this->_scopeConfig->getValue(
-            $templateConfigPath,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-
         $alertGrid = $this->_appState->emulateAreaCode(
-            Area::AREA_FRONTEND,
+            \Magento\Framework\App\Area::AREA_FRONTEND,
             [$block, 'toHtml']
         );
         $this->_appEmulation->stopEnvironmentEmulation();
 
-        $customerName = $this->_customerHelper->getCustomerName($this->_customer);
-        $this->_transportBuilder->setTemplateIdentifier(
+        $transport = $this->_transportBuilder->setTemplateIdentifier(
             $templateId
         )->setTemplateOptions(
-            ['area' => Area::AREA_FRONTEND, 'store' => $storeId]
+            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
             [
-                'customerName' => $customerName,
+                'customerName' => $this->_customerHelper->getCustomerName($this->_customer),
                 'alertGrid' => $alertGrid,
             ]
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_IDENTITY,
-                ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             )
         )->addTo(
             $this->_customer->getEmail(),
-            $customerName
-        )->getTransport()->sendMessage();
+            $this->_customerHelper->getCustomerName($this->_customer)
+        )->getTransport();
+
+        $transport->sendMessage();
 
         return true;
-    }
-
-    /**
-     * Retrieve the store for the email
-     *
-     * @param int|null $customerStoreId
-     *
-     * @return StoreInterface
-     * @throws NoSuchEntityException
-     */
-    private function getStore(?int $customerStoreId): StoreInterface
-    {
-        return $customerStoreId > 0
-            ? $this->_storeManager->getStore($customerStoreId)
-            : $this->_website->getDefaultStore();
-    }
-
-    /**
-     * Retrieve the block for the email based on type
-     *
-     * @return Price|Stock
-     * @throws LocalizedException
-     */
-    private function getBlock(): AbstractEmail
-    {
-        return $this->_type === 'price'
-            ? $this->_getPriceBlock()
-            : $this->_getStockBlock();
-    }
-
-    /**
-     * Retrieve the products for the email based on type
-     *
-     * @return array
-     */
-    private function getProducts(): array
-    {
-        return $this->_type === 'price'
-            ? $this->_priceProducts
-            : $this->_stockProducts;
-    }
-
-    /**
-     * Retrieve template config path based on type
-     *
-     * @return string
-     */
-    private function getTemplateConfigPath(): string
-    {
-        return $this->_type === 'price'
-            ? self::XML_PATH_EMAIL_PRICE_TEMPLATE
-            : self::XML_PATH_EMAIL_STOCK_TEMPLATE;
     }
 }

@@ -139,7 +139,7 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Define Chooser Grid Columns and filters
+     * Define Cooser Grid Columns and filters
      *
      * @return $this
      */

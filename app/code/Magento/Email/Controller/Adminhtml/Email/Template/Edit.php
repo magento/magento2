@@ -6,9 +6,7 @@
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template implements HttpGetActionInterface
+class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**
      * Edit transactional email action
@@ -35,12 +33,7 @@ class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template implements
         $this->_addContent(
             $this->_view->getLayout()->createBlock(
                 \Magento\Email\Block\Adminhtml\Template\Edit::class,
-                'template_edit',
-                [
-                    'data' => [
-                        'email_template' => $template
-                    ]
-                ]
+                'template_edit'
             )->setEditMode(
                 (bool)$this->getRequest()->getParam('id')
             )

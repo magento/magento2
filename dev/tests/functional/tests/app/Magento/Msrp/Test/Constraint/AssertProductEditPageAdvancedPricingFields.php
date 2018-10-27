@@ -33,7 +33,7 @@ class AssertProductEditPageAdvancedPricingFields extends AbstractConstraint
         $catalogProductEdit->getProductForm()->openSection('advanced-pricing');
         $advancedPricing = $catalogProductEdit->getProductForm()->getSection('advanced-pricing');
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $advancedPricing->checkField($this->manufacturerFieldTitle),
             '"Manufacturer\'s Suggested Retail Price" field is not correct.'
         );

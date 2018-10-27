@@ -179,7 +179,7 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteSaveException()
     {
-        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
@@ -189,11 +189,11 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
             ->with($this->shipmentMock, $this->requestMock)
             ->will($this->returnValue(true));
         $this->shipmentMock->expects($this->once())->method('save')->will($this->throwException(new \Exception()));
-        $loggerMock->expects($this->once())->method('critical');
+        $logerMock->expects($this->once())->method('critical');
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Psr\Log\LoggerInterface::class)
-            ->will($this->returnValue($loggerMock));
+            ->will($this->returnValue($logerMock));
         $this->responseMock->expects($this->once())->method('representJson');
 
         $this->assertNull($this->controller->execute());

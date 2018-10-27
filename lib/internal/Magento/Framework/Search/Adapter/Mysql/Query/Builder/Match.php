@@ -15,11 +15,7 @@ use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 /**
- * MySQL search query match.
- *
  * @api
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class Match implements QueryInterface
 {
@@ -73,7 +69,7 @@ class Match implements QueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function build(
         ScoreBuilder $scoreBuilder,
@@ -117,8 +113,6 @@ class Match implements QueryInterface
     }
 
     /**
-     * Prepare query.
-     *
      * @param string $queryValue
      * @param string $conditionType
      * @return string

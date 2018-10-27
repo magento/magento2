@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\Catalog\Controller\Adminhtml;
 
 use Magento\Store\Model\Store;
-<<<<<<< HEAD
-=======
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Catalog\Model\Category as CategoryModel;
@@ -21,7 +19,6 @@ use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\DataObject;
->>>>>>> upstream/2.2-develop
 
 /**
  * Catalog category controller
@@ -61,11 +58,7 @@ abstract class Category extends Action
     {
         $categoryId = $this->resolveCategoryId();
         $storeId = $this->resolveStoreId();
-<<<<<<< HEAD
-        $category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class);
-=======
         $category = $this->_objectManager->create(CategoryModel::class);
->>>>>>> upstream/2.2-develop
         $category->setStoreId($storeId);
 
         if ($categoryId) {
@@ -87,17 +80,10 @@ abstract class Category extends Action
             }
         }
 
-<<<<<<< HEAD
-        $this->_objectManager->get(\Magento\Framework\Registry::class)->register('category', $category);
-        $this->_objectManager->get(\Magento\Framework\Registry::class)->register('current_category', $category);
-        $this->_objectManager->get(\Magento\Cms\Model\Wysiwyg\Config::class)
-            ->setStoreId($storeId);
-=======
         $this->_objectManager->get(Registry::class)->register('category', $category);
         $this->_objectManager->get(Registry::class)->register('current_category', $category);
         $this->_objectManager->get(Config::class)
             ->setStoreId($this->getRequest()->getParam('store'));
->>>>>>> upstream/2.2-develop
         return $category;
     }
 
@@ -106,11 +92,7 @@ abstract class Category extends Action
      *
      * @return int
      */
-<<<<<<< HEAD
-    private function resolveCategoryId() : int
-=======
     private function resolveCategoryId(): int
->>>>>>> upstream/2.2-develop
     {
         $categoryId = (int)$this->getRequest()->getParam('id', false);
 
@@ -125,11 +107,7 @@ abstract class Category extends Action
      *
      * @return int
      */
-<<<<<<< HEAD
-    private function resolveStoreId() : int
-=======
     private function resolveStoreId(): int
->>>>>>> upstream/2.2-develop
     {
         $storeId = (int)$this->getRequest()->getParam('store', false);
 

@@ -206,6 +206,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
             ['select', 'boolean', 'multiselect']
         )
         ) {
+            //$value = $attribute->getSource()->getOptionText($product->getData($attribute->getAttributeCode()));
             $value = $attribute->getFrontend()->getValue($product);
         } else {
             $value = $product->getData($attribute->getAttributeCode());
@@ -214,30 +215,19 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
-<<<<<<< HEAD
-     * Check if any of the products has a value set for the attribute
-=======
      * Check if any of the products has a value set for the attribute.
->>>>>>> upstream/2.2-develop
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return bool
      */
-<<<<<<< HEAD
-    public function hasAttributeValueForProducts($attribute)
-=======
     public function hasAttributeValueForProducts(\Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute) : bool
->>>>>>> upstream/2.2-develop
     {
         foreach ($this->getItems() as $item) {
             if ($item->hasData($attribute->getAttributeCode())) {
                 return true;
             }
         }
-<<<<<<< HEAD
-=======
         
->>>>>>> upstream/2.2-develop
         return false;
     }
 

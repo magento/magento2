@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Exception\Test\Unit;
 
 use \Magento\Framework\Exception\InputException;
@@ -76,9 +75,7 @@ class InputExceptionTest extends \PHPUnit\Framework\TestCase
             $inputException->getLogMessage()
         );
 
-        $inputException->addError(
-            new Phrase('"%fieldName" is required. Enter and try again.', ['fieldName' => 'name'])
-        );
+        $inputException->addError(new Phrase('%fieldName is a required field.', ['fieldName' => 'name']));
         $this->assertTrue($inputException->wasErrorAdded());
         $this->assertCount(2, $inputException->getErrors());
 
@@ -105,9 +102,9 @@ class InputExceptionTest extends \PHPUnit\Framework\TestCase
             $errors[0]->getLogMessage()
         );
 
-        $this->assertEquals('"%fieldName" is required. Enter and try again.', $errors[1]->getRawMessage());
-        $this->assertEquals('"name" is required. Enter and try again.', $errors[1]->getMessage());
-        $this->assertEquals('"name" is required. Enter and try again.', $errors[1]->getLogMessage());
+        $this->assertEquals('%fieldName is a required field.', $errors[1]->getRawMessage());
+        $this->assertEquals('name is a required field.', $errors[1]->getMessage());
+        $this->assertEquals('name is a required field.', $errors[1]->getLogMessage());
     }
 
     /**

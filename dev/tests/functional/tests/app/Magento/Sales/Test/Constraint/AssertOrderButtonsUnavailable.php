@@ -40,7 +40,7 @@ class AssertOrderButtonsUnavailable extends AbstractConstraint
                 $matches[] = $button;
             }
         }
-        \PHPUnit\Framework\Assert::assertEmpty(
+        \PHPUnit_Framework_Assert::assertEmpty(
             $matches,
             'Buttons are present on order page.'
             . "\nLog:\n" . implode(";\n", $matches)

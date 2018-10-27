@@ -6,11 +6,6 @@
 
 namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
-/**
- * @inheritdoc
- * @deprecated
- * @see \Magento\ElasticSearch
- */
 class Field implements FieldInterface
 {
     /**
@@ -41,8 +36,6 @@ class Field implements FieldInterface
     }
 
     /**
-     * Get column.
-     *
      * @return string
      */
     public function getColumn()
@@ -51,8 +44,6 @@ class Field implements FieldInterface
     }
 
     /**
-     * Get attribute ID.
-     *
      * @return int|null
      */
     public function getAttributeId()
@@ -61,8 +52,6 @@ class Field implements FieldInterface
     }
 
     /**
-     * Get type.
-     *
      * @return int
      */
     public function getType()

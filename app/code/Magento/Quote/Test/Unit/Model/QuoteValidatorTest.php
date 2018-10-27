@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Directory\Model\AllowedCountries;
@@ -79,21 +78,6 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testCheckQuoteAmountExistingError()
     {
-<<<<<<< HEAD
-        $this->quoteMock->expects($this->once())
-            ->method('getHasError')
-            ->will($this->returnValue(true));
-
-        $this->quoteMock->expects($this->never())
-            ->method('setHasError');
-
-        $this->quoteMock->expects($this->never())
-            ->method('addMessage');
-
-        $this->assertSame(
-            $this->quoteValidator,
-            $this->quoteValidator->validateQuoteAmount($this->quoteMock, QuoteValidator::MAXIMUM_AVAILABLE_NUMBER + 1)
-=======
         $this->quote->method('getHasError')
             ->willReturn(true);
 
@@ -106,7 +90,6 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
         self::assertSame(
             $this->quoteValidator,
             $this->quoteValidator->validateQuoteAmount($this->quote, QuoteValidator::MAXIMUM_AVAILABLE_NUMBER + 1)
->>>>>>> upstream/2.2-develop
         );
     }
 }

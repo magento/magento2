@@ -6,9 +6,7 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-
-class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance implements HttpPostActionInterface
+class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
     /**
      * Save action
@@ -51,5 +49,7 @@ class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance implemen
             $this->_redirect('adminhtml/*/edit', ['_current' => true]);
             return;
         }
+        $this->_redirect('adminhtml/*/');
+        return;
     }
 }

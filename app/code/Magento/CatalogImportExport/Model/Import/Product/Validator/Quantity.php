@@ -18,9 +18,7 @@ class Quantity extends AbstractImportValidator implements RowValidatorInterface
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!empty($value['qty']) && (!is_numeric($value['qty'])
-            && $value['qty'] !== $this->context->getEmptyAttributeValueConstant())
-        ) {
+        if (!empty($value['qty']) && !is_numeric($value['qty'])) {
             $this->_addMessages(
                 [
                     sprintf(

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Test client for REST API testing.
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,9 +12,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Authentication\OauthHelper;
 
-/**
- * Test client for REST API testing.
- */
 class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
 {
     /** @var \Magento\Webapi\Model\Config */
@@ -33,8 +32,8 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     /** @var string */
     protected static $_verifier;
 
-    /** @var \Magento\TestFramework\TestCase\Webapi\Adapter\Rest\RestClient */
-    protected $restClient;
+    /** @var \Magento\TestFramework\TestCase\Webapi\Adapter\Rest\CurlClient */
+    protected $curlClient;
 
     /** @var \Magento\TestFramework\TestCase\Webapi\Adapter\Rest\DocumentationGenerator */
     protected $documentationGenerator;
@@ -50,7 +49,7 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
         $this->_config = $objectManager->get(\Magento\Webapi\Model\Config::class);
-        $this->restClient = $objectManager->get(\Magento\TestFramework\TestCase\Webapi\Adapter\Rest\RestClient::class);
+        $this->curlClient = $objectManager->get(\Magento\TestFramework\TestCase\Webapi\Adapter\Rest\CurlClient::class);
         $this->documentationGenerator = $objectManager->get(
             \Magento\TestFramework\TestCase\Webapi\Adapter\Rest\DocumentationGenerator::class
         );
@@ -83,7 +82,7 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             $authHeader = $oAuthClient->buildBearerTokenAuthorizationHeader($restServiceInfo['token']);
         } else {
             $authHeader = $oAuthClient->buildOauthAuthorizationHeader(
-                $this->restClient->constructResourceUrl($resourcePath),
+                $this->curlClient->constructResourceUrl($resourcePath),
                 $accessCredentials['key'],
                 $accessCredentials['secret'],
                 ($httpMethod == 'PUT' || $httpMethod == 'POST') && $urlFormEncoded ? $arguments : [],
@@ -93,16 +92,16 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         $authHeader = array_merge($authHeader, ['Accept: application/json', 'Content-Type: application/json']);
         switch ($httpMethod) {
             case Request::HTTP_METHOD_GET:
-                $response = $this->restClient->get($resourcePath, [], $authHeader);
+                $response = $this->curlClient->get($resourcePath, [], $authHeader);
                 break;
             case Request::HTTP_METHOD_POST:
-                $response = $this->restClient->post($resourcePath, $arguments, $authHeader);
+                $response = $this->curlClient->post($resourcePath, $arguments, $authHeader);
                 break;
             case Request::HTTP_METHOD_PUT:
-                $response = $this->restClient->put($resourcePath, $arguments, $authHeader);
+                $response = $this->curlClient->put($resourcePath, $arguments, $authHeader);
                 break;
             case Request::HTTP_METHOD_DELETE:
-                $response = $this->restClient->delete($resourcePath, $authHeader);
+                $response = $this->curlClient->delete($resourcePath, $authHeader);
                 break;
             default:
                 throw new \LogicException("HTTP method '{$httpMethod}' is not supported.");

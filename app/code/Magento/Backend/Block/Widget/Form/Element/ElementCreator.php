@@ -3,10 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-=======
->>>>>>> upstream/2.2-develop
 
 namespace Magento\Backend\Block\Widget\Form\Element;
 
@@ -17,12 +13,7 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 /**
  * Class ElementCreator
  *
-<<<<<<< HEAD
- * @deprecated 100.3.0 in favour of UI component implementation
- * @package Magento\Backend\Block\Widget\Form\Element
-=======
  * @deprecated 100.2.7 in favour of UI component implementation
->>>>>>> upstream/2.2-develop
  */
 class ElementCreator
 {

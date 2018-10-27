@@ -85,8 +85,6 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
 
     const ERROR_DUPLICATE_URL_KEY = 'duplicatedUrlKey';
 
-    const ERROR_DUPLICATE_MULTISELECT_VALUES = 'duplicatedMultiselectValues';
-
     /**
      * Value that means all entities (e.g. websites, groups etc.)
      */

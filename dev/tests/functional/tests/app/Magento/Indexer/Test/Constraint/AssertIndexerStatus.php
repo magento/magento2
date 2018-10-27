@@ -38,7 +38,7 @@ class AssertIndexerStatus extends AbstractConstraint
         $indexManagement->open();
         foreach ($indexers as $indexer) {
             $indexerStatus = $indexManagement->getMainBlock()->getIndexerStatus($indexer);
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $expectedStatus,
                 $indexerStatus,
                 'Wrong ' . $indexer . ' status is displayed.'

@@ -74,12 +74,12 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(self::OPERATION_NAME));
 
         $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
-            \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::class
-        )->disableOriginalConstructor()->setMethods(['getDataTypes'])
-            ->getMockForAbstractClass();
+            \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->customAttributeTypeLocatorMock->expects($this->any())
-            ->method('getDataTypes')
-            ->willReturn(['customAttributeClass']);
+            ->method('getAllServiceDataInterfaces')
+            ->willReturn(['$customAttributeClass']);
 
         $storeMock = $this->getMockBuilder(
             \Magento\Store\Model\Store::class
@@ -113,7 +113,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                 'cache' => $this->cacheMock,
                 'typeProcessor' => $this->typeProcessorMock,
                 'serviceMetadata' => $this->serviceMetadataMock,
-                'serviceTypeList' => $this->customAttributeTypeLocatorMock,
+                'customAttributeTypeLocator' => $this->customAttributeTypeLocatorMock,
                 'authorization' => $authorizationMock,
                 'serializer' => $this->serializer
             ]

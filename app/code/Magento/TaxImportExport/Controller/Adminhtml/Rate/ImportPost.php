@@ -16,14 +16,13 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
      */
     public function execute()
     {
-        $importRatesFile = $this->getRequest()->getFiles('import_rates_file');
-        if ($this->getRequest()->isPost() && isset($importRatesFile['tmp_name'])) {
+        if ($this->getRequest()->isPost() && !empty($_FILES['import_rates_file']['tmp_name'])) {
             try {
                 /** @var $importHandler \Magento\TaxImportExport\Model\Rate\CsvImportHandler */
                 $importHandler = $this->_objectManager->create(
                     \Magento\TaxImportExport\Model\Rate\CsvImportHandler::class
                 );
-                $importHandler->importFromCsvFile($importRatesFile);
+                $importHandler->importFromCsvFile($this->getRequest()->getFiles('import_rates_file'));
 
                 $this->messageManager->addSuccess(__('The tax rate has been imported.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {

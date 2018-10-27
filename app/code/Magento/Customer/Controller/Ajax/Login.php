@@ -6,7 +6,6 @@
 
 namespace Magento\Customer\Controller\Ajax;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
@@ -14,13 +13,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
-<<<<<<< HEAD
-use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\Stdlib\CookieManagerInterface;
-=======
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
->>>>>>> upstream/2.2-develop
 
 /**
  * Login controller
@@ -29,7 +23,7 @@ use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
  * @method \Magento\Framework\App\Response\Http getResponse()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Login extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface
+class Login extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\Session\Generic
@@ -104,19 +98,12 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
         $this->customerAccountManagement = $customerAccountManagement;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
-<<<<<<< HEAD
-        $this->cookieManager = $cookieManager ?:
-            ObjectManager::getInstance()->get(CookieManagerInterface::class);
-        $this->cookieMetadataFactory = $cookieMetadataFactory ?:
-            ObjectManager::getInstance()->get(CookieMetadataFactory::class);
-=======
         $this->cookieManager = $cookieManager ?: ObjectManager::getInstance()->get(
             CookieManagerInterface::class
         );
         $this->cookieMetadataFactory = $cookieMetadataFactory ?: ObjectManager::getInstance()->get(
             CookieMetadataFactory::class
         );
->>>>>>> upstream/2.2-develop
     }
 
     /**

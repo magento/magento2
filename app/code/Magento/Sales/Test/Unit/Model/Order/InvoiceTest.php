@@ -4,17 +4,17 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Api\Data\InvoiceInterface;
-<<<<<<< HEAD
-use Magento\Sales\Model\Order;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
+use Magento\Sales\Model\Order;
+use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
 
 /**
  * Class InvoiceTest
@@ -99,11 +99,9 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             'context' => $contextMock,
             'orderFactory' => $this->orderFactory,
             'calculatorFactory' => $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
-            'invoiceItemCollectionFactory' =>
-                $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class),
+            'invoiceItemCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class),
             'invoiceCommentFactory' => $this->createMock(\Magento\Sales\Model\Order\Invoice\CommentFactory::class),
-            'commentCollectionFactory' =>
-                $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class),
+            'commentCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class),
         ];
         $this->model = $this->helperManager->getObject(\Magento\Sales\Model\Order\Invoice::class, $arguments);
         $this->model->setOrder($this->order);
@@ -208,6 +206,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $store = $this->helperManager->getObject(\Magento\Store\Model\Store::class, []);
         $this->order->expects($this->once())->method('getStore')->willReturn($store);
         $this->assertEquals($store, $this->model->getStore());
+
     }
 
     public function testGetShippingAddress()
@@ -215,6 +214,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $address = $this->helperManager->getObject(\Magento\Sales\Model\Order\Address::class, []);
         $this->order->expects($this->once())->method('getShippingAddress')->willReturn($address);
         $this->assertEquals($address, $this->model->getShippingAddress());
+
     }
 
     /**
@@ -424,28 +424,6 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->setMethods(
                 ['getStateDefaultStatus']
             )->getMock();
-<<<<<<< HEAD
-
-        $orderConfigMock->expects($this->once())->method('getStateDefaultStatus')
-            ->with(Order::STATE_PROCESSING)
-            ->willReturn(Order::STATE_PROCESSING);
-
-        $this->order->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
-        $this->order->expects($this->once())->method('getConfig')->willReturn($orderConfigMock);
-
-        $this->paymentMock->expects($this->once())
-            ->method('cancelInvoice')
-            ->willReturn($this->paymentMock);
-
-        $this->eventManagerMock->expects($this->once())
-            ->method('dispatch')
-            ->with('sales_order_invoice_cancel');
-
-        $this->model->setData(InvoiceInterface::ITEMS, []);
-        $this->model->setState(Invoice::STATE_OPEN);
-        $this->model->cancel();
-
-=======
         $orderConfigMock->expects($this->once())->method('getStateDefaultStatus')
             ->with(Order::STATE_PROCESSING)
             ->willReturn(Order::STATE_PROCESSING);
@@ -458,7 +436,6 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->model->setData(InvoiceInterface::ITEMS, []);
         $this->model->setState(Invoice::STATE_OPEN);
         $this->model->cancel();
->>>>>>> upstream/2.2-develop
         self::assertEquals(Invoice::STATE_CANCELED, $this->model->getState());
     }
 
@@ -476,15 +453,8 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->eventManagerMock->expects($this->never())
             ->method('dispatch')
             ->with('sales_order_invoice_cancel');
-<<<<<<< HEAD
-
         $this->model->setState($initialInvoiceStatus);
         $this->model->cancel();
-
-=======
-        $this->model->setState($initialInvoiceStatus);
-        $this->model->cancel();
->>>>>>> upstream/2.2-develop
         self::assertEquals($finalInvoiceStatus, $this->model->getState());
     }
 

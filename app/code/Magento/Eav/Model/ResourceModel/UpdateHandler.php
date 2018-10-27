@@ -122,10 +122,7 @@ class UpdateHandler implements AttributeInterface
             }
             $attributeSetId = isset($entityData[AttributeLoader::ATTRIBUTE_SET_ID])
                 ? $entityData[AttributeLoader::ATTRIBUTE_SET_ID]
-                : null; // @todo verify is it normal to not have attribute_set_id
-            if (!isset($entityDataForSnapshot['attribute_set_id'])) {
-                $entityDataForSnapshot['attribute_set_id'] = $attributeSetId;
-            }
+                : null; // @todo verify is it normal to not have attributer_set_id
             $snapshot = $this->readSnapshot->execute($entityType, $entityDataForSnapshot);
             foreach ($this->getAttributes($entityType, $attributeSetId) as $attribute) {
                 $code = $attribute->getAttributeCode();

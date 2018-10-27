@@ -6,10 +6,7 @@
 
 namespace Magento\Braintree\Gateway\Command;
 
-<<<<<<< HEAD
-=======
 use Exception;
->>>>>>> upstream/2.2-develop
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
@@ -79,7 +76,7 @@ class GetPaymentNonceCommand implements CommandInterface
         $customerId = $this->subjectReader->readCustomerId($commandSubject);
         $paymentToken = $this->tokenManagement->getByPublicHash($publicHash, $customerId);
         if (!$paymentToken) {
-            throw new \Exception('No available payment tokens');
+            throw new Exception('No available payment tokens');
         }
 
         $storeId = $this->subjectReader->readStoreId($commandSubject);
@@ -88,7 +85,7 @@ class GetPaymentNonceCommand implements CommandInterface
         $result = $this->responseValidator->validate(['response' => ['object' => $data]]);
 
         if (!$result->isValid()) {
-            throw new \Exception(__(implode("\n", $result->getFailsDescription())));
+            throw new Exception(__(implode("\n", $result->getFailsDescription())));
         }
 
         return $this->resultFactory->create(['array' => ['paymentMethodNonce' => $data->paymentMethodNonce->nonce]]);

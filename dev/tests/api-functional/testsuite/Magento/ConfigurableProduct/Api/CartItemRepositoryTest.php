@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ConfigurableProduct\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -106,7 +105,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The %1 Cart doesn't contain the %2 item.
+     * @expectedExceptionMessage Cart %1 does not contain item %2
      */
     public function testUpdateIncorrectItem()
     {

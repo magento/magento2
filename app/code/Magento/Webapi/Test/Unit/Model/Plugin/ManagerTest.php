@@ -113,10 +113,10 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
                 ]
             )
         );
-        $firstIntegrationId = 1;
+        $firstInegrationId = 1;
         $integrationsData1 = new \Magento\Framework\DataObject(
             [
-                'id' => $firstIntegrationId,
+                'id' => $firstInegrationId,
                 Integration::NAME => 'TestIntegration1',
                 Integration::EMAIL => 'test-integration1@magento.com',
                 Integration::ENDPOINT => 'http://endpoint.com',
@@ -168,9 +168,9 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterProcessConfigBasedIntegrationsSuccess()
     {
-        $firstIntegrationId = 1;
+        $firstInegrationId = 1;
         $integrationsData1 = [
-            'id' => $firstIntegrationId,
+            'id' => $firstInegrationId,
             Integration::NAME => 'TestIntegration1',
             Integration::EMAIL => 'test-integration1@magento.com',
             Integration::ENDPOINT => 'http://endpoint.com',

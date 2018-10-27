@@ -236,7 +236,7 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
             ->willReturn('CODE');
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccessMessage')
+            ->method('addSuccess')
             ->willReturnSelf();
 
         $this->objectManagerMock->expects($this->once())
@@ -290,7 +290,7 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccessMessage')
+            ->method('addSuccess')
             ->willReturnSelf();
 
         $this->objectManagerMock->expects($this->once())
@@ -344,7 +344,7 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccessMessage')
+            ->method('addSuccess')
             ->with('You canceled the coupon code.')
             ->willReturnSelf();
 
@@ -386,7 +386,7 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
             ->willReturn($coupon);
 
         $this->messageManager->expects($this->once())
-            ->method('addErrorMessage')
+            ->method('addError')
             ->willReturnSelf();
 
         $this->objectManagerMock->expects($this->once())

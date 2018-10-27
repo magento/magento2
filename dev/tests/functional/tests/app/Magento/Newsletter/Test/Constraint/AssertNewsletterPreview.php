@@ -33,7 +33,7 @@ class AssertNewsletterPreview extends AbstractConstraint
         $browser->selectWindow();
         $content = $templatePreview->getContent()->getPageContent();
         $browser->closeWindow();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $newsletter->getText(),
             $content,
             'Template content not correct information.'

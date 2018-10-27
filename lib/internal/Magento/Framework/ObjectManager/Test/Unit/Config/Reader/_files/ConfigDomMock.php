@@ -4,9 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @codingStandardsIgnoreStart
- */
+// @codingStandardsIgnoreFile
+
 class ConfigDomMock extends \PHPUnit\Framework\TestCase
 {
     /**

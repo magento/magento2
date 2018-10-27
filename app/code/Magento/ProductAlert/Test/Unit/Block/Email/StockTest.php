@@ -25,11 +25,6 @@ class StockTest extends \PHPUnit\Framework\TestCase
      */
     protected $imageBuilder;
 
-    /**
-     * @var \Magento\ProductAlert\Block\Product\ImageProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $imageProviderMock;
-
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -39,16 +34,11 @@ class StockTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->imageProviderMock = $this->getMockBuilder(\Magento\ProductAlert\Block\Product\ImageProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->_block = $objectManager->getObject(
             \Magento\ProductAlert\Block\Email\Stock::class,
             [
                 'maliciousCode' => $this->_filter,
                 'imageBuilder' => $this->imageBuilder,
-                'imageProvider' => $this->imageProviderMock
             ]
         );
     }
@@ -84,11 +74,26 @@ class StockTest extends \PHPUnit\Framework\TestCase
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productImageMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Image::class)
+
+        $imageMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->imageProviderMock->expects($this->atLeastOnce())->method('getImage')->willReturn($productImageMock);
+        $this->imageBuilder->expects($this->once())
+            ->method('setProduct')
+            ->with($productMock)
+            ->willReturnSelf();
+        $this->imageBuilder->expects($this->once())
+            ->method('setImageId')
+            ->with($imageId)
+            ->willReturnSelf();
+        $this->imageBuilder->expects($this->once())
+            ->method('setAttributes')
+            ->with($attributes)
+            ->willReturnSelf();
+        $this->imageBuilder->expects($this->once())
+            ->method('create')
+            ->willReturn($imageMock);
 
         $this->assertInstanceOf(
             \Magento\Catalog\Block\Product\Image::class,

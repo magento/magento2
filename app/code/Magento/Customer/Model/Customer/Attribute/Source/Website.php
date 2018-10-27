@@ -32,9 +32,9 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
-     * @inheritdoc
+     * @return array
      */
-    public function getAllOptions($withEmpty = true, $defaultValues = false)
+    public function getAllOptions()
     {
         if (!$this->_options) {
             $this->_options = $this->_store->getWebsiteValuesForForm();

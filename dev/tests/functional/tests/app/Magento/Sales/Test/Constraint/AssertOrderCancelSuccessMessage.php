@@ -27,7 +27,7 @@ class AssertOrderCancelSuccessMessage extends AbstractConstraint
      */
     public function processAssert(SalesOrderView $salesOrderView)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_CANCEL_MESSAGE,
             $salesOrderView->getMessagesBlock()->getSuccessMessage()
         );

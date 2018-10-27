@@ -32,7 +32,7 @@ class AssertWishlistShareMessage extends AbstractConstraint
      */
     public function processAssert(WishlistIndex $wishlistIndex)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $wishlistIndex->getMessagesBlock()->getSuccessMessage(),
             'Wrong success message is displayed.'

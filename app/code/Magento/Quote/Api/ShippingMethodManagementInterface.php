@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Quote\Api;
 
 /**
@@ -38,7 +37,7 @@ interface ShippingMethodManagementInterface
      * @param int $cartId The shopping cart ID.
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified quote does not exist.
-     * @throws \Magento\Framework\Exception\StateException The shipping address is missing.
+     * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
      */
     public function getList($cartId);
 }

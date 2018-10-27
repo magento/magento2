@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
@@ -59,7 +58,9 @@ class Validator
             $validator = $this->objectManager->create($validatorName, $validatorArguments);
             if (!$validator instanceof ValidatorInterface) {
                 throw new ConfigurationMismatchException(
-                    __('The "%1" validator is not an instance of the general validator interface.', $validatorName)
+                    __(
+                        sprintf('Validator %s is not instance of general validator interface', $validatorName)
+                    )
                 );
             }
             $messages = array_merge($messages, $validator->validate($entity));

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Store\Model\Config\Importer\Processor;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
@@ -58,9 +57,7 @@ class ProcessorFactory
     public function create($processorName)
     {
         if (!isset($this->processors[$processorName])) {
-            throw new ConfigurationMismatchException(
-                __('The class for "%1" type wasn\'t declared. Enter the class and try again.', $processorName)
-            );
+            throw new ConfigurationMismatchException(__('Class for type "%1" was not declared', $processorName));
         }
 
         $object = $this->objectManager->create($this->processors[$processorName]);

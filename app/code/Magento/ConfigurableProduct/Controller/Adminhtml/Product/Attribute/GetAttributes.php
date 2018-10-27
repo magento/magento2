@@ -6,11 +6,10 @@
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\ConfigurableProduct\Model\AttributesListInterface;
 
-class GetAttributes extends Action implements HttpGetActionInterface
+class GetAttributes extends Action
 {
     /**
      * Authorization level of a basic admin session

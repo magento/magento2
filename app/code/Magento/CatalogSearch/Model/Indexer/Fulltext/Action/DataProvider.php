@@ -12,8 +12,6 @@ use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
 /**
- * Catalog search full test search data provider.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
@@ -224,11 +222,7 @@ class DataProvider
         $batch
     ) {
         $websiteId = (int)$this->storeManager->getStore($storeId)->getWebsiteId();
-<<<<<<< HEAD
-        $lastProductId = (int) $lastProductId;
-=======
         $lastProductId = (int)$lastProductId;
->>>>>>> upstream/2.2-develop
 
         $select = $this->connection->select()
             ->useStraightJoin(true)
@@ -322,14 +316,8 @@ class DataProvider
             /** @var \Magento\Eav\Model\Entity\Attribute[] $attributes */
             $attributes = $productAttributes->getItems();
 
-            /** @deprecated */
             $this->eventManager->dispatch(
                 'catelogsearch_searchable_attributes_load_after',
-                ['engine' => $this->engine, 'attributes' => $attributes]
-            );
-            
-            $this->eventManager->dispatch(
-                'catalogsearch_searchable_attributes_load_after',
                 ['engine' => $this->engine, 'attributes' => $attributes]
             );
 
@@ -617,26 +605,15 @@ class DataProvider
         if (false !== $value) {
             $optionValue = $this->getAttributeOptionValue($attributeId, $valueId, $storeId);
             if (null === $optionValue) {
-<<<<<<< HEAD
-                $value = $this->filterAttributeValue($value);
-=======
                 $value = preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
->>>>>>> upstream/2.2-develop
             } else {
                 $value = implode($this->separator, array_filter([$value, $optionValue]));
             }
         }
-<<<<<<< HEAD
 
         return $value;
     }
 
-=======
-
-        return $value;
-    }
-
->>>>>>> upstream/2.2-develop
     /**
      * Get attribute option value
      *
@@ -658,31 +635,11 @@ class DataProvider
                 $attribute->setStoreId($storeId);
                 $options = $attribute->getSource()->toOptionArray();
                 $this->attributeOptions[$optionKey] = array_column($options, 'label', 'value');
-<<<<<<< HEAD
-                $this->attributeOptions[$optionKey] = array_map(function ($value) {
-                    return $this->filterAttributeValue($value);
-                }, $this->attributeOptions[$optionKey]);
-=======
->>>>>>> upstream/2.2-develop
             } else {
                 $this->attributeOptions[$optionKey] = null;
             }
         }
 
         return $this->attributeOptions[$optionKey][$valueId] ?? null;
-<<<<<<< HEAD
-    }
-
-    /**
-     * Remove whitespaces and tags from attribute value
-     *
-     * @param string $value
-     * @return string
-     */
-    private function filterAttributeValue($value)
-    {
-        return preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
-=======
->>>>>>> upstream/2.2-develop
     }
 }

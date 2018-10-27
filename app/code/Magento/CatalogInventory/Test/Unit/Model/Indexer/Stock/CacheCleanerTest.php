@@ -12,7 +12,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\Product;
@@ -45,11 +44,6 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
     private $cacheContextMock;
 
     /**
-     * @var MetadataPool |\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $metadataPoolMock;
-
-    /**
      * @var StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stockConfigurationMock;
@@ -67,8 +61,6 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getStockThresholdQty'])->getMockForAbstractClass();
         $this->cacheContextMock = $this->getMockBuilder(CacheContext::class)->disableOriginalConstructor()->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)->getMock();
-        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->setMethods(['getMetadata', 'getLinkField'])->disableOriginalConstructor()->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
 
         $this->resourceMock->expects($this->any())
@@ -81,8 +73,7 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
                 'resource' => $this->resourceMock,
                 'stockConfiguration' => $this->stockConfigurationMock,
                 'cacheContext' => $this->cacheContextMock,
-                'eventManager' => $this->eventManagerMock,
-                'metadataPool' => $this->metadataPoolMock
+                'eventManager' => $this->eventManagerMock
             ]
         );
     }
@@ -99,7 +90,6 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
         $productId = 123;
         $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('where')->willReturnSelf();
-        $this->selectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
         $this->connectionMock->expects($this->exactly(2))->method('select')->willReturn($this->selectMock);
         $this->connectionMock->expects($this->exactly(2))->method('fetchAll')->willReturnOnConsecutiveCalls(
             [
@@ -115,10 +105,7 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
             ->with(Product::CACHE_TAG, [$productId]);
         $this->eventManagerMock->expects($this->once())->method('dispatch')
             ->with('clean_cache_by_tags', ['object' => $this->cacheContextMock]);
-        $this->metadataPoolMock->expects($this->exactly(2))->method('getMetadata')
-            ->willReturnSelf();
-        $this->metadataPoolMock->expects($this->exactly(2))->method('getLinkField')
-            ->willReturn('row_id');
+
         $callback = function () {
         };
         $this->unit->clean([], $callback);
@@ -149,7 +136,6 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
         $productId = 123;
         $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('where')->willReturnSelf();
-        $this->selectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
         $this->connectionMock->expects($this->exactly(2))->method('select')->willReturn($this->selectMock);
         $this->connectionMock->expects($this->exactly(2))->method('fetchAll')->willReturnOnConsecutiveCalls(
             [
@@ -163,10 +149,6 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($stockThresholdQty);
         $this->cacheContextMock->expects($this->never())->method('registerEntities');
         $this->eventManagerMock->expects($this->never())->method('dispatch');
-        $this->metadataPoolMock->expects($this->exactly(2))->method('getMetadata')
-            ->willReturnSelf();
-        $this->metadataPoolMock->expects($this->exactly(2))->method('getLinkField')
-            ->willReturn('row_id');
 
         $callback = function () {
         };

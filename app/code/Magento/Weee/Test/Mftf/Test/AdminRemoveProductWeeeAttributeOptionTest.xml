@@ -6,22 +6,14 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-<<<<<<< HEAD
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-=======
        xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
->>>>>>> upstream/2.2-develop
     <test name="AdminRemoveProductWeeeAttributeOptionTest">
         <annotations>
             <features value="Weee attribute options can be removed in product page"/>
             <title value="Weee attribute options can be removed in product page"/>
             <description value="Weee attribute options can be removed in product page"/>
             <severity value="CRITICAL"/>
-<<<<<<< HEAD
-            <testCaseId value="MAGETWO-95033"/>
-=======
             <testCaseId value="MAGETWO-94817"/>
->>>>>>> upstream/2.2-develop
             <group value="weee"/>
         </annotations>
         <before>
@@ -29,11 +21,7 @@
             <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
                 <requiredEntity createDataKey="createProductFPTAttribute"/>
             </createData>
-<<<<<<< HEAD
-            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
-=======
             <createData entity="SimpleOne" stepKey="createSimpleProduct"/>
->>>>>>> upstream/2.2-develop
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProductInitial">
                 <argument name="product" value="$$createSimpleProduct$$"/>
@@ -46,20 +34,12 @@
                 <argument name="stateForFPT" value="California"/>
                 <argument name="valueForFPT" value="10"/>
             </actionGroup>
-<<<<<<< HEAD
-            <actionGroup ref="saveProductForm" stepKey="saveProductInitial"/>
-=======
             <actionGroup ref="SaveProductOnProductPageOnAdmin" stepKey="saveProductInitial"/>
->>>>>>> upstream/2.2-develop
         </before>
         <after>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductListing"/>
             <waitForPageLoad stepKey="waitForProductListingPageLoad"/>
-<<<<<<< HEAD
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
-=======
             <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
->>>>>>> upstream/2.2-develop
             <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
@@ -73,14 +53,9 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <!--  Step 2: Remove weee attribute options  -->
-<<<<<<< HEAD
-        <click selector="{{AdminProductAddFPTValueSection.removeRowByIndex('$$createProductFPTAttribute.attribute_code$$','1')}}" stepKey="removeAttributeOption"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
-=======
         <scrollTo stepKey="scrollToProductDetails" selector="[data-index='product-details']" x="0" y="-80" />
         <click selector="{{AdminProductAddFPTValueSection.removeRowByIndex('$$createProductFPTAttribute.attribute_code$$','1')}}" stepKey="removeAttributeOption"/>
         <actionGroup ref="SaveProductOnProductPageOnAdmin" stepKey="saveProduct"/>
->>>>>>> upstream/2.2-develop
         <!--  Assert weee attribute options are empty -->
         <dontSeeElement selector="{{AdminProductAddFPTValueSection.removeRowByIndex('$$createProductFPTAttribute.attribute_code$$','1')}}" stepKey="dontSeeOptions"/>
     </test>

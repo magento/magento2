@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\View\Test\Unit\File\Collector\Decorator;
 
 class ModuleOutputTest extends \PHPUnit\Framework\TestCase
@@ -35,8 +37,7 @@ class ModuleOutputTest extends \PHPUnit\Framework\TestCase
                 ['Module_OutputDisabled', false],
             ]));
         $this->_model = new \Magento\Framework\View\File\Collector\Decorator\ModuleOutput(
-            $this->_fileSource,
-            $this->_moduleManager
+            $this->_fileSource, $this->_moduleManager
         );
     }
 

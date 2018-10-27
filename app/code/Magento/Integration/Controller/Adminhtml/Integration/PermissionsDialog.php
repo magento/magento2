@@ -6,10 +6,9 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Exception\IntegrationException;
 
-class PermissionsDialog extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpGetActionInterface
+class PermissionsDialog extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**
      * Show permissions popup.

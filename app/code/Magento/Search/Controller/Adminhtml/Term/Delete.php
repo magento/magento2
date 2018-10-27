@@ -5,11 +5,10 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Delete extends TermController implements HttpPostActionInterface
+class Delete extends TermController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect

@@ -62,13 +62,11 @@ class Iterator extends \Magento\Framework\DataObject
 
         if (is_string($query)) {
             if (!$connection instanceof AdapterInterface) {
-                throw new LocalizedException(
-                    new Phrase('The connection is invalid. Verify the connection and try again.')
-                );
+                throw new LocalizedException(new Phrase('Invalid connection'));
             }
             return $connection->query($query);
         }
 
-        throw new LocalizedException(new Phrase('The query is invalid. Verify the query and try again.'));
+        throw new LocalizedException(new Phrase('Invalid query'));
     }
 }

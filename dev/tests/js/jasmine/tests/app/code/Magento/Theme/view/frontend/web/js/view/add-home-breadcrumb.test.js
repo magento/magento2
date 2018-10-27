@@ -37,14 +37,6 @@ define([
 
         afterEach(function () {
             delete window.BASE_URL;
-<<<<<<< HEAD
-
-            try {
-                injector.clean();
-                injector.remove();
-            } catch (e) {}
-=======
->>>>>>> upstream/2.2-develop
         });
 
         it('mixin is applied to Magento_Theme/js/view/breadcrumbs', function () {

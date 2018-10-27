@@ -31,7 +31,7 @@ class AssertIntegrationResourcesPopup extends AbstractConstraint
             : [$integration->getResources()];
         $formResources = $integrationIndex->getIntegrationGrid()->getResourcesPopup()->getStructure($resourceDepth);
         $result = $this->verifyResources($formResources, $fixtureResources);
-        \PHPUnit\Framework\Assert::assertEmpty(
+        \PHPUnit_Framework_Assert::assertEmpty(
             $result,
             "Integration resources is not correct.\nLog:\n" . $result
         );

@@ -70,7 +70,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Joins templates information
+     * Joines templates information
      *
      * @return $this
      */
@@ -86,7 +86,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Adds subscribers info to select
+     * Adds subscribers info to selelect
      *
      * @return $this
      */
@@ -130,7 +130,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Joins subscribers information
+     * Joines subscribers information
      *
      * @return $this
      */
@@ -142,7 +142,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Checks if field is 'subscribers_total', 'subscribers_sent'
-     * to add specific filter or adds regular filter
+     * to add specific filter or adds reguler filter
      *
      * @param string $field
      * @param null|string|array $condition

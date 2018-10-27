@@ -29,7 +29,7 @@ class AssertCustomerLogin extends AbstractConstraint
             ['customer' => $customer]
         )->run();
 
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $cmsIndex->getLinksBlock()->isAuthorizationVisible(),
             "Authorisation link is visible after Login attempt."
         );

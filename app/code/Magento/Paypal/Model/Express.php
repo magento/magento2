@@ -275,7 +275,6 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * Store setter
-     *
      * Also updates store ID in config object
      *
      * @param \Magento\Store\Model\Store|int $store
@@ -335,7 +334,6 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * Check whether payment method can be used
-     *
      * @param \Magento\Quote\Api\Data\CartInterface|Quote|null $quote
      * @return bool
      */
@@ -547,7 +545,6 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * Whether payment can be reviewed
-     *
      * @return bool
      */
     public function canReviewPayment()
@@ -604,8 +601,6 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
-     * Returns api instance
-     *
      * @return Api\Nvp
      */
     public function getApi()
@@ -722,7 +717,6 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * Check void availability
-     *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      * @internal param \Magento\Framework\DataObject $payment

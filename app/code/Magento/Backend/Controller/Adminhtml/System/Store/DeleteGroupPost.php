@@ -1,22 +1,18 @@
 <?php
 /**
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\NotFoundException;
 
-/**
- * Delete store.
- */
-class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpPostActionInterface
+class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
-     * @inheritDoc
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws NotFoundException
      */

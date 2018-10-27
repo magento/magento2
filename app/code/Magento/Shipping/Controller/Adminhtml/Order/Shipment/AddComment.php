@@ -4,7 +4,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
@@ -65,7 +64,7 @@ class AddComment extends \Magento\Backend\App\Action
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('The comment is missing. Enter and try again.')
+                    __('Please enter a comment.')
                 );
             }
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));

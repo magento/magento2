@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Adminhtml catalog product edit action attributes update tab block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-declare(strict_types=1);
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -46,11 +46,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeAction
      * @param array $data
-<<<<<<< HEAD
-     * @param array|null $excludeFields
-=======
      * @param array $excludeFields
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -59,19 +55,11 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeAction,
         array $data = [],
-<<<<<<< HEAD
-        array $excludeFields = null
-    ) {
-        $this->_attributeAction = $attributeAction;
-        $this->_productFactory = $productFactory;
-        $this->excludeFields = $excludeFields ?: [];
-=======
         array $excludeFields = []
     ) {
         $this->_attributeAction = $attributeAction;
         $this->_productFactory = $productFactory;
         $this->excludeFields = $excludeFields;
->>>>>>> upstream/2.2-develop
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -93,7 +81,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _prepareForm(): void
+    protected function _prepareForm()
     {
         $this->setFormExcludedFieldList($this->getExcludedFields());
         $this->_eventManager->dispatch(
@@ -154,7 +142,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
         $dataAttribute = "data-disable='{$elementId}'";
         $dataCheckboxName = "toggle_" . "{$elementId}";
         $checkboxLabel = __('Change');
-        // @codingStandardsIgnoreStart
         $html = <<<HTML
 <span class="attribute-change-checkbox">
     <input type="checkbox" id="$dataCheckboxName" name="$dataCheckboxName" class="checkbox" $nameAttributeHtml onclick="toogleFieldEditMode(this, '{$elementId}')" $dataAttribute />
@@ -169,7 +156,6 @@ HTML;
     weightHandle.hideWeightSwitcher();
 });</script>
 HTML;
-            // @codingStandardsIgnoreEnd
         }
         return $html;
     }

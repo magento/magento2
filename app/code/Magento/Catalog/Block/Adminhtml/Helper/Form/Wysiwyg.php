@@ -102,7 +102,19 @@ require([
 var config = $config,
     editor;
 
-editor = new wysiwygSetup(
+jQuery.extend(config, {
+    settings: {
+        theme_advanced_buttons1 : 'bold,italic,|,justifyleft,justifycenter,justifyright,|,' +
+            'fontselect,fontsizeselect,|,forecolor,backcolor,|,link,unlink,image,|,bullist,numlist,|,code',
+        theme_advanced_buttons2: null,
+        theme_advanced_buttons3: null,
+        theme_advanced_buttons4: null,
+        theme_advanced_statusbar_location: null
+    },
+    files_browser_window_url: false
+});
+
+editor = new tinyMceWysiwygSetup(
     '{$this->getHtmlId()}',
     config
 );

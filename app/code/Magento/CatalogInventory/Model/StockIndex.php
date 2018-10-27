@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\CatalogInventory\Model;
 
 use Magento\Catalog\Model\Product\Type as ProductType;
@@ -12,7 +14,6 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\StockIndexInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Class StockIndex
@@ -175,7 +176,7 @@ class StockIndex implements StockIndexInterface
                         if (isset($childrenStatus[$childId])
                             && isset($childrenWebsites[$childId])
                             && in_array($websiteId, $childrenWebsites[$childId])
-                            && $childrenStatus[$childId] == Status::STATUS_ENABLED
+                            && $childrenStatus[$childId] == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
                             && isset($childrenStock[$childId])
                             && $childrenStock[$childId] == \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK
                         ) {
@@ -200,13 +201,13 @@ class StockIndex implements StockIndexInterface
      */
     protected function getWebsitesWithDefaultStores($websiteId = null)
     {
-        if ($this->websites === null) {
+        if (is_null($this->websites)) {
             /** @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Status $resource */
             $resource = $this->getStockStatusResource();
             $this->websites = $resource->getWebsiteStores();
         }
         $websites = $this->websites;
-        if ($websiteId !== null && isset($this->websites[$websiteId])) {
+        if (!is_null($websiteId) && isset($this->websites[$websiteId])) {
             $websites = [$websiteId => $this->websites[$websiteId]];
         }
         return $websites;

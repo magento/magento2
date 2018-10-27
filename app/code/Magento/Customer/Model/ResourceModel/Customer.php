@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Model\Customer\NotificationStorage;
@@ -112,7 +111,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         parent::_beforeSave($customer);
 
         if (!$customer->getEmail()) {
-            throw new ValidatorException(__('The customer email is missing. Enter and try again.'));
+            throw new ValidatorException(__('Please enter a customer email.'));
         }
 
         $connection = $this->getConnection();
@@ -136,7 +135,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         $result = $connection->fetchOne($select, $bind);
         if ($result) {
             throw new AlreadyExistsException(
-                __('A customer with the same email address already exists in an associated website.')
+                __('A customer with the same email already exists in an associated website.')
             );
         }
 
@@ -243,7 +242,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         if ($customer->getSharingConfig()->isWebsiteScope()) {
             if (!$customer->hasData('website_id')) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __("A customer website ID wasn't specified. The ID must be specified to use the website scope.")
+                    __('A customer website ID must be specified when using the website scope.')
                 );
             }
             $bind['website_id'] = (int)$customer->getWebsiteId();

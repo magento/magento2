@@ -183,18 +183,6 @@ class ConditionsToSearchCriteriaMapper
     private function reverseSqlOperatorInFilter(Filter $filter)
     {
         $operatorsMap = [
-<<<<<<< HEAD
-            'eq' => 'neq',
-            'neq' => 'eq',
-            'gteq' => 'lt',
-            'lteq' => 'gt',
-            'gt' => 'lteq',
-            'lt' => 'gteq',
-            'like' => 'nlike',
-            'nlike' => 'like',
-            'in' => 'nin',
-            'nin' => 'in',
-=======
             'eq'    => 'neq',
             'neq'   => 'eq',
             'gteq'  => 'lt',
@@ -205,7 +193,6 @@ class ConditionsToSearchCriteriaMapper
             'nlike' => 'like',
             'in'    => 'nin',
             'nin'   => 'in',
->>>>>>> upstream/2.2-develop
         ];
 
         if (!array_key_exists($filter->getConditionType(), $operatorsMap)) {
@@ -267,18 +254,6 @@ class ConditionsToSearchCriteriaMapper
     private function mapRuleOperatorToSQLCondition(string $ruleOperator): string
     {
         $operatorsMap = [
-<<<<<<< HEAD
-            '==' => 'eq',    // is
-            '!=' => 'neq',   // is not
-            '>=' => 'gteq',  // equals or greater than
-            '<=' => 'lteq',  // equals or less than
-            '>' => 'gt',    // greater than
-            '<' => 'lt',    // less than
-            '{}' => 'like',  // contains
-            '!{}' => 'nlike', // does not contains
-            '()' => 'in',    // is one of
-            '!()' => 'nin',   // is not one of
-=======
             '=='    => 'eq',    // is
             '!='    => 'neq',   // is not
             '>='    => 'gteq',  // equals or greater than
@@ -289,7 +264,6 @@ class ConditionsToSearchCriteriaMapper
             '!{}'   => 'nlike', // does not contains
             '()'    => 'in',    // is one of
             '!()'   => 'nin',   // is not one of
->>>>>>> upstream/2.2-develop
         ];
 
         if (!array_key_exists($ruleOperator, $operatorsMap)) {
@@ -315,13 +289,8 @@ class ConditionsToSearchCriteriaMapper
     private function mapRuleAggregatorToSQLAggregator(string $ruleAggregator): string
     {
         $operatorsMap = [
-<<<<<<< HEAD
-            'all' => 'AND',
-            'any' => 'OR',
-=======
             'all'    => 'AND',
             'any'    => 'OR',
->>>>>>> upstream/2.2-develop
         ];
 
         if (!array_key_exists(strtolower($ruleAggregator), $operatorsMap)) {

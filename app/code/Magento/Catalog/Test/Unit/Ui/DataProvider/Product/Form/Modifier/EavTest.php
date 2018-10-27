@@ -9,10 +9,6 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Framework\App\RequestInterface;
-<<<<<<< HEAD
-use Magento\Framework\Phrase;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
@@ -195,7 +191,7 @@ class EavTest extends AbstractModifierTest
      * @var ObjectManager
      */
     protected $objectManager;
-
+    
     /**
      * @var Eav
      */
@@ -276,11 +272,7 @@ class EavTest extends AbstractModifierTest
                 'getFrontendInput',
                 'getAttributeCode',
                 'usesSource',
-<<<<<<< HEAD
-                'getSource',
-=======
                 'getSource'
->>>>>>> upstream/2.2-develop
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -465,10 +457,7 @@ class EavTest extends AbstractModifierTest
      * @param string|null $attrValue
      * @param array $expected
      * @param bool $locked
-<<<<<<< HEAD
-=======
      * @return void
->>>>>>> upstream/2.2-develop
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      * @dataProvider setupAttributeMetaDataProvider
@@ -478,13 +467,8 @@ class EavTest extends AbstractModifierTest
         bool $productRequired,
         $attrValue,
         array $expected,
-<<<<<<< HEAD
-        $locked = false
-    ) : void {
-=======
         bool $locked = false
     ) {
->>>>>>> upstream/2.2-develop
         $configPath = 'arguments/data/config';
         $groupCode = 'product-details';
         $sortOrder = '0';
@@ -493,22 +477,14 @@ class EavTest extends AbstractModifierTest
             ['value' => 1.5, 'label' => 'Float label'],
             ['value' => true, 'label' => 'Boolean label'],
             ['value' => 'string', 'label' => 'String label'],
-<<<<<<< HEAD
-            ['value' => ['test1', 'test2'], 'label' => 'Array label'],
-=======
             ['value' => ['test1', 'test2'], 'label' => 'Array label']
->>>>>>> upstream/2.2-develop
         ];
         $attributeOptionsExpected = [
             ['value' => '1', 'label' => 'Int label'],
             ['value' => '1.5', 'label' => 'Float label'],
             ['value' => '1', 'label' => 'Boolean label'],
             ['value' => 'string', 'label' => 'String label'],
-<<<<<<< HEAD
-            ['value' => ['test1', 'test2'], 'label' => 'Array label'],
-=======
             ['value' => ['test1', 'test2'], 'label' => 'Array label']
->>>>>>> upstream/2.2-develop
         ];
 
         $this->productMock->method('getId')->willReturn($productId);
@@ -524,22 +500,12 @@ class EavTest extends AbstractModifierTest
             ->getMockForAbstractClass();
 
         $attributeMock->method('getValue')->willReturn($attrValue);
-<<<<<<< HEAD
-
         $this->productMock->method('getCustomAttribute')->willReturn($attributeMock);
         $this->eavAttributeMock->method('usesSource')->willReturn(true);
 
         $attributeSource = $this->getMockBuilder(SourceInterface::class)->getMockForAbstractClass();
         $attributeSource->method('getAllOptions')->willReturn($attributeOptions);
 
-=======
-        $this->productMock->method('getCustomAttribute')->willReturn($attributeMock);
-        $this->eavAttributeMock->method('usesSource')->willReturn(true);
-
-        $attributeSource = $this->getMockBuilder(SourceInterface::class)->getMockForAbstractClass();
-        $attributeSource->method('getAllOptions')->willReturn($attributeOptions);
-
->>>>>>> upstream/2.2-develop
         $this->eavAttributeMock->method('getSource')->willReturn($attributeSource);
 
         $this->arrayManagerMock->method('set')
@@ -564,10 +530,7 @@ class EavTest extends AbstractModifierTest
             ->willReturn($expected);
 
         $this->arrayManagerMock->method('get')->willReturn([]);
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         $this->arrayManagerMock->method('exists')->willReturn(true);
 
         $this->assertEquals(
@@ -584,63 +547,6 @@ class EavTest extends AbstractModifierTest
     {
         return [
             'default_null_prod_not_new_and_required' => [
-<<<<<<< HEAD
-                'productId' => 1,
-                'productRequired' => true,
-                'attrValue' => 'val',
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => true,
-                    'notice' => null,
-                    'default' => null,
-                    'label' => new Phrase(null),
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0,
-                ],
-            ],
-            'default_null_prod_not_new_locked_and_required' => [
-                'productId' => 1,
-                'productRequired' => true,
-                'attrValue' => 'val',
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => true,
-                    'notice' => null,
-                    'default' => null,
-                    'label' => new Phrase(null),
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0,
-                ],
-                'locked' => true,
-            ],
-            'default_null_prod_not_new_and_not_required' => [
-                'productId' => 1,
-                'productRequired' => false,
-                'attrValue' => 'val',
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => false,
-                    'notice' => null,
-                    'default' => null,
-                    'label' => new Phrase(null),
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0,
-=======
                 'productId'         => 1,
                 'productRequired'   => true,
                 'attrValue'         => 'val',
@@ -697,47 +603,8 @@ class EavTest extends AbstractModifierTest
                     'globalScope'   => false,
                     'sortOrder'     => 0
                     ],
->>>>>>> upstream/2.2-develop
                 ],
-            ],
             'default_null_prod_new_and_not_required' => [
-<<<<<<< HEAD
-                'productId' => null,
-                'productRequired' => false,
-                'attrValue' => null,
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => false,
-                    'notice' => null,
-                    'default' => 'required_value',
-                    'label' => new Phrase(null),
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0,
-                ],
-            ],
-            'default_null_prod_new_locked_and_not_required' => [
-                'productId' => null,
-                'productRequired' => false,
-                'attrValue' => null,
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => false,
-                    'notice' => null,
-                    'default' => 'required_value',
-                    'label' => new Phrase(null),
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0,
-=======
                 'productId'         => null,
                 'productRequired'   => false,
                 'attrValue'         => null,
@@ -754,29 +621,9 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel'    => '',
                     'globalScope'   => false,
                     'sortOrder'     => 0
->>>>>>> upstream/2.2-develop
                 ],
-                'locked' => true,
             ],
             'default_null_prod_new_and_required' => [
-<<<<<<< HEAD
-                'productId' => null,
-                'productRequired' => false,
-                'attrValue' => null,
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => false,
-                    'notice' => null,
-                    'default' => 'required_value',
-                    'label' => new Phrase(null),
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0,
-=======
                 'productId'         => null,
                 'productRequired'   => false,
                 'attrValue'         => null,
@@ -793,7 +640,6 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel'    => '',
                     'globalScope'   => false,
                     'sortOrder'     => 0
->>>>>>> upstream/2.2-develop
                 ],
             ]
         ];

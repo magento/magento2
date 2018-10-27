@@ -39,7 +39,7 @@ class AssertCacheIsRefreshableAndInvalidated extends AbstractConstraint
         $adminCache->open();
         $adminCache->getGridBlock()->massaction($items, 'Refresh');
 
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             sprintf(self::SUCCESS_MESSAGE, count($items)),
             $adminCache->getMessagesBlock()->getSuccessMessage(),
             'Cache is Invalid and refreshable.'

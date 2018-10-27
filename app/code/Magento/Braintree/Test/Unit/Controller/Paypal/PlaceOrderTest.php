@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
 use Magento\Braintree\Controller\Paypal\PlaceOrder;
@@ -187,7 +186,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
             ->method('addExceptionMessage')
             ->with(
                 self::isInstanceOf('\InvalidArgumentException'),
-                'Checkout failed to initialize. Verify and try again.'
+                'We can\'t initialize checkout.'
             );
 
         self::assertEquals($this->placeOrder->execute(), $resultMock);

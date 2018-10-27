@@ -4,7 +4,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
 use Magento\Webapi\Model\AbstractSchemaGenerator;
@@ -35,7 +34,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param \Magento\Webapi\Model\Cache\Type\Webapi $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList
+     * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
      * @param Authorization $authorization
      * @param WsdlFactory $wsdlFactory
@@ -43,7 +42,7 @@ class Generator extends AbstractSchemaGenerator
     public function __construct(
         \Magento\Webapi\Model\Cache\Type\Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList,
+        \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         \Magento\Webapi\Model\ServiceMetadata $serviceMetadata,
         Authorization $authorization,
         WsdlFactory $wsdlFactory
@@ -52,7 +51,7 @@ class Generator extends AbstractSchemaGenerator
         parent::__construct(
             $cache,
             $typeProcessor,
-            $serviceTypeList,
+            $customAttributeTypeLocator,
             $serviceMetadata,
             $authorization
         );
@@ -121,7 +120,7 @@ class Generator extends AbstractSchemaGenerator
      */
     protected function addCustomAttributeTypes($wsdl)
     {
-        foreach ($this->serviceTypeList->getDataTypes() as $customAttributeClass) {
+        foreach ($this->customAttributeTypeLocator->getAllServiceDataInterfaces() as $customAttributeClass) {
             $typeName = $this->typeProcessor->register($customAttributeClass);
             $wsdl->addComplexType($this->typeProcessor->getArrayItemType($typeName));
         }
@@ -376,7 +375,7 @@ class Generator extends AbstractSchemaGenerator
         if (!$allowedServicesMetadata) {
             throw new AuthorizationException(
                 __(
-                    "The consumer isn't authorized to access %resources.",
+                    'Consumer is not authorized to access %resources',
                     ['resources' => implode(', ', $requestedServices)]
                 )
             );

@@ -108,15 +108,8 @@ class SourceTest extends \PHPUnit\Framework\TestCase
         $product2->setStatus(Status::STATUS_ENABLED);
         $productRepository->save($product2);
 
-<<<<<<< HEAD
-        $statusSelect = clone $select;
-        $statusSelect->reset(\Magento\Framework\DB\Select::COLUMNS)
-            ->columns(new \Magento\Framework\DB\Sql\Expression('COUNT(*)'));
-        $this->assertEquals(1, $connection->fetchOne($statusSelect));
-=======
         $result = $connection->fetchAll($select);
         $this->assertCount(1, $result);
->>>>>>> upstream/2.2-develop
     }
 
     /**

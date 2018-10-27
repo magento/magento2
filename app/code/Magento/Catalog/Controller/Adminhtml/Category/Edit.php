@@ -6,9 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Edit extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpGetActionInterface
+class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -106,6 +104,11 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
         $resultPage->getConfig()->getTitle()->prepend(__('Categories'));
         $resultPage->getConfig()->getTitle()->prepend($resultPageTitle);
         $resultPage->addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
+
+        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
+        if ($block) {
+            $block->setStoreId($storeId);
+        }
 
         return $resultPage;
     }

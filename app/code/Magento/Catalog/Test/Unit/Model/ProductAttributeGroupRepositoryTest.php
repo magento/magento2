@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Unit\Model;
 
 class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
@@ -122,7 +121,7 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The attribute group can't be deleted because it contains system attributes.
+     * @expectedExceptionMessage Attribute group that contains system attributes can not be deleted
      */
     public function testDeleteThrowsExceptionIfGroupHasSystemAttributes()
     {

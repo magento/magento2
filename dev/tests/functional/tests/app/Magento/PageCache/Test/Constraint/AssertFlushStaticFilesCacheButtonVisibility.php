@@ -25,12 +25,12 @@ class AssertFlushStaticFilesCacheButtonVisibility extends AbstractConstraint
     public function processAssert(AdminCache $adminCache)
     {
         if ($_ENV['mage_mode'] === 'production') {
-            \PHPUnit\Framework\Assert::assertFalse(
+            \PHPUnit_Framework_Assert::assertFalse(
                 $adminCache->getAdditionalBlock()->isFlushCacheButtonVisible(self::FLUSH_STATIC_FILES_CACHE),
                 self::FLUSH_STATIC_FILES_CACHE . ' button should not be visible in production mode.'
             );
         } else {
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $adminCache->getAdditionalBlock()->isFlushCacheButtonVisible(self::FLUSH_STATIC_FILES_CACHE),
                 self::FLUSH_STATIC_FILES_CACHE . ' button should be visible in developer or default mode.'
             );

@@ -12,30 +12,19 @@ use Magento\Payment\Model\InfoInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Tests \Magento\Braintree\Gateway\Request\PayPal\DeviceDataBuilder.
+ * Class DeviceDataBuilderTest
  */
 class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-<<<<<<< HEAD
-     * @var SubjectReader|MockObject
-     */
-    private $subjectReaderMock;
-
-    /**
-     * @var PaymentDataObjectInterface|MockObject
-     */
-    private $paymentDataObjectMock;
-=======
      * @var PaymentDataObjectInterface|MockObject
      */
     private $paymentDO;
->>>>>>> upstream/2.2-develop
 
     /**
      * @var InfoInterface|MockObject
      */
-    private $paymentInfoMock;
+    private $paymentInfo;
 
     /**
      * @var DeviceDataBuilder
@@ -44,23 +33,10 @@ class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-<<<<<<< HEAD
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['readPayment'])
-            ->getMock();
-
-        $this->paymentDataObjectMock = $this->createMock(PaymentDataObjectInterface::class);
-
-        $this->paymentInfoMock = $this->createMock(InfoInterface::class);
-        
-        $this->builder = new DeviceDataBuilder($this->subjectReaderMock);
-=======
         $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $this->paymentInfo = $this->createMock(InfoInterface::class);
         
         $this->builder = new DeviceDataBuilder(new SubjectReader());
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -72,22 +48,6 @@ class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuild(array $paymentData, array $expected)
     {
         $subject = [
-<<<<<<< HEAD
-            'payment' => $this->paymentDataObjectMock,
-        ];
-
-        $this->subjectReaderMock->expects(static::once())
-            ->method('readPayment')
-            ->with($subject)
-            ->willReturn($this->paymentDataObjectMock);
-
-        $this->paymentDataObjectMock->expects(static::once())
-            ->method('getPayment')
-            ->willReturn($this->paymentInfoMock);
-
-        $this->paymentInfoMock->expects(static::once())
-            ->method('getAdditionalInformation')
-=======
             'payment' => $this->paymentDO
         ];
 
@@ -95,7 +55,6 @@ class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->paymentInfo);
 
         $this->paymentInfo->method('getAdditionalInformation')
->>>>>>> upstream/2.2-develop
             ->willReturn($paymentData);
 
         $actual = $this->builder->build($subject);

@@ -7,11 +7,7 @@
 namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
 /**
- * MySQL search field factory.
- *
  * @api
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class FieldFactory
 {

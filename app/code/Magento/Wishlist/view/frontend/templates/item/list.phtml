@@ -13,18 +13,10 @@ $columns = $block->getColumns();
 ?>
 
 <div class="products-grid wishlist">
+    <?php $iterator = 1; ?>
     <?php if (count($block->getItems())): ?>
     <ol class="product-items">
         <?php foreach ($block->getItems() as $item): ?>
-<<<<<<< HEAD
-            <li data-row="product-item" class="product-item" id="item_<?= $block->escapeHtmlAttr($item->getId()) ?>">
-                <div class="product-item-info" data-container="product-grid">
-                    <?php foreach ($columns as $column): ?>
-                        <?= $column->setItem($item)->toHtml();?>
-                    <?php endforeach; ?>
-                </div>
-            </li>
-=======
         <?= /* @noEscape */ ($iterator++ == 1) ? '<li data-row="product-item" class="product-item" id="item_' . $block->escapeHtmlAttr($item->getId()) . '">' : '</li><li class="product-item" id="item_' . $block->escapeHtmlAttr($item->getId()) . '">' ?>
             <div class="product-item-info" data-container="product-grid">
                 <?php foreach ($columns as $column): ?>
@@ -32,7 +24,6 @@ $columns = $block->getColumns();
                 <?php endforeach; ?>
             </div>
         <?= ($iterator == count($block->getItems())+1) ? '</li>' : '' ?>
->>>>>>> upstream/2.2-develop
         <?php endforeach; ?>
     </ol>
     <?php else: ?>

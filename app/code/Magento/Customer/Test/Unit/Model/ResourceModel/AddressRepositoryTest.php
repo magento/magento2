@@ -275,13 +275,13 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "regionId" is required. Enter and try again.
+     * @expectedExceptionMessage regionId is a required field.
      */
     public function testSaveWithInvalidRegionId()
     {
         $customerId = 34;
         $addressId = 53;
-        $errors[] = __('"regionId" is required. Enter and try again.');
+        $errors[] = __('regionId is a required field.');
         $customerAddress = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\AddressInterface::class,
             [],

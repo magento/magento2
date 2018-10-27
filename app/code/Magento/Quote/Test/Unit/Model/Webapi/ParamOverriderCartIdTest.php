@@ -67,9 +67,6 @@ class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($retValue, $this->model->getOverriddenValue());
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     */
     public function testGetOverriddenValueIsCustomerAndCartDoesNotExist()
     {
         $customerId = 1;
@@ -86,7 +83,7 @@ class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
             ->with($customerId)
             ->will($this->throwException(new NoSuchEntityException()));
 
-        $this->model->getOverriddenValue();
+        $this->assertNull($this->model->getOverriddenValue());
     }
 
     public function testGetOverriddenValueIsCustomerAndCartIsNull()

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -65,21 +64,13 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
         if (empty($value) && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
             $this->setIsValid(false);
-            throw new LocalizedException(
-                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
-            );
+            throw new LocalizedException(__('Please specify product\'s required option(s).'));
         }
         if (!$this->_isSingleSelection()) {
             $valuesCollection = $option->getOptionValuesByOptionId($value, $this->getProduct()->getStoreId())->load();
-            $valueCount = is_array($value) ? count($value) : 1;
-            if ($valuesCollection->count() != $valueCount) {
+            if ($valuesCollection->count() != count($value)) {
                 $this->setIsValid(false);
-                throw new LocalizedException(
-                    __(
-                        "The product's required option(s) weren't entered. "
-                        . "Make sure the options are entered and try again."
-                    )
-                );
+                throw new LocalizedException(__('Please specify product\'s required option(s).'));
             }
         }
         return $this;

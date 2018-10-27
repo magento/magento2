@@ -6,10 +6,9 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog implements HttpPostActionInterface
+class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
      * @return void

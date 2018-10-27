@@ -34,7 +34,7 @@ class AssertUserInvalidEmailHostnameMessage extends AbstractConstraint
         $hostname = substr($email, strpos($email, '@')+1);
         $expectedMessage = sprintf(self::ERROR_MESSAGE, $hostname, $email);
         $actualMessage = $userEdit->getMessagesBlock()->getErrorMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $expectedMessage,
             $actualMessage,
             'Wrong error message is displayed.'

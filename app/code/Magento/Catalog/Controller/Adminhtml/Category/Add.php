@@ -6,14 +6,12 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
 /**
  * Class Add Category
  *
  * @package Magento\Catalog\Controller\Adminhtml\Category
  */
-class Add extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpGetActionInterface
+class Add extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
      * Forward factory for result
@@ -72,6 +70,11 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category implements Http
         $resultPage->setActiveMenu('Magento_Catalog::catalog_categories');
         $resultPage->getConfig()->getTitle()->prepend(__('New Category'));
         $resultPage->addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
+
+        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
+        if ($block) {
+            $block->setStoreId(0);
+        }
 
         return $resultPage;
     }

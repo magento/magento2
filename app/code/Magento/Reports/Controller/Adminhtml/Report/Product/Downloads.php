@@ -6,9 +6,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Downloads extends \Magento\Reports\Controller\Adminhtml\Report\Product implements HttpGetActionInterface
+class Downloads extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**
      * Authorization level of a basic admin session

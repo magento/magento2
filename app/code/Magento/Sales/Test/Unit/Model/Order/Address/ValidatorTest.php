@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\Unit\Model\Order\Address;
 
 /**
@@ -126,7 +125,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
                 'co.co.co',
                 'coco-shipping',
                 [
-                    '"Street" is required. Enter and try again.',
+                    'Street is a required field',
                     'Email has a wrong format',
                     'Address type doesn\'t match required options'
                 ]

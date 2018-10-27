@@ -24,7 +24,7 @@ class AssertFindExtensionOnGrid extends AbstractConstraint
      */
     public function processAssert(AbstractGrid $grid, Extension $extension)
     {
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $grid->findExtensionOnGrid($extension),
             'Extension is not found on the grid.'
         );

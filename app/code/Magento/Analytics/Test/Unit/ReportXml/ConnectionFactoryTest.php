@@ -12,12 +12,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-<<<<<<< HEAD
-=======
 /**
  * Class ConnectionFactoryTest
  */
->>>>>>> upstream/2.2-develop
 class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**

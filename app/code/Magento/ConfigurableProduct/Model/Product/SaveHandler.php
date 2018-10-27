@@ -78,17 +78,13 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Save only newly created attributes for configurable product.
-=======
      * Save only newly created attributes for configurable product
->>>>>>> upstream/2.2-develop
      *
      * @param ProductInterface $product
      * @param array $attributes
      * @return array
      */
-    private function saveConfigurableProductAttributes(ProductInterface $product, array $attributes): array
+    private function saveConfigurableProductAttributes(ProductInterface $product, array $attributes)
     {
         $ids = [];
         $existingAttributeIds = [];
@@ -108,16 +104,12 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Remove product attributes which no longer used.
-=======
      * Remove product attributes which no longer used
->>>>>>> upstream/2.2-develop
      *
      * @param ProductInterface $product
      * @return void
      */
-    private function deleteConfigurableProductAttributes(ProductInterface $product): void
+    private function deleteConfigurableProductAttributes(ProductInterface $product)
     {
         $newAttributeIds = [];
         foreach ($product->getExtensionAttributes()->getConfigurableProductOptions() as $option) {
@@ -129,8 +121,6 @@ class SaveHandler implements ExtensionInterface
             ) {
                 $this->optionRepository->deleteById($product->getSku(), $option->getId());
             }
-<<<<<<< HEAD
-=======
         }
     }
 
@@ -147,24 +137,7 @@ class SaveHandler implements ExtensionInterface
             && $option->getPosition() == $attribute->getPosition()
         ) {
             return false;
->>>>>>> upstream/2.2-develop
         }
-        return true;
-    }
-
-    /**
-     * Check if existing option is changed.
-     *
-     * @param OptionInterface $option
-     * @param Attribute $attribute
-     * @return bool
-     */
-    private function isOptionChanged(OptionInterface $option, Attribute $attribute): bool
-    {
-        if ($option->getLabel() == $attribute->getLabel() && $option->getPosition() == $attribute->getPosition()) {
-            return false;
-        }
-
         return true;
     }
 }

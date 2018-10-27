@@ -119,10 +119,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomerEmpty()
     {
-        $expectedCustomer = $this->createCustomerAndAddToBackendSession();
-        $actualCustomer = $this->_block->getCustomer();
-        $this->assertEquals($expectedCustomer->getExtensionAttributes(), $actualCustomer->getExtensionAttributes());
-        $this->assertEquals($expectedCustomer, $actualCustomer);
+        $this->assertEquals($this->_createCustomer(), $this->_block->getCustomer());
     }
 
     /**
@@ -136,7 +133,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetGroupNameNull()
     {
-        $this->createCustomerAndAddToBackendSession();
+        $this->_createCustomer();
         $this->assertNull($this->_block->getGroupName());
     }
 
@@ -246,7 +243,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetBillingAddressHtmlNoDefaultAddress()
     {
-        $this->createCustomerAndAddToBackendSession();
+        $this->_createCustomer();
         $this->assertEquals(
             __('The customer does not have default billing address.'),
             $this->_block->getBillingAddressHtml()
@@ -256,7 +253,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
     /**
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
-    private function createCustomerAndAddToBackendSession()
+    private function _createCustomer()
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         $customer = $this->_customerFactory->create()->setFirstname(

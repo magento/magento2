@@ -6,11 +6,6 @@
 
 namespace Magento\Framework\Interception\Code\Generator;
 
-/**
- * Class Interceptor
- ˚*
- * @package Magento\Framework\Interception\Code\Generator
- */
 class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
@@ -19,8 +14,6 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
     const ENTITY_TYPE = 'interceptor';
 
     /**
-     * Returns default result class name
-     *
      * @param string $modelClassName
      * @return string
      */
@@ -109,33 +102,9 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
-        $returnTypeValue = $this->getReturnTypeValue($method->getReturnType());
         $methodInfo = [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,
-<<<<<<< HEAD
-            'body' => str_replace(
-                [
-                    '%methodName%',
-                    '%return%',
-                    '%parameters%'
-                ],
-                [
-                    $method->getName(),
-                    $returnTypeValue === 'void' ? '' : ' return',
-                    $this->_getParameterList($parameters)
-                ],
-                <<<'METHOD_BODY'
-$pluginInfo = $this->pluginList->getNext($this->subjectType, '%methodName%');
-if (!$pluginInfo) {
-   %return% parent::%methodName%(%parameters%);
-} else {
-   %return% $this->___callPlugins('%methodName%', func_get_args(), $pluginInfo);
-}
-METHOD_BODY
-            ),
-            'returnType' => $returnTypeValue,
-=======
             'body' => "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
                 "if (!\$pluginInfo) {\n" .
                 "    return parent::{$method->getName()}({$this->_getParameterList(
@@ -145,7 +114,6 @@ METHOD_BODY
             "    return \$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
             "}",
             'returnType' => $this->getReturnTypeValue($method->getReturnType()),
->>>>>>> upstream/2.2-develop
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
 
@@ -153,8 +121,6 @@ METHOD_BODY
     }
 
     /**
-     * Return parameters list
-     *
      * @param array $parameters
      * @return string
      */
@@ -164,13 +130,7 @@ METHOD_BODY
             ', ',
             array_map(
                 function ($item) {
-                    $output = '';
-                    if ($item['variadic']) {
-                        $output .= '... ';
-                    }
-
-                    $output .= "\${$item['name']}";
-                    return $output;
+                    return "$" . $item['name'];
                 },
                 $parameters
             )
@@ -193,16 +153,14 @@ METHOD_BODY
         } else {
             $this->_classGenerator->setExtendedClass($typeName);
         }
-        $this->_classGenerator->addTrait('\\' . \Magento\Framework\Interception\Interceptor::class);
-        $interfaces[] = '\\' . \Magento\Framework\Interception\InterceptorInterface::class;
+        $this->_classGenerator->addTrait('\\'. \Magento\Framework\Interception\Interceptor::class);
+        $interfaces[] =  '\\'. \Magento\Framework\Interception\InterceptorInterface::class;
         $this->_classGenerator->setImplementedInterfaces($interfaces);
         return parent::_generateCode();
     }
 
     /**
-     * Validates data
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     protected function _validateData()
     {
@@ -232,17 +190,6 @@ METHOD_BODY
      * @param mixed $returnType
      * @return null|string
      */
-<<<<<<< HEAD
-    private function getReturnTypeValue($returnType): ?string
-    {
-        $returnTypeValue = null;
-        if ($returnType) {
-            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
-            $returnTypeValue .= ($returnType->getName() === 'self')
-                ? $this->getSourceClassName()
-                : $returnType->getName();
-        }
-=======
     private function getReturnTypeValue($returnType)
     {
         $returnTypeValue = null;
@@ -253,7 +200,6 @@ METHOD_BODY
                 : (string)$returnType;
         }
 
->>>>>>> upstream/2.2-develop
         return $returnTypeValue;
     }
 }

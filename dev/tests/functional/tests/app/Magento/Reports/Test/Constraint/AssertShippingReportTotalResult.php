@@ -28,7 +28,7 @@ class AssertShippingReportTotalResult extends AbstractAssertShippingReportResult
         $shipmentResult = $this->salesShippingReport->getGridBlock()->getTotalResult();
         $prepareInitialResults = $this->prepareExpectedResult($initialShippingTotalResult, $shipmentResult);
         list($prepareInitialResult, $shipmentResult) = $prepareInitialResults;
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $prepareInitialResult,
             $shipmentResult,
             "Grand total Shipment result is not correct."

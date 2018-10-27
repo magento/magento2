@@ -47,7 +47,7 @@ class AssertInvoiceInInvoicesTab extends AbstractConstraint
             $grid->search($filter);
             $filter['amount_from'] = number_format($amount[$key]['grand_invoice_total'], 2);
             unset($filter['amount_to']);
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $grid->isRowVisible($filter, false, false),
                 'Invoice is absent on invoices tab.'
             );

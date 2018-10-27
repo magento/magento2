@@ -14,11 +14,7 @@
             <title value="Remove item from cart if product disabled"/>
             <description value="Remove item from cart if simple or configurable product is disabled"/>
             <severity value="MAJOR"/>
-<<<<<<< HEAD
-            <testCaseId value="MAGETWO-95857"/>
-=======
             <testCaseId value="MAGETWO-95844"/>
->>>>>>> upstream/2.2-develop
             <group value="checkout"/>
         </annotations>
         <before>
@@ -27,20 +23,11 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Create the configurable product based on the data in the /data folder -->
-<<<<<<< HEAD
-            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-
-            <!-- Make the configurable product have two options, that are children of the default attribute set -->
-            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
-=======
             <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Make the configurable product have two options, that are children of the default attribute set -->
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttribute"/>
->>>>>>> upstream/2.2-develop
             <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
@@ -56,19 +43,6 @@
             <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </getData>
-<<<<<<< HEAD
-
-            <!-- Create the 2 children that will be a part of the configurable product -->
-            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-                <requiredEntity createDataKey="getConfigAttributeOption1"/>
-            </createData>
-            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-                <requiredEntity createDataKey="getConfigAttributeOption2"/>
-            </createData>
-
-=======
             <!-- Create the 2 children that will be a part of the configurable product -->
             <createData entity="SimpleOption" stepKey="createConfigChildProduct1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
@@ -79,7 +53,6 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
             </createData>
->>>>>>> upstream/2.2-develop
             <!-- Assign the two products to the configurable product -->
             <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
                 <requiredEntity createDataKey="createConfigProduct"/>
@@ -107,11 +80,7 @@
         <!--  Step 1: Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-<<<<<<< HEAD
-        <actionGroup ref="AddSimpleProductToCart" stepKey="cartAddSimpleProductToCart">
-=======
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
->>>>>>> upstream/2.2-develop
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>

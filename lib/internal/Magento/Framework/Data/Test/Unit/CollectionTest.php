@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Data\Test\Unit;
 
+// @codingStandardsIgnoreFile
+
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -103,14 +105,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testPossibleFlowWithItem()
     {
-        $firstItemMock = $this->createPartialMock(
-            \Magento\Framework\DataObject::class,
-            ['getId', 'getData', 'toArray']
-        );
-        $secondItemMock = $this->createPartialMock(
-            \Magento\Framework\DataObject::class,
-            ['getId', 'getData', 'toArray']
-        );
+        $firstItemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId', 'getData', 'toArray']);
+        $secondItemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId', 'getData', 'toArray']);
         $requiredFields = ['required_field_one', 'required_field_two'];
         $arrItems = [
             'totalRecords' => 1,

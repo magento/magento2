@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Mview;
 
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
@@ -280,22 +282,12 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
                     ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
                     : self::DEFAULT_BATCH_SIZE;
 
-<<<<<<< HEAD
-                for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
-                    // Don't go past the current version for atomicy.
-                    $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
-                    $ids = $this->getChangelog()->getList($vsFrom, $versionTo);
-
-                    // We run the actual indexer in batches.
-                    // Chunked AFTER loading to avoid duplicates in separate chunks.
-=======
                 for ($versionFrom = $lastVersionId; $versionFrom < $currentVersionId; $versionFrom += $versionBatchSize) {
                     // Don't go past the current version for atomicy.
                     $versionTo = min($currentVersionId, $versionFrom + $versionBatchSize);
                     $ids = $this->getChangelog()->getList($versionFrom, $versionTo);
 
                     // We run the actual indexer in batches.  Chunked AFTER loading to avoid duplicates in separate chunks.
->>>>>>> upstream/2.2-develop
                     $chunks = array_chunk($ids, $batchSize);
                     foreach ($chunks as $ids) {
                         $action->execute($ids);

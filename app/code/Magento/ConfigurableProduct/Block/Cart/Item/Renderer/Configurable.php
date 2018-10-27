@@ -27,7 +27,7 @@ class Configurable extends Renderer implements IdentityInterface
     /**
      * Get item configurable child product
      *
-     * @return \Magento\Catalog\Model\Product|null
+     * @return \Magento\Catalog\Model\Product
      */
     public function getChildProduct()
     {

@@ -28,7 +28,7 @@ class AssertSynonymGroupsSearch extends AbstractConstraint
         foreach ($searchQueries as $query) {
             $synonymGroupIndex->getSynonymGroupGrid()->fullTextSearch($query['query']);
             foreach ($query['results'] as $key => $result) {
-                \PHPUnit\Framework\Assert::assertEquals(
+                \PHPUnit_Framework_Assert::assertEquals(
                     $result,
                     $synonymGroupIndex->getSynonymGroupGrid()->isRowVisible(
                         ['synonyms' => $synonymGroups[$key]->getData()['synonyms']],

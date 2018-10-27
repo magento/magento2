@@ -34,7 +34,7 @@ class AssertBestsellersOnDashboard extends AbstractConstraint
         $bestsellersGrid = $dashboard->getStoreStatsBlock()->getTab('bestsellers')->getBestsellersGrid();
         $products = $order->getEntityId()['products'];
         foreach ($products as $product) {
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $bestsellersGrid->isProductVisible($product),
                 'Bestseller ' . $product->getName() . ' is not present in report grid after refresh data.'
             );

@@ -13,12 +13,9 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-<<<<<<< HEAD
-=======
 /**
  * Class SubscriptionHandlerTest
  */
->>>>>>> upstream/2.2-develop
 class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -16,11 +16,7 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class AssertCustomOptions extends AssertProductForm
 {
     /**
-<<<<<<< HEAD
-     * Assert form data equals fixture data.
-=======
      * Assert form data equals fixture data
->>>>>>> upstream/2.2-develop
      *
      * @param FixtureInterface $product
      * @param CatalogProductIndex $productGrid
@@ -42,14 +38,8 @@ class AssertCustomOptions extends AssertProductForm
         }
         $fixtureData = $this->prepareFixtureData($productData, $this->sortFields);
         $formData = $this->prepareFormData($productPage->getProductForm()->getData($product), $this->sortFields);
-<<<<<<< HEAD
-        $errors = $this->verifyData($fixtureData, $formData);
-
-        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
-=======
         $error = $this->verifyData($fixtureData, $formData);
         \PHPUnit_Framework_Assert::assertTrue(empty($error), $error);
->>>>>>> upstream/2.2-develop
     }
 
     /**

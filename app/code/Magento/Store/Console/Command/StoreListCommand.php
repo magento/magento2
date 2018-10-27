@@ -6,7 +6,6 @@
  */
 namespace Magento\Store\Console\Command;
 
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
@@ -49,7 +48,7 @@ class StoreListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $table = new Table($output);
+            $table = $this->getHelperSet()->get('table');
             $table->setHeaders(['ID', 'Website ID', 'Group ID', 'Name', 'Code', 'Sort Order', 'Is Active']);
 
             foreach ($this->storeManager->getStores(true, true) as $store) {
@@ -64,7 +63,7 @@ class StoreListCommand extends Command
                 ]);
             }
 
-            $table->render();
+            $table->render($output);
 
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {

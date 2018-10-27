@@ -57,7 +57,7 @@ class AssertCatalogPriceRuleInGrid extends AbstractConstraint
 
         $pageCatalogRuleIndex->open();
         $errorMessage = implode(', ', $filter);
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $pageCatalogRuleIndex->getCatalogRuleGrid()->isRowVisible($filter),
             'Catalog Price Rule with following data: \'' . $errorMessage . '\' '
             . 'is absent in Catalog Price Rule grid.'

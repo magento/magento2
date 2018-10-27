@@ -5,8 +5,6 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
-use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
-use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\ImportExport\Model\Import;
 use \Magento\Store\Model\Store;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
@@ -20,7 +18,6 @@ use Magento\Catalog\Model\Product as ProductEntity;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @since 100.0.2
  */
 class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
@@ -205,7 +202,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_itemFactory;
 
     /**
-     * @var Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
      */
     protected $_optionColFactory;
 
@@ -350,7 +347,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     private $productEntityLinkField;
 
     /**
-     * Product constructor.
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -369,10 +365,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param RowCustomizerInterface $rowCustomizer
      * @param array $dateAttrCodes
      * @throws \Magento\Framework\Exception\LocalizedException
-<<<<<<< HEAD
-=======
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -447,12 +440,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             if ($pathSize > 1) {
                 $path = [];
                 for ($i = 1; $i < $pathSize; $i++) {
-                    $name = $collection->getItemById($structure[$i])->getName();
-                    $path[] = $this->quoteCategoryDelimiter($name);
+                    $path[] = $collection->getItemById($structure[$i])->getName();
                 }
                 $this->_rootCategories[$category->getId()] = array_shift($path);
                 if ($pathSize > 2) {
-                    $this->_categories[$category->getId()] = implode(CategoryProcessor::DELIMITER_CATEGORY, $path);
+                    $this->_categories[$category->getId()] = implode('/', $path);
                 }
             }
         }
@@ -549,11 +541,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 'mgv.label',
                 'mgv.position',
                 'mgv.disabled',
-<<<<<<< HEAD
-                'mgv.store_id',
-=======
                 'mgv.store_id'
->>>>>>> upstream/2.2-develop
             ]
         )->where(
             "mgvte.$productEntityJoinField IN (?)",
@@ -707,11 +695,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Get header columns
      *
-<<<<<<< HEAD
-     * @return string[]
-=======
      * {@inheritdoc}
->>>>>>> upstream/2.2-develop
      */
     public function _getHeaderColumns()
     {
@@ -772,12 +756,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Get entity collection
      *
-<<<<<<< HEAD
-     * @param bool $resetCollection
-     * @return \Magento\Framework\Data\Collection\AbstractDb
-=======
      * {@inheritdoc}
->>>>>>> upstream/2.2-develop
      */
     protected function _getEntityCollection($resetCollection = false)
     {
@@ -822,14 +801,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             // Maximal Products limit
             $maxProductsLimit = 5000;
 
-<<<<<<< HEAD
-            $this->_itemsPerPage = (int)(
-                ($memoryLimit * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct
-            );
-=======
             $this->_itemsPerPage = (int)
                 ($memoryLimit * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct;
->>>>>>> upstream/2.2-develop
             if ($this->_itemsPerPage < $minProductsLimit) {
                 $this->_itemsPerPage = $minProductsLimit;
             }
@@ -892,10 +865,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @since 100.2.0
      */
     protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
@@ -959,13 +929,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Load products' data from the collection and filter it (if needed).
      *
-<<<<<<< HEAD
-     * @return array Keys are product IDs, values arrays with keys as store IDs
-     *               and values as store-specific versions of Product entity.
-=======
      * @return array Keys are product IDs, values arrays with keys as store ID
      * and values as store-specific versions of Product entity.
->>>>>>> upstream/2.2-develop
      */
     protected function loadCollection(): array
     {
@@ -977,13 +942,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             foreach ($collection as $itemId => $item) {
                 $data[$itemId][$storeId] = $item;
             }
-<<<<<<< HEAD
-        }
-        $collection->clear();
-=======
             $collection->clear();
         }
->>>>>>> upstream/2.2-develop
 
         return $data;
     }
@@ -1000,19 +960,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $data = [];
         $items = $this->loadCollection();
 
-<<<<<<< HEAD
-        /**
-         * @var int $itemId
-         * @var ProductEntity[] $itemByStore
-         */
-        foreach ($items as $itemId => $itemByStore) {
-=======
         foreach ($items as $itemId => $itemByStore) {
             /**
              * @var int           $itemId
              * @var ProductEntity $item
              */
->>>>>>> upstream/2.2-develop
             foreach ($this->_storeIdToCode as $storeId => $storeCode) {
                 $item = $itemByStore[$storeId];
                 $additionalAttributes = [];
@@ -1117,8 +1069,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Collect multi raw data from
-     *
      * @return array
      */
     protected function collectMultirawData()
@@ -1160,8 +1110,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Check the current data has multiselect value
-     *
      * @param \Magento\Catalog\Model\Product $item
      * @param int $storeId
      * @return bool
@@ -1174,8 +1122,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Collect multiselect values based on value
-     *
      * @param \Magento\Catalog\Model\Product $item
      * @param string $attrCode
      * @param int $storeId
@@ -1200,8 +1146,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Check attribute is valid
-     *
      * @param string $code
      * @param mixed $value
      * @return bool
@@ -1221,8 +1165,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Append multi row data
-     *
      * @param array $dataRow
      * @param array $multiRawData
      * @return array
@@ -1246,10 +1188,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         unset($dataRow[self::COL_STORE]);
         unset($dataRow[self::COL_ATTR_SET]);
         unset($dataRow[self::COL_TYPE]);
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         if (Store::DEFAULT_STORE_ID == $storeId) {
             $this->updateDataWithCategoryColumns($dataRow, $multiRawData['rowCategories'], $productId);
             if (!empty($multiRawData['rowWebsites'][$productId])) {
@@ -1350,17 +1288,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $dataRow[self::COL_SKU] = $sku;
         $dataRow[self::COL_ATTR_SET] = $attributeSet;
         $dataRow[self::COL_TYPE] = $type;
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> upstream/2.2-develop
         return $dataRow;
     }
 
     /**
-     * Add multi row data to export
-     *
      * @deprecated 100.1.0
      * @param array $dataRow
      * @param array $multiRawData
@@ -1408,8 +1340,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Convert option row to cell string
-     *
      * @param array $option
      * @return string
      */
@@ -1442,15 +1372,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
             $options = $this->_optionColFactory->create();
-<<<<<<< HEAD
-            /* @var Collection $options*/
-            $options->reset()
-                ->addOrder('sort_order', Collection::SORT_ORDER_ASC)
-                ->addTitleToResult($storeId)
-                ->addPriceToResult($storeId)
-                ->addProductToFilter($productIds)
-                ->addValuesToResult($storeId);
-=======
             /* @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options*/
             $options->reset()->addOrder(
                 'sort_order',
@@ -1464,7 +1385,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             )->addValuesToResult(
                 $storeId
             );
->>>>>>> upstream/2.2-develop
 
             foreach ($options as $option) {
                 $row = [];
@@ -1613,20 +1533,5 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
-    }
-
-    /**
-     * Quoting category delimiter character in string.
-     *
-     * @param string $string
-     * @return string
-     */
-    private function quoteCategoryDelimiter($string)
-    {
-        return str_replace(
-            CategoryProcessor::DELIMITER_CATEGORY,
-            '\\' . CategoryProcessor::DELIMITER_CATEGORY,
-            $string
-        );
     }
 }

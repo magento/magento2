@@ -52,10 +52,7 @@ class ValidationException extends LocalizedException implements AggregateExcepti
                 $localizedErrors[] = new LocalizedException($error);
             }
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         return $localizedErrors;
     }
 }

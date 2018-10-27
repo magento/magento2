@@ -286,10 +286,11 @@ class File
      */
     public function saveFile($file, $overwrite = true)
     {
-        if (isset($file['filename'])
-            && !empty($file['filename'])
-            && isset($file['content'])
-            && !empty($file['content'])
+        if (isset(
+            $file['filename']
+        ) && !empty($file['filename']) && isset(
+            $file['content']
+        ) && !empty($file['content'])
         ) {
             try {
                 $filename = isset(
@@ -306,6 +307,8 @@ class File
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('Wrong file info format'));
         }
+
+        return false;
     }
 
     /**

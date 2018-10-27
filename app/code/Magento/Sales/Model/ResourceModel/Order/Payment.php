@@ -14,7 +14,7 @@ use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
 class Payment extends SalesResource
 {
     /**
-     * Serializable field: additional_information
+     * Serializeable field: additional_information
      *
      * @var array
      */

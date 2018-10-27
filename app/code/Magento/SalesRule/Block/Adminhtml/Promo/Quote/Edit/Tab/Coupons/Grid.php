@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons;
 
 /**
@@ -104,8 +106,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'width' => '100',
                 'type' => 'options',
                 'options' => [__('No'), __('Yes')],
-                'renderer' =>
-                    \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer\Used::class,
+                'renderer' => \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer\Used::class,
                 'filter_condition_callback' => [$this->_salesRuleCoupon->create(), 'addIsUsedFilterCallback']
             ]
         );

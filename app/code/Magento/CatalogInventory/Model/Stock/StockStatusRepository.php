@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogInventory\Model\Stock;
 
 use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterfaceFactory;
@@ -83,10 +82,7 @@ class StockStatusRepository implements StockStatusRepositoryInterface
         try {
             $this->resource->save($stockStatus);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(
-                __('The stock status was unable to be saved. Please try again.'),
-                $exception
-            );
+            throw new CouldNotSaveException(__('Unable to save Stock Status'), $exception);
         }
         return $stockStatus;
     }

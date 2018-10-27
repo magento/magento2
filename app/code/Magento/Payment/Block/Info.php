@@ -6,7 +6,7 @@
 namespace Magento\Payment\Block;
 
 /**
- * Base payment information block
+ * Base payment iformation block
  *
  * @api
  * @since 100.0.2

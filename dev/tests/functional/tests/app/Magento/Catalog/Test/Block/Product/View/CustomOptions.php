@@ -232,13 +232,8 @@ class CustomOptions extends Form
             'options' => [
                 [
                     'price' => (float)$price,
-<<<<<<< HEAD
-                    'max_characters' => $maxCharacters,
-                ],
-=======
                     'max_characters' => $maxCharacters
                 ]
->>>>>>> upstream/2.2-develop
             ]
         ];
     }
@@ -349,13 +344,8 @@ class CustomOptions extends Form
         return [
             'options' => [
                 [
-<<<<<<< HEAD
-                    'price' => (float)$price,
-                ],
-=======
                     'price' => (float)$price
                 ]
->>>>>>> upstream/2.2-develop
             ]
         ];
     }

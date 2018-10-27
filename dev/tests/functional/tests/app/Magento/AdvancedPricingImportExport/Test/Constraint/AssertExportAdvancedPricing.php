@@ -37,7 +37,7 @@ class AssertExportAdvancedPricing extends AbstractConstraint
         $this->exportData = $export->getLatest();
         foreach ($products as $product) {
             $regexps = $this->prepareRegexpsForCheck($exportedFields, $product);
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $this->isProductDataExists($regexps),
                 'A product with name ' . $product->getName() . ' was not found in exported file.'
             );

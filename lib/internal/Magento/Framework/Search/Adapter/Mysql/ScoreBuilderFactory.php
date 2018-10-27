@@ -7,9 +7,6 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 
 /**
  * ScoreBuilder Factory
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class ScoreBuilderFactory
 {

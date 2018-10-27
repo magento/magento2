@@ -7,11 +7,7 @@
 -->
 
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-<<<<<<< HEAD
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
-=======
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
->>>>>>> upstream/2.2-develop
     <operation name="CreateRegion" dataType="region" type="create">
         <field key="region_code">string</field>
         <field key="region">string</field>

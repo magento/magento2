@@ -7,14 +7,9 @@
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation;
 
 use Magento\Catalog\Model\Product;
-<<<<<<< HEAD
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
-=======
 use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\QueryBuilder;
 use Magento\Customer\Model\Session;
->>>>>>> upstream/2.2-develop
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -22,14 +17,10 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
-<<<<<<< HEAD
- * @deprecated
- * @see \Magento\ElasticSearch
-=======
  * DataProvider for Catalog search Mysql.
->>>>>>> upstream/2.2-develop
  */
 class DataProvider implements DataProviderInterface
 {
@@ -39,19 +30,24 @@ class DataProvider implements DataProviderInterface
     private $eavConfig;
 
     /**
+     * @var Resource
+     */
+    private $resource;
+
+    /**
      * @var ScopeResolverInterface
      */
     private $scopeResolver;
 
     /**
+     * @var Session
+     */
+    private $customerSession;
+
+    /**
      * @var AdapterInterface
      */
     private $connection;
-
-    /**
-     * @var SelectBuilderForAttribute
-     */
-    private $selectBuilderForAttribute;
 
     /**
      * @var QueryBuilder;
@@ -62,38 +58,22 @@ class DataProvider implements DataProviderInterface
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
-<<<<<<< HEAD
-     * @param null $customerSession @deprecated
-     * @param SelectBuilderForAttribute|null $selectBuilderForAttribute
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-=======
      * @param Session $customerSession
      * @param QueryBuilder|null $queryBuilder
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         Config $eavConfig,
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-<<<<<<< HEAD
-        $customerSession,
-        SelectBuilderForAttribute $selectBuilderForAttribute = null
-=======
         Session $customerSession,
         QueryBuilder $queryBuilder = null
->>>>>>> upstream/2.2-develop
     ) {
         $this->eavConfig = $eavConfig;
+        $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->scopeResolver = $scopeResolver;
-<<<<<<< HEAD
-        $this->selectBuilderForAttribute = $selectBuilderForAttribute
-            ?: ObjectManager::getInstance()->get(SelectBuilderForAttribute::class);
-=======
         $this->customerSession = $customerSession;
         $this->queryBuilder = $queryBuilder ?: ObjectManager::getInstance()->get(QueryBuilder::class);
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -105,17 +85,8 @@ class DataProvider implements DataProviderInterface
         Table $entityIdsTable
     ) {
         $currentScope = $this->scopeResolver->getScope($dimensions['scope']->getValue())->getId();
-        $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $bucket->getField());
-<<<<<<< HEAD
-        $select = $this->getSelect();
 
-        $select->joinInner(
-            ['entities' => $entityIdsTable->getName()],
-            'main_table.entity_id  = entities.entity_id',
-            []
-        );
-        $select = $this->selectBuilderForAttribute->build($select, $attribute, $currentScope);
-=======
+        $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $bucket->getField());
 
         $select = $this->queryBuilder->build(
             $attribute,
@@ -123,7 +94,6 @@ class DataProvider implements DataProviderInterface
             $currentScope,
             $this->customerSession->getCustomerGroupId()
         );
->>>>>>> upstream/2.2-develop
 
         return $select;
     }

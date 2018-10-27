@@ -35,6 +35,13 @@ class TableBuilder
     private $tableBuilderFactory;
 
     /**
+     * Check whether builder was executed
+     *
+     * @var bool
+     */
+    protected $_isExecuted = false;
+
+    /**
      * Constructor
      *
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
@@ -63,6 +70,9 @@ class TableBuilder
      */
     public function build($storeId, $changedIds, $valueFieldSuffix)
     {
+        if ($this->_isExecuted) {
+            return;
+        }
         $entityTableName = $this->_productIndexerHelper->getTable('catalog_product_entity');
         $attributes = $this->_productIndexerHelper->getAttributes();
         $eavAttributes = $this->_productIndexerHelper->getTablesStructure($attributes);
@@ -107,6 +117,7 @@ class TableBuilder
             //Fill temporary tables with attributes grouped by it type
             $this->_fillTemporaryTable($tableName, $columns, $changedIds, $valueFieldSuffix, $storeId);
         }
+        $this->_isExecuted = true;
     }
 
     /**

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Api;
 
 use Magento\Framework\Api\FilterBuilder;

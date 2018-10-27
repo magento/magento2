@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model\Quote\Item;
 
-use Magento\Catalog\Model\Product;
+use \Magento\Catalog\Model\Product;
 use Magento\Quote\Model\Quote\ItemFactory;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\StoreManagerInterface;
@@ -53,12 +53,12 @@ class Processor
     /**
      * Initialize quote item object
      *
-     * @param DataObject $request
+     * @param \Magento\Framework\DataObject $request
      * @param Product $product
      *
-     * @return Item
+     * @return \Magento\Quote\Model\Quote\Item
      */
-    public function init(Product $product, DataObject $request): Item
+    public function init(Product $product, $request)
     {
         $item = $this->quoteItemFactory->create();
 
@@ -82,11 +82,11 @@ class Processor
      * Set qty and custom price for quote item
      *
      * @param Item $item
-     * @param DataObject $request
+     * @param \Magento\Framework\DataObject $request
      * @param Product $candidate
      * @return void
      */
-    public function prepare(Item $item, DataObject $request, Product $candidate): void
+    public function prepare(Item $item, DataObject $request, Product $candidate)
     {
         /**
          * We specify qty after we know about parent (for stock)
@@ -123,7 +123,7 @@ class Processor
      * @param Item $item
      * @return void
      */
-    protected function setItemStoreId(Item $item): void
+    protected function setItemStoreId(Item $item)
     {
         if ($this->appState->getAreaCode() === \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) {
             $storeId = $this->storeManager->getStore($this->storeManager->getStore()->getId())

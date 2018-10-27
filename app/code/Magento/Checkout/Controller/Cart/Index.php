@@ -7,9 +7,7 @@
 
 namespace Magento\Checkout\Controller\Cart;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Checkout\Controller\Cart implements HttpGetActionInterface
+class Index extends \Magento\Checkout\Controller\Cart
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

@@ -43,6 +43,9 @@
         <input type="<?= /* @escapeNotVerified */ $element->getType() ?>" name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>" class="input-text <?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>"/>
     </span>
       <?php break;
+    case 'hidden': ?>
+        <input type="<?= /* @escapeNotVerified */ $element->getType() ?>" name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>">
+      <?php break;
     case 'radios': ?>
     <span class="form_row">
         <label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label>
@@ -56,9 +59,8 @@
       <label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label>
         <script>
         require([
-            "wysiwygAdapter"
+            'tinymce'
         ], function(tinyMCE){
-
             tinyMCE.init({
                 mode : "exact",
                 theme : "advanced",

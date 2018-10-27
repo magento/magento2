@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\Paypal\Plugin;
 
 use Magento\Paypal\Model\Adminhtml\Express;
@@ -37,14 +32,6 @@ class OrderCanInvoice
      * Checks a possibility to invoice of PayPal Express payments when payment action is "order".
      *
      * @param Order $order
-<<<<<<< HEAD
-     * @param bool $result
-     * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function afterCanInvoice(Order $order, bool $result): bool
-    {
-=======
      * @param $result
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -55,7 +42,6 @@ class OrderCanInvoice
             return false;
         }
 
->>>>>>> upstream/2.2-develop
         if ($this->express->isOrderAuthorizationAllowed($order->getPayment())) {
             return false;
         }

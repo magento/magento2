@@ -32,7 +32,7 @@ class AssertExportCustomerAddresses extends AbstractConstraint
         $exportData = $export->getLatest();
 
         foreach ($customer->getDataFieldConfig('address')['source']->getAddresses() as $address) {
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $this->isAddressDataInFile(
                     $exportedFields,
                     $customer,

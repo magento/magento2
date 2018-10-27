@@ -8,12 +8,13 @@ namespace Magento\Braintree\Test\Unit\Gateway\Response;
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Tests \\Magento\Braintree\Gateway\Response\PaymentDetailsHandler.
+ * Class PaymentDetailsHandlerTest
  */
 class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -27,35 +28,35 @@ class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Sales\Model\Order\Payment|MockObject
      */
-    private $paymentMock;
+    private $payment;
 
     /**
      * @var SubjectReader|MockObject
      */
-    private $subjectReaderMock;
+    private $subjectReader;
 
     protected function setUp()
     {
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
+        $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'setCcTransId',
                 'setLastTransId',
-                'setAdditionalInformation',
+                'setAdditionalInformation'
             ])
             ->getMock();
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->paymentMock->expects(static::once())
+        $this->payment->expects(static::once())
             ->method('setCcTransId');
-        $this->paymentMock->expects(static::once())
+        $this->payment->expects(static::once())
             ->method('setLastTransId');
-        $this->paymentMock->expects(static::any())
+        $this->payment->expects(static::any())
             ->method('setAdditionalInformation');
 
-        $this->paymentHandler = new PaymentDetailsHandler($this->subjectReaderMock);
+        $this->paymentHandler = new PaymentDetailsHandler($this->subjectReader);
     }
 
     /**
@@ -63,17 +64,17 @@ class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testHandle()
     {
-        $paymentDataMock = $this->getPaymentDataObjectMock();
+        $paymentData = $this->getPaymentDataObjectMock();
         $transaction = $this->getBraintreeTransaction();
 
-        $subject = ['payment' => $paymentDataMock];
+        $subject = ['payment' => $paymentData];
         $response = ['object' => $transaction];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReader->expects(self::once())
             ->method('readPayment')
             ->with($subject)
-            ->willReturn($paymentDataMock);
-        $this->subjectReaderMock->expects(self::once())
+            ->willReturn($paymentData);
+        $this->subjectReader->expects(self::once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
@@ -94,7 +95,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects(static::once())
             ->method('getPayment')
-            ->willReturn($this->paymentMock);
+            ->willReturn($this->payment);
 
         return $mock;
     }
@@ -112,7 +113,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             'cvvResponseCode' => 'M',
             'processorAuthorizationCode' => 'W1V8XK',
             'processorResponseCode' => '1000',
-            'processorResponseText' => 'Approved',
+            'processorResponseText' => 'Approved'
         ];
 
         return Transaction::factory($attributes);

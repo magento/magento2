@@ -80,7 +80,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     }
 
     /**
-     * Returns status flag about this tab can be shown or not
+     * Returns status flag about this tab can be showen or not
      *
      * @return true
      */
@@ -229,7 +229,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     }
 
     /**
-     * Initialize form fields values
+     * Initialize form fileds values
      *
      * @return $this
      */

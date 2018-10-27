@@ -134,7 +134,7 @@ abstract class AbstractConfig implements ConfigInterface
      * Returns payment configuration value
      *
      * @param string $key
-     * @param null|int $storeId
+     * @param null $storeId
      * @return null|string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -224,26 +224,15 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function shouldUseUnilateralPayments()
     {
-        return $this->getValue('business_account') && !$this->isWppApiAvailable();
+        return $this->getValue('business_account') && !$this->isWppApiAvailabe();
     }
 
     /**
      * Check whether WPP API credentials are available for this method
      *
-     * @deprecated
      * @return bool
      */
     public function isWppApiAvailabe()
-    {
-        return $this->isWppApiAvailable();
-    }
-
-    /**
-     * Check whether WPP API credentials are available for this method
-     *
-     * @return bool
-     */
-    public function isWppApiAvailable()
     {
         return $this->getValue('api_username')
         && $this->getValue('api_password')
@@ -254,7 +243,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Check whether method available for checkout or not
      *
-     * @param null|string $methodCode
+     * @param null $methodCode
      *
      * @return bool
      */

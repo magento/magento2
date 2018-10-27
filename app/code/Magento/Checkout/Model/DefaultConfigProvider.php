@@ -27,11 +27,7 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Store\Model\ScopeInterface;
 
 /**
-<<<<<<< HEAD
- * Default Config Provider
-=======
  * Default Config Provider.
->>>>>>> upstream/2.2-develop
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -272,14 +268,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Return configuration array
-     *
-     * @return array|mixed
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function getConfig()
     {
@@ -385,11 +374,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Set additional customer address data
-=======
      * Set additional customer address data.
->>>>>>> upstream/2.2-develop
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
@@ -595,11 +580,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Return quote totals data
-=======
      * Return quote totals data.
->>>>>>> upstream/2.2-develop
      *
      * @return array
      */
@@ -631,11 +612,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Returns active carriers codes
-=======
      * Returns active carriers codes.
->>>>>>> upstream/2.2-develop
      *
      * @return array
      */
@@ -649,11 +626,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Returns origin country code
-=======
      * Returns origin country code.
->>>>>>> upstream/2.2-develop
      *
      * @return string
      */
@@ -667,16 +640,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Returns array of payment methods
-     *
-     * @return array $paymentMethods
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-=======
      * Returns array of payment methods.
      *
      * @return array
->>>>>>> upstream/2.2-develop
      */
     private function getPaymentMethods()
     {
@@ -694,19 +660,10 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Set Labels to custom Attributes
-     *
-     * @param array $customAttributes
-     * @return array $customAttributes
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\StateException
-=======
      * Set Labels to custom Attributes.
      *
      * @param array $customAttributes
      * @return array
->>>>>>> upstream/2.2-develop
      */
     private function setLabelsToAttributes(array $customAttributes) : array
     {
@@ -723,21 +680,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Get Labels by CustomAttribute and CustomAttributeCode
-     *
-     * @param array $customAttribute
-     * @param string|integer $customAttributeCode
-     * @return array $attributeOptionLabels
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\StateException
-=======
      * Get Labels by CustomAttribute and CustomAttributeCode.
      *
      * @param array $customAttribute
      * @param string $customAttributeCode
      * @return array
->>>>>>> upstream/2.2-develop
      */
     private function getAttributeLabels(array $customAttribute, string $customAttributeCode) : array
     {

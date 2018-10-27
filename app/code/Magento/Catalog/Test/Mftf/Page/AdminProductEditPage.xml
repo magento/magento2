@@ -7,13 +7,8 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-<<<<<<< HEAD
-       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminProductEditPage" url="catalog/product/edit/id/{{productId}}/" area="admin" module="Magento_Catalog" parameterized="true">
-=======
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminProductEditPage" url="catalog/product/edit/id/{{productId}}" parameterized="true" area="admin" module="Magento_Catalog">
->>>>>>> upstream/2.2-develop
         <!-- This page object only exists for the url. Use the AdminProductCreatePage for selectors. -->
     </page>
 </pages>

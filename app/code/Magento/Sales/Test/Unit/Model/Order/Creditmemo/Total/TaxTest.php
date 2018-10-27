@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
 use Magento\Framework\DataObject as MagentoObject;
@@ -41,30 +43,21 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Sales\Model\Order\Creditmemo\Total\Tax $model */
         $this->model = $this->objectManager->getObject(\Magento\Sales\Model\Order\Creditmemo\Total\Tax::class);
 
-        $this->order = $this->createPartialMock(
-            \Magento\Sales\Model\Order::class,
-            [
+        $this->order = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
                 '__wakeup'
-            ]
-        );
+            ]);
 
-        $this->invoice = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Invoice::class,
-            [
+        $this->invoice = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice::class, [
                 '__wakeup',
-            ]
-        );
+            ]);
 
-        $this->creditmemo = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo::class,
-            [
+        $this->creditmemo = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, [
                 'getAllItems',
                 'getOrder',
                 'roundPrice',
                 'isLast',
                 '__wakeup',
-            ]
-        );
+            ]);
         $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
     }
 
@@ -190,13 +183,13 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'tax_amount' => 0.82,
                     'base_tax_amount' => 0.82,
                     'invoice' => new MagentoObject(
-                        [
-                            'shipping_tax_amount' => 2.45,
-                            'base_shipping_tax_amount' => 2.45,
-                            'shipping_discount_tax_compensation_amount' => 0,
-                            'base_shipping_discount_tax_compensation_amount' => 0,
-                        ]
-                    ),
+                            [
+                                'shipping_tax_amount' => 2.45,
+                                'base_shipping_tax_amount' => 2.45,
+                                'shipping_discount_tax_compensation_amount' => 0,
+                                'base_shipping_discount_tax_compensation_amount' => 0,
+                            ]
+                        ),
                 ],
             ],
             'expected_results' => [
@@ -354,13 +347,13 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'tax_amount' => 1.65,
                     'base_tax_amount' => 1.65,
                     'invoice' => new MagentoObject(
-                        [
-                            'shipping_tax_amount' => 1.24,
-                            'base_shipping_tax_amount' => 1.24,
-                            'shipping_discount_tax_compensation_amount' => 0,
-                            'base_shipping_discount_tax_compensation_amount' => 0,
-                        ]
-                    ),
+                            [
+                                'shipping_tax_amount' => 1.24,
+                                'base_shipping_tax_amount' => 1.24,
+                                'shipping_discount_tax_compensation_amount' => 0,
+                                'base_shipping_discount_tax_compensation_amount' => 0,
+                            ]
+                        ),
                 ],
             ],
             'expected_results' => [
@@ -430,13 +423,13 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'tax_amount' => 0.82,
                     'base_tax_amount' => 0.82,
                     'invoice' => new MagentoObject(
-                        [
-                            'shipping_tax_amount' => 1.24,
-                            'base_shipping_tax_amount' => 1.24,
-                            'shipping_discount_tax_compensation_amount' => 0,
-                            'base_shipping_discount_tax_compensation_amount' => 0,
-                        ]
-                    ),
+                            [
+                                'shipping_tax_amount' => 1.24,
+                                'base_shipping_tax_amount' => 1.24,
+                                'shipping_discount_tax_compensation_amount' => 0,
+                                'base_shipping_discount_tax_compensation_amount' => 0,
+                            ]
+                        ),
                 ],
             ],
             'expected_results' => [
@@ -511,13 +504,13 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'tax_amount' => 0.76,
                     'base_tax_amount' => 0.76,
                     'invoice' => new MagentoObject(
-                        [
-                            'shipping_tax_amount' => 0,
-                            'base_shipping_tax_amount' => 0,
-                            'shipping_discount_tax_compensation_amount' => 0,
-                            'base_shipping_discount_tax_compensation_amount' => 0,
-                        ]
-                    ),
+                            [
+                                'shipping_tax_amount' => 0,
+                                'base_shipping_tax_amount' => 0,
+                                'shipping_discount_tax_compensation_amount' => 0,
+                                'base_shipping_discount_tax_compensation_amount' => 0,
+                            ]
+                        ),
                 ],
             ],
             'expected_results' => [
@@ -620,26 +613,20 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected function getCreditmemoItem($creditmemoItemData)
     {
         /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
-        $orderItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Item::class,
-            [
+        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
                 'isDummy',
                 '__wakeup'
-            ]
-        );
+            ]);
         foreach ($creditmemoItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
 
         /** @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject $creditmemoItem */
-        $creditmemoItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo\Item::class,
-            [
+        $creditmemoItem = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo\Item::class, [
                 'getOrderItem',
                 'isLast',
                 '__wakeup'
-            ]
-        );
+            ]);
         $creditmemoItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
         $creditmemoItem->expects($this->any())
             ->method('isLast')

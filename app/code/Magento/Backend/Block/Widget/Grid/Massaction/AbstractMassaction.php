@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
 use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
@@ -58,7 +57,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     {
         parent::_construct();
 
-        $this->setErrorText($this->escapeHtml(__('An item needs to be selected. Select and try again.')));
+        $this->setErrorText($this->escapeHtml(__('Please select items.')));
 
         if (null !== $this->getOptions()) {
             foreach ($this->getOptions() as $optionId => $option) {

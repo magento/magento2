@@ -6,9 +6,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Customer;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Totals extends \Magento\Reports\Controller\Adminhtml\Report\Customer implements HttpGetActionInterface
+class Totals extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
     /**
      * Customers by orders total action

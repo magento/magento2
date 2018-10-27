@@ -51,9 +51,6 @@ class ReviewPaymentTest extends \PHPUnit\Framework\TestCase
      */
     protected $loggerMock;
 
-    /**
-     * Test setup
-     */
     protected function setUp()
     {
         $this->contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
@@ -78,7 +75,7 @@ class ReviewPaymentTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->messageManagerMock = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccessMessage', 'addErrorMessage']
+            ['addSuccess', 'addError']
         );
 
         $this->resultRedirectFactoryMock = $this->createPartialMock(
@@ -115,9 +112,6 @@ class ReviewPaymentTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * testExecuteUpdateAction
-     */
     public function testExecuteUpdateAction()
     {
         $orderId = 30;
@@ -143,7 +137,7 @@ class ReviewPaymentTest extends \PHPUnit\Framework\TestCase
         $this->paymentMock->expects($this->once())->method('update');
         $this->paymentMock->expects($this->any())->method('getIsTransactionApproved')->willReturn(true);
 
-        $this->messageManagerMock->expects($this->once())->method('addSuccessMessage');
+        $this->messageManagerMock->expects($this->once())->method('addSuccess');
 
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')

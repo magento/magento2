@@ -6,10 +6,9 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Reports\Model\Flag;
 
-class Bestsellers extends \Magento\Reports\Controller\Adminhtml\Report\Sales implements HttpGetActionInterface
+class Bestsellers extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**
      * Bestsellers report action

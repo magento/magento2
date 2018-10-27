@@ -120,7 +120,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     }
 
     /**
-     * Return formatted attribute value from entity model
+     * Return formated attribute value from entity model
      *
      * @param string $format
      * @return string|array

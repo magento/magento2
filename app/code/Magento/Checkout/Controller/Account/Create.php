@@ -5,7 +5,6 @@
  */
 namespace Magento\Checkout\Controller\Account;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -60,7 +59,7 @@ class Create extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $resultJson = $this->_objectManager->get(\Magento\Framework\Controller\Result\JsonFactory::class)->create();
 
         if ($this->customerSession->isLoggedIn()) {
             return $resultJson->setData(
@@ -88,7 +87,7 @@ class Create extends \Magento\Framework\App\Action\Action
                 ]
             );
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, $e->getMessage());
+            $this->messageManager->addException($e, $e->getMessage());
             throw $e;
         }
     }

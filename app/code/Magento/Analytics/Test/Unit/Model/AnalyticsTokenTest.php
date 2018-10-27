@@ -11,12 +11,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-<<<<<<< HEAD
-=======
 /**
  * Class AnalyticsTokenTest
  */
->>>>>>> upstream/2.2-develop
 class AnalyticsTokenTest extends \PHPUnit\Framework\TestCase
 {
     /**

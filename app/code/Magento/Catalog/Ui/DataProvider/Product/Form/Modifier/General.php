@@ -60,7 +60,6 @@ class General extends AbstractModifier
     /**
      * {@inheritdoc}
      * @since 101.0.0
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function modifyData(array $data)
     {

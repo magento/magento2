@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -28,10 +23,6 @@ $configWriter = $objectManager->get(WriterInterface::class);
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $website = $websiteRepository->get('test');
-<<<<<<< HEAD
-$deleteConfigData($configWriter, $configData, ScopeInterface::SCOPE_WEBSITES, (int)$website->getId());
-=======
 $deleteConfigData($configWriter, $configData, ScopeInterface::SCOPE_WEBSITES, $website->getId());
->>>>>>> upstream/2.2-develop
 
 require __DIR__ . '/../../Store/_files/second_website_with_two_stores_rollback.php';

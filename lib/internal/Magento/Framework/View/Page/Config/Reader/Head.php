@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Page\Config\Reader;
 
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config as PageConfig;
-use Magento\Framework\View\Page\Config\Structure;
 
 /**
  * Head structure reader is intended for collecting assets, title and metadata
@@ -72,21 +71,6 @@ class Head implements Layout\ReaderInterface
         Layout\Element $headElement
     ) {
         $pageConfigStructure = $readerContext->getPageConfigStructure();
-<<<<<<< HEAD
-
-        $orderedNodes = [];
-
-        foreach ($headElement as $node) {
-            $nodeOrder = $node->getAttribute('order') ?: 0;
-            $orderedNodes[$nodeOrder][] = $node;
-        }
-
-        ksort($orderedNodes);
-        foreach ($orderedNodes as $nodes) {
-            /** @var \Magento\Framework\View\Layout\Element $node */
-            foreach ($nodes as $node) {
-                $this->processNode($node, $pageConfigStructure);
-=======
         $nodes = iterator_to_array($headElement, false);
 
         usort(
@@ -127,7 +111,6 @@ class Head implements Layout\ReaderInterface
 
                 default:
                     break;
->>>>>>> upstream/2.2-develop
             }
         }
 
@@ -165,50 +148,5 @@ class Head implements Layout\ReaderInterface
         }
 
         $pageConfigStructure->setMetadata($metadataName, $node->getAttribute('content'));
-<<<<<<< HEAD
-    }
-
-    /**
-     * Process given node based on it's name.
-     *
-     * @param Layout\Element $node
-     * @param Structure $pageConfigStructure
-     * @return void
-     */
-    private function processNode(Layout\Element $node, Structure $pageConfigStructure)
-    {
-        switch ($node->getName()) {
-            case self::HEAD_CSS:
-            case self::HEAD_SCRIPT:
-            case self::HEAD_LINK:
-                $this->addContentTypeByNodeName($node);
-                $pageConfigStructure->addAssets($node->getAttribute('src'), $this->getAttributes($node));
-                break;
-
-            case self::HEAD_REMOVE:
-                $pageConfigStructure->removeAssets($node->getAttribute('src'));
-                break;
-
-            case self::HEAD_TITLE:
-                $pageConfigStructure->setTitle(new \Magento\Framework\Phrase($node));
-                break;
-
-            case self::HEAD_META:
-                $this->setMetadata($pageConfigStructure, $node);
-                break;
-
-            case self::HEAD_ATTRIBUTE:
-                $pageConfigStructure->setElementAttribute(
-                    PageConfig::ELEMENT_TYPE_HEAD,
-                    $node->getAttribute('name'),
-                    $node->getAttribute('value')
-                );
-                break;
-
-            default:
-                break;
-        }
-=======
->>>>>>> upstream/2.2-develop
     }
 }

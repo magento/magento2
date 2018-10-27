@@ -16,11 +16,8 @@ use Magento\Backend\Helper\Data as BackendHelper;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Reports api controller
- *
  * @api
  * @since 100.0.2
- * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class AbstractReport extends \Magento\Backend\App\Action
 {
@@ -150,19 +147,15 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         }
 
         $refreshStatsLink = $this->getUrl('reports/report_statistics');
-        $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent');
+        $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent', ['code' => $refreshCode]);
 
         $this->messageManager->addNotice(
             __(
                 'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
-                'click <a href="#2" data-post="%3">here</a>.',
+                'click <a href="%3">here</a>.',
                 $updatedAt,
                 $refreshStatsLink,
-                str_replace(
-                    '"',
-                    '&quot;',
-                    json_encode(['action' => $directRefreshLink, 'data' => ['code' => $refreshCode]])
-                )
+                $directRefreshLink
             )
         );
         return $this;

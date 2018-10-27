@@ -35,14 +35,14 @@ class AssertSitemapSubmissionToRobotsTxt extends AbstractConstraint
     public function processAssert(BrowserInterface $browser)
     {
         $browser->open($_ENV['app_frontend_url'] . $this->filename);
-        \PHPUnit\Framework\Assert::assertNotEquals(
+        \PHPUnit_Framework_Assert::assertNotEquals(
             self::HTTP_NOT_FOUND,
             $browser->getTitle(),
             'File ' . $this->filename . ' is not readable or not exists.'
         );
 
         $expectedRobotsContent = 'Sitemap: ' .  $_ENV['app_frontend_url'] . 'sitemap.xml';
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             strpos($browser->getHtmlSource(), $expectedRobotsContent) !== false,
             'File ' . $this->filename . ' contains incorrect data.'
         );

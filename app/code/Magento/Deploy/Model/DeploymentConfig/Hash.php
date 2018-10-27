@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Deploy\Model\DeploymentConfig;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -98,7 +97,7 @@ class Hash
             $flag->setFlagData($hashes);
             $this->flagResource->save($flag);
         } catch (\Exception $exception) {
-            throw new LocalizedException(__("The hash isn't saved."), $exception);
+            throw new LocalizedException(__('Hash has not been saved.'), $exception);
         }
     }
 

@@ -6,9 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpGetActionInterface
+class Index extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory

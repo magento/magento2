@@ -81,11 +81,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @dataProvider getColumnsDataProvider
      */
-<<<<<<< HEAD
-    public function testGetHeaders(array $columnLabels, array $expected): void
-=======
     public function testGetHeaders(array $columnLabels, array $expected)
->>>>>>> upstream/2.2-develop
     {
         $componentName = 'component_name';
         $columnName = 'column_name';
@@ -390,16 +386,6 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-<<<<<<< HEAD
-     * Test for convertDate function
-     *
-     * @param string $fieldValue
-     * @param string $expected
-     * @dataProvider convertDateProvider
-     * @covers       \Magento\Ui\Model\Export\MetadataProvider::convertDate()
-     */
-    public function testConvertDate($fieldValue, $expected)
-=======
      * Test for convertDate function.
      *
      * @param string $fieldValue
@@ -409,7 +395,6 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
      * @covers \Magento\Ui\Model\Export\MetadataProvider::convertDate()
      */
     public function testConvertDate(string $fieldValue, string $expected)
->>>>>>> upstream/2.2-develop
     {
         $componentName = 'component_name';
         /** @var DocumentInterface|\PHPUnit_Framework_MockObject_MockObject $document */
@@ -434,19 +419,11 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-<<<<<<< HEAD
-     * Data provider for testConvertDate
-     *
-     * @return array
-     */
-    public function convertDateProvider()
-=======
      * Data provider for testConvertDate.
      *
      * @return array
      */
     public function convertDateProvider(): array
->>>>>>> upstream/2.2-develop
     {
         return [
             [

@@ -6,11 +6,9 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page\Widget;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 
-class Chooser extends Action implements HttpPostActionInterface, HttpGetActionInterface
+class Chooser extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session

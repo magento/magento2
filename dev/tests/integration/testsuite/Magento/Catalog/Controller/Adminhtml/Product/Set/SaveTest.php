@@ -9,7 +9,6 @@ use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Request\Http as HttpRequest;
 
 class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -21,7 +20,6 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $attributeSet = $this->getAttributeSetByName('attribute_set_test');
         $this->assertNotEmpty($attributeSet, 'Attribute set with name "attribute_set_test" is missed');
 
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue('data', json_encode([
             'attribute_set_name' => 'attribute_set_test',
             'groups' => [

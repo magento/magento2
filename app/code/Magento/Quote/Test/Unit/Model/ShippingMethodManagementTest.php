@@ -182,7 +182,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
+     * @expectedExceptionMessage Shipping address not set.
      */
     public function testGetMethodWhenShippingAddressIsNotSet()
     {
@@ -271,7 +271,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
+     * @expectedExceptionMessage Shipping address not set.
      */
     public function testGetListWhenShippingAddressIsNotSet()
     {
@@ -321,7 +321,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The shipping method can't be set for an empty cart. Add an item to cart and try again.
+     * @expectedExceptionMessage Shipping method is not applicable for empty cart
      */
     public function testSetMethodWithInputException()
     {
@@ -340,7 +340,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
+     * @expectedExceptionMessage Cart contains virtual product(s) only. Shipping method is not applicable.
      */
     public function testSetMethodWithVirtualProduct()
     {
@@ -360,7 +360,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
+     * @expectedExceptionMessage Shipping address is not set
      */
     public function testSetMethodWithoutShippingAddress()
     {
@@ -383,7 +383,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The shipping method can't be set. Custom Error
+     * @expectedExceptionMessage Cannot set shipping method. Custom Error
      */
     public function testSetMethodWithCouldNotSaveException()
     {
@@ -419,7 +419,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
+     * @expectedExceptionMessage Shipping address is not set
      */
     public function testSetMethodWithoutAddress()
     {

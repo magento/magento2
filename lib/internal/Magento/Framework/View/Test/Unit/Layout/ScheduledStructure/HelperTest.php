@@ -144,7 +144,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $loggerExpects
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $loggerExpects
      * @param string $stateMode
      * @return void
      * @dataProvider scheduleElementLogDataProvider

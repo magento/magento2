@@ -36,7 +36,7 @@ class AssertSalesPrintOrderProducts extends AbstractConstraint
             }
         }
 
-        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
+        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
     }
 
     /**

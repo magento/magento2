@@ -68,18 +68,13 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     protected $backendDataMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $escaperMock;
-
-    /**
      * @var string
      */
     protected $path;
 
     protected function setUp()
     {
-        $this->path = 'PATH';
+        $this->path = 'PATH/';
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
@@ -110,8 +105,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap(
                 [
                     [WysiwygConfig::IMAGE_DIRECTORY, null, $this->getAbsolutePath(WysiwygConfig::IMAGE_DIRECTORY)],
-                    [null, null, $this->getAbsolutePath(null)],
-                    ['', null, $this->getAbsolutePath('')],
+                    [null, null, $this->getAbsolutePath(null)]
                 ]
             );
 
@@ -125,7 +119,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
                 [
                     'clearWebsiteCache', 'getDefaultStoreView', 'getGroup', 'getGroups',
                     'getStore', 'getStores', 'getWebsite', 'getWebsites', 'hasSingleStore',
-                    'isSingleStoreMode', 'reinitStores', 'setCurrentStore', 'setIsSingleStoreModeAllowed',
+                    'isSingleStoreMode', 'reinitStores', 'setCurrentStore', 'setIsSingleStoreModeAllowed'
                 ]
             )
             ->disableOriginalConstructor()
@@ -133,16 +127,13 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
 
         $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
-        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
-
         $this->imagesHelper = $this->objectManager->getObject(
             \Magento\Cms\Helper\Wysiwyg\Images::class,
             [
                 'context' => $this->contextMock,
                 'filesystem' => $this->filesystemMock,
                 'storeManager' => $this->storeManagerMock,
-                'backendData' => $this->backendDataMock,
-                'escaper' => $this->escaperMock,
+                'backendData' => $this->backendDataMock
             ]
         );
     }
@@ -160,7 +151,6 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->requestMock = null;
         $this->urlEncoderMock = null;
         $this->backendDataMock = null;
-        $this->escaperMock = null;
     }
 
     /**
@@ -180,7 +170,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     public function testGetStorageRoot()
     {
         $this->assertEquals(
-            $this->getAbsolutePath(''),
+            $this->getAbsolutePath(WysiwygConfig::IMAGE_DIRECTORY),
             $this->imagesHelper->getStorageRoot()
         );
     }
@@ -204,7 +194,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     public function testConvertPathToId()
     {
         $pathOne = '/test_path';
-        $pathTwo = $this->getAbsolutePath('') . '/test_path';
+        $pathTwo = $this->getAbsolutePath(WysiwygConfig::IMAGE_DIRECTORY) . '/test_path';
         $this->assertEquals(
             $this->imagesHelper->convertPathToId($pathOne),
             $this->imagesHelper->convertPathToId($pathTwo)
@@ -230,7 +220,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['', ''],
-            ['/test_path', 'L3Rlc3RfcGF0aA--'],
+            ['/test_path', 'L3Rlc3RfcGF0aA--']
         ];
     }
 
@@ -268,7 +258,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         return [
             ['test', 3, 'tes...'],
             ['test', 4, 'test'],
-            ['test', 20, 'test'],
+            ['test', 20, 'test']
         ];
     }
 
@@ -290,7 +280,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         return [
             ['Mini text', 'Mini text'],
             ['20 symbols are here', '20 symbols are here'],
-            ['Some text for this unit test', 'Some text for this u...'],
+            ['Some text for this unit test', 'Some text for this u...']
         ];
     }
 
@@ -329,7 +319,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [true],
-            [false],
+            [false]
         ];
     }
 
@@ -341,30 +331,26 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCurrentPath($pathId, $expectedPath, $isExist)
     {
-        $this->requestMock->expects($this->any())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
-            ->willReturnMap(
-                [
-                    ['node', null, $pathId],
-                ]
-            );
+            ->willReturn($pathId);
 
         $this->directoryWriteMock->expects($this->any())
             ->method('isDirectory')
             ->willReturnMap(
                 [
-                    ['/../test_path', true],
-                    ['/../my.jpg', false],
-                    ['.', true],
+                    ['/../wysiwyg/test_path', true],
+                    ['/../wysiwyg/my.jpg', false],
+                    ['/../wysiwyg', true]
                 ]
             );
         $this->directoryWriteMock->expects($this->any())
             ->method('getRelativePath')
             ->willReturnMap(
                 [
-                    ['PATH/test_path', '/../test_path'],
-                    ['PATH/my.jpg', '/../my.jpg'],
-                    ['PATH', '.'],
+                    ['PATH/wysiwyg/test_path', '/../wysiwyg/test_path'],
+                    ['PATH/wysiwyg/my.jpg', '/../wysiwyg/my.jpg'],
+                    ['PATH/wysiwyg', '/../wysiwyg'],
                 ]
             );
         $this->directoryWriteMock->expects($this->once())
@@ -379,8 +365,10 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCurrentPathThrowException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('The directory PATH is not writable by server.');
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class,
+            'The directory PATH/wysiwyg is not writable by server.'
+        );
 
         $this->directoryWriteMock->expects($this->once())
             ->method('isExist')
@@ -402,12 +390,12 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     public function providerGetCurrentPath()
     {
         return [
-            ['L3Rlc3RfcGF0aA--', 'PATH/test_path', true],
-            ['L215LmpwZw--', 'PATH', true],
-            [null, 'PATH', true],
-            ['L3Rlc3RfcGF0aA--', 'PATH/test_path', false],
-            ['L215LmpwZw--', 'PATH', false],
-            [null, 'PATH', false],
+            ['L3Rlc3RfcGF0aA--', 'PATH/wysiwyg/test_path', true],
+            ['L215LmpwZw--', 'PATH/wysiwyg', true],
+            [null, 'PATH/wysiwyg', true],
+            ['L3Rlc3RfcGF0aA--', 'PATH/wysiwyg/test_path', false],
+            ['L215LmpwZw--', 'PATH/wysiwyg', false],
+            [null, 'PATH/wysiwyg', false]
         ];
     }
 
@@ -437,18 +425,12 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      * @param string $baseUrl
      * @param string $fileName
      * @param bool $isUsingStaticUrls
-     * @param string|null $escapedValue
      * @param string $expectedHtml
      * @dataProvider providerGetImageHtmlDeclarationRenderingAsTag
      */
-    public function testGetImageHtmlDeclarationRenderingAsTag(
-        $baseUrl,
-        $fileName,
-        $isUsingStaticUrls,
-        $escapedValue,
-        $expectedHtml
-    ) {
-        $this->generalSettingsGetImageHtmlDeclaration($baseUrl, $isUsingStaticUrls, $escapedValue);
+    public function testGetImageHtmlDeclarationRenderingAsTag($baseUrl, $fileName, $isUsingStaticUrls, $expectedHtml)
+    {
+        $this->generalSettingsGetImageHtmlDeclaration($baseUrl, $isUsingStaticUrls);
         $this->assertEquals($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName, true));
     }
 
@@ -458,20 +440,8 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     public function providerGetImageHtmlDeclarationRenderingAsTag()
     {
         return [
-            [
-                'http://localhost',
-                'test.png',
-                true,
-                null,
-                '<img src="http://localhost/test.png" alt="" />',
-            ],
-            [
-                'http://localhost',
-                'test.png',
-                false,
-                '{{media url=&quot;/test.png&quot;}}',
-                '<img src="{{media url=&quot;/test.png&quot;}}" alt="" />',
-            ],
+            ['http://localhost', 'test.png', true, '<img src="http://localhost/test.png" alt="" />'],
+            ['http://localhost', 'test.png', false, '<img src="{{media url="/test.png"}}" alt="" />']
         ];
     }
 
@@ -508,16 +478,15 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['http://localhost', 'test.png', true, 'http://localhost/test.png'],
-            ['http://localhost', 'test.png', false, '{{media url="/test.png"}}'],
+            ['http://localhost', 'test.png', false, '{{media url="/test.png"}}']
         ];
     }
 
     /**
      * @param string $baseUrl
      * @param bool $isUsingStaticUrls
-     * @param string|null $escapedValue
      */
-    protected function generalSettingsGetImageHtmlDeclaration($baseUrl, $isUsingStaticUrls, $escapedValue = null)
+    protected function generalSettingsGetImageHtmlDeclaration($baseUrl, $isUsingStaticUrls)
     {
         $storeId = 1;
         $this->imagesHelper->setStoreId($storeId);
@@ -529,10 +498,6 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
-
-        if ($escapedValue) {
-            $this->escaperMock->expects($this->once())->method('escapeHtml')->willReturn($escapedValue);
-        }
 
         $this->generalSettingsIsUsingStaticUrlsAllowed($isUsingStaticUrls);
     }

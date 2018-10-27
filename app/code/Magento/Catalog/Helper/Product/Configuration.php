@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Helper\Product;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Escaper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -45,11 +44,6 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     private $serializer;
 
     /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Framework\Filter\FilterManager $filter
@@ -61,14 +55,12 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Framework\Filter\FilterManager $filter,
         \Magento\Framework\Stdlib\StringUtils $string,
-        Json $serializer = null,
-        Escaper $escaper = null
+        Json $serializer = null
     ) {
         $this->_productOptionFactory = $productOptionFactory;
         $this->filter = $filter;
         $this->string = $string;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
-        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
         parent::__construct($context);
     }
 
@@ -183,7 +175,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
             if (isset($optionValue['option_id'])) {
                 $optionInfo = $optionValue;
                 if (isset($optionInfo['value'])) {
-                    $optionValue = $this->escaper->escapeHtml($optionInfo['value']);
+                    $optionValue = $optionInfo['value'];
                 }
             } elseif (isset($optionValue['value'])) {
                 $optionValue = $optionValue['value'];

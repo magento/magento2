@@ -165,7 +165,7 @@ class AdminAccount
     {
         if (empty($this->data[self::KEY_PASSWORD])) {
             throw new \Exception(
-                '"Password" is required. Enter and try again.'
+                'Password is a required field.'
             );
         }
 

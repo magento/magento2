@@ -15,7 +15,6 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Webapi\Exception;
 use Magento\Payment\Gateway\Command\ResultInterface as CommandResultInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -34,119 +33,82 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
     /**
      * @var GetPaymentNonceCommand|MockObject
      */
-    private $commandMock;
+    private $command;
 
     /**
      * @var Session|MockObject
      */
-    private $sessionMock;
+    private $session;
 
     /**
      * @var LoggerInterface|MockObject
      */
-    private $loggerMock;
+    private $logger;
 
     /**
      * @var ResultFactory|MockObject
      */
-    private $resultFactoryMock;
+    private $resultFactory;
 
     /**
      * @var ResultInterface|MockObject
      */
-    private $resultMock;
+    private $result;
 
     /**
      * @var Http|MockObject
      */
-    private $requestMock;
+    private $request;
 
     /**
      * @var CommandResultInterface|MockObject
      */
-    private $commandResultMock;
+    private $commandResult;
 
     protected function setUp()
     {
         $this->initResultFactoryMock();
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+        $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
             ->getMock();
 
-        $this->commandMock = $this->getMockBuilder(GetPaymentNonceCommand::class)
+        $this->command = $this->getMockBuilder(GetPaymentNonceCommand::class)
             ->disableOriginalConstructor()
             ->setMethods(['execute', '__wakeup'])
             ->getMock();
 
-        $this->commandResultMock = $this->getMockBuilder(CommandResultInterface::class)
+        $this->commandResult = $this->getMockBuilder(CommandResultInterface::class)
             ->setMethods(['get'])
             ->getMock();
 
-        $this->sessionMock = $this->getMockBuilder(Session::class)
+        $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerId', 'getStoreId'])
             ->getMock();
-        $this->sessionMock->expects(static::once())
-            ->method('getStoreId')
-            ->willReturn(null);
 
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-<<<<<<< HEAD
-        $context->expects(static::any())
-            ->method('getRequest')
-            ->willReturn($this->requestMock);
-        $context->expects(static::any())
-            ->method('getResultFactory')
-            ->willReturn($this->resultFactoryMock);
-=======
         $context->method('getRequest')
             ->willReturn($this->request);
         $context->method('getResultFactory')
             ->willReturn($this->resultFactory);
->>>>>>> upstream/2.2-develop
 
         $managerHelper = new ObjectManager($this);
         $this->action = $managerHelper->getObject(GetNonce::class, [
             'context' => $context,
-            'logger' => $this->loggerMock,
-            'session' => $this->sessionMock,
-            'command' => $this->commandMock,
+            'logger' => $this->logger,
+            'session' => $this->session,
+            'command' => $this->command
         ]);
     }
 
     public function testExecuteWithException()
     {
-<<<<<<< HEAD
-        $this->requestMock->expects(static::once())
-            ->method('getParam')
-            ->with('public_hash')
-            ->willReturn(null);
-
-        $this->sessionMock->expects(static::once())
-            ->method('getCustomerId')
-            ->willReturn(null);
-
-        $exception = new \Exception('The "publicHash" field does not exists');
-        $this->commandMock->expects(static::once())
-            ->method('execute')
-            ->willThrowException($exception);
-
-        $this->loggerMock->expects(static::once())
-            ->method('critical')
-            ->with($exception);
-
-        $this->resultMock->expects(static::once())
-            ->method('setHttpResponseCode')
-            ->with(Exception::HTTP_BAD_REQUEST);
-        $this->resultMock->expects(static::once())
-            ->method('setData')
-=======
         $this->request->method('getParam')
             ->with('public_hash')
             ->willReturn(null);
@@ -166,7 +128,6 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
         $this->result->method('setHttpResponseCode')
             ->with(Exception::HTTP_BAD_REQUEST);
         $this->result->method('setData')
->>>>>>> upstream/2.2-develop
             ->with(['message' => 'Sorry, but something went wrong']);
 
         $this->action->execute();
@@ -178,44 +139,15 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
         $publicHash = '65b7bae0dcb690d93';
         $nonce = 'f1hc45';
 
-<<<<<<< HEAD
-        $this->requestMock->expects(static::once())
-            ->method('getParam')
-            ->with('public_hash')
-            ->willReturn($publicHash);
-
-        $this->sessionMock->expects(static::once())
-            ->method('getCustomerId')
-=======
         $this->request->method('getParam')
             ->with('public_hash')
             ->willReturn($publicHash);
 
         $this->session->method('getCustomerId')
->>>>>>> upstream/2.2-develop
             ->willReturn($customerId);
         $this->session->method('getStoreId')
             ->willReturn(null);
 
-<<<<<<< HEAD
-        $this->commandResultMock->expects(static::once())
-            ->method('get')
-            ->willReturn([
-                'paymentMethodNonce' => $nonce
-            ]);
-        $this->commandMock->expects(static::once())
-            ->method('execute')
-            ->willReturn($this->commandResultMock);
-
-        $this->resultMock->expects(static::once())
-            ->method('setData')
-            ->with(['paymentMethodNonce' => $nonce]);
-
-        $this->loggerMock->expects(static::never())
-            ->method('critical');
-
-        $this->resultMock->expects(static::never())
-=======
         $this->commandResult->method('get')
             ->willReturn([
                 'paymentMethodNonce' => $nonce
@@ -230,7 +162,6 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
             ->method('critical');
 
         $this->result->expects(self::never())
->>>>>>> upstream/2.2-develop
             ->method('setHttpResponseCode');
 
         $this->action->execute();
@@ -241,22 +172,16 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
      */
     private function initResultFactoryMock()
     {
-        $this->resultMock = $this->getMockBuilder(ResultInterface::class)
+        $this->result = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['setHttpResponseCode', 'renderResult', 'setHeader', 'setData'])
             ->getMock();
 
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
+        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-<<<<<<< HEAD
-        $this->resultFactoryMock->expects(static::once())
-            ->method('create')
-            ->willReturn($this->resultMock);
-=======
         $this->resultFactory->method('create')
             ->willReturn($this->result);
->>>>>>> upstream/2.2-develop
     }
 }

@@ -7,7 +7,7 @@ namespace Magento\Framework\Stdlib;
  */
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\HttpClient\CurlClientWithCookies;
+use Magento\TestFramework\TestCase\Webapi\Curl;
 
 /**
  * End to end test of the Cookie Manager, using curl.
@@ -18,16 +18,14 @@ class CookieManagerTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     private $cookieTesterUrl = 'testmoduleone/CookieTester';
 
-    /** @var CurlClientWithCookies */
+    /** @var Curl */
     protected $curlClient;
 
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->config = $objectManager->get(\Magento\Webapi\Model\Config::class);
-        $this->curlClient = $objectManager->get(
-            \Magento\TestFramework\TestCase\HttpClient\CurlClientWithCookies::class
-        );
+        $this->curlClient = $objectManager->get(\Magento\TestFramework\TestCase\Webapi\Curl::class);
     }
 
     /**

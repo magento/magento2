@@ -5,9 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Start extends \Magento\Backend\App\Action implements HttpGetActionInterface
+class Start extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session

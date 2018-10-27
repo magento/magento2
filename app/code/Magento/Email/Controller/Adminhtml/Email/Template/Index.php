@@ -6,9 +6,7 @@
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Email\Controller\Adminhtml\Email\Template implements HttpGetActionInterface
+class Index extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**
      * Index action

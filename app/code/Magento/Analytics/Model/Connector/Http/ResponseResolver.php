@@ -38,19 +38,7 @@ class ResponseResolver
     public function getResult(\Zend_Http_Response $response)
     {
         $result = false;
-<<<<<<< HEAD
-        $converterMediaType = $this->converter->getContentMediaType();
-
-        /** Content-Type header may not only contain media-type declaration */
-        if ($response->getBody() && is_int(strripos($response->getHeader('Content-Type'), $converterMediaType))) {
-            $responseBody = $this->converter->fromBody($response->getBody());
-        } else {
-            $responseBody = [];
-        }
-
-=======
         $responseBody = $this->converter->fromBody($response->getBody());
->>>>>>> upstream/2.2-develop
         if (array_key_exists($response->getStatus(), $this->responseHandlers)) {
             $result = $this->responseHandlers[$response->getStatus()]->handleResponse($responseBody);
         }

@@ -13,9 +13,6 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
-/**
- * Save handler for indexer.
- */
 class IndexerHandler implements IndexerInterface
 {
     /**
@@ -96,7 +93,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function saveIndex($dimensions, \Traversable $documents)
     {
@@ -107,7 +104,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
@@ -120,7 +117,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function cleanIndex($dimensions)
     {
@@ -129,16 +126,14 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isAvailable($dimensions = [])
+    public function isAvailable()
     {
         return true;
     }
 
     /**
-     * Returns table name.
-     *
      * @param string $dataType
      * @param Dimension[] $dimensions
      * @return string
@@ -149,8 +144,6 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * Returns index name
-     *
      * @return string
      */
     protected function getIndexName()
@@ -159,8 +152,6 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * Save searchable documents to storage.
-     *
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
@@ -175,8 +166,6 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * Save filterable documents to storage.
-     *
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
@@ -198,8 +187,6 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * Prepare filterable fields.
-     *
      * @param array $documents
      * @return array
      */
@@ -219,8 +206,6 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * Prepare searchable fields.
-     *
      * @param array $documents
      * @return array
      */
@@ -243,8 +228,6 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * Prepare fields.
-     *
      * @return void
      */
     private function prepareFields()

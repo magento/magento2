@@ -143,8 +143,8 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Authorizenet\Helper\Data $dataHelper
-     * @param \Magento\Authorizenet\Model\Directpost\Request\Factory $requestFactory
-     * @param \Magento\Authorizenet\Model\Directpost\Response\Factory $responseFactory
+     * @param Directpost\Request\Factory $requestFactory
+     * @param Directpost\Response\Factory $responseFactory
      * @param \Magento\Authorizenet\Model\TransactionService $transactionService
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -171,11 +171,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         \Magento\Authorizenet\Helper\Data $dataHelper,
         \Magento\Authorizenet\Model\Directpost\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Directpost\Response\Factory $responseFactory,
-<<<<<<< HEAD
-        \Magento\Authorizenet\Model\TransactionService $transactionService,
-=======
         TransactionService $transactionService,
->>>>>>> upstream/2.2-develop
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,

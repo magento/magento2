@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Api;
 
 /**
@@ -32,8 +34,7 @@ interface CreditmemoCommentRepositoryInterface
      * Returns a credit memo comment search results interface.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
-     * @return \Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterface
-     * Credit memo comment search results interface.
+     * @return \Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterface Credit memo comment search results interface.
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 

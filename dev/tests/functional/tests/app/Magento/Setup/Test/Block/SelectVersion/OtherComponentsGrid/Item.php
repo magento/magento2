@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\Setup\Test\Block\SelectVersion\OtherComponentsGrid;
 
 use Magento\Mtf\Block\Block;
@@ -37,11 +32,7 @@ class Item extends Block
      *
      * @param string $version
      */
-<<<<<<< HEAD
-    public function setVersion(string $version)
-=======
     public function setVersion($version)
->>>>>>> upstream/2.2-develop
     {
         $this->_rootElement->find($this->version, Locator::SELECTOR_CSS, 'select')->setValue($version);
     }

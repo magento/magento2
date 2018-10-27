@@ -56,7 +56,7 @@ class AssertOrderInOrdersGridOnFrontend extends AbstractConstraint
         )->run();
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Orders');
         $errorMessage = implode(', ', $filter);
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $orderHistory->getOrderHistoryBlock()->isOrderVisible($filter),
             'Order with following data \'' . $errorMessage . '\' is absent in Orders block on frontend.'
         );

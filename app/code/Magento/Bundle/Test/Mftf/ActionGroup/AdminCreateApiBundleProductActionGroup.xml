@@ -13,18 +13,6 @@
             <argument name="productName" defaultValue="Api Dynamic Bundle Product" type="string"/>
         </arguments>
         <!--Create 4 simple products-->
-<<<<<<< HEAD
-        <createData entity="SimpleProduct2" stepKey="simpleProduct1">
-            <field key="price">4.99</field>
-        </createData>
-        <createData entity="SimpleProduct2" stepKey="simpleProduct2">
-            <field key="price">2.89</field>
-        </createData>
-        <createData entity="SimpleProduct2" stepKey="simpleProduct3">
-            <field key="price">7.33</field>
-        </createData>
-        <createData entity="SimpleProduct2" stepKey="simpleProduct4">
-=======
         <createData entity="SimpleProduct3" stepKey="simpleProduct1">
             <field key="price">4.99</field>
         </createData>
@@ -35,7 +23,6 @@
             <field key="price">7.33</field>
         </createData>
         <createData entity="SimpleProduct3" stepKey="simpleProduct4">
->>>>>>> upstream/2.2-develop
             <field key="price">18.25</field>
         </createData>
         <!-- Create the bundle product based -->
@@ -75,18 +62,6 @@
             <argument name="productName" defaultValue="Api Fixed Bundle Product" type="string"/>
         </arguments>
         <!--Create 4 simple products-->
-<<<<<<< HEAD
-        <createData entity="SimpleProduct2" stepKey="simpleProduct1">
-            <field key="price">4.99</field>
-        </createData>
-        <createData entity="SimpleProduct2" stepKey="simpleProduct2">
-            <field key="price">2.89</field>
-        </createData>
-        <createData entity="SimpleProduct2" stepKey="simpleProduct3">
-            <field key="price">7.33</field>
-        </createData>
-        <createData entity="SimpleProduct2" stepKey="simpleProduct4">
-=======
         <createData entity="SimpleProduct3" stepKey="simpleProduct1">
             <field key="price">4.99</field>
         </createData>
@@ -97,7 +72,6 @@
             <field key="price">7.33</field>
         </createData>
         <createData entity="SimpleProduct3" stepKey="simpleProduct4">
->>>>>>> upstream/2.2-develop
             <field key="price">18.25</field>
         </createData>
         <!-- Create the bundle product based -->

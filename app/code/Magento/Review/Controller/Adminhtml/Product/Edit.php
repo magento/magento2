@@ -5,11 +5,10 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Edit extends ProductController implements HttpGetActionInterface
+class Edit extends ProductController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page

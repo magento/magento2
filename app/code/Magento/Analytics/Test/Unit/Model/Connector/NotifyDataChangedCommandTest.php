@@ -10,11 +10,6 @@ use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ZendClient;
-<<<<<<< HEAD
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-=======
->>>>>>> upstream/2.2-develop
 use Psr\Log\LoggerInterface;
 use Magento\Analytics\Model\Connector\NotifyDataChangedCommand;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
@@ -67,33 +62,6 @@ class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $successHandler->method('handleResponse')
             ->willReturn(true);
-<<<<<<< HEAD
-        $serializerMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serializerMock->expects($this->any())
-            ->method('unserialize')
-            ->willReturn(['unserialized data']);
-        $objectManager = new ObjectManager($this);
-        $this->notifyDataChangedCommand = $objectManager->getObject(
-            NotifyDataChangedCommand::class,
-            [
-                'analyticsToken' => $this->analyticsTokenMock,
-                'httpClient' => $this->httpClientMock,
-                'config' => $this->configMock,
-                'responseResolver' => $objectManager->getObject(
-                    ResponseResolver::class,
-                    [
-                        'converter' => $objectManager->getObject(
-                            JsonConverter::class,
-                            ['serializer' => $serializerMock]
-                        ),
-                        'responseHandlers' => [201 => $successHandler]
-                    ]
-                ),
-                'logger' => $this->loggerMock
-            ]
-=======
 
         $this->notifyDataChangedCommand = new NotifyDataChangedCommand(
             $this->analyticsTokenMock,
@@ -101,7 +69,6 @@ class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
             $this->configMock,
             new ResponseResolver(new JsonConverter(), [201 => $successHandler]),
             $this->loggerMock
->>>>>>> upstream/2.2-develop
         );
     }
 

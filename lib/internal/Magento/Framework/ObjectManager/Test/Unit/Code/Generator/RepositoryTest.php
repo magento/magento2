@@ -13,11 +13,7 @@ use Magento\Framework\Api\Test\Unit\Code\Generator\EntityChildTestAbstract;
 class RepositoryTest extends EntityChildTestAbstract
 {
     /**
-<<<<<<< HEAD
-     * @return string
-=======
      * @return mixed|string
->>>>>>> upstream/2.2-develop
      */
     protected function getSourceClassName()
     {
@@ -25,11 +21,7 @@ class RepositoryTest extends EntityChildTestAbstract
     }
 
     /**
-<<<<<<< HEAD
-     * @return string
-=======
      * @return mixed|string
->>>>>>> upstream/2.2-develop
      */
     protected function getResultClassName()
     {
@@ -37,11 +29,7 @@ class RepositoryTest extends EntityChildTestAbstract
     }
 
     /**
-<<<<<<< HEAD
-     * @return string
-=======
      * @return mixed|string
->>>>>>> upstream/2.2-develop
      */
     protected function getGeneratorClassName()
     {
@@ -49,11 +37,7 @@ class RepositoryTest extends EntityChildTestAbstract
     }
 
     /**
-<<<<<<< HEAD
-     * @return string
-=======
      * @return mixed|string
->>>>>>> upstream/2.2-develop
      */
     protected function getOutputFileName()
     {

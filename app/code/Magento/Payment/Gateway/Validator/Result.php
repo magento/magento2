@@ -20,46 +20,34 @@ class Result implements ResultInterface
     private $failsDescription;
 
     /**
-     * @var string[]
-     */
-    private $errorCodes;
-
-    /**
      * @param bool $isValid
      * @param array $failsDescription
-     * @param array $errorCodes
      */
     public function __construct(
         $isValid,
-        array $failsDescription = [],
-        array $errorCodes = []
+        array $failsDescription = []
     ) {
         $this->isValid = (bool)$isValid;
         $this->failsDescription = $failsDescription;
-        $this->errorCodes = $errorCodes;
     }
 
     /**
-     * {@inheritdoc}
+     * Returns validation result
+     *
+     * @return bool
      */
-    public function isValid(): bool
+    public function isValid()
     {
         return $this->isValid;
     }
 
     /**
-     * {@inheritdoc}
+     * Returns list of fails description
+     *
+     * @return Phrase[]
      */
-    public function getFailsDescription(): array
+    public function getFailsDescription()
     {
         return $this->failsDescription;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getErrorCodes(): array
-    {
-        return $this->errorCodes;
     }
 }

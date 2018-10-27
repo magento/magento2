@@ -25,7 +25,7 @@ class AssertFieldsAreDisabled extends AbstractConstraint
     public function processAssert(SystemConfigEditSectionPayment $configEditSectionPayment, array $fieldIds)
     {
         foreach ($fieldIds as $fieldId) {
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $configEditSectionPayment->getPaymentsConfigBlock()->isFieldDisabled($fieldId),
                 'Field is active.'
             );

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Api;
 
 /**
@@ -29,8 +31,7 @@ interface OrderManagementInterface
      * Lists comments for a specified order.
      *
      * @param int $id The order ID.
-     * @return \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface Order status history
-     * search results interface.
+     * @return \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface Order status history search results interface.
      */
     public function getCommentsList($id);
 

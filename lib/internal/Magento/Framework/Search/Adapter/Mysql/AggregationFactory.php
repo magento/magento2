@@ -7,9 +7,6 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 
 /**
  * Aggregation Factory
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class AggregationFactory
 {

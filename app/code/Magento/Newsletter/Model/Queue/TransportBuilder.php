@@ -48,7 +48,9 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
         $template = $this->getTemplate()->setData($this->templateData);
         $this->setTemplateFilter($template);
 
-        $this->message->setBodyHtml(
+        $this->message->setMessageType(
+            \Magento\Framework\Mail\MessageInterface::TYPE_HTML
+        )->setBody(
             $template->getProcessedTemplate($this->templateVars)
         )->setSubject(
             $template->getSubject()

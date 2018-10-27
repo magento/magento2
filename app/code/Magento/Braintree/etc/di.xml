@@ -407,7 +407,7 @@
     <!-- Value handlers infrastructure -->
     <type name="Magento\Braintree\Gateway\Response\VaultDetailsHandler">
         <arguments>
-            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Api\Data\PaymentTokenFactoryInterface</argument>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
         </arguments>
     </type>
     <virtualType name="BraintreeValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
@@ -452,7 +452,7 @@
     <!-- PayPal value handlers infrastructure -->
     <type name="Magento\Braintree\Gateway\Response\PayPal\VaultDetailsHandler">
         <arguments>
-            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Api\Data\PaymentTokenFactoryInterface</argument>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\AccountPaymentTokenFactory</argument>
         </arguments>
     </type>
     <virtualType name="BraintreePayPalValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">

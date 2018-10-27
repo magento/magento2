@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data;
@@ -138,7 +137,7 @@ class PageRepository implements PageRepositoryInterface
         $page = $this->pageFactory->create();
         $page->load($pageId);
         if (!$page->getId()) {
-            throw new NoSuchEntityException(__('The CMS page with the "%1" ID doesn\'t exist.', $pageId));
+            throw new NoSuchEntityException(__('CMS Page with id "%1" does not exist.', $pageId));
         }
         return $page;
     }

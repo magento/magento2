@@ -5,12 +5,10 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CouponPost extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
+class CouponPost extends \Magento\Checkout\Controller\Cart
 {
     /**
      * Sales quote repository
@@ -97,14 +95,14 @@ class CouponPost extends \Magento\Checkout\Controller\Cart implements HttpPostAc
                 if (!$itemsCount) {
                     if ($isCodeLengthValid && $coupon->getId()) {
                         $this->_checkoutSession->getQuote()->setCouponCode($couponCode)->save();
-                        $this->messageManager->addSuccessMessage(
+                        $this->messageManager->addSuccess(
                             __(
                                 'You used coupon code "%1".',
                                 $escaper->escapeHtml($couponCode)
                             )
                         );
                     } else {
-                        $this->messageManager->addErrorMessage(
+                        $this->messageManager->addError(
                             __(
                                 'The coupon code "%1" is not valid.',
                                 $escaper->escapeHtml($couponCode)
@@ -113,14 +111,14 @@ class CouponPost extends \Magento\Checkout\Controller\Cart implements HttpPostAc
                     }
                 } else {
                     if ($isCodeLengthValid && $coupon->getId() && $couponCode == $cartQuote->getCouponCode()) {
-                        $this->messageManager->addSuccessMessage(
+                        $this->messageManager->addSuccess(
                             __(
                                 'You used coupon code "%1".',
                                 $escaper->escapeHtml($couponCode)
                             )
                         );
                     } else {
-                        $this->messageManager->addErrorMessage(
+                        $this->messageManager->addError(
                             __(
                                 'The coupon code "%1" is not valid.',
                                 $escaper->escapeHtml($couponCode)
@@ -129,12 +127,12 @@ class CouponPost extends \Magento\Checkout\Controller\Cart implements HttpPostAc
                     }
                 }
             } else {
-                $this->messageManager->addSuccessMessage(__('You canceled the coupon code.'));
+                $this->messageManager->addSuccess(__('You canceled the coupon code.'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('We cannot apply the coupon code.'));
+            $this->messageManager->addError(__('We cannot apply the coupon code.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
 

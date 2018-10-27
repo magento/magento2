@@ -10,8 +10,6 @@ namespace Magento\GroupedProduct\Model\Product\Type;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
- * Grouped product type model
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -228,8 +226,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Flush Associated Products Cache
-     *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      * @since 100.1.0
@@ -327,8 +323,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Returns product info
-     *
      * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode
@@ -356,7 +350,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Prepare product and its configuration to be added to some products list.
-     *
      * Perform standard preparation process and add logic specific to Grouped product type.
      *
      * @param \Magento\Framework\DataObject $buyRequest
@@ -430,7 +423,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Retrieve products divided into groups required to purchase
-     *
      * At least one product in each group has to be purchased
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -444,8 +436,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Prepare selected qty for grouped product's options
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Framework\DataObject $buyRequest
+     * @param  \Magento\Catalog\Model\Product $product
+     * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -481,7 +473,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function beforeSave($product)
     {
@@ -494,8 +486,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Returns msrp for children products
-     *
      * @param \Magento\Catalog\Model\Product $product
      * @return int
      */

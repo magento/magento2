@@ -10,8 +10,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use Magento\Framework\Setup\Lists;
-use Symfony\Component\Console\Helper\TableFactory;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Command prints list of available timezones
@@ -26,18 +24,11 @@ class InfoTimezoneListCommand extends Command
     private $lists;
 
     /**
-     * @var TableFactory
-     */
-    private $tableHelperFactory;
-
-    /**
      * @param Lists $lists
-     * @param TableFactory $tableHelperFactory
      */
-    public function __construct(Lists $lists, TableFactory $tableHelperFactory = null)
+    public function __construct(Lists $lists)
     {
         $this->lists = $lists;
-        $this->tableHelperFactory = $tableHelperFactory ?: ObjectManager::getInstance()->create(TableFactory::class);
         parent::__construct();
     }
 
@@ -57,18 +48,14 @@ class InfoTimezoneListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $tableHelper = $this->tableHelperFactory->create(['output' => $output]);
-        $tableHelper->setHeaders(['Timezone', 'Code']);
+        $table = $this->getHelperSet()->get('table');
+        $table->setHeaders(['Timezone', 'Code']);
 
         foreach ($this->lists->getTimezoneList() as $key => $timezone) {
-            $tableHelper->addRow([$timezone, $key]);
+            $table->addRow([$timezone, $key]);
         }
 
-<<<<<<< HEAD
-        $tableHelper->render();
-=======
         $table->render($output);
->>>>>>> upstream/2.2-develop
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

@@ -22,7 +22,7 @@ class CredentialsValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "username" is required. Enter and try again.
+     * @expectedExceptionMessage username is a required field.
      */
     public function testValidateNoUsername()
     {
@@ -34,7 +34,7 @@ class CredentialsValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "password" is required. Enter and try again.
+     * @expectedExceptionMessage password is a required field.
      */
     public function testValidateNoPassword()
     {

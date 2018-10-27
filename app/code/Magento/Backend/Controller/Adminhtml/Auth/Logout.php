@@ -6,10 +6,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGet;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPost;
-
-class Logout extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGet, HttpPost
+class Logout extends \Magento\Backend\Controller\Adminhtml\Auth
 {
     /**
      * Administrator logout action

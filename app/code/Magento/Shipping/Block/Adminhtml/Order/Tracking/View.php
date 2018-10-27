@@ -92,6 +92,11 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
     public function getCarrierTitle($code)
     {
         $carrier = $this->_carrierFactory->create($code);
-        return $carrier ? $carrier->getConfigData('title') : __('Custom Value');
+        if ($carrier) {
+            return $carrier->getConfigData('title');
+        } else {
+            return __('Custom Value');
+        }
+        return false;
     }
 }

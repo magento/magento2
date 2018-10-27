@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Deploy\Model\Plugin;
 
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
@@ -50,7 +49,7 @@ class ConfigChangeDetector
             throw new LocalizedException(
                 __(
                     'The configuration file has changed.'
-                    . ' Run the "app:config:import" or the "setup:upgrade" command to synchronize the configuration.'
+                    . ' Run app:config:import or setup:upgrade command to synchronize configuration.'
                 )
             );
         }

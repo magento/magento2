@@ -61,7 +61,6 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
 
     /**
      * Compose and get order full history.
-     *
      * Consists of the status history comments as well as of invoices, shipments and creditmemos creations
      *
      * @TODO This method requires refactoring. Need to create separate model for comment history handling
@@ -219,7 +218,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -227,7 +226,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -265,7 +264,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -273,7 +272,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isHidden()
     {

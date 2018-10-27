@@ -17,7 +17,7 @@ use Magento\Framework\Data\Tree\Node;
 /**
  * @api
  */
-class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
+class Collection implements \ArrayAccess, \IteratorAggregate
 {
     /**
      * @var array

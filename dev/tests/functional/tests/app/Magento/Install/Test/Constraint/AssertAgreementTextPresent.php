@@ -34,13 +34,13 @@ class AssertAgreementTextPresent extends AbstractConstraint
     public function processAssert(Install $installPage)
     {
         try {
-            \PHPUnit\Framework\Assert::assertContains(
+            \PHPUnit_Framework_Assert::assertContains(
                 self::LICENSE_AGREEMENT_TEXT,
                 $installPage->getLicenseBlock()->getLicense(),
                 'License agreement text is absent.'
             );
         } catch (\Exception $e) {
-            \PHPUnit\Framework\Assert::assertContains(
+            \PHPUnit_Framework_Assert::assertContains(
                 self::DEFAULT_LICENSE_AGREEMENT_TEXT,
                 $installPage->getLicenseBlock()->getLicense(),
                 'License agreement text is absent.'

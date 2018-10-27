@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\GiftMessage\Model;
 
 class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
@@ -78,7 +77,7 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Sales/_files/order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 0
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The gift message isn't available.
+     * @expectedExceptionMessage Gift Message is not available
      */
     public function testSaveMessageIsNotAvailable()
     {
@@ -93,7 +92,7 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GiftMessage/_files/virtual_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 1
      * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift messages can't be used for virtual products.
+     * @expectedExceptionMessage Gift Messages are not applicable for virtual products
      */
     public function testSaveMessageIsVirtual()
     {
@@ -108,6 +107,7 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GiftMessage/_files/empty_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 1
      * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Gift Messages are not applicable for empty order
      */
     public function testSaveMessageIsEmpty()
     {
@@ -116,17 +116,13 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\GiftMessage\Api\Data\MessageInterface $message */
         $this->giftMessageOrderRepository->save($order->getEntityId(), $this->message);
-
-        $this->expectExceptionMessage(
-            "Gift messages can't be used for an empty order. Create an order, add an item, and try again."
-        );
     }
 
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/empty_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 1
      * @expectedException  \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No order exists with this ID. Verify your information and try again.
+     * @expectedExceptionMessage There is no order with provided id
      */
     public function testSaveMessageNoProvidedItemId()
     {

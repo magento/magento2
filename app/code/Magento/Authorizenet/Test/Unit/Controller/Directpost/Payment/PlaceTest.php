@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Authorizenet\Test\Unit\Controller\Directpost\Payment;
 
 use Magento\Authorizenet\Controller\Directpost\Payment\Place;
@@ -298,9 +297,7 @@ class PlaceTest extends \PHPUnit\Framework\TestCase
         $objectFailed1 = new \Magento\Framework\DataObject(
             [
                 'error' => true,
-                'error_messages' => __(
-                    'A server error stopped your order from being placed. Please try to place your order again.'
-                )
+                'error_messages' => __('An error occurred on the server. Please try to place the order again.')
             ]
         );
         $generalException = new \Exception('Exception logging will save the world!');

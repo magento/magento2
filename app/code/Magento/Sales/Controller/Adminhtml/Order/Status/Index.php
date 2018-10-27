@@ -6,12 +6,11 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Registry;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class Index extends \Magento\Sales\Controller\Adminhtml\Order\Status implements HttpGetActionInterface
+class Index extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**
      * @var PageFactory

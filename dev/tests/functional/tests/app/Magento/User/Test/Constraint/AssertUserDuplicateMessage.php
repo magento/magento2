@@ -25,7 +25,7 @@ class AssertUserDuplicateMessage extends AbstractConstraint
     public function processAssert(UserEdit $userEdit)
     {
         $failedMessage = $userEdit->getMessagesBlock()->getErrorMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::ERROR_MESSAGE,
             $failedMessage,
             'Wrong success message is displayed.'

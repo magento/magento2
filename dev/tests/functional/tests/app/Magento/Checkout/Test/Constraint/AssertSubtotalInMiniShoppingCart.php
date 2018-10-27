@@ -27,7 +27,7 @@ class AssertSubtotalInMiniShoppingCart extends AbstractAssertForm
         $cmsIndex->open();
         $fixtureSubtotal = number_format($cart->getSubtotal(), 2);
         $miniCartSubtotal = $cmsIndex->getCartSidebarBlock()->getSubtotal();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $fixtureSubtotal,
             $miniCartSubtotal,
             'Subtotal price in mini shopping cart is not equal to subtotal price from fixture.'

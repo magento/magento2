@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -154,21 +152,13 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider saveExistingProductDataProvider
      * @param array $tierPricesData
-<<<<<<< HEAD
-     * @param int $tierPriceCount
-=======
      * @param $tierPriceCount
->>>>>>> upstream/2.2-develop
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
-<<<<<<< HEAD
-    public function testSaveExistingProduct(array $tierPricesData, int $tierPriceCount): void
-=======
     public function testSaveExistingProduct(array $tierPricesData, $tierPriceCount)
->>>>>>> upstream/2.2-develop
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->productRepository->get('simple', true);
@@ -258,21 +248,13 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider saveNewProductDataProvider
      * @param array $tierPricesData
-<<<<<<< HEAD
-     * @param int $tierPriceCount
-=======
      * @param $tierPriceCount
->>>>>>> upstream/2.2-develop
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\StateException
      */
-<<<<<<< HEAD
-    public function testSaveNewProduct(array $tierPricesData, int $tierPriceCount): void
-=======
     public function testSaveNewProduct(array $tierPricesData, $tierPriceCount)
->>>>>>> upstream/2.2-develop
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

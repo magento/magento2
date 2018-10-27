@@ -18,11 +18,6 @@ class Codes extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      */
     public function render(\Magento\Framework\DataObject $row)
     {
-<<<<<<< HEAD
-        $ratesCodes = $row->getTaxRatesCodes();
-
-        return $ratesCodes && is_array($ratesCodes) ? $this->escapeHtml(implode(', ', $ratesCodes)) : '';
-=======
         /** @var string[]|null $ratesCodes */
         $ratesCodes = $row['tax_rates_codes'];
         if ($ratesCodes) {
@@ -30,6 +25,5 @@ class Codes extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
         } else {
             return '';
         }
->>>>>>> upstream/2.2-develop
     }
 }

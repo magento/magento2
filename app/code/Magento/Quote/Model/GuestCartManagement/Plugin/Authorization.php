@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Quote\Model\GuestCartManagement\Plugin;
 
 use Magento\Framework\Exception\StateException;
@@ -41,7 +40,7 @@ class Authorization
     ) {
         if ($customerId !== (int)$this->userContext->getUserId()) {
             throw new StateException(
-                __("You don't have the correct permissions to assign the customer to the cart.")
+                __('Cannot assign customer to the given cart. You don\'t have permission for this operation.')
             );
         }
     }

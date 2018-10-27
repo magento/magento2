@@ -12,8 +12,9 @@
 namespace Magento\Framework\HTTP\Client;
 
 /**
- * Socket client
- *
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
+/**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class Socket implements \Magento\Framework\HTTP\ClientInterface
@@ -133,7 +134,6 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Set headers from hash
-     *
      * @param array $headers
      * @return void
      */
@@ -167,7 +167,6 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Authorization: Basic header
-     *
      * Login credentials support
      *
      * @param string $login username
@@ -236,7 +235,8 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     }
 
     /**
-     * Set host, port from full url and return relative url
+     * Set host, port from full url
+     * and return relative url
      *
      * @param string $uri ex. http://google.com/index.php?a=b
      * @return string ex. /index.php?a=b
@@ -330,7 +330,6 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     /**
      * Get cookies array with details
      * (domain, expire time etc)
-     *
      * @return array
      */
     public function getCookiesFull()
@@ -445,7 +444,6 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Get response status code
-     *
      * @see \Magento\Framework\HTTP\Client#getStatus()
      *
      * @return int
@@ -496,7 +494,6 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Throw error exception
-     *
      * @param string $string
      * @return void
      * @throws \Exception
@@ -508,7 +505,6 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Convert headers hash to string
-     *
      * @param array $append
      * @return string
      */

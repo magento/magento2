@@ -15,11 +15,9 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Robots\Model\Config\Value as RobotsValue;
 use Magento\Store\Model\StoreResolver;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Backend model for sitemap/search_engines/submission_robots configuration value.
- *
  * Required to implement Page Cache functionality.
  */
 class Robots extends Value implements IdentityInterface
@@ -32,9 +30,9 @@ class Robots extends Value implements IdentityInterface
     protected $_cacheTag = true;
 
     /**
-     * @var StoreManagerInterface
+     * @var StoreResolver
      */
-    private $storeManager;
+    private $storeResolver;
 
     /**
      * @param Context $context
@@ -42,12 +40,9 @@ class Robots extends Value implements IdentityInterface
      * @param ScopeConfigInterface $config
      * @param TypeListInterface $cacheTypeList
      * @param StoreResolver $storeResolver
-     * @param StoreManagerInterface|null $storeManager
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -55,13 +50,11 @@ class Robots extends Value implements IdentityInterface
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         StoreResolver $storeResolver,
-        StoreManagerInterface $storeManager = null,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(StoreManagerInterface::class);
+        $this->storeResolver = $storeResolver;
 
         parent::__construct(
             $context,
@@ -82,7 +75,7 @@ class Robots extends Value implements IdentityInterface
     public function getIdentities()
     {
         return [
-            RobotsValue::CACHE_TAG . '_' . $this->storeManager->getStore()->getId(),
+            RobotsValue::CACHE_TAG . '_' . $this->storeResolver->getCurrentStoreId(),
         ];
     }
 }

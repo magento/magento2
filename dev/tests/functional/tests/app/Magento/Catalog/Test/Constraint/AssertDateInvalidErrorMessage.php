@@ -28,7 +28,7 @@ class AssertDateInvalidErrorMessage extends AbstractConstraint
     public function processAssert(CatalogProductEdit $productPage)
     {
         $actualMessages = $productPage->getMessagesBlock()->getErrorMessage();
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             self::INVALID_DATE_ERROR_MESSAGE,
             $actualMessages,
             'Wrong error message is displayed.'

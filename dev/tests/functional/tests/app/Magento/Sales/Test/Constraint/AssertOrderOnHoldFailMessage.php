@@ -28,7 +28,7 @@ class AssertOrderOnHoldFailMessage extends AbstractConstraint
      */
     public function processAssert(OrderIndex $orderIndex)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::FAIL_ON_HOLD_MESSAGE,
             $orderIndex->getMessagesBlock()->getErrorMessage()
         );

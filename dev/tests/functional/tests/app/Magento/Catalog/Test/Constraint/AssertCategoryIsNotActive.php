@@ -33,11 +33,11 @@ class AssertCategoryIsNotActive extends AbstractConstraint
         BrowserInterface $browser
     ) {
         $browser->open($this->getCategoryUrl($category));
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $categoryView->getTopmenu()->isCategoryVisible($category->getName()),
             'Category can be accessed from the navigation bar in the frontend.'
         );
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::NOT_FOUND_MESSAGE,
             $categoryView->getTitleBlock()->getTitle(),
             'Wrong page is displayed.'

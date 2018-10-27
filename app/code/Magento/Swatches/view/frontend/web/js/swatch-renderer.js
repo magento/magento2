@@ -94,7 +94,7 @@ define([
                 $title,
                 $corner;
 
-            if (!$element.length) {
+            if (!$element.size()) {
                 $element = $('<div class="' +
                     $widget.options.tooltipClass +
                     '"><div class="image"></div><div class="title"></div><div class="corner"></div></div>'
@@ -833,7 +833,7 @@ define([
             $widget._Rewind(controls);
 
             // done if nothing selected
-            if (selected.length <= 0) {
+            if (selected.size() <= 0) {
                 return;
             }
 
@@ -843,7 +843,7 @@ define([
                     id = $this.attr('attribute-id'),
                     products = $widget._CalcProducts(id);
 
-                if (selected.length === 1 && selected.first().attr('attribute-id') === id) {
+                if (selected.size() === 1 && selected.first().attr('attribute-id') === id) {
                     return;
                 }
 
@@ -1035,14 +1035,12 @@ define([
                 mediaCallData.isAjax = true;
                 $widget._XhrKiller();
                 $widget._EnableProductMediaLoader($this);
-                $widget.xhr = $.ajax({
-                    url: $widget.options.mediaCallback,
-                    cache: true,
-                    type: 'GET',
-                    dataType: 'json',
-                    data: mediaCallData,
-                    success: mediaSuccessCallback
-                }).done(function () {
+                $widget.xhr = $.get(
+                    $widget.options.mediaCallback,
+                    mediaCallData,
+                    mediaSuccessCallback,
+                    'json'
+                ).done(function () {
                     $widget._XhrKiller();
                 });
             }
@@ -1057,7 +1055,7 @@ define([
         _EnableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').length > 0) {
+            if ($('body.catalog-product-view').size() > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .addClass($widget.options.classes.loader);
             } else {
@@ -1076,7 +1074,7 @@ define([
         _DisableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').length > 0) {
+            if ($('body.catalog-product-view').size() > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .removeClass($widget.options.classes.loader);
             } else {

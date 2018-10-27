@@ -35,7 +35,7 @@ class AssertProductAttributeAbsenceInSearchOnProductForm extends AbstractConstra
         $filter = [
             'label' => $productAttribute->getFrontendLabel(),
         ];
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $newProductPage->getProductForm()->getAttributesSearchGrid()->isRowVisible($filter),
             'Attribute \'' . $productAttribute->getFrontendLabel() . '\' is found in Attributes grid.'
         );

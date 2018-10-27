@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
 /**
@@ -98,9 +97,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $orderRepositoryMock;
 
-    /**
-     * Test setup
-     */
     protected function setUp()
     {
         $this->orderManagementMock = $this->getMockBuilder(\Magento\Sales\Api\OrderManagementInterface::class)
@@ -222,9 +218,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with($orderIdParam)
             ->willThrowException(
-                new \Magento\Framework\Exception\NoSuchEntityException(
-                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
-                )
+                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested entity doesn\'t exist'))
             );
         $this->initOrderFail();
         $this->prepareRedirect();
@@ -254,7 +248,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('critical')
             ->with($exception);
         $this->messageManagerMock->expects($this->once())
-            ->method('addErrorMessage')
+            ->method('addError')
             ->with('Exception occurred during order load')
             ->willReturnSelf();
         $this->setPath('sales/order/index');
@@ -265,9 +259,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * initOrder
-     */
     protected function initOrder()
     {
         $orderIdParam = 111;
@@ -295,13 +286,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             );
     }
 
-    /**
-     * initOrderFail
-     */
     protected function initOrderFail()
     {
         $this->messageManagerMock->expects($this->once())
-            ->method('addErrorMessage')
+            ->method('addError')
             ->with('This order no longer exists.')
             ->willReturnSelf();
         $this->actionFlagMock->expects($this->once())
@@ -309,9 +297,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->with('', \Magento\Sales\Controller\Adminhtml\Order::FLAG_NO_DISPATCH, true);
     }
 
-    /**
-     * initAction
-     */
     protected function initAction()
     {
         $this->resultPageFactoryMock->expects($this->once())
@@ -330,9 +315,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
     }
 
-    /**
-     * prepareRedirect
-     */
     protected function prepareRedirect()
     {
         $this->resultRedirectFactoryMock->expects($this->once())

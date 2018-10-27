@@ -200,12 +200,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setPostValue($params);
         $this->dispatch('backend/admin/auth/login');
         $this->assertSessionMessages(
-            $this->equalTo(
-                [
-                    'The account sign-in was incorrect or your account is disabled temporarily. '
-                    . 'Please wait and try again later.'
-                ]
-            ),
+            $this->equalTo(['You did not sign in correctly or your account is temporarily disabled.']),
             MessageInterface::TYPE_ERROR
         );
         $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

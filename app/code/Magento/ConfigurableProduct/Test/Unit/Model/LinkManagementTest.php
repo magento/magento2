@@ -235,7 +235,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The product is already attached.
+     * @expectedExceptionMessage Product has been already attached
      */
     public function testAddChildStateException()
     {

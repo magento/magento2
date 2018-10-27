@@ -27,15 +27,6 @@ class RuleProductPricesPersistorTest extends \PHPUnit\Framework\TestCase
     private $resourceMock;
 
     /**
-<<<<<<< HEAD
-     * @var ActiveTableSwitcher|\PHPUnit_Framework_MockObject_MockObject
-=======
-     * @var IndexerTableSwapperInterface|\PHPUnit_Framework_MockObject_MockObject
->>>>>>> upstream/2.2-develop
-     */
-    private $tableSwapperMock;
-
-    /**
      * @var IndexerTableSwapperInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $tableSwapperMock;
@@ -48,13 +39,9 @@ class RuleProductPricesPersistorTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-<<<<<<< HEAD
-        $this->activeTableSwitcherMock = $this->getMockBuilder(ActiveTableSwitcher::class)
-=======
         /** @var ActiveTableSwitcher|\PHPUnit_Framework_MockObject_MockObject $activeTableSwitcherMock */
         $activeTableSwitcherMock =
             $this->getMockBuilder(ActiveTableSwitcher::class)
->>>>>>> upstream/2.2-develop
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->tableSwapperMock = $this->getMockForAbstractClass(
@@ -63,11 +50,7 @@ class RuleProductPricesPersistorTest extends \PHPUnit\Framework\TestCase
         $this->model = new \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor(
             $this->dateTimeMock,
             $this->resourceMock,
-<<<<<<< HEAD
-            $this->activeTableSwitcherMock,
-=======
             $activeTableSwitcherMock,
->>>>>>> upstream/2.2-develop
             $this->tableSwapperMock
         );
     }

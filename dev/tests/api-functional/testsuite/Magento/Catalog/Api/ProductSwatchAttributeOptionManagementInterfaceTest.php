@@ -42,11 +42,7 @@ class ProductSwatchAttributeOptionManagementInterfaceTest extends WebapiAbstract
             ]
         );
 
-<<<<<<< HEAD
-        $this->assertNotNull($response);
-=======
         $this->assertTrue($response);
->>>>>>> upstream/2.2-develop
         $updatedData = $this->getAttributeOptions($testAttributeCode);
         $lastOption = array_pop($updatedData);
         $this->assertEquals(

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Paypal\Model\Report;
 
 use DateTime;
@@ -237,7 +239,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Goes to specified host/path and fetches reports from there.
-     *
      * Save reports to database.
      *
      * @param \Magento\Framework\Filesystem\Io\Sftp $connection
@@ -310,10 +311,15 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      */
     public static function createConnection(array $config)
     {
-        if (!isset($config['hostname'])
-            || !isset($config['username'])
-            || !isset($config['password'])
-            || !isset($config['path'])
+        if (!isset(
+                $config['hostname']
+            ) || !isset(
+                $config['username']
+            ) || !isset(
+                $config['password']
+            ) || !isset(
+                $config['path']
+            )
         ) {
             throw new \InvalidArgumentException('Required config elements: hostname, username, password, path');
         }
@@ -410,14 +416,9 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     private function getBodyItems(array $line, array $sectionColumns, array $rowMap)
     {
         $bodyItem = [];
-<<<<<<< HEAD
-        for ($i = 1, $count = count($line); $i < $count; $i++) {
-            if (isset($rowMap[$sectionColumns[$i]])) {
-=======
         $lineCount = count($line);
         for ($i = 1, $count = $lineCount; $i < $count; $i++) {
             if(isset($rowMap[$sectionColumns[$i]])) {
->>>>>>> upstream/2.2-develop
                 if (in_array($rowMap[$sectionColumns[$i]], $this->dateTimeColumns)) {
                     $line[$i] = $this->formatDateTimeColumns($line[$i]);
                 }
@@ -524,7 +525,6 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Iterate through website configurations and collect all SFTP configurations
-     *
      * Filter config values if necessary
      *
      * @param bool $automaticMode Whether to skip settings with disabled Automatic Fetching or not

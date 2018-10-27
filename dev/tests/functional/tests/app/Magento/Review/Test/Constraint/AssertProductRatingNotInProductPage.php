@@ -36,7 +36,7 @@ class AssertProductRatingNotInProductPage extends AbstractConstraint
         $catalogProductView->getReviewSummary()->getAddReviewLink()->click();
 
         $reviewForm = $catalogProductView->getReviewFormBlock();
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $reviewForm->isVisibleRating($productRating),
             'Product rating "' . $productRating->getRatingCode() . '" is displayed.'
         );

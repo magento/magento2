@@ -33,7 +33,7 @@ class AssertGlobalSearchProductName extends AbstractConstraint
         $productName = $product->getName();
         $isVisibleInResult = $dashboard->getAdminPanelHeader()->isSearchResultVisible($productName);
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $isVisibleInResult,
             'Product name ' . $productName . ' is absent in search results'
         );

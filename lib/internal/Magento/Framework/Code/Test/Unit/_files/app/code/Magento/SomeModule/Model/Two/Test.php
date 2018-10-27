@@ -16,10 +16,7 @@ class Test extends \Magento\SomeModule\Model\One\Test
 
     /**
      * Test constructor.
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @param \Magento\SomeModule\Model\Proxy $proxy
      * @param array $data
      */

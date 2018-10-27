@@ -5,10 +5,6 @@
  */
 namespace Magento\Paypal\Test\Unit\Controller\Payflow;
 
-<<<<<<< HEAD
-use Magento\Framework\Event\ManagerInterface;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Checkout\Block\Onepage\Success;
 use Magento\Checkout\Model\Session;
@@ -101,14 +97,6 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
     private $paymentFailures;
 
     /**
-<<<<<<< HEAD
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $eventManagerMock;
-
-    /**
-=======
->>>>>>> upstream/2.2-develop
      * @inheritdoc
      */
     protected function setUp()
@@ -160,18 +148,10 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-<<<<<<< HEAD
-        $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-=======
         $this->context->expects($this->any())->method('getView')->willReturn($this->view);
         $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
 
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
->>>>>>> upstream/2.2-develop
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -179,21 +159,6 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->view);
         $this->context->method('getRequest')
             ->willReturn($this->request);
-<<<<<<< HEAD
-        $this->context->method('getEventManager')
-            ->willReturn($this->eventManagerMock);
-
-        $this->returnUrl = $this->objectManager->getObject(
-            ReturnUrl::class,
-            [
-                'context' => $this->context,
-                'checkoutSession' => $this->checkoutSession,
-                'orderFactory' => $this->orderFactory,
-                'checkoutHelper' => $this->checkoutHelper,
-                'paymentFailures' => $this->paymentFailures,
-            ]
-        );
-=======
 
         $this->returnUrl = $this->objectManager->getObject(ReturnUrl::class, [
             'context' => $this->context,
@@ -202,7 +167,6 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             'checkoutHelper' => $this->checkoutHelper,
             'paymentFailures' => $this->paymentFailures,
         ]);
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -222,10 +186,6 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
         $this->block->method('setData')
             ->with('goto_success_page', true)
             ->willReturnSelf();
-
-        $this->eventManagerMock->expects($this->once())
-            ->method('dispatch')
-            ->with('paypal_checkout_success', $this->arrayHasKey('order'));
 
         $result = $this->returnUrl->execute();
         $this->assertNull($result);

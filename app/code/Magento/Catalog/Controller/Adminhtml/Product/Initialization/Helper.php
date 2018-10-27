@@ -104,11 +104,7 @@ class Helper
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param CustomOptionFactory|null $customOptionFactory
-<<<<<<< HEAD
-     * @param ProductLinkFactory|null $productLinkFactory
-=======
      * @param ProductLinkFactory |null $productLinkFactory
->>>>>>> upstream/2.2-develop
      * @param ProductRepositoryInterface|null $productRepository
      * @param LinkTypeProvider|null $linkTypeProvider
      * @param AttributeFilter|null $attributeFilter

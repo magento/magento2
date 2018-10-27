@@ -10,12 +10,15 @@ use Magento\Checkout\Block\Checkout\LayoutProcessor;
 use Magento\Checkout\Helper\Data;
 use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Options;
-
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\Component\Form\AttributeMapper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * LayoutProcessorTest covers a list of variations for checkout layout processor
+ * LayoutProcessorTest covers a list of variations for
+ * checkout layout processor
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
 {
@@ -47,10 +50,12 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @var MockObject
      */
-    private $storeManager;
+    private $storeResolver;
 
     protected function setUp()
     {
+        $objectManager = new ObjectManager($this);
+
         $this->attributeDataProvider = $this->getMockBuilder(AttributeMetadataDataProvider::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadAttributesCollection'])
@@ -75,21 +80,17 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $shippingConfig = $this->getMockBuilder(\Magento\Shipping\Model\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-
         $this->layoutProcessor = new LayoutProcessor(
             $this->attributeDataProvider,
             $this->attributeMapper,
-            $this->attributeMerger,
-            $options,
-            $this->dataHelper,
-            $shippingConfig,
-            $this->storeManager
+            $this->attributeMerger
         );
+
+        $this->storeResolver = $this->createMock(\Magento\Store\Api\StoreResolverInterface::class);
+
+        $objectManager->setBackwardCompatibleProperty($this->layoutProcessor, 'checkoutDataHelper', $this->dataHelper);
+        $objectManager->setBackwardCompatibleProperty($this->layoutProcessor, 'options', $options);
+        $objectManager->setBackwardCompatibleProperty($this->layoutProcessor, 'storeResolver', $this->storeResolver);
     }
 
     /**
@@ -276,7 +277,7 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
             'telephone' => [
                 'config' => [
                     'tooltip' => [
-                        'description' => ('For delivery questions.'),
+                        'description' => __('For delivery questions.'),
                     ],
                 ],
             ],

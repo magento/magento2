@@ -6,8 +6,6 @@
 namespace Magento\Directory\Block;
 
 /**
- * Directory data block
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends \Magento\Framework\View\Element\Template
@@ -69,8 +67,6 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Returns load url for regions
-     *
      * @return string
      */
     public function getLoadrRegionUrl()
@@ -79,8 +75,6 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Returns country collection instance
-     *
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     public function getCountryCollection()
@@ -109,8 +103,6 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Returns country html select
-     *
      * @param null|string $defValue
      * @param string $name
      * @param string $id
@@ -154,8 +146,6 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Returns region collection
-     *
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getRegionCollection()
@@ -170,8 +160,6 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Returns region html select
-     *
      * @return string
      */
     public function getRegionHtmlSelect()
@@ -205,8 +193,6 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Returns country id
-     *
      * @return string
      */
     public function getCountryId()
@@ -219,8 +205,6 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Returns regions js
-     *
      * @return string
      */
     public function getRegionsJs()

@@ -103,7 +103,7 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
         if (!$country) {
             throw new NoSuchEntityException(
                 __(
-                    "The country isn't available."
+                    'Requested country is not available.'
                 )
             );
         }

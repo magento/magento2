@@ -23,7 +23,7 @@ class AssertCheckoutErrorMessage extends AbstractConstraint
      */
     public function processAssert(CheckoutOnepage $checkoutOnepage, $expectedErrorMessage)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $expectedErrorMessage,
             $checkoutOnepage->getMessagesBlock()->getErrorMessage(),
             'Wrong error message is displayed.'

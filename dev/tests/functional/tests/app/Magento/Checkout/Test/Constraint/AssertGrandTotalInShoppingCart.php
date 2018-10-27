@@ -33,7 +33,7 @@ class AssertGrandTotalInShoppingCart extends AbstractConstraint
 
         $fixtureGrandTotal = number_format($cart->getGrandTotal(), 2);
         $pageGrandTotal = $checkoutCart->getTotalsBlock()->getGrandTotal();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $fixtureGrandTotal,
             $pageGrandTotal,
             'Grand total price in the shopping cart not equals to grand total price from fixture.'

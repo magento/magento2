@@ -36,18 +36,18 @@ class AssertReviewLinksIsPresentOnProductPage extends AbstractConstraint
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         // Verify add review link
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $catalogProductView->getReviewSummary()->getAddReviewLink()->isVisible(),
             'Add review link is not visible on product page.'
         );
 
         // Verify view review link
         $viewReviewLink = $catalogProductView->getReviewSummary()->getViewReviewLink();
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $viewReviewLink->isVisible(),
             'View review link is not visible on product page.'
         );
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             '1',
             $viewReviewLink->getText(),
             'There is more than 1 approved review.'

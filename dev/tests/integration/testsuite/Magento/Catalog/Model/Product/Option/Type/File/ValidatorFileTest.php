@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 use Magento\Framework\Math\Random;
@@ -87,11 +86,9 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
      */
     public function testLargeSizeFile()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $exceptionMessage = 'The file was too big and couldn\'t be uploaded. Use a file smaller than %s MBs and try ' .
-            'to upload again.';
-        $this->expectExceptionMessage(
-            sprintf($exceptionMessage, $this->maxFileSizeInMb)
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class,
+            sprintf('The file you uploaded is larger than %s Megabytes allowed by server', $this->maxFileSizeInMb)
         );
         $this->prepareEnv();
         $_SERVER['CONTENT_LENGTH'] = $this->maxFileSize + 1;
@@ -136,6 +133,7 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Please specify product's required option(s).
      * @return void
      */
     public function testException()
@@ -152,10 +150,6 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
             $this->objectManager->create(\Magento\Framework\DataObject::class),
             $this->getProductOption()
         );
-
-        $this->expectExceptionMessage(
-            "The product's required option(s) weren't entered. Make sure the options are entered and try again."
-        );
     }
 
     /**
@@ -163,8 +157,8 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidateFile()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage(
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class,
             "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The maximum allowed image size for 'MediaOption' is 2000x2000 px.\n"
@@ -178,13 +172,6 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
             \Zend_File_Transfer_Adapter_Http::class,
             ['isValid', 'getErrors', 'getFileInfo', 'isUploaded']
         );
-        $httpAdapterMock->expects($this->once())
-            ->method('getFileInfo')
-            ->willReturn([
-                'options_1_file' => [
-                    'name' => 'test.jpg'
-                ]
-            ]);
         $httpAdapterMock->expects($this->once())
             ->method('isValid')
             ->willReturn(false);
@@ -235,8 +222,10 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
     {
         $this->prepareEnvForEmptyFile();
 
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('The file is empty. Select another file and try again.');
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class,
+            'The file is empty. Please choose another one'
+        );
 
         $httpAdapterMock = $this->createPartialMock(\Zend_File_Transfer_Adapter_Http::class, ['isValid']);
         $httpAdapterMock->expects($this->once())->method('isValid')->will($this->returnValue(true));

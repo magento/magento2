@@ -177,7 +177,7 @@ class Curl extends Conditions implements SalesRuleInterface
         $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
-        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
+        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
             throw new \Exception("Sales rule entity creating by curl handler was not successful! Response: $response");
         }
 

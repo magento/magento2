@@ -18,7 +18,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Zend\Uri\UriFactory;
 
 /**
  * Store model
@@ -28,6 +27,7 @@ use Zend\Uri\UriFactory;
  * @method int getSortOrder()
  * @method int getStoreId()
  * @method Store setSortOrder($value)
+ * @method Store setIsActive($value)
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -207,7 +207,6 @@ class Store extends AbstractExtensibleModel implements
      * Flag that shows that backend URLs are secure
      *
      * @var boolean|null
-     * @deprecated unused protected property
      */
     protected $_isAdminSecure = null;
 
@@ -811,7 +810,7 @@ class Store extends AbstractExtensibleModel implements
             return false;
         }
 
-        $uri = UriFactory::factory($secureBaseUrl);
+        $uri = \Zend_Uri::factory($secureBaseUrl);
         $port = $uri->getPort();
         $serverPort = $this->_request->getServer('SERVER_PORT');
         $isSecure = $uri->getScheme() == 'https' && isset($serverPort) && $port == $serverPort;
@@ -1101,22 +1100,6 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @inheritdoc
-     */
-    public function getIsActive()
-    {
-        return $this->_getData('is_active');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setIsActive($isActive)
-    {
-        return $this->setData('is_active', $isActive);
-    }
-
-    /**
      * Retrieve default group identifier
      *
      * @return string|int|null
@@ -1380,8 +1363,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @param \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
-     * @return $this
+     * {@inheritdoc}
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes

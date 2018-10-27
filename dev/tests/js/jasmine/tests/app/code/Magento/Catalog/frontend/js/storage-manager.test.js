@@ -36,13 +36,6 @@ define([
         });
     });
 
-    afterEach(function () {
-        try {
-            injector.clean();
-            injector.remove();
-        } catch (e) {}
-    });
-
     describe('Magento_Catalog/js/storage-manager', function () {
         describe('"initStorages" method', function () {
             beforeEach(function () {

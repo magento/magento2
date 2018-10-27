@@ -16,7 +16,6 @@ use Magento\Setup\Model\AdminAccount;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
-use Magento\Setup\Console\Command\AdminUserCreateCommand;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -63,11 +62,6 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $configImportMock;
 
-    /**
-     * @var AdminUserCreateCommand|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $adminUserMock;
-
     public function setUp()
     {
         $this->input = [
@@ -79,6 +73,11 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             '--' . StoreConfigurationDataMapper::KEY_LANGUAGE => 'en_US',
             '--' . StoreConfigurationDataMapper::KEY_TIMEZONE => 'America/Chicago',
             '--' . StoreConfigurationDataMapper::KEY_CURRENCY => 'USD',
+            '--' . AdminAccount::KEY_USER => 'user',
+            '--' . AdminAccount::KEY_PASSWORD => '123123q',
+            '--' . AdminAccount::KEY_EMAIL => 'test@test.com',
+            '--' . AdminAccount::KEY_FIRST_NAME => 'John',
+            '--' . AdminAccount::KEY_LAST_NAME => 'Doe',
         ];
 
         $configModel = $this->createMock(\Magento\Setup\Model\ConfigModel::class);
@@ -101,11 +100,15 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             ->method('validate')
             ->will($this->returnValue([]));
 
-        $this->adminUserMock = $this->createMock(AdminUserCreateCommand::class);
-        $this->adminUserMock
+        $adminUser = $this->createMock(\Magento\Setup\Console\Command\AdminUserCreateCommand::class);
+        $adminUser
             ->expects($this->once())
             ->method('getOptionsList')
             ->will($this->returnValue($this->getOptionsListAdminUser()));
+        $adminUser
+            ->expects($this->once())
+            ->method('validate')
+            ->will($this->returnValue([]));
 
         $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->installer = $this->createMock(\Magento\Setup\Model\Installer::class);
@@ -140,7 +143,7 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             $this->installerFactory,
             $configModel,
             $userConfig,
-            $this->adminUserMock
+            $adminUser
         );
         $this->command->setApplication(
             $this->applicationMock
@@ -149,16 +152,6 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $this->input['--' . AdminAccount::KEY_USER] = 'user';
-        $this->input['--' . AdminAccount::KEY_PASSWORD] = '123123q';
-        $this->input['--' . AdminAccount::KEY_EMAIL] = 'test@test.com';
-        $this->input['--' . AdminAccount::KEY_FIRST_NAME] = 'John';
-        $this->input['--' . AdminAccount::KEY_LAST_NAME] = 'Doe';
-
-        $this->adminUserMock
-            ->expects($this->once())
-            ->method('validate')
-            ->willReturn([]);
         $this->installerFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->installer));
@@ -276,9 +269,6 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidate($prefixValue)
     {
-        $this->adminUserMock
-            ->expects($this->never())
-            ->method('validate');
         $this->installerFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->installer));
@@ -298,9 +288,6 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateWithException($prefixValue)
     {
-        $this->adminUserMock
-            ->expects($this->never())
-            ->method('validate');
         $this->installerFactory->expects($this->never())
             ->method('create')
             ->will($this->returnValue($this->installer));

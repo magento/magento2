@@ -287,11 +287,7 @@ class PhpReadinessCheck
 
         $data = [];
         $error = false;
-<<<<<<< HEAD
-        $iniSetting = intval(ini_get('always_populate_raw_post_data'));
-=======
         $iniSetting = (int)ini_get('always_populate_raw_post_data');
->>>>>>> upstream/2.2-develop
 
         $checkVersionConstraint = $this->versionParser->parseConstraints('~5.6.0');
         $normalizedPhpVersion = $this->getNormalizedCurrentPhpVersion(PHP_VERSION);
@@ -307,11 +303,7 @@ class PhpReadinessCheck
             Please open your php.ini file and set always_populate_raw_post_data to -1.
             If you need more help please call your hosting provider.',
             PHP_VERSION,
-<<<<<<< HEAD
-            intval(ini_get('always_populate_raw_post_data'))
-=======
             (int)ini_get('always_populate_raw_post_data')
->>>>>>> upstream/2.2-develop
         );
 
         $data['always_populate_raw_post_data'] = [

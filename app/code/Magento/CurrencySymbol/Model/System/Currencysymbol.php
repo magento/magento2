@@ -187,7 +187,7 @@ class Currencysymbol
     /**
      * Save currency symbol to config
      *
-     * @param array $symbols
+     * @param  $symbols array
      * @return $this
      */
     public function setCurrencySymbolsData($symbols = [])

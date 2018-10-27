@@ -4,17 +4,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Bundle\Model;
 
-use Magento\Bundle\Model\Option\SaveAction;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Repository for performing CRUD operations for a bundle product's options.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInterface
@@ -40,6 +39,11 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $optionResource;
 
     /**
+     * @var \Magento\Store\Model\StoreManager
+     */
+    protected $storeManager;
+
+    /**
      * @var \Magento\Bundle\Api\ProductLinkManagementInterface
      */
     protected $linkManagement;
@@ -50,43 +54,52 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $productOptionList;
 
     /**
+     * @var Product\LinksList
+     */
+    protected $linkList;
+
+    /**
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
 
     /**
-     * @var SaveAction
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
-    private $optionSave;
+    private $metadataPool;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Product\Type $type
      * @param \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory
      * @param \Magento\Bundle\Model\ResourceModel\Option $optionResource
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement
      * @param Product\OptionList $productOptionList
+     * @param Product\LinksList $linkList
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param SaveAction $optionSave
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Bundle\Model\Product\Type $type,
         \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory,
         \Magento\Bundle\Model\ResourceModel\Option $optionResource,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement,
         \Magento\Bundle\Model\Product\OptionList $productOptionList,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        SaveAction $optionSave
+        \Magento\Bundle\Model\Product\LinksList $linkList,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->productRepository = $productRepository;
         $this->type = $type;
         $this->optionFactory = $optionFactory;
         $this->optionResource = $optionResource;
+        $this->storeManager = $storeManager;
         $this->linkManagement = $linkManagement;
         $this->productOptionList = $productOptionList;
+        $this->linkList = $linkList;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->optionSave = $optionSave;
     }
 
     /**
@@ -99,12 +112,10 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         /** @var \Magento\Bundle\Model\Option $option */
         $option = $this->type->getOptionsCollection($product)->getItemById($optionId);
         if (!$option || !$option->getId()) {
-            throw new NoSuchEntityException(
-                __("The option that was requested doesn't exist. Verify the entity and try again.")
-            );
+            throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
         }
 
-        $productLinks = $this->linkManagement->getChildren($product->getSku(), $optionId);
+        $productLinks = $this->linkList->getItems($product, $optionId);
 
         /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
         $optionDataObject = $this->optionFactory->create();
@@ -148,7 +159,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $this->optionResource->delete($option);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\StateException(
-                __('The option with "%1" ID can\'t be deleted.', $option->getOptionId()),
+                __('Cannot delete option with id %1', $option->getOptionId()),
                 $exception
             );
         }
@@ -163,9 +174,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $product = $this->getProduct($sku);
         $optionCollection = $this->type->getOptionsCollection($product);
         $optionCollection->setIdFilter($optionId);
-        $hasBeenDeleted = $this->delete($optionCollection->getFirstItem());
-
-        return $hasBeenDeleted;
+        return $this->delete($optionCollection->getFirstItem());
     }
 
     /**
@@ -175,9 +184,6 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Bundle\Api\Data\OptionInterface $option
     ) {
-<<<<<<< HEAD
-        $savedOption = $this->optionSave->save($product, $option);
-=======
         $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
         $option->setStoreId($product->getStoreId());
@@ -208,12 +214,19 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $option->setData(array_merge($existingOption->getData(), $option->getData()));
             $this->updateOptionSelection($product, $option);
         }
->>>>>>> upstream/2.2-develop
 
-        $productToSave = $this->productRepository->get($product->getSku());
-        $this->productRepository->save($productToSave);
+        try {
+            $this->optionResource->save($option);
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(__('Could not save option'), $e);
+        }
 
-        return $savedOption->getOptionId();
+        /** @var \Magento\Bundle\Api\Data\LinkInterface $linkedProduct */
+        foreach ($linksToAdd as $linkedProduct) {
+            $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
+        }
+        $product->setIsRelationsChanged(true);
+        return $option->getOptionId();
     }
 
     /**
@@ -270,7 +283,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     {
         $product = $this->productRepository->get($sku, true, null, true);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException(__('This is implemented for bundle products only.'));
+            throw new InputException(__('Only implemented for bundle product'));
         }
         return $product;
     }
@@ -307,5 +320,17 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         }
 
         return $result;
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

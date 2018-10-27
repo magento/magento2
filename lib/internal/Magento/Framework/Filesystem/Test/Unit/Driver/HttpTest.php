@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
 use \Magento\Framework\Filesystem\Driver\Http;
@@ -137,7 +136,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessage The download URL is incorrect. Verify and try again.
+     * @expectedExceptionMessage Please correct the download URL.
      */
     public function testFileOpenInvalidUrl()
     {

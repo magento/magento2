@@ -178,7 +178,7 @@ class SpecialPriceStorageTest extends \PHPUnit\Framework\TestCase
             ->with(
                 1,
                 __(
-                    'The product that was requested doesn\'t exist. Verify the product and try again. '
+                    'Requested product doesn\'t exist. '
                     . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
                     [
                         'SKU' => 'sku_1',

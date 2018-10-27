@@ -82,10 +82,12 @@ $connection->delete(
 /**
  * remove website by id
  */
-/** @var \Magento\Store\Model\Website $website */
-$website = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
-$website->load((int)$websiteId);
-$website->delete();
+$connection->delete(
+    $resourceConnection->getTableName('store_website'),
+    [
+        'website_id = ?' => $websiteId,
+    ]
+);
 
 /**
  * reIndex all

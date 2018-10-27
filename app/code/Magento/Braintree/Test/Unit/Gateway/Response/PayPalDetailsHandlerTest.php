@@ -8,6 +8,7 @@ namespace Magento\Braintree\Test\Unit\Gateway\Response;
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Response\PayPalDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -25,26 +26,26 @@ class PayPalDetailsHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Payment|MockObject
      */
-    private $paymentMock;
+    private $payment;
 
     /**
      * @var SubjectReader|MockObject
      */
-    private $subjectReaderMock;
+    private $subjectReader;
 
     protected function setUp()
     {
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
+        $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'setAdditionalInformation',
             ])
             ->getMock();
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->payPalHandler = new PayPalDetailsHandler($this->subjectReaderMock);
+        $this->payPalHandler = new PayPalDetailsHandler($this->subjectReader);
     }
 
     /**
@@ -52,26 +53,26 @@ class PayPalDetailsHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testHandle()
     {
-        $paymentDataMock = $this->getPaymentDataObjectMock();
+        $paymentData = $this->getPaymentDataObjectMock();
         $transaction = $this->getBraintreeTransaction();
 
-        $subject = ['payment' => $paymentDataMock];
+        $subject = ['payment' => $paymentData];
         $response = ['object' => $transaction];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReader->expects(self::once())
             ->method('readPayment')
             ->with($subject)
-            ->willReturn($paymentDataMock);
-        $this->subjectReaderMock->expects(self::once())
+            ->willReturn($paymentData);
+        $this->subjectReader->expects(self::once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
-        $this->subjectReaderMock->expects(static::once())
+        $this->subjectReader->expects(static::once())
             ->method('readPayPal')
             ->with($transaction)
             ->willReturn($transaction->paypal);
 
-        $this->paymentMock->expects(static::exactly(2))
+        $this->payment->expects(static::exactly(2))
             ->method('setAdditionalInformation');
 
         $this->payPalHandler->handle($subject, $response);
@@ -90,7 +91,7 @@ class PayPalDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects(static::once())
             ->method('getPayment')
-            ->willReturn($this->paymentMock);
+            ->willReturn($this->payment);
 
         return $mock;
     }

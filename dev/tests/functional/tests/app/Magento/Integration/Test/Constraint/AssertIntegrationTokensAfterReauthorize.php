@@ -61,7 +61,7 @@ class AssertIntegrationTokensAfterReauthorize extends AbstractConstraint
         $actualData = $integrationNew->getIntegrationForm()->getData();
         $errors = $this->checkTokens($actualData, $integration->getData());
 
-        \PHPUnit\Framework\Assert::assertEmpty(
+        \PHPUnit_Framework_Assert::assertEmpty(
             $errors,
             "Integration tokens was changed incorrectly.\nLog:\n" . implode(";\n", $errors)
         );

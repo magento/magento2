@@ -6,6 +6,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 
 use Magento\Framework\Session\Config\Validator\CookieLifetimeValidator;

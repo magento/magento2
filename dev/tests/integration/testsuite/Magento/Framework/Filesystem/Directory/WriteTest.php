@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\Filesystem\Directory;
 
-use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -64,28 +63,6 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testCreateOutside()
-    {
-        $exceptions = 0;
-        $dir = $this->getDirectoryInstance('newDir1', 0777);
-        try {
-            $dir->create('../../outsideDir');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->create('//./..///../outsideDir');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->create('\..\..\outsideDir');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        $this->assertEquals(3, $exceptions);
-    }
-
     /**
      * Test for delete method
      *
@@ -109,28 +86,6 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     public function deleteProvider()
     {
         return [['subdir'], ['subdir/subsubdir']];
-    }
-
-    public function testDeleteOutside()
-    {
-        $exceptions = 0;
-        $dir = $this->getDirectoryInstance('newDir1', 0777);
-        try {
-            $dir->delete('../../Directory');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->delete('//./..///../Directory');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->delete('\..\..\Directory');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        $this->assertEquals(3, $exceptions);
     }
 
     /**
@@ -162,31 +117,6 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     public function renameProvider()
     {
         return [['newDir1', 0777, 'first_name.txt', 'second_name.txt']];
-    }
-
-    public function testRenameOutside()
-    {
-        $exceptions = 0;
-        $dir = $this->getDirectoryInstance('newDir1', 0777);
-        try {
-            $dir->renameFile('../../Directory/ReadTest.php', 'RenamedTest');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->renameFile(
-                '//./..///../Directory/ReadTest.php',
-                'RenamedTest'
-            );
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->renameFile('\..\..\Directory\ReadTest.php', 'RenamedTest');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        $this->assertEquals(3, $exceptions);
     }
 
     /**
@@ -255,40 +185,6 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testCopyOutside()
-    {
-        $exceptions = 0;
-        $dir = $this->getDirectoryInstance('newDir1', 0777);
-        $dir->touch('test_file_for_copy_outside.txt');
-        try {
-            $dir->copyFile('../../Directory/ReadTest.php', 'CopiedTest');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->copyFile(
-                '//./..///../Directory/ReadTest.php',
-                'CopiedTest'
-            );
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->copyFile('\..\..\Directory\ReadTest.php', 'CopiedTest');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->copyFile(
-                'test_file_for_copy_outside.txt',
-                '../../Directory/copied_outside.txt'
-            );
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        $this->assertEquals(4, $exceptions);
-    }
-
     /**
      * Test for copy method (copy to another directory instance)
      *
@@ -335,28 +231,6 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($directory->changePermissions('test_directory', 0644));
     }
 
-    public function testChangePermissionsOutside()
-    {
-        $exceptions = 0;
-        $dir = $this->getDirectoryInstance('newDir1', 0777);
-        try {
-            $dir->changePermissions('../../Directory', 0777);
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->changePermissions('//./..///../Directory', 0777);
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->changePermissions('\..\..\Directory', 0777);
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        $this->assertEquals(3, $exceptions);
-    }
-
     /**
      * Test for changePermissionsRecursively method
      */
@@ -368,28 +242,6 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $directory->writeFile('test_directory/subdirectory/test_file.txt', 'Test Content');
 
         $this->assertTrue($directory->changePermissionsRecursively('test_directory', 0777, 0644));
-    }
-
-    public function testChangePermissionsRecursivelyOutside()
-    {
-        $exceptions = 0;
-        $dir = $this->getDirectoryInstance('newDir1', 0777);
-        try {
-            $dir->changePermissionsRecursively('../foo', 0777, 0777);
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->changePermissionsRecursively('//./..///foo', 0777, 0777);
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->changePermissionsRecursively('\..\foo', 0777, 0777);
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        $this->assertEquals(3, $exceptions);
     }
 
     /**
@@ -422,28 +274,6 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testTouchOutside()
-    {
-        $exceptions = 0;
-        $dir = $this->getDirectoryInstance('newDir1', 0777);
-        try {
-            $dir->touch('../../foo.tst');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->touch('//./..///../foo.tst');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->touch('\..\..\foo.tst');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        $this->assertEquals(3, $exceptions);
-    }
-
     /**
      * Test isWritable method
      */
@@ -453,28 +283,6 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $directory->create('bar');
         $this->assertFalse($directory->isWritable('not_existing_dir'));
         $this->assertTrue($directory->isWritable('bar'));
-    }
-
-    public function testIsWritableOutside()
-    {
-        $exceptions = 0;
-        $dir = $this->getDirectoryInstance('newDir1', 0777);
-        try {
-            $dir->isWritable('../../Directory');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->isWritable('//./..///../Directory');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->isWritable('\..\..\Directory');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        $this->assertEquals(3, $exceptions);
     }
 
     /**
@@ -505,28 +313,6 @@ class WriteTest extends \PHPUnit\Framework\TestCase
             ['newDir1', 0777, 'newFile.txt', 'w+'],
             ['newDir1', 0777, 'subdirectory/newFile.txt', 'w+']
         ];
-    }
-
-    public function testOpenFileOutside()
-    {
-        $exceptions = 0;
-        $dir = $this->getDirectoryInstance('newDir1', 0777);
-        try {
-            $dir->openFile('../../Directory/ReadTest.php');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->openFile('//./..///../Directory/ReadTest.php');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->openFile('\..\..\Directory\ReadTest.php');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        $this->assertEquals(3, $exceptions);
     }
 
     /**
@@ -571,28 +357,6 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     public function writeFileProvider()
     {
         return [['file1', '123', '456'], ['folder1/file1', '123', '456']];
-    }
-
-    public function testWriteFileOutside()
-    {
-        $exceptions = 0;
-        $dir = $this->getDirectoryInstance('newDir1', 0777);
-        try {
-            $dir->writeFile('../../Directory/ReadTest.php', 'tst');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->writeFile('//./..///../Directory/ReadTest.php', 'tst');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        try {
-            $dir->writeFile('\..\..\Directory\ReadTest.php', 'tst');
-        } catch (ValidatorException $exception) {
-            $exceptions++;
-        }
-        $this->assertEquals(3, $exceptions);
     }
 
     /**

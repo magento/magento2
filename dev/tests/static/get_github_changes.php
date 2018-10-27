@@ -9,6 +9,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 define(
     'USAGE',
     <<<USAGE
@@ -42,17 +44,6 @@ $changes = retrieveChangesAcrossForks($mainline, $repo, $options['branch']);
 $changedFiles = getChangedFiles($changes, $fileExtensions);
 generateChangedFilesList($options['output-file'], $changedFiles);
 saveChangedFileContent($repo);
-
-$additions = retrieveNewFilesAcrossForks($mainline, $repo, $options['branch']);
-$addedFiles = getChangedFiles($additions, $fileExtensions);
-$additionsFile = pathinfo($options['output-file']);
-$additionsFile = $additionsFile['dirname']
-    . DIRECTORY_SEPARATOR
-    . $additionsFile['filename']
-    . '.added.'
-    . $additionsFile['extension'];
-generateChangedFilesList($additionsFile, $addedFiles);
-
 cleanup($repo, $mainline);
 
 /**
@@ -147,8 +138,6 @@ function getRepo($options, $mainline)
 }
 
 /**
- * Combine list of changed files based on comparison between forks.
- *
  * @param string $mainline
  * @param GitRepo $repo
  * @param string $branchName
@@ -156,27 +145,14 @@ function getRepo($options, $mainline)
  */
 function retrieveChangesAcrossForks($mainline, GitRepo $repo, $branchName)
 {
-    return $repo->compareChanges($mainline, $branchName, GitRepo::CHANGE_TYPE_ALL);
-}
-
-/**
- * Combine list of new files based on comparison between forks.
- *
- * @param string $mainline
- * @param GitRepo $repo
- * @param string $branchName
- * @return array
- */
-function retrieveNewFilesAcrossForks($mainline, GitRepo $repo, $branchName)
-{
-    return $repo->compareChanges($mainline, $branchName, GitRepo::CHANGE_TYPE_ADDED);
+    return $repo->compareChanges($mainline, $branchName);
 }
 
 /**
  * Deletes temporary "base" repo
  *
  * @param GitRepo $repo
- * @param string $mainline
+ * @param string $repo
  */
 function cleanup($repo, $mainline)
 {
@@ -200,14 +176,8 @@ function validateInput(array $options, array $requiredOptions)
     return true;
 }
 
-//@codingStandardsIgnoreStart
 class GitRepo
-// @codingStandardsIgnoreEnd
 {
-    const CHANGE_TYPE_ADDED = 1;
-    const CHANGE_TYPE_MODIFIED = 2;
-    const CHANGE_TYPE_ALL = 3;
-
     /**
      * Absolute path to git project
      *
@@ -304,10 +274,9 @@ class GitRepo
      *
      * @param string $remoteAlias
      * @param string $remoteBranch
-     * @param int $changesType
      * @return array
      */
-    public function compareChanges($remoteAlias, $remoteBranch, $changesType = self::CHANGE_TYPE_ALL)
+    public function compareChanges($remoteAlias, $remoteBranch)
     {
         if (!isset($this->remoteList[$remoteAlias])) {
             throw new LogicException('Alias "' . $remoteAlias . '" is not defined');
@@ -316,11 +285,9 @@ class GitRepo
         $result = $this->call(sprintf('log %s/%s..HEAD  --name-status --oneline', $remoteAlias, $remoteBranch));
 
         return is_array($result)
-            ? $this->filterChangedFiles(
-                $result,
+            ? $this->filterChangedFiles($result,
                 $remoteAlias,
-                $remoteBranch,
-                $changesType
+                $remoteBranch
             )
             : [];
     }
@@ -331,112 +298,43 @@ class GitRepo
      * @param array $changes
      * @param string $remoteAlias
      * @param string $remoteBranch
-     * @param int $changesType
      * @return array
      */
-    protected function filterChangedFiles(
-        array $changes,
-        $remoteAlias,
-        $remoteBranch,
-        $changesType = self::CHANGE_TYPE_ALL
-    ) {
+    protected function filterChangedFiles(array $changes, $remoteAlias, $remoteBranch)
+    {
         $countScannedFiles = 0;
-        $changedFilesMasks = $this->buildChangedFilesMask($changesType);
+        $changedFilesMasks = [
+            'M' => "M\t",
+            'A' => "A\t"
+        ];
         $filteredChanges = [];
         foreach ($changes as $fileName) {
             $countScannedFiles++;
             if (($countScannedFiles % 5000) == 0) {
                 echo $countScannedFiles . " files scanned so far\n";
             }
-
-            $changeTypeMask = $this->detectChangeTypeMask($fileName, $changedFilesMasks);
-            if (null === $changeTypeMask) {
-                continue;
+            foreach ($changedFilesMasks as $mask) {
+                if (strpos($fileName, $mask) === 0) {
+                    $fileName = str_replace($mask, '', $fileName);
+                    $fileName = trim($fileName);
+                    if (!in_array($fileName, $filteredChanges) && is_file($this->workTree . '/' . $fileName)) {
+                        $result = $this->call(sprintf(
+                                'diff HEAD %s/%s -- %s', $remoteAlias, $remoteBranch, $this->workTree . '/' . $fileName)
+                        );
+                        if ($result) {
+                            if (!(isset($this->changedContentFiles[$fileName]))) {
+                                $this->setChangedContentFile($result, $fileName);
+                            }
+                            $filteredChanges[] = $fileName;
+                        }
+                    }
+                    break;
+                }
             }
-
-            $fileName = trim(substr($fileName, strlen($changeTypeMask)));
-            if (in_array($fileName, $filteredChanges)) {
-                continue;
-            }
-
-            $fileChanges = $this->getFileChangeDetails($fileName, $remoteAlias, $remoteBranch);
-            if (empty($fileChanges)) {
-                continue;
-            }
-
-            if (!(isset($this->changedContentFiles[$fileName]))) {
-                $this->setChangedContentFile($fileChanges, $fileName);
-            }
-            $filteredChanges[] = $fileName;
         }
         echo $countScannedFiles . " files scanned\n";
 
         return $filteredChanges;
-    }
-
-    /**
-     * Build mask of git diff report
-     *
-     * @param int $changesType
-     * @return array
-     */
-    private function buildChangedFilesMask(int $changesType): array
-    {
-        $changedFilesMasks = [];
-        foreach ([
-            self::CHANGE_TYPE_ADDED => "A\t",
-            self::CHANGE_TYPE_MODIFIED => "M\t",
-        ] as $changeType => $changedFilesMask) {
-            if ($changeType & $changesType) {
-                $changedFilesMasks[] = $changedFilesMask;
-            }
-        }
-        return $changedFilesMasks;
-    }
-
-    /**
-     * Find one of the allowed modification mask returned by git diff.
-     *
-     * Example of change record: "A path/to/added_file"
-     *
-     * @param string $changeRecord
-     * @param array $allowedMasks
-     * @return string|null
-     */
-    private function detectChangeTypeMask(string $changeRecord, array $allowedMasks)
-    {
-        foreach ($allowedMasks as $mask) {
-            if (strpos($changeRecord, $mask) === 0) {
-                return $mask;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Read detailed information about changes in a file
-     *
-     * @param string $fileName
-     * @param string $remoteAlias
-     * @param string $remoteBranch
-     * @return array
-     */
-    private function getFileChangeDetails(string $fileName, string $remoteAlias, string $remoteBranch): array
-    {
-        if (!is_file($this->workTree . '/' . $fileName)) {
-            return [];
-        }
-
-        $result = $this->call(
-            sprintf(
-                'diff HEAD %s/%s -- %s',
-                $remoteAlias,
-                $remoteBranch,
-                $fileName
-            )
-        );
-
-        return $result;
     }
 
     /**

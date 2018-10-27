@@ -77,7 +77,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         $errorMessage = null,
         $errorDescription = null
     ) {
-        if ($this->isErrorAlreadyAdded($rowNumber, $errorCode, $columnName)) {
+        if ($this->isErrorAlreadyAdded($rowNumber, $errorCode)) {
             return $this;
         }
         $this->processErrorStatistics($errorLevel);
@@ -333,14 +333,13 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * @param int $rowNum
      * @param string $errorCode
-     * @param string $columnName
      * @return bool
      */
-    protected function isErrorAlreadyAdded($rowNum, $errorCode, $columnName = null)
+    protected function isErrorAlreadyAdded($rowNum, $errorCode)
     {
         $errors = $this->getErrorsByCode([$errorCode]);
         foreach ($errors as $error) {
-            if ($rowNum == $error->getRowNumber() && $columnName == $error->getColumnName()) {
+            if ($rowNum == $error->getRowNumber()) {
                 return true;
             }
         }

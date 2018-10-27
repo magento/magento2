@@ -23,13 +23,6 @@ class AssertConfigurableProductPage extends AssertProductPage
     protected $priceFormat = 2;
 
     /**
-     * Price format.
-     *
-     * @var int
-     */
-    private $priceFormat = 2;
-
-    /**
      * Verify displayed product data on product page(front-end) equals passed from fixture:
      * 1. Product Name
      * 2. Price
@@ -162,12 +155,8 @@ class AssertConfigurableProductPage extends AssertProductPage
     }
 
     /**
-<<<<<<< HEAD
-     * Verifies displayed product price label on a product page (front-end) equals passed from the fixture.
-=======
      * Verifies displayed product price label on a product page (front-end)
      * equals passed from the fixture.
->>>>>>> upstream/2.2-develop
      *
      * @return string|null
      */

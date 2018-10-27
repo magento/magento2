@@ -6,14 +6,13 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 
 /**
  * Class Save
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute implements HttpPostActionInterface
+class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor

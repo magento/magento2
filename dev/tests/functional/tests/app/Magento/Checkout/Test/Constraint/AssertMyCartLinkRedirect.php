@@ -29,7 +29,7 @@ class AssertMyCartLinkRedirect extends AbstractConstraint
     {
         $cmsIndex->open();
         $cmsIndex->getCartSidebarBlock()->openMiniCart();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::CART_PAGE_TITLE,
             $cmsIndex->getTitleBlock()->getTitle(),
             'Wrong page is displayed instead of the shopping cart page.'

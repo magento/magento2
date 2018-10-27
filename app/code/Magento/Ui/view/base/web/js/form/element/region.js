@@ -49,10 +49,6 @@ define([
                 if (option && !option['is_region_required']) {
                     this.error(false);
                     this.validation = _.omit(this.validation, 'required-entry');
-                    registry.get(this.customName, function (input) {
-                        input.validation['required-entry'] = false;
-                        input.required(false);
-                    });
                 } else {
                     this.validation['required-entry'] = true;
                 }

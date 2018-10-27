@@ -39,7 +39,7 @@ class AssertCardRequiredFields extends AbstractConstraint
             ->getJsErrors();
         $creditCardEmpty = $creditCard->get('visa_empty');
         foreach (array_keys($creditCardEmpty) as $field) {
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 isset($actualRequiredFields[$field]),
                 "Field '$field' is not highlighted with an JS error."
             );
@@ -47,7 +47,7 @@ class AssertCardRequiredFields extends AbstractConstraint
             if (in_array($field, ['cc_number', 'cc_cid'])) {
                 $expected = self::VALID_NUMBER_MESSAGE;
             }
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $expected,
                 $actualRequiredFields[$field],
                 "Field '$field' is not highlighted as required."

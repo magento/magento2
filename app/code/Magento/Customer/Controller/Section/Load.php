@@ -5,7 +5,6 @@
  */
 namespace Magento\Customer\Controller\Section;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Customer\CustomerData\Section\Identifier;
 use Magento\Customer\CustomerData\SectionPoolInterface;
 use Magento\Framework\App\Action\Context;
@@ -14,7 +13,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
 /**
  * Customer section controller
  */
-class Load extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
+class Load extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var JsonFactory

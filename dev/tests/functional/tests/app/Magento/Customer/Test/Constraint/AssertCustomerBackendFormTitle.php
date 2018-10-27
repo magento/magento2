@@ -28,7 +28,7 @@ class AssertCustomerBackendFormTitle extends AbstractConstraint
      */
     public function processAssert(CustomerAccountIndex $pageCustomerIndex, Customer $customer)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $customer->getFirstname() . ' ' . $customer->getLastname(),
             $pageCustomerIndex->getTitleBlock()->getTitle(),
             'Wrong page title is displayed.'

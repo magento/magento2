@@ -16,7 +16,7 @@ use Magento\Sales\Model\Spi\TransactionResourceInterface;
 class Transaction extends EntityAbstract implements TransactionResourceInterface
 {
     /**
-     * Serializable field: additional_information
+     * Serializeable field: additional_information
      *
      * @var array
      */

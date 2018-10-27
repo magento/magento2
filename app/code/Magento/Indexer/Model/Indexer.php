@@ -8,7 +8,7 @@ namespace Magento\Indexer\Model;
 use Magento\Framework\Indexer\ActionFactory;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\ConfigInterface;
-use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerInterface as IdxInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
@@ -16,7 +16,7 @@ use Magento\Framework\Indexer\StructureFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
+class Indexer extends \Magento\Framework\DataObject implements IdxInterface
 {
     /**
      * @var string
@@ -211,7 +211,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      * Fill indexer data from config
      *
      * @param string $indexerId
-     * @return IndexerInterface
+     * @return IdxInterface
      * @throws \InvalidArgumentException
      */
     public function load($indexerId)
@@ -258,7 +258,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      * Set indexer state object
      *
      * @param StateInterface $state
-     * @return IndexerInterface
+     * @return IdxInterface
      */
     public function setState(StateInterface $state)
     {
@@ -368,7 +368,6 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      * Return indexer action instance
      *
      * @return ActionInterface
-     * @throws \InvalidArgumentException
      */
     protected function getActionInstance()
     {
@@ -398,7 +397,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      * Regenerate full index
      *
      * @return void
-     * @throws \Throwable
+     * @throws \Exception
      */
     public function reindexAll()
     {

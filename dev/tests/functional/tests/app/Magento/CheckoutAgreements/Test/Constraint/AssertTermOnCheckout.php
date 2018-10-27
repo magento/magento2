@@ -75,7 +75,7 @@ class AssertTermOnCheckout extends AbstractConstraint
         $objectManager->create(\Magento\Checkout\Test\TestStep\SelectPaymentMethodStep::class, $paymentData)->run();
 
         $paymentBlock->getSelectedPaymentMethodBlock()->clickPlaceOrder();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::NOTIFICATION_MESSAGE,
             $checkoutOnepage->getAgreementReview()->getNotificationMassage(),
             'Notification required message of Terms and Conditions is absent.'

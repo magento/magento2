@@ -79,14 +79,14 @@ class AssertSuccessInstall extends AbstractConstraint
     private function checkInstallData(array $allData, array $adminData, array $dbData)
     {
         foreach ($this->adminFieldsList as $field) {
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $allData[$field['fixture']],
                 $adminData[$field['pageData']],
                 'Wrong admin information is displayed.'
             );
         }
         foreach ($this->dbFieldsList as $field) {
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $allData[$field['fixture']],
                 $dbData[$field['pageData']],
                 'Wrong database information is displayed.'

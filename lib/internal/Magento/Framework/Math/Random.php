@@ -53,15 +53,9 @@ class Random
     /**
      * Return a random number in the specified range
      *
-<<<<<<< HEAD
-     * @param int $min
-     * @param int $max
-     * @return int  A random integer value between min (or 0) and max
-=======
      * @param $min [optional]
      * @param $max [optional]
      * @return int A random integer value between min (or 0) and max
->>>>>>> upstream/2.2-develop
      * @throws LocalizedException
      */
     public static function getRandomNumber($min = 0, $max = null)
@@ -69,10 +63,6 @@ class Random
         if (null === $max) {
             $max = mt_getrandmax();
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         if ($max < $min) {
             throw new LocalizedException(new Phrase('Invalid range given.'));
         }
@@ -85,7 +75,6 @@ class Random
      *
      * @param string $prefix
      * @return string
-     * @throws LocalizedException
      */
     public function getUniqueHash($prefix = '')
     {

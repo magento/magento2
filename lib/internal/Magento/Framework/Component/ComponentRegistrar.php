@@ -21,7 +21,6 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     const LIBRARY = 'library';
     const THEME = 'theme';
     const LANGUAGE = 'language';
-    const SETUP = 'setup';
     /**#@- */
 
     /**#@- */
@@ -30,7 +29,6 @@ class ComponentRegistrar implements ComponentRegistrarInterface
         self::LIBRARY => [],
         self::LANGUAGE => [],
         self::THEME => [],
-        self::SETUP => []
     ];
 
     /**

@@ -4,20 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . 'product_with_multiple_options.php';
 
-<<<<<<< HEAD
-$objectManager = Bootstrap::getObjectManager();
-=======
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
->>>>>>> upstream/2.2-develop
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);

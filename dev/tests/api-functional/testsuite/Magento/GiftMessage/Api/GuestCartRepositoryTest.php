@@ -5,6 +5,8 @@
  */
 namespace Magento\GiftMessage\Api;
 
+// @codingStandardsIgnoreFile
+
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class GuestCartRepositoryTest extends WebapiAbstract

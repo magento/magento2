@@ -25,7 +25,7 @@ class AssertTaxRuleSuccessDeleteMessage extends AbstractConstraint
     public function processAssert(TaxRuleIndex $taxRuleIndex)
     {
         $actualMessage = $taxRuleIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $actualMessage,
             'Wrong success delete message is displayed.'

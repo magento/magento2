@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 
 class OptionManagementTest extends \PHPUnit\Framework\TestCase
@@ -81,12 +80,12 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->once())->method('setDefault')->with(['id_new_option']);
         $attributeMock->expects($this->once())->method('setOption')->with($option);
         $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock);
-        $this->assertEquals('id_new_option', $this->model->add($entityType, $attributeCode, $optionMock));
+        $this->assertTrue($this->model->add($entityType, $attributeCode, $optionMock));
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute code is empty. Enter the code and try again.
+     * @expectedExceptionMessage Empty attribute code
      */
     public function testAddWithEmptyAttributeCode()
     {
@@ -107,7 +106,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The "testAttribute" attribute doesn't work with options.
+     * @expectedExceptionMessage Attribute testAttribute doesn't work with options
      */
     public function testAddWithWrongOptions()
     {
@@ -140,7 +139,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The "atrCde" attribute can't be saved.
+     * @expectedExceptionMessage Cannot save attribute atrCde
      */
     public function testAddWithCannotSaveException()
     {
@@ -226,7 +225,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The "atrCode" attribute can't be saved.
+     * @expectedExceptionMessage Cannot save attribute atrCode
      */
     public function testDeleteWithCannotSaveException()
     {
@@ -262,7 +261,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The "atrCode" attribute doesn't include an option with "option" ID.
+     * @expectedExceptionMessage Attribute atrCode does not contain option with Id option
      */
     public function testDeleteWithWrongOption()
     {
@@ -291,7 +290,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The "atrCode" attribute has no option.
+     * @expectedExceptionMessage Attribute atrCode doesn't have any option
      */
     public function testDeleteWithAbsentOption()
     {
@@ -316,7 +315,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute code is empty. Enter the code and try again.
+     * @expectedExceptionMessage Empty attribute code
      */
     public function testDeleteWithEmptyAttributeCode()
     {
@@ -349,7 +348,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The options for "atrCode" attribute can't be loaded.
+     * @expectedExceptionMessage Cannot load options for attribute atrCode
      */
     public function testGetItemsWithCannotLoadException()
     {
@@ -372,7 +371,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute code is empty. Enter the code and try again.
+     * @expectedExceptionMessage Empty attribute code
      */
     public function testGetItemsWithEmptyAttributeCode()
     {

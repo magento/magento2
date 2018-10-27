@@ -60,7 +60,7 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\AuthorizationException
-     * @expectedExceptionMessage The role wasn't found for the user. Verify the role and try again.
+     * @expectedExceptionMessage We can't find the role for the user you wanted.
      */
     public function testGetAllowedResourcesByUserRoleNotFound()
     {

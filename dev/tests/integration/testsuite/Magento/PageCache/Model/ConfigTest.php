@@ -51,7 +51,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'accessList' =>  explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
             'designExceptions' => json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true),
             'sslOffloadedHeader' => 'X-Forwarded-Proto',
-            'gracePeriod' => 1234
+            'gracePeriod' => null
         ];
         $vclGeneratorFactory->expects($this->any())
             ->method('create')
@@ -61,7 +61,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'example.com',
                 '8080',
                 explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
-                1234,
+                null,
                 'X-Forwarded-Proto',
                 json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true)
             )));
@@ -77,7 +77,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoConfigFixture default/system/full_page_cache/varnish/backend_host example.com
      * @magentoConfigFixture default/system/full_page_cache/varnish/backend_port 8080
-     * @magentoConfigFixture default/system/full_page_cache/varnish/grace_period 1234
      * @magentoConfigFixture default/system/full_page_cache/varnish/access_list 127.0.0.1,192.168.0.1,127.0.0.2
      * @magentoConfigFixture current_store design/theme/ua_regexp {"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}
      * @magentoAppIsolation enabled

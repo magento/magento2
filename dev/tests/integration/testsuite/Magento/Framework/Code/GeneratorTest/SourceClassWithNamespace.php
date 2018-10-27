@@ -7,9 +7,6 @@ namespace Magento\Framework\Code\GeneratorTest;
 
 use Zend\Code\Generator\ClassGenerator;
 
-/**
- * Class  SourceClassWithNamespace
- */
 class SourceClassWithNamespace extends ParentClassWithNamespace
 {
     /**
@@ -99,23 +96,15 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     ) {
     }
 
-    /**
-     * Test method
-     */
     public function publicChildWithoutParameters()
     {
     }
 
-    /**
-     * Test method
-     */
     public static function publicChildStatic()
     {
     }
 
     /**
-     * Test method
-     *
      * @SuppressWarnings(PHPMD.FinalImplementation) Suppressed as is a fixture but not a real code
      */
     final public function publicChildFinal()
@@ -125,43 +114,6 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     /**
      * Test method
      *
-<<<<<<< HEAD
-     * @param mixed $arg1
-     * @param string $arg2
-     * @param int|null $arg3
-     * @param int|null $arg4
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function public71(
-        $arg1,
-        string $arg2,
-        ?int $arg3,
-        ?int $arg4 = null
-    ): void {
-    }
-
-    /**
-     * Test method
-     *
-     * @param \DateTime|null $arg1
-     * @param mixed $arg2
-     *
-     * @return null|string
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function public71Another(?\DateTime $arg1, $arg2 = false): ?string
-    {
-    }
-
-    /**
-     * Test method
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @param bool $arg
      * @return SourceClassWithNamespace
      *

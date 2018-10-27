@@ -27,10 +27,12 @@ class CompositeReader implements ReaderInterface
         usort(
             $readers,
             function ($firstItem, $secondItem) {
-                if (!isset($firstItem['sortOrder']) || !isset($secondItem['sortOrder'])) {
+                if (!isset($firstItem['sortOrder']) || !isset($secondItem['sortOrder'])
+                    || $firstItem['sortOrder'] == $secondItem['sortOrder']
+                ) {
                     return 0;
                 }
-                return $firstItem['sortOrder'] <=> $secondItem['sortOrder'];
+                return $firstItem['sortOrder'] < $secondItem['sortOrder'] ? -1 : 1;
             }
         );
         $this->readers = [];

@@ -7,11 +7,6 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-<<<<<<< HEAD
-
-/**
- * The copier creates product duplicates.
-=======
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ProductFactory;
@@ -19,7 +14,6 @@ use Magento\Catalog\Model\Product\Option\Repository as OptionRepository;
 
 /**
  * Catalog product copier. Creates product duplicate
->>>>>>> upstream/2.2-develop
  */
 class Copier
 {
@@ -89,7 +83,6 @@ class Copier
                 ? $matches[1] . '-' . ($matches[2] + 1)
                 : $urlKey . '-1';
             $duplicate->setUrlKey($urlKey);
-            $duplicate->setData(Product::URL_PATH, null);
             try {
                 $duplicate->save();
                 $isDuplicateSaved = true;
@@ -106,13 +99,7 @@ class Copier
     }
 
     /**
-<<<<<<< HEAD
-     * Returns product option repository.
-     *
-     * @return Option\Repository
-=======
      * @return OptionRepository
->>>>>>> upstream/2.2-develop
      * @deprecated 101.0.0
      */
     private function getOptionRepository()
@@ -124,13 +111,7 @@ class Copier
     }
 
     /**
-<<<<<<< HEAD
-     * Returns metadata pool.
-     *
-     * @return \Magento\Framework\EntityManager\MetadataPool
-=======
      * @return MetadataPool
->>>>>>> upstream/2.2-develop
      * @deprecated 101.0.0
      */
     private function getMetadataPool()

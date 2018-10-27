@@ -50,9 +50,6 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
     /** @var  CouponGenerator | \PHPUnit_Framework_MockObject_MockObject */
     private $couponGenerator;
 
-    /**
-     * Test setup
-     */
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
@@ -112,9 +109,6 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * testExecute
-     */
     public function testExecute()
     {
         $helperData = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
@@ -149,7 +143,7 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
             ->with($requestData)
             ->willReturn(['some_data', 'some_data_2']);
         $this->messageManager->expects($this->once())
-            ->method('addSuccessMessage');
+            ->method('addSuccess');
         $this->responseMock->expects($this->once())
             ->method('representJson')
             ->with();

@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
-use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
 
@@ -158,9 +157,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     /** @var \Magento\Catalog\Model\Product\Url|\PHPUnit_Framework_MockObject_MockObject*/
     protected $productUrl;
-
-    /** @var  ImageTypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
-    protected $imageTypeProcessor;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -329,16 +325,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
         $this->data = [];
 
-        $this->imageTypeProcessor = $this->getMockBuilder(ImageTypeProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->_objectConstructor()
             ->_parentObjectConstructor()
             ->_initAttributeSets()
             ->_initTypeModels()
-            ->_initSkus()
-            ->_initImagesArrayKeys();
+            ->_initSkus();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -381,8 +372,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'taxClassProcessor' => $this->taxClassProcessor,
                 'scopeConfig' => $this->scopeConfig,
                 'productUrl' => $this->productUrl,
-                'data' => $this->data,
-                'imageTypeProcessor' => $this->imageTypeProcessor
+                'data' => $this->data
             ]
         );
         $reflection = new \ReflectionClass(\Magento\CatalogImportExport\Model\Import\Product::class);
@@ -505,17 +495,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function _initImagesArrayKeys()
-    {
-        $this->imageTypeProcessor->expects($this->once())->method('getImageTypes')->willReturn(
-            ['image', 'small_image', 'thumbnail', 'swatch_image', '_media_image']
-        );
-        return $this;
-    }
-
     public function testSaveProductAttributes()
     {
         $testTable = 'test_table';
@@ -600,28 +579,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertEquals(
             $expectedSeparator,
             $this->importProduct->getMultipleValueSeparator()
-        );
-    }
-
-    public function testGetEmptyAttributeValueConstantDefault()
-    {
-        $this->setPropertyValue($this->importProduct, '_parameters', null);
-        $this->assertEquals(
-            Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
-            $this->importProduct->getEmptyAttributeValueConstant()
-        );
-    }
-
-    public function testGetEmptyAttributeValueConstantFromParameters()
-    {
-        $expectedSeparator = '__EMPTY__VALUE__TEST__';
-        $this->setPropertyValue($this->importProduct, '_parameters', [
-            \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT => $expectedSeparator,
-        ]);
-
-        $this->assertEquals(
-            $expectedSeparator,
-            $this->importProduct->getEmptyAttributeValueConstant()
         );
     }
 
@@ -1236,18 +1193,12 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $expectedFileName = '';
             $this->_logger->expects($this->once())->method('critical')->with($exception);
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         $fileUploaderMock = $this
             ->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         $fileUploaderMock
             ->expects($this->once())
             ->method('move')
@@ -1259,28 +1210,19 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                     return ['file' => $name];
                 }
             );
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         $this->setPropertyValue(
             $this->importProduct,
             '_fileUploader',
             $fileUploaderMock
         );
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         $actualFileName = $this->invokeMethod(
             $this->importProduct,
             'uploadMediaFiles',
             [$fileName]
         );
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         $this->assertEquals(
             $expectedFileName,
             $actualFileName

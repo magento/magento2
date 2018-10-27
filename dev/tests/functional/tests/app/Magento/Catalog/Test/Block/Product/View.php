@@ -256,11 +256,7 @@ class View extends AbstractConfigureBlock
      */
     public function getPriceBlock(FixtureInterface $product = null)
     {
-<<<<<<< HEAD
-        $typeId = '';
-=======
         $typeId = null;
->>>>>>> upstream/2.2-develop
 
         if ($product) {
             $dataConfig = $product->getDataConfig();

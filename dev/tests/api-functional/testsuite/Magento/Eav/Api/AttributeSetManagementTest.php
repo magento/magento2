@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -146,7 +145,7 @@ class AttributeSetManagementTest extends WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage The attribute set name is empty. Enter the name and try again.
+     * @expectedExceptionMessage Attribute set name is empty.
      */
     public function testCreateThrowsExceptionIfAttributeSetNameIsEmpty()
     {
@@ -170,7 +169,7 @@ class AttributeSetManagementTest extends WebapiAbstract
         $entityTypeCode = 'catalog_product';
         $entityType = $this->getEntityTypeByCode($entityTypeCode);
         $attributeSetName = 'Default';
-        $expectedMessage = 'A "Default" attribute set name already exists. Create a new name and try again.';
+        $expectedMessage = 'An attribute set named "Default" already exists.';
 
         $arguments = [
             'entityTypeCode' => $entityTypeCode,

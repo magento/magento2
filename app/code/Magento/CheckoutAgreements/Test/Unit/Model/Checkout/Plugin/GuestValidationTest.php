@@ -3,16 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CheckoutAgreements\Test\Unit\Model\Checkout\Plugin;
 
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class GuestValidationTest
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class GuestValidationTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -48,17 +43,12 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $repositoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $scopeConfigMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $checkoutAgreementsListMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $agreementsFilterMock;
 
     protected function setUp()
     {
@@ -71,18 +61,14 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             ['getAgreementIds']
         );
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->checkoutAgreementsListMock = $this->createMock(
-            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
-        );
-        $this->agreementsFilterMock = $this->createMock(
-            \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter::class
+        $this->repositoryMock = $this->createMock(
+            \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface::class
         );
 
         $this->model = new \Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation(
             $this->agreementsValidatorMock,
             $this->scopeConfigMock,
-            $this->checkoutAgreementsListMock,
-            $this->agreementsFilterMock
+            $this->repositoryMock
         );
     }
 
@@ -96,14 +82,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
-        $this->agreementsFilterMock->expects($this->once())
-            ->method('buildSearchCriteria')
-            ->willReturn($searchCriteriaMock);
-        $this->checkoutAgreementsListMock->expects($this->once())
-            ->method('getList')
-            ->with($searchCriteriaMock)
-            ->willReturn([1]);
+        $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
         $this->paymentMock->expects(static::atLeastOnce())
@@ -120,6 +99,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     * @expectedExceptionMessage Please agree to all the terms and conditions before placing the order.
      */
     public function testBeforeSavePaymentInformationAndPlaceOrderIfAgreementsNotValid()
     {
@@ -131,14 +111,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
-        $this->agreementsFilterMock->expects($this->once())
-            ->method('buildSearchCriteria')
-            ->willReturn($searchCriteriaMock);
-        $this->checkoutAgreementsListMock->expects($this->once())
-            ->method('getList')
-            ->with($searchCriteriaMock)
-            ->willReturn([1]);
+        $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(false);
         $this->paymentMock->expects(static::atLeastOnce())
@@ -150,10 +123,6 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             $email,
             $this->paymentMock,
             $this->addressMock
-        );
-
-        $this->expectExceptionMessage(
-            "The order wasn't placed. First, agree to the terms and conditions, then try placing your order again."
         );
     }
 
@@ -167,14 +136,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
-        $this->agreementsFilterMock->expects($this->once())
-            ->method('buildSearchCriteria')
-            ->willReturn($searchCriteriaMock);
-        $this->checkoutAgreementsListMock->expects($this->once())
-            ->method('getList')
-            ->with($searchCriteriaMock)
-            ->willReturn([1]);
+        $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
         $this->paymentMock->expects(static::atLeastOnce())

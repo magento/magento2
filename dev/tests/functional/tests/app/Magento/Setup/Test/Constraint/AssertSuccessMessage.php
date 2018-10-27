@@ -24,12 +24,12 @@ class AssertSuccessMessage extends AbstractConstraint
     public function processAssert(SetupWizard $setupWizard, $package)
     {
         $message = "You upgraded";
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             $message,
             $setupWizard->getSuccessMessage()->getUpdaterStatus(),
             'Success message is incorrect.'
         );
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             $package,
             $setupWizard->getSuccessMessage()->getUpdaterStatus(),
             'Updated package is incorrect.'

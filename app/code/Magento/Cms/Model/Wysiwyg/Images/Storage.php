@@ -243,12 +243,10 @@ class Storage extends \Magento\Framework\DataObject
     protected function removeItemFromCollection($collection, $conditions)
     {
         $regExp = $conditions['reg_exp'] ? '~' . implode('|', array_keys($conditions['reg_exp'])) . '~i' : null;
-        $storageRoot = $this->_cmsWysiwygImages->getStorageRoot();
-        $storageRootLength = strlen($storageRoot);
+        $storageRootLength = strlen($this->_cmsWysiwygImages->getStorageRoot());
 
         foreach ($collection as $key => $value) {
-            $mediaSubPathname = substr($value->getFilename(), $storageRootLength);
-            $rootChildParts = explode('/', '/' . ltrim($mediaSubPathname, '/'));
+            $rootChildParts = explode('/', substr($value->getFilename(), $storageRootLength));
 
             if (array_key_exists($rootChildParts[1], $conditions['plain'])
                 || ($regExp && preg_match($regExp, $value->getFilename()))) {
@@ -322,8 +320,6 @@ class Storage extends \Magento\Framework\DataObject
             $item->setName($item->getBasename());
             $item->setShortName($this->_cmsWysiwygImages->getShortFilename($item->getBasename()));
             $item->setUrl($this->_cmsWysiwygImages->getCurrentUrl() . $item->getBasename());
-            $item->setSize(filesize($item->getFilename()));
-            $item->setMimeType(\mime_content_type($item->getFilename()));
 
             if ($this->isImage($item->getBasename())) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
@@ -751,11 +747,7 @@ class Storage extends \Magento\Framework\DataObject
     }
 
     /**
-<<<<<<< HEAD
-     * Prepare mime types config settings.
-=======
      * Prepare mime types config settings
->>>>>>> upstream/2.2-develop
      *
      * @param string|null $type Type of storage, e.g. image, media etc.
      * @return array Array of allowed file extensions
@@ -768,11 +760,7 @@ class Storage extends \Magento\Framework\DataObject
     }
 
     /**
-<<<<<<< HEAD
-     * Get list of allowed file extensions with mime type in values.
-=======
      * Get list of allowed file extensions with mime type in values
->>>>>>> upstream/2.2-develop
      *
      * @param string|null $type
      * @return array
@@ -784,10 +772,6 @@ class Storage extends \Magento\Framework\DataObject
         } else {
             $allowed = $this->_extensions['allowed'];
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         return $allowed;
     }
 }

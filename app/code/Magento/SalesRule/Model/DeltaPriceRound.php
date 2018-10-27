@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\SalesRule\Model;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -42,11 +37,7 @@ class DeltaPriceRound
      * @param string $type
      * @return float
      */
-<<<<<<< HEAD
-    public function round(float $price, string $type): float
-=======
     public function round($price, $type)
->>>>>>> upstream/2.2-develop
     {
         if ($price) {
             // initialize the delta to a small number to avoid non-deterministic behavior with rounding of 0.5
@@ -65,11 +56,7 @@ class DeltaPriceRound
      *
      * @return void
      */
-<<<<<<< HEAD
-    public function resetAll(): void
-=======
     public function resetAll()
->>>>>>> upstream/2.2-develop
     {
         $this->roundingDeltas = [];
     }
@@ -80,11 +67,7 @@ class DeltaPriceRound
      * @param string $type
      * @return void
      */
-<<<<<<< HEAD
-    public function reset(string $type): void
-=======
     public function reset($type)
->>>>>>> upstream/2.2-develop
     {
         if (isset($this->roundingDeltas[$type])) {
             unset($this->roundingDeltas[$type]);

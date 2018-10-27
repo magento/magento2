@@ -66,13 +66,7 @@ class CollectionTime extends Value
         $result = preg_match('#(?<hour>\d{2}),(?<min>\d{2}),(?<sec>\d{2})#', $this->getValue(), $time);
 
         if (!$result) {
-<<<<<<< HEAD
-            throw new LocalizedException(
-                __('The time value is using an unsupported format. Enter a supported format and try again.')
-            );
-=======
             throw new LocalizedException(__('Time value has an unsupported format'));
->>>>>>> upstream/2.2-develop
         }
 
         $cronExprArray = [

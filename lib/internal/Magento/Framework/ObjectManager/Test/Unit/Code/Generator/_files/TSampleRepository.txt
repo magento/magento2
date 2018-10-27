@@ -27,9 +27,9 @@ class TSampleRepository implements TSampleRepositoryInterface
      *
      * @var array
      */
-    protected $registry = [
+    protected $registry = array(
         
-    ];
+    );
 
     /**
      * Extension attributes join processor.
@@ -71,25 +71,13 @@ class TSampleRepository implements TSampleRepositoryInterface
     public function get(int $id) : \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
     {
         if (!$id) {
-<<<<<<< HEAD
-            throw new \Magento\Framework\Exception\InputException(
-                new \Magento\Framework\Phrase('An ID is needed. Set the ID and try again.')
-            );
-=======
             throw new \Magento\Framework\Exception\InputException(new \Magento\Framework\Phrase('ID required'));
->>>>>>> upstream/2.2-develop
         }
         if (!isset($this->registry[$id])) {
             $entity = $this->tSampleInterfacePersistor->loadEntity($id);
             if (!$entity->getId()) {
                 throw new \Magento\Framework\Exception\NoSuchEntityException(
-<<<<<<< HEAD
-                    new \Magento\Framework\Phrase(
-                        'The entity that was requested doesn\'t exist. Verify the entity and try again.'
-                    )
-=======
                     new \Magento\Framework\Phrase('Requested entity doesn\'t exist')
->>>>>>> upstream/2.2-develop
                 );
             }
             $this->registry[$id] = $entity;

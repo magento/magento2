@@ -6,13 +6,13 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\GoogleOptimizer\Helper;
 
 use \Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Data
- *
  * @api
  * @since 100.0.2
  */
@@ -34,8 +34,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_analyticsHelper;
 
     /**
-     * Data constructor.
-     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\GoogleAnalytics\Helper\Data $analyticsHelper
      */
@@ -55,7 +53,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isGoogleExperimentEnabled($store = null)
     {
-        return $this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE, $store);
+        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**

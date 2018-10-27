@@ -14,9 +14,7 @@ angular.module('extension-grid', ['ngStorage'])
             $scope.syncError = false;
             $scope.currentPage = 1;
 
-            $http.get('index.php/extensionGrid/extensions').then(function successCallback(resp) {
-                var data = resp.data;
-
+            $http.get('index.php/extensionGrid/extensions').success(function (data) {
                 $scope.extensions = data.extensions;
                 $scope.total = data.total;
 
@@ -39,7 +37,7 @@ angular.module('extension-grid', ['ngStorage'])
                 }
                 $scope.availableUpdatePackages = data.lastSyncData.packages;
                 $scope.currentPage = 1;
-                $scope.rowLimit = '20';
+                $scope.rowLimit = 20;
                 $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
                 $rootScope.extensionsProcessed = true;
             });
@@ -80,9 +78,7 @@ angular.module('extension-grid', ['ngStorage'])
 
             $scope.sync = function() {
                 $scope.isHiddenSpinner = false;
-                $http.get('index.php/extensionGrid/sync').then(function successCallback(resp) {
-                    var data = resp.data;
-
+                $http.get('index.php/extensionGrid/sync').success(function(data) {
                     if (typeof data.lastSyncData.lastSyncDate !== 'undefined') {
                         $scope.lastSyncDate = data.lastSyncData.lastSyncDate.date;
                         $scope.lastSyncTime = data.lastSyncData.lastSyncDate.time;

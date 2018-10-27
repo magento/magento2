@@ -20,7 +20,7 @@ class PaymentToken extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('vault_payment_token', 'entity_id');
+        $this->_init(InstallSchema::PAYMENT_TOKEN_TABLE, InstallSchema::ID_FILED_NAME);
     }
 
     /**
@@ -36,7 +36,7 @@ class PaymentToken extends AbstractDb
             ->select()
             ->from($this->getMainTable())
             ->joinInner(
-                $this->getTable('vault_payment_token_order_payment_link'),
+                $this->getTable(InstallSchema::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE),
                 'payment_token_id = entity_id',
                 null
             )
@@ -104,7 +104,7 @@ class PaymentToken extends AbstractDb
         $connection = $this->getConnection();
 
         $select = $connection->select()
-            ->from($this->getTable('vault_payment_token_order_payment_link'))
+            ->from($this->getTable(InstallSchema::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE))
             ->where('order_payment_id = ?', (int) $orderPaymentId)
             ->where('payment_token_id =?', (int) $paymentTokenId);
 
@@ -113,7 +113,7 @@ class PaymentToken extends AbstractDb
         }
 
         return 1 === $connection->insert(
-            $this->getTable('vault_payment_token_order_payment_link'),
+            $this->getTable(InstallSchema::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE),
             ['order_payment_id' => (int) $orderPaymentId, 'payment_token_id' => (int) $paymentTokenId]
         );
     }

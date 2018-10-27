@@ -215,28 +215,18 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Finds 4 categories
-     *
      * @return Category[]
      */
     private function getCategories()
     {
-        $collectionFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class
+        /** @var Category $category */
+        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\Category::class
         );
 
-        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
-        $collection = $collectionFactory->create();
+        $result = $category->getCollection()->addAttributeToSelect('name')->getItems();
+        $result = array_slice($result, 2);
 
-        $collection
-            ->addAttributeToSelect('name')
-            ->addAttributeToFilter('name', ['in' => [
-                'Category 1',
-                'Category 2',
-                'Category 3',
-                'Category 4',
-            ]]);
-
-        return array_values($collection->getItems());
+        return array_slice($result, 0, 4);
     }
 }

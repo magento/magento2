@@ -41,7 +41,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
         return [
             [
                 'metaInput' => [
-                    'product-details' => [
+                    'pruduct-details' => [
                         'children' => [
                             'container_price' => [
                                 'children' => [
@@ -54,7 +54,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
                     ]
                 ],
                 'metaOutput' => [
-                    'product-details' => [
+                    'pruduct-details' => [
                         'children' => [
                             'container_price' => [
                                 'children' => [
@@ -86,7 +86,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
                 ]
             ], [
                 'metaInput' => [
-                    'product-details' => [
+                    'pruduct-details' => [
                         'children' => [
                             'container_price' => [
                                 'children' => []
@@ -95,7 +95,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
                     ]
                 ],
                 'metaOutput' => [
-                    'product-details' => [
+                    'pruduct-details' => [
                         'children' => [
                             'container_price' => [
                                 'children' => [

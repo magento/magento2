@@ -42,11 +42,6 @@ class EavAttributeCondition implements CustomConditionInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Build condition to filter product collection by EAV attribute
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @param Filter $filter
      * @return string
      * @throws \DomainException

@@ -39,7 +39,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
     protected $reviewSession;
 
     /**
-     * Catalog category model
+     * Catalog catgory model
      *
      * @var \Magento\Catalog\Api\CategoryRepositoryInterface
      */

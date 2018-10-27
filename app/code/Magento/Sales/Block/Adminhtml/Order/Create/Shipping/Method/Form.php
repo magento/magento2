@@ -90,7 +90,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     }
 
     /**
-     * Retrieve carrier name from store configuration
+     * Rertrieve carrier name from store configuration
      *
      * @param string $carrierCode
      * @return string

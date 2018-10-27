@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -119,7 +118,7 @@ class DateTimeFormatterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The format type is invalid. Verify the format type and try again.
+     * @expectedExceptionMessage Format type is invalid
      */
     public function testFormatObjectIfPassedWrongFormat()
     {

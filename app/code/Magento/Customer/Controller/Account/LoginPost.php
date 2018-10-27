@@ -3,32 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
-use Magento\Framework\App\CsrfAwareActionInterface;
-use Magento\Framework\App\Request\InvalidRequestException;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Customer\Controller\AbstractAccount;
-use Magento\Framework\Phrase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
+class LoginPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
@@ -139,30 +131,6 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
     }
 
     /**
-     * @inheritDoc
-     */
-    public function createCsrfValidationException(
-        RequestInterface $request
-    ): ?InvalidRequestException {
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('*/*/');
-
-        return new InvalidRequestException(
-            $resultRedirect,
-            [new Phrase('Invalid Form Key. Please refresh the page.')]
-        );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateForCsrf(RequestInterface $request): ?bool
-    {
-        return null;
-    }
-
-    /**
      * Login post action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
@@ -205,18 +173,10 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                     );
                 } catch (UserLockedException $e) {
                     $message = __(
-                        'The account sign-in was incorrect or your account is disabled temporarily. '
-                        . 'Please wait and try again later.'
+                        'You did not sign in correctly or your account is temporarily disabled.'
                     );
                 } catch (AuthenticationException $e) {
-<<<<<<< HEAD
-                    $message = __(
-                        'The account sign-in was incorrect or your account is disabled temporarily. '
-                        . 'Please wait and try again later.'
-                    );
-=======
                     $message = __('You did not sign in correctly or your account is temporarily disabled.');
->>>>>>> upstream/2.2-develop
                 } catch (LocalizedException $e) {
                     $message = $e->getMessage();
                 } catch (\Exception $e) {

@@ -26,7 +26,7 @@ class AssertCustomerSuccessSaveMessage extends AbstractConstraint
     public function processAssert(CustomerIndex $pageCustomerIndex)
     {
         $actualMessage = $pageCustomerIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

@@ -5,9 +5,6 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
-use Magento\Framework\Search\EngineResolverInterface;
-use Magento\Framework\Search\SearchEngine\ConfigInterface;
-
 /**
  * Result page builder class
  *
@@ -20,12 +17,12 @@ class ResultPageBuilder
     protected $resultPageFactory;
 
     /**
-     * @var EngineResolverInterface $engineResolver
+     * @var \Magento\Search\Model\EngineResolver $engineResolver
      */
     protected $engineResolver;
 
     /**
-     * @var ConfigInterface $searchFeatureConfig
+     * @var \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
      */
     protected $searchFeatureConfig;
 
@@ -38,14 +35,14 @@ class ResultPageBuilder
      * Constructor
      *
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param EngineResolverInterface $engineResolver
-     * @param ConfigInterface $searchFeatureConfig
+     * @param \Magento\Search\Model\EngineResolver $engineResolver
+     * @param \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        EngineResolverInterface $engineResolver,
-        ConfigInterface $searchFeatureConfig,
+        \Magento\Search\Model\EngineResolver $engineResolver,
+        \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig,
         \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->resultPageFactory = $resultPageFactory;
@@ -83,7 +80,7 @@ class ResultPageBuilder
         $searchEngine = $this->engineResolver->getCurrentSearchEngine();
         if (!$this->searchFeatureConfig
             ->isFeatureSupported(
-                ConfigInterface::SEARCH_ENGINE_FEATURE_SYNONYMS,
+                \Magento\Framework\Search\SearchEngine\ConfigInterface::SEARCH_ENGINE_FEATURE_SYNONYMS,
                 $searchEngine
             )
         ) {

@@ -8,11 +8,7 @@ namespace Magento\Framework\Filesystem\File;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
-/**
- * Opens a file for reading and/or writing
- * @api
- */
-class WriteFactory extends ReadFactory
+class WriteFactory
 {
     /**
      * Pool of filesystem drivers
@@ -28,17 +24,16 @@ class WriteFactory extends ReadFactory
      */
     public function __construct(DriverPool $driverPool)
     {
-        parent::__construct($driverPool);
         $this->driverPool = $driverPool;
     }
 
     /**
-     * Create a {@see WriterInterface}
+     * Create a readable file.
      *
      * @param string $path
      * @param DriverInterface|string $driver Driver or driver code
      * @param string $mode [optional]
-     * @return WriteInterface
+     * @return Write
      */
     public function create($path, $driver, $mode = 'r')
     {

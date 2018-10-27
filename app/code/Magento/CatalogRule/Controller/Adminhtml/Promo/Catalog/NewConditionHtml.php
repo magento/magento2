@@ -6,12 +6,9 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Rule\Model\Condition\AbstractCondition;
-use Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog as CatalogAction;
 
-class NewConditionHtml extends CatalogAction implements HttpPostActionInterface, HttpGetActionInterface
+class NewConditionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
      * @return void

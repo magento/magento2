@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model\ProductLink;
 
 /**
@@ -69,12 +71,8 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $linkManagementMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Management::class);
         $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
-        $this->entityCollectionProviderMock = $this->createMock(
-            \Magento\Catalog\Model\ProductLink\CollectionProvider::class
-        );
-        $this->linkInitializerMock = $this->createMock(
-            \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks::class
-        );
+        $this->entityCollectionProviderMock = $this->createMock(\Magento\Catalog\Model\ProductLink\CollectionProvider::class);
+        $this->linkInitializerMock = $this->createMock(\Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks::class);
         $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->hydratorPoolMock = $this->createMock(\Magento\Framework\EntityManager\HydratorPool::class);
         $this->hydratorMock = $this->createPartialMock(\Magento\Framework\EntityManager\Hydrator::class, ['extract']);
@@ -137,7 +135,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The linked products data is invalid. Verify the data and try again.
+     * @expectedExceptionMessage Invalid data provided for linked products
      */
     public function testSaveWithException()
     {
@@ -208,7 +206,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The linked products data is invalid. Verify the data and try again.
+     * @expectedExceptionMessage Invalid data provided for linked products
      */
     public function testDeleteWithInvalidDataException()
     {

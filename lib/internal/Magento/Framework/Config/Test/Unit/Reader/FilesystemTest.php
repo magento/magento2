@@ -119,7 +119,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The XML in file "0" is invalid:
+     * @expectedExceptionMessage Invalid XML in file
      */
     public function testReadWithInvalidXml()
     {

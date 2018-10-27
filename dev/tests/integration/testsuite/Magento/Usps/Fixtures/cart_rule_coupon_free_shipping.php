@@ -21,13 +21,9 @@ require __DIR__ . '/../../SalesRule/_files/cart_rule_free_shipping.php';
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 
-<<<<<<< HEAD
-$salesRule->setCouponType(Rule::COUPON_TYPE_SPECIFIC)->setUseAutoGeneration(0);
-=======
 $salesRule->setCouponType(Rule::COUPON_TYPE_SPECIFIC)
     ->setUseAutoGeneration(0);
 
->>>>>>> upstream/2.2-develop
 $salesRule->save();
 
 $couponCode = 'IMPHBR852R61';

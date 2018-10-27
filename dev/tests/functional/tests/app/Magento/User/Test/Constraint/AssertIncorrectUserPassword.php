@@ -14,7 +14,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertIncorrectUserPassword extends AbstractConstraint
 {
-    const ERROR_MESSAGE = 'The password entered for the current user is invalid. Verify the password and try again.';
+    const ERROR_MESSAGE = 'You have entered an invalid password for current user.';
 
     /**
      * Asserts that invalid password message equals to expected message.
@@ -25,7 +25,7 @@ class AssertIncorrectUserPassword extends AbstractConstraint
     public function processAssert(Dashboard $dashboard)
     {
         $errorMessage = $dashboard->getMessagesBlock()->getErrorMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::ERROR_MESSAGE,
             $errorMessage,
             'Wrong error message is displayed.'

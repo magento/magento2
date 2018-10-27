@@ -9,7 +9,7 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\Model\AbstractModel;
 
 /**
- * Entity attribute option model
+ * Emtity attribute option model
  *
  * @method int getAttributeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Option setAttributeId(int $value)

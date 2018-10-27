@@ -239,7 +239,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $response = $curl->read();
         $curl->close();
 
-        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
+        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
             $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
             throw new \Exception('Product creation by curl handler was not successful!');
         }
@@ -345,7 +345,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Preparation whether product 'Is Virtual'.
+     * Preparation wheather product 'Is Virtual'.
      *
      * @return void
      */

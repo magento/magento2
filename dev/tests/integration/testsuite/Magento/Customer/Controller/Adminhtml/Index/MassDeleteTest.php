@@ -13,10 +13,6 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use PHPUnit\Framework\Constraint\Constraint;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-<<<<<<< HEAD
-use Magento\Framework\App\Request\Http as HttpRequest;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -36,23 +32,12 @@ class MassDeleteTest extends AbstractBackendController
      */
     private $baseControllerUrl = 'http://localhost/index.php/backend/customer/index/index';
 
-<<<<<<< HEAD
-    /**
-     * @inheritDoc
-     *
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     */
-=======
->>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         parent::setUp();
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function tearDown()
     {
         /**
@@ -116,14 +101,6 @@ class MassDeleteTest extends AbstractBackendController
      */
     private function massDeleteAssertions($ids, Constraint $constraint, $messageType)
     {
-<<<<<<< HEAD
-        $requestData = [
-            'selected' => $ids,
-            'namespace' => 'customer_listing',
-        ];
-
-        $this->getRequest()->setParams($requestData)->setMethod(HttpRequest::METHOD_POST);
-=======
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
 
@@ -135,7 +112,6 @@ class MassDeleteTest extends AbstractBackendController
 
         $this->getRequest()->setParams($requestData);
         $this->getRequest()->setMethod('POST');
->>>>>>> upstream/2.2-develop
         $this->dispatch('backend/customer/index/massDelete');
         $this->assertSessionMessages(
             $constraint,
@@ -154,11 +130,7 @@ class MassDeleteTest extends AbstractBackendController
         return [
             [
                 'ids' => [],
-<<<<<<< HEAD
-                'constraint' => self::equalTo(['An item needs to be selected. Select and try again.']),
-=======
                 'constraint' => self::equalTo(['Please select item(s).']),
->>>>>>> upstream/2.2-develop
                 'messageType' => MessageInterface::TYPE_ERROR,
             ],
             [
@@ -168,11 +140,7 @@ class MassDeleteTest extends AbstractBackendController
             ],
             [
                 'ids' => null,
-<<<<<<< HEAD
-                'constraint' => self::equalTo(['An item needs to be selected. Select and try again.']),
-=======
                 'constraint' => self::equalTo(['Please select item(s).']),
->>>>>>> upstream/2.2-develop
                 'messageType' => MessageInterface::TYPE_ERROR,
             ]
         ];

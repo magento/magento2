@@ -153,23 +153,6 @@
             </argument>
         </arguments>
     </type>
-<<<<<<< HEAD
-    <type name="Magento\Backend\Model\Search\Config\Result\Builder">
-        <arguments>
-            <argument name="structureElementTypes" xsi:type="array">
-                <item name="section" xsi:type="object">Magento\Backend\Model\Search\Config\Structure\Element\Builder\Section</item>
-                <item name="group" xsi:type="object">Magento\Backend\Model\Search\Config\Structure\Element\Builder\Group</item>
-                <item name="field" xsi:type="object">Magento\Backend\Model\Search\Config\Structure\Element\Builder\Field</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Layout\Generator\Block">
-        <arguments>
-            <argument name="defaultClass" xsi:type="string">Magento\Backend\Block\Template</argument>
-        </arguments>
-    </type>
-    <preference for="CsrfRequestValidator" type="Magento\Backend\App\Request\BackendValidator" />
-=======
     <type name="Magento\Framework\View\Layout\Generator\Block">
         <arguments>
             <argument name="defaultClass" xsi:type="string">Magento\Backend\Block\Template</argument>
@@ -191,5 +174,4 @@
             </argument>
         </arguments>
     </type>
->>>>>>> upstream/2.2-develop
 </config>

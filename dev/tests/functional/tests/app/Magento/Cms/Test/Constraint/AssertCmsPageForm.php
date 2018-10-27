@@ -52,7 +52,7 @@ class AssertCmsPageForm extends AbstractAssertForm
         $storeId = explode('/', $cms->getStoreId());
         $cmsFixtureData['store_id'] = array_pop($storeId);
         $errors = $this->verifyData($cmsFixtureData, $cmsFormData);
-        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
+        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
     }
 
     /**

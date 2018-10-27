@@ -13,11 +13,8 @@ use Magento\Analytics\ReportXml\DB\ColumnsResolver;
 use Magento\Framework\App\ResourceConnection;
 
 /**
-<<<<<<< HEAD
-=======
  * Class JoinAssembler
  *
->>>>>>> upstream/2.2-develop
  * Assembles JOIN conditions
  */
 class JoinAssembler implements AssemblerInterface

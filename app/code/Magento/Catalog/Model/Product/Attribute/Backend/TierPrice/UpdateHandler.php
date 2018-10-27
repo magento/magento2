@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\Catalog\Model\Product\Attribute\Backend\TierPrice;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
@@ -70,11 +65,6 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Perform action on relation/extension attribute.
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @param \Magento\Catalog\Api\Data\ProductInterface|object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
@@ -95,22 +85,10 @@ class UpdateHandler implements ExtensionInterface
             $websiteId = $this->storeManager->getStore($entity->getStoreId())->getWebsiteId();
             $isGlobal = $attribute->isScopeGlobal() || $websiteId === 0;
             $identifierField = $this->metadataPoll->getMetadata(ProductInterface::class)->getLinkField();
-<<<<<<< HEAD
-            $productId = (int) $entity->getData($identifierField);
-
-            // prepare original data to compare
-            $origPrices = [];
-            $originalId = $entity->getOrigData($identifierField);
-            if (empty($originalId) || $entity->getData($identifierField) == $originalId) {
-                $origPrices = $entity->getOrigData($attribute->getName());
-            }
-
-=======
             $productId = $entity->getData($identifierField);
 
             // prepare original data to compare
             $origPrices = $entity->getOrigData($attribute->getName());
->>>>>>> upstream/2.2-develop
             $old = $this->prepareOriginalDataToCompare($origPrices, $isGlobal);
             // prepare data for save
             $new = $this->prepareNewDataForSave($priceRows, $isGlobal);
@@ -151,15 +129,9 @@ class UpdateHandler implements ExtensionInterface
      * Check whether price has percentage value.
      *
      * @param array $priceRow
-<<<<<<< HEAD
-     * @return int|null
-     */
-    private function getPercentage(array $priceRow): ?int
-=======
      * @return integer|null
      */
     private function getPercentage(array $priceRow)
->>>>>>> upstream/2.2-develop
     {
         return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
             ? (int)$priceRow['percentage_value']
@@ -171,11 +143,7 @@ class UpdateHandler implements ExtensionInterface
      *
      * @param array $valuesToUpdate
      * @param array $oldValues
-<<<<<<< HEAD
-     * @return bool
-=======
      * @return boolean
->>>>>>> upstream/2.2-develop
      */
     private function updateValues(array $valuesToUpdate, array $oldValues): bool
     {
@@ -294,20 +262,11 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Prepare original data to compare.
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @param array|null $origPrices
      * @param bool $isGlobal
      * @return array
      */
-<<<<<<< HEAD
-    private function prepareOriginalDataToCompare(?array $origPrices, bool $isGlobal = true): array
-=======
     private function prepareOriginalDataToCompare($origPrices, $isGlobal = true): array
->>>>>>> upstream/2.2-develop
     {
         $old = [];
         if (is_array($origPrices)) {
@@ -323,21 +282,12 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Prepare new data for save.
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @param array $priceRows
      * @param bool $isGlobal
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-<<<<<<< HEAD
-    private function prepareNewDataForSave(array $priceRows, bool $isGlobal = true): array
-=======
     private function prepareNewDataForSave($priceRows, $isGlobal = true): array
->>>>>>> upstream/2.2-develop
     {
         $new = [];
         $priceRows = array_filter($priceRows);

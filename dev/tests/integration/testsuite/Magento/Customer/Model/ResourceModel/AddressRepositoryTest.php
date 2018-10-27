@@ -170,15 +170,6 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedNewAddress = $this->expectedAddresses[1];
         $expectedNewAddress->setId($savedAddress->getId());
         $expectedNewAddress->setRegion($this->expectedAddresses[1]->getRegion());
-<<<<<<< HEAD
-
-        $this->assertEquals($expectedNewAddress->getExtensionAttributes(), $savedAddress->getExtensionAttributes());
-        $this->assertEquals(
-            $expectedNewAddress->getRegion()->getExtensionAttributes(),
-            $savedAddress->getRegion()->getExtensionAttributes()
-        );
-=======
->>>>>>> upstream/2.2-develop
         $this->assertEquals($expectedNewAddress, $savedAddress);
     }
 
@@ -226,8 +217,8 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals('One or more input exceptions have occurred.', $exception->getMessage());
             $errors = $exception->getErrors();
             $this->assertCount(2, $errors);
-            $this->assertEquals('"firstname" is required. Enter and try again.', $errors[0]->getLogMessage());
-            $this->assertEquals('"lastname" is required. Enter and try again.', $errors[1]->getLogMessage());
+            $this->assertEquals('firstname is a required field.', $errors[0]->getLogMessage());
+            $this->assertEquals('lastname is a required field.', $errors[1]->getLogMessage());
         }
     }
 

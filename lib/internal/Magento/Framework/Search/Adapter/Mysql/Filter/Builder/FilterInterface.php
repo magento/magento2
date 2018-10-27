@@ -8,16 +8,12 @@ namespace Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 
 /**
- * MySQL search filter builder.
+ * Interface \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\FilterInterface
  *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 interface FilterInterface
 {
     /**
-     * Build filter.
-     *
      * @param RequestFilterInterface $filter
      * @param bool $isNegation
      * @return string

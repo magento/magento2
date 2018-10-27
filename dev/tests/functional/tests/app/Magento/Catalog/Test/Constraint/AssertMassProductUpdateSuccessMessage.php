@@ -30,7 +30,7 @@ class AssertMassProductUpdateSuccessMessage extends AbstractConstraint
     {
         $expectedMessage = sprintf(self::SUCCESS_MESSAGE, $productsCount);
         $actualMessage = $productGrid->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $expectedMessage,
             $actualMessage,
             'Wrong success message is displayed.'

@@ -26,7 +26,7 @@ class AssertCreditCardJsValidationMessagesArePresent extends AbstractConstraint
         $errorMessages = $checkoutOnepage->getBraintreeBlock()->getVisibleMessages($expectedErrorMessages);
 
         foreach (array_keys($errorMessages) as $field) {
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $expectedErrorMessages[$field],
                 $errorMessages[$field],
                 "Wrong js validation error message is displayed for field: $field."

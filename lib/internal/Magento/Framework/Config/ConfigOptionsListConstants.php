@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-declare(strict_types=1);
-
 namespace Magento\Framework\Config;
 
 /**
@@ -46,14 +44,6 @@ class ConfigOptionsListConstants
      */
     const CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION = 'static_content_on_demand_in_production';
 
-<<<<<<< HEAD
-    /**
-     * Paramater for forcing HTML minification even if file is already minified.
-     */
-    const CONFIG_PATH_FORCE_HTML_MINIFICATION = 'force_html_minification';
-
-=======
->>>>>>> upstream/2.2-develop
     /**#@+
      * Input keys for the options
      */
@@ -132,5 +122,5 @@ class ConfigOptionsListConstants
     /**
      * Size of random string generated for store's encryption key
      */
-    const STORE_KEY_RANDOM_STRING_SIZE = SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES;
+    const STORE_KEY_RANDOM_STRING_SIZE = 32;
 }

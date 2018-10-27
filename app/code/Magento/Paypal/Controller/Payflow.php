@@ -44,11 +44,7 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
     protected $_redirectBlockName = 'payflow.link.iframe';
 
     /**
-<<<<<<< HEAD
-     * @var \Magento\Sales\Api\PaymentFailuresInterface
-=======
      * @var PaymentFailuresInterface
->>>>>>> upstream/2.2-develop
      */
     private $paymentFailures;
 
@@ -59,11 +55,7 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
      * @param \Magento\Paypal\Model\PayflowlinkFactory $payflowModelFactory
      * @param \Magento\Paypal\Helper\Checkout $checkoutHelper
      * @param \Psr\Log\LoggerInterface $logger
-<<<<<<< HEAD
-     * @param \Magento\Sales\Api\PaymentFailuresInterface|null $paymentFailures
-=======
      * @param PaymentFailuresInterface|null $paymentFailures
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -72,11 +64,7 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
         \Magento\Paypal\Model\PayflowlinkFactory $payflowModelFactory,
         \Magento\Paypal\Helper\Checkout $checkoutHelper,
         \Psr\Log\LoggerInterface $logger,
-<<<<<<< HEAD
-        \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null
-=======
         PaymentFailuresInterface $paymentFailures = null
->>>>>>> upstream/2.2-develop
     ) {
         parent::__construct($context);
 
@@ -85,13 +73,7 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
         $this->_logger = $logger;
         $this->_payflowModelFactory = $payflowModelFactory;
         $this->_checkoutHelper = $checkoutHelper;
-<<<<<<< HEAD
-        $this->paymentFailures = $paymentFailures ?: $this->_objectManager->get(
-            \Magento\Sales\Api\PaymentFailuresInterface::class
-        );
-=======
         $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(PaymentFailuresInterface::class);
->>>>>>> upstream/2.2-develop
     }
 
     /**

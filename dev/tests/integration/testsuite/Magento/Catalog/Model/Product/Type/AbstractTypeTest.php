@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Product\Type;
 
 /**
@@ -200,7 +199,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         // fixture
 
         $this->assertContains(
-            "The product's required option(s) weren't entered. Make sure the options are entered and try again.",
+            'Please specify product\'s required option(s).',
             $this->_model->prepareForCart(new \Magento\Framework\DataObject(), $product)
         );
     }
@@ -208,7 +207,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
     public function testGetSpecifyOptionMessage()
     {
         $this->assertEquals(
-            "The product's required option(s) weren't entered. Make sure the options are entered and try again.",
+            'Please specify product\'s required option(s).',
             $this->_model->getSpecifyOptionMessage()
         );
     }

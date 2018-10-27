@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Stdlib\Cookie;
 
 use Magento\Framework\App\RequestInterface;
@@ -44,8 +46,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
             ],
-            $cookieScope->getSensitiveCookieMetadata()->__toArray()
-        );
+            $cookieScope->getSensitiveCookieMetadata()->__toArray());
 
         $this->request->setServer(new Parameters($serverVal));
     }
@@ -140,8 +141,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => false,
             ],
-            $cookieScope->getSensitiveCookieMetadata($override)->__toArray()
-        );
+            $cookieScope->getSensitiveCookieMetadata($override)->__toArray());
     }
 
     public function testGetPublicCookieMetadataOverrides()

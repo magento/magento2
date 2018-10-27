@@ -48,7 +48,7 @@ class AssertCatalogPriceRuleForm extends AbstractConstraint
             $fixtureData['discount_amount'] = (float)$fixtureData['discount_amount'];
         }
         $diff = $this->verifyData($formData, $fixtureData);
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             empty($diff),
             implode(' ', $diff)
         );

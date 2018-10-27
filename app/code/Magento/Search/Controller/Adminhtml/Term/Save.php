@@ -5,14 +5,13 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Search\Model\QueryFactory;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends TermController implements HttpPostActionInterface
+class Save extends TermController
 {
     /**
      * @var QueryFactory

@@ -39,11 +39,7 @@ class AssertSignifydGuaranteeCancelInCommentsHistory extends AbstractConstraint
         $orderComments = $infoTab->getCommentsHistoryBlock()->getComments();
         $commentsMessages = array_column($orderComments, 'comment');
 
-<<<<<<< HEAD
-        \PHPUnit\Framework\Assert::assertContains(
-=======
         \PHPUnit_Framework_Assert::assertContains(
->>>>>>> upstream/2.2-develop
             $this->guaranteeCancelMessage,
             implode('. ', $commentsMessages),
             'There is no message regarding Signifyd guarantee cancel in Comments History section for the order #'

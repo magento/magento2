@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Deploy\Model\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
@@ -110,8 +109,6 @@ class ImporterPool
     }
 
     /**
-     * Retrieves sections names
-     *
      * Retrieves names of sections for configuration files whose data is read from these files for import
      * to appropriate application sources.
      *
@@ -151,9 +148,7 @@ class ImporterPool
 
             foreach ($this->sort($this->importers) as $section => $importer) {
                 if (empty($importer['importer_class'])) {
-                    throw new ConfigurationMismatchException(
-                        __('The parameter "importer_class" is missing. Set the "importer_class" and try again.')
-                    );
+                    throw new ConfigurationMismatchException(__('Parameter "importer_class" must be present.'));
                 }
 
                 $sortedImporters[$section] = $importer['importer_class'];

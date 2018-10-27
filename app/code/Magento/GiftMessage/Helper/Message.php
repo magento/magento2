@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\GiftMessage\Helper;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
@@ -201,8 +203,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $result = $this->scopeConfig->getValue(
             self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store
         );
         if ($productConfig === null || '' === $productConfig || $productConfig == Boolean::VALUE_USE_CONFIG) {
             return $result;
@@ -326,7 +327,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     public function getGiftMessage($messageId = null)
     {
         $message = $this->_giftMessageFactory->create();
-        if ($messageId !== null) {
+        if (!is_null($messageId)) {
             $message->load($messageId);
         }
         return $message;

@@ -10,7 +10,6 @@
 return [
     'Magento_AdminNotification',
     'Magento_AdvancedPricingImportExport',
-    'Magento_AdvancedSearch',
     'Magento_Authorization',
     'Magento_Authorizenet',
     'Magento_Backend',

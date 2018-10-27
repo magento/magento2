@@ -407,7 +407,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     * Get additional attributes for downloadable product.
+     * Get additional attributes for dowloadable product.
      *
      * @param array $rowData
      * @return array
@@ -777,8 +777,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $option = [];
         foreach ($values as $keyValue) {
             $keyValue = trim($keyValue);
-            $pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR);
-            if ($pos !== false) {
+            if ($pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR)) {
                 $key = substr($keyValue, 0, $pos);
                 $value = substr($keyValue, $pos + 1);
                 if ($key == 'sample') {
@@ -811,8 +810,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $option = [];
         foreach ($values as $keyValue) {
             $keyValue = trim($keyValue);
-            $pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR);
-            if ($pos !== false) {
+            if ($pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR)) {
                 $key = substr($keyValue, 0, $pos);
                 $value = substr($keyValue, $pos + 1);
                 if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE) {

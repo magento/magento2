@@ -8,20 +8,18 @@
 
 require([
     'jquery',
+    'tinymce',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
     'loadingPopup',
     'mage/backend/floating-header'
-], function (jQuery, confirm) {
+], function (jQuery, tinyMCE, confirm) {
     'use strict';
 
     /**
      * Delete some category
      * This routine get categoryId explicitly, so even if currently selected tree node is out of sync
-     * with this form, we surely delete same category in the tree and at backend.
-     *
-     * @deprecated
-     * @see deleteConfirm
+     * with this form, we surely delete same category in the tree and at backend
      */
     function categoryDelete(url) {
         confirm({

@@ -55,7 +55,7 @@ class EmailSender
             $this->orderSender->send($order);
         } catch (\Magento\Framework\Exception\MailException $exception) {
             $this->logger->critical($exception);
-            $this->messageManager->addWarningMessage(
+            $this->messageManager->addWarning(
                 __('You did not email your customer. Please check your email settings.')
             );
             return false;

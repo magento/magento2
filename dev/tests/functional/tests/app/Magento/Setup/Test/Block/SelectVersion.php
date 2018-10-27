@@ -105,11 +105,7 @@ class SelectVersion extends Form
      * @param array $packages
      * @return void
      */
-<<<<<<< HEAD
-    public function chooseUpgradeOtherComponents(array $packages) :void
-=======
     public function chooseUpgradeOtherComponents(array $packages)
->>>>>>> upstream/2.2-develop
     {
         $this->_rootElement->find("[for=yesUpdateComponents]")->click();
         $this->waitForElementNotVisible("[ng-show=\"!componentsProcessed\"");
@@ -129,10 +125,6 @@ class SelectVersion extends Form
     public function isComponentsEmpty()
     {
         $this->waitForElementVisible($this->waitEmpty, Locator::SELECTOR_XPATH);
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         return $this->_rootElement->find($this->empty)->isVisible();
     }
 
@@ -151,11 +143,7 @@ class SelectVersion extends Form
      *
      * @return OtherComponentsGrid
      */
-<<<<<<< HEAD
-    private function getOtherComponentsGrid() : OtherComponentsGrid
-=======
     private function getOtherComponentsGrid()
->>>>>>> upstream/2.2-develop
     {
         if (!isset($this->otherComponentGrid)) {
             $this->otherComponentGrid = $this->blockFactory->create(
@@ -163,10 +151,6 @@ class SelectVersion extends Form
                 ['element' => $this->_rootElement->find($this->otherComponentsGrid)]
             );
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         return $this->otherComponentGrid;
     }
 }

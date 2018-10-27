@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\Paypal\Test\Unit\Model\Adminhtml;
 
 use Magento\Payment\Model\MethodInterface;
@@ -23,12 +18,6 @@ use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use PHPUnit\Framework\TestCase;
 
-<<<<<<< HEAD
-/**
- * Test ability to make an authorization calls to Paypal API from admin.
- */
-=======
->>>>>>> upstream/2.2-develop
 class ExpressTest extends TestCase
 {
     /**
@@ -98,11 +87,7 @@ class ExpressTest extends TestCase
             Express::class,
             [
                 'data' => [$this->pro],
-<<<<<<< HEAD
-                'transactionRepository' => $this->transactionRepository,
-=======
                 'transactionRepository' => $this->transactionRepository
->>>>>>> upstream/2.2-develop
             ]
         );
 
@@ -117,11 +102,7 @@ class ExpressTest extends TestCase
                 'getOrder',
                 'addTransaction',
                 'addTransactionCommentsToOrder',
-<<<<<<< HEAD
-                'setAmountAuthorized',
-=======
                 'setAmountAuthorized'
->>>>>>> upstream/2.2-develop
             ]
         );
         $this->payment->method('getMethodInstance')
@@ -195,17 +176,8 @@ class ExpressTest extends TestCase
      * @throws LocalizedException
      * @dataProvider paymentDataProvider
      */
-<<<<<<< HEAD
-    public function testIsOrderAuthorizationAllowed(
-        string $method,
-        string $action,
-        float $authorizedAmount,
-        bool $isAuthAllowed
-    ) {
-=======
     public function testIsOrderAuthorizationAllowed($method, $action, $authorizedAmount, $isAuthAllowed)
     {
->>>>>>> upstream/2.2-develop
         $this->payment->method('getMethod')
             ->willReturn($method);
 
@@ -231,11 +203,7 @@ class ExpressTest extends TestCase
             ['paypal_express', 'capture', 0, false],
             ['paypal_express', 'order', 0, true],
             ['braintree', 'authorize', 10, false],
-<<<<<<< HEAD
-            ['braintree', 'authorize', 0, false],
-=======
             ['braintree', 'authorize', 0, false]
->>>>>>> upstream/2.2-develop
         ];
     }
 }

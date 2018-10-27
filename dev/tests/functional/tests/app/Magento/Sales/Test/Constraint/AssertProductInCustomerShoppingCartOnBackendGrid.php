@@ -34,7 +34,7 @@ class AssertProductInCustomerShoppingCartOnBackendGrid extends AbstractConstrain
         $customerIndexEdit->open(['id' => $customer->getId()]);
         $customerIndexEdit->getPageActionsBlock()->manageShoppingCart();
         foreach ($productsInCart as $product) {
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $product->getName(),
                 $checkoutIndex->getItemsBlock()->getItemName($product),
                 'Product ' . $product->getName() . " is not present in grid on customer's shopping cart on backend."

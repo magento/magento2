@@ -33,11 +33,11 @@ class Capture extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             )->addObject(
                 $invoice->getOrder()
             )->save();
-            $this->messageManager->addSuccessMessage(__('The invoice has been captured.'));
+            $this->messageManager->addSuccess(__('The invoice has been captured.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('Invoice capturing error'));
+            $this->messageManager->addError(__('Invoice capturing error'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

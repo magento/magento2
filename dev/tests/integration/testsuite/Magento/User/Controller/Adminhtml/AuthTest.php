@@ -5,9 +5,6 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
-use Magento\TestFramework\Mail\Template\TransportBuilderMock;
-use Magento\TestFramework\Helper\Bootstrap;
-
 /**
  * Test class for \Magento\User\Controller\Adminhtml\Auth
  *
@@ -38,7 +35,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->dispatch('backend/admin/auth/forgotpassword');
         $this->assertRedirect(
             $this->equalTo(
-                Bootstrap::getObjectManager()->get(
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                     \Magento\Backend\Helper\Data::class
                 )->getHomePageUrl()
             )
@@ -54,24 +51,21 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testEmailSendForgotPasswordAction()
     {
-        /** @var TransportBuilderMock $transportMock */
-        $transportMock = Bootstrap::getObjectManager()->get(
-            TransportBuilderMock::class
+        $transportBuilderMock = $this->prepareEmailMock(
+            1,
+            'admin_emails_forgot_email_template',
+            'general'
         );
+        $this->addMockToClass($transportBuilderMock, \Magento\User\Model\User::class);
+
         $this->getRequest()->setPostValue('email', 'adminUser@example.com');
         $this->dispatch('backend/admin/auth/forgotpassword');
         $this->assertRedirect(
             $this->equalTo(
-                Bootstrap::getObjectManager()->get(
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                     \Magento\Backend\Helper\Data::class
                 )->getHomePageUrl()
             )
-        );
-        $message = $transportMock->getSentMessage();
-        $this->assertNotEmpty($message);
-        $this->assertEquals(
-            __('Password Reset Confirmation for %1', ['John Doe'])->render(),
-            $message->getSubject()
         );
     }
 
@@ -85,13 +79,13 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     public function testResetPasswordAction()
     {
         /** @var $user \Magento\User\Model\User */
-        $user = Bootstrap::getObjectManager()->create(
+        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\User\Model\User::class
         )->loadByUsername(
             'dummy_username'
         );
         $this->assertNotEmpty($user->getId(), 'Broken fixture');
-        $resetPasswordToken = Bootstrap::getObjectManager()->get(
+        $resetPasswordToken = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\User\Helper\Data::class
         )->generateResetPasswordLinkToken();
         $user->changeResetPasswordLinkToken($resetPasswordToken);
@@ -129,7 +123,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testResetPasswordPostAction($password, $passwordConfirmation, $isPasswordChanged)
     {
-        $objectManager = Bootstrap::getObjectManager();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $user \Magento\User\Model\User */
         $user = $objectManager->create(\Magento\User\Model\User::class);
@@ -209,7 +203,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
 
-        $objectManager = Bootstrap::getObjectManager();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Backend\Helper\Data $backendHelper */
         $backendHelper = $objectManager->get(\Magento\Backend\Helper\Data::class);
@@ -224,7 +218,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testResetPasswordPostActionWithInvalidPassword()
     {
-        $objectManager = Bootstrap::getObjectManager();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $user = $objectManager->create(\Magento\User\Model\User::class);
         $user->loadByUsername('dummy_username');

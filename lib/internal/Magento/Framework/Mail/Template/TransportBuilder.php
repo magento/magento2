@@ -9,20 +9,14 @@
 namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
-<<<<<<< HEAD
-=======
 use Magento\Framework\Mail\TransportInterface;
->>>>>>> upstream/2.2-develop
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Phrase;
 
 /**
  * @api
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransportBuilder
 {
@@ -95,11 +89,7 @@ class TransportBuilder
     protected $mailTransportFactory;
 
     /**
-<<<<<<< HEAD
-     * @var \Magento\Framework\Mail\MessageInterfaceFactory
-=======
      * @var MessageInterfaceFactory
->>>>>>> upstream/2.2-develop
      */
     private $messageFactory;
 
@@ -109,11 +99,7 @@ class TransportBuilder
      * @param SenderResolverInterface $senderResolver
      * @param ObjectManagerInterface $objectManager
      * @param TransportInterfaceFactory $mailTransportFactory
-<<<<<<< HEAD
-     * @param MessageInterfaceFactory $messageFactory
-=======
      * @param MessageInterfaceFactory|null $messageFactory
->>>>>>> upstream/2.2-develop
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -286,30 +272,23 @@ class TransportBuilder
     }
 
     /**
-     * Prepare message.
+     * Prepare message
      *
      * @return $this
-     * @throws LocalizedException if template type is unknown
      */
     protected function prepareMessage()
     {
         $template = $this->getTemplate();
+        $types = [
+            TemplateTypesInterface::TYPE_TEXT => MessageInterface::TYPE_TEXT,
+            TemplateTypesInterface::TYPE_HTML => MessageInterface::TYPE_HTML,
+        ];
+
         $body = $template->processTemplate();
-        switch ($template->getType()) {
-            case TemplateTypesInterface::TYPE_TEXT:
-                $this->message->setBodyText($body);
-                break;
+        $this->message->setMessageType($types[$template->getType()])
+            ->setBody($body)
+            ->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
 
-            case TemplateTypesInterface::TYPE_HTML:
-                $this->message->setBodyHtml($body);
-                break;
-
-            default:
-                throw new LocalizedException(
-                    new Phrase('Unknown template type')
-                );
-        }
-        $this->message->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
         return $this;
     }
 }

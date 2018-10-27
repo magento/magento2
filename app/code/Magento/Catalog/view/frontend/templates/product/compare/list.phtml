@@ -30,11 +30,7 @@
                             <th scope="row" class="cell label remove"><span><?= /* @escapeNotVerified */ __('Remove Product') ?></span></th>
                         <?php endif; ?>
                         <td class="cell remove product hidden-print">
-<<<<<<< HEAD
-                            <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
-=======
                             <?php $compareHelper = $this->helper(\Magento\Catalog\Helper\Product\Compare::class);?>
->>>>>>> upstream/2.2-develop
                             <a href="#" data-post='<?= /* @escapeNotVerified */ $compareHelper->getPostDataRemove($item) ?>'
                                class="action delete" title="<?= /* @escapeNotVerified */ __('Remove Product') ?>">
                                 <span><?= /* @escapeNotVerified */ __('Remove Product') ?></span>
@@ -46,11 +42,7 @@
                 <tbody>
                 <tr>
                     <?php $index = 0; ?>
-<<<<<<< HEAD
-                    <?php $helper = $this->helper('Magento\Catalog\Helper\Output'); ?>
-=======
                     <?php $helper = $this->helper(\Magento\Catalog\Helper\Output::class); ?>
->>>>>>> upstream/2.2-develop
                     <?php /** @var $item \Magento\Catalog\Model\Product */ ?>
                     <?php foreach ($block->getItems() as $item): ?>
                         <?php if ($index++ == 0): ?>
@@ -70,11 +62,7 @@
                             <div class="product-item-actions hidden-print">
                                 <div class="actions-primary">
                                     <?php if ($item->isSaleable()): ?>
-<<<<<<< HEAD
-                                        <form data-role="tocart-form" action="<?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Product\Compare')->getAddToCartUrl($item) ?>" method="post">
-=======
                                         <form data-role="tocart-form" action="<?= /* @escapeNotVerified */ $this->helper(\Magento\Catalog\Helper\Product\Compare::class)->getAddToCartUrl($item) ?>" method="post">
->>>>>>> upstream/2.2-develop
                                             <?= $block->getBlockHtml('formkey') ?>
                                             <button type="submit" class="action tocart primary">
                                                 <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>

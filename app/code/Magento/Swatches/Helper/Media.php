@@ -68,9 +68,9 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     protected $swatchImageTypes = ['swatch_image', 'swatch_thumb'];
 
     /**
-     * @var array
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
      */
-    private $imageConfig;
+    private $registeredThemesCache;
 
     /**
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
@@ -110,11 +110,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         $absoluteImagePath = $this->mediaDirectory
             ->getAbsolutePath($this->getSwatchMediaPath() . '/' . $generationPath);
         if (!file_exists($absoluteImagePath)) {
-            try {
-                $this->generateSwatchVariations($file);
-            } catch (\Exception $e) {
-                return '';
-            }
+            $this->generateSwatchVariations($file);
         }
         return $this->getSwatchMediaUrl() . '/' . $generationPath;
     }
@@ -256,14 +252,18 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getImageConfig()
     {
-        if (!$this->imageConfig) {
-            $this->imageConfig = $this->viewConfig->getViewConfig()->getMediaEntities(
-                'Magento_Catalog',
-                Image::MEDIA_TYPE_CONFIG_NODE
+        $imageConfig = [];
+        foreach ($this->getRegisteredThemes() as $theme) {
+            $config = $this->viewConfig->getViewConfig([
+                'area' => Area::AREA_FRONTEND,
+                'themeModel' => $theme,
+            ]);
+            $imageConfig = array_merge(
+                $imageConfig,
+                $config->getMediaEntities('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE)
             );
         }
-
-        return $this->imageConfig;
+        return $imageConfig;
     }
 
     /**
@@ -333,5 +333,17 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     protected function prepareFile($file)
     {
         return ltrim(str_replace('\\', '/', $file), '/');
+    }
+
+    /**
+     * @return \Magento\Theme\Model\ResourceModel\Theme\Collection
+     */
+    private function getRegisteredThemes()
+    {
+        if ($this->registeredThemesCache === null) {
+            $this->registeredThemesCache = $this->themeCollection->loadRegisteredThemes();
+        }
+
+        return $this->registeredThemesCache;
     }
 }

@@ -17,11 +17,6 @@ use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-<<<<<<< HEAD
- * @deprecated
- * @see \Magento\ElasticSearch
-=======
->>>>>>> upstream/2.2-develop
  */
 class ExclusionStrategyTest extends \PHPUnit\Framework\TestCase
 {

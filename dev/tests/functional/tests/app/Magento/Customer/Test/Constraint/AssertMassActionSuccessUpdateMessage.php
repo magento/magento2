@@ -35,7 +35,7 @@ class AssertMassActionSuccessUpdateMessage extends AbstractConstraint
     public function processAssert(array $customers, CustomerIndex $pageCustomerIndex)
     {
         $actualMessage = $pageCustomerIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(sprintf(self::UPDATE_MESSAGE, count($customers)), $actualMessage);
+        \PHPUnit_Framework_Assert::assertEquals(sprintf(self::UPDATE_MESSAGE, count($customers)), $actualMessage);
     }
 
     /**

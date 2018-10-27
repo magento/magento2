@@ -8,7 +8,6 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
          colors="true"
-         columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
         >
@@ -20,11 +19,7 @@
         <directory suffix="Test.php">../../../vendor/*/module-*/Test/Unit</directory>
         <directory suffix="Test.php">../../../vendor/*/framework/Test/Unit</directory>
         <directory suffix="Test.php">../../../vendor/*/framework/*/Test/Unit</directory>
-<<<<<<< HEAD
-        <directory suffix="Test.php">../../tests/unit/*/Test/Unit</directory>
-=======
         <directory suffix="Test.php">./*/*/Test/Unit</directory>
->>>>>>> upstream/2.2-develop
     </testsuite>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>

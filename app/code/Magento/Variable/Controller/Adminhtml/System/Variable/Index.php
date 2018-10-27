@@ -6,14 +6,12 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
 /**
  * Display Variables list page
  * @api
  * @since 100.0.2
  */
-class Index extends \Magento\Variable\Controller\Adminhtml\System\Variable implements HttpGetActionInterface
+class Index extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
     /**
      * Index Action

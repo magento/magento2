@@ -7,11 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Controller\Adminhtml\Product;
 
-<<<<<<< HEAD
-use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\Data\Form\FormKey;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -23,33 +18,11 @@ use Magento\Framework\Exception\LocalizedException;
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-<<<<<<< HEAD
-     * @var FormKey
-     */
-    private $formKey;
-
-    /**
-     * @inheritDoc
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->formKey = $this->_objectManager->get(FormKey::class);
-    }
-
-    /**
-=======
->>>>>>> upstream/2.2-develop
      * Generate random hex color.
      *
      * @return string
      */
-<<<<<<< HEAD
-    private function getRandomColor() : string
-=======
     private function getRandomColor(): string
->>>>>>> upstream/2.2-develop
     {
         return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
     }
@@ -60,45 +33,11 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      * @param int $optionsCount
      * @return array
      */
-<<<<<<< HEAD
-    private function getSwatchVisualDataSet(int $optionsCount) : array
-=======
     private function getSwatchVisualDataSet(int $optionsCount): array
->>>>>>> upstream/2.2-develop
     {
         $optionsData = [];
         $expectedOptionsLabels = [];
         for ($i = 0; $i < $optionsCount; $i++) {
-<<<<<<< HEAD
-            $expectedOptionLabelOnStoreView = 'value_' . $i .'_store_1';
-            $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
-            $optionId = 'option_' .$i;
-            $optionRowData = [];
-            $optionRowData['optionvisual']['order'][$optionId] = $i + 1;
-            $optionRowData['defaultvisual'][] = $optionId;
-            $optionRowData['swatchvisual']['value'][$optionId] = $this->getRandomColor();
-            $optionRowData['optionvisual']['value'][$optionId][0] = 'value_' . $i .'_admin';
-            $optionRowData['optionvisual']['value'][$optionId][1] = $expectedOptionLabelOnStoreView;
-            $optionRowData['optionvisual']['delete'][$optionId] = '';
-            $optionsData[] = http_build_query($optionRowData);
-        }
-        return [
-            'attribute_data' => array_merge_recursive(
-                [
-                    'serialized_options' => json_encode($optionsData),
-                ],
-                [
-                    'visual_swatch_validation' => '',
-                    'visual_swatch_validation_unique' => '',
-                ],
-                $this->getAttributePreset(),
-                [
-                    'frontend_input' => 'swatch_visual'
-                ]
-            ),
-            'expected_options_count' => $optionsCount + 1,
-            'expected_store_labels' => $expectedOptionsLabels
-=======
             $order = $i + 1;
             $expectedOptionLabelOnStoreView = "value_{$i}_store_1";
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
@@ -123,7 +62,6 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             ),
             'expected_options_count' => $optionsCount + 1,
             'expected_store_labels' => $expectedOptionsLabels,
->>>>>>> upstream/2.2-develop
         ];
     }
 
@@ -133,45 +71,11 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      * @param int $optionsCount
      * @return array
      */
-<<<<<<< HEAD
-    private function getSwatchTextDataSet(int $optionsCount) : array
-=======
     private function getSwatchTextDataSet(int $optionsCount): array
->>>>>>> upstream/2.2-develop
     {
         $optionsData = [];
         $expectedOptionsLabels = [];
         for ($i = 0; $i < $optionsCount; $i++) {
-<<<<<<< HEAD
-            $expectedOptionLabelOnStoreView = 'value_' . $i . '_store_1';
-            $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
-            $optionId = 'option_' . $i;
-            $optionRowData = [];
-            $optionRowData['optiontext']['order'][$optionId] = $i + 1;
-            $optionRowData['defaulttext'][] = $optionId;
-            $optionRowData['swatchtext']['value'][$optionId] = 'x' . $i ;
-            $optionRowData['optiontext']['value'][$optionId][0] = 'value_' . $i . '_admin';
-            $optionRowData['optiontext']['value'][$optionId][1]= $expectedOptionLabelOnStoreView;
-            $optionRowData['optiontext']['delete'][$optionId]='';
-            $optionsData[] = http_build_query($optionRowData);
-        }
-        return [
-            'attribute_data' => array_merge_recursive(
-                [
-                    'serialized_options' => json_encode($optionsData),
-                ],
-                [
-                    'text_swatch_validation' => '',
-                    'text_swatch_validation_unique' => '',
-                ],
-                $this->getAttributePreset(),
-                [
-                    'frontend_input' => 'swatch_text'
-                ]
-            ),
-            'expected_options_count' => $optionsCount + 1,
-            'expected_store_labels' => $expectedOptionsLabels
-=======
             $order = $i + 1;
             $expectedOptionLabelOnStoreView = "value_{$i}_store_1";
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
@@ -196,7 +100,6 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             ),
             'expected_options_count' => $optionsCount + 1,
             'expected_store_labels' => $expectedOptionsLabels,
->>>>>>> upstream/2.2-develop
         ];
     }
 
@@ -205,16 +108,10 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      *
      * @return array
      */
-<<<<<<< HEAD
-    private function getAttributePreset() : array
-    {
-        return [
-=======
     private function getAttributePreset(): array
     {
         return [
             'serialized_options' => '[]',
->>>>>>> upstream/2.2-develop
             'form_key' => 'XxtpPYjm2YPYUlAt',
             'frontend_label' => [
                 0 => 'asdasd',
@@ -252,11 +149,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      *
      * @return array
      */
-<<<<<<< HEAD
-    public function getLargeSwatchesAmountAttributeData() : array
-=======
     public function getLargeSwatchesAmountAttributeData(): array
->>>>>>> upstream/2.2-develop
     {
         $maxInputVars = ini_get('max_input_vars');
         // Each option is at least 7 variables array for a visual swatch.
@@ -265,20 +158,13 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $swatchTextOptionsCount = (int)floor($maxInputVars / 4) + 80;
         return [
             'visual swatches' => $this->getSwatchVisualDataSet($swatchVisualOptionsCount),
-<<<<<<< HEAD
-            'text swatches' => $this->getSwatchTextDataSet($swatchTextOptionsCount)
-=======
             'text swatches' => $this->getSwatchTextDataSet($swatchTextOptionsCount),
->>>>>>> upstream/2.2-develop
         ];
     }
 
     /**
      * Test attribute saving with large amount of options exceeding maximum allowed by max_input_vars limit.
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @dataProvider getLargeSwatchesAmountAttributeData()
      * @param array $attributeData
      * @param int $expectedOptionsCount
@@ -289,15 +175,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         array $attributeData,
         int $expectedOptionsCount,
         array $expectedLabels
-<<<<<<< HEAD
-    ) : void {
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()->setPostValue($attributeData);
-        $this->getRequest()->setPostValue('form_key', $this->formKey->getFormKey());
-=======
     ) {
         $this->getRequest()->setPostValue($attributeData);
->>>>>>> upstream/2.2-develop
         $this->dispatch('backend/catalog/product_attribute/save');
         $entityTypeId = $this->_objectManager->create(
             \Magento\Eav\Model\Entity::class

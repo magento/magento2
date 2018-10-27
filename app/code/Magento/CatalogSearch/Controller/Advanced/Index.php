@@ -6,17 +6,12 @@
  */
 namespace Magento\CatalogSearch\Controller\Advanced;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Advanced search controller.
- */
-class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
+class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @inheritdoc
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {

@@ -6,9 +6,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Start extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View implements HttpGetActionInterface
+class Start extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**
      * Start create invoice action

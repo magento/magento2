@@ -232,7 +232,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 
         $countryCode = $taxRate->getTaxCountryId();
         if (!\Zend_Validate::is($countryCode, 'NotEmpty')) {
-            $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'country_id']));
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'country_id']));
         } elseif (!\Zend_Validate::is(
             $this->countryFactory->create()->loadByCode($countryCode)->getId(),
             'NotEmpty'
@@ -265,13 +265,11 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         }
 
         if (!is_numeric($taxRate->getRate()) || $taxRate->getRate() < 0) {
-            $exception->addError(
-                __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'percentage_rate'])
-            );
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'percentage_rate']));
         }
 
         if (!\Zend_Validate::is(trim($taxRate->getCode()), 'NotEmpty')) {
-            $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'code']));
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'code']));
         }
 
         if ($taxRate->getZipIsRange()) {
@@ -294,7 +292,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             }
         } else {
             if (!\Zend_Validate::is(trim($taxRate->getTaxPostcode()), 'NotEmpty')) {
-                $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']));
+                $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'postcode']));
             }
         }
 

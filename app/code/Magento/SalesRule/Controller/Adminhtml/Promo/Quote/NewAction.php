@@ -6,9 +6,7 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class NewAction extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpGetActionInterface
+class NewAction extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**
      * New promo quote action

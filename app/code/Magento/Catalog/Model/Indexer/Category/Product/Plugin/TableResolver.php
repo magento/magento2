@@ -13,11 +13,7 @@ use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\Framework\Search\Request\Dimension;
 
 /**
-<<<<<<< HEAD
- * Class that replace catalog_category_product_index table name on the table name segmented per store
-=======
  * Class that replace catalog_category_product_index table name  on  the table name segmented per store
->>>>>>> upstream/2.2-develop
  */
 class TableResolver
 {
@@ -44,11 +40,7 @@ class TableResolver
     }
 
     /**
-<<<<<<< HEAD
-     * Replacing catalog_category_product_index table name on the table name segmented per store
-=======
      * replacing catalog_category_product_index table name on the table name segmented per store
->>>>>>> upstream/2.2-develop
      *
      * @param ResourceConnection $subject
      * @param string $result

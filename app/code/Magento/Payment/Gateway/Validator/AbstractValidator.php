@@ -32,16 +32,14 @@ abstract class AbstractValidator implements ValidatorInterface
      *
      * @param bool $isValid
      * @param array $fails
-     * @param array $errorCodes
-     * @return void
+     * @return ResultInterface
      */
-    protected function createResult($isValid, array $fails = [], array $errorCodes = [])
+    protected function createResult($isValid, array $fails = [])
     {
         return $this->resultInterfaceFactory->create(
             [
                 'isValid' => (bool)$isValid,
-                'failsDescription' => $fails,
-                'errorCodes' => $errorCodes
+                'failsDescription' => $fails
             ]
         );
     }

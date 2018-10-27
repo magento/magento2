@@ -6,10 +6,9 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
 
-class Edit extends \Magento\Backend\App\Action implements HttpGetActionInterface
+class Edit extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session

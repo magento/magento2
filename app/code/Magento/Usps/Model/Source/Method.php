@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Usps\Model\Source;
 
 /**
- * Method source
- */
+* Method source
+*/
 class Method extends Generic
 {
     /**

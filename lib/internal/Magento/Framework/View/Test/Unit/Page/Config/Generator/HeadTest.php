@@ -61,17 +61,11 @@ class HeadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-<<<<<<< HEAD
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testProcess()
-=======
      * @param array $assets
      *
      * @dataProvider testProcessAssetDataProvider
      */
     public function testProcess($assets)
->>>>>>> upstream/2.2-develop
     {
         $generatorContextMock = $this->createMock(Context::class);
         $this->title->expects($this->any())->method('set')->with()->will($this->returnSelf());
@@ -86,49 +80,6 @@ class HeadTest extends \PHPUnit\Framework\TestCase
             ->with('customcss/render/css')
             ->willReturn('http://magento.dev/customcss/render/css');
 
-<<<<<<< HEAD
-        $assets = [
-            'remoteCss' => [
-                'src' => 'file-url-css',
-                'src_type' => 'url',
-                'content_type' => 'css',
-                'media' => 'all',
-            ],
-            'remoteCssOrderedLast' => [
-                'src' => 'file-url-css-last',
-                'src_type' => 'url',
-                'content_type' => 'css',
-                'media' => 'all',
-                'order' => 30,
-            ],
-            'remoteCssOrderedFirst' => [
-                'src' => 'file-url-css-first',
-                'src_type' => 'url',
-                'content_type' => 'css',
-                'media' => 'all',
-                'order' => 10,
-            ],
-            'remoteLink' => [
-                'src' => 'file-url-link',
-                'src_type' => 'url',
-                'media' => 'all',
-            ],
-            'controllerCss' => [
-                'src' => 'customcss/render/css',
-                'src_type' => 'controller',
-                'content_type' => 'css',
-                'media' => 'all',
-            ],
-            'name' => [
-                'src' => 'file-path',
-                'ie_condition' => 'lt IE 7',
-                'content_type' => 'css',
-                'media' => 'print',
-            ],
-        ];
-
-=======
->>>>>>> upstream/2.2-develop
         $this->pageConfigMock->expects($this->at(0))
             ->method('addRemotePageAsset')
             ->with('file-url-css', 'css', ['attributes' => ['media' => 'all']]);

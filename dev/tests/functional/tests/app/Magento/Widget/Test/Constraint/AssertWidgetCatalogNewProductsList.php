@@ -59,11 +59,11 @@ class AssertWidgetCatalogNewProductsList extends AbstractConstraint
         $cmsIndex->open();
         $categoryName = $widget->getWidgetInstance()[0]['entities']->getName();
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $catalogCategoryView->getWidgetView()->isWidgetVisible($widget, 'New Products'),
             'Widget is absent on Category page.'
         );
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $products,
             $this->catalogCategoryView->getViewBlock()->getProductsFromCatalogNewProductsListBlock(),
             'There are wrong products or products are absent on Catalog New Products List block on Category page.'

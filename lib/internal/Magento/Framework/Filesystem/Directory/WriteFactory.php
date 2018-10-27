@@ -37,16 +37,7 @@ class WriteFactory
     public function create($path, $driverCode = DriverPool::FILE, $createPermissions = null)
     {
         $driver = $this->driverPool->getDriver($driverCode);
-        $factory = new \Magento\Framework\Filesystem\File\WriteFactory(
-            $this->driverPool
-        );
-
-        return new Write(
-            $factory,
-            $driver,
-            $path,
-            $createPermissions,
-            new PathValidator($driver)
-        );
+        $factory = new \Magento\Framework\Filesystem\File\WriteFactory($this->driverPool);
+        return new Write($factory, $driver, $path, $createPermissions);
     }
 }

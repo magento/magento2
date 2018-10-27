@@ -12,7 +12,7 @@ namespace Magento\Email\Block\Adminhtml\Template\Edit;
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
-     * @var \Magento\Variable\Model\Source\Variables
+     * @var \Magento\Email\Model\Source\Variables
      */
     protected $_variables;
 
@@ -31,7 +31,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Variable\Model\VariableFactory $variableFactory
-     * @param \Magento\Variable\Model\Source\Variables $variables
+     * @param \Magento\Email\Model\Source\Variables $variables
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
@@ -41,7 +41,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Variable\Model\VariableFactory $variableFactory,
-        \Magento\Variable\Model\Source\Variables $variables,
+        \Magento\Email\Model\Source\Variables $variables,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
@@ -174,7 +174,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getEmailTemplate()
     {
-        return $this->getData('email_template');
+        return $this->_coreRegistry->registry('current_email_template');
     }
 
     /**
@@ -184,14 +184,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getVariables()
     {
-        $variables = $this->_variables->toOptionArray(true);
+        $variables = [];
+        $variables[] = $this->_variables->toOptionArray(true);
         $customVariables = $this->_variableFactory->create()->getVariablesOptionArray(true);
         if ($customVariables) {
-            $variables = array_merge_recursive($variables, $customVariables);
+            $variables[] = $customVariables;
         }
-        $template = $this->getEmailTemplate();
+        /* @var $template \Magento\Email\Model\Template */
+        $template = $this->_coreRegistry->registry('current_email_template');
         if ($template->getId() && ($templateVariables = $template->getVariablesOptionArray(true))) {
-            $variables = array_merge_recursive($variables, $templateVariables);
+            $variables[] = $templateVariables;
         }
         return $variables;
     }

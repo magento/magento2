@@ -31,7 +31,7 @@ class AssertCmsPageDuplicateErrorMessage extends AbstractConstraint
     {
         $actualMessage = $cmsIndex->getMessagesBlock()->getErrorMessage();
 
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             self::ERROR_MESSAGE_TITLE,
             $actualMessage,
             'Wrong error message is displayed.'
@@ -39,7 +39,7 @@ class AssertCmsPageDuplicateErrorMessage extends AbstractConstraint
             . "\nActual:\n" . $actualMessage
         );
 
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             $cmsPage->getIdentifier(),
             $actualMessage,
             'CMS page url is not present on error message.'

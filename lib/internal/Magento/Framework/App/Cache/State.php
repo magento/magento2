@@ -11,9 +11,6 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 
-/**
- * Cache State
- */
 class State implements StateInterface
 {
     /**
@@ -77,7 +74,7 @@ class State implements StateInterface
     public function isEnabled($cacheType)
     {
         $this->load();
-        return (bool)($this->statuses[$cacheType] ?? false);
+        return isset($this->statuses[$cacheType]) ? (bool)$this->statuses[$cacheType] : false;
     }
 
     /**

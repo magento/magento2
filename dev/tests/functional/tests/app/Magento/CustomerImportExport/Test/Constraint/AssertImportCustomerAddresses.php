@@ -91,7 +91,7 @@ class AssertImportCustomerAddresses extends AbstractConstraint
 
         $resultArrays = $this->getPrepareAddresses();
 
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $resultArrays['pageData'],
             $resultArrays['csvData'],
             'Addresses from page and csv are not match.'

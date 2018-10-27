@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Model\AttributeManagement;
@@ -19,6 +18,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codingStandardsIgnoreFile
  */
 class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 {
@@ -102,7 +102,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     /**
      *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The AttributeSet with a "2" ID doesn't exist. Verify the attributeSet and try again.
+     * @expectedExceptionMessage AttributeSet with id "2" does not exist.
      */
     public function testAssignNoSuchEntityException()
     {
@@ -117,19 +117,13 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
             ->with($attributeSetId)
             ->will($this->throwException(new \Magento\Framework\Exception\NoSuchEntityException()));
 
-        $this->attributeManagement->assign(
-            $entityTypeCode,
-            $attributeSetId,
-            $attributeGroupId,
-            $attributeCode,
-            $sortOrder
-        );
+        $this->attributeManagement->assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder);
     }
 
     /**
      *
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute set ID is incorrect. Verify the ID and try again.
+     * @expectedExceptionMessage Wrong attribute set id provided
      */
     public function testAssignInputException()
     {
@@ -149,19 +143,13 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(66)->willReturn($entityTypeMock);
         $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn($entityTypeCode+1);
 
-        $this->attributeManagement->assign(
-            $entityTypeCode,
-            $attributeSetId,
-            $attributeGroupId,
-            $attributeCode,
-            $sortOrder
-        );
+        $this->attributeManagement->assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder);
     }
 
     /**
      *
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute group doesn't belong to the attribute set.
+     * @expectedExceptionMessage Attribute group does not belong to attribute set
      */
     public function testAssignInputExceptionGroupInSet()
     {
@@ -189,13 +177,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock->expects($this->once())->method('get')->willReturn($attributeGroup);
         $attributeGroup->expects($this->once())->method('getAttributeSetId')->willReturn($attributeSetId + 1);
 
-        $this->attributeManagement->assign(
-            $entityTypeCode,
-            $attributeSetId,
-            $attributeGroupId,
-            $attributeCode,
-            $sortOrder
-        );
+        $this->attributeManagement->assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder);
     }
 
     public function testAssign()
@@ -244,13 +226,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             $attributeMock,
-            $this->attributeManagement->assign(
-                $entityTypeCode,
-                $attributeSetId,
-                $attributeGroupId,
-                $attributeCode,
-                $sortOrder
-            )
+            $this->attributeManagement->assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder)
         );
     }
 
@@ -296,6 +272,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Attribute "code" not found in attribute set 1.
      */
     public function testUnassignInputException()
     {
@@ -335,15 +312,11 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->never())->method('deleteEntity');
 
         $this->attributeManagement->unassign($attributeSetId, $attributeCode);
-
-        $this->expectExceptionMessage(
-            'The "code" attribute wasn\'t found in the "1" attribute set. Enter the attribute and try again.'
-        );
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The "1234567" attribute set wasn't found. Verify and try again.
+     * @expectedExceptionMessage Attribute set not found: 1
      */
     public function testUnassignWithWrongAttributeSet()
     {
@@ -360,7 +333,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The system attribute can't be deleted.
+     * @expectedExceptionMessage System attribute can not be deleted
      */
     public function testUnassignStateException()
     {

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Backend\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
@@ -74,7 +73,7 @@ abstract class Cache extends Action
         $allTypes = array_keys($this->_cacheTypeList->getTypes());
         $invalidTypes = array_diff($types, $allTypes);
         if (count($invalidTypes) > 0) {
-            throw new LocalizedException(__('These cache type(s) don\'t exist: %1', join(', ', $invalidTypes)));
+            throw new LocalizedException(__('Specified cache type(s) don\'t exist: %1', join(', ', $invalidTypes)));
         }
     }
 }

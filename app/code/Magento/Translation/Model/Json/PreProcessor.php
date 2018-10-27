@@ -68,11 +68,7 @@ class PreProcessor implements PreProcessorInterface
         $this->dataProvider = $dataProvider;
         $this->areaList = $areaList;
         $this->translate = $translate;
-<<<<<<< HEAD
-        $this->viewDesign = $viewDesign ?? ObjectManager::getInstance()->get(DesignInterface::class);
-=======
         $this->viewDesign = $viewDesign ?: ObjectManager::getInstance()->get(DesignInterface::class);
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -95,19 +91,14 @@ class PreProcessor implements PreProcessorInterface
                 $areaCode = $context->getAreaCode();
 
                 $this->viewDesign->setDesignTheme($themePath, $areaCode);
-<<<<<<< HEAD
-=======
 
                 $this->translate
                     ->setLocale($context->getLocale())
                     ->loadData($areaCode);
->>>>>>> upstream/2.2-develop
             }
 
             $area = $this->areaList->getArea($areaCode);
             $area->load(\Magento\Framework\App\Area::PART_TRANSLATE);
-
-            $this->translate->setLocale($context->getLocale())->loadData($areaCode, true);
 
             $chain->setContent(json_encode($this->dataProvider->getData($themePath)));
             $chain->setContentType('json');

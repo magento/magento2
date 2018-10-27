@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Paypal\Model\Api;
 
 use Magento\Payment\Model\Cart;

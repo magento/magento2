@@ -62,11 +62,7 @@ class Block implements Layout\GeneratorInterface
     protected $exceptionHandlerBlockFactory;
 
     /**
-<<<<<<< HEAD
-     * Default block class name. Will be used if no class name is specified in block configuration.
-=======
      * Default block class name. Will be used if no class name is specified in block configuration
->>>>>>> upstream/2.2-develop
      *
      * @var string
      */

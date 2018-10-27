@@ -6,9 +6,7 @@
  */
 namespace Magento\Paypal\Controller\Express;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Start extends \Magento\Paypal\Controller\Express\AbstractExpress\Start implements HttpGetActionInterface
+class Start extends \Magento\Paypal\Controller\Express\AbstractExpress\Start
 {
     /**
      * Config mode type

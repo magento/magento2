@@ -37,7 +37,7 @@ class AssertOrderPaymentInformation extends AbstractConstraint
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
         $actualPaymentInformation = $infoTab->getPaymentInfoBlock()->getData();
 
-        \PHPUnit\Framework\Assert::assertEmpty(
+        \PHPUnit_Framework_Assert::assertEmpty(
             array_diff($paymentInfo, $actualPaymentInformation),
             'Payment Information missmatch with expected values.'
         );

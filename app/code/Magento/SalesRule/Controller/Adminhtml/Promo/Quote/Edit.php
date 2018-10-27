@@ -6,9 +6,7 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpGetActionInterface
+class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -53,7 +51,7 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
         if ($id) {
             $model->load($id);
             if (!$model->getRuleId()) {
-                $this->messageManager->addErrorMessage(__('This rule no longer exists.'));
+                $this->messageManager->addError(__('This rule no longer exists.'));
                 $this->_redirect('sales_rule/*');
                 return;
             }

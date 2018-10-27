@@ -16,16 +16,7 @@ use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
-<<<<<<< HEAD
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
-use Magento\Braintree\Observer\DataAssignObserver;
-use Magento\Braintree\Gateway\Config\PayPal\Config;
-use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
-use Magento\Quote\Api\Data\CartExtensionInterface;
-=======
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
->>>>>>> upstream/2.2-develop
 
 /**
  * Class QuoteUpdaterTest
@@ -62,11 +53,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
     private $quoteUpdater;
 
     /**
-<<<<<<< HEAD
-     * @return void
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     protected function setUp()
     {
@@ -119,12 +106,8 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-<<<<<<< HEAD
-     * @return void
-=======
      * Checks if quote details can be update by the response from Braintree.
      *
->>>>>>> upstream/2.2-develop
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testExecute()
@@ -147,11 +130,8 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Disables quote's addresses validation.
      *
->>>>>>> upstream/2.2-develop
      * @return void
      */
     private function disabledQuoteAddressValidationStep()
@@ -308,11 +288,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
      */
     private function getQuoteMock(): MockObject
     {
-<<<<<<< HEAD
-        $quoteMock = $this->getMockBuilder(Quote::class)
-=======
         $quote = $this->getMockBuilder(Quote::class)
->>>>>>> upstream/2.2-develop
             ->setMethods(
                 [
                     'getIsVirtual',
@@ -323,32 +299,19 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
                     'collectTotals',
                     'getShippingAddress',
                     'getBillingAddress',
-                    'getExtensionAttributes'
                 ]
             )
             ->disableOriginalConstructor()
             ->getMock();
 
-<<<<<<< HEAD
-        $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
-=======
         $cartExtension = $this->getMockBuilder(CartExtensionInterface::class)
->>>>>>> upstream/2.2-develop
             ->setMethods(['setShippingAssignments'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-<<<<<<< HEAD
-        $quoteMock->expects(self::any())
-            ->method('getExtensionAttributes')
-            ->willReturn($cartExtensionMock);
-
-        return $quoteMock;
-=======
         $quote->method('getExtensionAttributes')
             ->willReturn($cartExtension);
         return $quote;
->>>>>>> upstream/2.2-develop
     }
 
     /**

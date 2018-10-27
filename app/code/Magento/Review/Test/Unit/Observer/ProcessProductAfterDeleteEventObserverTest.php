@@ -31,41 +31,24 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
     /**
      * @var Review|PHPUnit_Framework_MockObject_MockObject
      */
-<<<<<<< HEAD
-    private $resourceReviewMock;
-=======
     private $_resourceReviewMock;
->>>>>>> upstream/2.2-develop
 
     /**
      * @var Rating|PHPUnit_Framework_MockObject_MockObject
      */
-<<<<<<< HEAD
-    private $resourceRatingMock;
-=======
     private $_resourceRatingMock;
->>>>>>> upstream/2.2-develop
 
     /**
      * Set up
      */
     protected function setUp()
     {
-<<<<<<< HEAD
-        $this->resourceReviewMock = $this->createMock(Review::class);
-        $this->resourceRatingMock = $this->createMock(Rating::class);
-
-        $this->observer = new ProcessProductAfterDeleteEventObserver(
-            $this->resourceReviewMock,
-            $this->resourceRatingMock
-=======
         $this->_resourceReviewMock = $this->createMock(Review::class);
         $this->_resourceRatingMock = $this->createMock(Rating::class);
 
         $this->observer = new ProcessProductAfterDeleteEventObserver(
             $this->_resourceReviewMock,
             $this->_resourceRatingMock
->>>>>>> upstream/2.2-develop
         );
     }
 
@@ -97,17 +80,10 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
         $observerMock->expects($this->once())
             ->method('getEvent')
             ->willReturn($eventMock);
-<<<<<<< HEAD
-        $this->resourceReviewMock->expects($this->once())
-            ->method('deleteReviewsByProductId')
-            ->willReturnSelf();
-        $this->resourceRatingMock->expects($this->once())
-=======
         $this->_resourceReviewMock->expects($this->once())
             ->method('deleteReviewsByProductId')
             ->willReturnSelf();
         $this->_resourceRatingMock->expects($this->once())
->>>>>>> upstream/2.2-develop
             ->method('deleteAggregatedRatingsByProductId')
             ->willReturnSelf();
 
@@ -133,17 +109,10 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
         $observerMock->expects($this->once())
             ->method('getEvent')
             ->willReturn($eventMock);
-<<<<<<< HEAD
-        $this->resourceReviewMock->expects($this->never())
-            ->method('deleteReviewsByProductId')
-            ->willReturnSelf();
-        $this->resourceRatingMock->expects($this->never())
-=======
         $this->_resourceReviewMock->expects($this->never())
             ->method('deleteReviewsByProductId')
             ->willReturnSelf();
         $this->_resourceRatingMock->expects($this->never())
->>>>>>> upstream/2.2-develop
             ->method('deleteAggregatedRatingsByProductId')
             ->willReturnSelf();
 

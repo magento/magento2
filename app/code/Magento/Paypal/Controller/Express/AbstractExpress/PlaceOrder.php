@@ -4,7 +4,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -23,11 +22,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
     protected $agreementsValidator;
 
     /**
-<<<<<<< HEAD
-     * @var \Magento\Sales\Api\PaymentFailuresInterface
-=======
      * @var PaymentFailuresInterface
->>>>>>> upstream/2.2-develop
      */
     private $paymentFailures;
 
@@ -41,11 +36,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
-<<<<<<< HEAD
-     * @param \Magento\Sales\Api\PaymentFailuresInterface|null $paymentFailures
-=======
      * @param PaymentFailuresInterface|null $paymentFailures
->>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -58,11 +49,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
-<<<<<<< HEAD
-        \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null
-=======
         PaymentFailuresInterface $paymentFailures = null
->>>>>>> upstream/2.2-develop
     ) {
         parent::__construct(
             $context,
@@ -76,13 +63,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
         );
 
         $this->agreementsValidator = $agreementValidator;
-<<<<<<< HEAD
-        $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(
-            \Magento\Sales\Api\PaymentFailuresInterface::class
-        );
-=======
         $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(PaymentFailuresInterface::class);
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -97,10 +78,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             !$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))
         ) {
             $e = new \Magento\Framework\Exception\LocalizedException(
-                __(
-                    "The order wasn't placed. "
-                    . "First, agree to the terms and conditions, then try placing your order again."
-                )
+                __('Please agree to all the terms and conditions before placing the order.')
             );
             $this->messageManager->addExceptionMessage(
                 $e,
@@ -163,11 +141,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      *
      * @return void
      */
-<<<<<<< HEAD
-    private function processException(\Exception $exception, string $message): void
-=======
     private function processException(\Exception $exception, string $message)
->>>>>>> upstream/2.2-develop
     {
         $this->messageManager->addExceptionMessage($exception, __($message));
         $this->_redirect('*/*/review');
@@ -257,6 +231,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
     protected function isValidationRequired()
     {
         return is_array($this->getRequest()->getBeforeForwardInfo())
-            && empty($this->getRequest()->getBeforeForwardInfo());
+        && empty($this->getRequest()->getBeforeForwardInfo());
     }
 }

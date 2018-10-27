@@ -39,7 +39,7 @@ class AssertRefundReportIntervalResult extends AbstractAssertSalesReportResult
         $this->searchInSalesReportGrid($refundsReport);
         $salesResult = $refundsReportPage->getGridBlock()->getLastResult();
         $prepareInitialResult = $this->prepareExpectedResult($initialRefundsResult);
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $prepareInitialResult,
             $salesResult,
             "Refund total Sales result is not correct."

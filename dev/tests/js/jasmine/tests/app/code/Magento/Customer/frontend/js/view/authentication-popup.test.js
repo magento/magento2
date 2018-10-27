@@ -44,13 +44,6 @@ define(['squire'], function (Squire) {
         });
     });
 
-    afterEach(function () {
-        try {
-            injector.clean();
-            injector.remove();
-        } catch (e) {}
-    });
-
     describe('Magento_Customer/js/view/authentication-popup', function () {
         describe('"isActive" method', function () {
             it('Check for return value.', function () {

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Ui\Component\Form;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -74,7 +73,7 @@ class Field extends AbstractComponent
         $formElement = $this->getData('config/formElement');
         if (null === $formElement) {
             throw new LocalizedException(__(
-                'The "formElement" configuration parameter is required for the "%1" field.',
+                'The configuration parameter "formElement" is a required for "%1" field.',
                 $this->getName()
             ));
         }

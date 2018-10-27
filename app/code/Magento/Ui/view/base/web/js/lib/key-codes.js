@@ -20,9 +20,6 @@ define([], function () {
         39: 'pageRightKey',
         17: 'ctrlKey',
         18: 'altKey',
-        16: 'shiftKey',
-        66: 'bKey',
-        73: 'iKey',
-        85: 'uKey'
+        16: 'shiftKey'
     };
 });

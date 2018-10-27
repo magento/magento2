@@ -5,11 +5,10 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Delete extends RatingController implements HttpPostActionInterface
+class Delete extends RatingController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect

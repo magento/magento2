@@ -19,11 +19,7 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
     /**
      * @var SecureToken
      */
-<<<<<<< HEAD
-    private $model;
-=======
     private $service;
->>>>>>> upstream/2.2-develop
 
     /**
      * @var Transparent|MockObject
@@ -36,18 +32,8 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
     private $mathRandom;
 
     /**
-<<<<<<< HEAD
-     * @var UrlInterface|MockObject
-     */
-    private $url;
-
-    /**
      * @inheritdoc
      */
-=======
-     * @inheritdoc
-     */
->>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $url = $this->getMockForAbstractClass(UrlInterface::class);
@@ -66,10 +52,6 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
 
     public function testRequestToken()
     {
-<<<<<<< HEAD
-        $request = new DataObject();
-=======
->>>>>>> upstream/2.2-develop
         $storeId = 1;
         $secureTokenID = 'Sdj46hDokds09c8k2klaGJdKLl032ekR';
         $response = new DataObject([
@@ -79,37 +61,12 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
             'securetokenid' => $secureTokenID,
             'result_code' => '0',
         ]);
-<<<<<<< HEAD
-
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quote->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn($storeId);
-
-        $this->transparent->expects($this->once())
-            ->method('buildBasicRequest')
-            ->willReturn($request);
-        $this->transparent->expects($this->once())
-            ->method('setStore')
-            ->with($storeId);
-        $this->transparent->expects($this->once())
-            ->method('fillCustomerContacts');
-        $this->transparent->expects($this->once())
-            ->method('getConfig')
-            ->willReturn($this->createMock(\Magento\Paypal\Model\PayflowConfig::class));
-        $this->transparent->expects($this->once())
-            ->method('postRequest')
-            ->willReturn($response);
-=======
 
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
         $quote->method('getStoreId')
             ->willReturn($storeId);
->>>>>>> upstream/2.2-develop
 
         $this->transparent->expects(self::once())
             ->method('setStore')
@@ -118,9 +75,6 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
         $this->transparent->method('buildBasicRequest')
             ->willReturn(new DataObject());
 
-<<<<<<< HEAD
-        $this->model->requestToken($quote);
-=======
         $config = $this->getMockBuilder(PayflowConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -137,7 +91,6 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
             ->willReturn($secureTokenID);
 
         $actual = $this->service->requestToken($quote);
->>>>>>> upstream/2.2-develop
 
         self::assertEquals($secureTokenID, $actual->getSecuretokenid());
     }

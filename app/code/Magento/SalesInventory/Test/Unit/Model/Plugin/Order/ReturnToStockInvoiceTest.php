@@ -63,7 +63,7 @@ class ReturnToStockInvoiceTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface
      */
-    private $extensionAttributesMock;
+    private $extencionAttributesMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Api\StockConfigurationInterface
@@ -91,7 +91,7 @@ class ReturnToStockInvoiceTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->extensionAttributesMock = $this->getMockBuilder(
+        $this->extencionAttributesMock = $this->getMockBuilder(
             \Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface::class
         )->disableOriginalConstructor()
             ->setMethods(['getReturnToStockItems'])
@@ -128,14 +128,14 @@ class ReturnToStockInvoiceTest extends \PHPUnit\Framework\TestCase
         $invoiceId = 98;
         $this->creditmemoCreationArgumentsMock->expects($this->exactly(3))
             ->method('getExtensionAttributes')
-            ->willReturn($this->extensionAttributesMock);
+            ->willReturn($this->extencionAttributesMock);
 
         $this->invoiceRepositoryMock->expects($this->once())
             ->method('get')
             ->with($invoiceId)
             ->willReturn($this->invoiceMock);
 
-        $this->extensionAttributesMock->expects($this->exactly(2))
+        $this->extencionAttributesMock->expects($this->exactly(2))
             ->method('getReturnToStockItems')
             ->willReturn($returnToStockItems);
 

@@ -5,8 +5,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
-use Magento\Framework\App\Request\Http as HttpRequest;
-
 /**
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
@@ -47,7 +45,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testGlobalSearchAction()
     {
         $this->getRequest()->setParam('isAjax', 'true');
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue('query', 'dummy');
         $this->dispatch('backend/admin/index/globalSearch');
 

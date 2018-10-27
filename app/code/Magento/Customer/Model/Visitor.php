@@ -11,7 +11,6 @@ use Magento\Framework\App\RequestSafetyInterface;
 
 /**
  * Class Visitor
- *
  * @package Magento\Customer\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -87,7 +86,6 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * @param array $ignoredUserAgents
      * @param array $ignores
      * @param array $data
-     * @param RequestSafetyInterface|null $requestSafety
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -279,7 +277,6 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Destroy binding of checkout quote
-     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Customer\Model\Visitor
      */

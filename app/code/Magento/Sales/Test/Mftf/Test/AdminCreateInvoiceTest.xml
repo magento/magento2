@@ -7,15 +7,6 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-<<<<<<< HEAD
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateInvoiceTest">
-        <annotations>
-            <features value="Sales"/>
-            <stories value="Create an Invoice via the Admin"/>
-            <title value="Admin should be able to create an invoice"/>
-            <description value="Admin should be able to create an invoice"/>
-=======
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreateInvoiceTest">
         <annotations>
@@ -23,7 +14,6 @@
             <stories value="Create an Invoice via the Admin"/>
             <title value="Create Invoice"/>
             <description value="Should be able to create an invoice via the admin."/>
->>>>>>> upstream/2.2-develop
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-72096"/>
             <group value="sales"/>
@@ -46,13 +36,8 @@
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
         <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
-<<<<<<< HEAD
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
-        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
-=======
         <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickCart"/>
         <click selector="{{StorefrontMiniCartSection.goToCheckout}}" stepKey="goToCheckout"/>
->>>>>>> upstream/2.2-develop
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
@@ -74,34 +59,6 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
-<<<<<<< HEAD
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
-
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForInvoicePageLoad"/>
-        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
-        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5" />
-        <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="{$grabOrderNumber}" stepKey="seeInvoice1"/>
-        <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="John Doe" stepKey="seeInvoice2"/>
-        <click selector="{{AdminOrderDetailsOrderViewSection.information}}" stepKey="clickInformation"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrderInformationTabLoadingMask"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
-        <amOnPage url="{{AdminInvoicesPage.url}}" stepKey="goToInvoices"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask6" />
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridInitial"/>
-        <click selector="{{AdminInvoicesGridSection.filter}}" stepKey="clickFilters"/>
-        <fillField selector="{{AdminInvoicesFiltersSection.orderNum}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum2"/>
-        <click selector="{{AdminInvoicesFiltersSection.applyFilters}}" stepKey="clickApplyFilters"/>
-        <click selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="clickInvoice2"/>
-        <see selector="{{AdminInvoiceDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus2"/>
-=======
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onAdminOrdersPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
         <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
@@ -125,6 +82,5 @@
         <fillField selector="{{InvoicesFiltersSection.orderNum}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum2"/>
         <click selector="{{InvoicesGridSection.firstRow}}" stepKey="clickInvoice2"/>
         <see selector="{{InvoiceDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus2"/>
->>>>>>> upstream/2.2-develop
     </test>
 </tests>

@@ -6,10 +6,9 @@
  */
 namespace Magento\Contact\Controller\Index;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Index extends \Magento\Contact\Controller\Index implements HttpGetActionInterface
+class Index extends \Magento\Contact\Controller\Index
 {
     /**
      * Show Contact Us page

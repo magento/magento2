@@ -47,7 +47,7 @@ class AssertProductAttributeAbsenceInVariationsSearch extends AbstractConstraint
         $variationsTab = $newProductPage->getProductForm()->getSection(self::TAB_VARIATIONS);
         $variationsTab->createConfigurations();
         $attributesGrid = $variationsTab->getAttributeBlock()->getAttributesGrid();
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $attributesGrid->isRowVisible(['frontend_label' => $productAttribute->getFrontendLabel()]),
             "Product attribute found in Attribute Search form."
         );

@@ -117,12 +117,11 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     public function testSaveAction()
     {
         $postData = [
-            'title' => '"><img src=y onerror=prompt(document.domain)>;',
-            'identifier' => 'unique_title_123',
-            'stores' => ['0'],
-            'is_active' => true,
-            'content' => '"><script>alert("cookie: "+document.cookie)</script>',
-            'back' => 'close'
+        'title' => '"><img src=y onerror=prompt(document.domain)>;',
+        'identifier' => 'unique_title_123',
+        'stores' => ['0'],
+        'is_active' => true,
+        'content' => '"><script>alert("cookie: "+document.cookie)</script>'
         ];
 
         $filteredPostData = [
@@ -130,8 +129,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'identifier' => 'unique_title_123',
             'stores' => ['0'],
             'is_active' => true,
-            'content' => '&quot;&gt;&lt;script&gt;alert(&quot;cookie: &quot;+document.cookie)&lt;/script&gt;',
-            'back' => 'close'
+            'content' => '&quot;&gt;&lt;script&gt;alert(&quot;cookie: &quot;+document.cookie)&lt;/script&gt;'
         ];
 
         $this->dataProcessorMock->expects($this->any())
@@ -187,11 +185,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap(
                 [
                     ['page_id', null, 1],
-<<<<<<< HEAD
-                    ['back', null, 'close'],
-=======
                     ['back', null, false],
->>>>>>> upstream/2.2-develop
                 ]
             );
 
@@ -215,21 +209,13 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveAndContinue()
     {
-        $postData = [
-            'title' => '"><img src=y onerror=prompt(document.domain)>;',
-            'identifier' => 'unique_title_123',
-            'stores' => ['0'],
-            'is_active' => true,
-            'content' => '"><script>alert("cookie: "+document.cookie)</script>',
-            'back' => 'continue'
-        ];
-        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn($postData);
+        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(['page_id' => $this->pageId]);
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
             ->willReturnMap(
                 [
                     ['page_id', null, $this->pageId],
-                    ['back', null, 'continue'],
+                    ['back', null, true],
                 ]
             );
 

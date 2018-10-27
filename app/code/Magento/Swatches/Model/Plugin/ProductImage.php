@@ -5,15 +5,6 @@
  */
 namespace Magento\Swatches\Model\Plugin;
 
-use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Swatches\Helper\Data;
-use Magento\Eav\Model\Config;
-use Magento\Framework\App\Request\Http;
-use Magento\Catalog\Block\Product\AbstractProduct;
-use Magento\Catalog\Model\Product as ProductModel;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-
 /**
  * Class ProductImage replace original configurable product with first child
  */
@@ -29,29 +20,29 @@ class ProductImage
     /**
      * Data helper to get child product image
      *
-     * @var Data $productHelper
+     * @var \Magento\Swatches\Helper\Data $productHelper
      */
     protected $swatchHelperData;
 
     /**
-     * @var Config
+     * @var \Magento\Eav\Model\Config
      */
     protected $eavConfig;
 
     /**
-     * @var Http
+     * @var \Magento\Framework\App\Request\Http
      */
     protected $request;
 
     /**
-     * @param Data $swatchesHelperData
-     * @param Config $eavConfig
-     * @param Http $request
+     * @param \Magento\Swatches\Helper\Data $swatchesHelperData
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\App\Request\Http $request
      */
     public function __construct(
-        Data $swatchesHelperData,
-        Config $eavConfig,
-        Http $request
+        \Magento\Swatches\Helper\Data $swatchesHelperData,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\App\Request\Http $request
     ) {
         $this->swatchHelperData = $swatchesHelperData;
         $this->eavConfig = $eavConfig;
@@ -62,19 +53,19 @@ class ProductImage
      * Replace original configurable product with first child
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @param AbstractProduct $subject
-     * @param ProductModel $product
+     * @param \Magento\Catalog\Block\Product\AbstractProduct $subject
+     * @param \Magento\Catalog\Model\Product $product
      * @param string $location
      * @param array $attributes
      * @return array
      */
     public function beforeGetImage(
-        AbstractProduct $subject,
-        ProductModel $product,
+        \Magento\Catalog\Block\Product\AbstractProduct $subject,
+        \Magento\Catalog\Model\Product $product,
         $location,
         array $attributes = []
     ) {
-        if ($product->getTypeId() == Configurable::TYPE_CODE
+        if ($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
             && ($location == self::CATEGORY_PAGE_GRID_LOCATION || $location == self::CATEGORY_PAGE_LIST_LOCATION)) {
             $request = $this->request->getParams();
             if (is_array($request)) {
@@ -88,11 +79,11 @@ class ProductImage
     }
 
     /**
-     * @param Product $parentProduct
+     * @param \Magento\Catalog\Model\Product $parentProduct
      * @param array $filterArray
-     * @return bool|Product
+     * @return bool|\Magento\Catalog\Model\Product
      */
-    private function loadSimpleVariation(Product $parentProduct, array $filterArray)
+    protected function loadSimpleVariation(\Magento\Catalog\Model\Product $parentProduct, array $filterArray)
     {
         $childProduct = $this->swatchHelperData->loadVariationByFallback($parentProduct, $filterArray);
         if ($childProduct && !$childProduct->getImage()) {
@@ -111,18 +102,11 @@ class ProductImage
      * @param \Magento\Catalog\Model\Product $product
      * @return array
      */
-<<<<<<< HEAD
-    private function getFilterArray(array $request, Product $product)
-    {
-        $filterArray = [];
-        $attributes = $this->eavConfig->getEntityAttributes(Product::ENTITY, $product);
-=======
     private function getFilterArray(array $request, \Magento\Catalog\Model\Product $product)
     {
         $filterArray = [];
         $attributes = $this->eavConfig->getEntityAttributes(\Magento\Catalog\Model\Product::ENTITY, $product);
 
->>>>>>> upstream/2.2-develop
         foreach ($request as $code => $value) {
             if (isset($attributes[$code])) {
                 $attribute = $attributes[$code];
@@ -137,10 +121,10 @@ class ProductImage
     /**
      * Check if we can replace original image with swatch image on catalog/category/list page
      *
-     * @param Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return bool
      */
-    private function canReplaceImageWithSwatch($attribute)
+    protected function canReplaceImageWithSwatch($attribute)
     {
         $result = true;
         if (!$this->swatchHelperData->isSwatchAttribute($attribute)) {

@@ -11,11 +11,7 @@ use Magento\Framework\Mail\Message;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\ScopeInterface;
-<<<<<<< HEAD
-use Zend\Mail\Message;
-=======
 use Zend\Mail\Message as ZendMessage;
->>>>>>> upstream/2.2-develop
 use Zend\Mail\Transport\Sendmail;
 
 /**
@@ -36,14 +32,6 @@ class Transport implements TransportInterface
     const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
 
     /**
-<<<<<<< HEAD
-     * @var Sendmail
-     */
-    private $zendTransport;
-
-    /**
-     * @var MessageInterface
-=======
      * Whether return path should be set or no.
      *
      * Possible values are:
@@ -67,33 +55,10 @@ class Transport implements TransportInterface
 
     /**
      * @var Message
->>>>>>> upstream/2.2-develop
      */
     private $message;
 
     /**
-<<<<<<< HEAD
-     * @param MessageInterface $message Email message object
-     * @param ScopeConfigInterface $scopeConfig Core store config
-     * @param null|string|array|\Traversable $parameters Config options for sendmail parameters
-     */
-    public function __construct(
-        MessageInterface $message,
-        ScopeConfigInterface $scopeConfig,
-        $parameters = null
-    ) {
-        /* configuration of whether return path should be set or no. Possible values are:
-             * 0 - no
-             * 1 - yes (set value as FROM address)
-             * 2 - use custom value
-             * @see Magento\Config\Model\Config\Source\Yesnocustom
-             */
-        $isSetReturnPath = $scopeConfig->getValue(
-            self::XML_PATH_SENDING_SET_RETURN_PATH,
-            ScopeInterface::SCOPE_STORE
-        );
-        $returnPathValue = $scopeConfig->getValue(
-=======
      * @var ZendMessage
      */
     private $zendMessage;
@@ -115,23 +80,13 @@ class Transport implements TransportInterface
             ScopeInterface::SCOPE_STORE
         );
         $this->returnPathValue = $scopeConfig->getValue(
->>>>>>> upstream/2.2-develop
             self::XML_PATH_SENDING_RETURN_PATH_EMAIL,
             ScopeInterface::SCOPE_STORE
         );
 
-<<<<<<< HEAD
-        if ($isSetReturnPath == '2' && $returnPathValue !== null) {
-            $parameters .= ' -f' . \escapeshellarg($returnPathValue);
-        }
-
-        $this->zendTransport = new Sendmail($parameters);
-        $this->message = $message;
-=======
         $this->zendTransport = new Sendmail($parameters);
         $this->message = $message;
         $this->zendMessage = $zendMessage;
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -140,11 +95,6 @@ class Transport implements TransportInterface
     public function sendMessage()
     {
         try {
-<<<<<<< HEAD
-            $this->zendTransport->send(
-                Message::fromString($this->message->getRawMessage())
-            );
-=======
             $message = $this->zendMessage->fromString($this->message->getRawMessage());
             if (2 === $this->isSetReturnPath && $this->returnPathValue) {
                 $message->setSender($this->returnPathValue);
@@ -155,7 +105,6 @@ class Transport implements TransportInterface
             }
 
             $this->zendTransport->send($message);
->>>>>>> upstream/2.2-develop
         } catch (\Exception $e) {
             throw new MailException(new Phrase($e->getMessage()), $e);
         }

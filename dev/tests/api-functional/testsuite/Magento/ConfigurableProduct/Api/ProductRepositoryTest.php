@@ -286,7 +286,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId1, $nonExistingId
         ];
 
-        $expectedMessage = 'The product was unable to be saved. Please try again.';
+        $expectedMessage = 'Unable to save product';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");
@@ -362,7 +362,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId1, $productId2
         ];
 
-        $expectedMessage = 'The product was unable to be saved. Please try again.';
+        $expectedMessage = 'Unable to save product';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");
@@ -461,15 +461,6 @@ class ProductRepositoryTest extends WebapiAbstract
      */
     protected function saveProduct($product)
     {
-        if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
-                ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
-                }
-            }
-        }
         $resourcePath = self::RESOURCE_PATH . '/' . $product['sku'];
         $serviceInfo = [
             'rest' => [

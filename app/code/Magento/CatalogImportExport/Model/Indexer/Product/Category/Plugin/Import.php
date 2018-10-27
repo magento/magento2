@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\CatalogImportExport\Model\Indexer\Product\Category\Plugin;
 
 class Import
@@ -16,9 +18,8 @@ class Import
     /**
      * @param \Magento\Catalog\Model\Indexer\Product\Category\Processor $indexerProductCategoryProcessor
      */
-    public function __construct(
-        \Magento\Catalog\Model\Indexer\Product\Category\Processor $indexerProductCategoryProcessor
-    ) {
+    public function __construct(\Magento\Catalog\Model\Indexer\Product\Category\Processor $indexerProductCategoryProcessor)
+    {
         $this->_indexerProductCategoryProcessor = $indexerProductCategoryProcessor;
     }
 

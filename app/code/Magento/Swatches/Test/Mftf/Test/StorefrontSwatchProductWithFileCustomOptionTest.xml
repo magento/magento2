@@ -7,30 +7,17 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-<<<<<<< HEAD
-       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-=======
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
->>>>>>> upstream/2.2-develop
     <test name="StorefrontSwatchProductWithFileCustomOptionTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Add configurable product to cart"/>
-<<<<<<< HEAD
-            <title value="Configurable product with swatch option and file custom option"/>
-            <description value="Configurable product with swatch option and file custom option. When adding to cart with an invalid filetype, the correct error message is shown, and options remain selected."/>
-            <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-93101"/>
-            <group value="ConfigurableProduct"/>
-            <group value="Swatches"/>
-=======
             <title value="Correct error message and redirect with invalid file option"/>
             <description value="Configurable product with swatch option and file custom option. When adding to cart with an invalid filetype, the correct error message is shown, and options remain selected."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93331"/>
             <group value="ConfigurableProduct"/>
             <group value="swatches"/>
->>>>>>> upstream/2.2-develop
         </annotations>
 
         <before>
@@ -39,9 +26,6 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-<<<<<<< HEAD
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
-=======
             <actionGroup ref="DeleteAllProductsOnProductsGridPageFilteredByName" stepKey="deleteAllCreatedProducts">
                 <argument name="product" value="BaseConfigurableProduct"/>
             </actionGroup>
@@ -49,7 +33,6 @@
                 <argument name="productAttribute" value="VisualSwatchAttribute"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>
->>>>>>> upstream/2.2-develop
         </after>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -65,26 +48,6 @@
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="searchAndSelectCategory"/>
         <!--Add swatch attribute to configurable product-->
-<<<<<<< HEAD
-        <actionGroup ref="AddVisualSwatchToProductActionGroup" stepKey="addSwatchToProduct"/>
-        <!--Add custom option to configurable product-->
-        <actionGroup ref="AddProductCustomOptionFile" stepKey="addCustomOptionToProduct"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        
-        <!--Go to storefront-->
-        <amOnPage url="" stepKey="goToHomePage"/>
-        <waitForPageLoad stepKey="waitForHomePageLoad"/>
-        <click selector="{{StorefrontNavigationSection.topCategory($$createCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="$$createCategory.name$$" stepKey="seeOnCategoryPage"/>
-        <!--Add configurable product to cart-->
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductTitleByName(BaseConfigurableProduct.name)}}" stepKey="hoverProductInGrid"/>
-        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(BaseConfigurableProduct.name)}}" stepKey="tryAddToCartFromCategoryPage"/>
-        <waitForPageLoad stepKey="waitForRedirectToProductPage"/>
-        <seeInCurrentUrl url="{{StorefrontProductPage.url(BaseConfigurableProduct.name)}}" stepKey="seeOnProductPage"/>
-        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(visualSwatchOption2.default_label)}}" stepKey="clickSwatchOption"/>
-        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue(visualSwatchAttribute.default_label)}}" userInput="{{visualSwatchOption2.default_label}}" stepKey="seeSwatchIsSelected"/>
-=======
         <actionGroup ref="CreateConfigurationsWithVisualSwatch" stepKey="createConfigurationsWithVisualSwatch"/>
         <!--Add custom option to configurable product-->
         <actionGroup ref="AddProductCustomOptionFile" stepKey="addCustomOptionToProduct"/>
@@ -103,23 +66,15 @@
         <seeInCurrentUrl url="{{StorefrontProductPage.url(BaseConfigurableProduct.name)}}" stepKey="seeOnProductPage"/>
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(VisualSwatchOption2.default_label)}}" stepKey="clickSwatchOption"/>
         <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue(VisualSwatchAttribute.default_label)}}" userInput="{{VisualSwatchOption2.default_label}}" stepKey="seeSwatchIsSelected"/>
->>>>>>> upstream/2.2-develop
 
         <!--Try invalid file-->
         <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="lorem_ipsum.docx" stepKey="attachInvalidFile"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartInvalidFile"/>
-<<<<<<< HEAD
-        <waitForElementVisible selector="{{StorefrontProductPageSection.alertMessage}}" stepKey="waitForErrorMessageInvalidFile"/>
-        <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="The file 'lorem_ipsum.docx' for '{{ProductOptionFile.title}}' has an invalid extension." stepKey="seeMessageInvalidFile"/>
-        <!--Swatch remains selected-->
-        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue(visualSwatchAttribute.default_label)}}" userInput="{{visualSwatchOption2.default_label}}" stepKey="seeSwatchRemainsSelected"/>
-=======
         <waitForPageLoad time="30" stepKey="waitForAddToCartWithError"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.alertMessage}}" stepKey="waitForErrorMessageInvalidFile"/>
         <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="The file 'lorem_ipsum.docx' for '{{ProductOptionFile.title}}' has an invalid extension." stepKey="seeMessageInvalidFile"/>
         <!--Swatch remains selected-->
         <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue(VisualSwatchAttribute.default_label)}}" userInput="{{VisualSwatchOption2.default_label}}" stepKey="seeSwatchRemainsSelected"/>
->>>>>>> upstream/2.2-develop
         <!--Try valid file-->
         <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="attachValidFile"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$132.99" stepKey="seePriceUpdated"/>
@@ -130,23 +85,10 @@
         <!--Check item in cart-->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
         <waitForPageLoad stepKey="waitForCartPageLoad"/>
-<<<<<<< HEAD
-        <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName(BaseConfigurableProduct.name)}}" stepKey="seeProductInCart"/>
-        <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute(BaseConfigurableProduct.name, visualSwatchAttribute.default_label)}}" userInput="{{visualSwatchOption2.default_label}}" stepKey="seeSelectedSwatch"/>
-        <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute(BaseConfigurableProduct.name, ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="seeCorrectOptionFile"/>
-        <!--Delete cart item-->
-        <click selector="{{CheckoutCartProductSection.RemoveItem}}" stepKey="deleteCartItem"/>
-
-        <!--Delete product-->
-        <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
-            <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
-        </actionGroup>
-=======
         <seeElement selector="{{CheckoutCartProductSection.productLinkByName(BaseConfigurableProduct.name)}}" stepKey="seeProductInCart"/>
         <see selector="{{CheckoutCartProductSection.productOptionByNameAndAttribute(BaseConfigurableProduct.name, VisualSwatchAttribute.default_label)}}" userInput="{{VisualSwatchOption2.default_label}}" stepKey="seeSelectedSwatch"/>
         <see selector="{{CheckoutCartProductSection.productOptionByNameAndAttribute(BaseConfigurableProduct.name, ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="seeCorrectOptionFile"/>
         <!--Delete cart item-->
         <click selector="{{CheckoutCartProductSection.removeItem}}" stepKey="deleteCartItem"/>
->>>>>>> upstream/2.2-develop
     </test>
 </tests>

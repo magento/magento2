@@ -10,12 +10,9 @@ use Magento\Analytics\Model\System\Message\NotificationAboutFailedSubscription;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
 
-<<<<<<< HEAD
-=======
 /**
  * Class NotificationAboutFailedSubscriptionTest
  */
->>>>>>> upstream/2.2-develop
 class NotificationAboutFailedSubscriptionTest extends \PHPUnit\Framework\TestCase
 {
     /**

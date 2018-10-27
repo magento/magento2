@@ -20,19 +20,12 @@ class Validator extends \Zend_Validate_Abstract
     /**#@-*/
 
     /**
-     * @var \Zend\Validator\Uri
-     */
-    private $validator;
-
-    /**
      * Object constructor
      */
-    public function __construct(\Zend\Validator\Uri $validator)
+    public function __construct()
     {
         // set translated message template
         $this->setMessage((string)new \Magento\Framework\Phrase("Invalid URL '%value%'."), self::INVALID_URL);
-        $this->validator = $validator;
-        $this->validator->setAllowRelative(false);
     }
 
     /**
@@ -52,12 +45,11 @@ class Validator extends \Zend_Validate_Abstract
     {
         $this->_setValue($value);
 
-        $valid = $this->validator->isValid($value);
-
-        if (!$valid) {
+        if (!\Zend_Uri::check($value)) {
             $this->_error(self::INVALID_URL);
+            return false;
         }
 
-        return $valid;
+        return true;
     }
 }

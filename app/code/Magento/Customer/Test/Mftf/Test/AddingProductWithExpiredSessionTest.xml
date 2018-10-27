@@ -6,17 +6,6 @@
   */
 -->
 
-<<<<<<< HEAD
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AddingProductWithExpiredSessionTest">
-        <annotations>
-            <title value="Adding a product to cart from category page with an expired session"/>
-            <description value="Adding a product to cart from category page with an expired session"/>
-            <features value="Module/ Catalog"/>
-            <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-93289"/>
-            <stories value="MAGETWO-66666: Adding a product to cart from category page with an expired session does not allow product to be added"/>
-=======
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AddingProductWithExpiredSessionTest">
@@ -26,7 +15,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94337"/>
             <stories value="MAGETWO-73443: Adding a product to cart from category page with an expired session does not allow product to be added"/>
->>>>>>> upstream/2.2-develop
             <group value="customer"/>
         </annotations>
 
@@ -37,25 +25,6 @@
             </createData>
         </before>
 
-<<<<<<< HEAD
-        <!--Navigate to a category page -->
-        <amOnPage url="$$createSimpleProduct.name$$.html" stepKey="goToProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-
-        <!-- Remove PHPSESSID and form_key to replicate an expired session-->
-        <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
-        <resetCookie userInput="form_key" stepKey="resetCookieForCart2"/>
-
-        <!-- "Add to Cart" any product-->
-        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
-        <see stepKey="assertErrorMessage" userInput="Your session has expired"/>
-        <after>
-            <!--Delete created product-->
-            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-        </after>
-
-=======
         <after>
             <!--Delete created product-->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
@@ -74,6 +43,5 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <see stepKey="assertErrorMessage" userInput="Your session has expired"/>
->>>>>>> upstream/2.2-develop
     </test>
 </tests>

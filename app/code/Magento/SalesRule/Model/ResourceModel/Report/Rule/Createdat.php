@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\SalesRule\Model\ResourceModel\Report\Rule;
 
 /**
@@ -93,8 +95,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
                         'base_subtotal_canceled',
                         0
                     ) . ' - ' . $connection->getIfNullSql(
-                        'ABS(base_discount_amount) - ABS('
-                        . $connection->getIfNullSql('base_discount_canceled', 0) . ')',
+                        'ABS(base_discount_amount) - ABS(' . $connection->getIfNullSql('base_discount_canceled', 0) . ')',
                         0
                     ) . ' + ' . $connection->getIfNullSql(
                         'base_tax_amount - ' . $connection->getIfNullSql('base_tax_canceled', 0),
@@ -123,8 +124,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
                         'base_subtotal_refunded',
                         0
                     ) . ' - ' . $connection->getIfNullSql(
-                        'ABS(base_discount_invoiced) - ABS('
-                        . $connection->getIfNullSql('base_discount_refunded', 0) . ')',
+                        'ABS(base_discount_invoiced) - ABS(' . $connection->getIfNullSql('base_discount_refunded', 0) . ')',
                         0
                     ) . ' + ' . $connection->getIfNullSql(
                         'base_tax_invoiced - ' . $connection->getIfNullSql('base_tax_refunded', 0),

@@ -1146,10 +1146,6 @@
                 </item>
             </field>
         </dataset>
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         <dataset name="product_with_3_sizes">
             <field name="name" xsi:type="string">Configurable product with sizes %isolation%</field>
             <field name="sku" xsi:type="string">sku_configurable_product_with_sizes_%isolation%</field>

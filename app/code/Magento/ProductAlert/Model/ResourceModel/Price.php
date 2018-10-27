@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\ProductAlert\Model\ResourceModel;
 
 /**
@@ -51,7 +53,7 @@ class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($object->getId() === null && $object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()
+        if (is_null($object->getId()) && $object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()
         ) {
             if ($row = $this->_getAlertRow($object)) {
                 $price = $object->getPrice();
@@ -62,7 +64,7 @@ class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
                 $object->setStatus(0);
             }
         }
-        if ($object->getAddDate() === null) {
+        if (is_null($object->getAddDate())) {
             $object->setAddDate($this->_dateFactory->create()->gmtDate());
         }
         return parent::_beforeSave($object);

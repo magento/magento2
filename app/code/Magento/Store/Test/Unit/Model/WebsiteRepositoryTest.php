@@ -34,7 +34,7 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->websiteFactoryMock =
-            $this->getMockBuilder(\Magento\Store\Model\WebsiteFactory::class)
+            $this->getMockBuilder('Magento\Store\Model\WebsiteFactory')
                 ->disableOriginalConstructor()
                 ->setMethods(['create'])
                 ->getMock();
@@ -94,6 +94,7 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \DomainException
+     * @expectedExceptionMessage More than one default website is defined
      */
     public function testGetDefaultIsSeveral()
     {
@@ -117,15 +118,11 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->websiteFactoryMock->expects($this->any())->method('create')->willReturn($websiteMock);
 
         $this->model->getDefault();
-
-        $this->expectExceptionMessage(
-            "The default website is invalid. Make sure no more than one default is defined and try again."
-        );
     }
 
     /**
      * @expectedException \DomainException
-     * @expectedExceptionMessage The default website isn't defined. Set the website and try again.
+     * @expectedExceptionMessage Default website is not defined
      */
     public function testGetDefaultIsZero()
     {

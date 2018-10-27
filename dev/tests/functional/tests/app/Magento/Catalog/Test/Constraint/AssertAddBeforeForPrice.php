@@ -48,7 +48,7 @@ class AssertAddBeforeForPrice extends AbstractConstraint
             );
 
             foreach ($valuesFromForm as $value) {
-                \PHPUnit\Framework\Assert::assertEquals($priceTypeSymbol, $value['add_before']);
+                \PHPUnit_Framework_Assert::assertEquals($priceTypeSymbol, $value['add_before']);
             }
         }
     }

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
@@ -306,12 +308,7 @@ class CommonTaxCollector extends AbstractTotal
             }
 
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
-                $parentItemDataObject = $this->mapItem(
-                    $itemDataObjectFactory,
-                    $item,
-                    $priceIncludesTax,
-                    $useBaseCurrency
-                );
+                $parentItemDataObject = $this->mapItem($itemDataObjectFactory, $item, $priceIncludesTax, $useBaseCurrency);
                 $itemDataObjects[] = $parentItemDataObject;
                 foreach ($item->getChildren() as $child) {
                     $childItemDataObject = $this->mapItem(
@@ -549,7 +546,7 @@ class CommonTaxCollector extends AbstractTotal
     protected function processAppliedTaxes(
         QuoteAddress\Total $total,
         ShippingAssignmentInterface $shippingAssignment,
-        array $itemsByType
+        Array $itemsByType
     ) {
         $total->setAppliedTaxes([]);
         $allAppliedTaxesArray = [];
@@ -675,14 +672,8 @@ class CommonTaxCollector extends AbstractTotal
     ) {
         $total->setTotalAmount('shipping', $shippingTaxDetails->getRowTotal());
         $total->setBaseTotalAmount('shipping', $baseShippingTaxDetails->getRowTotal());
-        $total->setTotalAmount(
-            'shipping_discount_tax_compensation',
-            $shippingTaxDetails->getDiscountTaxCompensationAmount()
-        );
-        $total->setBaseTotalAmount(
-            'shipping_discount_tax_compensation',
-            $baseShippingTaxDetails->getDiscountTaxCompensationAmount()
-        );
+        $total->setTotalAmount('shipping_discount_tax_compensation', $shippingTaxDetails->getDiscountTaxCompensationAmount());
+        $total->setBaseTotalAmount('shipping_discount_tax_compensation', $baseShippingTaxDetails->getDiscountTaxCompensationAmount());
 
         $total->setShippingInclTax($shippingTaxDetails->getRowTotalInclTax());
         $total->setBaseShippingInclTax($baseShippingTaxDetails->getRowTotalInclTax());

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Service\V1;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -43,13 +45,13 @@ class ShipmentCreateTest extends WebapiAbstract
                 'qty' => $orderItem->getQtyOrdered(),
                 'additional_data' => null,
                 'description' => null,
-                'entity_id' => 1,
+                'entity_id' => null,
                 'name' => null,
                 'parent_id' => null,
                 'price' => null,
                 'product_id' => null,
                 'row_total' => null,
-                'sku' => 'simple',
+                'sku' => null,
                 'weight' => null,
             ],
         ];

@@ -428,7 +428,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve formatted price
+     * Retrieve formated price
      *
      * @param float $price
      * @return string

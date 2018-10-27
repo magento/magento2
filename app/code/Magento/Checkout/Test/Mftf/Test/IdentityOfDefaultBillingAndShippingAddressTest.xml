@@ -11,50 +11,29 @@
     <test name="IdentityOfDefaultBillingAndShippingAddressTest">
         <annotations>
             <features value="Customer"/>
-<<<<<<< HEAD
-            <title value="Checking assignment of default billing address after placing an orde"/>
-            <description value="In 'Address book' field 'Default Billing Address' should be the same as 'Default Shipping Address'"/>
-            <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-94108"/>
-            <stories value="MAGETWO-62891: New address is not marked as 'Default Billing'"/>
-=======
             <title value="Checking assignment of default billing address after placing an order"/>
             <description value="In 'Address book' field 'Default Billing Address' should be the same as 'Default Shipping Address'"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94336"/>
             <stories value="MAGETWO-73604: New address is not marked as 'Default Billing'"/>
->>>>>>> upstream/2.2-develop
             <group value="customer"/>
         </annotations>
 
         <before>
             <!--Create product-->
-<<<<<<< HEAD
-            <createData stepKey="category" entity="SimpleSubCategory"/>
-            <createData stepKey="product" entity="SimpleProduct">
-=======
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <createData entity="SimpleProduct" stepKey="product">
->>>>>>> upstream/2.2-develop
                 <requiredEntity createDataKey="category"/>
             </createData>
         </before>
 
         <!--Go to Storefront-->
-<<<<<<< HEAD
-        <amOnPage url="" stepKey="DoToStorefront"/>
-
-        <!-- Fill out form for a new user with address -->
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
-            <argument name="Customer" value="Simple_US_Customer_NY"/>
-=======
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <!-- Fill out form for a new user with address -->
         <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
             <argument name="Customer" value="Simple_US_NY_Customer"/>
->>>>>>> upstream/2.2-develop
         </actionGroup>
 
         <!-- Add simple product to cart -->
@@ -68,11 +47,7 @@
 
         <!--Fill shipment form-->
         <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="checkoutFillingShippingSection" >
-<<<<<<< HEAD
-            <argument name="customerVar" value="Simple_US_Customer_NY" />
-=======
             <argument name="customerVar" value="Simple_US_NY_Customer" />
->>>>>>> upstream/2.2-develop
             <argument name="customerAddressVar" value="US_Address_NY" />
         </actionGroup>
 
@@ -84,22 +59,14 @@
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
         <!--Go To My Account-->
-<<<<<<< HEAD
-        <amOnPage stepKey="goToMyAccountPage" url="/customer/account/"/>
-=======
         <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToMyAccountPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
->>>>>>> upstream/2.2-develop
 
         <!--Assert That Shipping And Billing Address are the same-->
         <actionGroup ref="AssertThatShippingAndBillingAddressTheSame" stepKey="assertThatShippingAndBillingAddressTheSame"/>
 
         <after>
             <!--Delete created Product-->
-<<<<<<< HEAD
-            <deleteData stepKey="deleteProduct" createDataKey="product"/>
-            <deleteData stepKey="deleteCategory" createDataKey="category"/>
-=======
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <!--Delete created customer-->
@@ -108,7 +75,6 @@
                 <argument name="customer" value="Simple_US_NY_Customer"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
->>>>>>> upstream/2.2-develop
         </after>
     </test>
 </tests>

@@ -6,9 +6,7 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue implements HttpGetActionInterface
+class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**
      * Core registry

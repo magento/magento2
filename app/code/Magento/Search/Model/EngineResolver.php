@@ -6,14 +6,12 @@
 namespace Magento\Search\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Search\EngineResolverInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * @api
  * @since 100.1.0
  */
-class EngineResolver implements EngineResolverInterface
+class EngineResolver
 {
     /**
      * MySQL search engine
@@ -48,27 +46,13 @@ class EngineResolver implements EngineResolverInterface
     protected $scopeCode;
 
     /**
-     * Available engines
-     * @var array
-     */
-    private $engines = [];
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param array $engines
      * @param string $path
      * @param string $scopeType
      * @param string $scopeCode
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        array $engines,
-        LoggerInterface $logger,
         $path,
         $scopeType,
         $scopeCode = null
@@ -77,33 +61,19 @@ class EngineResolver implements EngineResolverInterface
         $this->path = $path;
         $this->scopeType = $scopeType;
         $this->scopeCode = $scopeCode;
-        $this->engines = $engines;
-        $this->logger = $logger;
     }
 
     /**
-     * Returns Current Search Engine
-     *
-     * It returns string identifier of Search Engine that is currently chosen in configuration
-     *
+     * Current Search Engine
      * @return string
      * @since 100.1.0
      */
     public function getCurrentSearchEngine()
     {
-        $engine = $this->scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             $this->path,
             $this->scopeType,
             $this->scopeCode
         );
-
-        if (in_array($engine, $this->engines)) {
-            return $engine;
-        } else {
-            $this->logger->error(
-                $engine . ' search engine doesn\'t exists. Falling back to ' . self::CATALOG_SEARCH_MYSQL_ENGINE
-            );
-            return self::CATALOG_SEARCH_MYSQL_ENGINE;
-        }
     }
 }

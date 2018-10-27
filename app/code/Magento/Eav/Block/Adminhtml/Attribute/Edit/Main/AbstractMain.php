@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Product attribute add/edit form main tab
  *
@@ -265,7 +267,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Initialize form fields values
+     * Initialize form fileds values
      *
      * @return $this
      */

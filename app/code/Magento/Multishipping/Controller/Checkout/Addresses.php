@@ -6,10 +6,9 @@
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
-class Addresses extends \Magento\Multishipping\Controller\Checkout implements HttpGetActionInterface
+class Addresses extends \Magento\Multishipping\Controller\Checkout
 {
     /**
      * Multishipping checkout select address page

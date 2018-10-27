@@ -6,12 +6,11 @@
  */
 namespace Magento\Sales\Controller\Order;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Sales\Controller\OrderInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class History extends \Magento\Framework\App\Action\Action implements OrderInterface, HttpGetActionInterface
+class History extends \Magento\Framework\App\Action\Action implements OrderInterface
 {
     /**
      * @var PageFactory

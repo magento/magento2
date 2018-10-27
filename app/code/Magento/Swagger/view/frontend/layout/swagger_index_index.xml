@@ -32,11 +32,8 @@
         <referenceBlock name="translate" remove="true"/>
         <referenceBlock name="requirejs-config" remove="true"/>
         <referenceContainer name="root">
-<<<<<<< HEAD
-            <block name="swaggerUiContent" class="Magento\Swagger\Block\Index" template="Magento_Swagger::swagger-ui/index.phtml" />
-=======
             <block name="swaggerUiContent" class="Magento\Swagger\Block\Index" template="Magento_Swagger::swagger-ui/index.phtml"/>
->>>>>>> upstream/2.2-develop
         </referenceContainer>
     </body>
 </page>
+

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -312,8 +314,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
                 return $error;
             } else {
                 /*
-                 * The admin set not to show the shipping module if the delivery country
-                 * is not within specific countries
+                 * The admin set not to show the shipping module if the delivery country is not within specific countries
                  */
                 return false;
             }
@@ -462,7 +463,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         /**
          * if we did not get our free shipping method in response we must use its old price
          */
-        if ($price !== null) {
+        if (!is_null($price)) {
             $this->_result->getRateById($freeRateId)->setPrice($price);
         }
     }

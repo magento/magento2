@@ -6,9 +6,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Abandoned extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart implements HttpGetActionInterface
+class Abandoned extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
     /**
      * Abandoned carts action

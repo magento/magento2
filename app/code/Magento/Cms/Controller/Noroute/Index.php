@@ -6,9 +6,6 @@
  */
 namespace Magento\Cms\Controller\Noroute;
 
-/**
- * @SuppressWarnings(PHPMD.AllPurposeAction)
- */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**

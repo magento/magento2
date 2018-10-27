@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Paypal\Model\Express;
 
 use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
@@ -16,11 +14,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
-<<<<<<< HEAD
- * Wrapper that performs Paypal Express and Checkout communication
-=======
  * Wrapper that performs Paypal Express and Checkout communication.
->>>>>>> upstream/2.2-develop
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -371,15 +365,9 @@ class Checkout
     }
 
     /**
-<<<<<<< HEAD
-     * Checkout with PayPal image URL getter
-     *
-     * Spares API calls of getting "pal" variable, by putting it into cache per store view
-=======
      * Checkout with PayPal image URL getter.
      *
      * Spares API calls of getting "pal" variable, by putting it into cache per store view.
->>>>>>> upstream/2.2-develop
      *
      * @return string
      */
@@ -971,11 +959,7 @@ class Checkout
     }
 
     /**
-<<<<<<< HEAD
-     * Attempt to collect address shipping rates and return them for further usage in instant update API
-=======
      * Attempt to collect address shipping rates and return them for further usage in instant update API.
->>>>>>> upstream/2.2-develop
      *
      * Returns empty array if it was impossible to obtain any shipping rate and
      * if there are shipping rates obtained, the method must return one of them as default.
@@ -1061,11 +1045,7 @@ class Checkout
     /**
      * Compare two shipping options based on their amounts.
      *
-<<<<<<< HEAD
-     * This function is used as a callback comparison function in shipping options sorting process
-=======
      * This function is used as a callback comparison function in shipping options sorting process.
->>>>>>> upstream/2.2-develop
      *
      * @see self::_prepareShippingOptions()
      * @param \Magento\Framework\DataObject $option1
@@ -1078,11 +1058,7 @@ class Checkout
     }
 
     /**
-<<<<<<< HEAD
-     * Try to find whether the code provided by PayPal corresponds to any of possible shipping rates
-=======
      * Try to find whether the code provided by PayPal corresponds to any of possible shipping rates.
->>>>>>> upstream/2.2-develop
      *
      * This method was created only because PayPal has issues with returning the selected code.
      * If in future the issue is fixed, we don't need to attempt to match it. It would be enough to set the method code
@@ -1108,11 +1084,7 @@ class Checkout
     }
 
     /**
-<<<<<<< HEAD
-     * Create payment redirect url
-=======
      * Create payment redirect url.
->>>>>>> upstream/2.2-develop
      *
      * @param bool|null $button
      * @param string $token
@@ -1136,11 +1108,7 @@ class Checkout
     }
 
     /**
-<<<<<<< HEAD
-     * Set shipping options to api
-=======
      * Set shipping options to api.
->>>>>>> upstream/2.2-develop
      *
      * @param \Magento\Paypal\Model\Cart $cart
      * @param \Magento\Quote\Model\Quote\Address|null $address

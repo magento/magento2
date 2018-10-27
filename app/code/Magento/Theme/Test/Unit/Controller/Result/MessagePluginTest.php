@@ -460,11 +460,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-<<<<<<< HEAD
-    public function testAfterRenderResultWithAllowedInlineTranslate(): void
-=======
     public function testAfterRenderResultWithAllowedInlineTranslate()
->>>>>>> upstream/2.2-develop
     {
         $messageType = 'message1type';
         $messageText = '{{{message1text}}{{message1text}}{{message1text}}{{theme/luma}}}';

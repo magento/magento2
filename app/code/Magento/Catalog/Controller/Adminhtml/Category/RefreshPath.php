@@ -6,9 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpGetActionInterface
+class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

@@ -17,20 +17,6 @@ define([
      */
     return function (addressData) {
         var identifier = Date.now(),
-<<<<<<< HEAD
-            countryId = addressData['country_id'] || addressData.countryId || window.checkoutConfig.defaultCountryId,
-            regionId;
-
-        if (addressData.region && addressData.region['region_id']) {
-            regionId = addressData.region['region_id'];
-        } else if (
-            /* eslint-disable */
-            addressData['country_id'] && addressData['country_id'] == window.checkoutConfig.defaultCountryId ||
-            !addressData['country_id'] && countryId == window.checkoutConfig.defaultCountryId
-            /* eslint-enable */
-        ) {
-            regionId = window.checkoutConfig.defaultRegionId || undefined;
-=======
             countryId,
             regionId;
 
@@ -45,17 +31,12 @@ define([
         } else {
             countryId = window.checkoutConfig.defaultCountryId;
             regionId = window.checkoutConfig.defaultRegionId;
->>>>>>> upstream/2.2-develop
         }
 
         return {
             email: addressData.email,
             countryId: countryId,
-<<<<<<< HEAD
-            regionId: regionId || addressData.regionId,
-=======
             regionId: regionId,
->>>>>>> upstream/2.2-develop
             regionCode: addressData.region ? addressData.region['region_code'] : null,
             region: addressData.region ? addressData.region.region : null,
             customerId: addressData['customer_id'] || addressData.customerId,

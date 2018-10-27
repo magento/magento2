@@ -6,9 +6,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-
-class AssignPost extends \Magento\Sales\Controller\Adminhtml\Order\Status implements HttpPostActionInterface
+class AssignPost extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**
      * Save status assignment to state
@@ -28,18 +26,18 @@ class AssignPost extends \Magento\Sales\Controller\Adminhtml\Order\Status implem
             if ($status && $status->getStatus()) {
                 try {
                     $status->assignState($state, $isDefault, $visibleOnFront);
-                    $this->messageManager->addSuccessMessage(__('You assigned the order status.'));
+                    $this->messageManager->addSuccess(__('You assigned the order status.'));
                     return $resultRedirect->setPath('sales/*/');
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    $this->messageManager->addErrorMessage($e->getMessage());
+                    $this->messageManager->addError($e->getMessage());
                 } catch (\Exception $e) {
-                    $this->messageManager->addExceptionMessage(
+                    $this->messageManager->addException(
                         $e,
                         __('Something went wrong while assigning the order status.')
                     );
                 }
             } else {
-                $this->messageManager->addErrorMessage(__('We can\'t find this order status.'));
+                $this->messageManager->addError(__('We can\'t find this order status.'));
             }
             return $resultRedirect->setPath('sales/*/assign');
         }

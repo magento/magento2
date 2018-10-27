@@ -55,14 +55,14 @@ class AssertBundlePriceView extends AbstractConstraint
             $priceLow = ($priceView == 'Price Range') ? $priceBlock->getPriceFrom() : $priceBlock->getPrice();
         }
 
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $priceData['price_from'],
             $priceLow,
             'Bundle price From on product view page is not correct.'
         );
 
         if ($priceView == 'Price Range') {
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $priceData['price_to'],
                 $priceBlock->getPriceTo(),
                 'Bundle price To on product view page is not correct.'

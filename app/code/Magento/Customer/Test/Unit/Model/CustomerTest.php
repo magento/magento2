@@ -134,7 +134,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The transactional account email type is incorrect. Verify and try again.
+     * @expectedExceptionMessage Please correct the transactional account email type.
      */
     public function testSendNewAccountEmailException()
     {

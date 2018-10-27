@@ -27,14 +27,13 @@ class AssertMinicartEmpty extends AbstractConstraint
     public function processAssert(
         CmsIndex $cmsIndex
     ) {
-        $cmsIndex->open();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::TEXT_EMPTY_MINICART,
             $cmsIndex->getCartSidebarBlock()->getEmptyMessage(),
             'Empty minicart message not found'
         );
 
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $cmsIndex->getCartSidebarBlock()->isItemsQtyVisible(),
             'Minicart is not empty'
         );

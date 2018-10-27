@@ -6,9 +6,7 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\User\Controller\Adminhtml\User implements HttpGetActionInterface
+class Index extends \Magento\User\Controller\Adminhtml\User
 {
     /**
      * @return void

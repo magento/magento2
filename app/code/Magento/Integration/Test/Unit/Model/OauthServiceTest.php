@@ -5,7 +5,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Integration\Model\Oauth\Token;
@@ -142,7 +141,7 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage A consumer with ID "1" doesn't exist. Verify the ID and try again.
+     * @expectedExceptionMessage Consumer with ID '1' does not exist.
      */
     public function testDeleteException()
     {
@@ -289,6 +288,7 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Oauth\Exception
+     * @expectedExceptionMessage Unexpected error. Unable to load oAuth consumer account.
      */
     public function testLoadConsumerException()
     {
@@ -298,19 +298,10 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
             'load'
         )->will(
             $this->throwException(
-                new \Magento\Framework\Oauth\Exception(
-                    __(
-                        "The oAuth consumer account couldn't be loaded due to an unexpected error. "
-                        . "Please try again later."
-                    )
-                )
+                new \Magento\Framework\Oauth\Exception(__('Unexpected error. Unable to load oAuth consumer account.'))
             )
         );
         $this->_service->loadConsumer(self::VALUE_CONSUMER_ID);
-
-        $this->expectExceptionMessage(
-            "The oAuth consumer account couldn't be loaded due to an unexpected error. Please try again later."
-        );
     }
 
     /**
@@ -337,6 +328,7 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Oauth\Exception
+     * @expectedExceptionMessage Unexpected error. Unable to load oAuth consumer account.
      */
     public function testLoadConsumerByKeyException()
     {
@@ -346,19 +338,10 @@ class OauthServiceTest extends \PHPUnit\Framework\TestCase
             'load'
         )->will(
             $this->throwException(
-                new \Magento\Framework\Oauth\Exception(
-                    __(
-                        "The oAuth consumer account couldn't be loaded due to an unexpected error. "
-                        . "Please try again later."
-                    )
-                )
+                new \Magento\Framework\Oauth\Exception(__('Unexpected error. Unable to load oAuth consumer account.'))
             )
         );
         $this->_service->loadConsumerByKey(self::VALUE_CONSUMER_KEY);
-
-        $this->expectExceptionMessage(
-            "The oAuth consumer account couldn't be loaded due to an unexpected error. Please try again later."
-        );
     }
 
     /**

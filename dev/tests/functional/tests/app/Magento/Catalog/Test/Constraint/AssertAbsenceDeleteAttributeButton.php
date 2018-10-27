@@ -23,7 +23,7 @@ class AssertAbsenceDeleteAttributeButton extends AbstractConstraint
      */
     public function processAssert(CatalogProductAttributeNew $attributeNew)
     {
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $attributeNew->getPageActions()->checkDeleteButton(),
             "Button 'Delete Attribute' is present on Attribute page"
         );

@@ -40,9 +40,9 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
-     * @inheritdoc
+     * @return array
      */
-    public function getAllOptions($withEmpty = true, $defaultValues = false)
+    public function getAllOptions()
     {
         if (!$this->_options) {
             $collection = $this->_createStoresCollection();
@@ -67,7 +67,7 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
             $value = '0';
         }
         $isMultiple = false;
-        if (strpos($value, ',') !== false) {
+        if (strpos($value, ',')) {
             $isMultiple = true;
             $value = explode(',', $value);
         }

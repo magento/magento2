@@ -16,11 +16,6 @@ class Body implements Layout\GeneratorInterface
     const TYPE = 'body';
 
     /**
-     * @var \Magento\Framework\View\Page\Config
-     */
-    private $pageConfig;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Page\Config $pageConfig

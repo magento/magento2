@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Ui\Test\Unit\Component\Form;
 
 use Magento\Ui\Component\Form\Field;
@@ -170,7 +169,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
      * @return void
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "formElement" configuration parameter is required for the "test-name" field.
+     * @expectedExceptionMessage The configuration parameter "formElement" is a required for "test-name" field.
      */
     public function testPrepareException()
     {

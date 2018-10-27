@@ -68,7 +68,7 @@ class ReturnToStockOrderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCreationArgumentsInterface
      */
-    private $extensionAttributesMock;
+    private $extencionAttributesMock;
 
     protected function setUp()
     {
@@ -87,7 +87,7 @@ class ReturnToStockOrderTest extends \PHPUnit\Framework\TestCase
         $this->creditmemoCreationArgumentsMock = $this->getMockBuilder(CreditmemoCreationArgumentsInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extensionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
+        $this->extencionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getReturnToStockItems'])
             ->getMockForAbstractClass();
@@ -117,9 +117,9 @@ class ReturnToStockOrderTest extends \PHPUnit\Framework\TestCase
         $returnToStockItems = [1];
         $this->creditmemoCreationArgumentsMock->expects($this->exactly(3))
             ->method('getExtensionAttributes')
-            ->willReturn($this->extensionAttributesMock);
+            ->willReturn($this->extencionAttributesMock);
 
-        $this->extensionAttributesMock->expects($this->exactly(2))
+        $this->extencionAttributesMock->expects($this->exactly(2))
             ->method('getReturnToStockItems')
             ->willReturn($returnToStockItems);
 

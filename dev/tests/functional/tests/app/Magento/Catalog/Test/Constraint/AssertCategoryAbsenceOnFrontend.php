@@ -40,7 +40,7 @@ class AssertCategoryAbsenceOnFrontend extends AbstractConstraint
         Category $category
     ) {
         $browser->open($_ENV['app_frontend_url'] . $category->getUrlKey() . '.html');
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::NOT_FOUND_MESSAGE,
             $categoryView->getTitleBlock()->getTitle(),
             'Wrong page is displayed.'

@@ -12,12 +12,9 @@ use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\App\ResourceConnection;
 
-<<<<<<< HEAD
-=======
 /**
  * Class for fast retrieval of all product images
  */
->>>>>>> upstream/2.2-develop
 class Image
 {
     /**

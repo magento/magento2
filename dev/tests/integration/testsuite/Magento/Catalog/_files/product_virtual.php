@@ -20,6 +20,5 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL)
         [
             'qty' => 100,
             'is_in_stock' => 1,
-            'manage_stock' => 1,
         ]
     )->save();

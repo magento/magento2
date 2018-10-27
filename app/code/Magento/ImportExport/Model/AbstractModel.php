@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 abstract class AbstractModel extends \Magento\Framework\DataObject
 {
     /**
-     * Enable logging
+     * Enable loging
      *
      * @var bool
      */

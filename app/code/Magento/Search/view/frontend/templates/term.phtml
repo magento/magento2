@@ -13,11 +13,7 @@
             <li class="item">
                 <a href="<?= /* @escapeNotVerified */ $block->getSearchUrl($_term) ?>"
                    style="font-size:<?= /* @escapeNotVerified */ $_term->getRatio()*70+75 ?>%;">
-<<<<<<< HEAD
-                    <?= $block->escapeHtml($_term->getQueryText()) ?>
-=======
                     <?= $block->escapeHtml($_term->getData('query_text')) ?>
->>>>>>> upstream/2.2-develop
                 </a>
             </li>
         <?php endforeach; ?>

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Adminhtml reviews grid
  *
@@ -11,8 +13,7 @@
  * @method \Magento\Review\Block\Adminhtml\Grid setProductId() setProductId(int $productId)
  * @method int getCustomerId() getCustomerId()
  * @method \Magento\Review\Block\Adminhtml\Grid setCustomerId() setCustomerId(int $customerId)
- * @method \Magento\Review\Block\Adminhtml\Grid setMassactionIdFieldOnlyIndexValue()
- * setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
+ * @method \Magento\Review\Block\Adminhtml\Grid setMassactionIdFieldOnlyIndexValue() setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */

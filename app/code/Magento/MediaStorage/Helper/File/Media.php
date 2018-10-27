@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\MediaStorage\Helper\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -62,9 +61,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $relativePath = $dir->getRelativePath($fullPath);
         if (!$dir->isFile($relativePath)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('The "%1" file doesn\'t exist. Verify the file and try again.', $fullPath)
-            );
+            throw new \Magento\Framework\Exception\LocalizedException(__('File %1 does not exist', $fullPath));
         }
         if (!$dir->isReadable($relativePath)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('File %1 is not readable', $fullPath));

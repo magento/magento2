@@ -22,19 +22,19 @@ class Config
     /**
      * @var \Magento\Catalog\Model\Config
      */
-    private $catalogConfig;
+    private $_catalogConfig;
 
     /**
      * @var \Magento\Catalog\Model\Attribute\Config
      */
-    private $attributeConfig;
+    private $_attributeConfig;
 
     /**
      * Number of emails allowed for sharing wishlist
      *
      * @var int
      */
-    private $sharingEmailLimit;
+    private $_sharingEmailLimit;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -54,10 +54,10 @@ class Config
             self::XML_PATH_SHARING_TEXT_LIMIT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        $this->sharingEmailLimit = $emailLimitInConfig ?: self::SHARING_EMAIL_LIMIT;
+        $this->_sharingEmailLimit = $emailLimitInConfig ?: self::SHARING_EMAIL_LIMIT;
         $this->_sharignTextLimit = $textLimitInConfig ?: self::SHARING_TEXT_LIMIT;
-        $this->catalogConfig = $catalogConfig;
-        $this->attributeConfig = $attributeConfig;
+        $this->_catalogConfig = $catalogConfig;
+        $this->_attributeConfig = $attributeConfig;
     }
 
     /**
@@ -67,8 +67,8 @@ class Config
      */
     public function getProductAttributes()
     {
-        $catalogAttributes = $this->catalogConfig->getProductAttributes();
-        $wishlistAttributes = $this->attributeConfig->getAttributeNames('wishlist_item');
+        $catalogAttributes = $this->_catalogConfig->getProductAttributes();
+        $wishlistAttributes = $this->_attributeConfig->getAttributeNames('wishlist_item');
         return array_merge($catalogAttributes, $wishlistAttributes);
     }
 
@@ -79,7 +79,7 @@ class Config
      */
     public function getSharingEmailLimit()
     {
-        return $this->sharingEmailLimit;
+        return $this->_sharingEmailLimit;
     }
 
     /**

@@ -64,11 +64,11 @@ class VoidAction extends Action
                     $transactionSave->addObject($creditmemo->getInvoice());
                 }
                 $transactionSave->save();
-                $this->messageManager->addSuccessMessage(__('You voided the credit memo.'));
+                $this->messageManager->addSuccess(__('You voided the credit memo.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage(__('We can\'t void the credit memo.'));
+                $this->messageManager->addError(__('We can\'t void the credit memo.'));
             }
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('sales/*/view', ['creditmemo_id' => $creditmemo->getId()]);

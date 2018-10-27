@@ -31,9 +31,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     public function testGetIdentities()
     {
         $categoryTag = ['catalog_category_1'];
-        $currentCategoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $currentCategoryMock->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTag));
-        $this->block->setCurrentCategory($currentCategoryMock);
+        $currentCatogoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $currentCatogoryMock->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTag));
+        $this->block->setCurrentCategory($currentCatogoryMock);
         $this->assertEquals($categoryTag, $this->block->getIdentities());
     }
 }

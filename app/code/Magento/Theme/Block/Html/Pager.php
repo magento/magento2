@@ -184,8 +184,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Returns data collection
-     *
      * @return \Magento\Framework\Data\Collection
      */
     public function getCollection()
@@ -194,10 +192,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Set page variable name
-     *
      * @param string $varName
-     *
      * @return $this
      */
     public function setPageVarName($varName)
@@ -207,8 +202,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get page variable name
-     *
      * @return string
      */
     public function getPageVarName()
@@ -217,10 +210,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Set show per page param
-     *
      * @param bool $varName
-     *
      * @return $this
      */
     public function setShowPerPage($varName)
@@ -230,8 +220,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Is show per page
-     *
      * @return bool
      */
     public function isShowPerPage()
@@ -246,7 +234,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Set the name for pager limit data
      *
      * @param string $varName
-     *
      * @return $this
      */
     public function setLimitVarName($varName)
@@ -288,8 +275,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get first number
-     *
      * @return int
      */
     public function getFirstNum()
@@ -299,8 +284,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get last number
-     *
      * @return int
      */
     public function getLastNum()
@@ -350,10 +333,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Is limit current
-     *
      * @param int $limit
-     *
      * @return bool
      */
     public function isLimitCurrent($limit)
@@ -362,10 +342,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Is page current
-     *
      * @param int $page
-     *
      * @return bool
      */
     public function isPageCurrent($page)
@@ -374,8 +351,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get pages
-     *
      * @return array
      */
     public function getPages()
@@ -402,8 +377,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get first page url
-     *
      * @return string
      */
     public function getFirstPageUrl()
@@ -445,7 +418,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Retrieve page URL
      *
      * @param string $page
-     *
      * @return string
      */
     public function getPageUrl($page)
@@ -454,10 +426,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get limit url
-     *
      * @param int $limit
-     *
      * @return string
      */
     public function getLimitUrl($limit)
@@ -469,7 +438,6 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Retrieve page URL by defined parameters
      *
      * @param array $params
-     *
      * @return string
      */
     public function getPagerUrl($params = [])
@@ -485,8 +453,6 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get path
-     *
      * @return string
      */
     protected function getPath()

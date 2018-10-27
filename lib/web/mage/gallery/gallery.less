@@ -400,6 +400,10 @@
         .fotorama-abs-center();
         height: @size-fotorama-block;
         width: @size-fotorama-block;
+
+        .ie9 & {
+            margin: (-@size-fotorama-block/2) 0 0 (-@size-fotorama-block/2);
+        }
     }
 }
 
@@ -869,6 +873,10 @@
         .fotorama__thumb--icon {
             .fotorama-abs-center();
             width: 100%;
+
+            .ie9 & {
+                margin: (-@fotorama-thumb-arrow/2) 0 0 (-@fotorama-thumb-arrow/2);
+            }
         }
     }
     .fotorama__thumb__arr--left {

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Model\Order\ItemRepository;
@@ -92,7 +91,7 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage An ID is needed. Set the ID and try again.
+     * @expectedExceptionMessage ID required
      */
     public function testGetWithNoId()
     {
@@ -111,7 +110,7 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The entity that was requested doesn't exist. Verify the entity and try again.
+     * @expectedExceptionMessage Requested entity doesn't exist
      */
     public function testGetEmptyEntity()
     {

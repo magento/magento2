@@ -7,24 +7,12 @@
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\Customer\Model\ResourceModel\Address\Attribute as AddressAttribute;
-<<<<<<< HEAD
-use Magento\CustomerImportExport\Model\Import\Address;
-use Magento\ImportExport\Model\Import\AbstractEntity;
-use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Customer\Model\ResourceModel\Customer\Collection;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
-use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
-use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
-=======
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\AbstractEntity;
 use Magento\CustomerImportExport\Model\Import\Address;
->>>>>>> upstream/2.2-develop
 
 /**
- * Tests Magento\CustomerImportExport\Model\Import\Address.
- *
+ * Class AddressTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressTest extends \PHPUnit\Framework\TestCase
@@ -70,8 +58,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected $_customers = [
-        ['entity_id' => 1, 'email' => 'test1@email.com', 'website_id' => 1],
-        ['entity_id' => 2, 'email' => 'test2@email.com', 'website_id' => 2],
+        ['id' => 1, 'email' => 'test1@email.com', 'website_id' => 1],
+        ['id' => 2, 'email' => 'test2@email.com', 'website_id' => 2],
     ];
 
     /**
@@ -126,12 +114,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $errorAggregator;
 
     /**
-<<<<<<< HEAD
-     * @var AddressAttribute\Source\CountryWithWebsites|\PHPUnit_Framework_MockObject_MockObject
-=======
      * @var AddressAttribute\Source\CountryWithWebsites
      * |\PHPUnit_Framework_MockObject_MockObject
->>>>>>> upstream/2.2-develop
      */
     private $countryWithWebsites;
 
@@ -272,17 +256,10 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(
                 function ($email, $websiteId) {
                     foreach ($this->_customers as $customerData) {
-<<<<<<< HEAD
-                        if ($customerData['email'] === $email
-                            && $customerData['website_id'] === $websiteId
-                        ) {
-                            return $customerData['entity_id'];
-=======
                         if ($customerData['email'] == $email
                             && $customerData['website_id'] == $websiteId
                         ) {
                             return $customerData['id'];
->>>>>>> upstream/2.2-develop
                         }
                     }
 
@@ -392,6 +369,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $availableBehaviors = new \ReflectionProperty($modelMock, '_availableBehaviors');
         $availableBehaviors->setAccessible(true);
         $availableBehaviors->setValue($modelMock, $this->_availableBehaviors);
+
         // mock to imitate data source model
         $dataSourceMock = $this->createPartialMock(
             \Magento\ImportExport\Model\ResourceModel\Import\Data::class,
@@ -463,6 +441,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Customer\Model\AddressFactory::class),
             $this->createMock(\Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class),
             $this->createMock(\Magento\Customer\Model\CustomerFactory::class),
+            $this->createMock(\Magento\Customer\Model\ResourceModel\Address\CollectionFactory::class),
             $this->createMock(\Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory::class),
             new \Magento\Framework\Stdlib\DateTime(),
             $this->createMock(\Magento\Customer\Model\Address\Validator\Postcode::class),

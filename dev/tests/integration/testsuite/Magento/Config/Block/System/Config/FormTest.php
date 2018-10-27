@@ -217,21 +217,17 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $this->_setupFieldsInheritCheckbox($fieldId, $isConfigDataEmpty, $configDataValue);
 
-        Bootstrap::getObjectManager()->get(
-            ScopeInterface::class
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
-            FrontNameResolver::AREA_CODE
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         $form = $this->formFactory->create();
         $fieldset = $form->addFieldset($this->section->getId() . '_' . $this->group->getId(), []);
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block FormStub */
-<<<<<<< HEAD
-        $block = Bootstrap::getObjectManager()->get(
-=======
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
->>>>>>> upstream/2.2-develop
             \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
             FormStub::class

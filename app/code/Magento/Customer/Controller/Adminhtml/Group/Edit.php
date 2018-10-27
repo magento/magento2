@@ -6,9 +6,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Edit extends \Magento\Customer\Controller\Adminhtml\Group implements HttpGetActionInterface
+class Edit extends \Magento\Customer\Controller\Adminhtml\Group
 {
     /**
      * Edit customer group action. Forward to new action.

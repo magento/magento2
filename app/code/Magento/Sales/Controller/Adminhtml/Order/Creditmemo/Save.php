@@ -5,12 +5,11 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 
-class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class Save extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session
@@ -110,7 +109,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                     $this->creditmemoSender->send($creditmemo);
                 }
 
-                $this->messageManager->addSuccessMessage(__('You created the credit memo.'));
+                $this->messageManager->addSuccess(__('You created the credit memo.'));
                 $this->_getSession()->getCommentText(true);
                 $resultRedirect->setPath('sales/order/view', ['order_id' => $creditmemo->getOrderId()]);
                 return $resultRedirect;
@@ -120,11 +119,11 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 return $resultForward;
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_getSession()->setFormData($data);
         } catch (\Exception $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-            $this->messageManager->addErrorMessage(__('We can\'t save the credit memo right now.'));
+            $this->messageManager->addError(__('We can\'t save the credit memo right now.'));
         }
         $resultRedirect->setPath('sales/*/new', ['_current' => true]);
         return $resultRedirect;

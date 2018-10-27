@@ -34,7 +34,6 @@ class ExportSearchCsv extends TermController
      * Export search report grid to CSV format
      *
      * @return \Magento\Framework\App\ResponseInterface
-     * @throws \Exception
      */
     public function execute()
     {

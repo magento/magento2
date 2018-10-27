@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 use Magento\Sales\Api\Data\ShipmentPackageCreationInterface;
@@ -16,10 +15,6 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
 use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
-<<<<<<< HEAD
-use Magento\Sales\Model\Order\ShipmentDocumentFactory\ExtensionAttributesProcessor;
-=======
->>>>>>> upstream/2.2-develop
 
 /**
  * Class ShipmentDocumentFactory
@@ -45,29 +40,20 @@ class ShipmentDocumentFactory
     private $hydratorPool;
 
     /**
-     * @var ExtensionAttributesProcessor
-     */
-    private $extensionAttributesProcessor;
-
-    /**
      * ShipmentDocumentFactory constructor.
      *
      * @param ShipmentFactory $shipmentFactory
      * @param HydratorPool $hydratorPool
      * @param TrackFactory $trackFactory
-     * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      */
     public function __construct(
         ShipmentFactory $shipmentFactory,
         HydratorPool $hydratorPool,
-        TrackFactory $trackFactory,
-        ExtensionAttributesProcessor $extensionAttributesProcessor = null
+        TrackFactory $trackFactory
     ) {
         $this->shipmentFactory = $shipmentFactory;
         $this->trackFactory = $trackFactory;
         $this->hydratorPool = $hydratorPool;
-        $this->extensionAttributesProcessor = $extensionAttributesProcessor ?: ObjectManager::getInstance()
-            ->get(ExtensionAttributesProcessor::class);
     }
 
     /**
@@ -102,13 +88,6 @@ class ShipmentDocumentFactory
             $shipmentItems
         );
 
-<<<<<<< HEAD
-        if (null !== $arguments) {
-            $this->extensionAttributesProcessor->execute($shipment, $arguments);
-        }
-
-=======
->>>>>>> upstream/2.2-develop
         foreach ($tracks as $track) {
             $hydrator = $this->hydratorPool->getHydrator(
                 \Magento\Sales\Api\Data\ShipmentTrackCreationInterface::class

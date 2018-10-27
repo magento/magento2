@@ -151,10 +151,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $id
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function mockPayment($id = false)

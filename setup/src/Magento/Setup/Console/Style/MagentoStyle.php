@@ -7,10 +7,7 @@
 namespace Magento\Setup\Console\Style;
 
 use Magento\Setup\Console\InputValidationException;
-<<<<<<< HEAD
-=======
 use Symfony\Component\Console\Application;
->>>>>>> upstream/2.2-develop
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\Helper;
@@ -24,10 +21,6 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\OutputStyle;
-<<<<<<< HEAD
-use Symfony\Component\Console\Terminal;
-=======
->>>>>>> upstream/2.2-develop
 
 /**
  * Magento console output decorator.
@@ -490,17 +483,10 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      */
     private function getTerminalWidth()
     {
-<<<<<<< HEAD
-        $terminal = new Terminal();
-        $width = $terminal->getWidth();
-
-        return $width ?: self::MAX_LINE_LENGTH;
-=======
         $application = new Application();
         $dimensions = $application->getTerminalDimensions();
 
         return $dimensions[0] ?: self::MAX_LINE_LENGTH;
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -533,12 +519,8 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     }
 
     /**
-<<<<<<< HEAD
-     * @param array $messages
-=======
      * @param $messages
      *
->>>>>>> upstream/2.2-develop
      * @return array
      */
     private function reduceBuffer($messages)

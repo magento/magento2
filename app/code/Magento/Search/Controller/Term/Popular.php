@@ -34,7 +34,6 @@ class Popular extends Action
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function dispatch(RequestInterface $request)
     {

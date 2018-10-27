@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * System config email sender field backend model
  */
@@ -31,9 +33,7 @@ class Sender extends \Magento\Framework\App\Config\Value
         }
 
         if (strlen($value) > 255) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Maximum sender name length is 255. Please correct your settings.')
-            );
+            throw new \Magento\Framework\Exception\LocalizedException(__('Maximum sender name length is 255. Please correct your settings.'));
         }
         return $this;
     }

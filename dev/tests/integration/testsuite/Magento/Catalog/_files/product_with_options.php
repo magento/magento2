@@ -36,8 +36,7 @@ $product->setTypeId(
 )->setStockData(
     [
         'qty' => 100,
-        'is_in_stock' => 1,
-        'manage_stock' => 1,
+        'is_in_stock' => 1
     ]
 )->setHasOptions(true);
 

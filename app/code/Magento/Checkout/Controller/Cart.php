@@ -77,7 +77,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
         if ($backUrl || $backUrl = $this->getBackUrl($this->_redirect->getRefererUrl())) {
             $resultRedirect->setUrl($backUrl);
         }
-
+        
         return $resultRedirect;
     }
 
@@ -106,7 +106,8 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
     /**
      * Get resolved back url
      *
-     * @param string|null $defaultUrl
+     * @param null $defaultUrl
+     *
      * @return mixed|null|string
      */
     protected function getBackUrl($defaultUrl = null)
@@ -128,11 +129,6 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
     }
 
     /**
-<<<<<<< HEAD
-     * Is redirect should be performed after the product was added to cart.
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @return bool
      */
     private function shouldRedirectToCart()

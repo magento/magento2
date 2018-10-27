@@ -35,18 +35,18 @@ class AssertMsrpOnCategoryPage extends AbstractConstraint
         $cmsIndex->getTopmenu()->selectCategoryByName($product->getCategoryIds()[0]);
 
         $productBlock = $catalogCategoryView->getMsrpListProductBlock()->getProductItem($product);
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $productBlock->isVisible(),
             'Product is invisible on Category page.'
         );
 
         $priceBlock = $productBlock->getPriceBlock();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $product->getMsrp(),
             $priceBlock->getOldPrice(),
             'Displayed on Category page MSRP is incorrect.'
         );
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $priceBlock->isRegularPriceVisible(),
             'Regular price on Category page is visible and not expected.'
         );

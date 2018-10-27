@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Model\ProductRepository;
@@ -217,11 +219,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             }
         } else {
             $this->expectException('Exception');
-<<<<<<< HEAD
-            $this->expectExceptionCode(400);
-=======
             $this->expectExceptionMessage('', 400);
->>>>>>> upstream/2.2-develop
         }
         $this->_webApiCall($serviceInfo, ['option' => $optionDataPost]);
     }

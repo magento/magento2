@@ -171,7 +171,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         $this->webapiTransport->close();
         if ($response !== true) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
-            throw new \Exception("The coupon code couldn't be applied. Verify the coupon code and try again.");
+            throw new \Exception('Could not apply coupon code!');
         }
     }
 
@@ -243,7 +243,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         $this->webapiTransport->close();
         if (!isset($response['payment_methods'], $response['totals'])) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
-            throw new \Exception("The shipping method can't be set to quote.");
+            throw new \Exception('Could not set shipping method to quote!');
         }
     }
 

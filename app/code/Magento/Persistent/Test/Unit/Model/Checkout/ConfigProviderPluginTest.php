@@ -64,17 +64,17 @@ class ConfigProviderPluginTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param bool $persistenceEnabled
+     * @param bool $persitenceEnabled
      * @param bool $isPersistent
      * @param bool $isLoggedIn
      *
      * @dataProvider configDataProvider
      */
-    public function testAfterGetConfigNegative($persistenceEnabled, $isPersistent, $isLoggedIn)
+    public function testAfterGetConfigNegative($persitenceEnabled, $isPersistent, $isLoggedIn)
     {
         $result = [40, 30, 50];
 
-        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn($persistenceEnabled);
+        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn($persitenceEnabled);
         $this->persistentSessionMock->expects($this->any())->method('isPersistent')->willReturn($isPersistent);
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn($isLoggedIn);
         $this->maskFactoryMock->expects($this->never())->method('create');

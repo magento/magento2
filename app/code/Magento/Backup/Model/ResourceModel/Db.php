@@ -115,11 +115,7 @@ class Db
     }
 
     /**
-<<<<<<< HEAD
-     * Return triggers for table(s).
-=======
      * Return triggers for table(s)
->>>>>>> upstream/2.2-develop
      *
      * @param string|null $tableName
      * @param bool $addDropIfExists
@@ -139,10 +135,6 @@ class Db
         } else {
             $triggerScript = $this->getTableTriggersSql($tableName, $addDropIfExists);
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         return $triggerScript;
     }
 

@@ -15,9 +15,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
-/**
- * Command to create an admin user.
- */
 class AdminUserCreateCommand extends AbstractSetupCommand
 {
     /**
@@ -55,11 +52,6 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     }
 
     /**
-<<<<<<< HEAD
-     * Creation admin user in interaction mode.
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
@@ -137,11 +129,6 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     }
 
     /**
-<<<<<<< HEAD
-     * Add not empty validator.
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @param \Symfony\Component\Console\Question\Question $question
      * @return void
      */
@@ -157,11 +144,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     }
 
     /**
-<<<<<<< HEAD
-     * @inheritdoc
-=======
      * {@inheritdoc}
->>>>>>> upstream/2.2-develop
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -182,43 +165,25 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     /**
      * Get list of arguments for the command
      *
-     * @param int $mode The mode of options.
      * @return InputOption[]
      */
-    public function getOptionsList($mode = InputOption::VALUE_REQUIRED)
+    public function getOptionsList()
     {
-        $requiredStr = ($mode === InputOption::VALUE_REQUIRED ? '(Required) ' : '');
-
         return [
-            new InputOption(
-                AdminAccount::KEY_USER,
-                null,
-                $mode,
-                $requiredStr . 'Admin user'
-            ),
-            new InputOption(
-                AdminAccount::KEY_PASSWORD,
-                null,
-                $mode,
-                $requiredStr . 'Admin password'
-            ),
-            new InputOption(
-                AdminAccount::KEY_EMAIL,
-                null,
-                $mode,
-                $requiredStr . 'Admin email'
-            ),
+            new InputOption(AdminAccount::KEY_USER, null, InputOption::VALUE_REQUIRED, '(Required) Admin user'),
+            new InputOption(AdminAccount::KEY_PASSWORD, null, InputOption::VALUE_REQUIRED, '(Required) Admin password'),
+            new InputOption(AdminAccount::KEY_EMAIL, null, InputOption::VALUE_REQUIRED, '(Required) Admin email'),
             new InputOption(
                 AdminAccount::KEY_FIRST_NAME,
                 null,
-                $mode,
-                $requiredStr . 'Admin first name'
+                InputOption::VALUE_REQUIRED,
+                '(Required) Admin first name'
             ),
             new InputOption(
                 AdminAccount::KEY_LAST_NAME,
                 null,
-                $mode,
-                $requiredStr . 'Admin last name'
+                InputOption::VALUE_REQUIRED,
+                '(Required) Admin last name'
             ),
         ];
     }

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\TestModule4\Service\V1;
 
 use Magento\TestModule4\Service\V1\Entity\DataObjectRequest;
@@ -44,8 +46,5 @@ interface DataObjectServiceInterface
      * @param \Magento\TestModule4\Service\V1\Entity\ExtensibleRequestInterface $request
      * @return \Magento\TestModule4\Service\V1\Entity\DataObjectResponse
      */
-    public function extensibleDataObject(
-        $id,
-        \Magento\TestModule4\Service\V1\Entity\ExtensibleRequestInterface $request
-    );
+    public function extensibleDataObject($id, \Magento\TestModule4\Service\V1\Entity\ExtensibleRequestInterface $request);
 }

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Theme\Test\Unit\Model\View;
 
 use Magento\Store\Model\ScopeInterface;

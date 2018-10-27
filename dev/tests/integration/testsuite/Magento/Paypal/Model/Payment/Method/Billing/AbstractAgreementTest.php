@@ -6,25 +6,11 @@
 namespace Magento\Paypal\Model\Payment\Method\Billing;
 
 use Magento\Quote\Api\Data\PaymentInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 
-class AbstractAgreementTest extends \Magento\TestFramework\Indexer\TestCase
+class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Paypal\Model\Method\Agreement */
     protected $_model;
-
-    public static function setUpBeforeClass()
-    {
-        $db = Bootstrap::getInstance()->getBootstrap()
-            ->getApplication()
-            ->getDbInstance();
-        if (!$db->isDbDumpExists()) {
-            throw new \LogicException('DB dump does not exist.');
-        }
-        $db->restoreFromDbDump();
-
-        parent::setUpBeforeClass();
-    }
 
     protected function setUp()
     {
@@ -85,13 +71,5 @@ class AbstractAgreementTest extends \Magento\TestFramework\Indexer\TestCase
             'REF-ID-TEST-678',
             $info->getAdditionalInformation(AbstractAgreement::PAYMENT_INFO_REFERENCE_ID)
         );
-    }
-
-    /**
-     * teardown
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
     }
 }

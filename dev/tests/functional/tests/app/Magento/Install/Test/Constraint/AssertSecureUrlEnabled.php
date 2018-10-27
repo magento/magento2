@@ -34,13 +34,13 @@ class AssertSecureUrlEnabled extends AbstractConstraint
         CustomerAccountLogin $customerAccountLogin
     ) {
         $dashboard->open();
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             strpos($browser->getUrl(), 'https://') !== false,
             'Secure Url is not displayed on backend.'
         );
 
         $customerAccountLogin->open();
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             strpos($browser->getUrl(), 'https://') !== false,
             'Secure Url is not displayed on frontend.'
         );

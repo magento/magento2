@@ -116,16 +116,10 @@ class CategoriesTest extends AbstractModifierTest
 
     /**
      * @param bool $locked
-<<<<<<< HEAD
-     * @dataProvider modifyMetaLockedDataProvider
-     */
-    public function testModifyMetaLocked($locked)
-=======
      * @return void
      * @dataProvider modifyMetaLockedDataProvider
      */
     public function testModifyMetaLocked(bool $locked)
->>>>>>> upstream/2.2-develop
     {
         $groupCode = 'test_group_code';
         $meta = [

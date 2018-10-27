@@ -7,9 +7,8 @@
  */
 namespace Magento\Store\App\Response;
 
-/**
- * Class Redirect computes redirect urls responses.
- */
+use Magento\Store\Api\StoreResolverInterface;
+
 class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 {
     /**
@@ -77,10 +76,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     }
 
     /**
-     * Get the referrer url.
-     *
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _getUrl()
     {
@@ -167,7 +163,10 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
+     * @param array $arguments
+     * @return array
      */
     public function updatePathParams(array $arguments)
     {
@@ -248,10 +247,10 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         $store = $this->_storeManager->getStore();
 
         if ($store
-            && !empty($refererQuery[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME])
-            && ($refererQuery[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME] !== $store->getCode())
+            && !empty($refererQuery[StoreResolverInterface::PARAM_NAME])
+            && ($refererQuery[StoreResolverInterface::PARAM_NAME] !== $store->getCode())
         ) {
-            $refererQuery[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME] = $store->getCode();
+            $refererQuery[StoreResolverInterface::PARAM_NAME] = $store->getCode();
         }
 
         return $refererQuery;

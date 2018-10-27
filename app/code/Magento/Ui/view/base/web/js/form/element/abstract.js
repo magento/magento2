@@ -408,7 +408,7 @@ define([
             this.bubble('error', message);
 
             //TODO: Implement proper result propagation for form
-            if (this.source && !isValid) {
+            if (!isValid) {
                 this.source.set('params.invalid', true);
             }
 

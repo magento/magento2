@@ -33,7 +33,7 @@ class AssertIntegrationSuccessSaveMessageNotPresent extends AbstractConstraint
         } else {
             $noSuccessMessage = true;
         }
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $noSuccessMessage,
             'Integration is not saved.'
         );

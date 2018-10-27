@@ -29,7 +29,7 @@ class AssertUrlRewriteDeletedMessage extends AbstractConstraint
     public function processAssert(UrlRewriteIndex $index)
     {
         $actualMessage = $index->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

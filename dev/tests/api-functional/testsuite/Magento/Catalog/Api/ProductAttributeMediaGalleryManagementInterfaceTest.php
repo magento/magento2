@@ -4,7 +4,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Api;
 
 use Magento\Framework\Api\Data\ImageContentInterface;
@@ -385,7 +384,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
+     * @expectedExceptionMessage Requested product doesn't exist
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -434,7 +433,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
+     * @expectedExceptionMessage Requested product doesn't exist
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -458,7 +457,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      * @expectedException \Exception
-     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
+     * @expectedExceptionMessage There is no image with provided ID.
      */
     public function testUpdateThrowsExceptionIfThereIsNoImageWithGivenId()
     {
@@ -482,7 +481,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
+     * @expectedExceptionMessage Requested product doesn't exist
      */
     public function testDeleteThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -498,7 +497,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      * @expectedException \Exception
-     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
+     * @expectedExceptionMessage There is no image with provided ID.
      */
     public function testDeleteThrowsExceptionIfThereIsNoImageWithGivenId()
     {
@@ -611,13 +610,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         ];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $this->expectException('SoapFault');
-<<<<<<< HEAD
-            $this->expectExceptionMessage(
-                "The product that was requested doesn't exist. Verify the product and try again."
-            );
-=======
             $this->expectExceptionMessage('Requested product doesn\'t exist');
->>>>>>> upstream/2.2-develop
         } else {
             $this->expectException('Exception');
             $this->expectExceptionCode(404);

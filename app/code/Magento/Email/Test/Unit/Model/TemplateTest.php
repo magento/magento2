@@ -30,7 +30,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     * @deprecated since 2.3.0 in favor of stateful global objects elimination.
      */
     private $registry;
 

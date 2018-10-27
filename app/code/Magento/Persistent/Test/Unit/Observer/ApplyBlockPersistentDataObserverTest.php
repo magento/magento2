@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Persistent\Test\Unit\Observer;
 
 class ApplyBlockPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
@@ -67,10 +69,10 @@ class ApplyBlockPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
         $this->blockMock = $this->createMock(\Magento\Framework\View\Element\AbstractBlock::class);
         $this->persistentConfigMock = $this->createMock(\Magento\Persistent\Model\Persistent\Config::class);
         $this->model = new \Magento\Persistent\Observer\ApplyBlockPersistentDataObserver(
-            $this->sessionMock,
-            $this->persistentHelperMock,
-            $this->customerSessionMock,
-            $this->configMock
+                $this->sessionMock,
+                $this->persistentHelperMock,
+                $this->customerSessionMock,
+                $this->configMock
         );
     }
 

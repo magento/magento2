@@ -53,10 +53,7 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $className
      * @param $arguments
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @return mixed
      */
     public function getModelInstance($className, $arguments)

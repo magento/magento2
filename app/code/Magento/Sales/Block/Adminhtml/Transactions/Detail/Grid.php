@@ -112,7 +112,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Retrieve Transaction additional info
+     * Retrieve Transaction addtitional info
      *
      * @return array
      */

@@ -12,6 +12,8 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use \InvalidArgumentException;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class StoreCookie
@@ -34,18 +36,26 @@ class StoreCookie
     protected $storeRepository;
 
     /**
+     * @var StoreResolverInterface
+     */
+    private $storeResolver;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param StoreCookieManagerInterface $storeCookieManager
      * @param StoreRepositoryInterface $storeRepository
+     * @param StoreResolverInterface $storeResolver
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         StoreCookieManagerInterface $storeCookieManager,
-        StoreRepositoryInterface $storeRepository
+        StoreRepositoryInterface $storeRepository,
+        StoreResolverInterface $storeResolver = null
     ) {
         $this->storeManager = $storeManager;
         $this->storeCookieManager = $storeCookieManager;
         $this->storeRepository = $storeRepository;
+        $this->storeResolver = $storeResolver ?: ObjectManager::getInstance()->get(StoreResolverInterface::class);
     }
 
     /**

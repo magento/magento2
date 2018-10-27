@@ -112,7 +112,7 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
         $changedFiles = ChangedFiles::getPhpFiles(__DIR__ . '/../_files/changed_files*');
         $blacklistFiles = $this->getBlacklistFiles();
         foreach ($blacklistFiles as $blacklistFile) {
-            unset($changedFiles[$blacklistFile]);
+            unset($changedFiles[BP . $blacklistFile]);
         }
         $invoker(
             function ($file) {
@@ -920,7 +920,7 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
 
         $fileSet = glob($appPath . DIRECTORY_SEPARATOR . $pattern, GLOB_NOSORT);
         foreach ($fileSet as $file) {
-            $files[] = ltrim(substr($file, $relativePathStart), '/');
+            $files[] = substr($file, $relativePathStart);
         }
 
         return $files;

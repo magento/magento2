@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Paypal\Model;
 
 use Magento\Framework\DataObject;
@@ -647,10 +646,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param DataObject $response
      * @return void
-<<<<<<< HEAD
-=======
      * @throws \Magento\Framework\Exception\LocalizedException
->>>>>>> upstream/2.2-develop
      * @throws \Magento\Payment\Gateway\Command\CommandException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      */
@@ -658,7 +654,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     {
         if ($response->getResultCode() == self::RESPONSE_CODE_VOID_ERROR) {
             throw new \Magento\Framework\Exception\State\InvalidTransitionException(
-                __("The verification transaction can't be voided. ")
+                __('You cannot void a verification transaction.')
             );
         } elseif ($response->getResultCode() != self::RESPONSE_CODE_APPROVED &&
             $response->getResultCode() != self::RESPONSE_CODE_FRAUDSERVICE_FILTER

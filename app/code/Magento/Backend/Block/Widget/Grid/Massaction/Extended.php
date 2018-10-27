@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
 /**
@@ -70,7 +69,7 @@ class Extended extends \Magento\Backend\Block\Widget
     public function _construct()
     {
         parent::_construct();
-        $this->setErrorText($this->escapeHtml(__('An item needs to be selected. Select and try again.')));
+        $this->setErrorText($this->escapeHtml(__('Please select items.')));
     }
 
     /**

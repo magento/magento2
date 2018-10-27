@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Response;
 
-use Magento\Framework\App\Response\Http;
+use \Magento\Framework\App\Response\Http;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadata;
@@ -22,57 +22,32 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $cookieManagerMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     protected $cookieMetadataFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Http\Context
      */
     protected $contextMock;
 
-    /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Http\Context */
     protected $dateTimeMock;
 
-    /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $requestMock;
-
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
-<<<<<<< HEAD
-    /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $sessionConfigMock;
-
-    /**
-     * @var int
-     */
-    private $cookieLifeTime = 3600;
-
-    /**
-     * @inheritdoc
-     */
-=======
     /** @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $sessionConfigMock;
 
     /** @var int */
     private $cookieLifeTime = 3600;
 
->>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -104,20 +79,13 @@ class HttpTest extends \PHPUnit\Framework\TestCase
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
                 'context' => $this->contextMock,
                 'dateTime' => $this->dateTimeMock,
-<<<<<<< HEAD
-                'sessionConfig' => $this->sessionConfigMock,
-=======
                 'sessionConfig' => $this->sessionConfigMock
->>>>>>> upstream/2.2-develop
             ]
         );
         $this->model->headersSentThrowsException = false;
         $this->model->setHeader('Name', 'Value');
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function tearDown()
     {
         unset($this->model);
@@ -226,8 +194,10 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetPublicHeadersWithoutTtl()
     {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Time to live is a mandatory parameter for set public headers');
+        $this->expectException(
+            'InvalidArgumentException',
+            'Time to live is a mandatory parameter for set public headers'
+        );
         $this->model->setPublicHeaders(null);
     }
 
@@ -262,8 +232,10 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetPrivateHeadersWithoutTtl()
     {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Time to live is a mandatory parameter for set private headers');
+        $this->expectException(
+            'InvalidArgumentException',
+            'Time to live is a mandatory parameter for set private headers'
+        );
         $this->model->setPrivateHeaders(null);
     }
 

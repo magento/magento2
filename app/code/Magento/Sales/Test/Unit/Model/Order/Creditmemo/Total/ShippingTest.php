@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
 class ShippingTest extends \PHPUnit\Framework\TestCase

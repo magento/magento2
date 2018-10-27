@@ -3,20 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Backup\Filesystem\Rollback;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Archive;
-use Magento\Framework\Archive\Gz;
-use Magento\Framework\Archive\Helper\File;
-use Magento\Framework\Archive\Helper\File\Gz as HelperGz;
-use Magento\Framework\Archive\Tar;
-use Magento\Framework\Backup\Exception\CantLoadSnapshot;
-use Magento\Framework\Backup\Exception\NotEnoughPermissions;
-use Magento\Framework\Backup\Filesystem\Helper;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
 
 /**
  * Rollback worker for rolling back via local filesystem
@@ -26,7 +15,7 @@ use Magento\Framework\Phrase;
 class Fs extends AbstractRollback
 {
     /**
-     * @var Helper
+     * @var \Magento\Framework\Backup\Filesystem\Helper
      */
     private $fsHelper;
 
@@ -34,7 +23,7 @@ class Fs extends AbstractRollback
      * Files rollback implementation via local filesystem
      *
      * @return void
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see AbstractRollback::run()
      */
@@ -43,8 +32,8 @@ class Fs extends AbstractRollback
         $snapshotPath = $this->_snapshot->getBackupPath();
 
         if (!is_file($snapshotPath) || !is_readable($snapshotPath)) {
-            throw new CantLoadSnapshot(
-                new Phrase('Can\'t load snapshot archive')
+            throw new \Magento\Framework\Backup\Exception\CantLoadSnapshot(
+                new \Magento\Framework\Phrase('Can\'t load snapshot archive')
             );
         }
 
@@ -52,55 +41,49 @@ class Fs extends AbstractRollback
 
         $filesInfo = $fsHelper->getInfo(
             $this->_snapshot->getRootDir(),
-            Helper::INFO_WRITABLE,
+            \Magento\Framework\Backup\Filesystem\Helper::INFO_WRITABLE,
             $this->_snapshot->getIgnorePaths()
         );
 
         if (!$filesInfo['writable']) {
             if (!empty($filesInfo['writableMeta'])) {
-                throw new NotEnoughPermissions(
-                    new Phrase(
+                throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(
+                    new \Magento\Framework\Phrase(
                         'You need write permissions for: %1',
                         [implode(', ', $filesInfo['writableMeta'])]
                     )
                 );
             }
 
-            throw new NotEnoughPermissions(
-                new Phrase("The rollback can't be executed because not all files are writable.")
+            throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(
+                new \Magento\Framework\Phrase('Unable to make rollback because not all files are writable')
             );
         }
 
-        $archiver = new Archive();
+        $archiver = new \Magento\Framework\Archive();
 
         /**
          * we need these fake initializations because all magento's files in filesystem will be deleted and autoloader
          * wont be able to load classes that we need for unpacking
          */
-        new Tar();
-        new Gz();
-        new File('');
-        new HelperGz('');
-        new LocalizedException(new Phrase('dummy'));
+        new \Magento\Framework\Archive\Tar();
+        new \Magento\Framework\Archive\Gz();
+        new \Magento\Framework\Archive\Helper\File('');
+        new \Magento\Framework\Archive\Helper\File\Gz('');
+        new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('dummy'));
 
-        if (!$this->_snapshot->keepSourceFile()) {
-            $fsHelper->rm($this->_snapshot->getRootDir(), $this->_snapshot->getIgnorePaths());
-        }
+        $fsHelper->rm($this->_snapshot->getRootDir(), $this->_snapshot->getIgnorePaths());
         $archiver->unpack($snapshotPath, $this->_snapshot->getRootDir());
-
-        if ($this->_snapshot->keepSourceFile() === false) {
-            @unlink($snapshotPath);
-        }
     }
 
     /**
-     * @return Helper
+     * @return \Magento\Framework\Backup\Filesystem\Helper
      * @deprecated 100.2.0
      */
     private function getFsHelper()
     {
         if (!$this->fsHelper) {
-            $this->fsHelper = ObjectManager::getInstance()->get(Helper::class);
+            $this->fsHelper = ObjectManager::getInstance()->get(\Magento\Framework\Backup\Filesystem\Helper::class);
         }
 
         return $this->fsHelper;

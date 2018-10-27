@@ -32,7 +32,7 @@ class AssertShippingMethodAvailableInCart extends AbstractConstraint
             $checkoutCart->open();
         }
 
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $checkoutCart->getShippingBlock()->isShippingCarrierMethodVisible(
                 $shippingExists['shipping_service'],
                 $shippingExists['shipping_method']

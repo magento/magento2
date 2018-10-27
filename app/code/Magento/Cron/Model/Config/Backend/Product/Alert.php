@@ -11,9 +11,6 @@
  */
 namespace Magento\Cron\Model\Config\Backend\Product;
 
-/**
- * Cron job Alert configuration
- */
 class Alert extends \Magento\Framework\App\Config\Value
 {
     /**
@@ -64,7 +61,7 @@ class Alert extends \Magento\Framework\App\Config\Value
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @return $this
      * @throws \Exception

@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Persistent\Test\Unit\Observer;
 
 use \Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver;
@@ -59,8 +61,7 @@ class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\Te
             $this->persistentSessionMock,
             $this->persistentDataMock,
             $this->customerSessionMock,
-            $this->quoteManagerMock
-        );
+            $this->quoteManagerMock);
     }
 
     public function testExecuteWithPersistentDataThatCanNotBeProcess()

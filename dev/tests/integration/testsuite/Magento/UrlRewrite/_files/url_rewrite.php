@@ -6,32 +6,14 @@
 
 use \Magento\UrlRewrite\Model\OptionProvider;
 use \Magento\UrlRewrite\Model\UrlRewrite;
-<<<<<<< HEAD
-use \Magento\TestFramework\Helper\Bootstrap;
-use \Magento\Store\Model\StoreManagerInterface;
-use \Magento\Store\Model\Store;
-use \Magento\UrlRewrite\Model\ResourceModel\UrlRewrite as UrlRewriteResource;
-use \Magento\Framework\ObjectManagerInterface;
-use \Magento\Cms\Model\ResourceModel\Page as PageResource;
-use \Magento\Cms\Model\Page;
-=======
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
->>>>>>> upstream/2.2-develop
 
 /** Create fixture store */
 require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
 
 /** @var UrlRewrite $rewrite */
-<<<<<<< HEAD
-/** @var ObjectManagerInterface $objectManager */
-$objectManager = Bootstrap::getObjectManager();
-/** @var UrlRewriteResource $rewriteResource */
-$rewriteResource = $objectManager->create(UrlRewriteResource::class);
-/** @var PageResource $pageResource */
-$pageResource = $objectManager->create(PageResource::class);
-=======
 /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\UrlRewrite\Model\ResourceModel\UrlRewrite $rewriteResource */
@@ -42,7 +24,6 @@ $rewriteResource = $objectManager->create(
 $pageResource = $objectManager->create(
     \Magento\Cms\Model\ResourceModel\Page::class
 );
->>>>>>> upstream/2.2-develop
 /** @var StoreManagerInterface $storeManager */
 $storeManager = Bootstrap::getObjectManager()
     ->get(StoreManagerInterface::class);
@@ -53,13 +34,8 @@ $secondStore->load('fixture_second_store');
 $secondStoreId = $secondStore->getId();
 $storeID = 1;
 
-<<<<<<< HEAD
-/** @var $page Page */
-$page = $objectManager->create(Page::class);
-=======
 /** @var $page \Magento\Cms\Model\Page */
 $page = Bootstrap::getObjectManager()->create(\Magento\Cms\Model\Page::class);
->>>>>>> upstream/2.2-develop
 $page->setTitle('Cms Page A')
     ->setIdentifier('page-a')
     ->setIsActive(1)
@@ -68,11 +44,7 @@ $page->setTitle('Cms Page A')
     ->setStores([$storeID, $secondStoreId]);
 $pageResource->save($page);
 
-<<<<<<< HEAD
-$page = $objectManager->create(Page::class);
-=======
 $page = Bootstrap::getObjectManager()->create(\Magento\Cms\Model\Page::class);
->>>>>>> upstream/2.2-develop
 $page->setTitle('Cms B')
     ->setIdentifier('page-b')
     ->setIsActive(1)
@@ -82,11 +54,7 @@ $page->setTitle('Cms B')
     ->setStores([$storeID, $secondStoreId]);
 $pageResource->save($page);
 
-<<<<<<< HEAD
-$page = $objectManager->create(Page::class);
-=======
 $page = Bootstrap::getObjectManager()->create(\Magento\Cms\Model\Page::class);
->>>>>>> upstream/2.2-develop
 $page->setTitle('Cms C')
     ->setIdentifier('page-c')
     ->setIsActive(1)

@@ -172,34 +172,14 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
                 $read = $this->_readFactory->create($url, DriverPool::HTTPS);
             }
 
-            //only use filename (for URI with query parameters)
-            $parsedUrlPath = parse_url($url, PHP_URL_PATH);
-            if ($parsedUrlPath) {
-                $urlPathValues = explode('/', $parsedUrlPath);
-                if (!empty($urlPathValues)) {
-                    $fileName = end($urlPathValues);
-                }
-            }
-
-            if ($this->getTmpDir()) {
-                $filePath = $this->getTmpDir() . '/';
-            } else {
-                $filePath = '';
-            }
             $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $fileName);
-            $filePath = $this->_directory->getRelativePath($filePath . $fileName);
             $this->_directory->writeFile(
-                $filePath,
+                $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName),
                 $read->readAll()
             );
         }
 
-        if ($this->getTmpDir()) {
-            $filePath = $this->getTmpDir() . '/';
-        } else {
-            $filePath = '';
-        }
-        $filePath = $this->_directory->getRelativePath($filePath . $fileName);
+        $filePath = $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName);
         $this->_setUploadFile($filePath);
         $destDir = $this->_directory->getAbsolutePath($this->getDestDir());
         $result = $this->save($destDir);

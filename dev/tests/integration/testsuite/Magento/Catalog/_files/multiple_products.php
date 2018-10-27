@@ -10,7 +10,7 @@ $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(10)
     ->setAttributeSetId(4)
-    ->setName('Simple Product1')
+    ->setName('Simple Product')
     ->setSku('simple1')
     ->setTaxClassId('none')
     ->setDescription('description')
@@ -27,7 +27,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setWebsiteIds([1])
     ->setCategoryIds([])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
-    ->setSpecialPrice('5.99')
     ->save();
 
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
@@ -52,7 +51,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setWebsiteIds([1])
     ->setCategoryIds([])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 50, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
-    ->setSpecialPrice('15.99')
     ->save();
 
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
@@ -60,7 +58,7 @@ $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(12)
     ->setAttributeSetId(4)
-    ->setName('Simple Product3')
+    ->setName('Simple Product 3')
     ->setSku('simple3')
     ->setTaxClassId('none')
     ->setDescription('description')
@@ -72,5 +70,4 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setWebsiteIds([1])
     ->setCategoryIds([])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 140, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
-    ->setSpecialPrice('25.99')
     ->save();

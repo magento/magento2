@@ -11,7 +11,7 @@ use Magento\Framework\Phrase;
 /**
  * @api
  */
-abstract class AbstractAggregateException extends LocalizedException implements AggregateExceptionInterface
+abstract class AbstractAggregateException extends LocalizedException
 {
     /**
      * The array of errors that have been added via the addError() method
@@ -100,7 +100,9 @@ abstract class AbstractAggregateException extends LocalizedException implements 
     }
 
     /**
-     * @inheritdoc
+     * Get the array of LocalizedException objects. Get an empty array if no errors were added.
+     *
+     * @return \Magento\Framework\Exception\LocalizedException[]
      */
     public function getErrors()
     {

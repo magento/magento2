@@ -11,12 +11,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Sql\Expression;
 
-<<<<<<< HEAD
-=======
 /**
  * Class ConditionResolverTest
  */
->>>>>>> upstream/2.2-develop
 class ConditionResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**

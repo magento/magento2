@@ -56,7 +56,7 @@ class AssertProductCrossSells extends AbstractConstraint
             }
         }
 
-        \PHPUnit\Framework\Assert::assertEmpty($errors, implode(" ", $errors));
+        \PHPUnit_Framework_Assert::assertEmpty($errors, implode(" ", $errors));
     }
 
     /**

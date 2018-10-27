@@ -3,18 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-=======
->>>>>>> upstream/2.2-develop
 
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-<<<<<<< HEAD
-=======
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
->>>>>>> upstream/2.2-develop
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -33,48 +26,16 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
-<<<<<<< HEAD
-=======
      * @var ProductResource
      */
     private $productResource;
 
     /**
->>>>>>> upstream/2.2-develop
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
     /**
-<<<<<<< HEAD
-     * Sets up common objects
-     */
-    protected function setUp()
-    {
-        $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
-        );
-
-        $this->searchCriteriaBuilder = \Magento\Framework\App\ObjectManager::getInstance()->create(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class
-        );
-    }
-
-    /**
-     * Checks filtering by store_id
-     *
-     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     */
-    public function testFilterByStoreId()
-    {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('store_id', '1', 'eq')
-            ->create();
-        $list = $this->productRepository->getList($searchCriteria);
-        $count = $list->getTotalCount();
-
-        $this->assertGreaterThanOrEqual(1, $count);
-=======
      * @inheritdoc
      */
     protected function setUp()
@@ -189,25 +150,16 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             $nameUpdated,
             $product->getName()
         );
->>>>>>> upstream/2.2-develop
     }
 
     /**
      * Check a case when product should be retrieved with different SKU variations.
      *
      * @param string $sku
-<<<<<<< HEAD
-     * @return void
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider skuDataProvider
-     */
-    public function testGetProduct(string $sku) : void
-=======
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @dataProvider skuDataProvider
      */
     public function testGetProduct(string $sku)
->>>>>>> upstream/2.2-develop
     {
         $expectedSku = 'simple';
         $product = $this->productRepository->get($sku);
@@ -226,11 +178,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         return [
             ['sku' => 'simple'],
             ['sku' => 'Simple'],
-<<<<<<< HEAD
-            ['sku' => 'simple '],
-        ];
-    }
-=======
             ['sku' => 'simple ']
         ];
     }
@@ -251,5 +198,4 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertGreaterThanOrEqual(1, $count);
     }
->>>>>>> upstream/2.2-develop
 }

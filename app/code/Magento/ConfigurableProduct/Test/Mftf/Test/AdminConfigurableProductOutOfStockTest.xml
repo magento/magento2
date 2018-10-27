@@ -7,51 +7,29 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-<<<<<<< HEAD
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-=======
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
->>>>>>> upstream/2.2-develop
     <test name="AdminConfigurableProductChildrenOutOfStockTest">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Product visibility when in stock/out of stock"/>
             <title value="Configurable Product goes 'Out of Stock' if all associated Simple Products are 'Out of Stock'"/>
-<<<<<<< HEAD
-            <description value="Configurable Product goes 'Out of Stock' if all associated Simple Products are 'Out of Stock'"/>
-            <severity value="CRITICAL"/>
-            <testCaseId value="MC-181"/>
-            <group value="ConfigurableProduct"/>
-=======
             <severity value="CRITICAL"/>
             <description value="Configurable Product goes 'Out of Stock' if all associated Simple Products are 'Out of Stock'"/>
             <testCaseId value="MAGETWO-79939"/>
             <group value="configurableProduct"/>
->>>>>>> upstream/2.2-develop
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
             <!-- Create the category to put the product in -->
-<<<<<<< HEAD
-            <createData entity="ApiCategory" stepKey="createCategory"/>
-
-            <!-- Create the configurable product based on the data in the /data folder -->
-            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
-=======
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
             <!-- Create the configurable product based on the data in the /data folder -->
             <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
->>>>>>> upstream/2.2-develop
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
             <!-- Make the configurable product have two options, that are children of the default attribute set -->
-<<<<<<< HEAD
-            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
-=======
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttribute"/>
->>>>>>> upstream/2.2-develop
             <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
@@ -69,20 +47,12 @@
             </getData>
 
             <!-- Create the 2 children that will be a part of the configurable product -->
-<<<<<<< HEAD
-            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-                <requiredEntity createDataKey="getConfigAttributeOption1"/>
-            </createData>
-            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
-=======
             <createData entity="SimpleOption" stepKey="createConfigChildProduct1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption1"/>
             </createData>
             <createData entity="SimpleOption" stepKey="createConfigChildProduct2">
                 <field key="sku">SimpleTwoOption</field>
->>>>>>> upstream/2.2-develop
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
             </createData>
@@ -108,11 +78,7 @@
         </before>
 
         <after>
-<<<<<<< HEAD
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
-=======
             <actionGroup ref="logout" stepKey="logout"/>
->>>>>>> upstream/2.2-develop
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
@@ -121,26 +87,16 @@
         </after>
 
         <!-- Check to make sure that the configurable product shows up as in stock -->
-<<<<<<< HEAD
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
-        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK" />
-=======
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK" stepKey="lookForOfStock"/>
->>>>>>> upstream/2.2-develop
 
         <!-- Find the first simple product that we just created using the product grid and go to its page-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForAdminProductGridLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
-<<<<<<< HEAD
-            <argument name="product" value="ApiSimpleOne"/>
-=======
             <argument name="product" value="$$createConfigChildProduct1$$"/>
->>>>>>> upstream/2.2-develop
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied"/>
         <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
@@ -149,31 +105,19 @@
         <!-- Edit the quantity of the simple first product as 0 -->
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="fillProductQuantity"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
-<<<<<<< HEAD
-
-        <!-- Check to make sure that the configurable product shows up as in stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage2"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad2"/>
-        <see stepKey="checkForOutOfStock2" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
-=======
         <waitForPageLoad stepKey="waitForProductPageSaved"/>
 
         <!-- Check to make sure that the configurable product shows up as in stock -->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToConfigProductPage2"/>
         <waitForPageLoad stepKey="waitForStoreFrontLoad2"/>
         <see selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK" stepKey="lookForOutOfStock2"/>
->>>>>>> upstream/2.2-develop
 
         <!-- Find the second simple product that we just created using the product grid and go to its page-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage2"/>
         <waitForPageLoad stepKey="waitForAdminProductGridLoad2"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
         <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct2">
-<<<<<<< HEAD
-            <argument name="product" value="ApiSimpleTwo"/>
-=======
             <argument name="product" value="$$createConfigChildProduct2$$"/>
->>>>>>> upstream/2.2-develop
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied2"/>
         <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage2"/>
@@ -182,16 +126,6 @@
         <!-- Edit the quantity of the second simple product as 0 -->
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="fillProductQuantity2"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct2"/>
-<<<<<<< HEAD
-
-        <!-- Check to make sure that the configurable product shows up as out of stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage3"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad3"/>
-        <see stepKey="checkForOutOfStock3" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="OUT OF STOCK"/>
-    </test>
-
-    <test name="AdminConfigurableProductOutOfStockTestDeleteChildren">
-=======
         <waitForPageLoad stepKey="waitForProductPageSaved2"/>
 
         <!-- Check to make sure that the configurable product shows up as out of stock -->
@@ -201,44 +135,27 @@
     </test>
 
     <test name="AdminConfigurableProductOutOfStockDeleteChildrenTest">
->>>>>>> upstream/2.2-develop
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Product visibility when in stock/out of stock"/>
             <title value="Configurable Product goes 'Out of Stock' if all associated Simple Products are deleted"/>
             <description value="Configurable Product goes 'Out of Stock' if all associated Simple Products are deleted"/>
             <severity value="CRITICAL"/>
-<<<<<<< HEAD
-            <testCaseId value="MC-3042"/>
-            <group value="ConfigurableProduct"/>
-=======
             <testCaseId value="MAGETWO-79939"/>
             <group value="configurableProduct"/>
->>>>>>> upstream/2.2-develop
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
             <!-- Create the category to put the product in -->
-<<<<<<< HEAD
-            <createData entity="ApiCategory" stepKey="createCategory"/>
-
-            <!-- Create the configurable product based on the data in the /data folder -->
-            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
-=======
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
             <!-- Create the configurable product based on the data in the /data folder -->
             <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
->>>>>>> upstream/2.2-develop
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
             <!-- Make the configurable product have two options, that are children of the default attribute set -->
-<<<<<<< HEAD
-            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
-=======
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttribute"/>
->>>>>>> upstream/2.2-develop
             <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
@@ -256,20 +173,12 @@
             </getData>
 
             <!-- Create the 2 children that will be a part of the configurable product -->
-<<<<<<< HEAD
-            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-                <requiredEntity createDataKey="getConfigAttributeOption1"/>
-            </createData>
-            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
-=======
             <createData entity="SimpleOption" stepKey="createConfigChildProduct1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption1"/>
             </createData>
             <createData entity="SimpleOption" stepKey="createConfigChildProduct2">
                 <field key="sku">SimpleTwoOption</field>
->>>>>>> upstream/2.2-develop
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
             </createData>
@@ -295,42 +204,13 @@
         </before>
 
         <after>
-<<<<<<< HEAD
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
-=======
             <actionGroup ref="logout" stepKey="logout"/>
->>>>>>> upstream/2.2-develop
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
         </after>
 
         <!-- Check to make sure that the configurable product shows up as in stock -->
-<<<<<<< HEAD
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
-        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK" />
-
-        <!-- Delete the first simple product -->
-        <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
-            <argument name="sku" value="{{ApiSimpleOne.sku}}"/>
-        </actionGroup>
-
-        <!-- Check to make sure that the configurable product shows up as in stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage2"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad2"/>
-        <see stepKey="checkForOutOfStock2" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
-
-        <!-- Delete the second simple product -->
-        <actionGroup stepKey="deleteProduct2" ref="deleteProductBySku">
-            <argument name="sku" value="{{ApiSimpleTwo.sku}}"/>
-        </actionGroup>
-
-        <!-- Check to make sure that the configurable product shows up as out of stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage3"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad3"/>
-        <see stepKey="checkForOutOfStock3" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="OUT OF STOCK"/>
-=======
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.stockIndication}}" stepKey="lookForOutOfStock"/>
@@ -354,7 +234,6 @@
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToConfigProductPage3"/>
         <waitForPageLoad stepKey="waitForStoreFrontLoad3"/>
         <see userInput="OUT OF STOCK" selector="{{StorefrontProductInfoMainSection.stockIndication}}" stepKey="lookForOutOfStock3"/>
->>>>>>> upstream/2.2-develop
     </test>
 
     <test name="AdminConfigurableProductOutOfStockAndDeleteCombinationTest">
@@ -364,37 +243,21 @@
             <title value="Configurable Product goes 'Out of Stock' if all associated Simple Products are a combination of 'Out of Stock' and deleted"/>
             <description value="Configurable Product goes 'Out of Stock' if all associated Simple Products are a combination of 'Out of Stock' and deleted"/>
             <severity value="CRITICAL"/>
-<<<<<<< HEAD
-            <testCaseId value="MC-3046"/>
-            <group value="ConfigurableProduct"/>
-=======
             <testCaseId value="MAGETWO-79939"/>
             <group value="configurableProduct"/>
->>>>>>> upstream/2.2-develop
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
             <!-- Create the category to put the product in -->
-<<<<<<< HEAD
-            <createData entity="ApiCategory" stepKey="createCategory"/>
-
-            <!-- Create the configurable product based on the data in the /data folder -->
-            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
-=======
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
             <!-- Create the configurable product based on the data in the /data folder -->
             <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
->>>>>>> upstream/2.2-develop
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
             <!-- Make the configurable product have two options, that are children of the default attribute set -->
-<<<<<<< HEAD
-            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
-=======
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttribute"/>
->>>>>>> upstream/2.2-develop
             <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
@@ -412,20 +275,12 @@
             </getData>
 
             <!-- Create the 2 children that will be a part of the configurable product -->
-<<<<<<< HEAD
-            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-                <requiredEntity createDataKey="getConfigAttributeOption1"/>
-            </createData>
-            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
-=======
             <createData entity="SimpleOption" stepKey="createConfigChildProduct1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption1"/>
             </createData>
             <createData entity="SimpleOption" stepKey="createConfigChildProduct2">
                 <field key="sku">SimpleTwoOption</field>
->>>>>>> upstream/2.2-develop
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
             </createData>
@@ -451,28 +306,6 @@
         </before>
 
         <after>
-<<<<<<< HEAD
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
-            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
-        </after>
-
-        <!-- Check to make sure that the configurable product shows up as in stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
-        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK" />
-
-        <!-- Delete the first simple product -->
-        <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
-            <argument name="sku" value="{{ApiSimpleOne.sku}}"/>
-        </actionGroup>
-
-        <!-- Check to make sure that the configurable product shows up as in stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage2"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad2"/>
-        <see stepKey="checkForOutOfStock2" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
-=======
             <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
@@ -494,18 +327,13 @@
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToConfigProductPage2"/>
         <waitForPageLoad stepKey="waitForStoreFrontLoad2"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.stockIndication}}" stepKey="lookForInOfStock2"/>
->>>>>>> upstream/2.2-develop
 
         <!-- Find the second simple product that we just created using the product grid and go to its page-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage2"/>
         <waitForPageLoad stepKey="waitForAdminProductGridLoad2"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
         <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct2">
-<<<<<<< HEAD
-            <argument name="product" value="ApiSimpleTwo"/>
-=======
             <argument name="product" value="$$createConfigChildProduct2$$"/>
->>>>>>> upstream/2.2-develop
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied2"/>
         <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage2"/>
@@ -514,19 +342,11 @@
         <!-- Edit the quantity of the second simple product as 0 -->
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="fillProductQuantity2"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct2"/>
-<<<<<<< HEAD
-
-        <!-- Check to make sure that the configurable product shows up as out of stock -->
-        <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage3"/>
-        <waitForPageLoad stepKey="waitForStoreFrontLoad3"/>
-        <see stepKey="checkForOutOfStock3" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="OUT OF STOCK"/>
-=======
         <waitForPageLoad stepKey="waitForProductPageSaved2"/>
 
         <!-- Check to make sure that the configurable product shows up as out of stock -->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToConfigProductPage3"/>
         <waitForPageLoad stepKey="waitForStoreFrontLoad3"/>
         <see selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="OUT OF STOCK" stepKey="lookForOutOfStock"/>
->>>>>>> upstream/2.2-develop
     </test>
 </tests>

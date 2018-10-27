@@ -59,6 +59,18 @@
         margin-top: -(@data-grid-spinner__size / 2);
         position: absolute;
         top: 50%;
+
+        .ie9 & {
+            background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
+            bottom: 0;
+            height: 149px;
+            left: 0;
+            margin: auto;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 218px;
+        }
     }
 }
 
@@ -987,6 +999,10 @@ body._in-resize {
                 transform: rotate(45deg);
                 width: 1.6rem;
                 z-index: 3;
+
+                .ie9 & {
+                    display: none;
+                }
             }
         }
     }

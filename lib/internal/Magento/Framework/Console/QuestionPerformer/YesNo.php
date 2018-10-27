@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Console\QuestionPerformer;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -82,7 +81,7 @@ class YesNo
         $question->setValidator(function ($answer) {
             if (!in_array(strtolower($answer), ['yes', 'y', 'no', 'n'])) {
                 throw new LocalizedException(
-                    new Phrase('A [y]es or [n]o selection needs to be made. Select and try again.')
+                    new Phrase('Please type [y]es or [n]o')
                 );
             }
 

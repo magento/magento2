@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Checkout\Helper\Cart as CartHelper;
@@ -105,7 +104,7 @@ class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex
             $item = $this->cart->getQuote()->getItemById($itemId);
             if (!$item) {
                 throw new LocalizedException(
-                    __("The cart item doesn't exist.")
+                    __('The requested cart item doesn\'t exist.')
                 );
             }
 

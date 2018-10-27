@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
- * Tests \Magento\Braintree\Gateway\Http\Client\TransactionSale.
+ * Class TransactionSaleTest
  */
 class TransactionSaleTest extends \PHPUnit\Framework\TestCase
 {
@@ -31,32 +31,13 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
     /**
      * @var BraintreeAdapter|MockObject
      */
-    private $adapterMock;
+    private $adapter;
 
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
-<<<<<<< HEAD
-        /** @var LoggerInterface|MockObject $criticalLoggerMock */
-        $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->loggerMock = $this->getMockBuilder(Logger::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->adapterMock = $this->getMockBuilder(BraintreeAdapter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var BraintreeAdapterFactory|MockObject $adapterFactoryMock */
-        $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $adapterFactoryMock->expects(self::once())
-            ->method('create')
-            ->willReturn($this->adapterMock);
-
-        $this->model = new TransactionSale($criticalLoggerMock, $this->loggerMock, $adapterFactoryMock);
-=======
         /** @var LoggerInterface|MockObject $criticalLogger */
         $criticalLogger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->logger = $this->getMockBuilder(Logger::class)
@@ -74,7 +55,6 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->adapter);
 
         $this->model = new TransactionSale($criticalLogger, $this->logger, $adapterFactory);
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -96,12 +76,7 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-<<<<<<< HEAD
-        $this->adapterMock->expects($this->once())
-            ->method('sale')
-=======
         $this->adapter->method('sale')
->>>>>>> upstream/2.2-develop
             ->willThrowException(new \Exception('Test messages'));
 
         /** @var TransferInterface|MockObject $transferObjectMock */
@@ -118,12 +93,7 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
     public function testPlaceRequestSuccess()
     {
         $response = $this->getResponseObject();
-<<<<<<< HEAD
-        $this->adapterMock->expects($this->once())
-            ->method('sale')
-=======
         $this->adapter->method('sale')
->>>>>>> upstream/2.2-develop
             ->with($this->getTransferData())
             ->willReturn($response);
 

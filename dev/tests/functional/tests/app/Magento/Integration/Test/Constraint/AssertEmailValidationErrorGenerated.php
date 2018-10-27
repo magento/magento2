@@ -34,7 +34,7 @@ class AssertEmailValidationErrorGenerated extends AbstractConstraint
                 break;
             }
         }
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $emailJsError,
             'Failed to validate email address (' . $integration->getEmail() . ') when saving integration.'
         );

@@ -48,17 +48,10 @@ class ModeSwitcher implements \Magento\Indexer\Model\ModeSwitcherInterface
     private $modeSwitcherConfiguration;
 
     /**
-<<<<<<< HEAD
-     * @param TableMaintainer $tableMaintainer
-     * @param DimensionCollectionFactory $dimensionCollectionFactory
-     * @param DimensionModeConfiguration $dimensionModeConfiguration
-     * @param ModeSwitcherConfiguration $modeSwitcherConfiguration
-=======
      * @param TableMaintainer            $tableMaintainer
      * @param DimensionCollectionFactory $dimensionCollectionFactory
      * @param DimensionModeConfiguration $dimensionModeConfiguration
      * @param ModeSwitcherConfiguration  $modeSwitcherConfiguration
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         TableMaintainer $tableMaintainer,

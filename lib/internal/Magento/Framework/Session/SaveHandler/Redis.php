@@ -140,10 +140,6 @@ class Redis implements \SessionHandlerInterface
      * @param int $maxLifeTime ignored
      * @return boolean
      * @throws SessionException
-<<<<<<< HEAD
-     * @SuppressWarnings(PHPMD.ShortMethodName)
-=======
->>>>>>> upstream/2.2-develop
      */
     public function gc($maxLifeTime)
     {

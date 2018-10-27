@@ -9,6 +9,7 @@ namespace Magento\Setup\Model;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Module\ResourceFactory;
 use Magento\Framework\App\ErrorHandler;
+use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Setup\LoggerInterface;
 
 /**
@@ -28,15 +29,8 @@ class InstallerFactory
      *
      * @param ServiceLocatorInterface $serviceLocator
      */
-<<<<<<< HEAD
-    public function __construct(
-        ServiceLocatorInterface $serviceLocator,
-        ResourceFactory $resourceFactory
-    ) {
-=======
     public function __construct(ServiceLocatorInterface $serviceLocator)
     {
->>>>>>> upstream/2.2-develop
         $this->serviceLocator = $serviceLocator;
         // For Setup Wizard we are using our customized error handler
         $handler = new ErrorHandler();

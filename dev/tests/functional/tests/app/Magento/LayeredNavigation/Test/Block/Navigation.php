@@ -166,37 +166,6 @@ class Navigation extends Block
     }
 
     /**
-<<<<<<< HEAD
-     * Get Layered Navigation filter options.
-     *
-     * @param string $attributeLabel
-     * @return array
-     */
-    public function getFilterContents($attributeLabel)
-    {
-        $data = [];
-
-        if (trim($attributeLabel) === '') {
-            return $data;
-        }
-
-        $link = sprintf($this->filterLink, $attributeLabel);
-        $this->openFilterContainer($attributeLabel, $link);
-
-        $optionContents = $this->_rootElement->getElements($link, Locator::SELECTOR_XPATH);
-
-        foreach ($optionContents as $optionContent) {
-            $data[] = trim(strtoupper($optionContent->getText()));
-        }
-
-        return $data;
-    }
-
-    /**
-     * Open filter container.
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @param string $filter
      * @param string $link
      * @return void

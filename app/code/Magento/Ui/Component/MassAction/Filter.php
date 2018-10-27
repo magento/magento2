@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Ui\Component\MassAction;
 
 use Magento\Framework\Api\FilterBuilder;
@@ -96,7 +95,7 @@ class Filter
 
         if ('false' !== $excluded) {
             if (!$isExcludedIdsValid && !$isSelectedIdsValid) {
-                throw new LocalizedException(__('An item needs to be selected. Select and try again.'));
+                throw new LocalizedException(__('Please select item(s).'));
             }
         }
 
@@ -161,7 +160,7 @@ class Filter
             } elseif (is_array($selected) && !empty($selected)) {
                 $collection->addFieldToFilter($collection->getIdFieldName(), ['in' => $selected]);
             } else {
-                throw new LocalizedException(__('An item needs to be selected. Select and try again.'));
+                throw new LocalizedException(__('Please select item(s).'));
             }
         } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()));

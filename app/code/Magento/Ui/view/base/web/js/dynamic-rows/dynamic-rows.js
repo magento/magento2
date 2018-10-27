@@ -549,10 +549,7 @@ define([
                         columnsHeaderClasses: cell.config.columnsHeaderClasses,
                         sortOrder: cell.config.sortOrder
                     });
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
                     labels.push(data);
                 }, this);
                 this.labels(_.sortBy(labels, 'sortOrder'));
@@ -910,7 +907,7 @@ define([
             prop = prop || this.identificationProperty;
 
             return _.reject(this.getChildItems(), function (recordData) {
-                return recordData[prop].toString() === id.toString();
+                return ~~recordData[prop] === ~~id;
             }, this);
         },
 

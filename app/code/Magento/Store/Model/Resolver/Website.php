@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Store\Model\Resolver;
 
 class Website implements \Magento\Framework\App\ScopeResolverInterface
@@ -30,9 +29,7 @@ class Website implements \Magento\Framework\App\ScopeResolverInterface
     {
         $scope = $this->_storeManager->getWebsite($scopeId);
         if (!($scope instanceof \Magento\Framework\App\ScopeInterface)) {
-            throw new \Magento\Framework\Exception\State\InitException(
-                __('The scope object is invalid. Verify the scope object and try again.')
-            );
+            throw new \Magento\Framework\Exception\State\InitException(__('Invalid scope object'));
         }
 
         return $scope;

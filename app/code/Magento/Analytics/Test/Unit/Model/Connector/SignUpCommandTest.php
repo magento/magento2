@@ -15,12 +15,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Integration\Model\Oauth\Token as IntegrationToken;
 use Psr\Log\LoggerInterface;
 
-<<<<<<< HEAD
-=======
 /**
  * Class SignUpCommandTest
  */
->>>>>>> upstream/2.2-develop
 class SignUpCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -63,12 +60,6 @@ class SignUpCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $responseResolverMock;
 
-<<<<<<< HEAD
-    /**
-     * @return void
-     */
-=======
->>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->analyticsTokenMock =  $this->getMockBuilder(AnalyticsToken::class)
@@ -103,13 +94,6 @@ class SignUpCommandTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-<<<<<<< HEAD
-    /**
-     * @throws \Zend_Http_Exception
-     * @return void
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testExecuteSuccess()
     {
         $this->integrationManagerMock->expects($this->once())
@@ -143,12 +127,6 @@ class SignUpCommandTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->signUpCommand->execute());
     }
 
-<<<<<<< HEAD
-    /**
-     * @return void
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testExecuteFailureCannotGenerateToken()
     {
         $this->integrationManagerMock->expects($this->once())
@@ -159,13 +137,6 @@ class SignUpCommandTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->signUpCommand->execute());
     }
 
-<<<<<<< HEAD
-    /**
-     * @throws \Zend_Http_Exception
-     * @return void
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testExecuteFailureResponseIsEmpty()
     {
         $this->integrationManagerMock->expects($this->once())
@@ -195,10 +166,7 @@ class SignUpCommandTest extends \PHPUnit\Framework\TestCase
             'url' => 'http://www.mystore.com',
             'access-token' => 'thisisaccesstoken',
             'integration-token' => 'thisisintegrationtoken',
-<<<<<<< HEAD
-=======
             'headers' => [JsonConverter::CONTENT_TYPE_HEADER],
->>>>>>> upstream/2.2-develop
             'method' => \Magento\Framework\HTTP\ZendClient::POST,
             'body'=> ['token' => 'thisisintegrationtoken','url' => 'http://www.mystore.com'],
         ];

@@ -24,8 +24,8 @@ class AssertImportCheckDataErrorMessagesList extends AbstractConstraint
     {
         $messages = $adminImportIndex->getMessagesBlock()->getErrorsList();
 
-        \PHPUnit\Framework\Assert::assertNotFalse($messages, 'Errors messages block is absent.');
-        \PHPUnit\Framework\Assert::assertNotEmpty($messages, 'Errors messages is absent.');
+        \PHPUnit_Framework_Assert::assertNotFalse($messages, 'Errors messages block is absent.');
+        \PHPUnit_Framework_Assert::assertNotEmpty($messages, 'Errors messages is absent.');
 
         $errors = [];
         foreach ($messages as $message) {
@@ -34,7 +34,7 @@ class AssertImportCheckDataErrorMessagesList extends AbstractConstraint
             }
         }
 
-        \PHPUnit\Framework\Assert::assertEmpty(
+        \PHPUnit_Framework_Assert::assertEmpty(
             $errors,
             'This assertions contains next errors:' . PHP_EOL . implode(PHP_EOL, $errors)
         );

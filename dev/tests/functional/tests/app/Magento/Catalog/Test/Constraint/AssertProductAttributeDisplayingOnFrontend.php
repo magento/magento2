@@ -34,7 +34,7 @@ class AssertProductAttributeDisplayingOnFrontend extends AbstractConstraint
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             in_array(
                 $attribute->getFrontendLabel(),
                 $catalogProductView->getAdditionalInformationBlock()->getAttributeLabels()

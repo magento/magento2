@@ -44,7 +44,7 @@ class AssertCustomerDefaultAddressFrontendAddressBook extends AbstractConstraint
                 $validated && ($billingAddressRendered == $this->createAddressRenderer($billingAddress)->render());
         }
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $validated,
             'Customer default address on address book tab is not matching the fixture.'
         );

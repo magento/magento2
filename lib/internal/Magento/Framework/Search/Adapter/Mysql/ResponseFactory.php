@@ -7,9 +7,6 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 
 /**
  * Response Factory
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class ResponseFactory
 {

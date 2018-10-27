@@ -22,14 +22,6 @@ define([
         });
     });
 
-    afterEach(function () {
-        try {
-            injector.clean();
-            injector.remove();
-        } catch (e) {}
-        window.localStorage.clear();
-    });
-
     describe('Magento_Catalog/js/product/storage/ids-storage', function () {
         describe('"getDataFromLocalStorage" method', function () {
             it('check calls localStorage get method', function () {
@@ -38,6 +30,13 @@ define([
                 };
 
                 obj.getDataFromLocalStorage();
+                expect(obj.localStorage.get).toHaveBeenCalled();
+            });
+        });
+        describe('"cachesDataFromLocalStorage" method', function () {
+            it('check calls localStorage get method', function () {
+                obj.getDataFromLocalStorage = jasmine.createSpy().and.returnValue({});
+
                 expect(obj.localStorage.get).toHaveBeenCalled();
             });
         });
@@ -74,16 +73,17 @@ define([
             it('check calls with data that equal with data in localStorage', function () {
                 obj.internalDataHandler(data);
 
-                expect(window.localStorage.getItem(obj.namespace)).toBe(JSON.stringify(data));
+                expect(obj.localStorage.get).toHaveBeenCalled();
+                expect(obj.localStorage.set).not.toHaveBeenCalled();
             });
 
             it('check calls with data that not equal with data in localStorage', function () {
                 var emptyData = {};
 
-                obj.internalDataHandler(data);
                 obj.internalDataHandler(emptyData);
 
-                expect(window.localStorage.getItem(obj.namespace)).toBe(JSON.stringify(emptyData));
+                expect(obj.localStorage.get).toHaveBeenCalled();
+                expect(obj.localStorage.set).toHaveBeenCalledWith(emptyData);
             });
         });
         describe('"externalDataHandler" method', function () {

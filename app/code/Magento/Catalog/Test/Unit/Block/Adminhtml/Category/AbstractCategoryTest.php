@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Category;
 
 class AbstractCategoryTest extends \PHPUnit\Framework\TestCase
@@ -50,8 +52,7 @@ class AbstractCategoryTest extends \PHPUnit\Framework\TestCase
         $this->contextMock = $this->createMock(\Magento\Backend\Block\Template\Context::class);
 
         $this->requestMock = $this->getMockBuilder(
-            \Magento\Framework\App\RequestInterface::class
-        )
+            \Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -60,14 +61,12 @@ class AbstractCategoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->requestMock));
 
         $this->urlBuilderMock = $this->getMockBuilder(
-            \Magento\Framework\UrlInterface::class
-        )
+            \Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->storeManagerMock = $this->getMockBuilder(
-            \Magento\Store\Model\StoreManagerInterface::class
-        )
+            \Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

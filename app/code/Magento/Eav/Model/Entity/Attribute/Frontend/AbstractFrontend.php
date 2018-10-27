@@ -283,7 +283,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     }
 
     /**
-     * Retrieve config field
+     * Reireive config field
      *
      * @param string $fieldName
      * @return mixed

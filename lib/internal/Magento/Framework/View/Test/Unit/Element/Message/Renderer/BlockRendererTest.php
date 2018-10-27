@@ -87,8 +87,10 @@ class BlockRendererTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->willReturn($messageData);
 
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Template should be provided for the renderer.');
+        $this->expectException(
+            'InvalidArgumentException',
+            'Template should be provided for the renderer.'
+        );
 
         $this->blockTemplate->expects(static::never())
             ->method('toHtml');

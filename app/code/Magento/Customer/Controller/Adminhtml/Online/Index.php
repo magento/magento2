@@ -6,11 +6,10 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Online;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class Index extends \Magento\Backend\App\Action implements HttpGetActionInterface
+class Index extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session

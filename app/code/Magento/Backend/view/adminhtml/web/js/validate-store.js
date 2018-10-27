@@ -67,7 +67,6 @@ define([
                              * 'Confirm' action handler.
                              */
                             confirm: function () {
-                                $('body').trigger('processStart');
                                 dataPost().postData(requestData);
                             }
                         }

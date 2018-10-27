@@ -25,9 +25,7 @@ class Address extends \Magento\Framework\App\Config\Value
     {
         $value = $this->getValue();
         if (!\Zend_Validate::is($value, \Magento\Framework\Validator\EmailAddress::class)) {
-            throw new LocalizedException(
-                __('The "%1" email address is incorrect. Verify the email address and try again.', $value)
-            );
+            throw new LocalizedException(__('Please correct the email address: "%1".', $value));
         }
         return $this;
     }

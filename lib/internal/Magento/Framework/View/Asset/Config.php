@@ -8,6 +8,7 @@ namespace Magento\Framework\View\Asset;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State;
 
 /**
  * View asset configuration interface
@@ -54,7 +55,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isMergeCssFiles()
     {
-        return $this->scopeConfig->isSetFlag(
+        return (bool)$this->scopeConfig->isSetFlag(
             self::XML_PATH_MERGE_CSS_FILES,
             ScopeInterface::SCOPE_STORE
         );
@@ -67,7 +68,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isBundlingJsFiles()
     {
-        return $this->scopeConfig->isSetFlag(
+        return (bool)$this->scopeConfig->isSetFlag(
             self::XML_PATH_JS_BUNDLING,
             ScopeInterface::SCOPE_STORE
         );
@@ -80,7 +81,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isMergeJsFiles()
     {
-        return $this->scopeConfig->isSetFlag(
+        return (bool)$this->scopeConfig->isSetFlag(
             self::XML_PATH_MERGE_JS_FILES,
             ScopeInterface::SCOPE_STORE
         );
@@ -93,7 +94,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isMinifyHtml()
     {
-        return $this->scopeConfig->isSetFlag(
+        return (bool)$this->scopeConfig->isSetFlag(
             self::XML_PATH_MINIFICATION_HTML,
             ScopeInterface::SCOPE_STORE
         );

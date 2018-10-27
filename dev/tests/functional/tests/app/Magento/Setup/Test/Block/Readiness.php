@@ -195,11 +195,7 @@ class Readiness extends Block
     /**
      * @return bool
      */
-<<<<<<< HEAD
-    public function isPhpVersionCheckVisible() : bool
-=======
     public function isPhpVersionCheckVisible()
->>>>>>> upstream/2.2-develop
     {
         return $this->_rootElement->find($this->phpVersionCheck)->isVisible();
     }

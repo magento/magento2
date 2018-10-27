@@ -292,7 +292,7 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             ->method('cancel')
             ->with($creditmemoId);
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccessMessage')
+            ->method('addSuccess')
             ->with('The credit memo has been canceled.');
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')

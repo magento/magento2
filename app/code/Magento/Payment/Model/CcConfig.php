@@ -85,7 +85,7 @@ class CcConfig
     }
 
     /**
-     * Retrieve available credit card types
+     * Retrieve availables credit card types
      *
      * @return array
      */

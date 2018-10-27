@@ -13,10 +13,7 @@ use Magento\Framework\Api\Search\DocumentInterface;
 
 /**
  * Document Factory
- *
  * @api
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class DocumentFactory
 {

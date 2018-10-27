@@ -39,9 +39,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -50,13 +47,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->model->setTypeId(Type::TYPE_BUNDLE);
     }
 
-    /**
-     * Tests Retrieve ans set type instance of the product
-     *
-     * @see \Magento\Catalog\Model\Product::getTypeInstance
-     * @see \Magento\Catalog\Model\Product::setTypeInstance
-     * @return void
-     */
     public function testGetSetTypeInstance()
     {
         // model getter
@@ -96,12 +86,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $crud->testCrud();
     }
 
-    /**
-     * Tests Get product price model
-     *
-     * @see \Magento\Catalog\Model\Product::getPriceModel
-     * @return void
-     */
     public function testGetPriceModel()
     {
         $this->model->setTypeId(Type::TYPE_BUNDLE);
@@ -110,12 +94,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($type, $this->model->getPriceModel());
     }
 
-    /**
-     * Tests Check is product composite
-     *
-     * @see \Magento\Catalog\Model\Product::isComposite
-     * @return void
-     */
     public function testIsComposite()
     {
         $this->assertTrue($this->model->isComposite());
@@ -160,10 +138,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @param bool $isSalable
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/product.php
-<<<<<<< HEAD
-=======
      * @magentoDbIsolation enabled
->>>>>>> upstream/2.2-develop
      * @dataProvider stockConfigDataProvider
      * @covers \Magento\Catalog\Model\Product::isSalable
      */

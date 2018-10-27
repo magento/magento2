@@ -30,7 +30,7 @@ class AssertCmsPageInGrid extends AbstractConstraint
             'is_active' => $expectedStatus
         ];
         $cmsIndex->open();
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $cmsIndex->getCmsPageGridBlock()->isRowVisible($filter, true, false),
             'Cms page \'' . $cms->getTitle() . '\' is not present in pages grid.'
         );

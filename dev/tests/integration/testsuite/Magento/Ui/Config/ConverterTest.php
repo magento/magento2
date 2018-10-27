@@ -88,7 +88,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
             ['form'],
             ['hidden'],
             ['htmlContent'],
-            ['imageUploader'],
             ['input'],
             ['insertForm'],
             ['insertListing'],

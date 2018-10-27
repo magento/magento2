@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Catalog\Helper;
 
 use Magento\Catalog\Model\Category as ModelCategory;
@@ -47,29 +45,20 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_escaper;
 
     /**
-     * @var array
-     */
-    private $directivePatterns;
-
-    /**
-     * Output constructor.
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Data $catalogData
      * @param \Magento\Framework\Escaper $escaper
-     * @param array $directivePatterns
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         Data $catalogData,
-        \Magento\Framework\Escaper $escaper,
-        $directivePatterns = []
+        \Magento\Framework\Escaper $escaper
     ) {
         $this->_eavConfig = $eavConfig;
         $this->_catalogData = $catalogData;
         $this->_escaper = $escaper;
-        $this->directivePatterns = $directivePatterns;
         parent::__construct($context);
     }
 
@@ -145,7 +134,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $attributeName
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function productAttribute($product, $attributeHtml, $attributeName)
     {
@@ -163,19 +151,10 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
                 $attributeHtml = nl2br($attributeHtml);
             }
         }
-<<<<<<< HEAD
-        if ($attributeHtml !== null
-            && $attribute->getIsHtmlAllowedOnFront()
-            && $attribute->getIsWysiwygEnabled()
-            && $this->isDirectivesExists($attributeHtml)
-        ) {
-            $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
-=======
         if ($attribute->getIsHtmlAllowedOnFront() || $attribute->getIsWysiwygEnabled()) {
             if ($this->_catalogData->isUrlDirectivesParsingAllowed()) {
                 $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
             }
->>>>>>> upstream/2.2-develop
         }
 
         $attributeHtml = $this->process(
@@ -194,7 +173,6 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $attributeHtml
      * @param string $attributeName
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function categoryAttribute($category, $attributeHtml, $attributeName)
     {
@@ -207,13 +185,10 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
         ) {
             $attributeHtml = $this->_escaper->escapeHtml($attributeHtml);
         }
-        if ($attributeHtml !== null
-            && $attribute->getIsHtmlAllowedOnFront()
-            && $attribute->getIsWysiwygEnabled()
-            && $this->isDirectivesExists($attributeHtml)
-
-        ) {
-            $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
+        if ($attribute->getIsHtmlAllowedOnFront() && $attribute->getIsWysiwygEnabled()) {
+            if ($this->_catalogData->isUrlDirectivesParsingAllowed()) {
+                $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
+            }
         }
         $attributeHtml = $this->process(
             'categoryAttribute',
@@ -221,23 +196,5 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
             ['category' => $category, 'attribute' => $attributeName]
         );
         return $attributeHtml;
-    }
-
-    /**
-     * Check if string has directives
-     *
-     * @param string $attributeHtml
-     * @return bool
-     */
-    public function isDirectivesExists($attributeHtml)
-    {
-        $matches = false;
-        foreach ($this->directivePatterns as $pattern) {
-            if (preg_match($pattern, $attributeHtml)) {
-                $matches = true;
-                break;
-            }
-        }
-        return $matches;
     }
 }

@@ -6,8 +6,9 @@
 
 namespace Magento\CatalogSearch\Model\Indexer;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Proxy for adapter-specific index switcher
@@ -29,39 +30,49 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
     private $handlers;
 
     /**
-     * @var EngineResolverInterface
+     * @var ScopeConfigInterface
      */
-    private $engineResolver;
+    private $scopeConfig;
+
+    /**
+     * Configuration path by which current indexer handler stored
+     *
+     * @var string
+     */
+    private $configPath;
 
     /**
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param EngineResolverInterface $engineResolver
+     * @param ScopeConfigInterface $scopeConfig
+     * @param string $configPath
      * @param string[] $handlers
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        EngineResolverInterface $engineResolver,
+        ScopeConfigInterface $scopeConfig,
+        $configPath,
         array $handlers = []
     ) {
         $this->objectManager = $objectManager;
+        $this->scopeConfig = $scopeConfig;
+        $this->configPath = $configPath;
         $this->handlers = $handlers;
-        $this->engineResolver = $engineResolver;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
      * As index switcher is an optional part of the search SPI, it may be not defined by a search engine.
-     * It is especially reasonable for search engines with pre-defined indexes declaration (like Sphinx)
+     * It is especially reasonable for search engines with pre-defined indexes declaration (like old SOLR and Sphinx)
      * which cannot create temporary indexes on the fly.
      * That's the reason why this method do nothing for the case
      * when switcher is not defined for a specific search engine.
      */
     public function switchIndex(array $dimensions)
     {
-        $currentHandler = $this->engineResolver->getCurrentSearchEngine();
+        $currentHandler = $this->scopeConfig->getValue($this->configPath, ScopeInterface::SCOPE_STORE);
         if (!isset($this->handlers[$currentHandler])) {
             return;
         }

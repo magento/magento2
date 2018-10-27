@@ -4,12 +4,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Checkout\Controller\Cart;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-
-class UpdateItemOptions extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
+class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
 {
     /**
      * Update product configuration for a cart item
@@ -38,9 +35,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart implements Htt
 
             $quoteItem = $this->cart->getQuote()->getItemById($id);
             if (!$quoteItem) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __("The quote item isn't found. Verify the item and try again.")
-                );
+                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the quote item.'));
             }
 
             $item = $this->cart->updateItem($id, new \Magento\Framework\DataObject($params));
@@ -69,17 +64,17 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart implements Htt
                         $this->_objectManager->get(\Magento\Framework\Escaper::class)
                             ->escapeHtml($item->getProduct()->getName())
                     );
-                    $this->messageManager->addSuccessMessage($message);
+                    $this->messageManager->addSuccess($message);
                 }
                 return $this->_goBack($this->_url->getUrl('checkout/cart'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
-                $this->messageManager->addNoticeMessage($e->getMessage());
+                $this->messageManager->addNotice($e->getMessage());
             } else {
                 $messages = array_unique(explode("\n", $e->getMessage()));
                 foreach ($messages as $message) {
-                    $this->messageManager->addErrorMessage($message);
+                    $this->messageManager->addError($message);
                 }
             }
 
@@ -91,7 +86,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart implements Htt
                 return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl($cartUrl));
             }
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('We can\'t update the item right now.'));
+            $this->messageManager->addException($e, __('We can\'t update the item right now.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->_goBack();
         }

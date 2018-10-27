@@ -17,16 +17,6 @@ define([
         },
         obj,
         utils;
-<<<<<<< HEAD
-
-    afterEach(function () {
-        try {
-            injector.clean();
-            injector.remove();
-        } catch (e) {}
-    });
-=======
->>>>>>> upstream/2.2-develop
 
     describe('Magento_Catalog/js/product/storage/storage-service', function () {
         var config = {

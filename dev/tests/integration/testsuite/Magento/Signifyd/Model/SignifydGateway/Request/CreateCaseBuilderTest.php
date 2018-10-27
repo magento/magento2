@@ -64,10 +64,7 @@ class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
         $order->loadByIncrementId('100000001');
 
         $orderItems = $order->getAllItems();
-<<<<<<< HEAD
-=======
         $product = $orderItems[0]->getProduct();
->>>>>>> upstream/2.2-develop
         $payment = $order->getPayment();
         $billingAddress = $order->getBillingAddress();
         $shippingAddress = $order->getShippingAddress();
@@ -107,26 +104,16 @@ class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
                         'itemName' => $orderItems[0]->getName(),
                         'itemPrice' => $orderItems[0]->getPrice(),
                         'itemQuantity' => $orderItems[0]->getQtyOrdered(),
-<<<<<<< HEAD
-                        'itemUrl' => $orderItems[0]->getProduct()->getProductUrl(),
-                        'itemWeight' => $orderItems[0]->getProduct()->getWeight()
-=======
                         'itemUrl' => $product->getProductUrl(),
                         'itemWeight' => $product->getWeight()
->>>>>>> upstream/2.2-develop
                     ],
                     1 => [
                         'itemId' => $orderItems[1]->getSku(),
                         'itemName' => $orderItems[1]->getName(),
                         'itemPrice' => $orderItems[1]->getPrice(),
                         'itemQuantity' => $orderItems[1]->getQtyOrdered(),
-<<<<<<< HEAD
-                        'itemUrl' => $orderItems[1]->getProduct()->getProductUrl(),
-                        'itemWeight' => $orderItems[1]->getProduct()->getWeight()
-=======
                         'itemUrl' => $product->getProductUrl(),
                         'itemWeight' => $product->getWeight()
->>>>>>> upstream/2.2-develop
                     ]
                 ],
                 'paymentMethod' => 'PAYPAL_ACCOUNT'

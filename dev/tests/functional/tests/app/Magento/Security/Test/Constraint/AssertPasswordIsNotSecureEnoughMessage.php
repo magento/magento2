@@ -26,7 +26,7 @@ class AssertPasswordIsNotSecureEnoughMessage extends AbstractConstraint
         $expectedErrorMessage = 'Minimum of different classes of characters in password is 3.' .
             ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.';
         $errorMessage = $registerPage->getRegisterForm()->getPasswordError();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $expectedErrorMessage,
             $errorMessage,
             'The messages are not equal.'

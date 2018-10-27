@@ -6,9 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute implements HttpGetActionInterface
+class Index extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page

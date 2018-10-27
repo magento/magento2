@@ -80,7 +80,7 @@ class CouponManagementTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
+     * @expectedExceptionMessage Coupon code is not valid
      */
     public function testSetCouponThrowsExceptionIfCouponDoesNotExist()
     {
@@ -215,7 +215,7 @@ class CouponManagementTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
+     * @expectedExceptionMessage Coupon code is not valid
      */
     public function testSetMyCouponThrowsExceptionIfCouponDoesNotExist()
     {

@@ -7,12 +7,9 @@ namespace Magento\Analytics\Test\Unit\Model\Connector\ResponseHandler;
 
 use Magento\Analytics\Model\Connector\ResponseHandler\Update;
 
-<<<<<<< HEAD
-=======
 /**
  * Class UpdateTest
  */
->>>>>>> upstream/2.2-develop
 class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleResult()

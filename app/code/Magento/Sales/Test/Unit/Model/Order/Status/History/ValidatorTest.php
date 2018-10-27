@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\Unit\Model\Order\Status\History;
 
 use \Magento\Sales\Model\Order\Status\History\Validator;
@@ -28,6 +27,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->with('parent_id')
             ->will($this->returnValue(false));
         $validator = new Validator();
-        $this->assertEquals(['"Order Id" is required. Enter and try again.'], $validator->validate($history));
+        $this->assertEquals(['Order Id is a required field'], $validator->validate($history));
     }
 }

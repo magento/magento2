@@ -34,7 +34,6 @@ class ExportSearchExcel extends TermController
      * Export search report to Excel XML format
      *
      * @return \Magento\Framework\App\ResponseInterface
-     * @throws \Exception
      */
     public function execute()
     {

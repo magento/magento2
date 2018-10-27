@@ -67,9 +67,11 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
     }
 
     /**
-     * @inheritdoc
+     * Retrieve all options
+     *
+     * @return array
      */
-    public function getAllOptions($withEmpty = true, $defaultValues = false)
+    public function getAllOptions()
     {
         if (!$this->options) {
             $allowedCountries = [];

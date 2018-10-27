@@ -36,11 +36,6 @@ define(['squire', 'jquery'], function (Squire, $) {
 
     afterEach(function () {
         $('.payment-method._active').remove();
-
-        try {
-            injector.clean();
-            injector.remove();
-        } catch (e) {}
     });
 
     describe('Magento_CheckoutAgreements/js/model/agreement-validator', function () {

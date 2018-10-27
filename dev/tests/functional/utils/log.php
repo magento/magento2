@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-declare(strict_types=1);
-
 if (!isset($_GET['name'])) {
     throw new \InvalidArgumentException(
         'The name of log file is required for getting logs.'

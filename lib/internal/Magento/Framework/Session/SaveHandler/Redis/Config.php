@@ -6,9 +6,9 @@
 namespace Magento\Framework\Session\SaveHandler\Redis;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
-use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
  * Redis session save handler
@@ -99,26 +99,6 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      * Configuration path for number of seconds to wait before trying to break the lock
      */
     const PARAM_BREAK_AFTER             = 'session/redis/break_after';
-
-    /**
-     * Configuration path for comma separated list of sentinel servers
-     */
-    const PARAM_SENTINEL_SERVERS        = 'session/redis/sentinel_servers';
-
-    /**
-     * Configuration path for sentinel master
-     */
-    const PARAM_SENTINEL_MASTER         = 'session/redis/sentinel_master';
-
-    /**
-     * Configuration path for verify sentinel master flag
-     */
-    const PARAM_SENTINEL_VERIFY_MASTER  = 'session/redis/sentinel_verify_master';
-
-    /**
-     * Configuration path for number of sentinel connection retries
-     */
-    const PARAM_SENTINEL_CONNECT_RETRIES = 'session/redis/sentinel_connect_retries';
 
     /**
      * Cookie lifetime config path
@@ -322,41 +302,6 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     /**
      * {@inheritdoc}
      */
-<<<<<<< HEAD
-    public function getSentinelServers()
-    {
-        return $this->deploymentConfig->get(self::PARAM_SENTINEL_SERVERS);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSentinelMaster()
-    {
-        return $this->deploymentConfig->get(self::PARAM_SENTINEL_MASTER);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSentinelVerifyMaster()
-    {
-        return $this->deploymentConfig->get(self::PARAM_SENTINEL_VERIFY_MASTER);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSentinelConnectRetries()
-    {
-        return $this->deploymentConfig->get(self::PARAM_SENTINEL_CONNECT_RETRIES);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function getFailAfter()
     {
         return self::DEFAULT_FAIL_AFTER;

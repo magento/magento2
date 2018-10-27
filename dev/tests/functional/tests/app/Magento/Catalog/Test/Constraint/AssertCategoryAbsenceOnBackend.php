@@ -25,7 +25,7 @@ class AssertCategoryAbsenceOnBackend extends AbstractConstraint
     public function processAssert(CatalogCategoryIndex $catalogCategoryIndex, Category $category)
     {
         $catalogCategoryIndex->open();
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $catalogCategoryIndex->getTreeCategories()->isCategoryVisible($category),
             'Category is displayed in backend catalog category tree.'
         );

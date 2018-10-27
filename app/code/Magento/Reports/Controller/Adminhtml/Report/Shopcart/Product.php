@@ -6,9 +6,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Product extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart implements HttpGetActionInterface
+class Product extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
     /**
      * Products in carts action

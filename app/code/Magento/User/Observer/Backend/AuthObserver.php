@@ -125,10 +125,7 @@ class AuthObserver implements ObserverInterface
             $lockExpires = new \DateTime($lockExpires);
             if ($lockExpires > new \DateTime()) {
                 throw new UserLockedException(
-                    __(
-                        'The account sign-in was incorrect or your account is disabled temporarily. '
-                        . 'Please wait and try again later.'
-                    )
+                    __('You did not sign in correctly or your account is temporarily disabled.')
                 );
             }
         }

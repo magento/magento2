@@ -29,7 +29,7 @@ class AssertSearchTermNotOnFrontend extends AbstractConstraint
     {
         $queryText = $searchTerm->getQueryText();
         $cmsIndex->open()->getSearchBlock()->search($queryText);
-        \PHPUnit\Framework\Assert::assertNotEquals(
+        \PHPUnit_Framework_Assert::assertNotEquals(
             $browser->getUrl(),
             $searchTerm->getRedirect(),
             'Url in the browser corresponds to Url in fixture (redirect has been performed).'

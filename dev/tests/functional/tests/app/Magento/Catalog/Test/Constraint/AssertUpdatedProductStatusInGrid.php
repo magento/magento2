@@ -31,7 +31,7 @@ class AssertUpdatedProductStatusInGrid extends AbstractConstraint
             ? 'Enabled'
             : 'Disabled';
         $filter = ['status' => $productStatus];
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $catalogProductIndex->getProductGrid()->isRowVisible($filter),
             'Product \'' . $product->getName() . '\' is absent in Products grid.'
         );

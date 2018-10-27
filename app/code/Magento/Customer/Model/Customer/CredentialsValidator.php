@@ -25,9 +25,7 @@ class CredentialsValidator
     public function checkPasswordDifferentFromEmail($email, $password)
     {
         if (strcasecmp($password, $email) == 0) {
-            throw new InputException(
-                __("The password can't be the same as the email address. Create a new password and try again.")
-            );
+            throw new InputException(__('Password cannot be the same as email address.'));
         }
     }
 }

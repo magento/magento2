@@ -72,7 +72,7 @@ class AssertHttpUsedOnFrontend extends AbstractConstraint
             $expectedProtocol .= '://';
         }
 
-        \PHPUnit\Framework\Assert::assertStringStartsWith(
+        \PHPUnit_Framework_Assert::assertStringStartsWith(
             $expectedProtocol,
             $this->browser->getUrl(),
             "$expectedProtocol is not used."

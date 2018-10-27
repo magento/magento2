@@ -58,9 +58,6 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp()
     {
         $this->sessionManagerMock = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['setUsername']);
@@ -94,9 +91,6 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * Test aroundExecute.
-     */
     public function testAroundExecute()
     {
         $username = 'name';
@@ -129,9 +123,6 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('result', $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
-    /**
-     * Test aroundExecuteIncorrectCaptcha.
-     */
     public function testAroundExecuteIncorrectCaptcha()
     {
         $username = 'name';

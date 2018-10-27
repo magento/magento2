@@ -5,8 +5,6 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
 
-use Magento\Framework\App\Request\Http as HttpRequest;
-
 /**
  * @magentoAppArea adminhtml
  */
@@ -17,9 +15,6 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
      */
     protected $_model;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -28,9 +23,6 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
         );
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function tearDown()
     {
         /**
@@ -55,7 +47,6 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
             'subject' => 'test subject',
             'text' => 'newsletter text',
         ];
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postForQueue);
 
         // Loading by code, since ID will vary. template_code is not actually used to load anywhere else.

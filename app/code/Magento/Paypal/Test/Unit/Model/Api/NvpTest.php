@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Paypal\Test\Unit\Model\Api;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -58,24 +60,16 @@ class NvpTest extends \PHPUnit\Framework\TestCase
         $this->resolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
         $this->regionFactory = $this->createMock(\Magento\Directory\Model\RegionFactory::class);
         $this->countryFactory = $this->createMock(\Magento\Directory\Model\CountryFactory::class);
-        $processableExceptionFactory = $this->createPartialMock(
-            \Magento\Paypal\Model\Api\ProcessableExceptionFactory::class,
-            ['create']
-        );
+        $processableExceptionFactory = $this->createPartialMock(\Magento\Paypal\Model\Api\ProcessableExceptionFactory::class, ['create']);
         $processableExceptionFactory->expects($this->any())
             ->method('create')
             ->will($this->returnCallback(function ($arguments) {
-                $this->processableException = $this->getMockBuilder(
-                    \Magento\Paypal\Model\Api\ProcessableException::class
-                )
+                $this->processableException = $this->getMockBuilder(\Magento\Paypal\Model\Api\ProcessableException::class)
                     ->setConstructorArgs([$arguments['phrase'], null, $arguments['code']])
                     ->getMock();
                 return $this->processableException;
             }));
-        $exceptionFactory = $this->createPartialMock(
-            \Magento\Framework\Exception\LocalizedExceptionFactory::class,
-            ['create']
-        );
+        $exceptionFactory = $this->createPartialMock(\Magento\Framework\Exception\LocalizedExceptionFactory::class, ['create']);
         $exceptionFactory->expects($this->any())
             ->method('create')
             ->will($this->returnCallback(function ($arguments) {
@@ -133,12 +127,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     {
         if (isset($exception)) {
             $this->expectException($exception);
-<<<<<<< HEAD
-            $this->expectExceptionMessage($exceptionMessage);
-            $this->expectExceptionCode($exceptionCode);
-=======
             $this->expectExceptionMessage($exceptionMessage, $exceptionCode);
->>>>>>> upstream/2.2-develop
         }
         $this->curl->expects($this->once())
             ->method('read')
@@ -258,7 +247,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
      * been completed for this token'. It must does not throws the exception and
      * must returns response array.
      */
-    public function testCallTransactionHasBeenCompleted()
+    public function testCallTransactionHasBeenCompleted ()
     {
         $response =    "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10415'
             . '&L_SHORTMESSAGE0[8]=Message.&L_LONGMESSAGE0[15]=Long%20Message.';

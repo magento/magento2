@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Quote\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -88,7 +87,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
-                __('The Cart includes virtual product(s) only, so a shipping address is not used.')
+                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
             );
         }
 
@@ -117,7 +116,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
             $address->save();
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('The address failed to save. Verify the address and try again.'));
+            throw new InputException(__('Unable to save address. Please check input data.'));
         }
         return $quote->getShippingAddress()->getId();
     }
@@ -131,7 +130,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
-                __('The Cart includes virtual product(s) only, so a shipping address is not used.')
+                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
             );
         }
         /** @var \Magento\Quote\Model\Quote\Address $address */

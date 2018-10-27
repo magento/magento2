@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\View\Type;
 
 use Magento\Customer\Model\Session;
@@ -84,12 +83,6 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     private $variationPricesMock;
 
-<<<<<<< HEAD
-    /**
-     * {@inheritDoc}
-     */
-=======
->>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->mockContextObject();
@@ -181,7 +174,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function cacheKeyProvider(): array
+    public function cacheKeyProvider() : array
     {
         return [
             'without_currency_and_customer_group' => [
@@ -320,24 +313,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->localeFormat->expects($this->atLeastOnce())->method('getPriceFormat')->willReturn([]);
         $this->localeFormat->expects($this->any())
             ->method('getNumber')
-            ->willReturnArgument(0);
-
-        $this->variationPricesMock->expects($this->once())
-            ->method('getFormattedPrices')
-            ->with($priceInfoMock)
-            ->willReturn(
-                [
-                    'oldPrice' => [
-                        'amount' => $amount,
-                    ],
-                    'basePrice' => [
-                        'amount' => $amount,
-                    ],
-                    'finalPrice' => [
-                        'amount' => $amount,
-                    ],
-                ]
-            );
+            ->willReturnMap([
+                [$amount, $amount],
+                [$priceQty, $priceQty],
+                [$percentage, $percentage],
+            ]);
 
         $this->variationPricesMock->expects($this->once())
             ->method('getFormattedPrices')
@@ -369,13 +349,13 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve array with expected parameters for method getJsonConfig()
      *
-     * @param int $productId
-     * @param double $amount
-     * @param int $priceQty
-     * @param int $percentage
+     * @param $productId
+     * @param $amount
+     * @param $priceQty
+     * @param $percentage
      * @return array
      */
-    private function getExpectedArray($productId, $amount, $priceQty, $percentage): array
+    private function getExpectedArray($productId, $amount, $priceQty, $percentage)
     {
         $expectedArray = [
             'attributes' => [],

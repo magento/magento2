@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
@@ -54,9 +56,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     private $urlModifierMock;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -105,10 +104,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     public function testLoad($key, $field)
     {
         /** @var \Magento\Store\Model\ResourceModel\Store $resource */
-        $resource = $this->createPartialMock(
-            \Magento\Store\Model\ResourceModel\Store::class,
-            ['load', 'getIdFieldName', '__wakeup']
-        );
+        $resource = $this->createPartialMock(\Magento\Store\Model\ResourceModel\Store::class, ['load', 'getIdFieldName', '__wakeup']);
         $resource->expects($this->atLeastOnce())->method('load')
             ->with($this->isInstanceOf(\Magento\Store\Model\Store::class), $this->equalTo($key), $this->equalTo($field))
             ->will($this->returnSelf());
@@ -129,9 +125,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return void
-     */
     public function testSetWebsite()
     {
         $website = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getId', '__wakeup']);
@@ -142,9 +135,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $model->getWebsiteId());
     }
 
-    /**
-     * @return void
-     */
     public function testGetWebsite()
     {
         $websiteId = 2;
@@ -160,17 +150,14 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class,
-            ['websiteRepository' => $websiteRepository,]
-        );
+            \Magento\Store\Model\Store::class, [
+            'websiteRepository' => $websiteRepository,
+        ]);
         $model->setWebsiteId($websiteId);
 
         $this->assertEquals($website, $model->getWebsite());
     }
 
-    /**
-     * @return void
-     */
     public function testGetWebsiteIfWebsiteIsNotExist()
     {
         $websiteRepository = $this->getMockBuilder(\Magento\Store\Api\WebsiteRepositoryInterface::class)
@@ -181,17 +168,14 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class,
-            ['websiteRepository' => $websiteRepository,]
-        );
+            \Magento\Store\Model\Store::class, [
+            'websiteRepository' => $websiteRepository,
+        ]);
         $model->setWebsiteId(null);
 
         $this->assertFalse($model->getWebsite());
     }
 
-    /**
-     * @return void
-     */
     public function testGetGroup()
     {
         $groupId = 2;
@@ -207,17 +191,14 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class,
-            ['groupRepository' => $groupRepository,]
-        );
+            \Magento\Store\Model\Store::class, [
+            'groupRepository' => $groupRepository,
+        ]);
         $model->setGroupId($groupId);
 
         $this->assertEquals($group, $model->getGroup());
     }
 
-    /**
-     * @return void
-     */
     public function testGetGroupIfGroupIsNotExist()
     {
         $groupRepository = $this->getMockBuilder(\Magento\Store\Api\GroupRepositoryInterface::class)
@@ -228,17 +209,14 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class,
-            ['groupRepository' => $groupRepository,]
-        );
+            \Magento\Store\Model\Store::class, [
+            'groupRepository' => $groupRepository,
+        ]);
         $model->setGroupId(null);
 
         $this->assertFalse($model->getGroup());
     }
 
-    /**
-     * @return void
-     */
     public function testGetUrl()
     {
         $params = ['_scope_to_url' => true];
@@ -367,9 +345,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return void
-     */
     public function testGetBaseUrlEntryPoint()
     {
         $expectedPath = 'web/unsecure/base_link_url';
@@ -507,15 +482,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 true,
-<<<<<<< HEAD
-                'http://test/u/u.2?___store=scope_code',
-                'http://test/u/u.2?'
-                . '___store=scope_code&SID=sid&___from_store=old-store',
-=======
                 'http://test/u/u.2?__store=scope_code',
                 'http://test/u/u.2?'
                 . 'SID=sid&___store=scope_code&___from_store=old-store',
->>>>>>> upstream/2.2-develop
                 'old-store'
             ]
         ];
@@ -577,9 +546,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return void
-     */
     public function testGetAllowedCurrencies()
     {
         $currencyPath = 'cur/ren/cy/path';
@@ -598,9 +564,10 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class,
-            ['config' => $configMock, 'currencyInstalled' => $currencyPath,]
-        );
+            \Magento\Store\Model\Store::class, [
+            'config' => $configMock,
+            'currencyInstalled' => $currencyPath,
+        ]);
 
         $this->assertEquals($expectedResult, $model->getAllowedCurrencies());
     }
@@ -673,8 +640,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             'unsecure request, no secure base url registered' => [false, 443, false, true, null],
             'unsecure request, not using registered port' => [false, 80],
             'unsecure request, using registered port, not using secure in frontend' => [false, 443, false, false],
-            'unsecure request, no secure base url registered, not using secure in frontend' =>
-                [false, 443, false, false, null],
+            'unsecure request, no secure base url registered, not using secure in frontend' => [false, 443, false, false, null],
             'unsecure request, not using registered port, not using secure in frontend' => [false, 80, false, false],
         ];
     }
@@ -705,17 +671,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->store->getBaseStaticDir());
     }
 
-    /**
-     * @return void
-     */
     public function testGetScopeType()
     {
         $this->assertEquals(ScopeInterface::SCOPE_STORE, $this->store->getScopeType());
     }
 
-    /**
-     * @return void
-     */
     public function testGetScopeTypeName()
     {
         $this->assertEquals('Store View', $this->store->getScopeTypeName());

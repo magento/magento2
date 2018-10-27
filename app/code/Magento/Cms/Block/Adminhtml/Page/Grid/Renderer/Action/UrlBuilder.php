@@ -5,9 +5,8 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action;
 
-/**
- * Url builder class used to compose dynamic urls.
- */
+use Magento\Store\Api\StoreResolverInterface;
+
 class UrlBuilder
 {
     /**
@@ -39,7 +38,7 @@ class UrlBuilder
             [
                 '_current' => false,
                 '_nosid' => true,
-                '_query' => [\Magento\Store\Model\StoreManagerInterface::PARAM_NAME => $store]
+                '_query' => [StoreResolverInterface::PARAM_NAME => $store]
             ]
         );
 

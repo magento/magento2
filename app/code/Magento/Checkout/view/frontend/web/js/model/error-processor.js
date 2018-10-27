@@ -9,13 +9,8 @@
 define([
     'mage/url',
     'Magento_Ui/js/model/messageList',
-<<<<<<< HEAD
-    'mage/translate'
-], function (url, globalMessageList, $t) {
-=======
     'consoleLogger'
 ], function (url, globalMessageList, consoleLogger) {
->>>>>>> upstream/2.2-develop
     'use strict';
 
     return {
@@ -33,17 +28,10 @@ define([
             } else {
                 try {
                     error = JSON.parse(response.responseText);
-<<<<<<< HEAD
-                } catch (exception) {
-                    error = $t('Something went wrong with your request. Please try again later.');
-                }
-                messageContainer.addErrorMessage(error);
-=======
                     messageContainer.addErrorMessage(error);
                 } catch (e) {
                     consoleLogger.error(e);
                 }
->>>>>>> upstream/2.2-develop
             }
         }
     };

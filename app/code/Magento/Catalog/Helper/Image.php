@@ -845,10 +845,10 @@ class Image extends AbstractHelper
     public function getFrame()
     {
         $frame = $this->getAttribute('frame');
-        if ($frame === null) {
+        if (empty($frame)) {
             $frame = $this->getConfigView()->getVarValue('Magento_Catalog', 'product_image_white_borders');
         }
-        return (bool)$frame;
+        return $frame;
     }
 
     /**

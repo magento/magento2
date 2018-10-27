@@ -144,7 +144,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $store = 1;
 
         $this->scopeConfigMock->expects($this->once())
-            ->method('isSetFlag')
+            ->method('getValue')
             ->with(
                 Configuration::XML_PATH_ENABLE_QTY_INCREMENTS,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,

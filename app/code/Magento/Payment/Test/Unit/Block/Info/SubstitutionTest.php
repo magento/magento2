@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Payment\Test\Unit\Block\Info;
 
 /**
@@ -143,7 +145,11 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Element\Template::class,
             '',
             ['data' => ['method' => $methodMock, 'template' => 'Magento_Payment::info/substitution.phtml']]
-        )->will($this->returnValue($fakeBlock));
+        )->will(
+                $this->returnValue(
+                    $fakeBlock
+                )
+            );
 
         $childAbstractBlock->expects(
             $this->any()

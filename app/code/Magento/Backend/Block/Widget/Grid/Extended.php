@@ -315,8 +315,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         if ($this->getColumnSet()->getChildBlock($columnId)) {
             $this->getColumnSet()->unsetChild($columnId);
             if ($this->_lastColumnId == $columnId) {
-                $names = $this->getColumnSet()->getChildNames();
-                $this->_lastColumnId = array_pop($names);
+                $this->_lastColumnId = array_pop($this->getColumnSet()->getChildNames());
             }
         }
         return $this;

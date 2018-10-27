@@ -7,11 +7,6 @@ namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Message\MessageInterface;
 
-/**
- * Test captcha observer behavior.
- *
- * @magentoAppArea adminhtml
- */
 class CaseCaptchaIsRequiredAfterFailedLoginAttemptsTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**

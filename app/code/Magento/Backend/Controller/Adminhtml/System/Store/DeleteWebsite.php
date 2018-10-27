@@ -6,9 +6,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class DeleteWebsite extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpGetActionInterface
+class DeleteWebsite extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface

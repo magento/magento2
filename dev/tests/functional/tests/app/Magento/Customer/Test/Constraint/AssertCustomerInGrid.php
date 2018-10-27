@@ -62,7 +62,7 @@ class AssertCustomerInGrid extends AbstractConstraint
 
         $errorMessage .= 'is absent in Customer grid.';
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $pageCustomerIndex->getCustomerGridBlock()->isRowVisible($filter, false),
             $errorMessage
         );

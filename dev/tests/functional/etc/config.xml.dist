@@ -27,19 +27,11 @@
         <baseUrl>http://magento2ce.com/</baseUrl>
         <backendName>backend</backendName>
     </install>
-<<<<<<< HEAD
-    <server>
-     	 <item name="selenium">
-     	    <item name="resolution" width="1366" height="768" />
-     	 </item>
-     </server>
-=======
    <server>
         <item name="selenium">
             <item name="resolution" width="1366" height="768" />
         </item>
     </server>
->>>>>>> upstream/2.2-develop
     <handler>
         <webapi priority="0">
             <token>integration_token</token>

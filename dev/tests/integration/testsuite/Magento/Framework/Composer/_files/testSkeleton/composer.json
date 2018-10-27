@@ -1,9 +1,7 @@
 {
-  "config": {
-    "sort-packages": true
-  },
+  "version": "0.74.0-beta9",
   "require": {
-    "magento/product-community-edition": "*",
+    "magento/product-community-edition": "0.74.0-beta2",
     "magento/sample-module-minimal" : "*"
    },
   "autoload": {

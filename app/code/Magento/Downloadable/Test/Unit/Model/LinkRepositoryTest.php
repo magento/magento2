@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Downloadable\Test\Unit\Model;
 
 use Magento\Downloadable\Model\LinkRepository;
@@ -260,7 +259,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The link title is empty. Enter the link title and try again.
+     * @expectedExceptionMessage Link title cannot be empty.
      */
     public function testCreateThrowsExceptionIfTitleIsEmpty()
     {
@@ -422,7 +421,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The link title is empty. Enter the link title and try again.
+     * @expectedExceptionMessage Link title cannot be empty.
      */
     public function testUpdateThrowsExceptionIfTitleIsEmptyAndScopeIsGlobal()
     {
@@ -470,7 +469,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No downloadable link with the provided ID was found. Verify the ID and try again.
+     * @expectedExceptionMessage There is no downloadable link with provided ID.
      */
     public function testDeleteThrowsExceptionIfLinkIdIsNotValid()
     {

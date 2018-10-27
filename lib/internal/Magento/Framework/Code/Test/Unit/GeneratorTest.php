@@ -187,7 +187,7 @@ class GeneratorTest extends TestCase
     public function testGenerateClassWithExistName($fileExists)
     {
         $this->definedClassesMock->expects($this->any())
-            ->method('isClassLoadableFromDisk')
+            ->method('isClassLoadableFromDisc')
             ->willReturn(true);
 
         $resultClassFileName = '/Magento/Path/To/Class.php';
@@ -202,9 +202,6 @@ class GeneratorTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public function trueFalseDataProvider()
     {
         return [[true], [false]];

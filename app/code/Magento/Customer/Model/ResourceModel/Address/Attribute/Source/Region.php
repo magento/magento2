@@ -33,9 +33,11 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
-     * @inheritdoc
+     * Retrieve all region options
+     *
+     * @return array
      */
-    public function getAllOptions($withEmpty = true, $defaultValues = false)
+    public function getAllOptions()
     {
         if (!$this->_options) {
             $this->_options = $this->_createRegionsCollection()->load()->toOptionArray();

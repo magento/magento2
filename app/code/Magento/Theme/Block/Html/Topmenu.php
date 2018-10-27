@@ -177,7 +177,7 @@ class Topmenu extends Template implements IdentityInterface
             return $html;
         }
 
-        $colStops = [];
+        $colStops = null;
         if ($childLevel == 0 && $limit) {
             $colStops = $this->_columnBrake($child->getChildren(), $limit);
         }
@@ -205,7 +205,7 @@ class Topmenu extends Template implements IdentityInterface
         \Magento\Framework\Data\Tree\Node $menuTree,
         $childrenWrapClass,
         $limit,
-        array $colBrakes = []
+        $colBrakes = []
     ) {
         $html = '';
 
@@ -244,7 +244,7 @@ class Topmenu extends Template implements IdentityInterface
                 }
             }
 
-            if (is_array($colBrakes) && count($colBrakes) && $colBrakes[$counter]['colbrake']) {
+            if (count($colBrakes) && $colBrakes[$counter]['colbrake']) {
                 $html .= '</ul></li><li class="column"><ul>';
             }
 
@@ -261,7 +261,7 @@ class Topmenu extends Template implements IdentityInterface
             $counter++;
         }
 
-        if (is_array($colBrakes) && count($colBrakes) && $limit) {
+        if (count($colBrakes) && $limit) {
             $html = '<li class="column"><ul>' . $html . '</ul></li>';
         }
 

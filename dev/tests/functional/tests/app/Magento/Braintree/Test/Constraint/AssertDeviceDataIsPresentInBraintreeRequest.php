@@ -33,7 +33,7 @@ class AssertDeviceDataIsPresentInBraintreeRequest extends AbstractConstraint
     public function processAssert(Log $log)
     {
         $file = $log->getFileContent(self::FILE_NAME);
-        \PHPUnit\Framework\Assert::assertRegExp(
+        \PHPUnit_Framework_Assert::assertRegExp(
             self::DEVICE_DATA_PATTERN,
             $file,
             'The device data is not present in Braintree request.'

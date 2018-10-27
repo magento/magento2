@@ -7,15 +7,6 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-<<<<<<< HEAD
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontPersistedCustomerLoginTest">
-        <annotations>
-            <features value="Customer"/>
-            <stories value="Login"/>
-            <title value="Persisted customer should be able to login from storefront"/>
-            <description value="Persisted customer should be able to login from storefront"/>
-=======
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="StorefrontPersistedCustomerLoginTest">
         <annotations>
@@ -24,7 +15,6 @@
             <stories value="Persisted customer can login from storefront."/>
             <title value="Persisted customer can login from storefront."/>
             <description value="Persisted customer can login from storefront."/>
->>>>>>> upstream/2.2-develop
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-72103"/>
             <group value="customer"/>

@@ -8,40 +8,39 @@
 namespace Magento\CatalogInventory\Model\Plugin;
 
 use Magento\Catalog\Model\Product\Attribute\Repository;
-use Magento\Catalog\Model\FilterProductCustomAttribute as Filter;
 
 class FilterCustomAttribute
 {
     /**
-     * @var Filter
+     * @var array
      */
-    private $filter;
+    private $blackList;
 
     /**
-     * @param Filter $filter
-     * @internal param Filter $customAttribute
+     * @param array $blackList
      */
-    public function __construct(Filter $filter)
+    public function __construct(array $blackList = [])
     {
-        $this->filter = $filter;
+        $this->blackList = $blackList;
     }
 
     /**
-     * Remove attributes from black list
+     * Delete custom attribute
      *
      * @param Repository $repository
      * @param array $attributes
-     * @return \Magento\Framework\Api\MetadataObjectInterface[]
+     * @return \Magento\Eav\Model\AttributeRepository
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetCustomAttributesMetadata(Repository $repository, array $attributes): array
+    public function afterGetCustomAttributesMetadata(Repository $repository, array $attributes)
     {
-        $return = [];
-        foreach ($attributes as $attribute) {
-            $return[$attribute->getAttributeCode()] = $attribute;
+        foreach ($attributes as $key => $attribute) {
+            if (in_array($attribute->getAttributeCode(), $this->blackList)) {
+                unset($attributes[$key]);
+            }
         }
 
-        return $this->filter->execute($return);
+        return $attributes;
     }
 }

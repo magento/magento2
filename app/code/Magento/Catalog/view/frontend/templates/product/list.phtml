@@ -27,12 +27,12 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
     <?php
     if ($block->getMode() == 'grid') {
         $viewMode = 'grid';
-        $imageDisplayArea = 'category_page_grid';
+        $image = 'category_page_grid';
         $showDescription = false;
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
     } else {
         $viewMode = 'list';
-        $imageDisplayArea = 'category_page_list';
+        $image = 'category_page_list';
         $showDescription = true;
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
     }
@@ -42,17 +42,14 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
     $pos = $block->getPositioned();
     ?>
     <div class="products wrapper <?= /* @escapeNotVerified */ $viewMode ?> products-<?= /* @escapeNotVerified */ $viewMode ?>">
+        <?php $iterator = 1; ?>
         <ol class="products list items product-items">
             <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php foreach ($_productCollection as $_product): ?>
-<<<<<<< HEAD
-            <li class="item product product-item">
-=======
                 <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
->>>>>>> upstream/2.2-develop
                 <div class="product-item-info" data-container="product-<?= /* @escapeNotVerified */ $viewMode ?>">
                     <?php
-                    $productImage = $block->getImage($_product, $imageDisplayArea);
+                    $productImage = $block->getImage($_product, $image);
                     if ($pos != null) {
                         $position = ' style="left:' . $productImage->getWidth() . 'px;'
                             . 'top:' . $productImage->getHeight() . 'px;"';
@@ -115,7 +112,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                         </div>
                     </div>
                 </div>
-            </li>
+                <?= ($iterator == count($_productCollection)+1) ? '</li>' : '' ?>
             <?php endforeach; ?>
         </ol>
     </div>

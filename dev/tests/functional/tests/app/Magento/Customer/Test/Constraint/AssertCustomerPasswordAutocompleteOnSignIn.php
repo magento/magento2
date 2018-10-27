@@ -23,7 +23,7 @@ class AssertCustomerPasswordAutocompleteOnSignIn extends AbstractConstraint
     public function processAssert(CustomerAccountLogin $loginPage)
     {
         $loginPage->open();
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $loginPage->getLoginBlock()->isPasswordAutocompleteOff(),
             'Password field autocomplete is not off.'
         );

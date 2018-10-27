@@ -215,8 +215,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return visibility of store switcher
-     *
      * @codeCoverageIgnore
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
@@ -227,8 +227,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return store switcher html
-     *
      * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getStoreSwitcherHtml()
@@ -250,8 +250,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return visibility of date filter
-     *
      * @codeCoverageIgnore
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
@@ -262,8 +262,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return date filter html
-     *
      * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getDateFilterHtml()
@@ -293,8 +293,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return refresh button html
-     *
      * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getRefreshButtonHtml()
@@ -346,8 +346,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return sub-report rows count
-     *
      * @codeCoverageIgnore
+     *
      * @return int
      */
     public function getSubReportSize()

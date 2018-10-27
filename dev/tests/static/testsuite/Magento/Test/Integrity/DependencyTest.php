@@ -11,7 +11,6 @@ namespace Magento\Test\Integrity;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Dependency\DbRule;
-use Magento\TestFramework\Dependency\DeclarativeSchemaRule;
 use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;
 use Magento\TestFramework\Dependency\PhpRule;
@@ -20,7 +19,6 @@ use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DependencyTest extends \PHPUnit\Framework\TestCase
 {
@@ -55,17 +53,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected static $_listConfigXml = [];
-
-    /**
-     * List of db_schema.xml files by modules
-     *
-     * Format: array(
-     *  '{Module_Name}' => '{Filename}'
-     * )
-     *
-     * @var array
-     */
-    protected static $_listDbSchemaXml = [];
 
     /**
      * List of routes.xml files by modules
@@ -174,7 +161,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         self::$_namespaces = implode('|', Files::init()->getNamespaces());
 
         self::_prepareListConfigXml();
-        self::_prepareListDbSchemaXml();
         self::_prepareListRoutesXml();
 
         self::_prepareMapRouters();
@@ -196,7 +182,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         $componentRegistrar = new ComponentRegistrar();
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library) {
             $library = str_replace('\\', '/', $library);
-            if (strpos($library, 'Framework/') !== false) {
+            if (strpos($library, 'Framework/')) {
                 $partOfLibraryPath = explode('/', $library);
                 self::$whiteList[] = implode('\\', array_slice($partOfLibraryPath, -3));
             }
@@ -230,7 +216,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
         }
         self::$_rulesInstances = [
-            new DeclarativeSchemaRule($dbRuleTables),
             new PhpRule(self::$_mapRouters, self::$_mapLayoutBlocks),
             new DbRule($dbRuleTables),
             new LayoutRule(
@@ -261,7 +246,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 break;
             case 'layout':
             case 'config':
-            case 'db_schema':
                 //Removing xml comments
                 $contents = preg_replace('~\<!\-\-/.*?\-\-\>~s', '', $contents);
                 break;
@@ -424,10 +408,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         foreach (array_keys(self::$mapDependencies) as $module) {
             $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
-            $found = array_merge(
-                $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND),
-                $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND)
-            );
+            $found = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND);
             $found['Magento\Framework'] = 'Magento\Framework';
             $this->_setDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
         }
@@ -508,12 +489,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $this->_prepareFiles('config', Files::init()->getConfigFiles())
         );
 
-        // Get all configuration files
-        $files = array_merge(
-            $files,
-            $this->_prepareFiles('db_schema', Files::init()->getDbSchemaFiles())
-        );
-
         //Get all layout updates files
         $files = array_merge(
             $files,
@@ -530,7 +505,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Prepare list of config.xml files (by modules).
+     * Prepare list of config.xml files (by modules)
      */
     protected static function _prepareListConfigXml()
     {
@@ -539,20 +514,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
                 self::$_listConfigXml[$module] = $file;
-            }
-        }
-    }
-
-    /**
-     * Prepare list of db_schema.xml files (by modules)
-     */
-    protected static function _prepareListDbSchemaXml()
-    {
-        $files = Files::init()->getDbSchemaFiles('db_schema.xml', [], false);
-        foreach ($files as $file) {
-            if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
-                $module = $matches['namespace'] . '\\' . $matches['module'];
-                self::$_listDbSchemaXml[$module] = $file;
             }
         }
     }
@@ -691,11 +652,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @param array $packageModuleMap Mapping package name with module namespace.
      * @return string The corresponding Magento Module e.g. 'Magento\Theme'
      */
-<<<<<<< HEAD
-    protected static function convertModuleName(string $jsonName, array $packageModuleMap): string
-=======
     protected static function convertModuleName($jsonName, array $packageModuleMap)
->>>>>>> upstream/2.2-develop
     {
         if (isset($packageModuleMap[$jsonName])) {
             return $packageModuleMap[$jsonName];
@@ -708,7 +665,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $moduleName = ucwords($moduleName);
             $moduleName = str_replace("\t", '\\', $moduleName);
             $moduleName = str_replace(' ', '', $moduleName);
-
             return $moduleName;
         }
 
@@ -765,41 +721,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @param array $packageModuleMap
      *
      * @return void
-<<<<<<< HEAD
-     */
-    private static function addDependencies(
-        string $moduleName,
-        array $packageNames,
-        string $type,
-        array $packageModuleMap
-    ): void {
-        $packageNames = array_filter($packageNames, function ($packageName) use ($packageModuleMap) {
-            return isset($packageModuleMap[$packageName]) ||
-                0 === strpos($packageName, 'magento/') && 'magento/magento-composer-installer' != $packageName;
-        });
-
-        foreach ($packageNames as $packageName) {
-            self::addDependency(
-                $moduleName,
-                $type,
-                self::MAP_TYPE_DECLARED,
-                self::convertModuleName($packageName, $packageModuleMap)
-            );
-        }
-    }
-
-    /**
-     * Add dependency map items.
-     *
-     * @param string $module
-     * @param string $type
-     * @param string $mapType
-     * @param string $dependency
-     *
-     * @return void
-     */
-    private static function addDependency(string $module, string $type, string $mapType, string $dependency): void
-=======
      */
     private static function addDependencies(
         string $moduleName,
@@ -833,7 +754,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @return void
      */
     private static function addDependency(string $module, string $type, string $mapType, string $dependency)
->>>>>>> upstream/2.2-develop
     {
         if (isset(self::$mapDependencies[$module][$type][$mapType])) {
             self::$mapDependencies[$module][$type][$mapType][$dependency] = $dependency;
@@ -846,11 +766,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @throws \Exception
      */
-<<<<<<< HEAD
-    private static function getPackageModuleMapping(): array
-=======
     private static function getPackageModuleMapping()
->>>>>>> upstream/2.2-develop
     {
         $jsonFiles = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
 
@@ -883,7 +799,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         if (isset(self::$mapDependencies[$module][$type][$mapType])) {
             return self::$mapDependencies[$module][$type][$mapType];
         }
-
         return [];
     }
 

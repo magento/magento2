@@ -32,7 +32,7 @@ class AssertCustomerGroupInGrid extends AbstractConstraint
     ) {
         $customerGroupIndex->open();
         $filter = ['code' => $customerGroup->getCustomerGroupCode()];
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $customerGroupIndex->getCustomerGroupGrid()->isRowVisible($filter),
             'Group with type \'' . $customerGroup->getCustomerGroupCode() . '\'is absent in customer groups grid.'
         );

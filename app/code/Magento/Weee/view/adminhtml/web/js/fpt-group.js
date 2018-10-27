@@ -34,10 +34,7 @@ define([
                 }
 
                 return true;
-            }, $t(
-                'Set unique country-state combinations within the same fixed product tax. ' +
-                'Verify the combinations and try again.'
-            ));
+            }, $t('You must set unique country-state combinations within the same fixed product tax'));
 
             this._super();
         },

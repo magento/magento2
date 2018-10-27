@@ -41,7 +41,7 @@ class AssertWebsiteForm extends AbstractAssertForm
         $storeIndex->open()->getStoreGrid()->searchAndOpenWebsite($website);
         $formData = $editWebsite->getEditFormWebsite()->getData();
         $errors = $this->verifyData($fixtureData, $formData);
-        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
+        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
     }
 
     /**

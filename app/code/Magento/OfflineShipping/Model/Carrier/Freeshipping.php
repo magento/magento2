@@ -138,8 +138,6 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
     }
 
     /**
-     * Returns allowed shipping methods
-     *
      * @return array
      */
     public function getAllowedMethods()

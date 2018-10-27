@@ -118,7 +118,6 @@ abstract class AbstractAssertForm extends AbstractConstraint
 
     /**
      * Sort multidimensional array by paths.
-     *
      * Pattern path: key/subKey::sortKey.
      * Example:
      * $data = [
@@ -150,6 +149,7 @@ abstract class AbstractAssertForm extends AbstractConstraint
      * ];
      *
      * @param array $data
+     * @param string $path
      * @param string $path
      * @return array
      * @throws \Exception

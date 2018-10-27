@@ -38,7 +38,7 @@ class AssertCmsPageDisabledOnFrontend extends AbstractConstraint
         $filter = ['title' => $cms->getTitle()];
         $cmsIndex->getCmsPageGridBlock()->searchAndPreview($filter);
         $browser->selectWindow();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::NOT_FOUND_MESSAGE,
             $frontCmsIndex->getTitleBlock()->getTitle(),
             'Wrong page is displayed.'

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Test\Unit\Observer\Frontend\Quote\Address;
 
 /**
@@ -106,25 +108,13 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         );
         $this->customerAddressMock = $this->createMock(\Magento\Customer\Helper\Address::class);
         $this->customerVatMock = $this->createMock(\Magento\Customer\Model\Vat::class);
-        $this->customerDataFactoryMock = $this->createPartialMock(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
-            ['mergeDataObjectWithArray', 'create']
-        );
+        $this->customerDataFactoryMock = $this->createPartialMock(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class, ['mergeDataObjectWithArray', 'create']);
         $this->vatValidatorMock = $this->createMock(\Magento\Quote\Observer\Frontend\Quote\Address\VatValidator::class);
-        $this->observerMock = $this->createPartialMock(
-            \Magento\Framework\Event\Observer::class,
-            ['getShippingAssignment', 'getQuote']
-        );
+        $this->observerMock = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getShippingAssignment', 'getQuote']);
 
-        $this->quoteAddressMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            ['getCountryId', 'getVatId', 'getQuote', 'setPrevQuoteCustomerGroupId', '__wakeup']
-        );
+        $this->quoteAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getCountryId', 'getVatId', 'getQuote', 'setPrevQuoteCustomerGroupId', '__wakeup']);
 
-        $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
-            ['setCustomerGroupId', 'getCustomerGroupId', 'getCustomer', '__wakeup', 'setCustomer']
-        );
+        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['setCustomerGroupId', 'getCustomerGroupId', 'getCustomer', '__wakeup', 'setCustomer']);
 
         $this->groupManagementMock = $this->getMockForAbstractClass(
             \Magento\Customer\Api\GroupManagementInterface::class,
@@ -248,7 +238,8 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue('customerGroupId'));
+            ->will($this->returnValue('customerGroupId')
+        );
         $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue('1'));
         $this->groupManagementMock->expects($this->once())
             ->method('getDefaultGroup')
@@ -385,5 +376,6 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->customerMock);
         $this->model->execute($this->observerMock);
+
     }
 }

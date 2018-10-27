@@ -197,10 +197,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $baseCurrency
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getStoreMock($baseCurrency)
@@ -220,10 +217,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
      * @param $amount
      * @param $convertedAmount
      * @param $currency
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getBaseCurrencyMock($amount, $convertedAmount, $currency)

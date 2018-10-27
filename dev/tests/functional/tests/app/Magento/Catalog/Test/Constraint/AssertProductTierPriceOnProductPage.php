@@ -92,7 +92,7 @@ class AssertProductTierPriceOnProductPage extends AbstractConstraint implements 
             }
         }
 
-        \PHPUnit\Framework\Assert::assertTrue($noError, $this->errorMessage);
+        \PHPUnit_Framework_Assert::assertTrue($noError, $this->errorMessage);
     }
 
     /**

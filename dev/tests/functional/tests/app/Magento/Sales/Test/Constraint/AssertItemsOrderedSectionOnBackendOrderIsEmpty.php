@@ -27,7 +27,7 @@ class AssertItemsOrderedSectionOnBackendOrderIsEmpty extends AbstractConstraint
      */
     public function processAssert(OrderCreateIndex $orderCreateIndex)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $orderCreateIndex->getCreateBlock()->getItemsBlock()->getEmptyTextMessage(),
             self::TEXT_MESSAGE,
             'Items Ordered section on Create Order page on backend is not empty.'

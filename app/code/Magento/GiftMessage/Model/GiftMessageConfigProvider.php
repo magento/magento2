@@ -13,7 +13,6 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Configuration provider for GiftMessage rendering on "Checkout cart" page.
@@ -43,11 +42,6 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     protected $checkoutSession;
 
     /**
-     * @var HttpContext
-     */
-    protected $httpContext;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -63,8 +57,6 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     protected $formKey;
 
     /**
-     * GiftMessageConfigProvider constructor.
-     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\GiftMessage\Api\CartRepositoryInterface $cartRepository
      * @param \Magento\GiftMessage\Api\ItemRepositoryInterface $itemRepository
@@ -95,28 +87,28 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getConfig()
     {
         $configuration = [];
         $configuration['giftMessage'] = [];
-        $orderLevelGiftMsg = $this->scopeConfiguration->isSetFlag(
+        $orderLevelGiftMessageConfiguration = (bool)$this->scopeConfiguration->getValue(
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER,
-            ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        $itemLevelGiftMessage = $this->scopeConfiguration->isSetFlag(
+        $itemLevelGiftMessageConfiguration = (bool)$this->scopeConfiguration->getValue(
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
-            ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        if ($orderLevelGiftMsg) {
+        if ($orderLevelGiftMessageConfiguration) {
             $orderMessages = $this->getOrderLevelGiftMessages();
             $configuration['isOrderLevelGiftOptionsEnabled'] = (bool)$this->isQuoteVirtual() ? false : true;
             $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
         }
 
         $itemMessages = $this->getItemLevelGiftMessages();
-        $configuration['isItemLevelGiftOptionsEnabled'] = $itemLevelGiftMessage;
+        $configuration['isItemLevelGiftOptionsEnabled'] = $itemLevelGiftMessageConfiguration;
         $configuration['giftMessage']['itemLevel'] = $itemMessages === null ? true : $itemMessages;
 
         $configuration['priceFormat'] = $this->localeFormat->getPriceFormat(
@@ -176,7 +168,6 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      * Load already specified item level gift messages and related configuration.
      *
      * @return \Magento\GiftMessage\Api\Data\MessageInterface[]|null
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function getItemLevelGiftMessages()
     {

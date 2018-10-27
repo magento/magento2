@@ -302,13 +302,13 @@ class AdminTokenServiceTest extends WebapiAbstract
             'message' => 'One or more input exceptions have occurred.',
             'errors' => [
                 [
-                    'message' => '"%fieldName" is required. Enter and try again.',
+                    'message' => '%fieldName is a required field.',
                     'parameters' => [
                         'fieldName' => 'username',
                     ],
                 ],
                 [
-                    'message' => '"%fieldName" is required. Enter and try again.',
+                    'message' => '%fieldName is a required field.',
                     'parameters' => [
                         'fieldName' => 'password',
                     ]
@@ -332,8 +332,7 @@ class AdminTokenServiceTest extends WebapiAbstract
         );
         $exceptionData = $this->processRestExceptionResult($exception);
         $expectedExceptionData = [
-            'message' => 'The account sign-in was incorrect or your account is disabled temporarily. '
-                . 'Please wait and try again later.'
+            'message' => 'You did not sign in correctly or your account is temporarily disabled.'
         ];
         $this->assertEquals($expectedExceptionData, $exceptionData, "Exception message is invalid.");
     }
@@ -352,7 +351,7 @@ class AdminTokenServiceTest extends WebapiAbstract
         );
         $exceptionData = $this->processRestExceptionResult($exception);
         $expectedExceptionData = [
-            'message' => "The consumer isn't authorized to access %resources.",
+            'message' => 'Consumer is not authorized to access %resources',
             'parameters' => [
                 'resources' => 'Magento_Backend::store'
             ]

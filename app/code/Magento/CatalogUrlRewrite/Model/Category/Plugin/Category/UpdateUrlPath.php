@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Category;
 
 use Magento\Framework\Model\AbstractModel;
@@ -20,11 +15,7 @@ use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 
 /**
-<<<<<<< HEAD
- * Generate and save url-rewrites for category if its parent have specified url-key for different store views.
-=======
  * Generate and save url-rewrites for category if its parent have specified url-key for different store views
->>>>>>> upstream/2.2-develop
  */
 class UpdateUrlPath
 {
@@ -67,11 +58,7 @@ class UpdateUrlPath
     }
 
     /**
-<<<<<<< HEAD
-     * Perform url updating for different stores.
-=======
      * Perform url updating for different stores
->>>>>>> upstream/2.2-develop
      *
      * @param CategoryResource $subject
      * @param CategoryResource $result
@@ -83,16 +70,6 @@ class UpdateUrlPath
         CategoryResource $subject,
         CategoryResource $result,
         AbstractModel $category
-<<<<<<< HEAD
-    ): CategoryResource {
-        $parentCategoryId = $category->getParentId();
-        if ($category->isObjectNew()
-            && !$category->isInRootCategoryList()
-            && !empty($parentCategoryId)
-        ) {
-            foreach ($category->getStoreIds() as $storeId) {
-                if (!$this->isGlobalScope((int)$storeId)
-=======
     ) {
         $parentCategoryId = $category->getParentId();
         if ($category->isObjectNew()
@@ -100,7 +77,6 @@ class UpdateUrlPath
             && !empty($parentCategoryId)) {
             foreach ($category->getStoreIds() as $storeId) {
                 if (!$this->isGlobalScope($storeId)
->>>>>>> upstream/2.2-develop
                     && $this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
                         $storeId,
                         $parentCategoryId,
@@ -113,40 +89,17 @@ class UpdateUrlPath
                 }
             }
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         return $result;
     }
 
     /**
-<<<<<<< HEAD
-     * Check that store id is in global scope.
-     *
-     * @param int $storeId
-=======
      * Check that store id is in global scope
      *
      * @param int|null $storeId
->>>>>>> upstream/2.2-develop
      * @return bool
      */
     private function isGlobalScope(int $storeId): bool
     {
-<<<<<<< HEAD
-        return $storeId === Store::DEFAULT_STORE_ID;
-    }
-
-    /**
-     * Updates category url path.
-     *
-     * @param Category $category
-     * @param CategoryResource $categoryResource
-     * @return void
-     */
-    private function updateUrlPathForCategory(Category $category, CategoryResource $categoryResource): void
-=======
         return null === $storeId || $storeId === Store::DEFAULT_STORE_ID;
     }
 
@@ -155,7 +108,6 @@ class UpdateUrlPath
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      */
     private function updateUrlPathForCategory(Category $category, CategoryResource $categoryResource)
->>>>>>> upstream/2.2-develop
     {
         $category->unsUrlPath();
         $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));

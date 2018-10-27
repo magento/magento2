@@ -72,13 +72,6 @@ define([
                 });
         });
 
-        afterEach(function () {
-            try {
-                injector.clean();
-                injector.remove();
-            } catch (e) {}
-        });
-
         it('showAcceptanceWindow is invoked when the anchor element of help link is clicked', function (done) {
             spyOn(paypalExpressAbstract, 'showAcceptanceWindow');
             setTimeout(function () {

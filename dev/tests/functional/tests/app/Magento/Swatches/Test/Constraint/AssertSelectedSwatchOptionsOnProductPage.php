@@ -28,7 +28,7 @@ class AssertSelectedSwatchOptionsOnProductPage extends AssertProductPage
 
         $this->productView->getSelectedSwatchOptions($this->product);
         $errors = $this->verify();
-        \PHPUnit\Framework\Assert::assertEmpty(
+        \PHPUnit_Framework_Assert::assertEmpty(
             $errors,
             "\nFound the following errors:\n" . implode(" \n", $errors)
         );

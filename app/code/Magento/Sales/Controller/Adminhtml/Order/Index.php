@@ -5,9 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Sales\Controller\Adminhtml\Order implements HttpGetActionInterface
+class Index extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
      * Orders grid

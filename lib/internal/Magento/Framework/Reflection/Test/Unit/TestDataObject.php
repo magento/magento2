@@ -11,10 +11,7 @@ class TestDataObject implements TestDataInterface
 
     /**
      * TestDataObject constructor.
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @param null $extensionAttributes
      */
     public function __construct($extensionAttributes = null)

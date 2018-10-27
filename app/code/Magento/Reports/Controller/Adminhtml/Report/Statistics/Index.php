@@ -6,9 +6,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Statistics;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Reports\Controller\Adminhtml\Report\Statistics implements HttpGetActionInterface
+class Index extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
     /**
      * Refresh statistics action

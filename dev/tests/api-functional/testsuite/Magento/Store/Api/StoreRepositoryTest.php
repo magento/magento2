@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Store\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -38,7 +40,7 @@ class StoreRepositoryTest extends WebapiAbstract
         $storeViews = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotNull($storeViews);
         $this->assertGreaterThan(1, count($storeViews));
-        $keys = ['id', 'code', 'name', 'website_id', 'store_group_id', 'is_active'];
+        $keys = ['id', 'code', 'name', 'website_id', 'store_group_id'];
         $this->assertEquals($keys, array_keys($storeViews[0]));
     }
 }

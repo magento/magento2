@@ -18,10 +18,7 @@ use Magento\Framework\Search\Request\Filter\Term;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Search\TableMapper
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class TableMapperTest extends \PHPUnit\Framework\TestCase
 {

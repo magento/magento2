@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Security\Model;
 
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
@@ -206,7 +205,7 @@ class AdminSessionsManager
                 break;
             case self::LOGOUT_REASON_USER_LOCKED:
                 $reasonMessage = __(
-                    'Your account is temporarily disabled. Please try again later.'
+                    'Your account is temporarily disabled.'
                 );
                 break;
             default:

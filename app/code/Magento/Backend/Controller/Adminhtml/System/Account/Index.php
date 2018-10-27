@@ -6,9 +6,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Backend\Controller\Adminhtml\System\Account implements HttpGetActionInterface
+class Index extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

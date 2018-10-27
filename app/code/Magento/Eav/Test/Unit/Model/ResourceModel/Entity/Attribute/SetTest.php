@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity\Attribute;
 
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set;
@@ -117,7 +116,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The default attribute set can't be deleted.
+     * @expectedExceptionMessage Default attribute set can not be deleted
      * @return void
      */
     public function testBeforeDeleteStateException()

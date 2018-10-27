@@ -175,7 +175,7 @@ class Manager
      */
     protected function splitPath($path)
     {
-        if (strpos($path, '::') !== false) {
+        if (strpos($path, '::') > 0) {
             list($excludedModule, $excludedPath) = explode('::', $path);
             return [
                 'excludedModule' => $excludedModule,

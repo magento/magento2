@@ -72,8 +72,6 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     //@codeCoverageIgnoreStart
 
     /**
-     * Retrieve  product ID
-     *
      * @return int
      */
     public function getProductId()
@@ -82,8 +80,6 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     /**
-     * Retrieve website ID
-     *
      * @return int
      */
     public function getWebsiteId()
@@ -92,8 +88,6 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     /**
-     * Retrieve stock ID
-     *
      * @return int
      */
     public function getStockId()
@@ -102,8 +96,6 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     /**
-     * Retrieve qty
-     *
      * @return int
      */
     public function getQty()
@@ -112,8 +104,6 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     /**
-     * Retrieve stock status
-     *
      * @return int
      */
     public function getStockStatus(): int
@@ -124,8 +114,6 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     //@codeCoverageIgnoreEnd
 
     /**
-     * Retrieve stock item
-     *
      * @return StockItemInterface
      */
     public function getStockItem()
@@ -136,8 +124,6 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     //@codeCoverageIgnoreStart
 
     /**
-     * Set product ID
-     *
      * @param int $productId
      * @return $this
      */
@@ -147,8 +133,6 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     /**
-     * Set web website ID
-     *
      * @param int $websiteId
      * @return $this
      */
@@ -158,8 +142,6 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     /**
-     * Set stock ID
-     *
      * @param int $stockId
      * @return $this
      */
@@ -169,8 +151,6 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     /**
-     * Set qty
-     *
      * @param int $qty
      * @return $this
      */
@@ -180,8 +160,6 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     /**
-     * Set stock status
-     *
      * @param int $stockStatus
      * @return $this
      */
@@ -191,7 +169,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
+     * {@inheritdoc}
      *
      * @return \Magento\CatalogInventory\Api\Data\StockStatusExtensionInterface|null
      */
@@ -201,7 +179,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     /**
-     * Set an extension attributes object.
+     * {@inheritdoc}
      *
      * @param \Magento\CatalogInventory\Api\Data\StockStatusExtensionInterface $extensionAttributes
      * @return $this

@@ -184,13 +184,13 @@ class ImagesFixture extends Fixture
 
         if (!isset($config['images-count'])) {
             throw new ValidatorException(
-                __("The amount of images to generate wasn't specified. Enter the amount and try again.")
+                __('Please, specify amount of images to generate')
             );
         }
 
         if (!isset($config['images-per-product'])) {
             throw new ValidatorException(
-                __("The amount of images per product wasn't specified. Enter the amount and try again.")
+                __('Please, specify amount of images per product')
             );
         }
 

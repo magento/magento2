@@ -53,7 +53,7 @@ class AssertCategoryForm extends AbstractAssertForm
         $fixtureData = $this->prepareFixtureData($category->getData());
         $formData = $catalogCategoryEdit->getEditForm()->getData($category);
         $error = $this->verifyData($this->sortData($fixtureData), $this->sortData($formData));
-        \PHPUnit\Framework\Assert::assertEmpty($error, $error);
+        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
     }
 
     /**

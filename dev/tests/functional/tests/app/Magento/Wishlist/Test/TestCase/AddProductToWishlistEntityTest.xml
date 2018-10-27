@@ -59,11 +59,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductPriceIsNotZero" />
         </variation>
-<<<<<<< HEAD
-        <variation name="AddProductToWishlistEntityTestVariation9" ticketId="MAGETWO-90131">
-=======
         <variation name="AddProductToWishlistEntityTestVariation9">
->>>>>>> upstream/2.2-develop
             <data name="product" xsi:type="array">
                 <item name="0" xsi:type="string">catalogProductSimple::withSpecialPrice</item>
             </data>
@@ -72,11 +68,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist"/>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductRegularPriceOnStorefront"/>
         </variation>
-<<<<<<< HEAD
-        <variation name="AddProductToWishlistEntityTestVariation10" ticketId="MAGETWO-90131">
-=======
         <variation name="AddProductToWishlistEntityTestVariation10">
->>>>>>> upstream/2.2-develop
             <data name="product" xsi:type="array">
                 <item name="0" xsi:type="string">catalogProductVirtual::product_with_special_price</item>
             </data>
@@ -85,11 +77,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist"/>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductRegularPriceOnStorefront"/>
         </variation>
-<<<<<<< HEAD
-        <variation name="AddProductToWishlistEntityTestVariation11" ticketId="MAGETWO-90131">
-=======
         <variation name="AddProductToWishlistEntityTestVariation11">
->>>>>>> upstream/2.2-develop
             <data name="product" xsi:type="array">
                 <item name="0" xsi:type="string">
                     downloadableProduct::with_two_separately_links_special_price_and_category
@@ -100,11 +88,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist"/>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductRegularPriceOnStorefront"/>
         </variation>
-<<<<<<< HEAD
-        <variation name="AddProductToWishlistEntityTestVariation12" ticketId="MAGETWO-90131">
-=======
         <variation name="AddProductToWishlistEntityTestVariation12">
->>>>>>> upstream/2.2-develop
             <data name="product" xsi:type="array">
                 <item name="0" xsi:type="string">groupedProduct::grouped_product_with_special_price</item>
             </data>
@@ -113,11 +97,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist"/>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductRegularPriceOnStorefront"/>
         </variation>
-<<<<<<< HEAD
-        <variation name="AddProductToWishlistEntityTestVariation13" ticketId="MAGETWO-90131">
-=======
         <variation name="AddProductToWishlistEntityTestVariation13">
->>>>>>> upstream/2.2-develop
             <data name="product" xsi:type="array">
                 <item name="0" xsi:type="string">configurableProduct::product_with_special_price</item>
             </data>
@@ -126,11 +106,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist"/>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductRegularPriceOnStorefront"/>
         </variation>
-<<<<<<< HEAD
-        <variation name="AddProductToWishlistEntityTestVariation14" ticketId="MAGETWO-90131">
-=======
         <variation name="AddProductToWishlistEntityTestVariation14">
->>>>>>> upstream/2.2-develop
             <data name="product" xsi:type="array">
                 <item name="0" xsi:type="string">bundleProduct::with_special_price_and_custom_options</item>
             </data>

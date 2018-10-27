@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -142,7 +141,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
                 $this->initDefaultWebsite();
             }
             if (!$this->default) {
-                throw new \DomainException(__("The default website isn't defined. Set the website and try again."));
+                throw new \DomainException(__('Default website is not defined'));
             }
         }
 
@@ -184,12 +183,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
         foreach ($websites as $data) {
             if (isset($data['is_default']) && $data['is_default'] == 1) {
                 if ($this->default) {
-                    throw new \DomainException(
-                        __(
-                            'The default website is invalid. '
-                            . 'Make sure no more than one default is defined and try again.'
-                        )
-                    );
+                    throw new \DomainException(__('More than one default website is defined'));
                 }
                 $website = $this->factory->create([
                     'data' => $data

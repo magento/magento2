@@ -36,12 +36,12 @@ class AssertProductReviewIsAbsentOnProductPage extends AbstractConstraint
     {
         $catalogProductView->getViewBlock()->selectTab('Reviews');
 
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $catalogProductView->getCustomerReviewBlock()->isVisibleReviewItem(),
             'No reviews below the form required.'
         );
 
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::NO_REVIEW_LINK_TEXT,
             trim($catalogProductView->getReviewSummary()->getAddReviewLink()->getText()),
             sprintf('"%s" link is not available', self::NO_REVIEW_LINK_TEXT)

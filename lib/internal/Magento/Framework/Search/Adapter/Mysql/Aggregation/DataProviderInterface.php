@@ -11,10 +11,8 @@ use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 
 /**
- * MySQL search data provider.
+ * Interface \Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface
  *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 interface DataProviderInterface
 {

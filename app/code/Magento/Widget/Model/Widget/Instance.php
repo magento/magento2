@@ -340,7 +340,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Setter
-     *
      * Prepare widget type
      *
      * @param string $type
@@ -354,7 +353,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
-     *
      * Prepare widget type
      *
      * @return string
@@ -366,7 +364,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter.
-     *
      * If not set return default
      *
      * @return string
@@ -382,7 +379,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
-     *
      * Explode to array if string setted
      *
      * @return array
@@ -397,7 +393,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
-     *
      * Unserialize if serialized string setted
      *
      * @return array

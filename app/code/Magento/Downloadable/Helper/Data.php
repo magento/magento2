@@ -5,9 +5,7 @@
  */
 namespace Magento\Downloadable\Helper;
 
-use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Link\Purchased\Item;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Downloadable helper
@@ -19,7 +17,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check is link shareable or not
      *
-     * @param Link|Item $link
+     * @param \Magento\Downloadable\Model\Link|Item $link
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
@@ -27,14 +25,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $shareable = false;
         switch ($link->getIsShareable()) {
-            case Link::LINK_SHAREABLE_YES:
-            case Link::LINK_SHAREABLE_NO:
+            case \Magento\Downloadable\Model\Link::LINK_SHAREABLE_YES:
+            case \Magento\Downloadable\Model\Link::LINK_SHAREABLE_NO:
                 $shareable = (bool)$link->getIsShareable();
                 break;
-            case Link::LINK_SHAREABLE_CONFIG:
-                $shareable = $this->scopeConfig->isSetFlag(
-                    Link::XML_PATH_CONFIG_IS_SHAREABLE,
-                    ScopeInterface::SCOPE_STORE
+            case \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG:
+                $shareable = (bool)$this->scopeConfig->isSetFlag(
+                    \Magento\Downloadable\Model\Link::XML_PATH_CONFIG_IS_SHAREABLE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
         }
         return $shareable;

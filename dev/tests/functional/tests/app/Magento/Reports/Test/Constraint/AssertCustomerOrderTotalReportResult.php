@@ -31,7 +31,7 @@ class AssertCustomerOrderTotalReportResult extends AbstractAssertCustomerOrderRe
     ) {
         $filter = $this->prepareFilter($customer, $columns, $report);
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $customerTotalsReport->getGridBlock()->isRowVisible($filter, false),
             'Order does not present in report grid.'
         );

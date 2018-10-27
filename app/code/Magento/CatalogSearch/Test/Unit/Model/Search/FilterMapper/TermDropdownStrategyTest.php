@@ -6,21 +6,18 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\FilterMapper;
 
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
-use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy;
-use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\SelectBuilder;
-use Magento\Eav\Model\Config as EavConfig;
-use Magento\Framework\DB\Select;
-use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Search\Request\FilterInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Framework\DB\Select;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 /**
  * Class TermDropdownStrategyTest.
  * Unit test for \Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy.
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
 {
@@ -30,54 +27,90 @@ class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
     private $eavConfig;
 
     /**
-     * @var TermDropdownStrategy
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $termDropdownStrategy;
+    private $storeManager;
 
     /**
-     * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $aliasResolver;
+    private $scopeConfig;
 
     /**
-     * SelectBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy
      */
-    private $selectBuilder;
+    private $model;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceMock;
 
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->eavConfig = $this->createMock(EavConfig::class);
-        $this->aliasResolver = $this->createMock(AliasResolver::class);
-        $this->selectBuilder = $this->createMock(SelectBuilder::class);
-        $this->termDropdownStrategy = $objectManager->getObject(
-            TermDropdownStrategy::class,
+        $this->eavConfig = $this->getMockBuilder(EavConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->model = $objectManager->getObject(
+            \Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy::class,
             [
+                'storeManager' => $this->storeManager,
+                'scopeConfig' => $this->scopeConfig,
                 'eavConfig' => $this->eavConfig,
-                'aliasResolver' => $this->aliasResolver,
-                'selectBuilder' => $this->selectBuilder
+                'resourceConnection' => $this->resourceMock
             ]
         );
     }
 
     public function testApply()
     {
-        $attributeId = 5;
-        $alias = 'some_alias';
-        $this->aliasResolver->expects($this->once())->method('getAlias')->willReturn($alias);
-        $searchFilter = $this->createPartialMock(
-            FilterInterface::class,
-            ['getField', 'getType', 'getName']
-        );
+        $searchFilter = $this->getMockBuilder(FilterInterface::class)
+            ->setMethods(['getField', 'getType', 'getName'])
+            ->getMock();
+        $select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attribute = $this->getMockBuilder(Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store = $this->getMockBuilder(StoreInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $select = $this->createMock(Select::class);
-        $attribute = $this->createMock(Attribute::class);
+        $this->resourceMock->expects($this->any())
+            ->method('getTableName')
+            ->willReturn('cataloginventory_stock_status');
+        $this->scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->willReturn(false);
+        $this->eavConfig->expects($this->once())
+            ->method('getAttribute')
+            ->willReturn($attribute);
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($store);
+        $store->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $attribute->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $searchFilter->expects($this->once())
+            ->method('getField')
+            ->willReturn('filed');
 
-        $this->eavConfig->expects($this->once())->method('getAttribute')->willReturn($attribute);
-        $attribute->expects($this->once())->method('getId')->willReturn($attributeId);
-        $searchFilter->expects($this->once())->method('getField');
-        $this->selectBuilder->expects($this->once())->method('execute')->with($attributeId, $alias, $select);
-
-        $this->assertTrue($this->termDropdownStrategy->apply($searchFilter, $select));
+        $this->assertTrue($this->model->apply($searchFilter, $select));
     }
 }

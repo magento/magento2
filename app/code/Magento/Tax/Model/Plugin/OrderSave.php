@@ -7,8 +7,6 @@
 
 namespace Magento\Tax\Model\Plugin;
 
-use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtension;
-
 class OrderSave
 {
     /**
@@ -81,9 +79,8 @@ class OrderSave
         foreach ($taxesForItems as $taxesArray) {
             foreach ($taxesArray['applied_taxes'] as $rates) {
                 if (isset($rates['extension_attributes'])) {
-                    $taxRates = $rates['extension_attributes'] instanceof OrderTaxDetailsAppliedTaxExtension
-                        ? $rates['extension_attributes']->getRates()
-                        : $rates['extension_attributes']['rates'];
+                    /** @var \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $taxRates */
+                    $taxRates = $rates['extension_attributes']->getRates();
                     if (is_array($taxRates)) {
                         if (count($taxRates) == 1) {
                             $ratesIdQuoteItemId[$rates['id']][] = [
@@ -127,9 +124,8 @@ class OrderSave
         foreach ($taxes as $row) {
             $id = $row['id'];
             if (isset($row['extension_attributes'])) {
-                $taxRates = $row['extension_attributes'] instanceof OrderTaxDetailsAppliedTaxExtension
-                    ? $row['extension_attributes']->getRates()
-                    : $row['extension_attributes']['rates'];
+                /** @var \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $taxRates */
+                $taxRates = $row['extension_attributes']->getRates();
                 if (is_array($taxRates)) {
                     foreach ($taxRates as $tax) {
                         if ($row['percent'] == null) {

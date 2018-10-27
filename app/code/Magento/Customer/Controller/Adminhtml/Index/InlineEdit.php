@@ -10,10 +10,6 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
-<<<<<<< HEAD
-use Magento\Framework\App\Action\HttpPostActionInterface;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Framework\Message\MessageInterface;
 
 /**
@@ -21,7 +17,7 @@ use Magento\Framework\Message\MessageInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class InlineEdit extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session
@@ -149,7 +145,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
      * Receive entity(customer|customer_address) data from request
      *
      * @param array $data
-     * @param mixed $isCustomerData
+     * @param null $isCustomerData
      * @return array
      */
     protected function getData(array $data, $isCustomerData = null)

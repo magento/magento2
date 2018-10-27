@@ -41,7 +41,7 @@ class Taxvat extends AbstractWidget
     public function _construct()
     {
         parent::_construct();
-        $this->setTemplate('Magento_Customer::widget/taxvat.phtml');
+        $this->setTemplate('widget/taxvat.phtml');
     }
 
     /**

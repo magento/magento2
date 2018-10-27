@@ -38,14 +38,14 @@ class AssertGenerationFilePathCheck extends AbstractConstraint
         ];
 
         foreach ($existsPaths as $path) {
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $pathChecker->pathExists($path),
                 'Path "' . $path . '" does not exist.'
             );
         }
 
         foreach ($nonExistsPaths as $path) {
-            \PHPUnit\Framework\Assert::assertFalse(
+            \PHPUnit_Framework_Assert::assertFalse(
                 $pathChecker->pathExists($path),
                 'Path "' . $path . '" exists.'
             );

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Comment;
 
 /**
@@ -83,7 +82,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
                 ],
                 [
                     'parent_id' => 'Parent Invoice Id can not be empty',
-                    'comment' => '"Comment" is required. Enter and try again.'
+                    'comment' => 'Comment is a required field'
                 ]
             ]
         ];

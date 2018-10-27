@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Test\Unit\Model\Attribute;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -177,7 +176,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test saving throws exception if cannot save group
      *
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The attributeGroup can't be saved.
+     * @expectedExceptionMessage Cannot save attributeGroup
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      * @return void
@@ -208,7 +207,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test saving throws exception if group does not belong to provided set
      *
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The attribute group doesn't belong to the provided attribute set.
+     * @expectedExceptionMessage Attribute group does not belong to provided attribute set
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      * @return void
@@ -337,7 +336,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test get throws exception if provided group does not exist
      *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The group with the "42" ID doesn't exist. Verify the ID and try again.
+     * @expectedExceptionMessage Group with id "42" does not exist.
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return void
      */
@@ -368,7 +367,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test deletion throws exception if provided group does not exist
      *
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The attribute group with id "42" can't be deleted.
+     * @expectedExceptionMessage Cannot delete attributeGroup with id
      * @throws \Magento\Framework\Exception\StateException
      * @return void
      */

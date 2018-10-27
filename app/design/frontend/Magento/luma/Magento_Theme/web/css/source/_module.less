@@ -342,10 +342,6 @@
         .widget.block {
             .lib-css(margin, @indent__base 0);
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         .links .widget.block {
             margin: 0;
         }
@@ -458,6 +454,12 @@
     html,
     body {
         height: 100%; // Stretch screen area for sticky footer
+    }
+
+    body {
+        .ie9 & {
+            .lib-css(background-color, @copyright__background-color);
+        }
     }
 
     .navigation ul {
@@ -638,6 +640,7 @@
             width: 100%;
         }
 
+        .ie10 &,
         .ie11 & {
             height: 100%;
         }

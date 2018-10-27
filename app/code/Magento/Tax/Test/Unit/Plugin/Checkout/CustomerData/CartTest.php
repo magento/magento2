@@ -5,63 +5,61 @@
  */
 namespace Magento\Tax\Test\Unit\Plugin\Checkout\CustomerData;
 
-use Magento\Checkout\CustomerData\Cart as CheckoutCart;
-use Magento\Checkout\Helper\Data;
-use Magento\Checkout\Model\Session;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\Quote\Item;
-use Magento\Tax\Block\Item\Price\Renderer;
-use Magento\Tax\Plugin\Checkout\CustomerData\Cart;
-use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-
-class CartTest extends TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var Session|MockObject
-     */
-    private $checkoutSession;
 
     /**
-     * @var Data|MockObject
+     * @var \Magento\Checkout\Model\Session
      */
-    private $checkoutHelper;
+    protected $checkoutSession;
 
     /**
-     * @var Renderer|MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $itemPriceRenderer;
+    protected $checkoutHelper;
 
     /**
-     * @var CheckoutCart|MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $checkoutCart;
+    protected $itemPriceRenderer;
 
     /**
-     * @var Quote|MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $quote;
+    protected $checkoutCart;
 
     /**
-     * @var Cart
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $cart;
+    protected $quote;
+
+    /**
+     * @var \Magento\Tax\Plugin\Checkout\CustomerData\Cart
+     */
+    protected $cart;
 
     protected function setUp()
     {
-        $this->checkoutSession = $this->createMock(Session::class);
-        $this->checkoutHelper = $this->createMock(Data::class);
-        $this->itemPriceRenderer = $this->createMock(Renderer::class);
-        $this->checkoutCart = $this->createMock(CheckoutCart::class);
-        $this->quote = $this->createMock(Quote::class);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->checkoutHelper = $this->createMock(\Magento\Checkout\Helper\Data::class);
+        $this->itemPriceRenderer = $this->createMock(\Magento\Tax\Block\Item\Price\Renderer::class);
+        $this->checkoutCart = $this->createMock(\Magento\Checkout\CustomerData\Cart::class);
+        $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
 
-        $this->checkoutSession->method('getQuote')
-            ->willReturn($this->quote);
-        
-        $this->cart = new Cart(
-            $this->checkoutSession,
-            $this->checkoutHelper,
-            $this->itemPriceRenderer
+        $this->checkoutSession->expects(
+            $this->any()
+        )->method(
+            'getQuote'
+        )->willReturn($this->quote);
+
+        $this->cart = $helper->getObject(
+            \Magento\Tax\Plugin\Checkout\CustomerData\Cart::class,
+            [
+                'checkoutSession' => $this->checkoutSession,
+                'checkoutHelper' => $this->checkoutHelper,
+                'itemPriceRenderer' => $this->itemPriceRenderer,
+            ]
         );
     }
 
@@ -79,34 +77,49 @@ class CartTest extends TestCase
             ]
         ];
 
-        $this->checkoutHelper->method('formatPrice')
-            ->willReturn('formatted');
+        $this->checkoutHelper->expects(
+            $this->atLeastOnce()
+        )->method(
+            'formatPrice'
+        )->willReturn('formatted');
 
-        $item1 = $this->createMock(Item::class);
-        $item2 = $this->createMock(Item::class);
+        $item1 = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $item2 = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
 
-        $item1->method('getItemId')
-            ->willReturn(1);
-        $item2->method('getItemId')
-            ->willReturn(2);
+        $item1->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getItemId'
+        )->willReturn(1);
+        $item2->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getItemId'
+        )->willReturn(2);
 
-        $this->quote->method('getAllVisibleItems')
-            ->willReturn([
-                $item1,
-                $item2,
-            ]);
+        $this->quote->expects(
+            $this->any()
+        )->method(
+            'getAllVisibleItems'
+        )->willReturn([
+            $item1,
+            $item2,
+        ]);
 
-        $this->itemPriceRenderer->method('toHtml')
-            ->willReturn(1);
+        $this->itemPriceRenderer->expects(
+            $this->atLeastOnce(1)
+        )->method(
+            'toHtml'
+        )->willReturn(1);
 
         $result = $this->cart->afterGetSectionData($this->checkoutCart, $input);
 
-        self::assertArrayHasKey('subtotal_incl_tax', $result);
-        self::assertArrayHasKey('subtotal_excl_tax', $result);
-        self::assertArrayHasKey('items', $result);
-        self::assertTrue(is_array($result['items']));
-        self::assertEquals(2, count($result['items']));
-        self::assertEquals(1, $result['items'][0]['product_price']);
-        self::assertEquals(1, $result['items'][1]['product_price']);
+        $this->assertArrayHasKey('subtotal_incl_tax', $result);
+        $this->assertArrayHasKey('subtotal_excl_tax', $result);
+        $this->assertArrayHasKey('items', $result);
+        $this->assertTrue(is_array($result['items']));
+        $this->assertEquals(2, count($result['items']));
+        $this->assertEquals(1, count($result['items'][0]['product_price']));
+        $this->assertEquals(1, count($result['items'][1]['product_price']));
     }
 }

@@ -6,11 +6,10 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends \Magento\Newsletter\Controller\Adminhtml\Template implements HttpPostActionInterface
+class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
     /**
      * Save Newsletter Template

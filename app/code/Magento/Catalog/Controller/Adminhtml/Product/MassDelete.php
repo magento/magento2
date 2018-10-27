@@ -6,7 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
@@ -14,7 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NotFoundException;
 
-class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
+class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * Massactions filter

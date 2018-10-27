@@ -14,12 +14,6 @@ use Magento\Framework\Search\Request\Aggregation\RangeBucket;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\Translate\AdapterInterface;
 
-/**
- * MySQL search aggregation range builder.
- *
- * @deprecated
- * @see \Magento\ElasticSearch
- */
 class Range implements BucketInterface
 {
     const GREATER_THAN = '>=';
@@ -52,7 +46,7 @@ class Range implements BucketInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function build(
         DataProviderInterface $dataProvider,
@@ -76,8 +70,6 @@ class Range implements BucketInterface
     }
 
     /**
-     * Generate case.
-     *
      * @param Select $select
      * @param AggregationRange[] $ranges
      * @return Select

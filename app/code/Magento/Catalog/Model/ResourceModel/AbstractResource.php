@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -78,7 +80,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _isApplicableAttribute($object, $attribute)
     {
-        $applyTo = $attribute->getApplyTo() ?: [];
+        $applyTo = $attribute->getApplyTo();
         return (count($applyTo) == 0 || in_array($object->getTypeId(), $applyTo))
             && $attribute->isInSet($object->getAttributeSetId());
     }
@@ -86,9 +88,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Check whether attribute instance (attribute, backend, frontend or source) has method and applicable
      *
-     * @param AbstractAttribute|\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
-     * |\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
-     * |\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource $instance
+     * @param AbstractAttribute|\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend|\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource $instance
      * @param string $method
      * @param array $args array of arguments
      * @return boolean
@@ -99,10 +99,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             && ($method == 'beforeSave' || $method == 'afterSave')
         ) {
             $attributeCode = $instance->getAttribute()->getAttributeCode();
-            if (isset($args[0])
-                && $args[0] instanceof \Magento\Framework\DataObject
-                && $args[0]->getData($attributeCode) === false
-            ) {
+            if (isset($args[0]) && $args[0] instanceof \Magento\Framework\DataObject && $args[0]->getData($attributeCode) === false) {
                 return false;
             }
         }

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
 class FilterableAttributeListTest extends \PHPUnit\Framework\TestCase
@@ -25,10 +27,7 @@ class FilterableAttributeListTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->collectionFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
-            ['create']
-        );
+        $this->collectionFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class, ['create']);
 
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
@@ -36,6 +35,7 @@ class FilterableAttributeListTest extends \PHPUnit\Framework\TestCase
             $this->collectionFactoryMock,
             $this->storeManagerMock
         );
+
     }
 
     public function testGetList()

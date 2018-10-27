@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\ResourceModel\Order;
 
 use Magento\Framework\App\ResourceConnection;
@@ -188,7 +187,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getConnection()->rollBack();
-            throw new LocalizedException(__('The status needs to remain assigned to its state.'));
+            throw new LocalizedException(__('Cannot unassign status from state'));
         }
 
         return $this;

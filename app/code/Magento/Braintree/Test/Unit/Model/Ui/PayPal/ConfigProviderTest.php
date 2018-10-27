@@ -106,11 +106,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'paymentIcon' => [
                                 'width' => 30, 'height' => 26, 'url' => 'https://icon.test.url'
                             ],
-<<<<<<< HEAD
-                            'isRequiredBillingAddress' => true
-=======
                             'isRequiredBillingAddress' => true,
->>>>>>> upstream/2.2-develop
                         ]
                     ]
                 ]

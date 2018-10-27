@@ -34,7 +34,7 @@ class AssertNewsletterInGrid extends AbstractConstraint
     ) {
         $templateIndex->open();
         $filter = ['code' => $template->getCode()];
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $templateIndex->getNewsletterTemplateGrid()->isRowVisible($filter),
             'Newsletter \'' . $template->getCode() . '\'is absent in newsletter template grid.'
         );

@@ -5,10 +5,9 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Delete extends \Magento\Customer\Controller\Adminhtml\Index implements HttpPostActionInterface
+class Delete extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
      * Delete customer action

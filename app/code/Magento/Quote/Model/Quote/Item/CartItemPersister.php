@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Quote\Api\Data\CartInterface;
@@ -63,7 +62,7 @@ class CartItemPersister
                 $currentItem = $quote->getItemById($itemId);
                 if (!$currentItem) {
                     throw new NoSuchEntityException(
-                        __('The %1 Cart doesn\'t contain the %2 item.', $cartId, $itemId)
+                        __('Cart %1 does not contain item %2', $cartId, $itemId)
                     );
                 }
                 $productType = $currentItem->getProduct()->getTypeId();
@@ -100,7 +99,7 @@ class CartItemPersister
         } catch (LocalizedException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__("The quote couldn't be saved."));
+            throw new CouldNotSaveException(__('Could not save quote'));
         }
         $itemId = $item->getId();
         foreach ($quote->getAllItems() as $quoteItem) {
@@ -110,6 +109,6 @@ class CartItemPersister
                 return $this->cartItemOptionProcessor->applyCustomOptions($item);
             }
         }
-        throw new CouldNotSaveException(__("The quote couldn't be saved."));
+        throw new CouldNotSaveException(__('Could not save quote'));
     }
 }

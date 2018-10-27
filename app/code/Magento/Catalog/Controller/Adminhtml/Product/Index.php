@@ -6,9 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpGetActionInterface
+class Index extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

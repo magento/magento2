@@ -732,7 +732,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 
     /**
      * Additional response processing.
-     *
      * Hack to cut off length from API type response params.
      *
      * @param  array $response
@@ -790,8 +789,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     }
 
     /**
-     * Set specific data when negative line item case.
-     *
+     * Set specific data when negative line item case
      * @return void
      */
     protected function _setSpecificForNegativeLineItems()

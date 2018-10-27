@@ -10,8 +10,6 @@
 namespace Magento\Config\Model\Config\Backend\Currency;
 
 /**
- * Cron job configuration for currency
- *
  * @api
  * @since 100.0.2
  */
@@ -49,8 +47,6 @@ class Cron extends \Magento\Framework\App\Config\Value
     }
 
     /**
-     * After save handler
-     *
      * @return $this
      * @throws \Exception
      */

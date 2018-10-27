@@ -7,21 +7,6 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-<<<<<<< HEAD
-              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Navigate to create order page (New Order -> Create New Customer)-->
-    <actionGroup name="navigateToNewOrderPageNewCustomer">
-        <arguments>
-            <argument name="storeView" defaultValue="_defaultStore"/>
-        </arguments>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
-        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
-        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
-        <click selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" stepKey="selectDefaultStoreView"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
-=======
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!--Cancel order that is in pending status-->
     <actionGroup name="cancelPendingOrder">
@@ -31,7 +16,6 @@
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeOrderStatusCanceled"/>
->>>>>>> upstream/2.2-develop
     </actionGroup>
 
     <!--Navigate to create order page (New Order -> Create New Customer)-->
@@ -42,31 +26,8 @@
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
         <waitForPageLoad stepKey="waitForIndexPageLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
-<<<<<<< HEAD
-        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
-        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
-    </actionGroup>
-
-    <!--Navigate to create order page (New Order -> Select Customer)-->
-    <actionGroup name="navigateToNewOrderPageExistingCustomer">
-        <arguments>
-            <argument name="customer"/>
-        </arguments>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
-        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
-        <waitForPageLoad stepKey="waitForCustomerGridLoad"/>
-        <fillField userInput="{{customer.email}}" selector="{{AdminOrderCustomersGridSection.emailInput}}" stepKey="filterEmail"/>
-        <click selector="{{AdminOrderCustomersGridSection.apply}}" stepKey="applyFilter"/>
-        <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
-        <click selector="{{AdminOrderCustomersGridSection.firstRow}}" stepKey="clickOnCustomer"/>
-        <waitForPageLoad stepKey="waitForCreateOrderPageLoad" />
-=======
         <click selector="{{OrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <click selector="{{AdminOrderFormActionSection.createNewCustomer}}" stepKey="clickCreateCustomer"/>
->>>>>>> upstream/2.2-develop
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
     </actionGroup>
 
@@ -75,18 +36,6 @@
         <seeElement selector="{{AdminOrderFormAccountSection.requiredGroup}}" stepKey="seeCustomerGroupRequired"/>
         <seeElement selector="{{AdminOrderFormAccountSection.requiredEmail}}" stepKey="seeEmailRequired"/>
         <clearField selector="{{AdminOrderFormAccountSection.email}}" stepKey="clearEmailField"/>
-<<<<<<< HEAD
-        <clearField selector="{{AdminOrderFormBillingAddressSection.FirstName}}" stepKey="clearFirstNameField"/>
-        <clearField selector="{{AdminOrderFormBillingAddressSection.LastName}}" stepKey="clearLastNameField"/>
-        <clearField selector="{{AdminOrderFormBillingAddressSection.StreetLine1}}" stepKey="clearStreetField"/>
-        <clearField selector="{{AdminOrderFormBillingAddressSection.City}}" stepKey="clearCityField"/>
-        <selectOption selector="{{AdminOrderFormBillingAddressSection.Country}}" userInput="United States" stepKey="selectUSCountry"/>
-        <selectOption selector="{{AdminOrderFormBillingAddressSection.State}}" userInput="Please select" stepKey="selectNoState"/>
-        <clearField selector="{{AdminOrderFormBillingAddressSection.PostalCode}}" stepKey="clearPostalCodeField"/>
-        <clearField selector="{{AdminOrderFormBillingAddressSection.Phone}}" stepKey="clearPhoneField"/>
-        <seeElement selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="seeShippingMethodNotSelected"/>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="trySubmitOrder"/>
-=======
         <clearField selector="{{AdminOrderFormBillingAddressSection.firstName}}" stepKey="clearFirstNameField"/>
         <clearField selector="{{AdminOrderFormBillingAddressSection.lastName}}" stepKey="clearLastNameField"/>
         <clearField selector="{{AdminOrderFormBillingAddressSection.streetLine1}}" stepKey="clearStreetField"/>
@@ -97,7 +46,6 @@
         <clearField selector="{{AdminOrderFormBillingAddressSection.phone}}" stepKey="clearPhoneField"/>
         <seeElement selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="seeShippingMethodNotSelected"/>
         <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="trySubmitOrder"/>
->>>>>>> upstream/2.2-develop
         <see selector="{{AdminOrderFormBillingAddressSection.emailError}}" userInput="This is a required field." stepKey="seeThatEmailIsRequired"/>
         <see selector="{{AdminOrderFormBillingAddressSection.firstNameError}}" userInput="This is a required field." stepKey="seeFirstNameRequired"/>
         <see selector="{{AdminOrderFormBillingAddressSection.lastNameError}}" userInput="This is a required field." stepKey="seeLastNameRequired"/>
@@ -108,32 +56,6 @@
         <see selector="{{AdminOrderFormBillingAddressSection.phoneError}}" userInput="This is a required field." stepKey="seePhoneRequired"/>
         <see selector="{{AdminOrderFormPaymentSection.shippingError}}" userInput="This is a required field." stepKey="seeShippingMethodRequired"/>
     </actionGroup>
-<<<<<<< HEAD
-
-    <!--Add a simple product to order-->
-    <actionGroup name="addSimpleProductToOrder">
-        <arguments>
-            <argument name="product" defaultValue="_defaultProduct"/>
-        </arguments>
-        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
-        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilter"/>
-        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
-        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
-        <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="1" stepKey="fillProductQty"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
-        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
-    </actionGroup>
-
-    <!--Add a simple product to order with user defined quantity-->
-    <actionGroup name="addSimpleProductToOrderWithCustomQuantity">
-        <arguments>
-            <argument name="product" defaultValue="_defaultProduct"/>
-            <argument name="quantity" type="string"/>
-        </arguments>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMastToDisappear"/>
-        <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductButton"/>
-=======
     <!--Navigate to create order page (New Order -> Select Customer)-->
     <actionGroup name="navigateToNewOrderPageExistingCustomer">
         <arguments>
@@ -156,28 +78,17 @@
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
         </arguments>
->>>>>>> upstream/2.2-develop
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilter"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
-<<<<<<< HEAD
-        <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="{{quantity}}" stepKey="fillProductQty"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
-        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
-    </actionGroup>
-
-    <!--Add configurable product to order -->
-    <actionGroup name="addConfigurableProductToOrder">
-=======
         <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="1" stepKey="fillProductQty"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
     <!--Add configurable product to order from Admin -->
     <actionGroup name="addConfigurableProductToOrderFromAdmin">
->>>>>>> upstream/2.2-develop
         <arguments>
             <argument name="product"/>
             <argument name="attribute"/>
@@ -188,33 +99,15 @@
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchConfigurable"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectConfigurableProduct"/>
-<<<<<<< HEAD
-        <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_label)}}" stepKey="waitForConfigurablePopover"/>
-        <wait time="2" stepKey="waitForOptionsToLoad"/>
-        <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_label)}}"
-                      userInput="{{option.name}}" stepKey="selectionConfigurableOption"/>
-=======
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" stepKey="waitForConfigurablePopover"/>
         <wait time="2" stepKey="waitForOptionsToLoad"/>
         <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}"
                       userInput="{{option.label}}" stepKey="selectionConfigurableOption"/>
->>>>>>> upstream/2.2-develop
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
-<<<<<<< HEAD
-
-    <!--Add configurable product to order -->
-    <actionGroup name="addConfigurableProductToOrderFromAdmin" extends="addConfigurableProductToOrder">
-        <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" stepKey="waitForConfigurablePopover"/>
-        <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}"
-                      userInput="{{option.label}}" stepKey="selectionConfigurableOption"/>
-    </actionGroup>
-
-=======
     <!-- Change product configurations which was added to order -->
->>>>>>> upstream/2.2-develop
     <actionGroup name="configureOrderedConfigurableProduct">
         <arguments>
             <argument name="attribute"/>
@@ -229,89 +122,12 @@
         <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>
     </actionGroup>
-<<<<<<< HEAD
-
-    <!--Add bundle product to order -->
-    <actionGroup name="addBundleProductToOrder">
-        <arguments>
-            <argument name="product"/>
-            <argument name="quantity" type="string" defaultValue="1"/>
-        </arguments>
-        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
-        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterBundle"/>
-        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchBundle"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
-        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectBundleProduct"/>
-        <waitForElementVisible selector="{{AdminOrderFormBundleProductSection.quantity}}" stepKey="waitForBundleOptionLoad"/>
-        <wait time="2" stepKey="waitForOptionsToLoad"/>
-        <fillField selector="{{AdminOrderFormBundleProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
-        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
-        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
-    </actionGroup>
-
-    <!--Add downloadable product to order -->
-    <actionGroup name="addDownloadableProductToOrder">
-        <arguments>
-            <argument name="product"/>
-            <argument name="link"/>
-            <argument name="quantity" defaultValue="1" type="string"/>
-        </arguments>
-        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterDownloadable"/>
-        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchDownloadable"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
-        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectDownloadableProduct"/>
-        <waitForElementVisible selector="{{AdminOrderFormDownloadableProductSection.optionSelect(link.title)}}" stepKey="waitForLinkLoad"/>
-        <click selector="{{AdminOrderFormDownloadableProductSection.optionSelect(link.title)}}" stepKey="selectLink"/>
-        <fillField selector="{{AdminOrderFormDownloadableProductSection.quantity}}" userInput="{{quantity}}" stepKey="setQuantity"/>
-        <click selector="{{AdminOrderFormDownloadableProductSection.ok}}" stepKey="confirmConfiguration"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
-        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
-    </actionGroup>
-
-    <!--Add grouped product option to order -->
-    <actionGroup name="addGroupedProductOptionToOrder">
-        <arguments>
-            <argument name="product"/>
-            <argument name="option"/>
-            <argument name="quantity" type="string" defaultValue="1"/>
-        </arguments>
-
-        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
-        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterGrouped"/>
-        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchGrouped"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
-        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectGroupedProduct"/>
-        <waitForElementVisible selector="{{AdminOrderFormGroupedProductSection.optionQty(option.sku)}}" stepKey="waitForGroupedOptionLoad"/>
-        <wait time="2" stepKey="waitForOptionsToLoad"/>
-        <fillField selector="{{AdminOrderFormGroupedProductSection.optionQty(option.sku)}}" userInput="{{quantity}}" stepKey="fillOptionQuantity"/>
-        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
-        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
-    </actionGroup>
-
-=======
->>>>>>> upstream/2.2-develop
     <!--Fill customer billing address-->
     <actionGroup name="fillOrderCustomerInformation">
         <arguments>
             <argument name="customer"/>
             <argument name="address"/>
         </arguments>
-<<<<<<< HEAD
-        <fillField selector="{{AdminOrderFormBillingAddressSection.FirstName}}" userInput="{{customer.firstname}}" stepKey="fillFirstName"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.LastName}}" userInput="{{customer.lastname}}" stepKey="fillLastName"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.StreetLine1}}" userInput="{{address.street[0]}}" stepKey="fillStreetLine1"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.City}}" userInput="{{address.city}}" stepKey="fillCity"/>
-        <selectOption selector="{{AdminOrderFormBillingAddressSection.Country}}" userInput="{{address.country_id}}" stepKey="fillCountry"/>
-        <selectOption selector="{{AdminOrderFormBillingAddressSection.State}}" userInput="{{address.state}}" stepKey="fillState"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.PostalCode}}" userInput="{{address.postcode}}" stepKey="fillPostalCode"/>
-        <fillField selector="{{AdminOrderFormBillingAddressSection.Phone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
-    </actionGroup>
-
-=======
         <fillField selector="{{AdminOrderFormBillingAddressSection.firstName}}" userInput="{{customer.firstname}}" stepKey="fillFirstName"/>
         <fillField selector="{{AdminOrderFormBillingAddressSection.lastName}}" userInput="{{customer.lastname}}" stepKey="fillLastName"/>
         <fillField selector="{{AdminOrderFormBillingAddressSection.streetLine1}}" userInput="{{address.street[0]}}" stepKey="fillStreetLine1"/>
@@ -321,7 +137,6 @@
         <fillField selector="{{AdminOrderFormBillingAddressSection.postalCode}}" userInput="{{address.postcode}}" stepKey="fillPostalCode"/>
         <fillField selector="{{AdminOrderFormBillingAddressSection.phone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
     </actionGroup>
->>>>>>> upstream/2.2-develop
     <!--Select flat rate shipping method-->
     <actionGroup name="orderSelectFlatRateShipping">
         <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
@@ -330,16 +145,6 @@
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.flatRateOption}}" stepKey="waitForShippingOptions"/>
         <selectOption selector="{{AdminOrderFormPaymentSection.flatRateOption}}" userInput="flatrate_flatrate" stepKey="checkFlatRate"/>
     </actionGroup>
-<<<<<<< HEAD
-
-    <!--Select free shipping method-->
-    <actionGroup name="orderSelectFreeShipping">
-        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
-        <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
-        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods"/>
-        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="waitForShippingOptions"/>
-        <selectOption selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" userInput="freeshipping_freeshipping" stepKey="checkFreeShipping"/>
-=======
     <actionGroup name="chooseOrderCustomer">
         <arguments>
             <argument name="customer"/>
@@ -358,7 +163,6 @@
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" after="seeSuccessMessage" stepKey="seeOrderPendingStatus"/>
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="getOrderId"/>
         <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty"/>
->>>>>>> upstream/2.2-develop
     </actionGroup>
 
     <!--Check that customer information is correct in order-->
@@ -382,17 +186,6 @@
         <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.postcode}}" stepKey="seeShippingAddressPostcode"/>
     </actionGroup>
 
-<<<<<<< HEAD
-    <!--Verify order information-->
-    <actionGroup name="verifyCreatedOrderInformation">
-        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus" after="seeSuccessMessage"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId" after="seeOrderPendingStatus"/>
-        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty" after="getOrderId"/>
-    </actionGroup>
-
-=======
->>>>>>> upstream/2.2-develop
     <!--Check for product in order items list-->
     <actionGroup name="seeProductInItemsOrdered">
         <arguments>
@@ -400,18 +193,4 @@
         </arguments>
         <see selector="{{AdminOrderItemsOrderedSection.productSkuColumn}}" userInput="{{product.sku}}" stepKey="seeSkuInItemsOrdered"/>
     </actionGroup>
-<<<<<<< HEAD
-
-    <!--Cancel order that is in pending status-->
-    <actionGroup name="cancelPendingOrder">
-        <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder"/>
-        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForCancelConfirmation"/>
-        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to cancel this order?" stepKey="seeConfirmationMessage"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeOrderStatusCanceled"/>
-    </actionGroup>
 </actionGroups>
-=======
-</actionGroups>
->>>>>>> upstream/2.2-develop

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
@@ -71,9 +73,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         );
         $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->_attributeConfig = $this->createMock(\Magento\Catalog\Model\Attribute\Config::class);
-        $this->_collectionFactory = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory::class
-        );
+        $this->_collectionFactory = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Collection\Factory::class);
 
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
@@ -159,10 +159,15 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         $attributeConfig = $this->createMock(\Magento\Catalog\Model\Attribute\Config::class);
 
         $attributes = ['attribute_one', 'attribute_two'];
-        $attributeConfig->expects($this->once())
-            ->method('getAttributeNames')
-            ->with('catalog_category')
-            ->will($this->returnValue($attributes));
+        $attributeConfig->expects(
+            $this->once()
+        )->method(
+                'getAttributeNames'
+            )->with(
+                'catalog_category'
+            )->will(
+                $this->returnValue($attributes)
+            );
 
         $collection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
         $collection->expects($this->never())->method('getAllIds')->will($this->returnValue([]));

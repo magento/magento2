@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Catalog\Api\AttributeSetRepositoryInterface;
@@ -183,7 +182,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
         $attributeIds = (array)$this->getRequest()->getParam('attributeIds', []);
 
         if (empty($attributeIds['selected'])) {
-            throw new LocalizedException(__('Attributes were missing and must be specified.'));
+            throw new LocalizedException(__('Please, specify attributes'));
         }
 
         return $this->getSearchCriteriaBuilder()

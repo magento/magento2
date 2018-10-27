@@ -28,7 +28,7 @@ class AssertUserPasswordChangedSuccessfully extends AbstractConstraint
     public function processAssert(UserIndex $userIndex)
     {
         $errorMessage = $userIndex->getMessagesBlock()->getErrorMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::FAIL_MESSAGE,
             $errorMessage,
             'Password update failed with error: "' . self::FAIL_MESSAGE . '"'

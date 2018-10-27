@@ -43,7 +43,7 @@ class AssertAddressDeletedBackend extends AbstractConstraint
             ['address' => $deletedAddress]
         );
         $addressToSearch = $addressRenderer->render();
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             in_array($addressToSearch, $actualAddresses),
             'Deleted address is present on backend during order creation'
         );

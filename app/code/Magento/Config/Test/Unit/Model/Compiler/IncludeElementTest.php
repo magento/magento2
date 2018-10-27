@@ -82,7 +82,7 @@ class IncludeElementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "adminhtml/path/to/file.xml" file doesn't exist.
+     * @expectedExceptionMessage The file "adminhtml/path/to/file.xml" does not exist
      */
     public function testCompileException()
     {

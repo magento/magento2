@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-2.3.0
-=============
-To get detailed information about changes in Magento 2.3.0, see the [Release Notes](https://devdocs.magento.com/guides/v2.3/release-notes/bk-release-notes.html)
-=======
 2.2.6
 =============
 * GitHub issues:
@@ -2015,7 +2010,6 @@ To get detailed information about changes in Magento 2.3.0, see the [Release Not
     * [#9588](https://github.com/magento/magento2/pull/9588) -- Support controller src_type for head links (by @kassner)
     * [#9904](https://github.com/magento/magento2/pull/9904) -- Fixed pointless exception in logs every time a category with image is saved (by @woutersamaey)
     * [#10059](https://github.com/magento/magento2/pull/10059) -- Fix fetching quote item by id (by @mladenilic)
->>>>>>> upstream/2.2-develop
 
 2.1.0
 =============

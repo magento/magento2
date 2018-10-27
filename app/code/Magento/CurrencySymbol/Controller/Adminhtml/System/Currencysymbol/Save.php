@@ -6,9 +6,7 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-
-class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol implements HttpPostActionInterface
+class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol
 {
     /**
      * Save custom Currency symbol

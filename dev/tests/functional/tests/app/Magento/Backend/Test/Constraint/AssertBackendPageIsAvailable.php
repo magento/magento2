@@ -25,12 +25,12 @@ class AssertBackendPageIsAvailable extends AbstractConstraint
      */
     public function processAssert(Dashboard $dashboard, $pageTitle)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $pageTitle,
             $dashboard->getTitleBlock()->getTitle(),
             'Invalid page title is displayed.'
         );
-        \PHPUnit\Framework\Assert::assertNotContains(
+        \PHPUnit_Framework_Assert::assertNotContains(
             self::ERROR_TEXT,
             $dashboard->getErrorBlock()->getContent(),
             "404 Error is displayed on '$pageTitle' page."

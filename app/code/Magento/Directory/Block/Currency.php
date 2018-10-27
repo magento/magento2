@@ -98,7 +98,7 @@ class Currency extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Retrieve Currency Switch URL
+     * Retrieve Currency Swith URL
      *
      * @return string
      */

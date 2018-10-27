@@ -10,10 +10,8 @@ use Magento\Eav\Model\Config as EavConfig;
 use Magento\Catalog\Model\Product;
 
 /**
+ * Class CustomAttributeFilterSelector
  * Checks if FilterInterface is by custom attribute
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class CustomAttributeFilterCheck
 {

@@ -74,9 +74,6 @@ class WebsitesTest extends AbstractModifierTest
      */
     protected $storeViewMock;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -93,11 +90,7 @@ class WebsitesTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->websiteRepositoryMock = $this->getMockBuilder(\Magento\Store\Api\WebsiteRepositoryInterface::class)
-<<<<<<< HEAD
-            ->setMethods(['getList'])
-=======
             ->setMethods(['getDefault'])
->>>>>>> upstream/2.2-develop
             ->getMockForAbstractClass();
         $this->websiteRepositoryMock->expects($this->any())
             ->method('getDefault')
@@ -115,11 +108,7 @@ class WebsitesTest extends AbstractModifierTest
             ->method('getWebsiteIds')
             ->willReturn($this->assignedWebsites);
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
-<<<<<<< HEAD
-            ->setMethods(['isSingleStoreMode', 'getWesites'])
-=======
             ->setMethods(['isSingleStoreMode', 'getWebsites'])
->>>>>>> upstream/2.2-develop
             ->getMockForAbstractClass();
         $this->storeManagerMock->method('getWebsites')
             ->willReturn([$this->websiteMock, $this->secondWebsiteMock]);

@@ -18,9 +18,9 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\View\Giftmessage
                 $this->getRequest()->getParam('giftmessage')
             )->saveAllInOrder();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('Something went wrong while saving the gift message.'));
+            $this->messageManager->addError(__('Something went wrong while saving the gift message.'));
         }
 
         if ($this->getRequest()->getParam('type') == 'order_item') {

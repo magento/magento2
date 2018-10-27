@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
 class SortbyTest extends \PHPUnit\Framework\TestCase
@@ -39,9 +41,7 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Category\Attribute\Backend\Sortby::class,
             ['scopeConfig' => $this->_scopeConfig]
         );
-        $this->_attribute = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            [
+        $this->_attribute = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class, [
                 'getName',
                 '__call',
                 'isValueEmpty',
@@ -50,8 +50,7 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
                 '__wakeup',
                 'getIsRequired',
                 'getIsUnique'
-            ]
-        );
+            ]);
 
         $this->_model->setAttribute($this->_attribute);
     }
@@ -284,8 +283,8 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
             [
                 'default_sort_by',
                 [
-                    'available_sort_by' => null,
-                    'default_sort_by' => null,
+                    'available_sort_by' => NULL,
+                    'default_sort_by' => NULL,
                     'use_post_data_config' => ['available_sort_by', 'default_sort_by', 'filter_price_range']
                 ]
             ],
@@ -315,14 +314,14 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
             [
                 'default_sort_by',
                 [
-                    'available_sort_by' => null,
+                    'available_sort_by' => NULL,
                     'use_post_data_config' => ['default_sort_by']
                 ],
             ],
             [
                 'default_sort_by',
                 [
-                    'available_sort_by' => null,
+                    'available_sort_by' => NULL,
                     'use_post_data_config' => []
                 ]
             ],

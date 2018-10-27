@@ -20,9 +20,6 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
      */
     protected $model;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -42,9 +39,6 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         );
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function tearDown()
     {
         /**
@@ -144,6 +138,19 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         $this->getRequest()->setMethod(\Zend\Http\Request::METHOD_GET)->setParam('id', $this->model->getId());
         $this->dispatch('backend/newsletter/template/save');
 
-        $this->assertEquals(404, $this->getResponse()->getStatusCode());
+        /**
+         * Check that errors was generated and set to session
+         */
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
+
+        /**
+         * Check that correct redirect performed.
+         */
+        $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Backend\Model\UrlInterface::class
+        );
+        $backendUrlModel->turnOffSecretKey();
+        $url = $backendUrlModel->getUrl('newsletter');
+        $this->assertRedirect($this->stringStartsWith($url));
     }
 }

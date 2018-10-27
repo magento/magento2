@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Model\Customer;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -36,11 +38,7 @@ class Mapper
      */
     public function toFlatArray(CustomerInterface $customer)
     {
-        $flatArray = $this->extensibleDataObjectConverter->toNestedArray(
-            $customer,
-            [],
-            \Magento\Customer\Api\Data\CustomerInterface::class
-        );
+        $flatArray = $this->extensibleDataObjectConverter->toNestedArray($customer, [], \Magento\Customer\Api\Data\CustomerInterface::class);
         unset($flatArray["addresses"]);
         return ConvertArray::toFlatArray($flatArray);
     }

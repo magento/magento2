@@ -86,7 +86,7 @@ class Unitofmeasure extends Field
             )
         );
 
-        $this->setTemplate('Magento_Dhl::unitofmeasure.phtml');
+        $this->setTemplate('unitofmeasure.phtml');
     }
 
     /**

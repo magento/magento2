@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Gallery;
 
 class GalleryManagementTest extends \PHPUnit\Framework\TestCase
@@ -65,7 +67,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The image content is invalid. Verify the content and try again.
+     * @expectedExceptionMessage The image content is not valid.
      */
     public function testCreateWithInvalidImageException()
     {
@@ -82,7 +84,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The product can't be saved.
+     * @expectedExceptionMessage Cannot save product.
      */
     public function testCreateWithCannotSaveException()
     {
@@ -136,7 +138,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
+     * @expectedExceptionMessage There is no image with provided ID.
      */
     public function testUpdateWithNonExistingImage()
     {
@@ -157,7 +159,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The product can't be saved.
+     * @expectedExceptionMessage Cannot save product.
      */
     public function testUpdateWithCannotSaveException()
     {
@@ -216,7 +218,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
+     * @expectedExceptionMessage There is no image with provided ID.
      */
     public function testRemoveWithNonExistingImage()
     {
@@ -253,7 +255,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The product doesn't exist. Verify and try again.
+     * @expectedExceptionMessage Such product doesn't exist
      */
     public function testGetWithNonExistingProduct()
     {
@@ -266,7 +268,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionText The image doesn't exist. Verify and try again.
+     * @expectedExceptionText Such image doesn't exist
      */
     public function testGetWithNonExistingImage()
     {

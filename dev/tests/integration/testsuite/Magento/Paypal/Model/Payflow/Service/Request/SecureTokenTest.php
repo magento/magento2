@@ -1,17 +1,8 @@
-<<<<<<< HEAD
-<?php
-=======
 <?php declare(strict_types=1);
->>>>>>> upstream/2.2-develop
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\Paypal\Model\Payflow\Service\Request;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -29,11 +20,6 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @magentoAppIsolation enabled
-<<<<<<< HEAD
- * @magentoDbIsolation disabled
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-=======
->>>>>>> upstream/2.2-develop
  */
 class SecureTokenTest extends TestCase
 {
@@ -82,11 +68,7 @@ class SecureTokenTest extends TestCase
         $this->service = $this->objectManager->create(
             SecureToken::class,
             [
-<<<<<<< HEAD
-                'mathRandom' => $this->mathRandom,
-=======
                 'mathRandom' => $this->mathRandom
->>>>>>> upstream/2.2-develop
             ]
         );
     }
@@ -104,17 +86,10 @@ class SecureTokenTest extends TestCase
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payflowpro.php
      * @magentoDataFixture Magento/Paypal/Fixtures/default_payment_configuration.php
-<<<<<<< HEAD
-     * @magentoAppArea adminhtml
-     * @return void
-     */
-    public function testRequestToken(): void
-=======
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
     public function testRequestToken()
->>>>>>> upstream/2.2-develop
     {
         $quote = $this->getQuote('100000015');
         $quote->setStoreId(null);
@@ -126,17 +101,10 @@ class SecureTokenTest extends TestCase
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payflowpro.php
      * @magentoDataFixture Magento/Paypal/Fixtures/store_payment_configuration.php
-<<<<<<< HEAD
-     * @magentoAppArea adminhtml
-     * @return void
-     */
-    public function testRequestTokenWithStoreConfiguration(): void
-=======
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
     public function testRequestTokenWithStoreConfiguration()
->>>>>>> upstream/2.2-develop
     {
         $quote = $this->getQuote('100000015');
         $store = $this->getStore('test');
@@ -149,17 +117,10 @@ class SecureTokenTest extends TestCase
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payflowpro.php
      * @magentoDataFixture Magento/Paypal/Fixtures/website_payment_configuration.php
-<<<<<<< HEAD
-     * @magentoAppArea adminhtml
-     * @return void
-     */
-    public function testRequestTokenWithWebsiteConfiguration(): void
-=======
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
     public function testRequestTokenWithWebsiteConfiguration()
->>>>>>> upstream/2.2-develop
     {
         $quote = $this->getQuote('100000015');
         $store = $this->getStore('fixture_second_store');
@@ -175,21 +136,9 @@ class SecureTokenTest extends TestCase
      * @param string $expVendor
      * @param string $expUser
      * @param string $expPwd
-<<<<<<< HEAD
-     * @return void
-     */
-    private function execute(
-        Quote $quote,
-        string $expPartner,
-        string $expVendor,
-        string $expUser,
-        string $expPwd
-    ): void {
-=======
      */
     private function execute(Quote $quote, string $expPartner, string $expVendor, string $expUser, string $expPwd)
     {
->>>>>>> upstream/2.2-develop
         $secureTokenId = '31f2a7c8d257c70b1c9eb9051b90e0';
         $token = '80IgSbabyj0CtBDWHZZeQN3';
 
@@ -226,14 +175,8 @@ class SecureTokenTest extends TestCase
      * @param string $expected
      * @param string $actual
      * @param string $property
-<<<<<<< HEAD
-     * @return void
-     */
-    private function performAssertion(string $expected, string $actual, string $property): void
-=======
      */
     private function performAssertion(string $expected, string $actual, string $property)
->>>>>>> upstream/2.2-develop
     {
         self::assertEquals($expected, $actual, "$property should match.");
     }

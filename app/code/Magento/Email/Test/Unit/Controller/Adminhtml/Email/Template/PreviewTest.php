@@ -9,6 +9,7 @@ use Magento\Email\Controller\Adminhtml\Email\Template\Preview;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\View;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Config;
 use Magento\Framework\View\Page\Title;
@@ -30,6 +31,11 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
      * @var Context
      */
     protected $context;
+
+    /**
+     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $coreRegistryMock;
 
     /**
      * @var View|\PHPUnit_Framework_MockObject_MockObject
@@ -102,6 +108,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             \Magento\Email\Controller\Adminhtml\Email\Template\Preview::class,
             [
                 'context' => $this->context,
+                'coreRegistry' => $this->coreRegistryMock,
             ]
         );
     }

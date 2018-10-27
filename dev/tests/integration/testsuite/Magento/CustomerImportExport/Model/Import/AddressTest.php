@@ -469,14 +469,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/CustomerImportExport/_files/two_addresses.php
-<<<<<<< HEAD
-     * @return void
-     */
-    public function testDifferentOptions(): void
-=======
      */
     public function testDifferentOptions()
->>>>>>> upstream/2.2-develop
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
@@ -493,12 +487,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         //Validate
         $adapter = ImportAdapter::findAdapterFor($sourceFile, $directoryWrite);
-<<<<<<< HEAD
-        $errors = $this->_entityAdapter->setSource($adapter)->validateData();
-=======
         $errors = $this->_entityAdapter->setSource($adapter)
             ->validateData();
->>>>>>> upstream/2.2-develop
         $this->assertEmpty($errors->getErrorsCount(), 'CSV must be valid');
         //Import
         $imported = $this->_entityAdapter->importData();

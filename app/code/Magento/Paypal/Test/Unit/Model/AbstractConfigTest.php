@@ -189,14 +189,14 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider isWppApiAvailabeDataProvider
      */
-    public function testIsWppApiAvailable($returnMap, $expectedValue)
+    public function testIsWppApiAvailabe($returnMap, $expectedValue)
     {
         $this->config->setMethod('paypal_express');
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->willReturnMap($returnMap);
 
-        $this->assertEquals($expectedValue, $this->config->isWppApiAvailable());
+        $this->assertEquals($expectedValue, $this->config->isWppApiAvailabe());
     }
 
     /**

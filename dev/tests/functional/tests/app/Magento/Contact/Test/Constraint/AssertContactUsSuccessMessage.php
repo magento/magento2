@@ -32,7 +32,7 @@ class AssertContactUsSuccessMessage extends AbstractConstraint
      */
     public function processAssert(ContactIndex $contactIndex)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE_PART_1 . self::SUCCESS_MESSAGE_PART_2,
             $contactIndex->getMessagesBlock()->getMessage(),
             'Wrong message is displayed.'

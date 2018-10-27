@@ -3,13 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
 
 declare(strict_types=1);
->>>>>>> upstream/2.2-develop
 namespace Magento\Framework\Lock\Backend;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -19,34 +14,6 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
 
-<<<<<<< HEAD
-/**
- * LockManager using the DB locks
- */
-class Database implements \Magento\Framework\Lock\LockManagerInterface
-{
-    /**
-     * @var ResourceConnection
-     */
-    private $resource;
-
-    /**
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @var string Lock prefix
-     */
-    private $prefix;
-
-    /**
-     * @var string|false Holds current lock name if set, otherwise false
-     */
-    private $currentLock = false;
-
-    /**
-=======
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
     /** @var ResourceConnection */
@@ -64,7 +31,6 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     /**
      * Database constructor.
      *
->>>>>>> upstream/2.2-develop
      * @param ResourceConnection $resource
      * @param DeploymentConfig $deploymentConfig
      * @param string|null $prefix

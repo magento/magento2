@@ -6,9 +6,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Review;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Product extends \Magento\Reports\Controller\Adminhtml\Report\Review implements HttpGetActionInterface
+class Product extends \Magento\Reports\Controller\Adminhtml\Report\Review
 {
     /**
      * Product reviews report action

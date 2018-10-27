@@ -48,7 +48,7 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
             $categoryName = $product->getCategoryIds()[0];
             $cmsIndexPage->getTopmenu()->selectCategoryByName($categoryName);
             $priceBlock = $catalogCategoryViewPage->getListProductBlock()->getProductItem($product)->getPriceBlock();
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $priceBlock->isVisible(),
                 'Price block is not displayed for product ' . $product->getName()
             );
@@ -56,21 +56,14 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
             if ($productPrice[$key]['regular'] !== 'No') {
                 $actualPrice['regular'] = (float)$priceBlock->getOldPrice();
                 $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
                 $actualPrice['price_from'] = (float)$priceBlock->getPriceFrom();
                 $actualPrice['price_to'] = (float)$priceBlock->getPriceTo();
                 $actualPrice['old_price_from'] = (float)$priceBlock->getOldPriceFrom();
                 $actualPrice['old_price_to'] = (float)$priceBlock->getOldPriceTo();
             }
             $diff = $this->verifyData($productPrice[$key], $actualPrice);
-<<<<<<< HEAD
-            \PHPUnit\Framework\Assert::assertTrue(
-=======
             \PHPUnit_Framework_Assert::assertTrue(
->>>>>>> upstream/2.2-develop
                 empty($diff),
                 implode(' ', $diff)
             );

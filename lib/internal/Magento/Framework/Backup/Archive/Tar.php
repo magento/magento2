@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Backup\Archive;
 
-use Magento\Framework\Backup\Filesystem\Iterator\Filter;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-
 class Tar extends \Magento\Framework\Archive\Tar
 {
     /**
@@ -39,12 +35,12 @@ class Tar extends \Magento\Framework\Archive\Tar
     {
         $path = $this->_getCurrentFile();
 
-        $filesystemIterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path),
-            RecursiveIteratorIterator::SELF_FIRST
+        $filesystemIterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $iterator = new Filter(
+        $iterator = new \Magento\Framework\Backup\Filesystem\Iterator\Filter(
             $filesystemIterator,
             $this->_skipFiles
         );

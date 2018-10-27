@@ -88,7 +88,7 @@ class Activity extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve formatting datetime
+     * Retrieve formatting datatime
      *
      * @param   string $time
      * @return  string

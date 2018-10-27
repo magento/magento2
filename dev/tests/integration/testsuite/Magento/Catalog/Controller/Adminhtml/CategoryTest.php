@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
-use Magento\Framework\App\Request\Http as HttpRequest;
-
 /**
  * @magentoAppArea adminhtml
  */
@@ -29,7 +27,6 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $store->load('fixturestore', 'code');
         $storeId = $store->getId();
 
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($inputData);
         $this->getRequest()->setParam('store', $storeId);
         $this->getRequest()->setParam('id', 2);
@@ -78,7 +75,6 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      */
     public function testSaveActionFromProductCreationPage($postData)
     {
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
 
         $this->dispatch('backend/catalog/category/save');
@@ -127,9 +123,6 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         return [[$postData], [$postData + ['return_session_messages_only' => 1]]];
     }
 
-    /**
-     * Test SuggestCategories finds any categories.
-     */
     public function testSuggestCategoriesActionDefaultCategoryFound()
     {
         $this->getRequest()->setParam('label_part', 'Default');
@@ -140,9 +133,6 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         );
     }
 
-    /**
-     * Test SuggestCategories properly processes search by label.
-     */
     public function testSuggestCategoriesActionNoSuggestions()
     {
         $this->getRequest()->setParam('label_part', strrev('Default'));
@@ -332,12 +322,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         ];
     }
 
-    /**
-     * Test validation.
-     */
     public function testSaveActionCategoryWithDangerRequest()
     {
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'general' => [
@@ -353,11 +339,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         );
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
-<<<<<<< HEAD
-            $this->equalTo(['The "Name" attribute value is empty. Set the attribute and try again.']),
-=======
             $this->equalTo(['The value of attribute "Name" must be set']),
->>>>>>> upstream/2.2-develop
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
@@ -392,8 +374,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         }
         $this->getRequest()
             ->setPostValue('id', $grandChildId)
-            ->setPostValue('pid', $parentId)
-            ->setMethod(HttpRequest::METHOD_POST);
+            ->setPostValue('pid', $parentId);
         $this->dispatch('backend/catalog/category/move');
         $jsonResponse = json_decode($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);

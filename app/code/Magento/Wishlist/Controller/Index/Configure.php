@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
@@ -67,7 +66,7 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
             $item->loadWithOptions($id);
             if (!$item->getId()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __("The Wish List item can't load at this time. Please try again later.")
+                    __('We can\'t load the Wish List item right now.')
                 );
             }
             $wishlist = $this->wishlistProvider->getWishlist($item->getWishlistId());

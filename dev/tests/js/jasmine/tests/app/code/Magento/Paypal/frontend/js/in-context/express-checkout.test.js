@@ -51,13 +51,6 @@ define([
                 });
         });
 
-        afterEach(function () {
-            try {
-                injector.clean();
-                injector.remove();
-            } catch (e) {}
-        });
-
         describe('clientConfig.click method', function () {
 
             it('Check for properties defined ', function () {

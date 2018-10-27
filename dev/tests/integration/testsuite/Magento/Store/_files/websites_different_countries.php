@@ -3,23 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-use Magento\TestFramework\Helper\Bootstrap;
-=======
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Config\Model\Config\Factory as ConfigFactory;
->>>>>>> upstream/2.2-develop
 use Magento\Store\Model\Website;
 use Magento\Store\Model\Store;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndex;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-<<<<<<< HEAD
-=======
 use Magento\Store\Model\Group;
->>>>>>> upstream/2.2-develop
 
 $objectManager = Bootstrap::getObjectManager();
 //Creating second website with a store.
@@ -31,17 +22,11 @@ if (!$website->getId()) {
     $website->setData([
         'code' => 'test',
         'name' => 'Test Website',
-<<<<<<< HEAD
-        'default_group_id' => '1',
-=======
->>>>>>> upstream/2.2-develop
         'is_default' => '0',
     ]);
     $website->save();
 }
 
-<<<<<<< HEAD
-=======
 /**
  * @var Group $storeGroup
  */
@@ -54,7 +39,6 @@ $storeGroup->save($storeGroup);
 $website->setDefaultGroupId($storeGroup->getId());
 $website->save($website);
 
->>>>>>> upstream/2.2-develop
 $websiteId = $website->getId();
 $store = $objectManager->create(Store::class);
 $store->load('fixture_second_store', 'code');

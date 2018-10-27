@@ -6,9 +6,7 @@
  */
 namespace Magento\Paypal\Controller\Adminhtml\Paypal\Reports;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports implements HttpGetActionInterface
+class Index extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
 {
     /**
      * Authorization level of a basic admin session

@@ -5,7 +5,5 @@
     "magento/module-some-module": "Some Module:888.8.*"
   },
   "type": "magento2-module",
-  "config": {
-    "sort-packages": true
-  }
+  "version": "777.7.7"
 }

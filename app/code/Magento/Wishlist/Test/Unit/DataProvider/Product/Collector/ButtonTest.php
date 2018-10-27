@@ -87,7 +87,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
         $this->button->collect($productMock, $productRendererMock);
     }
 
-    public function testCollectEmptyExtensionAttributes()
+    public function testCollectEmptyExtnsionAttributes()
     {
         $productRendererMock = $this->getMockBuilder(ProductRenderInterface::class)
             ->disableOriginalConstructor()

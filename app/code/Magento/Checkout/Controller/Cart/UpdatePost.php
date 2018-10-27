@@ -7,14 +7,8 @@
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
-<<<<<<< HEAD
-use Magento\Framework\App\Action\HttpPostActionInterface;
-
-class UpdatePost extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
-=======
 
 class UpdatePost extends \Magento\Checkout\Controller\Cart
->>>>>>> upstream/2.2-develop
 {
     /**
      * @var RequestQuantityProcessor
@@ -61,9 +55,9 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
         try {
             $this->cart->truncate()->save();
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
-            $this->messageManager->addErrorMessage($exception->getMessage());
+            $this->messageManager->addError($exception->getMessage());
         } catch (\Exception $exception) {
-            $this->messageManager->addExceptionMessage($exception, __('We can\'t update the shopping cart.'));
+            $this->messageManager->addException($exception, __('We can\'t update the shopping cart.'));
         }
     }
 
@@ -85,11 +79,11 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
                 $this->cart->updateItems($cartData)->save();
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage(
+            $this->messageManager->addError(
                 $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($e->getMessage())
             );
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('We can\'t update the shopping cart.'));
+            $this->messageManager->addException($e, __('We can\'t update the shopping cart.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
     }

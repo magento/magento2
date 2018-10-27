@@ -128,7 +128,7 @@ class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The address failed to save. Verify the address and try again.
+     * @expectedExceptionMessage Unable to save address. Please check input data.
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {

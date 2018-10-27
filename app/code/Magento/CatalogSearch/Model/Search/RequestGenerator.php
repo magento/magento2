@@ -14,8 +14,6 @@ use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
 
 /**
- * Catalog search request generator.
- *
  * @api
  * @since 100.0.2
  */

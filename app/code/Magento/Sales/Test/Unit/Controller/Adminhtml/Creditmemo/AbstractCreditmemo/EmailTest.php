@@ -73,9 +73,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      */
     protected $resultRedirectMock;
 
-    /**
-     * Test setup
-     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -101,10 +98,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create']
         );
-        $this->messageManager = $this->createPartialMock(
-            \Magento\Framework\Message\Manager::class,
-            ['addSuccessMessage']
-        );
+        $this->messageManager = $this->createPartialMock(\Magento\Framework\Message\Manager::class, ['addSuccess']);
         $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
         $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
@@ -134,9 +128,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * testEmail
-     */
     public function testEmail()
     {
         $cmId = 10000031;
@@ -156,7 +147,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->method('notify')
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccessMessage')
+            ->method('addSuccess')
             ->with('You sent the message.');
 
         $this->assertInstanceOf(
@@ -166,9 +157,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->response, $this->creditmemoEmail->getResponse());
     }
 
-    /**
-     * testEmailNoCreditmemoId
-     */
     public function testEmailNoCreditmemoId()
     {
         $this->request->expects($this->once())

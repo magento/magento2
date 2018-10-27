@@ -43,7 +43,7 @@ class Curl extends AbstractCurl implements SitemapInterface
         $response = $curl->read();
         $curl->close();
 
-        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
+        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
             throw new \Exception("Sitemap entity creating by curl handler was not successful! Response: $response");
         }
 

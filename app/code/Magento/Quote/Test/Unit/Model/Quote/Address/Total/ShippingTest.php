@@ -5,9 +5,6 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -45,9 +42,6 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $priceCurrency;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp()
     {
         $this->freeShipping = $this->getMockForAbstractClass(
@@ -129,10 +123,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->store = $this->createMock(\Magento\Store\Model\Store::class);
     }
 
-    /**
-     * @return void
-     */
-    public function testFetch(): void
+    public function testFetch()
     {
         $shippingAmount = 100;
         $shippingDescription = 100;
@@ -153,10 +144,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->shippingModel->fetch($quoteMock, $totalMock));
     }
 
-    /**
-     * @return void
-     */
-    public function testCollect(): void
+    public function testCollect()
     {
         $this->shippingAssignment->expects($this->exactly(3))
             ->method('getShipping')
@@ -246,10 +234,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->shippingModel->collect($this->quote, $this->shippingAssignment, $this->total);
     }
 
-    /**
-     * @return void
-     */
-    protected function freeShippingAssertions(): void
+    protected function freeShippingAssertions()
     {
         $this->address->expects($this->at(0))
             ->method('getFreeShipping')

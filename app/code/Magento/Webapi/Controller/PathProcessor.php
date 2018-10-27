@@ -8,9 +8,6 @@ namespace Magento\Webapi\Controller;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class PathProcessor
- */
 class PathProcessor
 {
     /**  Store code alias to indicate that all stores should be affected by action */
@@ -53,7 +50,7 @@ class PathProcessor
     public function process($pathInfo)
     {
         $pathParts = $this->stripPathBeforeStorecode($pathInfo);
-        $storeCode = current($pathParts);
+        $storeCode = $pathParts[0];
         $stores = $this->storeManager->getStores(false, true);
         if (isset($stores[$storeCode])) {
             $this->storeManager->setCurrentStore($storeCode);

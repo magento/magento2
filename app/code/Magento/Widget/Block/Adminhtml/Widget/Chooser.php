@@ -11,9 +11,6 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
-/**
- * Chooser widget block.
- */
 class Chooser extends \Magento\Backend\Block\Template
 {
     /**

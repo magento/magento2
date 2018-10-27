@@ -72,7 +72,6 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
 
     /**
      * Document constructor.
-     *
      * @param AttributeValueFactory $attributeValueFactory
      * @param GroupRepositoryInterface $groupRepository
      * @param CustomerMetadataInterface $customerMetadata
@@ -119,10 +118,9 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     }
 
     /**
-     * Update customer gender value. Method set gender label instead of id value
-     *
+     * Update customer gender value
+     * Method set gender label instead of id value
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function setGenderValue()
     {
@@ -143,10 +141,9 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     }
 
     /**
-     * Update customer group value. Method set group code instead id value
-     *
+     * Update customer group value
+     * Method set group code instead id value
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function setCustomerGroupValue()
     {
@@ -160,8 +157,8 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     }
 
     /**
-     * Update website value. Method set website name instead id value
-     *
+     * Update website value
+     * Method set website name instead id value
      * @return void
      */
     private function setWebsiteValue()
@@ -173,24 +170,15 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     }
 
     /**
-<<<<<<< HEAD
-     * Update confirmation value. Method set confirmation text value to match what is shown in grid
-     *
-=======
      * Update confirmation value
      * Method set confirmation text value to match what is shown in grid
->>>>>>> upstream/2.2-develop
      * @return void
      */
     private function setConfirmationValue()
     {
         $value = $this->getData(self::$confirmationAttributeCode);
         $websiteId = $this->getData(self::$websiteIdAttributeCode) ?: $this->getData(self::$websiteAttributeCode);
-<<<<<<< HEAD
-        $isConfirmRequired = $this->scopeConfig->isSetFlag(
-=======
         $isConfirmRequired = (bool)$this->scopeConfig->getValue(
->>>>>>> upstream/2.2-develop
             AccountManagement::XML_PATH_IS_CONFIRM,
             ScopeInterface::SCOPE_WEBSITES,
             $websiteId
@@ -205,13 +193,8 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     }
 
     /**
-<<<<<<< HEAD
-     * Update lock expires value. Method set account lock text value to match what is shown in grid
-     *
-=======
      * Update lock expires value
      * Method set account lock text value to match what is shown in grid
->>>>>>> upstream/2.2-develop
      * @return void
      */
     private function setAccountLockValue()

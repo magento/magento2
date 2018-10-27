@@ -5,8 +5,6 @@
  */
 namespace Magento\Sitemap\Test\Unit\Block;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -79,7 +77,6 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
         $this->sitemapCollectionFactory = $this->getMockBuilder(
             \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory::class
         )
-            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -112,17 +109,12 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
         $this->initEventManagerMock($expected);
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
+        $this->storeResolver->expects($this->once())
+            ->method('getCurrentStoreId')
+            ->willReturn($defaultStoreId);
+
         $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->getMockForAbstractClass();
-
-        $storeMock->expects($this->once())
-            ->method('getWebsiteId')
-            ->willReturn($defaultWebsiteId);
-
-        $this->storeManager->expects($this->once())
-            ->method('getDefaultStoreView')
-            ->willReturn($storeMock);
-
         $storeMock->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn($defaultWebsiteId);
@@ -134,6 +126,10 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
             ->method('getStoreIds')
             ->willReturn([$defaultStoreId]);
 
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->with($defaultStoreId)
+            ->willReturn($storeMock);
         $this->storeManager->expects($this->once())
             ->method('getWebsite')
             ->with($defaultWebsiteId)
@@ -169,13 +165,12 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
         $this->initEventManagerMock($expected);
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
+        $this->storeResolver->expects($this->once())
+            ->method('getCurrentStoreId')
+            ->willReturn($defaultStoreId);
+
         $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->getMockForAbstractClass();
-
-        $this->storeManager->expects($this->once())
-            ->method('getDefaultStoreView')
-            ->willReturn($storeMock);
-
         $storeMock->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn($defaultWebsiteId);
@@ -187,6 +182,10 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
             ->method('getStoreIds')
             ->willReturn([$defaultStoreId, $secondStoreId]);
 
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->with($defaultStoreId)
+            ->willReturn($storeMock);
         $this->storeManager->expects($this->once())
             ->method('getWebsite')
             ->with($defaultWebsiteId)
@@ -229,14 +228,8 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 1;
 
-        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMockForAbstractClass();
-
-        $this->storeManager->expects($this->once())
-            ->method('getDefaultStoreView')
-            ->willReturn($storeMock);
-
-        $storeMock->expects($this->once())
-            ->method('getId')
+        $this->storeResolver->expects($this->once())
+            ->method('getCurrentStoreId')
             ->willReturn($storeId);
 
         $expected = [

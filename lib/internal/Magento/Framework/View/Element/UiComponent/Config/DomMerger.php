@@ -59,11 +59,6 @@ class DomMerger implements DomMergerInterface
     protected $isMergeSimpleXMLElement;
 
     /**
-     * @var string
-     */
-    private $schema;
-
-    /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
      *
      * Format of $schema: Absolute schema file path or URN

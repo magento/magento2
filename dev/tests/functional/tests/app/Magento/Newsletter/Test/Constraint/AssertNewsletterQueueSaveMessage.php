@@ -29,7 +29,7 @@ class AssertNewsletterQueueSaveMessage extends AbstractAssertForm
         TemplateQueueIndex $indexQueue
     ) {
         $actualMessages = $indexQueue->getMessagesBlock()->getSuccessMessages();
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             self::SUCCESS_MESSAGE,
             $actualMessages,
             'Wrong success message is displayed.'

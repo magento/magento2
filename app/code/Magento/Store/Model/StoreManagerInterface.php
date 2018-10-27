@@ -22,11 +22,6 @@ interface StoreManagerInterface
     const CONTEXT_STORE = 'store';
 
     /**
-     * The store GET Param name
-     */
-    const PARAM_NAME = '___store';
-
-    /**
      * Allow or disallow single store mode
      *
      * @param bool $value

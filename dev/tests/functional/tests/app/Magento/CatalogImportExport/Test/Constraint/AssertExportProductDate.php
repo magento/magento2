@@ -24,7 +24,7 @@ class AssertExportProductDate extends AbstractConstraint
     {
         $exportData = $export->getLatest();
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             (bool) strpos($exportData->getContent(), $dateTime->format('n/j/y, g')),
             'Date fields in exported file are shown in not global configuration time zone.'
         );

@@ -5,11 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<<<<<<< HEAD
-<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-=======
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
->>>>>>> upstream/2.2-develop
     <entity name="_defaultStoreGroup" type="group">
         <data key="name">Main Website Store</data>
         <data key="code">main_website_store</data>
@@ -20,17 +16,11 @@
         <data key="group_id">null</data>
         <data key="name" unique="suffix">store</data>
         <data key="code" unique="suffix">store</data>
-<<<<<<< HEAD
-        <data key="root_category_id">2</data>
-=======
         <var key="root_category_id" entityKey="id" entityType="category"/>
->>>>>>> upstream/2.2-develop
         <data key="website_id">1</data>
         <data key="store_action">add</data>
         <data key="store_type">group</data>
     </entity>
-<<<<<<< HEAD
-=======
     <entity name="secondStoreGroup" type="group">
         <data key="group_id">null</data>
         <data key="name">Second Store</data>
@@ -47,18 +37,10 @@
         <data key="store_action">add</data>
         <data key="store_type">group</data>
     </entity>
->>>>>>> upstream/2.2-develop
     <entity name="staticStoreGroup" type="group">
         <data key="name">NewStore</data>
         <data key="code">Base12</data>
         <data key="root_category_id">2</data>
         <data key="website_id">1</data>
     </entity>
-<<<<<<< HEAD
-    <entity name="staticFirstStoreGroup" extends="staticStoreGroup">
-        <data key="name">NewStore</data>
-        <data key="code">Base1</data>
-    </entity>
-=======
->>>>>>> upstream/2.2-develop
 </entities>

@@ -15,10 +15,14 @@ class CryptTest extends \PHPUnit\Framework\TestCase
 
     private static $_cipherInfo;
 
-    private const SUPPORTED_CIPHER_MODE_COMBINATIONS = [
-        MCRYPT_BLOWFISH => [MCRYPT_MODE_ECB],
-        MCRYPT_RIJNDAEL_128 => [MCRYPT_MODE_ECB],
-        MCRYPT_RIJNDAEL_256 => [MCRYPT_MODE_CBC],
+    protected $_supportedCiphers = [MCRYPT_BLOWFISH, MCRYPT_RIJNDAEL_128, MCRYPT_RIJNDAEL_256];
+
+    protected $_supportedModes = [
+        MCRYPT_MODE_ECB,
+        MCRYPT_MODE_CBC,
+        MCRYPT_MODE_CFB,
+        MCRYPT_MODE_OFB,
+        MCRYPT_MODE_NOFB,
     ];
 
     protected function setUp()
@@ -28,10 +32,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $length
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @return bool|string
      */
     protected function _getRandomString($length)
@@ -46,7 +47,23 @@ class CryptTest extends \PHPUnit\Framework\TestCase
     protected function _requireCipherInfo()
     {
         $filename = __DIR__ . '/Crypt/_files/_cipher_info.php';
-
+        /* Generate allowed sizes for encryption key and init vector
+           $data = array();
+           foreach ($this->_supportedCiphers as $cipher) {
+           if (!array_key_exists($cipher, $data)) {
+           $data[$cipher] = array();
+           }
+           foreach ($this->_supportedModes as $mode) {
+           $cipherHandle = mcrypt_module_open($cipher, '', $mode, '');
+           $data[$cipher][$mode] = array(
+           'key_size' => mcrypt_enc_get_key_size($cipherHandle),
+           'iv_size'  => mcrypt_enc_get_iv_size($cipherHandle),
+           );
+           mcrypt_module_close($cipherHandle);
+           }
+           }
+           file_put_contents($filename, '<?php return ' . var_export($data, true) . ";\n", LOCK_EX);
+           */
         if (!self::$_cipherInfo) {
             self::$_cipherInfo = include $filename;
         }
@@ -55,10 +72,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $cipherName
      * @param $modeName
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @return mixed
      */
     protected function _getKeySize($cipherName, $modeName)
@@ -70,10 +84,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $cipherName
      * @param $modeName
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @return mixed
      */
     protected function _getInitVectorSize($cipherName, $modeName)
@@ -85,17 +96,12 @@ class CryptTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-<<<<<<< HEAD
-    public function getCipherModeCombinations(): array
-=======
     public function getCipherModeCombinations()
->>>>>>> upstream/2.2-develop
     {
         $result = [];
-        foreach (self::SUPPORTED_CIPHER_MODE_COMBINATIONS as $cipher => $modes) {
-            /** @var array $modes */
-            foreach ($modes as $mode) {
-                $result[$cipher . '-' . $mode] = [$cipher, $mode];
+        foreach ($this->_supportedCiphers as $cipher) {
+            foreach ($this->_supportedModes as $mode) {
+                $result[] = [$cipher, $mode];
             }
         }
         return $result;
@@ -121,18 +127,15 @@ class CryptTest extends \PHPUnit\Framework\TestCase
      */
     public function getConstructorExceptionData()
     {
-        $key = substr(__CLASS__, -32, 32);
         $result = [];
-        foreach (self::SUPPORTED_CIPHER_MODE_COMBINATIONS as $cipher => $modes) {
-            /** @var array $modes */
-            foreach ($modes as $mode) {
+        foreach ($this->_supportedCiphers as $cipher) {
+            foreach ($this->_supportedModes as $mode) {
                 $tooLongKey = str_repeat('-', $this->_getKeySize($cipher, $mode) + 1);
                 $tooShortInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) - 1);
                 $tooLongInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) + 1);
-                $result['tooLongKey-' . $cipher . '-' . $mode . '-false'] = [$tooLongKey, $cipher, $mode, false];
-                $keyPrefix = 'key-' . $cipher . '-' . $mode;
-                $result[$keyPrefix . '-tooShortInitVector'] = [$key, $cipher, $mode, $tooShortInitVector];
-                $result[$keyPrefix . '-tooLongInitVector'] = [$key, $cipher, $mode, $tooLongInitVector];
+                $result[] = [$tooLongKey, $cipher, $mode, false];
+                $result[] = [$this->_key, $cipher, $mode, $tooShortInitVector];
+                $result[] = [$this->_key, $cipher, $mode, $tooLongInitVector];
             }
         }
         return $result;
@@ -163,7 +166,27 @@ class CryptTest extends \PHPUnit\Framework\TestCase
     public function getCryptData()
     {
         $fixturesFilename = __DIR__ . '/Crypt/_files/_crypt_fixtures.php';
-
+        /* Generate fixtures
+           $fixtures = array();
+           foreach (array('', 'Hello world!!!') as $inputString) {
+           foreach ($this->_supportedCiphers as $cipher) {
+           foreach ($this->_supportedModes as $mode) {
+           $randomKey = $this->_getRandomString($this->_getKeySize($cipher, $mode));
+           $randomInitVector = $this->_getRandomString($this->_getInitVectorSize($cipher, $mode));
+           $crypt = new \Magento\Framework\Encryption\Crypt($randomKey, $cipher, $mode, $randomInitVector);
+           $fixtures[] = array(
+           $randomKey, // Encryption key
+           $cipher,
+           $mode,
+           $randomInitVector, // Init vector
+           $inputString, // String to encrypt
+           base64_encode($crypt->encrypt($inputString)) // Store result of encryption as base64
+           );
+           }
+           }
+           }
+           file_put_contents($fixturesFilename, '<?php return ' . var_export($fixtures, true) . ";\n", LOCK_EX);
+           */
         $result = include $fixturesFilename;
         /* Restore encoded string back to binary */
         foreach ($result as &$cryptParams) {

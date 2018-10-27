@@ -6,13 +6,7 @@
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
-
-/**
- * Save current state of open tabs. GET is allowed for legacy reasons.
- */
-class State extends AbstractScopeConfig implements HttpPostActionInterface, HttpGetActionInterface
+class State extends AbstractScopeConfig
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory

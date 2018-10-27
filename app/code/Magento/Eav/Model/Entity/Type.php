@@ -317,7 +317,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Get default attribute set identifier for entity type
+     * Get default attribute set identifier for etity type
      *
      * @return string|null
      */

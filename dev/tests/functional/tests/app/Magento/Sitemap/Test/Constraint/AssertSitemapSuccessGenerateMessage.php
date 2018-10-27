@@ -33,7 +33,7 @@ class AssertSitemapSuccessGenerateMessage extends AbstractConstraint
         Sitemap $sitemap
     ) {
         $actualMessage = $sitemapPage->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             sprintf(self::SUCCESS_GENERATE_MESSAGE, $sitemap->getSitemapFilename()),
             $actualMessage,
             'Wrong success message is displayed.'

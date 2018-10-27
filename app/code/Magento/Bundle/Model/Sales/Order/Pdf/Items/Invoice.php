@@ -10,6 +10,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Order invoice pdf default items renderer
+ *
+ * @codingStandardsIgnoreFile
  */
 class Invoice extends AbstractItems
 {

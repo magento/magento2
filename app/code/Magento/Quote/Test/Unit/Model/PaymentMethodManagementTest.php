@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Quote\Test\Unit\Model;
 
 class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
@@ -300,7 +298,7 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
+     * @expectedExceptionMessage Shipping address is not set
      */
     public function testSetSimpleProductTrowsExceptionIfShippingAddressNotSet()
     {

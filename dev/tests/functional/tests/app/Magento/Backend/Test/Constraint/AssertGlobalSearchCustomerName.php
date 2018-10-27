@@ -30,18 +30,18 @@ class AssertGlobalSearchCustomerName extends AbstractConstraint
         $customer = $search->getDataFieldConfig('query')['source']->getEntity();
         $customerName = $customer->getFirstname() . " " . $customer->getLastname();
         $isVisibleInResult = $dashboard->getAdminPanelHeader()->isSearchResultVisible($customerName);
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $isVisibleInResult,
             'Customer name ' . $customerName . ' is absent in search results'
         );
 
         $dashboard->getAdminPanelHeader()->navigateToGrid("Customers");
         $isCustomerGridVisible = $customerIndex->getCustomerGridBlock()->isVisible();
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $isCustomerGridVisible,
             'Customer grid is not visible'
         );
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             (string) $customer->getId(),
             $customerIndex->getCustomerGridBlock()->getAllIds(),
             'Customer grid does not have ' . $customerName . ' in search results'

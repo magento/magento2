@@ -21,7 +21,7 @@ class DefinedClasses
      */
     public function isClassLoadable($className)
     {
-        return $this->isClassLoadableFromMemory($className) || $this->isClassLoadableFromDisk($className);
+        return $this->isClassLoadableFromMemory($className) || $this->isClassLoadableFromDisc($className);
     }
 
     /**
@@ -36,24 +36,12 @@ class DefinedClasses
     }
 
     /**
-     * Determine if a class exists on disk
+     * Determine if a class exists on disc
      *
      * @param string $className
      * @return bool
-     * @deprecated
      */
     public function isClassLoadableFromDisc($className)
-    {
-        return $this->isClassLoadableFromDisk($className);
-    }
-
-    /**
-     * Determine if a class exists on disk
-     *
-     * @param string $className
-     * @return bool
-     */
-    public function isClassLoadableFromDisk($className)
     {
         try {
             return (bool)AutoloaderRegistry::getAutoloader()->findFile($className);

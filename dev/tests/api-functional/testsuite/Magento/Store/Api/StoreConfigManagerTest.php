@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Store\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;

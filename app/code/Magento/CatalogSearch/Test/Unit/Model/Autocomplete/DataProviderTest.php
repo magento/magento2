@@ -30,11 +30,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $suggestCollection;
 
-    /**
-     * @var integer
-     */
-    private $limit = 3;
-
     protected function setUp()
     {
         $helper = new ObjectManager($this);
@@ -65,20 +60,11 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
-            ->setMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $scopeConfig->expects($this->any())
-            ->method('getValue')
-            ->willReturn($this->limit);
-
         $this->model = $helper->getObject(
             \Magento\CatalogSearch\Model\Autocomplete\DataProvider::class,
             [
                 'queryFactory' => $queryFactory,
-                'itemFactory' => $this->itemFactory,
-                'scopeConfig' => $scopeConfig
+                'itemFactory' => $this->itemFactory
             ]
         );
     }
@@ -117,10 +103,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expected));
 
         $this->itemFactory->expects($this->any())->method('create')->willReturn($itemMock);
-
         $result = $this->model->getItems();
         $this->assertEquals($expected, $result[0]->toArray());
-        $this->assertEquals($this->limit, count($result));
     }
 
     /**

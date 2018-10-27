@@ -9,9 +9,6 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Product form price modifier
- */
 class PriceModifier
 {
     /**
@@ -29,8 +26,6 @@ class PriceModifier
     }
 
     /**
-     * Remove tier price
-     *
      * @param \Magento\Catalog\Model\Product $product
      * @param int|string $customerGroupId
      * @param int $qty
@@ -45,25 +40,17 @@ class PriceModifier
         $prices = $product->getData('tier_price');
         // verify if price exist
         if ($prices === null) {
-            throw new NoSuchEntityException(__('Tier price is unavailable for this product.'));
+            throw new NoSuchEntityException(__('This product doesn\'t have tier price'));
         }
         $tierPricesQty = count($prices);
 
         foreach ($prices as $key => $tierPrice) {
             if ($customerGroupId == 'all' && $tierPrice['price_qty'] == $qty
-<<<<<<< HEAD
-                && $tierPrice['all_groups'] == 1 && (int) $tierPrice['website_id'] === (int) $websiteId
-            ) {
-                unset($prices[$key]);
-            } elseif ($tierPrice['price_qty'] == $qty && $tierPrice['cust_group'] == $customerGroupId
-                && (int) $tierPrice['website_id'] === (int) $websiteId
-=======
                 && $tierPrice['all_groups'] == 1 && (int)$tierPrice['website_id'] === (int)$websiteId
             ) {
                 unset($prices[$key]);
             } elseif ($tierPrice['price_qty'] == $qty && $tierPrice['cust_group'] == $customerGroupId
                 && (int)$tierPrice['website_id'] === (int)$websiteId
->>>>>>> upstream/2.2-develop
             ) {
                 unset($prices[$key]);
             }
@@ -82,7 +69,7 @@ class PriceModifier
         try {
             $this->productRepository->save($product);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('The tier_price data is invalid. Verify the data and try again.'));
+            throw new CouldNotSaveException(__('Invalid data provided for tier_price'));
         }
     }
 }

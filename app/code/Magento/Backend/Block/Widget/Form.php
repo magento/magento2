@@ -6,9 +6,6 @@
 
 namespace Magento\Backend\Block\Widget;
 
-<<<<<<< HEAD
-use Magento\Framework\App\ObjectManager;
-=======
 use Magento\Backend\Block\Widget\Form\Element\ElementCreator;
 use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Block\Template\Context;
@@ -19,7 +16,6 @@ use Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element as FieldsetEleme
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\Form\AbstractForm;
->>>>>>> upstream/2.2-develop
 
 /**
  * Backend form widget
@@ -43,25 +39,7 @@ class Form extends \Magento\Backend\Block\Widget
      */
     protected $_template = 'Magento_Backend::widget/form.phtml';
 
-    /** @var Form\Element\ElementCreator */
-    private $creator;
-
     /**
-<<<<<<< HEAD
-     * Constructs form
-     *
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param array $data
-     * @param Form\Element\ElementCreator|null $creator
-     */
-    public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        array $data = [],
-        Form\Element\ElementCreator $creator = null
-    ) {
-        parent::__construct($context, $data);
-        $this->creator = $creator ?: ObjectManager::getInstance()->get(Form\Element\ElementCreator::class);
-=======
      * @var ElementCreator
      * /
     private $creator;
@@ -80,7 +58,6 @@ class Form extends \Magento\Backend\Block\Widget
     ) {
         parent::__construct($context, $data);
         $this->creator = $creator ?: ObjectManager::getInstance()->get(ElementCreator::class);
->>>>>>> upstream/2.2-develop
     }
 
     /**

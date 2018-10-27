@@ -32,7 +32,7 @@ class AssertWidgetSuccessSaveMessage extends AbstractConstraint
     public function processAssert(WidgetInstanceIndex $widgetInstanceIndex)
     {
         $actualMessage = $widgetInstanceIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

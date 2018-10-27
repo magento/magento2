@@ -121,7 +121,7 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *  Test for method getValue with dynamic productType
+     *  test fro method getValue with dynamic productType
      *
      * @param bool $useRegularPrice
      * @dataProvider useRegularPriceDataProvider
@@ -166,14 +166,12 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test for method getValue with type Fixed and selectionPriceType not null.
+     * test for method getValue with type Fixed and selectionPriceType not null
      *
      * @param bool $useRegularPrice
      * @dataProvider useRegularPriceDataProvider
-     *
-     * @return void
      */
-    public function testGetValueTypeFixedWithSelectionPriceType(bool $useRegularPrice)
+    public function testGetValueTypeFixedWithSelectionPriceType($useRegularPrice)
     {
         $this->setupSelectionPrice($useRegularPrice);
         $regularPrice = 100.125;
@@ -183,32 +181,24 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->bundleMock->expects($this->once())
             ->method('getPriceType')
-            ->willReturn(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED);
+            ->will($this->returnValue(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED));
         $this->bundleMock->expects($this->atLeastOnce())
             ->method('getPriceInfo')
-            ->willReturn($this->priceInfoMock);
+            ->will($this->returnValue($this->priceInfoMock));
         $this->priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with(RegularPrice::PRICE_CODE)
-            ->willReturn($this->regularPriceMock);
+            ->with($this->equalTo(RegularPrice::PRICE_CODE))
+            ->will($this->returnValue($this->regularPriceMock));
         $this->regularPriceMock->expects($this->once())
             ->method('getValue')
-            ->willReturn($actualPrice);
+            ->will($this->returnValue($actualPrice));
         $this->bundleMock->expects($this->once())
             ->method('setFinalPrice')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch');
         $this->bundleMock->expects($this->exactly(2))
             ->method('getData')
-<<<<<<< HEAD
-            ->willReturnMap(
-                [
-                    ['qty', null, 1],
-                    ['final_price', null, 100],
-                    ['price', null, 100],
-                ]
-=======
             ->will(
                 $this->returnValueMap(
                     [
@@ -217,26 +207,28 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
                         ['price', null, 100],
                     ]
                 )
->>>>>>> upstream/2.2-develop
             );
         $this->productMock->expects($this->once())
             ->method('getSelectionPriceType')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->productMock->expects($this->any())
             ->method('getSelectionPriceValue')
-            ->willReturn($actualPrice);
+            ->will($this->returnValue($actualPrice));
 
         if (!$useRegularPrice) {
             $this->discountCalculatorMock->expects($this->once())
                 ->method('calculateDiscount')
-                ->with($this->bundleMock, $actualPrice)
-                ->willReturn($discountedPrice);
+                ->with(
+                    $this->equalTo($this->bundleMock),
+                    $this->equalTo($actualPrice)
+                )
+                ->will($this->returnValue($discountedPrice));
         }
 
         $this->priceCurrencyMock->expects($this->once())
             ->method('round')
             ->with($actualPrice)
-            ->willReturn($expectedPrice);
+            ->will($this->returnValue($expectedPrice));
 
         $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
     }

@@ -42,12 +42,6 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject */
     private $componentRegistrarMock;
 
-    /** @var  \Symfony\Component\Console\Output\OutputInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $outputMock;
-
-    /** @var \Symfony\Component\Console\Formatter\OutputFormatterInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $outputFormatterMock;
-
     public function setUp()
     {
         $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
@@ -84,13 +78,6 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
             [ComponentRegistrar::MODULE, ['/path/to/module/one', '/path (1)/to/module/two']],
             [ComponentRegistrar::LIBRARY, ['/path/to/library/one', '/path (1)/to/library/two']],
         ]);
-
-        $this->outputFormatterMock = $this->createMock(
-            \Symfony\Component\Console\Formatter\OutputFormatterInterface::class
-        );
-        $this->outputMock = $this->createMock(\Symfony\Component\Console\Output\OutputInterface::class);
-        $this->outputMock->method('getFormatter')
-            ->willReturn($this->outputFormatterMock);
 
         $this->command = new DiCompileCommand(
             $this->deploymentConfigMock,
@@ -134,7 +121,11 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(\Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES)
             ->willReturn(['Magento_Catalog' => 1]);
-        $progressBar = new \Symfony\Component\Console\Helper\ProgressBar($this->outputMock);
+        $progressBar = $this->getMockBuilder(
+            \Symfony\Component\Console\Helper\ProgressBar::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerMock->expects($this->once())->method('configure');
         $this->objectManagerMock
@@ -161,12 +152,7 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
                 [OperationFactory::INTERCEPTION, $this->anything()],
                 [OperationFactory::AREA_CONFIG_GENERATOR, $this->anything()],
                 [OperationFactory::INTERCEPTION_CACHE, $this->anything()]
-<<<<<<< HEAD
-            )
-        ;
-=======
             );
->>>>>>> upstream/2.2-develop
 
         $this->managerMock->expects($this->once())->method('process');
         $tester = new CommandTester($this->command);

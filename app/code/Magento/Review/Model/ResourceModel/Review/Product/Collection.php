@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Review\Model\ResourceModel\Review\Product;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -404,20 +403,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function getResultingIds()
     {
         $idsSelect = clone $this->getSelect();
-        $data = $this->getConnection()
-            ->fetchAll(
-                $idsSelect
-                    ->reset(Select::LIMIT_COUNT)
-                    ->reset(Select::LIMIT_OFFSET)
-                    ->columns('rt.review_id')
-            );
-
-        return array_map(
-            function ($value) {
-                return $value['review_id'];
-            },
-            $data
-        );
+        $idsSelect->reset(Select::LIMIT_COUNT);
+        $idsSelect->reset(Select::LIMIT_OFFSET);
+        $idsSelect->reset(Select::COLUMNS);
+        $idsSelect->reset(Select::ORDER);
+        $idsSelect->columns('rt.review_id');
+        return $this->getConnection()->fetchCol($idsSelect);
     }
 
     /**

@@ -47,7 +47,7 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
         $transactionId = $this->getTransactionId();
-        \PHPUnit\Framework\Assert::assertNotEmpty($transactionId);
+        \PHPUnit_Framework_Assert::assertNotEmpty($transactionId);
 
         $this->settlementReportIndex->open();
 
@@ -56,7 +56,7 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
 
         $ids = $grid->getTransactionIds();
 
-        \PHPUnit\Framework\Assert::assertTrue(in_array($transactionId, $ids));
+        \PHPUnit_Framework_Assert::assertTrue(in_array($transactionId, $ids));
     }
 
     /**

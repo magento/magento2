@@ -31,12 +31,12 @@ class AssertCategoryInNavigationMenu extends AbstractConstraint
     ) {
         $cmsIndex->open();
         if (($category->getIncludeInMenu() == 'Yes') && ($category->getIsActive() == 'Yes')) {
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $catalogCategoryView->getTopmenu()->isCategoryVisible($category->getName()),
                 'Expected that ' . $category->getName() . ' is visible in navigation menu, but it is not.'
             );
         } else {
-            \PHPUnit\Framework\Assert::assertFalse(
+            \PHPUnit_Framework_Assert::assertFalse(
                 $catalogCategoryView->getTopmenu()->isCategoryVisible($category->getName()),
                 'Expected that ' . $category->getName() . ' is not visible in navigation menu, but it is.'
             );

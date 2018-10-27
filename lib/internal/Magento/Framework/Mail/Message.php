@@ -56,22 +56,14 @@ class Message implements MailMessageInterface
     public function setBody($body)
     {
         if (is_string($body) && $this->messageType === MailMessageInterface::TYPE_HTML) {
-<<<<<<< HEAD
-            $body = self::createHtmlMimeFromString($body);
-=======
             $body = $this->createHtmlMimeFromString($body);
->>>>>>> upstream/2.2-develop
         }
         $this->zendMessage->setBody($body);
         return $this;
     }
 
     /**
-<<<<<<< HEAD
-     * {@inheritdoc}
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function setSubject($subject)
     {
@@ -80,11 +72,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-<<<<<<< HEAD
-     * {@inheritdoc}
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function getSubject()
     {
@@ -92,11 +80,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-<<<<<<< HEAD
-     * {@inheritdoc}
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function getBody()
     {
@@ -104,11 +88,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-<<<<<<< HEAD
-     * {@inheritdoc}
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function setFrom($fromAddress)
     {
@@ -117,11 +97,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-<<<<<<< HEAD
-     * {@inheritdoc}
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function addTo($toAddress)
     {
@@ -130,11 +106,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-<<<<<<< HEAD
-     * {@inheritdoc}
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function addCc($ccAddress)
     {
@@ -143,11 +115,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-<<<<<<< HEAD
-     * {@inheritdoc}
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function addBcc($bccAddress)
     {
@@ -156,11 +124,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-<<<<<<< HEAD
-     * {@inheritdoc}
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function setReplyTo($replyToAddress)
     {
@@ -169,11 +133,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-<<<<<<< HEAD
-     * {@inheritdoc}
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function getRawMessage()
     {
@@ -181,27 +141,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Create HTML mime message from the string.
-     *
-     * @param string $htmlBody
-     * @return \Zend\Mime\Message
-     */
-    private function createHtmlMimeFromString($htmlBody)
-    {
-        $htmlPart = new Part($htmlBody);
-        $htmlPart->setCharset($this->zendMessage->getEncoding());
-        $htmlPart->setType(Mime::TYPE_HTML);
-        $mimeMessage = new \Zend\Mime\Message();
-        $mimeMessage->addPart($htmlPart);
-        return $mimeMessage;
-    }
-
-    /**
-     * {@inheritdoc}
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function setBodyHtml($html)
     {
@@ -210,19 +150,13 @@ class Message implements MailMessageInterface
     }
 
     /**
-<<<<<<< HEAD
-     * {@inheritdoc}
-=======
      * @inheritdoc
->>>>>>> upstream/2.2-develop
      */
     public function setBodyText($text)
     {
         $this->setMessageType(self::TYPE_TEXT);
         return $this->setBody($text);
     }
-<<<<<<< HEAD
-=======
 
     /**
      * Create HTML mime message from the string.
@@ -239,5 +173,4 @@ class Message implements MailMessageInterface
         $mimeMessage->addPart($htmlPart);
         return $mimeMessage;
     }
->>>>>>> upstream/2.2-develop
 }

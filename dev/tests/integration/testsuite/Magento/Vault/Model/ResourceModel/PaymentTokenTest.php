@@ -72,7 +72,7 @@ class PaymentTokenTest extends \PHPUnit\Framework\TestCase
             ->getByGatewayToken(self::TOKEN, PayPalConfigProvider::PAYPAL_CODE, self::CUSTOMER_ID);
 
         $this->connection->insert(
-            $this->resource->getTableName('vault_payment_token_order_payment_link'),
+            $this->resource->getTableName(InstallSchema::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE),
             [
                 'order_payment_id' => $this->order->getPayment()->getEntityId(),
                 'payment_token_id' => $paymentToken->getEntityId()
@@ -98,7 +98,7 @@ class PaymentTokenTest extends \PHPUnit\Framework\TestCase
             ->getByGatewayToken(self::TOKEN, PayPalConfigProvider::PAYPAL_CODE, self::CUSTOMER_ID);
 
         $select = $this->connection->select()
-            ->from($this->resource->getTableName('vault_payment_token_order_payment_link'))
+            ->from($this->resource->getTableName(InstallSchema::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE))
             ->where('order_payment_id = ?', (int) $this->order->getPayment()->getEntityId())
             ->where('payment_token_id =?', (int) $paymentToken->getEntityId());
 

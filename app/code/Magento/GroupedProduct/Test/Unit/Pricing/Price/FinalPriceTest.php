@@ -104,10 +104,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $price
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getProductMock($price)

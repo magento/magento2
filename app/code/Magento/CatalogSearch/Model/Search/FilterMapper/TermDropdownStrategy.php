@@ -7,17 +7,16 @@
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
-use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\SelectBuilder;
 use Magento\Eav\Model\Config as EavConfig;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * This strategy handles attributes which comply with two criteria:
  *   - The filter for dropdown or multi-select attribute
  *   - The filter is Term filter
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class TermDropdownStrategy implements FilterStrategyInterface
 {
@@ -27,36 +26,45 @@ class TermDropdownStrategy implements FilterStrategyInterface
     private $aliasResolver;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var EavConfig
      */
     private $eavConfig;
 
     /**
-     * @var SelectBuilder
+     * @var ResourceConnection
      */
-    private $selectBuilder;
+    private $resourceConnection;
 
     /**
-     * @param null $storeManager @deprecated
-     * @param null $resourceConnection @deprecated
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     * @param ResourceConnection $resourceConnection
      * @param EavConfig $eavConfig
-     * @param null $scopeConfig @deprecated
+     * @param ScopeConfigInterface $scopeConfig
      * @param AliasResolver $aliasResolver
-     * @param SelectBuilder|null $selectBuilder
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
-        $storeManager,
-        $resourceConnection,
+        StoreManagerInterface $storeManager,
+        ResourceConnection $resourceConnection,
         EavConfig $eavConfig,
-        $scopeConfig,
-        AliasResolver $aliasResolver,
-        SelectBuilder $selectBuilder = null
+        ScopeConfigInterface $scopeConfig,
+        AliasResolver $aliasResolver
     ) {
+        $this->storeManager = $storeManager;
+        $this->resourceConnection = $resourceConnection;
         $this->eavConfig = $eavConfig;
+        $this->scopeConfig = $scopeConfig;
         $this->aliasResolver = $aliasResolver;
-        $this->selectBuilder = $selectBuilder ?: ObjectManager::getInstance()->get(SelectBuilder::class);
     }
 
     /**
@@ -69,7 +77,27 @@ class TermDropdownStrategy implements FilterStrategyInterface
     ) {
         $alias = $this->aliasResolver->getAlias($filter);
         $attribute = $this->getAttributeByCode($filter->getField());
-        $this->selectBuilder->execute((int)$attribute->getId(), $alias, $select);
+        $joinCondition = sprintf(
+            'search_index.entity_id = %1$s.entity_id AND %1$s.attribute_id = %2$d AND %1$s.store_id = %3$d',
+            $alias,
+            $attribute->getId(),
+            $this->storeManager->getStore()->getId()
+        );
+        $select->joinLeft(
+            [$alias => $this->resourceConnection->getTableName('catalog_product_index_eav')],
+            $joinCondition,
+            []
+        );
+        if ($this->isAddStockFilter()) {
+            $stockAlias = $alias . AliasResolver::STOCK_FILTER_SUFFIX;
+            $select->joinLeft(
+                [
+                    $stockAlias => $this->resourceConnection->getTableName('cataloginventory_stock_status'),
+                ],
+                sprintf('%2$s.product_id = %1$s.source_id', $alias, $stockAlias),
+                []
+            );
+        }
 
         return true;
     }
@@ -82,5 +110,18 @@ class TermDropdownStrategy implements FilterStrategyInterface
     private function getAttributeByCode($field)
     {
         return $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field);
+    }
+
+    /**
+     * @return bool
+     */
+    private function isAddStockFilter()
+    {
+        $isShowOutOfStock = $this->scopeConfig->isSetFlag(
+            'cataloginventory/options/show_out_of_stock',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return false === $isShowOutOfStock;
     }
 }

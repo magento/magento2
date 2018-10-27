@@ -5,11 +5,9 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Controller\Result\Redirect;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Download sample file controller
@@ -39,26 +37,20 @@ class Download extends ImportController
     protected $fileFactory;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\SampleFileProvider
-     */
-    private $sampleFileProvider;
-
-    /**
+     * Constructor
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
-     * @param \Magento\ImportExport\Model\Import\SampleFileProvider $sampleFileProvider
      * @param ComponentRegistrar $componentRegistrar
-     * @param \Magento\ImportExport\Model\Import\SampleFileProvider|null $sampleFileProvider
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
-        \Magento\Framework\Component\ComponentRegistrar $componentRegistrar,
-        \Magento\ImportExport\Model\Import\SampleFileProvider $sampleFileProvider = null
+        \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
     ) {
         parent::__construct(
             $context
@@ -67,9 +59,6 @@ class Download extends ImportController
         $this->resultRawFactory = $resultRawFactory;
         $this->readFactory = $readFactory;
         $this->componentRegistrar = $componentRegistrar;
-        $this->sampleFileProvider = $sampleFileProvider
-            ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\ImportExport\Model\Import\SampleFileProvider::class);
     }
 
     /**
@@ -79,23 +68,22 @@ class Download extends ImportController
      */
     public function execute()
     {
-        $entityName = $this->getRequest()->getParam('filename');
+        $fileName = $this->getRequest()->getParam('filename') . '.csv';
+        $moduleDir = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, self::SAMPLE_FILES_MODULE);
+        $fileAbsolutePath = $moduleDir . '/Files/Sample/' . $fileName;
+        $directoryRead = $this->readFactory->create($moduleDir);
+        $filePath = $directoryRead->getRelativePath($fileAbsolutePath);
 
-        if (preg_match('/^\w+$/', $entityName) == 0) {
-            $this->messageManager->addErrorMessage(__('Incorrect entity name.'));
-
-            return $this->getResultRedirect();
-        }
-        try {
-            $fileContents = $this->sampleFileProvider->getFileContents($entityName);
-        } catch (NoSuchEntityException $e) {
+        if (!$directoryRead->isFile($filePath)) {
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $this->messageManager->addError(__('There is no sample file for this entity.'));
-
-            return $this->getResultRedirect();
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('*/import');
+            return $resultRedirect;
         }
 
-        $fileSize = $this->sampleFileProvider->getSize($entityName);
-        $fileName = $entityName . '.csv';
+        $fileSize = isset($directoryRead->stat($filePath)['size'])
+            ? $directoryRead->stat($filePath)['size'] : null;
 
         $this->fileFactory->create(
             $fileName,
@@ -107,18 +95,7 @@ class Download extends ImportController
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
-        $resultRaw->setContents($fileContents);
+        $resultRaw->setContents($directoryRead->readFile($filePath));
         return $resultRaw;
-    }
-
-    /**
-     * @return Redirect
-     */
-    private function getResultRedirect(): Redirect
-    {
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('*/import');
-
-        return $resultRedirect;
     }
 }

@@ -6,9 +6,7 @@
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Multishipping\Controller\Checkout implements HttpGetActionInterface
+class Index extends \Magento\Multishipping\Controller\Checkout
 {
     /**
      * Index action of Multishipping checkout

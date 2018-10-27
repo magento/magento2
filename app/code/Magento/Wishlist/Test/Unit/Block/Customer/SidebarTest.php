@@ -46,14 +46,9 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->block = $objectManager->getObject(
-            Sidebar::class,
-            [
-                'context' => $this->productContext,
-                'httpContext' => $this->httpContext
-            ]
+        $this->block = new Sidebar(
+            $this->productContext,
+            $this->httpContext
         );
     }
 

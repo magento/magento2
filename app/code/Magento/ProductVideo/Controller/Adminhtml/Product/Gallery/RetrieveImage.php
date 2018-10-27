@@ -3,10 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ProductVideo\Controller\Adminhtml\Product\Gallery;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Uploader;
@@ -14,7 +12,7 @@ use Magento\Framework\File\Uploader;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class RetrieveImage extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session
@@ -201,7 +199,7 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
         $image = $this->curl->read();
         if (empty($image)) {
             throw new LocalizedException(
-                __('The preview image information is unavailable. Check your connection and try again.')
+                __('Could not get preview image information. Please check your connection and try again.')
             );
         }
         $this->fileUtility->saveFile($localFilePath, $image);

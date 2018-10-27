@@ -6,10 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class Upload extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session

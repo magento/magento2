@@ -37,17 +37,17 @@ class AssertSuccessfulReadinessCheck extends AbstractConstraint
      */
     public function processAssert(Install $installPage)
     {
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             self::PHP_VERSION_MESSAGE,
             $installPage->getReadinessBlock()->getPhpVersionCheck(),
             'PHP version is incorrect.'
         );
-        \PHPUnit\Framework\Assert::assertRegExp(
+        \PHPUnit_Framework_Assert::assertRegExp(
             self::PHP_EXTENSIONS_REGEXP,
             $installPage->getReadinessBlock()->getPhpExtensionsCheck(),
             'PHP extensions missed.'
         );
-        \PHPUnit\Framework\Assert::assertRegExp(
+        \PHPUnit_Framework_Assert::assertRegExp(
             self::FILE_PERMISSION_REGEXP,
             $installPage->getReadinessBlock()->getFilePermissionCheck(),
             'File permissions does not meet requirements.'

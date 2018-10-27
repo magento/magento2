@@ -6,10 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class CleanStaticFiles extends \Magento\Backend\Controller\Adminhtml\Cache implements HttpGetActionInterface
+class CleanStaticFiles extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
      * Authorization level of a basic admin session

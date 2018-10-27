@@ -5,11 +5,8 @@
  */
 namespace Magento\Framework\File;
 
-<<<<<<< HEAD
-=======
 use Magento\Framework\Image\Adapter\UploadConfigInterface;
 
->>>>>>> upstream/2.2-develop
 /**
  * File upload class
  *
@@ -143,24 +140,16 @@ class Uploader
     /**
      * Maximum Image Width resolution in pixels. For image resizing on client side
      * @deprecated
-<<<<<<< HEAD
-     * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
-=======
      * @see UploadConfigInterface::getMaxWidth()
->>>>>>> upstream/2.2-develop
      */
-    const MAX_IMAGE_WIDTH = 4096;
+    const MAX_IMAGE_WIDTH = 1920;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated
-<<<<<<< HEAD
-     * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
-=======
      * @see UploadConfigInterface::getMaxHeight()
->>>>>>> upstream/2.2-develop
      */
-    const MAX_IMAGE_HEIGHT = 2160;
+    const MAX_IMAGE_HEIGHT = 1200;
 
     /**
      * Resulting of uploaded file
@@ -174,11 +163,7 @@ class Uploader
      * Init upload
      *
      * @param string|array $fileId
-<<<<<<< HEAD
-     * @param \Magento\Framework\File\Mime|null $fileMime
-=======
      * @param null|\Magento\Framework\File\Mime $fileMime
->>>>>>> upstream/2.2-develop
      * @throws \Exception
      */
     public function __construct(
@@ -208,7 +193,8 @@ class Uploader
     }
 
     /**
-     * Used to save uploaded file into destination folder with original or new file name (if specified).
+     * Used to save uploaded file into destination folder with
+     * original or new file name (if specified)
      *
      * @param string $destinationFolder
      * @param string $newFileName
@@ -285,8 +271,6 @@ class Uploader
     }
 
     /**
-     * Set access permissions to file.
-     *
      * @param string $file
      * @return void
      *
@@ -563,7 +547,7 @@ class Uploader
 
             preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
 
-            if (is_array($file) && count($file) > 0 && count($file[0]) > 0 && count($file[1]) > 0) {
+            if (count($file) > 0 && count($file[0]) > 0 && count($file[1]) > 0) {
                 array_shift($file);
                 $this->_uploadType = self::MULTIPLE_STYLE;
 
@@ -576,7 +560,7 @@ class Uploader
 
                 $fileAttributes = $tmpVar;
                 $this->_file = $fileAttributes;
-            } elseif (!empty($fileId) && isset($_FILES[$fileId])) {
+            } elseif (count($fileId) > 0 && isset($_FILES[$fileId])) {
                 $this->_uploadType = self::SINGLE_STYLE;
                 $this->_file = $_FILES[$fileId];
             } elseif ($fileId == '') {

@@ -11,24 +11,15 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
-use Magento\Catalog\Block\Product\Context;
-use Magento\Catalog\Helper\Image;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
-use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Framework\Data\Collection;
-use Magento\Framework\DataObject;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\EncoderInterface;
-use Magento\Framework\Stdlib\ArrayUtils;
+use Magento\Catalog\Helper\Image;
 
 /**
- * Product gallery block
- *
  * @api
  * @since 100.0.2
  */
-class Gallery extends AbstractView
+class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
      * @var \Magento\Framework\Config\View
@@ -36,49 +27,24 @@ class Gallery extends AbstractView
     protected $configView;
 
     /**
-     * @var EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $jsonEncoder;
 
     /**
-     * @var array
-     */
-    private $galleryImagesConfig;
-
-    /**
-     * @var ImagesConfigFactoryInterface
-     */
-    private $galleryImagesConfigFactory;
-
-    /**
-     * @var UrlBuilder
-     */
-    private $imageUrlBuilder;
-
-    /**
-     * @param Context $context
-     * @param ArrayUtils $arrayUtils
+     * @param \Magento\Catalog\Block\Product\Context $context
+     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param EncoderInterface $jsonEncoder
      * @param array $data
-     * @param ImagesConfigFactoryInterface|null $imagesConfigFactory
-     * @param array $galleryImagesConfig
-     * @param UrlBuilder|null $urlBuilder
      */
     public function __construct(
-        Context $context,
-        ArrayUtils $arrayUtils,
+        \Magento\Catalog\Block\Product\Context $context,
+        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         EncoderInterface $jsonEncoder,
-        array $data = [],
-        ImagesConfigFactoryInterface $imagesConfigFactory = null,
-        array $galleryImagesConfig = [],
-        UrlBuilder $urlBuilder = null
+        array $data = []
     ) {
-        parent::__construct($context, $arrayUtils, $data);
         $this->jsonEncoder = $jsonEncoder;
-        $this->galleryImagesConfigFactory = $imagesConfigFactory ?: ObjectManager::getInstance()
-            ->get(ImagesConfigFactoryInterface::class);
-        $this->galleryImagesConfig = $galleryImagesConfig;
-        $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
+        parent::__construct($context, $arrayUtils, $data);
     }
 
     /**
@@ -90,16 +56,26 @@ class Gallery extends AbstractView
     {
         $product = $this->getProduct();
         $images = $product->getMediaGalleryImages();
-        if (!$images instanceof \Magento\Framework\Data\Collection) {
-            return $images;
-        }
-
-        foreach ($images as $image) {
-            $galleryImagesConfig = $this->getGalleryImagesConfig()->getItems();
-            foreach ($galleryImagesConfig as $imageConfig) {
+        if ($images instanceof \Magento\Framework\Data\Collection) {
+            foreach ($images as $image) {
+                /* @var \Magento\Framework\DataObject $image */
                 $image->setData(
-                    $imageConfig->getData('data_object_key'),
-                    $this->imageUrlBuilder->getUrl($image->getFile(), $imageConfig['image_id'])
+                    'small_image_url',
+                    $this->_imageHelper->init($product, 'product_page_image_small')
+                        ->setImageFile($image->getFile())
+                        ->getUrl()
+                );
+                $image->setData(
+                    'medium_image_url',
+                    $this->_imageHelper->init($product, 'product_page_image_medium_no_frame')
+                        ->setImageFile($image->getFile())
+                        ->getUrl()
+                );
+                $image->setData(
+                    'large_image_url',
+                    $this->_imageHelper->init($product, 'product_page_image_large_no_frame')
+                        ->setImageFile($image->getFile())
+                        ->getUrl()
                 );
             }
         }
@@ -135,30 +111,17 @@ class Gallery extends AbstractView
     public function getGalleryImagesJson()
     {
         $imagesItems = [];
-        /** @var DataObject $image */
         foreach ($this->getGalleryImages() as $image) {
-            $imageItem = new DataObject([
+            $imagesItems[] = [
                 'thumb' => $image->getData('small_image_url'),
                 'img' => $image->getData('medium_image_url'),
                 'full' => $image->getData('large_image_url'),
                 'caption' => ($image->getLabel() ?: $this->getProduct()->getName()),
-<<<<<<< HEAD
-                'position' => $image->getData('position'),
-                'isMain'   => $this->isMainImage($image),
-=======
                 'position' => $image->getPosition(),
                 'isMain' => $this->isMainImage($image),
->>>>>>> upstream/2.2-develop
                 'type' => str_replace('external-', '', $image->getMediaType()),
                 'videoUrl' => $image->getVideoUrl(),
-            ]);
-            foreach ($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
-                $imageItem->setData(
-                    $imageConfig->getData('json_object_key'),
-                    $image->getData($imageConfig->getData('data_object_key'))
-                );
-            }
-            $imagesItems[] = $imageItem->toArray();
+            ];
         }
         if (empty($imagesItems)) {
             $imagesItems[] = [
@@ -203,8 +166,6 @@ class Gallery extends AbstractView
     }
 
     /**
-     * Returns image attribute
-     *
      * @param string $imageId
      * @param string $attributeName
      * @param string $default
@@ -228,20 +189,5 @@ class Gallery extends AbstractView
             $this->configView = $this->_viewConfig->getViewConfig();
         }
         return $this->configView;
-    }
-
-    /**
-     * Returns image gallery config object
-     *
-     * @return Collection
-     */
-    private function getGalleryImagesConfig()
-    {
-        if (false === $this->hasData('gallery_images_config')) {
-            $galleryImageConfig = $this->galleryImagesConfigFactory->create($this->galleryImagesConfig);
-            $this->setData('gallery_images_config', $galleryImageConfig);
-        }
-
-        return $this->getData('gallery_images_config');
     }
 }

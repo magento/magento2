@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -82,10 +84,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->taxItemDetailsDataObjectFactory = $this->createPartialMock(
-            \Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory::class,
-            ['create']
-        );
+        $this->taxItemDetailsDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory::class, ['create']);
         $this->taxDetailsItem = $this->objectManager->getObject(\Magento\Tax\Model\TaxDetails\ItemDetails::class);
         $this->taxItemDetailsDataObjectFactory->expects($this->any())
             ->method('create')
@@ -103,15 +102,9 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
 
         $this->mockItem = $this->getMockBuilder(\Magento\Tax\Api\Data\QuoteDetailsItemInterface::class)->getMock();
 
-        $this->appliedTaxDataObjectFactory = $this->createPartialMock(
-            \Magento\Tax\Api\Data\AppliedTaxInterfaceFactory::class,
-            ['create']
-        );
+        $this->appliedTaxDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\AppliedTaxInterfaceFactory::class, ['create']);
 
-        $this->appliedTaxRateDataObjectFactory = $this->createPartialMock(
-            \Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory::class,
-            ['create']
-        );
+        $this->appliedTaxRateDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory::class, ['create']);
         $this->appliedTaxRate = $this->objectManager->getObject(\Magento\Tax\Model\TaxDetails\AppliedTaxRate::class);
         $this->appliedTaxRateDataObjectFactory->expects($this->any())
             ->method('create')

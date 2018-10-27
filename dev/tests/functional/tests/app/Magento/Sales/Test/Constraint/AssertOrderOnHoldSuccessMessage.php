@@ -42,7 +42,7 @@ class AssertOrderOnHoldSuccessMessage extends AbstractConstraint
             ? sprintf(self::MULTIPLE_SUCCESS_ON_HOLD_MESSAGE, $ordersCount)
             : self::SINGLE_SUCCESS_ON_HOLD_MESSAGE;
 
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $successOnHoldMessage,
             $orderIndex->getMessagesBlock()->getSuccessMessage()
         );

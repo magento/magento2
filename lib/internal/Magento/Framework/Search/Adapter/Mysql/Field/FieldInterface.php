@@ -7,10 +7,8 @@
 namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
 /**
- * MySQL search field.
+ * Interface \Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface
  *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 interface FieldInterface
 {
@@ -18,22 +16,19 @@ interface FieldInterface
     const TYPE_FULLTEXT = 2;
 
     /**
-     * Get type of index.
-     *
+     * Get type of index
      * @return int
      */
     public function getType();
 
     /**
-     * Get ID of attribute.
-     *
+     * Get ID of attribute
      * @return int
      */
     public function getAttributeId();
 
     /**
-     * Get field nam.
-     *
+     * Get field name
      * @return string
      */
     public function getColumn();

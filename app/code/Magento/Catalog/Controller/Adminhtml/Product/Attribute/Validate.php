@@ -4,22 +4,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-use Magento\Framework\Serialize\Serializer\FormData;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Catalog\Controller\Adminhtml\Product\Attribute as AttributeAction;
 
-/**
- * Product attribute validate controller.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-class Validate extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
+class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     const DEFAULT_MESSAGE_KEY = 'message';
 
@@ -39,11 +28,6 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     private $multipleAttributeList;
 
     /**
-     * @var FormData|null
-     */
-    private $formDataSerializer;
-
-    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -53,7 +37,6 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param array $multipleAttributeList
-     * @param FormData|null $formDataSerializer
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -62,20 +45,15 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        array $multipleAttributeList = [],
-        FormData $formDataSerializer = null
+        array $multipleAttributeList = []
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->multipleAttributeList = $multipleAttributeList;
-        $this->formDataSerializer = $formDataSerializer ?: ObjectManager::getInstance()
-            ->get(FormData::class);
     }
 
     /**
-     * @inheritdoc
-     *
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -84,15 +62,6 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     {
         $response = new DataObject();
         $response->setError(false);
-        try {
-            $optionsData = $this->formDataSerializer
-                ->unserialize($this->getRequest()->getParam('serialized_options', '[]'));
-        } catch (\InvalidArgumentException $e) {
-            $message = __("The attribute couldn't be validated due to an error. Verify your information and try again. "
-                . "If the error persists, please try again later.");
-            $this->setMessageToResponse($response, [$message]);
-            $response->setError(true);
-        }
 
         $attributeCode = $this->getRequest()->getParam('attribute_code');
         $frontendLabel = $this->getRequest()->getParam('frontend_label');
@@ -132,10 +101,10 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         }
 
         $multipleOption = $this->getRequest()->getParam("frontend_input");
-        $multipleOption = (null === $multipleOption) ? 'select' : $multipleOption;
+        $multipleOption = null == $multipleOption ? 'select' : $multipleOption;
 
-        if (isset($this->multipleAttributeList[$multipleOption])) {
-            $options = $optionsData[$this->multipleAttributeList[$multipleOption]] ?? null;
+        if (isset($this->multipleAttributeList[$multipleOption]) && !(null == ($multipleOption))) {
+            $options = $this->getRequest()->getParam($this->multipleAttributeList[$multipleOption]);
             $this->checkUniqueOption(
                 $response,
                 $options
@@ -153,8 +122,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     }
 
     /**
-     * Throws Exception if not unique values into options.
-     *
+     * Throws Exception if not unique values into options
      * @param array $optionsValues
      * @param array $deletedOptions
      * @return bool
@@ -168,7 +136,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
             }
         }
         $uniqueValues = array_unique($adminValues);
-        return array_diff_assoc($adminValues, $uniqueValues);
+        return ($uniqueValues === $adminValues);
     }
 
     /**
@@ -188,8 +156,6 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     }
 
     /**
-     * Performs checking the uniqueness of the attribute options.
-     *
      * @param DataObject $response
      * @param array|null $options
      * @return $this
@@ -199,17 +165,10 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         if (is_array($options)
             && isset($options['value'])
             && isset($options['delete'])
-            && !empty($options['value'])
-            && !empty($options['delete'])
+            && !$this->isUniqueAdminValues($options['value'], $options['delete'])
         ) {
-            $duplicates = $this->isUniqueAdminValues($options['value'], $options['delete']);
-            if (!empty($duplicates)) {
-                $this->setMessageToResponse(
-                    $response,
-                    [__('The value of Admin must be unique. (%1)', implode(', ', $duplicates))]
-                );
-                $response->setError(true);
-            }
+            $this->setMessageToResponse($response, [__("The value of Admin must be unique.")]);
+            $response->setError(true);
         }
         return $this;
     }

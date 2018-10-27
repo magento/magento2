@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Ui\Config\Reader;
 
 use Magento\Framework\Config\Dom\ValidationException;
@@ -54,10 +53,7 @@ class Definition extends \Magento\Framework\Config\Reader\Filesystem implements 
                 }
             } catch (ValidationException $e) {
                 throw new LocalizedException(
-                    new Phrase(
-                        'The XML in file "%1" is invalid.' . "\n%2\nVerify the XML and try again.",
-                        [$key, $e->getMessage()]
-                    )
+                    new Phrase("Invalid XML in file %1:\n%2", [$key, $e->getMessage()])
                 );
             }
         }

@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Backup;
 
-use Magento\Framework\Archive;
-use Magento\Framework\Backup\Db\BackupFactory;
-use Magento\Framework\Backup\Filesystem\Iterator\File;
-
 /**
  * Class to work with database backups
  *
@@ -18,14 +14,14 @@ use Magento\Framework\Backup\Filesystem\Iterator\File;
 class Db extends AbstractBackup
 {
     /**
-     * @var BackupFactory
+     * @var \Magento\Framework\Backup\Db\BackupFactory
      */
     protected $_backupFactory;
 
     /**
-     * @param BackupFactory $backupFactory
+     * @param \Magento\Framework\Backup\Db\BackupFactory $backupFactory
      */
-    public function __construct(BackupFactory $backupFactory)
+    public function __construct(\Magento\Framework\Backup\Db\BackupFactory $backupFactory)
     {
         $this->_backupFactory = $backupFactory;
     }
@@ -42,16 +38,14 @@ class Db extends AbstractBackup
 
         $this->_lastOperationSucceed = false;
 
-        $archiveManager = new Archive();
+        $archiveManager = new \Magento\Framework\Archive();
         $source = $archiveManager->unpack($this->getBackupPath(), $this->getBackupsDir());
 
-        $file = new File($source);
+        $file = new \Magento\Framework\Backup\Filesystem\Iterator\File($source);
         foreach ($file as $statement) {
             $this->getResourceModel()->runCommand($statement);
         }
-        if ($this->keepSourceFile() === false) {
-            @unlink($source);
-        }
+        @unlink($source);
 
         $this->_lastOperationSucceed = true;
 

@@ -5,11 +5,11 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-
-class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue implements HttpPostActionInterface
+class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**
      * Save Newsletter queue
@@ -30,9 +30,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue implements Htt
                 $template = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class)->load($templateId);
 
                 if (!$template->getId() || $template->getIsSystem()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Please correct the newsletter template and try again.')
-                    );
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the newsletter template and try again.'));
                 }
 
                 $queue->setTemplateId(

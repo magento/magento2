@@ -68,7 +68,7 @@ define([
         }
     };
 
-    ko.expressionRewriting._twoWayBindings.simpleChecked = true;
+    ko.expressionRewriting.twoWayBindings.simpleChecked = true;
 
     renderer.addAttribute('simpleChecked');
     renderer.addAttribute('simple-checked', {

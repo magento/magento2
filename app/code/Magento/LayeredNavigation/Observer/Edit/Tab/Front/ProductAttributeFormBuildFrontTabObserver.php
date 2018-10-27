@@ -11,9 +11,6 @@ use Magento\Config\Model\Config\Source;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Observer for Product Attribute Form
- */
 class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
 {
     /**
@@ -37,8 +34,6 @@ class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
     }
 
     /**
-     * Execute
-     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */

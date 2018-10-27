@@ -83,6 +83,7 @@ define([
          */
         getCountrySpecificCardTypes: function (countryId) {
             if (typeof this.config.countrySpecificCardTypes[countryId] !== 'undefined') {
+
                 return this.config.countrySpecificCardTypes[countryId];
             }
 

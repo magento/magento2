@@ -267,11 +267,7 @@ define([
         },
 
         /**
-<<<<<<< HEAD
-         * Is billing address required from PayPal side
-=======
          * Is billing address required from PayPal side.
->>>>>>> upstream/2.2-develop
          * @returns {Boolean}
          */
         isRequiredBillingAddress: function () {
@@ -328,6 +324,7 @@ define([
             var address = quote.shippingAddress();
 
             if (_.isNull(address.postcode) || _.isUndefined(address.postcode)) {
+
                 return {};
             }
 

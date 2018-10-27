@@ -17,8 +17,6 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
 
 /**
- * Address repository.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterface
@@ -147,8 +145,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     }
 
     /**
-     * Update address collection.
-     *
      * @param Customer $customer
      * @param Address $address
      * @throws \Magento\Framework\Exception\LocalizedException

@@ -8,23 +8,12 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
-<<<<<<< HEAD
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Framework\App\ObjectManager;
 use Magento\Bundle\Model\Product\Price as BundlePrice;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\CatalogImportExport\Model\Import\Product;
-<<<<<<< HEAD
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Store\Model\StoreManagerInterface;
-=======
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Bundle\Model\ResourceModel\Bundle as BundleResourceModel;
->>>>>>> upstream/2.2-develop
 
 /**
  * Class Bundle
@@ -161,11 +150,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     private $storeCodeToId = [];
 
     /**
-<<<<<<< HEAD
-     * @param AttributeSetCollectionFactory $attrSetColFac
-     * @param AttributeCollectionFactory $prodAttrColFac
-     * @param ResourceConnection $resource
-=======
      * @var BundleResourceModel
      */
     private $bundleResourceModel;
@@ -174,44 +158,30 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
->>>>>>> upstream/2.2-develop
      * @param array $params
-     * @param MetadataPool|null $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param Bundle\RelationsDataSaver|null $relationsDataSaver
-<<<<<<< HEAD
-     * @param StoreManagerInterface|null $storeManager
-=======
      * @param StoreManagerInterface $storeManager
      * @param BundleResourceModel $bundleResourceModel
      * @throws \Magento\Framework\Exception\LocalizedException
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
-        AttributeSetCollectionFactory $attrSetColFac,
-        AttributeCollectionFactory $prodAttrColFac,
-        ResourceConnection $resource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $params,
-<<<<<<< HEAD
-        MetadataPool $metadataPool = null,
-        Bundle\RelationsDataSaver $relationsDataSaver = null,
-        StoreManagerInterface $storeManager = null
-=======
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         Bundle\RelationsDataSaver $relationsDataSaver = null,
         StoreManagerInterface $storeManager = null,
         BundleResourceModel $bundleResourceModel = null
->>>>>>> upstream/2.2-develop
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->relationsDataSaver = $relationsDataSaver
             ?: ObjectManager::getInstance()->get(Bundle\RelationsDataSaver::class);
         $this->storeManager = $storeManager
             ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
-<<<<<<< HEAD
-=======
         $this->bundleResourceModel = $bundleResourceModel
             ?: ObjectManager::getInstance()->get(BundleResourceModel::class);
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -273,8 +243,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $option = [];
         foreach ($values as $keyValue) {
             $keyValue = trim($keyValue);
-            $pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR);
-            if ($pos !== false) {
+            if ($pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR)) {
                 $key = substr($keyValue, 0, $pos);
                 $value = substr($keyValue, $pos + 1);
                 if ($key == 'type') {
@@ -320,14 +289,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param int $storeId
      * @return array
      */
-    protected function populateOptionValueTemplate(array $option, int $optionId, int $storeId = 0): array
+    protected function populateOptionValueTemplate($option, $optionId, $storeId = 0)
     {
         $optionValues = [];
-<<<<<<< HEAD
-        if (isset($option['name'], $option['parent_id']) && $optionId) {
-=======
         if (isset($option['name']) && isset($option['parent_id']) && $optionId) {
->>>>>>> upstream/2.2-develop
             $pattern = '/^name[_]?(.*)/';
             $keys = array_keys($option);
             $optionNames = preg_grep($pattern, $keys);
@@ -343,10 +308,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 ];
             }
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         return $optionValues;
     }
 
@@ -371,7 +332,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         } else {
             $productId = $selection['product_id'];
         }
-
         $populatedSelection = [
             'selection_id' => null,
             'option_id' => (int)$optionId,
@@ -383,8 +343,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 ? self::SELECTION_PRICE_TYPE_FIXED : self::SELECTION_PRICE_TYPE_PERCENT,
             'selection_price_value' => (isset($selection['price'])) ? (float)$selection['price'] : 0.0,
             'selection_qty' => (isset($selection['default_qty'])) ? (float)$selection['default_qty'] : 1.0,
-            'selection_can_change_qty' => isset($selection['can_change_qty'])
-                ? ($selection['can_change_qty'] ? 1 : 0) : 1,
+            'selection_can_change_qty' => 1,
         ];
         if (isset($selection['selection_id'])) {
             $populatedSelection['selection_id'] = $selection['selection_id'];
@@ -393,20 +352,11 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
-     * @deprecated Misspelled method
-     * @see retrieveProductsByCachedSkus
-     */
-    protected function retrieveProducsByCachedSkus()
-    {
-        return $this->retrieveProductsByCachedSkus();
-    }
-
-    /**
      * Retrieve mapping between skus and products.
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function retrieveProductsByCachedSkus()
+    protected function retrieveProducsByCachedSkus()
     {
         $this->_cachedSkuToProducts = $this->connection->fetchPairs(
             $this->connection->select()->from(
@@ -452,15 +402,11 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->parseSelections($rowData, $productId);
                 }
                 if (!empty($this->_cachedOptions)) {
-                    $this->retrieveProductsByCachedSkus();
+                    $this->retrieveProducsByCachedSkus();
                     $this->populateExistingOptions();
                     $this->insertOptions();
                     $this->insertSelections();
-<<<<<<< HEAD
-                    $this->insertParentChildRelations();
-=======
                     $this->insertProductRelations();
->>>>>>> upstream/2.2-develop
                     $this->clear();
                 }
             }
@@ -652,7 +598,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param array $optionIds
      * @return array
      */
-    protected function populateInsertOptionValues(array $optionIds): array
+    protected function populateInsertOptionValues($optionIds)
     {
         $optionValues = [];
         foreach ($this->_cachedOptions as $entityId => $options) {
@@ -671,10 +617,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 }
             }
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         return $optionValues;
     }
 
@@ -713,39 +655,16 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
-<<<<<<< HEAD
-     * Insert parent/child product relations
-     *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
-     */
-    private function insertParentChildRelations()
-=======
      * Insert product relations.
      *
      * @return void
      */
     private function insertProductRelations()
->>>>>>> upstream/2.2-develop
     {
         foreach ($this->_cachedOptions as $productId => $options) {
             $childIds = [];
             foreach ($options as $option) {
                 foreach ($option['selections'] as $selection) {
-<<<<<<< HEAD
-                    if (!isset($selection['parent_product_id'])) {
-                        if (!isset($this->_cachedSkuToProducts[$selection['sku']])) {
-                            continue;
-                        }
-                        $childIds[] = $this->_cachedSkuToProducts[$selection['sku']];
-                    }
-                }
-
-                $this->relationsDataSaver->saveProductRelations($productId, $childIds);
-            }
-        }
-
-        return $this;
-=======
                     if (isset($this->_cachedSkuToProducts[$selection['sku']])) {
                         $childIds[] = $this->_cachedSkuToProducts[$selection['sku']];
                     }
@@ -756,7 +675,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 $this->bundleResourceModel->saveProductRelations($productId, $childIds);
             }
         }
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -797,13 +715,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected function deleteOptionsAndSelections($productIds)
     {
-        if (empty($productIds)) {
-            return $this;
-        }
-
         $optionTable = $this->_resource->getTableName('catalog_product_bundle_option');
         $optionValueTable = $this->_resource->getTableName('catalog_product_bundle_option_value');
-        $selectionTable = $this->_resource->getTableName('catalog_product_bundle_selection');
         $valuesIds =  $this->connection->fetchAssoc($this->connection->select()->from(
             ['bov' => $optionValueTable],
             ['value_id']
@@ -816,16 +729,17 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             $productIds
         ));
         $this->connection->delete(
-            $optionValueTable,
+            $optionTable,
             $this->connection->quoteInto('value_id IN (?)', array_keys($valuesIds))
+        );
+        $productIdsInWhere = $this->connection->quoteInto('parent_id IN (?)', $productIds);
+        $this->connection->delete(
+            $optionTable,
+            $this->connection->quoteInto('parent_id IN (?)', $productIdsInWhere)
         );
         $this->connection->delete(
             $optionTable,
-            $this->connection->quoteInto('parent_id IN (?)', $productIds)
-        );
-        $this->connection->delete(
-            $selectionTable,
-            $this->connection->quoteInto('parent_product_id IN (?)', $productIds)
+            $this->connection->quoteInto('parent_product_id IN (?)', $productIdsInWhere)
         );
         return $this;
     }
@@ -858,10 +772,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 $this->storeCodeToId[$store->getCode()] = $store->getId();
             }
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         return $this->storeCodeToId[$storeCode];
     }
 }

@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Gallery;
 
 class MimeTypeExtensionMapTest extends \PHPUnit\Framework\TestCase

@@ -70,10 +70,7 @@ class DevTestsRunCommand extends Command
             'Additional arguments for PHPUnit. Example: "-c\'--filter=MyTest\'" (no spaces)',
             ''
         );
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         parent::configure();
     }
 

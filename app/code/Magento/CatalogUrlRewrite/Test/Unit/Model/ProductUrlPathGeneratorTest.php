@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
@@ -34,10 +32,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
     protected $category;
 
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->category = $this->createMock(\Magento\Catalog\Model\Category::class);
         $productMethods = [
@@ -74,7 +69,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getUrlPathDataProvider(): array
+    public function getUrlPathDataProvider()
     {
         return [
             'path based on url key' => ['url-key', null, 'url-key'],
@@ -89,9 +84,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
      * @param string|null|bool $urlKey
      * @param string|null|bool $productName
      * @param string $result
-     * @return void
      */
-    public function testGetUrlPath($urlKey, $productName, $result): void
+    public function testGetUrlPath($urlKey, $productName, $result)
     {
         $this->product->expects($this->once())->method('getData')->with('url_path')
             ->will($this->returnValue(null));
@@ -105,10 +99,9 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|bool $productUrlKey
      * @param string|bool $expectedUrlKey
-     * @return void
      * @dataProvider getUrlKeyDataProvider
      */
-    public function testGetUrlKey($productUrlKey, $expectedUrlKey): void
+    public function testGetUrlKey($productUrlKey, $expectedUrlKey)
     {
         $this->product->expects($this->any())->method('getUrlKey')->will($this->returnValue($productUrlKey));
         $this->product->expects($this->any())->method('formatUrlKey')->will($this->returnValue($productUrlKey));
@@ -118,7 +111,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getUrlKeyDataProvider(): array
+    public function getUrlKeyDataProvider()
     {
         return [
             'URL Key use default' => [false, null],
@@ -130,10 +123,9 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
      * @param string|null|bool $storedUrlKey
      * @param string|null|bool $productName
      * @param string $expectedUrlKey
-     * @return void
      * @dataProvider getUrlPathDefaultUrlKeyDataProvider
      */
-    public function testGetUrlPathDefaultUrlKey($storedUrlKey, $productName, $expectedUrlKey): void
+    public function testGetUrlPathDefaultUrlKey($storedUrlKey, $productName, $expectedUrlKey)
     {
         $this->product->expects($this->once())->method('getData')->with('url_path')
             ->will($this->returnValue(null));
@@ -146,7 +138,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getUrlPathDefaultUrlKeyDataProvider(): array
+    public function getUrlPathDefaultUrlKeyDataProvider()
     {
         return [
             ['default-store-view-url-key', null, 'default-store-view-url-key'],
@@ -154,10 +146,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return void
-     */
-    public function testGetUrlPathWithCategory(): void
+    public function testGetUrlPathWithCategory()
     {
         $this->product->expects($this->once())->method('getData')->with('url_path')
             ->will($this->returnValue('product-path'));
@@ -170,10 +159,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testGetUrlPathWithSuffix(): void
+    public function testGetUrlPathWithSuffix()
     {
         $storeId = 1;
         $this->product->expects($this->once())->method('getData')->with('url_path')
@@ -191,10 +177,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testGetUrlPathWithSuffixAndCategoryAndStore(): void
+    public function testGetUrlPathWithSuffixAndCategoryAndStore()
     {
         $storeId = 1;
         $this->product->expects($this->once())->method('getData')->with('url_path')
@@ -212,10 +195,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testGetCanonicalUrlPath(): void
+    public function testGetCanonicalUrlPath()
     {
         $this->product->expects($this->once())->method('getId')->will($this->returnValue(1));
 
@@ -225,10 +205,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testGetCanonicalUrlPathWithCategory(): void
+    public function testGetCanonicalUrlPathWithCategory()
     {
         $this->product->expects($this->once())->method('getId')->will($this->returnValue(1));
         $this->category->expects($this->once())->method('getId')->will($this->returnValue(1));

@@ -53,7 +53,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "NonExistentType" data type isn't declared. Verify the type and try again.
+     * @expectedExceptionMessage Data type "NonExistentType" is not declared.
      */
     public function testGetTypeDataInvalidArgumentException()
     {
@@ -161,7 +161,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "\Magento\TestModule3\V1\Parameter[]" parameter type is invalid. Verify the parameter and try again.
+     * @expectedExceptionMessage Invalid parameter type "\Magento\TestModule3\V1\Parameter[]".
      */
     public function testTranslateTypeNameInvalidArgumentException()
     {
@@ -233,7 +233,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\SerializationException
-     * @expectedExceptionMessage The "integer" value's type is invalid. The "int[]" type was expected. Verify and try again.
+     * @expectedExceptionMessage Invalid type for value: "integer". Expected Type: "int[]".
      */
     public function testProcessSimpleTypeInvalidType()
     {

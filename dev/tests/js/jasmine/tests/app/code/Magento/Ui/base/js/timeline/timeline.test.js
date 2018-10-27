@@ -35,13 +35,6 @@ define([
         });
     });
 
-    afterEach(function () {
-        try {
-            injector.clean();
-            injector.remove();
-        } catch (e) {}
-    });
-
     describe('Magento_Ui/js/timeline/timeline', function () {
 
         describe('isActive method', function () {

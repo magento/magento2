@@ -16,12 +16,6 @@ use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-<<<<<<< HEAD
-/**
- * FixerIo Test
- */
-=======
->>>>>>> upstream/2.2-develop
 class FixerIoTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -31,15 +25,6 @@ class FixerIoTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var CurrencyFactory|MockObject
-<<<<<<< HEAD
-     */
-    private $currencyFactory;
-
-    /**
-     * @var ZendClientFactory|MockObject
-     */
-    private $httpClientFactory;
-=======
      */
     private $currencyFactory;
 
@@ -52,16 +37,7 @@ class FixerIoTest extends \PHPUnit\Framework\TestCase
      * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfig;
->>>>>>> upstream/2.2-develop
 
-    /**
-     * @var ScopeConfigInterface|MockObject
-     */
-    private $scopeConfig;
-
-    /**
-     * @inheritdoc
-     */
     protected function setUp()
     {
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
@@ -80,12 +56,7 @@ class FixerIoTest extends \PHPUnit\Framework\TestCase
         $this->model = new FixerIo($this->currencyFactory, $this->scopeConfig, $this->httpClientFactory);
     }
 
-    /**
-     * Test Fetch Rates
-     *
-     * @return void
-     */
-    public function testFetchRates(): void
+    public function testFetchRates()
     {
         $currencyFromList = ['USD'];
         $currencyToList = ['EUR', 'UAH'];

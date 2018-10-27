@@ -27,7 +27,7 @@ class AssertProductCompareRemoveLastProductMessage extends AbstractConstraint
     {
         $comparePage->open();
         $actualMessage = $comparePage->getCompareProductsBlock()->getEmptyMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

@@ -28,7 +28,7 @@ class AssertUsedSuperAttributeImpossibleDeleteMessages extends AbstractConstrain
      */
     public function processAssert(CatalogProductAttributeNew $newPage)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::ERROR_DELETE_MESSAGE,
             $newPage->getMessagesBlock()->getErrorMessage(),
             'Wrong impossible to delete message is not displayed.'

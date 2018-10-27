@@ -27,7 +27,7 @@ class AssertStoreCodeInUrl extends AbstractConstraint
     {
         $cmsIndex->open();
         $cmsIndex->getLogoBlock()->clickOnLogo();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $_ENV['app_frontend_url'] . $storeCode . '/',
             $browser->getUrl(),
             sprintf('Store code \'%s\' is not present in the url: %s', $storeCode, $browser->getUrl())

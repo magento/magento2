@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -501,7 +500,7 @@ abstract class AbstractType
                             $rootDir->create($rootDir->getRelativePath($path));
                         } catch (\Magento\Framework\Exception\FileSystemException $e) {
                             throw new \Magento\Framework\Exception\LocalizedException(
-                                __('We can\'t create the "%1" writeable directory.', $path)
+                                __('We can\'t create writeable directory "%1".', $path)
                             );
                         }
 
@@ -514,9 +513,7 @@ abstract class AbstractType
                             if (isset($queueOptions['option'])) {
                                 $queueOptions['option']->setIsValid(false);
                             }
-                            throw new \Magento\Framework\Exception\LocalizedException(
-                                __('The file upload failed. Try to upload again.')
-                            );
+                            throw new \Magento\Framework\Exception\LocalizedException(__('The file upload failed.'));
                         }
                         $this->_fileStorageDb->saveFile($dst);
                         break;
@@ -532,7 +529,7 @@ abstract class AbstractType
 
     /**
      * Add file to File Queue
-     * @param array $queueOptions Array of File Queue
+     * @param array $queueOptions   Array of File Queue
      *                              (eg. ['operation'=>'move',
      *                                    'src_name'=>'filename',
      *                                    'dst_name'=>'filename2'])
@@ -561,7 +558,7 @@ abstract class AbstractType
      */
     public function getSpecifyOptionMessage()
     {
-        return __("The product's required option(s) weren't entered. Make sure the options are entered and try again.");
+        return __('Please specify product\'s required option(s).');
     }
 
     /**
@@ -632,7 +629,7 @@ abstract class AbstractType
                     if (!$customOption || strlen($customOption->getValue()) == 0) {
                         $product->setSkipCheckRequiredOption(true);
                         throw new \Magento\Framework\Exception\LocalizedException(
-                            __('The product has required options. Enter the options and try again.')
+                            __('The product has required options.')
                         );
                     }
                 }
@@ -971,7 +968,7 @@ abstract class AbstractType
         }
 
         if (isset($config['can_use_qty_decimals'])) {
-            $this->_canUseQtyDecimals = (bool)$config['can_use_qty_decimals'];
+            $this->_canUseQtyDecimals = (bool) $config['can_use_qty_decimals'];
         }
 
         return $this;

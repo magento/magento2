@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Shipping\Model\Shipping;
 
 use Magento\Framework\DataObject;
@@ -91,9 +93,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
         $shipmentCarrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         $baseCurrencyCode = $this->_storeManager->getStore($shipmentStoreId)->getBaseCurrencyCode();
         if (!$shipmentCarrier) {
-            throw new LocalizedException(
-                __('The "%1" carrier is invalid. Verify and try again.', $shippingMethod->getCarrierCode())
-            );
+            throw new LocalizedException(__('Invalid carrier: %1', $shippingMethod->getCarrierCode()));
         }
         $shipperRegionCode = $this->_scopeConfig->getValue(
             Shipment::XML_PATH_STORE_REGION_ID,
@@ -140,8 +140,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
         ) {
             throw new LocalizedException(
                 __(
-                    "Shipping labels can't be created. "
-                    . "Verify that the store information and settings are complete and try again."
+                    'We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete.'
                 )
             );
         }

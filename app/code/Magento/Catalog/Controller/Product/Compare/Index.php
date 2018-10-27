@@ -6,7 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Product\Compare;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\View\Result\PageFactory;
@@ -14,7 +13,7 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Index extends \Magento\Catalog\Controller\Product\Compare implements HttpGetActionInterface
+class Index extends \Magento\Catalog\Controller\Product\Compare
 {
     /**
      * @var \Magento\Framework\Url\DecoderInterface

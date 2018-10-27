@@ -117,16 +117,13 @@ class Page extends AbstractDb
 
         if (!$this->isValidPageIdentifier($object)) {
             throw new LocalizedException(
-                __(
-                    "The page URL key can't use capital letters or disallowed symbols. "
-                    . "Remove the letters and symbols and try again."
-                )
+                __('The page URL key contains capital letters or disallowed symbols.')
             );
         }
 
         if ($this->isNumericPageIdentifier($object)) {
             throw new LocalizedException(
-                __("The page URL key can't use only numbers. Add letters or words and try again.")
+                __('The page URL key cannot be made of only numbers.')
             );
         }
         return parent::_beforeSave($object);

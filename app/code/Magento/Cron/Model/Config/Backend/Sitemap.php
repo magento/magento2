@@ -11,9 +11,6 @@
  */
 namespace Magento\Cron\Model\Config\Backend;
 
-/**
- * Sitemap configuration
- */
 class Sitemap extends \Magento\Framework\App\Config\Value
 {
     /**
@@ -64,8 +61,6 @@ class Sitemap extends \Magento\Framework\App\Config\Value
     }
 
     /**
-     * After save handler
-     *
      * @return $this
      * @throws \Exception
      */

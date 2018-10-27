@@ -5,7 +5,6 @@
  */
 namespace Magento\Ui\Controller\Adminhtml\Index\Render;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Ui\Component\Control\ActionPool;
 use Magento\Ui\Component\Wrapper\UiComponent;
@@ -14,7 +13,7 @@ use Magento\Ui\Controller\Adminhtml\AbstractAction;
 /**
  * Class Handle
  */
-class Handle extends AbstractAction implements HttpGetActionInterface
+class Handle extends AbstractAction
 {
     /**
      * Render UI component by namespace in handle context

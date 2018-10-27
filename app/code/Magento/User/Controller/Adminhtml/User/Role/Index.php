@@ -6,9 +6,7 @@
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\User\Controller\Adminhtml\User\Role implements HttpGetActionInterface
+class Index extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**
      * Show grid with roles existing in systems

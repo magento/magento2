@@ -7,6 +7,7 @@
 namespace Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery;
 
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
+use Magento\ProductVideo\Setup\InstallSchema;
 
 /**
  * Plugin for catalog product gallery read handler.
@@ -85,17 +86,13 @@ class ReadHandler extends AbstractHandler
         }
         $joinTable = [
             [
-                [
-                    'store_value' => $this->resourceModel->getTable(
-                        'catalog_product_entity_media_gallery_value_video'
-                    )
-                ],
+                ['store_value' => $this->resourceModel->getTable(InstallSchema::GALLERY_VALUE_VIDEO_TABLE)],
                 $joinConditions,
                 $this->getVideoProperties()
             ]
         ];
         $result = $this->resourceModel->loadDataFromTableByValueId(
-            'catalog_product_entity_media_gallery_value_video',
+            InstallSchema::GALLERY_VALUE_VIDEO_TABLE,
             $ids,
             \Magento\Store\Model\Store::DEFAULT_STORE_ID,
             [

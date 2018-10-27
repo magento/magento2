@@ -6,14 +6,11 @@
  */
 namespace Magento\Paypal\Controller\Payflow;
 
-use Magento\Framework\App\CsrfAwareActionInterface;
-use Magento\Framework\App\Request\InvalidRequestException;
-use Magento\Framework\App\RequestInterface;
 use Magento\Paypal\Controller\Payflow;
 use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
 
-class ReturnUrl extends Payflow implements CsrfAwareActionInterface
+class ReturnUrl extends Payflow
 {
     /**
      * @var array of allowed order states on frontend
@@ -34,23 +31,6 @@ class ReturnUrl extends Payflow implements CsrfAwareActionInterface
     ];
 
     /**
-     * @inheritDoc
-     */
-    public function createCsrfValidationException(
-        RequestInterface $request
-    ): ?InvalidRequestException {
-        return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateForCsrf(RequestInterface $request): ?bool
-    {
-        return true;
-    }
-
-    /**
      * When a customer return to website from payflow gateway.
      *
      * @return void
@@ -68,7 +48,6 @@ class ReturnUrl extends Payflow implements CsrfAwareActionInterface
             if ($order->getIncrementId()) {
                 if ($this->checkOrderState($order)) {
                     $redirectBlock->setData('goto_success_page', true);
-                    $this->_eventManager->dispatch('paypal_checkout_success', ['order' => $order]);
                 } else {
                     if ($this->checkPaymentMethod($order)) {
                         $gotoSection = $this->_cancelPayment((string)$this->getRequest()->getParam('RESPMSG'));

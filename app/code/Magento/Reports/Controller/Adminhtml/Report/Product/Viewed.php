@@ -6,10 +6,9 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Reports\Model\Flag;
 
-class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product implements HttpGetActionInterface
+class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**
      * Authorization level of a basic admin session

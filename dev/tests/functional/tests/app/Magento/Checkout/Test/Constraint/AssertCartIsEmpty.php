@@ -35,14 +35,14 @@ class AssertCartIsEmpty extends AbstractConstraint
         $checkoutCart->open();
         $cartEmptyBlock = $checkoutCart->getCartEmptyBlock();
 
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::TEXT_EMPTY_CART,
             $cartEmptyBlock->getText(),
             'Wrong text on empty cart page.'
         );
 
         $cartEmptyBlock->clickLinkToMainPage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $_ENV['app_frontend_url'],
             $browser->getUrl(),
             'Wrong link to main page on empty cart page.'

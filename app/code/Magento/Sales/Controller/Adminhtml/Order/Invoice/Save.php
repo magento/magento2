@@ -4,10 +4,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
@@ -20,7 +18,7 @@ use Magento\Sales\Model\Service\InvoiceService;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class Save extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session
@@ -119,8 +117,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
         $isPost = $this->getRequest()->isPost();
         if (!$formKeyIsValid || !$isPost) {
-            $this->messageManager
-                ->addErrorMessage(__("The invoice can't be saved at this time. Please try again later."));
+            $this->messageManager->addError(__('We can\'t save the invoice right now.'));
             return $resultRedirect->setPath('sales/order/index');
         }
 
@@ -149,12 +146,12 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             $invoice = $this->invoiceService->prepareInvoice($order, $invoiceItems);
 
             if (!$invoice) {
-                throw new LocalizedException(__("The invoice can't be saved at this time. Please try again later."));
+                throw new LocalizedException(__('We can\'t save the invoice right now.'));
             }
 
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __("The invoice can't be created without products. Add products and try again.")
+                    __('You can\'t create an invoice without products.')
                 );
             }
             $this->registry->register('current_invoice', $invoice);
@@ -195,13 +192,9 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             $transactionSave->save();
 
             if (!empty($data['do_shipment'])) {
-<<<<<<< HEAD
-                $this->messageManager->addSuccessMessage(__('You created the invoice and shipment.'));
-=======
                 $this->messageManager->addSuccess(__('You created the invoice and shipment.'));
->>>>>>> upstream/2.2-develop
             } else {
-                $this->messageManager->addSuccessMessage(__('The invoice has been created.'));
+                $this->messageManager->addSuccess(__('The invoice has been created.'));
             }
 
             // send invoice/shipment emails
@@ -211,7 +204,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 }
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->messageManager->addErrorMessage(__('We can\'t send the invoice email right now.'));
+                $this->messageManager->addError(__('We can\'t send the invoice email right now.'));
             }
             if ($shipment) {
                 try {
@@ -220,17 +213,15 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                     }
                 } catch (\Exception $e) {
                     $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                    $this->messageManager->addErrorMessage(__('We can\'t send the shipment right now.'));
+                    $this->messageManager->addError(__('We can\'t send the shipment right now.'));
                 }
             }
             $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true);
             return $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
         } catch (LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(
-                __("The invoice can't be saved at this time. Please try again later.")
-            );
+            $this->messageManager->addError(__('We can\'t save the invoice right now.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         return $resultRedirect->setPath('sales/*/new', ['order_id' => $orderId]);

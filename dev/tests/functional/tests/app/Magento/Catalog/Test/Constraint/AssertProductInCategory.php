@@ -46,7 +46,7 @@ class AssertProductInCategory extends AbstractConstraint
             $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
         }
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $isProductVisible,
             'Product is absent on category page.'
         );
@@ -66,14 +66,14 @@ class AssertProductInCategory extends AbstractConstraint
     {
         $priceBlock = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock();
 
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             number_format($product->getPrice(), 2, '.', ''),
             $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice(),
             'Product regular price on category page is not correct.'
         );
 
         if ($product->hasData('special_price')) {
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 number_format($product->getSpecialPrice(), 2, '.', ''),
                 $priceBlock->getSpecialPrice(),
                 'Product special price on category page is not correct.'

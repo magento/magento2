@@ -28,7 +28,7 @@ class AssertProductPriceIsNotZero extends \Magento\Mtf\Constraint\AbstractConstr
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Wish List');
         $wishlistItem = $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product);
 
-        \PHPUnit\Framework\Assert::assertNotEquals(
+        \PHPUnit_Framework_Assert::assertNotEquals(
             '0.00',
             $wishlistItem->getPrice(),
             $product->getName() . ' has zero price on Wish List page.'

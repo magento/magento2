@@ -40,10 +40,11 @@ main.controller('navigationController',
     function ($scope, $state, navigationService, $localStorage, $interval, $http) {
         $interval(
             function () {
-                $http.post('index.php/session/prolong').then(
-                    function successCallback() {},
-                    function errorCallback() {}
-                );
+                $http.post('index.php/session/prolong')
+                    .success(function (result) {
+                    })
+                    .error(function (result) {
+                    });
             },
             25000
         );
@@ -116,12 +117,9 @@ main.controller('navigationController',
         isLoadedStates: false,
         load: function () {
             var self = this;
-
-            return $http.get('index.php/navigation').then(function successCallback(resp) {
-                var data = resp.data,
-                    currentState = $location.path().replace('/', ''),
-                    isCurrentStateFound = false;
-
+            return $http.get('index.php/navigation').success(function (data) {
+                var currentState = $location.path().replace('/', '');
+                var isCurrentStateFound = false;
                 self.states = data.nav;
                 $localStorage.menu = data.menu;
                 self.titlesWithModuleName.forEach(function (value) {
@@ -186,35 +184,34 @@ main.controller('navigationController',
             },
             reset: function (context) {
                 return $http.post('index.php/marketplace/remove-credentials', [])
-                    .then(function successCallback(response) {
-                        if (response.data.success) {
+                    .success(function (response) {
+                        if (response.success) {
                             $localStorage.isMarketplaceAuthorized = $rootScope.isMarketplaceAuthorized = false;
                             context.success();
                         }
+                    })
+                    .error(function (data) {
                     });
             },
             checkAuth: function(context) {
                 return $http.post('index.php/marketplace/check-auth', [])
-                    .then(function successCallback(response) {
-                        var data = response.data;
-
-                        if (data.success) {
+                    .success(function (response) {
+                        if (response.success) {
                             $rootScope.isMarketplaceAuthorized  = $localStorage.isMarketplaceAuthorized = true;
-                            $localStorage.marketplaceUsername = data.username;
-                            context.success(data);
+                            $localStorage.marketplaceUsername = response.data.username;
+                            context.success(response);
                         } else {
                             $rootScope.isMarketplaceAuthorized  = $localStorage.isMarketplaceAuthorized = false;
-                            context.fail(data);
+                            context.fail(response);
                         }
-                    }, function errorCallback() {
+                    })
+                    .error(function() {
                         $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized = false;
                         context.error();
                     });
             },
             openAuthDialog: function(scope) {
-                return $http.get('index.php/marketplace/popup-auth').then(function successCallback(resp) {
-                    var data = resp.data;
-
+                return $http.get('index.php/marketplace/popup-auth').success(function (data) {
                     scope.isHiddenSpinner = true;
                     ngDialog.open({
                         scope: scope,
@@ -230,22 +227,21 @@ main.controller('navigationController',
             },
             saveAuthJson: function (context) {
                 return $http.post('index.php/marketplace/save-auth-json', context.user)
-                    .then(function successCallback(response) {
-                        var data = response.data;
-
-                        $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized = data.success;
+                    .success(function (response) {
+                        $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized = response.success;
                         $localStorage.marketplaceUsername = context.user.username;
-                        if (data.success) {
-                            context.success(data);
+                        if (response.success) {
+                            context.success(response);
                         } else {
-                            context.fail(data);
+                            context.fail(response);
                         }
-                    }, function errorCallback(resp) {
+                    })
+                    .error(function (data) {
                         $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized = false;
-                        context.error(resp.data);
+                        context.error(data);
                     });
             }
-        };
+    };
     }]
 )
 .service('titleService', ['$localStorage', '$rootScope',

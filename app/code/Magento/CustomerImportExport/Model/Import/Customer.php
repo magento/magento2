@@ -8,7 +8,6 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\Import\AbstractSource;
 
 /**
  * Customer entity import
@@ -347,19 +346,6 @@ class Customer extends AbstractCustomer
     }
 
     /**
-<<<<<<< HEAD
-     * Prepare customers data for existing customers checks to perform mass validation/import efficiently.
-     *
-     * @param array|AbstractSource $rows
-     *
-     * @return void
-     */
-    public function prepareCustomerData($rows): void
-    {
-        $customersPresent = [];
-        foreach ($rows as $rowData) {
-            $email = $rowData[static::COLUMN_EMAIL] ?? null;
-=======
      * Pre-loading customers for existing customers checks in order
      * to perform mass validation/import efficiently.
      *
@@ -374,17 +360,12 @@ class Customer extends AbstractCustomer
         foreach ($rows as $rowData) {
             $email = isset($rowData[static::COLUMN_EMAIL])
                 ? $rowData[static::COLUMN_EMAIL] : null;
->>>>>>> upstream/2.2-develop
             $websiteId = isset($rowData[static::COLUMN_WEBSITE])
                 ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
             if ($email && $websiteId !== false) {
                 $customersPresent[] = [
                     'email' => $email,
-<<<<<<< HEAD
-                    'website_id' => $websiteId,
-=======
                     'website_id' => $websiteId
->>>>>>> upstream/2.2-develop
                 ];
             }
         }
@@ -479,11 +460,7 @@ class Customer extends AbstractCustomer
             // create
             $entityRow['group_id'] = empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'];
             $entityRow['store_id'] = empty($rowData[self::COLUMN_STORE])
-<<<<<<< HEAD
-                ? \Magento\Store\Model\Store::DEFAULT_STORE_ID : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
-=======
                 ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
->>>>>>> upstream/2.2-develop
             $entityRow['created_at'] = $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
@@ -618,18 +595,6 @@ class Customer extends AbstractCustomer
                 if (in_array($attributeCode, $this->_ignoredAttributes)) {
                     continue;
                 }
-
-                $isFieldRequired = $attributeParams['is_required'];
-                $isFieldNotSetAndCustomerDoesNotExist =
-                    !isset($rowData[$attributeCode]) && !$this->_getCustomerId($email, $website);
-                $isFieldSetAndTrimmedValueIsEmpty
-                    = isset($rowData[$attributeCode]) && '' === trim($rowData[$attributeCode]);
-
-                if ($isFieldRequired && ($isFieldNotSetAndCustomerDoesNotExist || $isFieldSetAndTrimmedValueIsEmpty)) {
-                    $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
-                    continue;
-                }
-
                 if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
                     $this->isAttributeValid(
                         $attributeCode,
@@ -640,6 +605,8 @@ class Customer extends AbstractCustomer
                             ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
                             : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
                     );
+                } elseif ($attributeParams['is_required'] && !$this->_getCustomerId($email, $website)) {
+                    $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                 }
             }
         }

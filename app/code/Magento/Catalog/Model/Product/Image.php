@@ -6,19 +6,10 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
-<<<<<<< HEAD
-use Magento\Catalog\Model\View\Asset\ImageFactory;
-use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Framework\Serialize\SerializerInterface;
-<<<<<<< HEAD
-use Magento\Catalog\Model\Product\Image\ParamsBuilder;
-=======
->>>>>>> upstream/2.2-develop
 
 /**
  * @method string getFile()
@@ -168,12 +159,12 @@ class Image extends \Magento\Framework\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var ImageFactory
+     * @var \Magento\Catalog\Model\View\Asset\ImageFactory
      */
     private $viewAssetImageFactory;
 
     /**
-     * @var PlaceholderFactory
+     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
      */
     private $viewAssetPlaceholderFactory;
 
@@ -183,14 +174,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private $imageAsset;
 
     /**
-<<<<<<< HEAD
-     * @var ParamsBuilder
-     */
-    private $paramsBuilder;
-
-    /**
-=======
->>>>>>> upstream/2.2-develop
      * @var string
      */
     private $cachePrefix = 'IMG_INFO';
@@ -216,16 +199,9 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-<<<<<<< HEAD
-     * @param ImageFactory|null $viewAssetImageFactory
-     * @param PlaceholderFactory|null $viewAssetPlaceholderFactory
-     * @param SerializerInterface|null $serializer
-     * @param ParamsBuilder $paramsBuilder
-=======
      * @param \Magento\Catalog\Model\View\Asset\ImageFactory|null $viewAssetImageFactory
      * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory|null $viewAssetPlaceholderFactory
      * @param SerializerInterface|null $serializer
->>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -239,20 +215,13 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Image\Factory $imageFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\FileSystem $viewFileSystem,
-        ImageFactory $viewAssetImageFactory,
-        PlaceholderFactory $viewAssetPlaceholderFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-<<<<<<< HEAD
-        SerializerInterface $serializer = null,
-        ParamsBuilder $paramsBuilder = null
-=======
         \Magento\Catalog\Model\View\Asset\ImageFactory $viewAssetImageFactory = null,
         \Magento\Catalog\Model\View\Asset\PlaceholderFactory $viewAssetPlaceholderFactory = null,
         SerializerInterface $serializer = null
->>>>>>> upstream/2.2-develop
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
@@ -263,18 +232,11 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->_assetRepo = $assetRepo;
         $this->_viewFileSystem = $viewFileSystem;
         $this->_scopeConfig = $scopeConfig;
-<<<<<<< HEAD
-        $this->viewAssetImageFactory = $viewAssetImageFactory;
-        $this->viewAssetPlaceholderFactory = $viewAssetPlaceholderFactory;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
-        $this->paramsBuilder = $paramsBuilder ?: ObjectManager::getInstance()->get(ParamsBuilder::class);
-=======
         $this->viewAssetImageFactory = $viewAssetImageFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\View\Asset\ImageFactory::class);
         $this->viewAssetPlaceholderFactory = $viewAssetPlaceholderFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -410,8 +372,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Convert array of 3 items (decimal r, g, b) to string of their hex values
      *
      * @param int[] $rgbArray
@@ -431,7 +391,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
->>>>>>> upstream/2.2-develop
      * Set filenames for base file and new file
      *
      * @param string $file
@@ -536,11 +495,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function rotate($angle)
     {
-<<<<<<< HEAD
-        $angle = (int) $angle;
-=======
         $angle = (int)$angle;
->>>>>>> upstream/2.2-develop
         $this->getImageProcessor()->rotate($angle);
         return $this;
     }
@@ -664,15 +619,10 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function isCached()
     {
-<<<<<<< HEAD
-        $path = $this->imageAsset->getPath();
-        return is_array($this->loadImageInfoFromCache($path)) || file_exists($path);
-=======
         return (
             is_array($this->loadImageInfoFromCache($this->imageAsset->getPath())) ||
             file_exists($this->imageAsset->getPath())
         );
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -895,23 +845,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     private function getMiscParams()
     {
-<<<<<<< HEAD
-        return $this->paramsBuilder->build(
-            [
-                'type' => $this->getDestinationSubdir(),
-                'width' => $this->getWidth(),
-                'height' => $this->getHeight(),
-                'frame' => $this->_keepFrame,
-                'constrain' => $this->_constrainOnly,
-                'aspect_ratio' => $this->_keepAspectRatio,
-                'transparency' => $this->_keepTransparency,
-                'background' => $this->_backgroundColor,
-                'angle' => $this->_angle,
-                'quality' => $this->_quality
-            ]
-        );
-    }
-=======
         $miscParams = [
             'image_type' => $this->getDestinationSubdir(),
             'image_height' => $this->getHeight(),
@@ -924,68 +857,17 @@ class Image extends \Magento\Framework\Model\AbstractModel
             'angle' => $this->_angle,
             'quality' => $this->getQuality(),
         ];
->>>>>>> upstream/2.2-develop
 
-    /**
-     * Get image size
-     *
-     * @param string $imagePath
-     * @return array
-     */
-    private function getImageSize($imagePath)
-    {
-        $imageInfo = $this->loadImageInfoFromCache($imagePath);
-        if (!isset($imageInfo['size'])) {
-            $imageSize = getimagesize($imagePath);
-            $this->saveImageInfoToCache(['size' => $imageSize], $imagePath);
-            return $imageSize;
-        } else {
-            return $imageInfo['size'];
+        // if has watermark add watermark params to hash
+        if ($this->getWatermarkFile()) {
+            $miscParams['watermark_file'] = $this->getWatermarkFile();
+            $miscParams['watermark_image_opacity'] = $this->getWatermarkImageOpacity();
+            $miscParams['watermark_position'] = $this->getWatermarkPosition();
+            $miscParams['watermark_width'] = $this->getWatermarkWidth();
+            $miscParams['watermark_height'] = $this->getWatermarkHeight();
         }
-    }
 
-    /**
-     * Save image data to cache
-     *
-     * @param array $imageInfo
-     * @param string $imagePath
-     * @return void
-     */
-    private function saveImageInfoToCache(array $imageInfo, string $imagePath)
-    {
-        $imagePath = $this->cachePrefix  . $imagePath;
-        $this->_cacheManager->save(
-            $this->serializer->serialize($imageInfo),
-            $imagePath,
-            [$this->cachePrefix]
-        );
-    }
-
-    /**
-     * Load image data from cache
-     *
-     * @param string $imagePath
-     * @return array|false
-     */
-    private function loadImageInfoFromCache(string $imagePath)
-    {
-        $imagePath = $this->cachePrefix  . $imagePath;
-        $cacheData = $this->_cacheManager->load($imagePath);
-        if (!$cacheData) {
-            return false;
-        } else {
-            return $this->serializer->unserialize($cacheData);
-        }
-    }
-
-    /**
-     * Clear image data from cache
-     *
-     * @return void
-     */
-    private function clearImageInfoFromCache()
-    {
-        $this->_cacheManager->clean([$this->cachePrefix]);
+        return $miscParams;
     }
 
     /**

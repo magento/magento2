@@ -19,18 +19,6 @@ $finalPriceModel = $block->getPriceType('final_price');
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
 ?>
-<<<<<<< HEAD
-<span class="normal-price">
-    <?php
-    $arguments = [
-        'display_label' => __('As low as'),
-        'price_id' => $block->getPriceId('product-price-' . $idSuffix),
-        'price_type' => 'finalPrice',
-        'include_container' => true,
-        'schema' => $schema,
-    ];
-    /* @noEscape */ echo $block->renderAmount($finalPriceModel->getAmount(), $arguments);
-=======
 
 <span class="normal-price">
     <?php
@@ -43,7 +31,6 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
         ];
 
         /* @noEscape */ echo $block->renderAmount($finalPriceModel->getAmount(), $arguments);
->>>>>>> upstream/2.2-develop
     ?>
 </span>
 

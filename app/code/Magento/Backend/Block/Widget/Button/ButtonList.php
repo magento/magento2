@@ -7,8 +7,6 @@
 namespace Magento\Backend\Block\Widget\Button;
 
 /**
- * Button list widget
- *
  * @api
  * @since 100.0.2
  */

@@ -25,7 +25,7 @@ class AssertProductRatingSuccessDeleteMessage extends AbstractConstraint
     public function processAssert(RatingIndex $ratingIndex)
     {
         $actualMessage = $ratingIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

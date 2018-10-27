@@ -52,10 +52,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param null $uri
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @return Request
      */
     private function getModel($uri = null)

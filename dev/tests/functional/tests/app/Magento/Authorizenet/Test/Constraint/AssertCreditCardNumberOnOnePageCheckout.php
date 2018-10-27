@@ -24,7 +24,7 @@ class AssertCreditCardNumberOnOnePageCheckout extends AbstractConstraint
      */
     public function processAssert(CheckoutOnepage $checkoutOnepage, CreditCard $creditCard)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $creditCard->getCcNumber(),
             $checkoutOnepage->getAuthorizenetBlock()->getCCNumber(),
             'Credit card data did persist with the values from fixture'

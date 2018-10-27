@@ -53,8 +53,7 @@ define([
             attributes: [],
             attributesName: [$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity'), $.mage.__('Price')],
             sections: [],
-            gridTemplate: 'Magento_ConfigurableProduct/variations/steps/summary-grid',
-            quantityFieldName: 'quantity'
+            gridTemplate: 'Magento_ConfigurableProduct/variations/steps/summary-grid'
         },
 
         /** @inheritdoc */
@@ -113,12 +112,12 @@ define([
                     return memo + '-' + option.label;
                 }, '');
                 name = productName + _.reduce(options, function (memo, option) {
-                    return memo + '-' + option.label;
-                }, '');
-                quantity = getSectionValue(this.quantityFieldName, options);
+                        return memo + '-' + option.label;
+                    }, '');
+                quantity = getSectionValue('quantity', options);
 
                 if (!quantity && productId) {
-                    quantity = product[this.quantityFieldName];
+                    quantity = product.quantity;
                 }
                 price = getSectionValue('price', options);
 
@@ -134,12 +133,12 @@ define([
                     images: images,
                     sku: sku,
                     name: name,
+                    quantity: quantity,
                     price: price,
                     productId: productId,
                     weight: productWeight,
                     editable: true
                 };
-                variation[this.quantityFieldName] = quantity;
 
                 if (productId) {
                     variation.sku = product.sku;
@@ -164,6 +163,7 @@ define([
             this.variationsExisting = gridExisting;
             this.variationsNew = gridNew;
             this.variationsDeleted = gridDeleted;
+
         },
 
         /**
@@ -195,7 +195,7 @@ define([
                 images: []
             }, variation.images));
             row.push(variation.sku);
-            row.push(variation[this.quantityFieldName]);
+            row.push(variation.quantity);
             _.each(variation.options, function (option) {
                 row.push(option.label);
             });

@@ -72,10 +72,10 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                 if ($module == 'Magento_Backend' || strpos(
                     $blockClass,
                     '\\Adminhtml\\'
-                ) !== false || strpos(
+                ) || strpos(
                     $blockClass,
                     '\\Backend\\'
-                ) !== false || $class->isSubclassOf(
+                ) || $class->isSubclassOf(
                     \Magento\Backend\Block\Template::class
                 )
                 ) {

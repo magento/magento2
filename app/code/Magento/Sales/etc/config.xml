@@ -18,9 +18,6 @@
             <reorder>
                 <allow>1</allow>
             </reorder>
-            <zerograndtotal_creditmemo>
-                <allow_zero_grandtotal>1</allow_zero_grandtotal>
-            </zerograndtotal_creditmemo>
             <minimum_order>
                 <tax_including>1</tax_including>
             </minimum_order>

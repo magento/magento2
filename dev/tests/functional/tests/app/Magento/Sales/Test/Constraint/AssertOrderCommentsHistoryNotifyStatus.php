@@ -37,7 +37,7 @@ class AssertOrderCommentsHistoryNotifyStatus extends AbstractConstraint
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
         $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
 
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             $latestComment['is_customer_notified'],
             (bool)$sendMail ? 'Customer Notified' : 'Customer Not Notified'
         );

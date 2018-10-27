@@ -182,7 +182,7 @@ class GuestCartManagementTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
+     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart is not anonymous.
      */
     public function testAssignCustomerThrowsExceptionIfTargetCartIsNotAnonymous()
     {
@@ -234,6 +234,7 @@ class GuestCartManagementTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      * @expectedException \Exception
+     * @expectedExceptionMessage Cannot assign customer to the given cart. Customer already has active cart.
      */
     public function testAssignCustomerThrowsExceptionIfCustomerAlreadyHasActiveCart()
     {
@@ -285,10 +286,6 @@ class GuestCartManagementTest extends WebapiAbstract
             'storeId' => 1,
         ];
         $this->_webApiCall($serviceInfo, $requestData);
-
-        $this->expectExceptionMessage(
-            "The customer can't be assigned to the cart because the customer already has an active cart."
-        );
     }
 
     /**
@@ -333,7 +330,7 @@ class GuestCartManagementTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage You don't have the correct permissions to assign the customer to the cart.
+     * @expectedExceptionMessage Cannot assign customer to the given cart. You don't have permission for this operation.
      */
     public function testAssignCustomerByGuestUser()
     {

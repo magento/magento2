@@ -64,17 +64,9 @@ define([
             });
         });
 
-        afterEach(function () {
-            try {
-                injector.clean();
-                injector.remove();
-            } catch (e) {}
-        });
-
         afterAll(function (done) {
             tplElement.remove();
             registry.remove(component.integrationName);
-
             done();
         });
 

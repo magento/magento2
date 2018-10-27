@@ -5,44 +5,56 @@
  */
 namespace Magento\Search\Test\Unit\Model;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Search\EngineResolverInterface;
-use Magento\Search\Model\AdapterFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $adapterFactory;
 
     /**
-     * @var ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    private $engineResolverMock;
+    private $helper;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfig;
 
     protected function setUp()
     {
-        $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
-            ->getMockForAbstractClass();
+        $this->helper = new ObjectManager($this);
 
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->adapterFactory = new AdapterFactory(
-            $this->objectManager,
-            ['ClassName' => 'ClassName'],
-            $this->engineResolverMock
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+
+        $this->adapterFactory = $this->helper->getObject(
+            \Magento\Search\Model\AdapterFactory::class,
+            [
+                'objectManager' => $this->objectManager,
+                'scopeConfig' => $this->scopeConfig,
+                'path' => 'some_path',
+                'scopeType' => 'some_scopeType',
+                'adapters' => ['ClassName' => 'ClassName']
+            ]
         );
     }
 
     public function testCreate()
     {
-        $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
+        $this->scopeConfig->expects($this->once())->method('getValue')
+            ->with($this->equalTo('some_path'), $this->equalTo('some_scopeType'))
             ->will($this->returnValue('ClassName'));
 
         $adapter = $this->getMockBuilder(\Magento\Framework\Search\AdapterInterface::class)
@@ -62,7 +74,8 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateExceptionThrown()
     {
-        $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
+        $this->scopeConfig->expects($this->once())->method('getValue')
+            ->with($this->equalTo('some_path'), $this->equalTo('some_scopeType'))
             ->will($this->returnValue('ClassName'));
 
         $this->objectManager->expects($this->once())->method('create')
@@ -77,7 +90,8 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateLogicException()
     {
-        $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
+        $this->scopeConfig->expects($this->once())->method('getValue')
+            ->with($this->equalTo('some_path'), $this->equalTo('some_scopeType'))
             ->will($this->returnValue('Class'));
 
         $this->adapterFactory->create(['input']);

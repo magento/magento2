@@ -22,12 +22,12 @@ class AssertLocaleCodeVisibility extends AbstractConstraint
     public function processAssert(SystemConfigEdit $configEdit)
     {
         if ($_ENV['mage_mode'] === 'production') {
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $configEdit->getForm()->getGroup('general', 'locale')->isFieldDisabled('general', 'locale', 'code'),
                 'Locale field should be disabled in production mode.'
             );
         } else {
-            \PHPUnit\Framework\Assert::assertFalse(
+            \PHPUnit_Framework_Assert::assertFalse(
                 $configEdit->getForm()->getGroup('general', 'locale')->isFieldDisabled('general', 'locale', 'code'),
                 'Locale field should be not disabled in developer or default mode.'
             );

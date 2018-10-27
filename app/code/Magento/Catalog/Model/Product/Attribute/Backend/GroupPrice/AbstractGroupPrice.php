@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -247,8 +249,6 @@ abstract class AbstractGroupPrice extends Price
     }
 
     /**
-     * Validate price.
-     *
      * @param array $priceRow
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -314,8 +314,6 @@ abstract class AbstractGroupPrice extends Price
     }
 
     /**
-     * Get website id.
-     *
      * @param int $storeId
      * @return int|null
      */
@@ -331,8 +329,6 @@ abstract class AbstractGroupPrice extends Price
     }
 
     /**
-     * Set price data.
-     *
      * @param \Magento\Catalog\Model\Product $object
      * @param array $priceData
      */
@@ -387,8 +383,6 @@ abstract class AbstractGroupPrice extends Price
     }
 
     /**
-     * Update values.
-     *
      * @param array $valuesToUpdate
      * @param array $oldValues
      * @return boolean
@@ -444,8 +438,6 @@ abstract class AbstractGroupPrice extends Price
     }
 
     /**
-     * Get metadata pool.
-     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()

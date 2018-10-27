@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Downloadable\Api;
 
 use Magento\Catalog\Model\Product;
@@ -206,7 +205,7 @@ class SampleRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The sample type is invalid. Verify the sample type and try again.
+     * @expectedExceptionMessage Invalid sample type.
      */
     public function testCreateThrowsExceptionIfSampleTypeIsInvalid()
     {
@@ -326,7 +325,7 @@ class SampleRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The product needs to be the downloadable type. Verify the product and try again.
+     * @expectedExceptionMessage Provided product must be type 'downloadable'.
      */
     public function testCreateThrowsExceptionIfTargetProductTypeIsNotDownloadable()
     {
@@ -346,7 +345,7 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
+     * @expectedExceptionMessage Requested product doesn't exist
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -423,7 +422,7 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
+     * @expectedExceptionMessage Requested product doesn't exist
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -444,7 +443,7 @@ class SampleRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
      * @expectedException \Exception
-     * @expectedExceptionMessage No downloadable sample with the provided ID was found. Verify the ID and try again.
+     * @expectedExceptionMessage There is no downloadable sample with provided ID.
      */
     public function testUpdateThrowsExceptionIfThereIsNoDownloadableSampleWithGivenId()
     {
@@ -507,7 +506,7 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage No downloadable sample with the provided ID was found. Verify the ID and try again.
+     * @expectedExceptionMessage There is no downloadable sample with provided ID.
      */
     public function testDeleteThrowsExceptionIfThereIsNoDownloadableSampleWithGivenId()
     {

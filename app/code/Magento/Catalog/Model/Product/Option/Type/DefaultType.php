@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -191,10 +193,7 @@ class DefaultType extends \Magento\Framework\DataObject
      */
     public function getConfigData($key)
     {
-        return $this->_scopeConfig->getValue(
-            'catalog/custom_options/' . $key,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return $this->_scopeConfig->getValue('catalog/custom_options/' . $key, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -212,9 +211,7 @@ class DefaultType extends \Magento\Framework\DataObject
 
         $option = $this->getOption();
         if (!isset($values[$option->getId()]) && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
-            throw new LocalizedException(
-                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
-            );
+            throw new LocalizedException(__('Please specify product\'s required option(s).'));
         } elseif (isset($values[$option->getId()])) {
             $this->setUserValue($values[$option->getId()]);
             $this->setIsValid(true);

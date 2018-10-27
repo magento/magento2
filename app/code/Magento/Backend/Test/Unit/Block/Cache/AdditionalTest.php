@@ -11,7 +11,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Backend\Block\Cache\Additional
      */
-    private $additionalBlock;
+    private $additonalBlock;
 
     /**
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -39,7 +39,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->additionalBlock = $objectHelper->getObject(
+        $this->additonalBlock = $objectHelper->getObject(
             \Magento\Backend\Block\Cache\Additional::class,
             ['context' => $context]
         );
@@ -52,7 +52,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl')
             ->with('*/*/cleanImages')
             ->will($this->returnValue($expectedUrl));
-        $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanImagesUrl());
+        $this->assertEquals($expectedUrl, $this->additonalBlock->getCleanImagesUrl());
     }
 
     public function testGetCleanMediaUrl()
@@ -62,7 +62,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl')
             ->with('*/*/cleanMedia')
             ->will($this->returnValue($expectedUrl));
-        $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanMediaUrl());
+        $this->assertEquals($expectedUrl, $this->additonalBlock->getCleanMediaUrl());
     }
 
     public function testGetCleanStaticFiles()
@@ -72,7 +72,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl')
             ->with('*/*/cleanStaticFiles')
             ->will($this->returnValue($expectedUrl));
-        $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanStaticFilesUrl());
+        $this->assertEquals($expectedUrl, $this->additonalBlock->getCleanStaticFilesUrl());
     }
 
     /**
@@ -85,7 +85,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
         $this->appStateMock->expects($this->once())
             ->method('getMode')
             ->willReturn($mode);
-        $this->assertEquals($expected, $this->additionalBlock->isInProductionMode());
+        $this->assertEquals($expected, $this->additonalBlock->isInProductionMode());
     }
 
     /**

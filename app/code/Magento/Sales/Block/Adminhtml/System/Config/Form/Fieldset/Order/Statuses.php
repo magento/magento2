@@ -52,7 +52,7 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * Render element
+     * Render elemnt
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string

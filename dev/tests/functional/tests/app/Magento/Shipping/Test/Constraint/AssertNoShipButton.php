@@ -32,7 +32,7 @@ class AssertNoShipButton extends AbstractConstraint
     {
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $salesOrderView->getPageActions()->isActionButtonVisible('Ship'),
             'Ship button is present on order view page.'
         );

@@ -3,11 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-<<<<<<< HEAD
-/* global Ext, varienWindowOnload, varienElementMethods */
-
-=======
->>>>>>> upstream/2.2-develop
 define([
     'jquery',
     'prototype',
@@ -38,18 +33,11 @@ define([
             root = {},
             key = '';
 
-<<<<<<< HEAD
-        /**
-         * Fix ext compatibility with prototype 1.6
-         */
-        Ext.lib.Event.getTarget = function (e) {
-=======
         /* eslint-disable */
         /**
          * Fix ext compatibility with prototype 1.6
          */
         Ext.lib.Event.getTarget = function (e) {// eslint-disable-line no-undef
->>>>>>> upstream/2.2-develop
             var ee = e.browserEvent || e;
 
             return ee.target ? Event.element(ee) : null;
@@ -57,25 +45,6 @@ define([
 
         /**
          * @param {Object} el
-<<<<<<< HEAD
-         * @param {Object} nodeConfig
-         */
-        Ext.tree.TreePanel.Enhanced = function (el, nodeConfig) {
-            Ext.tree.TreePanel.Enhanced.superclass.constructor.call(this, el, nodeConfig);
-        };
-
-        Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
-            /**
-             * @param {Object} treeConfig
-             * @param {Boolean} firstLoad
-             */
-            loadTree: function (treeConfig, firstLoad) {
-                parameters = treeConfig.parameters,
-                    data = treeConfig.data,
-                    root = new Ext.tree.TreeNode(parameters);
-
-                if (typeof parameters.rootVisible !== 'undefined') {
-=======
          * @param {Object} config
          */
         Ext.tree.TreePanel.Enhanced = function (el, config) {// eslint-disable-line no-undef
@@ -94,7 +63,6 @@ define([
                     root = new Ext.tree.TreeNode(parameters);// eslint-disable-line no-undef
 
                 if (typeof parameters.rootVisible != 'undefined') {
->>>>>>> upstream/2.2-develop
                     this.rootVisible = parameters.rootVisible * 1;
                 }
 
@@ -120,11 +88,7 @@ define([
         });
 
         jQuery(function () {
-<<<<<<< HEAD
-            var categoryLoader = new Ext.tree.TreeLoader({
-=======
             var categoryLoader = new Ext.tree.TreeLoader({// eslint-disable-line no-undef
->>>>>>> upstream/2.2-develop
                 dataUrl: config.dataUrl
             });
 
@@ -144,21 +108,6 @@ define([
             };
 
             /**
-<<<<<<< HEAD
-             * @param {Object} nodeConfig
-             * @returns {Object}
-             */
-            categoryLoader.createNode = function (nodeConfig) {
-                var node;
-
-                nodeConfig.uiProvider = Ext.tree.CheckboxNodeUI;
-
-                if (nodeConfig.children && !nodeConfig.children.length) {
-                    delete nodeConfig.children;
-                    node = new Ext.tree.AsyncTreeNode(nodeConfig);
-                } else {
-                    node = new Ext.tree.TreeNode(nodeConfig);
-=======
              * @param {Object} config
              * @returns {Object}
              */
@@ -172,7 +121,6 @@ define([
                     node = new Ext.tree.AsyncTreeNode(config);// eslint-disable-line no-undef
                 } else {
                     node = new Ext.tree.TreeNode(config);// eslint-disable-line no-undef
->>>>>>> upstream/2.2-develop
                 }
 
                 return node;
@@ -180,24 +128,6 @@ define([
 
             /**
              * @param {Object} parent
-<<<<<<< HEAD
-             * @param {Object} nodeConfig
-             * @param {Integer} i
-             */
-            categoryLoader.processCategoryTree = function (parent, nodeConfig, i) {
-                var node,
-                    _node = {};
-
-                nodeConfig[i].uiProvider = Ext.tree.CheckboxNodeUI;
-
-                _node = Object.clone(nodeConfig[i]);
-
-                if (_node.children && !_node.children.length) {
-                    delete _node.children;
-                    node = new Ext.tree.AsyncTreeNode(_node);
-                } else {
-                    node = new Ext.tree.TreeNode(nodeConfig[i]);
-=======
              * @param {Object} config
              * @param {Integer} i
              */
@@ -214,7 +144,6 @@ define([
                     node = new Ext.tree.AsyncTreeNode(_node);// eslint-disable-line no-undef
                 } else {
                     node = new Ext.tree.TreeNode(config[i]);// eslint-disable-line no-undef
->>>>>>> upstream/2.2-develop
                 }
                 parent.appendChild(node);
                 node.loader = node.getOwnerTree().loader;
@@ -226,21 +155,6 @@ define([
 
             /**
              * @param {Object} parent
-<<<<<<< HEAD
-             * @param {Object} nodeConfig
-             * @returns {void}
-             */
-            categoryLoader.buildCategoryTree = function (parent, nodeConfig) {
-                var i = 0;
-
-                if (!nodeConfig) {
-                    return null;
-                }
-
-                if (parent && nodeConfig && nodeConfig.length) {
-                    for (i; i < nodeConfig.length; i++) {
-                        categoryLoader.processCategoryTree(parent, nodeConfig, i);
-=======
              * @param {Object} config
              * @returns {void}
              */
@@ -254,7 +168,6 @@ define([
                 if (parent && config && config.length) {
                     for (i; i < config.length; i++) {
                         categoryLoader.processCategoryTree(parent, config, i);
->>>>>>> upstream/2.2-develop
                     }
                 }
             };
@@ -265,17 +178,6 @@ define([
              * @param {Object} node
              * @returns {Object}
              */
-<<<<<<< HEAD
-            categoryLoader.buildHashChildren = function (hash, node) {
-                var i = 0,
-                    len;
-
-                if (node.childNodes.length > 0 || node.loaded === false && node.loading === false) {
-                    hash.children = [];
-
-                    for (i, len = node.childNodes.length; i < len; i++) {
-                        hash.children = hash.children ? hash.children : [];
-=======
             categoryLoader.buildHashChildren = function (hash, node) {// eslint-disable-line no-shadow
                 var i = 0,
                     len;
@@ -290,7 +192,6 @@ define([
                             hash.children = [];
                         }
                         /* eslint-enable */
->>>>>>> upstream/2.2-develop
                         hash.children.push(this.buildHash(node.childNodes[i]));
                     }
                 }
@@ -332,10 +233,7 @@ define([
                 treeLoader.baseParams.selected = options.jsFormObject.updateElement.value;
             });
 
-<<<<<<< HEAD
-=======
             /* eslint-disable */
->>>>>>> upstream/2.2-develop
             categoryLoader.on('load', function () {
                 varienWindowOnload();
             });
@@ -375,10 +273,7 @@ define([
             tree.loadTree({
                 parameters: parameters, data: options.treeJson
             }, true);
-<<<<<<< HEAD
-=======
             /* eslint-enable */
->>>>>>> upstream/2.2-develop
         });
     };
 });

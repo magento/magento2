@@ -28,13 +28,6 @@ define([
         });
     });
 
-    afterEach(function () {
-        try {
-            injector.clean();
-            injector.remove();
-        } catch (e) {}
-    });
-
     describe('Magento_Catalog/js/product/list/columns/final-price', function () {
         describe('"getPrice" method', function () {
             it('Check returned value', function () {

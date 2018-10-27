@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-use Magento\Sales\Model\Order\ShipmentFactory;
-
 require 'order.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -39,10 +36,4 @@ $invoice->register();
 
 $order->setIsInProcess(true);
 
-$items = [];
-foreach ($order->getItems() as $orderItem) {
-    $items[$orderItem->getId()] = $orderItem->getQtyOrdered();
-}
-$shipment = $objectManager->get(ShipmentFactory::class)->create($order, $items);
-
-$transaction->addObject($invoice)->addObject($shipment)->addObject($order)->save();
+$transaction->addObject($invoice)->addObject($order)->save();

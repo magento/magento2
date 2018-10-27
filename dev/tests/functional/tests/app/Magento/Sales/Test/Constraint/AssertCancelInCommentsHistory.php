@@ -41,7 +41,7 @@ class AssertCancelInCommentsHistory extends AbstractConstraint
         $comments = $infoTab->getCommentsHistoryBlock()->getComments();
         $commentsMessages = array_column($comments, 'comment');
 
-        \PHPUnit\Framework\Assert::assertRegExp(
+        \PHPUnit_Framework_Assert::assertRegExp(
             sprintf($this->canceledAmountPattern, $prices['grandTotal']),
             implode('. ', $commentsMessages),
             'Incorrect canceled amount value for the order #' . $orderId

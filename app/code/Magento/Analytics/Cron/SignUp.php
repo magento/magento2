@@ -12,11 +12,7 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 
 /**
-<<<<<<< HEAD
- * Cron class for the Advanced Reporting signup process
-=======
  * Class SignUp
->>>>>>> upstream/2.2-develop
  */
 class SignUp
 {

@@ -40,11 +40,7 @@ class ItemProductResolver implements ItemResolverInterface
     /**
      * {@inheritdoc}
      */
-<<<<<<< HEAD
-    public function getFinalProduct(ItemInterface $item) : ProductInterface
-=======
     public function getFinalProduct(ItemInterface $item): ProductInterface
->>>>>>> upstream/2.2-develop
     {
         /**
          * Show parent product thumbnail if it must be always shown according to the related setting in system config
@@ -53,10 +49,7 @@ class ItemProductResolver implements ItemResolverInterface
         $parentProduct = $item->getProduct();
         $finalProduct = $parentProduct;
         $childProduct = $this->getChildProduct($item);
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         if ($childProduct !== $parentProduct) {
             $configValue = $this->scopeConfig->getValue(
                 self::CONFIG_THUMBNAIL_SOURCE,
@@ -68,10 +61,7 @@ class ItemProductResolver implements ItemResolverInterface
                     ? $parentProduct
                     : $childProduct;
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         return $finalProduct;
     }
 
@@ -81,15 +71,6 @@ class ItemProductResolver implements ItemResolverInterface
      * @param ItemInterface $item
      * @return Product
      */
-<<<<<<< HEAD
-    private function getChildProduct(ItemInterface $item) : Product
-    {
-        $option = $item->getOptionByCode('simple_product');
-        $product = $item->getProduct();
-        if ($option) {
-            $product = $option->getProduct();
-        }
-=======
     private function getChildProduct(ItemInterface $item): Product
     {
         $option = $item->getOptionByCode('simple_product');
@@ -99,7 +80,6 @@ class ItemProductResolver implements ItemResolverInterface
             $product = $option->getProduct();
         }
 
->>>>>>> upstream/2.2-develop
         return $product;
     }
 }

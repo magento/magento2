@@ -6,10 +6,9 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Reports\Model\Flag;
 
-class Tax extends \Magento\Reports\Controller\Adminhtml\Report\Sales implements HttpGetActionInterface
+class Tax extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**
      * Tax report action

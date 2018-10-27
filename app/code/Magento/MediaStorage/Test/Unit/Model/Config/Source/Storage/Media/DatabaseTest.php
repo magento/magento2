@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\MediaStorage\Test\Unit\Model\Config\Source\Storage\Media;
 
 use Magento\MediaStorage\Model\Config\Source\Storage\Media\Database;
@@ -34,11 +36,11 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             'resource'
         )->will(
             $this->returnValue(
-                [
-                    'default_setup' => ['name' => 'default_setup', 'connection' => 'connect1'],
-                    'custom_resource' => ['name' => 'custom_resource', 'connection' => 'connect2'],
-                ]
-            )
+            [
+                'default_setup' => ['name' => 'default_setup', 'connection' => 'connect1'],
+                'custom_resource' => ['name' => 'custom_resource', 'connection' => 'connect2'],
+            ]
+        )
         );
         $this->mediaDatabase = new Database($this->deploymentConfig);
     }

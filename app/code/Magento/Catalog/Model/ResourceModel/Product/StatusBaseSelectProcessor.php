@@ -13,7 +13,6 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class StatusBaseSelectProcessor
@@ -31,32 +30,28 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
     private $metadataPool;
 
     /**
-     * @var StoreManagerInterface
+     * @var StoreResolverInterface
      */
-    private $storeManager;
+    private $storeResolver;
 
     /**
      * @param Config $eavConfig
      * @param MetadataPool $metadataPool
      * @param StoreResolverInterface $storeResolver
-     * @param StoreManagerInterface $storeManager
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Config $eavConfig,
         MetadataPool $metadataPool,
-        StoreResolverInterface $storeResolver,
-        StoreManagerInterface $storeManager = null
+        StoreResolverInterface $storeResolver
     ) {
         $this->eavConfig = $eavConfig;
         $this->metadataPool = $metadataPool;
-        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(StoreManagerInterface::class);
+        $this->storeResolver = $storeResolver;
     }
 
     /**
-     * @inheritdoc
+     * @param Select $select
+     * @return Select
      */
     public function process(Select $select)
     {
@@ -75,7 +70,7 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
             ['status_attr' => $statusAttribute->getBackendTable()],
             "status_attr.{$linkField} = " . self::PRODUCT_TABLE_ALIAS . ".{$linkField}"
             . ' AND status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
-            . ' AND status_attr.store_id = ' . $this->storeManager->getStore()->getId(),
+            . ' AND status_attr.store_id = ' . $this->storeResolver->getCurrentStoreId(),
             []
         );
 

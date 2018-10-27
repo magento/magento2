@@ -75,8 +75,7 @@ class ValidatorCompositeTest extends \PHPUnit\Framework\TestCase
             ->with(
                 [
                     'isValid' => false,
-                    'failsDescription' => ['Fail'],
-                    'errorCodes' => []
+                    'failsDescription' => ['Fail']
                 ]
             )
             ->willReturn($compositeResult);

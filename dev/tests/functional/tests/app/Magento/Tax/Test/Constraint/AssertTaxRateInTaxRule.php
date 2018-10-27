@@ -30,7 +30,7 @@ class AssertTaxRateInTaxRule extends AbstractConstraint
         $taxRuleIndex->open();
         $taxRuleIndex->getGridPageActions()->addNew();
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $taxRuleNew->getTaxRuleForm()->isTaxRateAvailable($taxRateCode),
             "$taxRateCode is not present in Tax Rates multiselect on tax rule creation page."
         );

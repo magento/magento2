@@ -6,12 +6,11 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Controller\ResultFactory;
 
-class Delete extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpPostActionInterface
+class Delete extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**
      * Delete the integration.

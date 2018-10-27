@@ -17,8 +17,7 @@ class AssertCustomerLoginErrorMessage extends AbstractConstraint
     /**
      * Customer login error message.
      */
-    const ERROR_MESSAGE =
-        'The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.';
+    const ERROR_MESSAGE = 'You did not sign in correctly or your account is temporarily disabled.';
 
     /**
      * Assert that customer login error message is displayed.
@@ -29,7 +28,7 @@ class AssertCustomerLoginErrorMessage extends AbstractConstraint
     public function processAssert(
         CustomerAccountLogin $customerLogin
     ) {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::ERROR_MESSAGE,
             $customerLogin->getMessages()->getErrorMessage(),
             'Wrong error message is displayed.'

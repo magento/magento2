@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Store\Model\Resolver;
 
 class Store implements \Magento\Framework\App\ScopeResolverInterface
@@ -29,9 +28,7 @@ class Store implements \Magento\Framework\App\ScopeResolverInterface
     {
         $scope = $this->_storeManager->getStore($scopeId);
         if (!$scope instanceof \Magento\Framework\App\ScopeInterface) {
-            throw new \Magento\Framework\Exception\State\InitException(
-                __('The scope object is invalid. Verify the scope object and try again.')
-            );
+            throw new \Magento\Framework\Exception\State\InitException(__('Invalid scope object'));
         }
 
         return $scope;

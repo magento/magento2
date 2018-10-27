@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model;
 
 /**
  * @api
- * Storage, which provide information for frontend storages, as product-storage, ids-storage
+ * Storage, which provide information for frontend storages, as priduct-storage, ids-storag
  * @since 101.1.0
  */
 interface FrontendStorageConfigurationInterface

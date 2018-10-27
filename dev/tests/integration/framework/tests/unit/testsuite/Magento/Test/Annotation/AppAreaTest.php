@@ -135,12 +135,6 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
             [
                 'area_code' => Area::AREA_CRONTAB,
             ],
-<<<<<<< HEAD
-            [
-                'area_code' => Area::AREA_GRAPHQL,
-            ],
-=======
->>>>>>> upstream/2.2-develop
         ];
     }
 }

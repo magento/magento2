@@ -315,11 +315,7 @@ class BundlePanel extends AbstractModifier
                         'additionalClasses' => 'admin__field-wide',
                         'dataScope' => 'data.bundle_options',
                         'isDefaultFieldScope' => 'is_default',
-<<<<<<< HEAD
-                        'bundleSelectionsName' => 'product_bundle_container.bundle_selections',
-=======
                         'bundleSelectionsName' => 'product_bundle_container.bundle_selections'
->>>>>>> upstream/2.2-develop
                     ],
                 ],
             ],
@@ -384,15 +380,9 @@ class BundlePanel extends AbstractModifier
                                                 ],
                                                 'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
                                                 'imports' => [
-<<<<<<< HEAD
-                                                    'inputType' => '${$.provider}:${$.dataScope}.type',
-                                                ],
-                                                'source' => 'product',
-=======
                                                     'inputType' => '${$.provider}:${$.dataScope}.type'
                                                 ],
                                                 'source' => 'product'
->>>>>>> upstream/2.2-develop
                                             ],
                                         ],
                                     ],
@@ -611,19 +601,11 @@ class BundlePanel extends AbstractModifier
                         'component' => 'Magento_Ui/js/dynamic-rows/record',
                         'is_collection' => true,
                         'imports' => [
-<<<<<<< HEAD
-                            'inputType' => '${$.parentName}:inputType',
-                        ],
-                        'exports' => [
-                            'isDefaultValue' => '${$.parentName}:isDefaultValue.${$.index}',
-                        ],
-=======
                             'inputType' => '${$.parentName}:inputType'
                         ],
                         'exports' => [
                             'isDefaultValue' => '${$.parentName}:isDefaultValue.${$.index}'
                         ]
->>>>>>> upstream/2.2-develop
                     ],
                 ],
             ],
@@ -723,13 +705,8 @@ class BundlePanel extends AbstractModifier
                                 'valueMap' => ['true' => '1', 'false' => '0'],
                                 'sortOrder' => 110,
                                 'imports' => [
-<<<<<<< HEAD
-                                    'inputType' => '${$.parentName}:inputType',
-                                ],
-=======
                                     'inputType' => '${$.parentName}:inputType'
                                 ]
->>>>>>> upstream/2.2-develop
                             ],
                         ],
                     ],

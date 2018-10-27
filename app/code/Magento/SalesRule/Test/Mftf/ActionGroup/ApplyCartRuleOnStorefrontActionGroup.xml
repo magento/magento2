@@ -12,16 +12,6 @@
             <argument name="product"/>
             <argument name="couponCode" type="string"/>
         </arguments>
-<<<<<<< HEAD
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart" />
-        <waitForText userInput="You added {{product.name}} to your shopping cart." stepKey="waitForText"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <click selector="{{DiscountSection.DiscountTab}}" stepKey="clickToDiscountTab" />
-        <fillField selector="{{DiscountSection.CouponInput}}" userInput="{{couponCode}}" stepKey="fillCouponCode"/>
-        <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
-=======
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
         <waitForText userInput="You added {{product.name}} to your shopping cart." stepKey="waitForProductAddToShoppingCart"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutPage"/>
@@ -31,6 +21,5 @@
                    stepKey="fillCouponCode"/>
         <click selector="{{AdminCartPriceRuleDiscountSection.applyCodeBtn}}" stepKey="applyCode"/>
         <waitForPageLoad stepKey="waitForApplyCode"/>
->>>>>>> upstream/2.2-develop
     </actionGroup>
 </actionGroups>

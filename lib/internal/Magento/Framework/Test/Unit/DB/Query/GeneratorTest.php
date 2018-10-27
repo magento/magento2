@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Test\Unit\DB\Query;
 
 use Magento\Framework\DB\Query\BatchIterator;
@@ -88,7 +87,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      * Test batch generation with invalid select object.
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The select object must have the correct "FROM" part. Verify and try again.
+     * @expectedExceptionMessage  Select object must have correct "FROM" part
      * @return void
      */
     public function testGenerateWithoutFromPart()

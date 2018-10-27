@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 class PriceModifierTest extends \PHPUnit\Framework\TestCase
@@ -54,7 +56,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedMessage Tier price is unavailable for this product.
+     * @expectedMessage This product doesn't have tier price
      */
     public function testRemoveWhenTierPricesNotExists()
     {

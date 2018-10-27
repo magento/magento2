@@ -64,7 +64,7 @@ class AssertCustomerIsRedirectedToCheckoutFromCart extends AbstractConstraint
         $miniShoppingCart->openMiniCart();
         $miniShoppingCart->clickProceedToCheckoutButton();
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             !$checkoutOnepage->getMessagesBlock()->isVisible()
             && $checkoutOnepage->getShippingMethodBlock()->isVisible(),
             'Checkout first step is not available.'

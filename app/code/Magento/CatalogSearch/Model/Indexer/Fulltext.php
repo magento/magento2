@@ -6,31 +6,21 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
-use Magento\CatalogSearch\Model\Indexer\Scope\StateFactory;
+use Magento\CatalogSearch\Model\Indexer\Scope\State;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
-<<<<<<< HEAD
-use Magento\Framework\Indexer\DimensionProviderInterface;
-use Magento\Store\Model\StoreDimensionProvider;
-=======
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Store\Model\StoreManagerInterface;
->>>>>>> upstream/2.2-develop
 use Magento\Indexer\Model\ProcessManager;
 
 /**
  * Provide functionality for Fulltext Search indexing.
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- *
  * @api
  * @since 100.0.2
  */
-class Fulltext implements
-    \Magento\Framework\Indexer\ActionInterface,
-    \Magento\Framework\Mview\ActionInterface,
-    \Magento\Framework\Indexer\DimensionalIndexerInterface
+class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * Indexer ID in configuration
@@ -48,6 +38,16 @@ class Fulltext implements
     private $indexerHandlerFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var \Magento\Framework\Search\Request\DimensionFactory
+     */
+    private $dimensionFactory;
+
+    /**
      * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
      */
     private $fullAction;
@@ -56,6 +56,11 @@ class Fulltext implements
      * @var FulltextResource
      */
     private $fulltextResource;
+
+    /**
+     * @var \Magento\Framework\Search\Request\Config
+     */
+    private $searchRequestConfig;
 
     /**
      * @var IndexSwitcherInterface
@@ -68,14 +73,6 @@ class Fulltext implements
     private $indexScopeState;
 
     /**
-<<<<<<< HEAD
-     * @var DimensionProviderInterface
-     */
-    private $dimensionProvider;
-
-    /**
-=======
->>>>>>> upstream/2.2-develop
      * @var ProcessManager
      */
     private $processManager;
@@ -83,46 +80,35 @@ class Fulltext implements
     /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
+     * @param StoreManagerInterface $storeManager
+     * @param DimensionFactory $dimensionFactory
      * @param FulltextResource $fulltextResource
-     * @param IndexSwitcherInterface $indexSwitcher
-<<<<<<< HEAD
-     * @param StateFactory $indexScopeStateFactory
-     * @param DimensionProviderInterface $dimensionProvider
+     * @param SearchRequestConfig $searchRequestConfig
      * @param array $data
-     * @param ProcessManager $processManager
-=======
+     * @param IndexSwitcherInterface $indexSwitcher
      * @param Scope\State $indexScopeState
      * @param ProcessManager $processManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         FullFactory $fullActionFactory,
         IndexerHandlerFactory $indexerHandlerFactory,
+        StoreManagerInterface $storeManager,
+        DimensionFactory $dimensionFactory,
         FulltextResource $fulltextResource,
-        IndexSwitcherInterface $indexSwitcher,
-        StateFactory $indexScopeStateFactory,
-        DimensionProviderInterface $dimensionProvider,
+        SearchRequestConfig $searchRequestConfig,
         array $data,
-<<<<<<< HEAD
-=======
         IndexSwitcherInterface $indexSwitcher = null,
         State $indexScopeState = null,
->>>>>>> upstream/2.2-develop
         ProcessManager $processManager = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
+        $this->storeManager = $storeManager;
+        $this->dimensionFactory = $dimensionFactory;
         $this->fulltextResource = $fulltextResource;
+        $this->searchRequestConfig = $searchRequestConfig;
         $this->data = $data;
-<<<<<<< HEAD
-        $this->indexSwitcher = $indexSwitcher;
-        $this->indexScopeState = $indexScopeStateFactory->create();
-        $this->dimensionProvider = $dimensionProvider;
-        $this->processManager = $processManager ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            ProcessManager::class
-        );
-=======
         if (null === $indexSwitcher) {
             $indexSwitcher = ObjectManager::getInstance()->get(IndexSwitcherInterface::class);
         }
@@ -135,22 +121,16 @@ class Fulltext implements
         $this->indexSwitcher = $indexSwitcher;
         $this->indexScopeState = $indexScopeState;
         $this->processManager = $processManager;
->>>>>>> upstream/2.2-develop
     }
 
     /**
      * Execute materialization on ids entities
      *
-     * @param int[] $entityIds
+     * @param int[] $ids
      * @return void
-     * @throws \InvalidArgumentException
      */
-    public function execute($entityIds)
+    public function execute($ids)
     {
-<<<<<<< HEAD
-        foreach ($this->dimensionProvider->getIterator() as $dimension) {
-            $this->executeByDimensions($dimension, new \ArrayIterator($entityIds));
-=======
         $storeIds = array_keys($this->storeManager->getStores());
         /** @var IndexerHandler $saveHandler */
         $saveHandler = $this->indexerHandlerFactory->create([
@@ -162,45 +142,6 @@ class Fulltext implements
             $productIds = array_unique(array_merge($ids, $this->fulltextResource->getRelationsByChild($ids)));
             $saveHandler->deleteIndex([$dimension], new \ArrayObject($productIds));
             $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId, $productIds));
->>>>>>> upstream/2.2-develop
-        }
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function executeByDimensions(array $dimensions, \Traversable $entityIds = null)
-    {
-<<<<<<< HEAD
-        if (count($dimensions) > 1 || !isset($dimensions[StoreDimensionProvider::DIMENSION_NAME])) {
-            throw new \InvalidArgumentException('Indexer "' . self::INDEXER_ID . '" support only Store dimension');
-        }
-        $storeId = $dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
-        $saveHandler = $this->indexerHandlerFactory->create([
-            'data' => $this->data
-        ]);
-
-        if (null === $entityIds) {
-            $this->indexScopeState->useTemporaryIndex();
-            $saveHandler->cleanIndex($dimensions);
-            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId));
-
-            $this->indexSwitcher->switchIndex($dimensions);
-            $this->indexScopeState->useRegularIndex();
-
-            $this->fulltextResource->resetSearchResultsByStore($storeId);
-        } else {
-            // internal implementation works only with array
-            $entityIds = iterator_to_array($entityIds);
-            $productIds = array_unique(
-                array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
-            );
-            if ($saveHandler->isAvailable($dimensions)) {
-                $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
-                $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
-            }
         }
     }
 
@@ -208,18 +149,9 @@ class Fulltext implements
      * Execute full indexation
      *
      * @return void
-     * @throws \InvalidArgumentException
      */
     public function executeFull()
     {
-        $userFunctions = [];
-        foreach ($this->dimensionProvider->getIterator() as $dimension) {
-            $userFunctions[] = function () use ($dimension) {
-                $this->executeByDimensions($dimension);
-            };
-        }
-        $this->processManager->execute($userFunctions);
-=======
         $storeIds = array_keys($this->storeManager->getStores());
 
         $userFunctions = [];
@@ -233,7 +165,6 @@ class Fulltext implements
 
         $this->fulltextResource->resetSearchResults();
         $this->searchRequestConfig->reset();
->>>>>>> upstream/2.2-develop
     }
 
     /**

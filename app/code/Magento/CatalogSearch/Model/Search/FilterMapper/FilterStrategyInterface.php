@@ -10,8 +10,6 @@ namespace Magento\CatalogSearch\Model\Search\FilterMapper;
  * FilterStrategyInterface provides the interface to work with strategies
  * @api
  * @since 100.1.6
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 interface FilterStrategyInterface
 {

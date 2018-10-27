@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Layer\Filter;
 
 /**
@@ -274,10 +276,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     {
         $algorithm = $this->algorithmFactory->create();
 
-        return $algorithm->getItemsData(
-            (array)$this->dataProvider->getInterval(),
-            $this->dataProvider->getAdditionalRequestData()
-        );
+        return $algorithm->getItemsData((array)$this->dataProvider->getInterval(), $this->dataProvider->getAdditionalRequestData());
     }
 
     /**

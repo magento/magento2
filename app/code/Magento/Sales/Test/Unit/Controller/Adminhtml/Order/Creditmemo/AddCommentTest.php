@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 
 /**
@@ -216,7 +215,7 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteNoComment()
     {
-        $message = 'The comment is missing. Enter and try again.';
+        $message = 'Please enter a comment.';
         $response = ['error' => true, 'message' => $message];
         $data = [];
 

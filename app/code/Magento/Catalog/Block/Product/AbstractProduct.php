@@ -510,6 +510,9 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      */
     public function getImage($product, $imageId, $attributes = [])
     {
-        return $this->imageBuilder->create($product, $imageId, $attributes);
+        return $this->imageBuilder->setProduct($product)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
     }
 }

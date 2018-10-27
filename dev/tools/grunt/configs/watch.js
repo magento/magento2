@@ -13,9 +13,6 @@ var themeOptions = {};
 
 _.each(themes, function(theme, name) {
     themeOptions[name] = {
-        'options': {
-            livereload: true
-        },
         'files': [
             '<%= combo.autopath(\''+name+'\', path.pub) %>/**/*.less'
         ],

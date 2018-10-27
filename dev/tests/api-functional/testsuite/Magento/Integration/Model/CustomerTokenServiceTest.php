@@ -168,13 +168,13 @@ class CustomerTokenServiceTest extends WebapiAbstract
             'message' => 'One or more input exceptions have occurred.',
             'errors' => [
                 [
-                    'message' => '"%fieldName" is required. Enter and try again.',
+                    'message' => '%fieldName is a required field.',
                     'parameters' => [
                         'fieldName' => 'username',
                     ],
                 ],
                 [
-                    'message' => '"%fieldName" is required. Enter and try again.',
+                    'message' => '%fieldName is a required field.',
                     'parameters' => [
                         'fieldName' => 'password',
                     ]
@@ -286,8 +286,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
         $this->assertEquals(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $e->getCode(), "Response HTTP code is invalid.");
         $exceptionData = $this->processRestExceptionResult($e);
         $expectedExceptionData = [
-            'message' => 'The account sign-in was incorrect or your account is disabled temporarily. '
-                . 'Please wait and try again later.'
+            'message' => 'You did not sign in correctly or your account is temporarily disabled.'
         ];
         $this->assertEquals($expectedExceptionData, $exceptionData, "Exception message is invalid.");
     }

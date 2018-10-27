@@ -11,9 +11,7 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\EntityManager\HydratorInterface;
-use PHPUnit\Framework\Assert;
 
 class StockItemDataChecker
 {
@@ -43,38 +41,29 @@ class StockItemDataChecker
     private $productFactory;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * @param HydratorInterface $hydrator
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
      * @param ProductRepositoryInterface $productRepository
      * @param ProductInterfaceFactory $productFactory
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         HydratorInterface $hydrator,
         StockItemRepositoryInterface $stockItemRepository,
         StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
         ProductRepositoryInterface $productRepository,
-        ProductInterfaceFactory $productFactory,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        ProductInterfaceFactory $productFactory
     ) {
         $this->hydrator = $hydrator;
         $this->stockItemRepository = $stockItemRepository;
         $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * @param $sku
+     * @param string $sku
      * @param array $expectedData
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function checkStockItemData($sku, array $expectedData)
     {
@@ -108,10 +97,10 @@ class StockItemDataChecker
             StockItemInterface::IS_IN_STOCK => 0,
             StockItemInterface::QTY => 0,
         ]);
-        Assert::assertNotNull($product->getQuantityAndStockStatus());
+        \PHPUnit\Framework\Assert::assertNotNull($product->getQuantityAndStockStatus());
         $this->assertArrayContains($expectedQuantityAndStockStatusData, $product->getQuantityAndStockStatus());
 
-        Assert::assertNotNull($product->getData('quantity_and_stock_status'));
+        \PHPUnit\Framework\Assert::assertNotNull($product->getData('quantity_and_stock_status'));
         $this->assertArrayContains($expectedQuantityAndStockStatusData, $product->getData('quantity_and_stock_status'));
     }
 
@@ -123,7 +112,7 @@ class StockItemDataChecker
     private function assertArrayContains(array $expected, array $actual)
     {
         foreach ($expected as $key => $value) {
-            Assert::assertArrayHasKey(
+            \PHPUnit\Framework\Assert::assertArrayHasKey(
                 $key,
                 $actual,
                 "Expected value for key '{$key}' is missed"
@@ -131,7 +120,7 @@ class StockItemDataChecker
             if (is_array($value)) {
                 $this->assertArrayContains($value, $actual[$key]);
             } else {
-                Assert::assertEquals(
+                \PHPUnit\Framework\Assert::assertEquals(
                     $value,
                     $actual[$key],
                     "Expected value for key '{$key}' doesn't match"

@@ -15,10 +15,6 @@ use Magento\Framework\Search\EntityMetadata;
 use Magento\Framework\Search\RequestInterface;
 
 /**
- * MySQL search aggregation builder.
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  * @api
  */
 class Builder
@@ -70,8 +66,6 @@ class Builder
     }
 
     /**
-     * Build aggregations.
-     *
      * @param RequestInterface $request
      * @param Table $documentsTable
      * @param array $documents
@@ -83,8 +77,6 @@ class Builder
     }
 
     /**
-     * Process aggregations.
-     *
      * @param RequestInterface $request
      * @param Table $documentsTable
      * @param array $documents
@@ -110,7 +102,7 @@ class Builder
     }
 
     /**
-     * Extract document ids.
+     * Extract document ids
      *
      * @param array $documents
      * @return array
@@ -121,7 +113,7 @@ class Builder
     }
 
     /**
-     * Get document ids.
+     * Get document ids
      *
      * @param Table $documentsTable
      * @return array
@@ -136,7 +128,7 @@ class Builder
     }
 
     /**
-     * Get Connection.
+     * Get Connection
      *
      * @return AdapterInterface
      */

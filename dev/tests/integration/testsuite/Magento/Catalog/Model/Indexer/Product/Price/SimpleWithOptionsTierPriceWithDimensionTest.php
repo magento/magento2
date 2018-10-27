@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -38,12 +33,6 @@ class SimpleWithOptionsTierPriceWithDimensionTest extends \PHPUnit\Framework\Tes
      */
     private $productCollectionFactory;
 
-<<<<<<< HEAD
-    /**
-     * set up
-     */
-=======
->>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Test\Unit\Model\AdminOrder;
 
 use Magento\Backend\Model\Session\Quote as SessionQuote;
@@ -18,10 +20,6 @@ use Magento\Customer\Model\Metadata\FormFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-<<<<<<< HEAD
-use Magento\Quote\Api\CartRepositoryInterface;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
@@ -45,20 +43,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     private $adminOrderCreate;
 
     /**
-<<<<<<< HEAD
-     * @var CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
-=======
      * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
->>>>>>> upstream/2.2-develop
      */
     private $quoteRepository;
 
     /**
-<<<<<<< HEAD
-     * @var QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
-=======
      * @var \Magento\Quote\Model\QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
->>>>>>> upstream/2.2-develop
      */
     private $quoteFactory;
 
@@ -105,11 +95,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->itemUpdater = $this->createMock(Updater::class);
 
-<<<<<<< HEAD
-        $this->quoteRepository = $this->getMockBuilder(CartRepositoryInterface::class)
-=======
         $this->quoteRepository = $this->getMockBuilder(\Magento\Quote\Api\CartRepositoryInterface::class)
->>>>>>> upstream/2.2-develop
             ->disableOriginalConstructor()
             ->setMethods(['getForCustomer'])
             ->getMockForAbstractClass();
@@ -186,12 +172,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $quote = $this->createMock(Quote::class);
         $quote->method('getCustomer')->willReturn($customer);
-<<<<<<< HEAD
-        $quote->method('addData')->with(
-=======
         $quote->method('addData')
             ->with(
->>>>>>> upstream/2.2-develop
             [
                 'customer_group_id' => $attributes[1][1],
                 'customer_tax_class_id' => $taxClassId
@@ -200,12 +182,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectHelper->method('populateWithArray')
             ->with(
                 $customer,
-<<<<<<< HEAD
-                ['group_id' => 1],
-                CustomerInterface::class
-=======
                 ['group_id' => 1], CustomerInterface::class
->>>>>>> upstream/2.2-develop
             );
 
         $this->formFactory->method('create')
@@ -308,29 +285,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $address->method('setFreeShipping')
             ->with(0)
             ->willReturnSelf();
-<<<<<<< HEAD
-
-        $object = $this->adminOrderCreate->applyCoupon($couponCode);
-        self::assertEquals($this->adminOrderCreate, $object);
-    }
-
-    public function testGetCustomerCart()
-    {
-        $storeId = 2;
-        $customerId = 2;
-        $cartResult = [
-            'cart' => true,
-        ];
-
-        $this->quoteFactory->expects($this->once())
-            ->method('create');
-        $this->sessionQuote->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn($storeId);
-        $this->sessionQuote->expects($this->once())
-            ->method('getCustomerId')
-            ->willReturn($customerId);
-=======
 
         $object = $this->adminOrderCreate->applyCoupon($couponCode);
         self::assertEquals($this->adminOrderCreate, $object);
@@ -355,7 +309,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerId')
             ->willReturn($customerId);
 
->>>>>>> upstream/2.2-develop
         $this->quoteRepository->expects($this->once())
             ->method('getForCustomer')
             ->with($customerId, [$storeId])

@@ -5,11 +5,10 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Interception\Fixture;
 
-/**
- * @codingStandardsIgnoreStart
- */
 class InterceptedParent implements InterceptedParentInterface
 {
     /**

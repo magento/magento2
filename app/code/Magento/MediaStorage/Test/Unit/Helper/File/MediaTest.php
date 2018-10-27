@@ -100,7 +100,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "mediaDir/path" file doesn't exist. Verify the file and try again.
+     * @expectedExceptionMessage File mediaDir/path does not exist
      */
     public function testCollectFileInfoNotFile()
     {

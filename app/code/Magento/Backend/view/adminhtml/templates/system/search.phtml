@@ -27,20 +27,6 @@
     </form>
     <script data-template="search-suggest" type="text/x-magento-template">
         <ul class="search-global-menu">
-<<<<<<< HEAD
-        <li class="item">
-            <a id="searchPreviewProducts" href="<?= /* @escapeNotVerified */ $block->getUrl('catalog/product/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Products</a>
-        </li>
-        <li class="item">
-            <a id="searchPreviewOrders" href="<?= /* @escapeNotVerified */ $block->getUrl('sales/order/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Orders</a>
-        </li>
-        <li class="item">
-            <a id="searchPreviewCustomers" href="<?= /* @escapeNotVerified */ $block->getUrl('customer/index/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Customers</a>
-        </li>
-        <li class="item">
-            <a id="searchPreviewPages" href="<?= /* @escapeNotVerified */ $block->getUrl('cms/page/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Pages</a>
-        </li>
-=======
             <?php foreach ($block->getEntitiesToShow() as $entity): ?>
                 <li class="item">
                     <a id="<?= /* @escapeNotVerified */ $entity->getId(); ?>"
@@ -50,7 +36,6 @@
                     </a>
                 </li>
             <?php endforeach; ?>
->>>>>>> upstream/2.2-develop
             <% if (data.items.length) { %>
             <% _.each(data.items, function(value){ %>
             <li class="item"

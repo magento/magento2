@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\Ups\Test\Unit\Model;
 
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -35,11 +30,6 @@ use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Ups\Helper\Config;
 use Magento\Quote\Model\Quote\Address\RateRequest;
-<<<<<<< HEAD
-use Magento\Framework\HTTP\ClientFactory;
-use Magento\Framework\HTTP\ClientInterface;
-=======
->>>>>>> upstream/2.2-develop
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -73,14 +63,6 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
     private $include_taxes;
 
     /**
-<<<<<<< HEAD
-     * @var ClientInterface|MockObject
-     */
-    private $httpClient;
-
-    /**
-=======
->>>>>>> upstream/2.2-develop
      * set up test environment
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -131,17 +113,6 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($rateResultMock);
 
-<<<<<<< HEAD
-        $httpClientFactory = $this->getMockBuilder(ClientFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->httpClient = $this->getMockForAbstractClass(ClientInterface::class);
-        $httpClientFactory->method('create')
-            ->willReturn($this->httpClient);
-
-=======
->>>>>>> upstream/2.2-develop
         $priceInterfaceMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -256,11 +227,7 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
                     'stockRegistry' => $stockRegistryMock,
                     'localeFormat' => $formatInterfaceMock,
                     'configHelper' => $configHelperMock,
-<<<<<<< HEAD
-                    'httpClientFactory' => $httpClientFactory,
-=======
                     'httpClientFactory' => $this->createMock(\Magento\Framework\HTTP\ClientFactory::class),
->>>>>>> upstream/2.2-develop
                     'data' => [],
                 ]
             )

@@ -28,7 +28,7 @@ class AssertCustomerNotInGrid extends AbstractConstraint
         CustomerIndex $customerIndexPage
     ) {
         $customerIndexPage->open();
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $customerIndexPage->getCustomerGridBlock()->isRowVisible(['email' => $customer->getEmail()]),
             'Customer with email ' . $customer->getEmail() . 'is present in Customer grid.'
         );

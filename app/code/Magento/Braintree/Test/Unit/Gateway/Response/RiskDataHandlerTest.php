@@ -27,19 +27,19 @@ class RiskDataHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var SubjectReader|MockObject
      */
-    private $subjectReaderMock;
+    private $subjectReader;
 
     /**
-     * @inheritdoc
+     * Set up
      */
     protected function setUp()
     {
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->setMethods(['readPayment', 'readTransaction'])
             ->getMock();
 
-        $this->riskDataHandler = new RiskDataHandler($this->subjectReaderMock);
+        $this->riskDataHandler = new RiskDataHandler($this->subjectReader);
     }
 
     /**
@@ -76,11 +76,11 @@ class RiskDataHandlerTest extends \PHPUnit\Framework\TestCase
             'payment' => $paymentDO,
         ];
 
-        $this->subjectReaderMock->expects(static::once())
+        $this->subjectReader->expects(static::once())
             ->method('readPayment')
             ->with($handlingSubject)
             ->willReturn($paymentDO);
-        $this->subjectReaderMock->expects(static::once())
+        $this->subjectReader->expects(static::once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -18,11 +17,6 @@ use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFact
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Model\ResourceModel\Metadata;
-<<<<<<< HEAD
-use Magento\Framework\App\ObjectManager;
-use Magento\Tax\Api\OrderTaxManagementInterface;
-=======
->>>>>>> upstream/2.2-develop
 
 /**
  * Repository class
@@ -62,15 +56,9 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     protected $registry = [];
 
     /**
-<<<<<<< HEAD
-     * @var OrderTaxManagementInterface
-     */
-    private $orderTaxManagement;
-=======
      * @var JoinProcessorInterface
      */
     private $extensionAttributesJoinProcessor;
->>>>>>> upstream/2.2-develop
 
     /**
      * Constructor
@@ -79,22 +67,14 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface|null $collectionProcessor
      * @param \Magento\Sales\Api\Data\OrderExtensionFactory|null $orderExtensionFactory
-<<<<<<< HEAD
-     * @param OrderTaxManagementInterface|null $orderTaxManagement
-=======
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         Metadata $metadata,
         SearchResultFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory = null,
-<<<<<<< HEAD
-        OrderTaxManagementInterface $orderTaxManagement = null
-=======
         JoinProcessorInterface $extensionAttributesJoinProcessor = null
->>>>>>> upstream/2.2-develop
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
@@ -102,17 +82,12 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             ->get(\Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class);
         $this->orderExtensionFactory = $orderExtensionFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Sales\Api\Data\OrderExtensionFactory::class);
-<<<<<<< HEAD
-        $this->orderTaxManagement = $orderTaxManagement ?: ObjectManager::getInstance()
-            ->get(OrderTaxManagementInterface::class);
-=======
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor
             ?: ObjectManager::getInstance()->get(JoinProcessorInterface::class);
->>>>>>> upstream/2.2-develop
     }
 
     /**
-     * Load entity
+     * load entity
      *
      * @param int $id
      * @return \Magento\Sales\Api\Data\OrderInterface
@@ -122,44 +97,18 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new InputException(__('An ID is needed. Set the ID and try again.'));
+            throw new InputException(__('Id required'));
         }
         if (!isset($this->registry[$id])) {
             /** @var OrderInterface $entity */
             $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
-                throw new NoSuchEntityException(
-                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
-                );
+                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
-            $this->setOrderTaxDetails($entity);
             $this->setShippingAssignments($entity);
             $this->registry[$id] = $entity;
         }
         return $this->registry[$id];
-    }
-
-    /**
-     * Set order tax details to extension attributes.
-     *
-     * @param OrderInterface $order
-     * @return void
-     */
-    private function setOrderTaxDetails(OrderInterface $order)
-    {
-        $extensionAttributes = $order->getExtensionAttributes();
-        $orderTaxDetails = $this->orderTaxManagement->getOrderTaxDetails($order->getEntityId());
-        $appliedTaxes = $orderTaxDetails->getAppliedTaxes();
-
-        $extensionAttributes->setAppliedTaxes($appliedTaxes);
-        if (!empty($appliedTaxes)) {
-            $extensionAttributes->setConvertingFromQuote(true);
-        }
-
-        $items = $orderTaxDetails->getItems();
-        $extensionAttributes->setItemAppliedTaxes($items);
-
-        $order->setExtensionAttributes($extensionAttributes);
     }
 
     /**
@@ -177,7 +126,6 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         $searchResult->setSearchCriteria($searchCriteria);
         foreach ($searchResult->getItems() as $order) {
             $this->setShippingAssignments($order);
-            $this->setOrderTaxDetails($order);
         }
         return $searchResult;
     }
@@ -231,8 +179,6 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     }
 
     /**
-     * Set shipping assignments to extension attributes.
-     *
      * @param OrderInterface $order
      * @return void
      */

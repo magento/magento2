@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -23,9 +22,7 @@ class Qtyincrements extends \Magento\Framework\App\Config\Value
     {
         $value = $this->getValue();
         if (floor($value) != $value) {
-            throw new LocalizedException(
-                __("Quantity increments can't use decimals. Enter a new increment and try again.")
-            );
+            throw new LocalizedException(__('Decimal qty increments is not allowed.'));
         }
     }
 }

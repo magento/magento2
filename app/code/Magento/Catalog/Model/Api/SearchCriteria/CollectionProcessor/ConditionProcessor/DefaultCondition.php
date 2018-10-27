@@ -31,11 +31,6 @@ class DefaultCondition implements CustomConditionInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Builds condition to filter product collection either by EAV or by native attribute
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @param Filter $filter
      * @return string
      */

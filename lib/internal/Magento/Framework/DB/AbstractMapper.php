@@ -123,7 +123,7 @@ abstract class AbstractMapper implements MapperInterface
             $mapperMethod = 'map' . $camelCaseKey;
             if (method_exists($this, $mapperMethod)) {
                 if (!is_array($value)) {
-                    throw new \InvalidArgumentException('Wrong type of argument, expecting array for '. $mapperMethod);
+                    $value = [$value];
                 }
                 call_user_func_array([$this, $mapperMethod], $value);
             }

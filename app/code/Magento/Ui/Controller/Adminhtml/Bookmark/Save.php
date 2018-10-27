@@ -5,7 +5,6 @@
  */
 namespace Magento\Ui\Controller\Adminhtml\Bookmark;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Json\DecoderInterface;
@@ -21,7 +20,7 @@ use Magento\Ui\Controller\Adminhtml\AbstractAction;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends AbstractAction implements HttpPostActionInterface
+class Save extends AbstractAction
 {
     /**
      * Identifier for current bookmark
@@ -54,14 +53,8 @@ class Save extends AbstractAction implements HttpPostActionInterface
 
     /**
      * @var DecoderInterface
-     * @deprecated
      */
     protected $jsonDecoder;
-
-    /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
-     */
-    private $serializer;
 
     /**
      * @param Context $context
@@ -71,8 +64,6 @@ class Save extends AbstractAction implements HttpPostActionInterface
      * @param BookmarkInterfaceFactory $bookmarkFactory
      * @param UserContextInterface $userContext
      * @param DecoderInterface $jsonDecoder
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @throws \RuntimeException
      */
     public function __construct(
         Context $context,
@@ -81,8 +72,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
         BookmarkManagementInterface $bookmarkManagement,
         BookmarkInterfaceFactory $bookmarkFactory,
         UserContextInterface $userContext,
-        DecoderInterface $jsonDecoder,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        DecoderInterface $jsonDecoder
     ) {
         parent::__construct($context, $factory);
         $this->bookmarkRepository = $bookmarkRepository;
@@ -90,16 +80,12 @@ class Save extends AbstractAction implements HttpPostActionInterface
         $this->bookmarkFactory = $bookmarkFactory;
         $this->userContext = $userContext;
         $this->jsonDecoder = $jsonDecoder;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
      * Action for AJAX request
      *
      * @return void
-     * @throws \InvalidArgumentException
-     * @throws \LogicException
      */
     public function execute()
     {
@@ -108,7 +94,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
         if (!$jsonData) {
             throw new \InvalidArgumentException('Invalid parameter "data"');
         }
-        $data = $this->serializer->unserialize($jsonData);
+        $data = $this->jsonDecoder->decode($jsonData);
         $action = key($data);
         switch ($action) {
             case self::ACTIVE_IDENTIFIER:

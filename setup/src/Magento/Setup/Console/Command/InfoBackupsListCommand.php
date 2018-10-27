@@ -11,10 +11,8 @@ use Magento\Framework\Backup\Factory;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Setup\BackupRollback;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\TableFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Command prints list of available backup files
@@ -36,23 +34,15 @@ class InfoBackupsListCommand extends Command
     private $directoryList;
 
     /**
-     * @var TableFactory
-     */
-    private $tableHelperFactory;
-
-    /**
      * @param DirectoryList $directoryList
      * @param File $file
-     * @param TableFactory $tableHelperFactory
      */
     public function __construct(
         DirectoryList $directoryList,
-        File $file,
-        TableFactory $tableHelperFactory = null
+        File $file
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;
-        $this->tableHelperFactory = $tableHelperFactory ?: ObjectManager::getInstance()->create(TableFactory::class);
         parent::__construct();
     }
 
@@ -100,14 +90,14 @@ class InfoBackupsListCommand extends Command
                 return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
             }
             $output->writeln("<info>Showing backup files in $backupsDir.</info>");
-            /** @var \Symfony\Component\Console\Helper\Table $tableHelper */
-            $tableHelper = $this->tableHelperFactory->create(['output' => $output]);
-            $tableHelper->setHeaders(['Backup Filename', 'Backup Type']);
+            /** @var \Symfony\Component\Console\Helper\Table $table */
+            $table = $this->getHelperSet()->get('table');
+            $table->setHeaders(['Backup Filename', 'Backup Type']);
             asort($tempTable);
             foreach ($tempTable as $key => $value) {
-                $tableHelper->addRow([$key, $value]);
+                $table->addRow([$key, $value]);
             }
-            $tableHelper->render();
+            $table->render($output);
         } else {
             $output->writeln('<info>No backup files found.</info>');
         }

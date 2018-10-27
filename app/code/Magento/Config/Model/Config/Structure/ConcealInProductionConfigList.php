@@ -60,7 +60,6 @@ class ConcealInProductionConfigList implements ElementVisibilityInterface
     public function isHidden($path)
     {
         $path = $this->normalizePath($path);
-
         return $this->state->getMode() === State::MODE_PRODUCTION
             && !empty($this->configs[$path])
             && $this->configs[$path] === static::HIDDEN;

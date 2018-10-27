@@ -260,7 +260,7 @@ class ObjectManagerFactory
                     new \Magento\Framework\Filesystem\Directory\WriteFactory($driverPool)
                 ),
                 new \Magento\Framework\Config\FileIteratorFactory(
-                    new \Magento\Framework\Filesystem\File\ReadFactory($driverPool)
+                    new \Magento\Framework\Filesystem\File\ReadFactory(new \Magento\Framework\Filesystem\DriverPool())
                 )
             );
             $schemaLocator = new \Magento\Framework\ObjectManager\Config\SchemaLocator();

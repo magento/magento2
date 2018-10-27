@@ -18,11 +18,7 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
     private $zendTransport;
 
     /**
-<<<<<<< HEAD
-     * @var MessageInterface
-=======
      * @var Message
->>>>>>> upstream/2.2-develop
      */
     private $message;
 

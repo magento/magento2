@@ -18,6 +18,11 @@ class EditTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_registryMock;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_configStructureMock;
@@ -44,6 +49,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['helper']);
         $helperMock = $this->createMock(\Magento\Backend\Helper\Data::class);
         $menuConfigMock = $this->createMock(\Magento\Backend\Model\Menu\Config::class);
@@ -74,6 +80,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
 
         $params = [
             'urlBuilder' => $urlBuilder,
+            'registry' => $this->_registryMock,
             'layout' => $layoutMock,
             'menuConfig' => $menuConfigMock,
             'configStructure' => $this->_configStructureMock,
@@ -150,7 +157,10 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->method('getSystemConfigPathsWhereCurrentlyUsed')
             ->will($this->returnValue($this->_fixtureConfigPath));
 
-        $this->_block->setEmailTemplate($templateMock);
+        $this->_registryMock->expects($this->once())
+            ->method('registry')
+            ->with('current_email_template')
+            ->will($this->returnValue($templateMock));
 
         $actual = $this->_block->getCurrentlyUsedForPaths(false);
         $expected = [

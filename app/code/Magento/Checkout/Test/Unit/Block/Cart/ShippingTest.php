@@ -98,11 +98,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             ->method('process')
             ->with($this->layout)
             ->willReturn($layoutProcessed);
-<<<<<<< HEAD
-
-=======
         
->>>>>>> upstream/2.2-develop
         $this->assertEquals(
             $jsonLayoutProcessed,
             $this->model->getJsLayout()

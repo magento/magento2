@@ -10,9 +10,6 @@ use Magento\Framework\Search\RequestInterface;
 
 /**
  * Build base Query for Index
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 interface IndexBuilderInterface
 {

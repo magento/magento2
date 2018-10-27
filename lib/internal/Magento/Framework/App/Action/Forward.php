@@ -10,11 +10,6 @@ namespace Magento\Framework\App\Action;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
-/**
- * Forward request further.
- *
- * @SuppressWarnings(PHPMD.AllPurposeAction)
- */
 class Forward extends AbstractAction
 {
     /**

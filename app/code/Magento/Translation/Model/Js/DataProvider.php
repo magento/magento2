@@ -103,6 +103,7 @@ class DataProvider implements DataProviderInterface
 
         $dictionary = [];
         foreach ($files as $filePath) {
+            /** @var \Magento\Framework\Filesystem\File\Read $read */
             $read = $this->fileReadFactory->create($filePath[0], \Magento\Framework\Filesystem\DriverPool::FILE);
             $content = $read->readAll();
             foreach ($this->getPhrases($content) as $phrase) {

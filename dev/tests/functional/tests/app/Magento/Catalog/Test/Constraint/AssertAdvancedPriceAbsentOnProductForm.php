@@ -31,7 +31,7 @@ class AssertAdvancedPriceAbsentOnProductForm extends AbstractConstraint
                 ->openSection('advanced-pricing')
                 ->getSection('advanced-pricing');
 
-            \PHPUnit\Framework\Assert::assertFalse(
+            \PHPUnit_Framework_Assert::assertFalse(
                 $advancedPricing->getTierPriceForm()->hasGroupPriceOptions(),
                 'Customer group price options is present in grid.'
             );

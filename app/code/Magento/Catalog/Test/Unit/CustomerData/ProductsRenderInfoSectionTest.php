@@ -134,7 +134,7 @@ class ProductsRenderInfoSectionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($filterMock);
-        $searchCriteria = $this->createMock(SearchCriteria::class);
+        $searchCritera = $this->createMock(SearchCriteria::class);
         $this->searchCriteriaBuilderMock
             ->expects($this->once())
             ->method('addFilters')
@@ -142,10 +142,10 @@ class ProductsRenderInfoSectionTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
-            ->willReturn($searchCriteria);
+            ->willReturn($searchCritera);
         $this->productRenderRepositoryMock->expects($this->once())
             ->method('getList')
-            ->with($searchCriteria, 3, 'UAH')
+            ->with($searchCritera, 3, 'UAH')
             ->willReturn($searchResult);
         $searchResult->expects($this->any())
             ->method('getItems')

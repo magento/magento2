@@ -51,7 +51,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
 
     /**
      * Set max regular price
-     * Max regular price is the same, as maximum price, except of excluding calculating special price and catalog rules
+     * Max regular price is the same, as maximum price, except of excluding calculating special price and catalogules
      * in it
      *
      * @param float $maxRegularPrice

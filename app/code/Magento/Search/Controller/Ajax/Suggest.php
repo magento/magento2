@@ -5,13 +5,12 @@
  */
 namespace Magento\Search\Controller\Ajax;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Search\Model\AutocompleteInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Suggest extends Action implements HttpGetActionInterface
+class Suggest extends Action
 {
     /**
      * @var  \Magento\Search\Model\AutocompleteInterface

@@ -21,7 +21,6 @@ class Config
     const HTTP_METHOD_DELETE = 'DELETE';
     const HTTP_METHOD_PUT = 'PUT';
     const HTTP_METHOD_POST = 'POST';
-    const HTTP_METHOD_PATCH = 'PATCH';
     /**#@-*/
 
     /**#@+

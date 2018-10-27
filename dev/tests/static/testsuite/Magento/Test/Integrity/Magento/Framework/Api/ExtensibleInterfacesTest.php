@@ -30,13 +30,12 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
             function ($filename) {
                 $errors = [];
                 $fileContent = file_get_contents($filename);
-                $pattern = '/'
-                    . str_replace('\\', '\\\\', self::EXTENSIBLE_DATA_INTERFACE)
-                    . '/';
-                $extendsFromExtensibleDataInterface = preg_match($pattern, $fileContent);
-                $namespacePattern = '/namespace ([\w\\\\]+).*interface ([\w\\\\]+)/s';
+                $extendsFromExtensibleDataInterface = preg_match(
+                    '/' . str_replace('\\', '\\\\', self::EXTENSIBLE_DATA_INTERFACE) . '/',
+                    $fileContent
+                );
                 if ($extendsFromExtensibleDataInterface
-                    && preg_match($namespacePattern, $fileContent, $matches)
+                    && preg_match('/namespace ([\w\\\\]+).*interface ([\w\\\\]+)/s', $fileContent, $matches)
                 ) {
                     $namespace = $matches[1];
                     $interfaceName = $matches[2];

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -148,7 +147,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         $productSku = $option->getProductSku();
         if (!$productSku) {
-            throw new CouldNotSaveException(__('The ProductSku is empty. Set the ProductSku and try again.'));
+            throw new CouldNotSaveException(__('ProductSku should be specified'));
         }
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($productSku);
@@ -201,7 +200,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
                 $this->productRepository->save($product);
             }
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__("The custom option couldn't be removed."));
+            throw new CouldNotSaveException(__('Could not remove custom option'));
         }
         return true;
     }

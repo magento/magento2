@@ -90,25 +90,13 @@ class Filesystem
     private $locale;
 
     /**
-<<<<<<< HEAD
-     * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
-     * @param \Magento\Framework\App\DeploymentConfig\Reader $reader
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-=======
->>>>>>> upstream/2.2-develop
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
      * @param \Magento\Framework\Filesystem\Driver\File $driverFile
      * @param \Magento\Store\Model\Config\StoreView $storeView
      * @param \Magento\Framework\ShellInterface $shell
-<<<<<<< HEAD
-     * @param UserCollection|null $userCollection
-     * @param Locale|null $locale
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-=======
      * @param UserCollection $userCollection
      * @param Locale $locale
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -116,26 +104,16 @@ class Filesystem
         \Magento\Framework\Filesystem\Driver\File $driverFile,
         \Magento\Store\Model\Config\StoreView $storeView,
         \Magento\Framework\ShellInterface $shell,
-<<<<<<< HEAD
-        UserCollection $userCollection = null,
-        Locale $locale = null
-=======
         UserCollection $userCollection,
         Locale $locale
->>>>>>> upstream/2.2-develop
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
         $this->storeView = $storeView;
         $this->shell = $shell;
-<<<<<<< HEAD
-        $this->userCollection = $userCollection ?: $this->objectManager->get(UserCollection::class);
-        $this->locale = $locale ?: $this->objectManager->get(Locale::class);
-=======
         $this->userCollection = $userCollection;
         $this->locale = $locale;
->>>>>>> upstream/2.2-develop
         $this->functionCallPath =
             PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
@@ -208,7 +186,7 @@ class Filesystem
     }
 
     /**
-     * Get used store and admin user locales.
+     * Get used store and admin user locales
      *
      * @return array
      * @throws \InvalidArgumentException if unknown locale is provided by the store configuration
@@ -219,25 +197,14 @@ class Filesystem
             $this->storeView->retrieveLocales(),
             $this->getAdminUserInterfaceLocales()
         );
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         return array_map(
             function ($locale) {
                 if (!$this->locale->isValid($locale)) {
                     throw new \InvalidArgumentException(
-<<<<<<< HEAD
-                        $locale . ' argument has invalid value, run info:language:list for list of available locales'
-                    );
-                }
-
-=======
                         $locale .
                         ' argument has invalid value, run info:language:list for list of available locales'
                     );
                 }
->>>>>>> upstream/2.2-develop
                 return $locale;
             },
             array_unique($usedLocales)

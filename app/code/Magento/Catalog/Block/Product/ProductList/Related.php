@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -16,8 +18,7 @@ use Magento\Framework\View\Element\AbstractBlock;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @since 100.0.2
  */
-class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
-    \Magento\Framework\DataObject\IdentityInterface
+class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Collection

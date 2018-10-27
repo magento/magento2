@@ -5,115 +5,124 @@
  */
 namespace Magento\Framework\Search\Test\Unit\Dynamic;
 
-use Magento\Framework\Search\Dynamic\IntervalFactory;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\Dynamic\IntervalInterface;
-<<<<<<< HEAD
-use Magento\Framework\Search\EngineResolverInterface;
-=======
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
->>>>>>> upstream/2.2-develop
 
 class IntervalFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var IntervalFactory */
-    private $model;
+    const CONFIG_PATH = 'config_path';
+    const INTERVAL = 'some_interval';
 
-    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $objectManagerMock;
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManager;
 
-    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $engineResolverMock;
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfig;
 
+    /**
+     * @var \Magento\Framework\Search\Dynamic\IntervalInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $interval;
+
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $helper;
+
+    /**
+     * SetUp method
+     */
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+        $this->helper = new ObjectManager($this);
+
+        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+            ->setMethods(['create', 'get', 'configure'])
+            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
+
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->interval = $this->getMockBuilder(\Magento\Framework\Search\Dynamic\IntervalInterface::class)
+            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
     }
 
+    /**
+     * Test for method Create
+     */
     public function testCreate()
     {
-        $dataProvider = 'current_interval';
-        $dataProviderClass = IntervalInterface::class;
-        $dataProviders = [
-            $dataProvider => $dataProviderClass,
-        ];
-        $data = ['data'];
-
-        $this->engineResolverMock->expects($this->once())
-            ->method('getCurrentSearchEngine')
-            ->willReturn($dataProvider);
-
-        $dataProviderMock = $this->getMockBuilder($dataProviderClass)
-            ->getMockForAbstractClass();
-
-        $this->objectManagerMock->expects($this->once())
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with(self::CONFIG_PATH, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
+            ->willReturn(self::CONFIG_PATH . 't');
+        $this->objectManager->expects($this->once())
             ->method('create')
-            ->with($dataProviderClass, $data)
-            ->willReturn($dataProviderMock);
+            ->with(self::INTERVAL)
+            ->willReturn($this->interval);
 
-        $this->model = new IntervalFactory(
-            $this->objectManagerMock,
-            $this->engineResolverMock,
-            $dataProviders
-        );
+        $result = $this->factoryCreate();
 
-        $this->assertEquals($dataProviderMock, $this->model->create($data));
+        $this->assertEquals($this->interval, $result);
     }
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Interval not found by config current_interval
+     * @expectedExceptionMessage Interval not found by config t
      */
-    public function testCreateWithoutIntervals()
+    public function testCreateIntervalNotFoundException()
     {
-        $dataProvider = 'current_interval';
-        $dataProviders = [];
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with(self::CONFIG_PATH, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
+            ->willReturn('t');
 
-        $this->engineResolverMock->expects($this->once())
-            ->method('getCurrentSearchEngine')
-            ->willReturn($dataProvider);
-
-        $this->model = new IntervalFactory(
-            $this->objectManagerMock,
-            $this->engineResolverMock,
-            $dataProviders
-        );
+        $this->factoryCreate();
     }
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Interval not instance of interface
+     * @expectedExceptionMessage Interval not instance of interface \Magento\Framework\Search\Dynamic\IntervalInterface
      */
-    public function testCreateWithWrongInterval()
+    public function testCreateIntervalNotImplementedInterfaceException()
     {
-        $dataProvider = 'current_interval';
-        $dataProviderClass = \stdClass::class;
-        $dataProviders = [
-            $dataProvider => $dataProviderClass,
-        ];
-        $data = ['data'];
-
-        $this->engineResolverMock->expects($this->once())
-            ->method('getCurrentSearchEngine')
-            ->willReturn($dataProvider);
-
-        $dataProviderMock = $this->getMockBuilder($dataProviderClass)
-            ->getMockForAbstractClass();
-
-        $this->objectManagerMock->expects($this->once())
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with(self::CONFIG_PATH, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
+            ->willReturn(self::CONFIG_PATH . 't');
+        $this->objectManager->expects($this->once())
             ->method('create')
-            ->with($dataProviderClass, $data)
-            ->willReturn($dataProviderMock);
+            ->with(self::INTERVAL)
+            ->willReturn($this->objectManager);
 
-        $this->model = new IntervalFactory(
-            $this->objectManagerMock,
-            $this->engineResolverMock,
-            $dataProviders
+        $this->factoryCreate();
+    }
+
+    /**
+     * @return IntervalInterface
+     */
+    private function factoryCreate()
+    {
+        /** @var \Magento\Framework\Search\Dynamic\IntervalFactory $factory */
+        $factory = $this->helper->getObject(
+            \Magento\Framework\Search\Dynamic\IntervalFactory::class,
+            [
+                'objectManager' => $this->objectManager,
+                'scopeConfig' => $this->scopeConfig,
+                'configPath' => self::CONFIG_PATH,
+                'intervals' => [self::CONFIG_PATH . 't' => self::INTERVAL]
+            ]
         );
 
-        $this->model->create($data);
+        return $factory->create();
     }
 }

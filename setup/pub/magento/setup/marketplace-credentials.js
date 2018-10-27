@@ -41,21 +41,16 @@ angular.module('marketplace-credentials', ['ngStorage'])
 
             $scope.upgradeProcessError = false;
             if ($state.current.type == 'upgrade') {
-                $scope.isHiddenSpinner = false;
                 $http.get('index.php/select-version/installedSystemPackage', {'responseType' : 'json'})
-                    .then(function successCallback(resp) {
-                        var data = resp.data;
-
-                        $scope.isHiddenSpinner = true;
-
+                    .success(function (data) {
                         if (data.responseType == 'error') {
                             $scope.upgradeProcessError = true;
                             $scope.upgradeProcessErrorMessage = $sce.trustAsHtml(data.error);
                         } else {
                             $scope.checkAuth();
                         }
-                    }, function errorCallback() {
-                        $scope.isHiddenSpinner = true;
+                    })
+                    .error(function (data) {
                         $scope.upgradeProcessError = true;
                     });
             } else {

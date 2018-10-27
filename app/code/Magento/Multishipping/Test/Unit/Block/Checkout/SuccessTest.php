@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
 use Magento\Multishipping\Block\Checkout\Success;
@@ -32,30 +34,12 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->sessionMock = $this->createPartialMock(
-            \Magento\Framework\Session\SessionManagerInterface::class,
-            [
-                'getOrderIds',
-                'start',
-                'writeClose',
-                'isSessionExists',
-                'getSessionId',
-                'getName',
-                'setName',
-                'destroy',
-                'clearStorage',
-                'getCookieDomain',
-                'getCookiePath',
-                'getCookieLifetime',
-                'setSessionId',
-                'regenerateId',
-                'expireSessionCookie',
-                'getSessionIdForHost',
-                'isValidForHost',
-                'isValidForPath',
+        $this->sessionMock = $this->createPartialMock(\Magento\Framework\Session\SessionManagerInterface::class, [
+                'getOrderIds', 'start', 'writeClose', 'isSessionExists', 'getSessionId', 'getName', 'setName',
+                'destroy', 'clearStorage', 'getCookieDomain', 'getCookiePath', 'getCookieLifetime', 'setSessionId',
+                'regenerateId', 'expireSessionCookie', 'getSessionIdForHost', 'isValidForHost', 'isValidForPath',
                 '__wakeup'
-            ]
-        );
+            ]);
         $this->contextMock = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
@@ -67,8 +51,7 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
             \Magento\Multishipping\Block\Checkout\Success::class,
             [
                 'context' => $this->contextMock
-            ]
-        );
+            ]);
     }
 
     public function testGetOrderIdsWithoutId()

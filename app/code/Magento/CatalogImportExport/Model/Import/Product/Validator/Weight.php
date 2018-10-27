@@ -15,9 +15,7 @@ class Weight extends AbstractImportValidator implements RowValidatorInterface
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!empty($value['weight']) && (!is_numeric($value['weight']) || $value['weight'] < 0)
-            && $value['weight'] !== $this->context->getEmptyAttributeValueConstant()
-        ) {
+        if (!empty($value['weight']) && (!is_numeric($value['weight']) || $value['weight'] < 0)) {
             $this->_addMessages(
                 [
                     sprintf(

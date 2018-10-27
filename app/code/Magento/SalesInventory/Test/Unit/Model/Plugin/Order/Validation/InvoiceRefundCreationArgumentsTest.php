@@ -16,7 +16,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface;
 
 /**
- * Class InvoiceRefundCreationArgumentsTest
+ * Class InvoiceRefundCreatetionArgumentsTest
  */
 class InvoiceRefundCreationArgumentsTest extends \PHPUnit\Framework\TestCase
 {
@@ -33,7 +33,7 @@ class InvoiceRefundCreationArgumentsTest extends \PHPUnit\Framework\TestCase
     /**
      * @var CreditmemoCreationArgumentsExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $extensionAttributesMock;
+    private $extencionAttributesMock;
 
     /**
      * @var CreditmemoCreationArgumentsInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -75,7 +75,7 @@ class InvoiceRefundCreationArgumentsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->extensionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
+        $this->extencionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
             ->setMethods(['getReturnToStockItems'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -111,9 +111,9 @@ class InvoiceRefundCreationArgumentsTest extends \PHPUnit\Framework\TestCase
         $returnToStockItems = [1];
         $this->creditmemoCreationArgumentsMock->expects($this->exactly(3))
             ->method('getExtensionAttributes')
-            ->willReturn($this->extensionAttributesMock);
+            ->willReturn($this->extencionAttributesMock);
 
-        $this->extensionAttributesMock->expects($this->exactly(2))
+        $this->extencionAttributesMock->expects($this->exactly(2))
             ->method('getReturnToStockItems')
             ->willReturn($returnToStockItems);
 

@@ -9,7 +9,6 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Directory\Model;
 
 class Observer
@@ -114,8 +113,7 @@ class Observer
                 $rates = $importModel->fetchRates();
                 $errors = $importModel->getMessages();
             } catch (\Exception $e) {
-                $importWarnings[] = __('FATAL ERROR:') . ' '
-                    . __("The import model can't be initialized. Verify the model and try again.");
+                $importWarnings[] = __('FATAL ERROR:') . ' ' . __('We can\'t initialize the import model.');
                 throw $e;
             }
         } else {
@@ -128,14 +126,9 @@ class Observer
             }
         }
 
-        $errorRecipient = $this->_scopeConfig->getValue(
-            self::XML_PATH_ERROR_RECIPIENT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
         if (sizeof($importWarnings) == 0) {
             $this->_currencyFactory->create()->saveRates($rates);
-        } elseif ($errorRecipient) {
-            //if $errorRecipient is not set, there is no sense send email to nobody
+        } else {
             $this->inlineTranslation->suspend();
 
             $this->_transportBuilder->setTemplateIdentifier(
@@ -155,7 +148,12 @@ class Observer
                     self::XML_PATH_ERROR_IDENTITY,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
-            )->addTo($errorRecipient);
+            )->addTo(
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_ERROR_RECIPIENT,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            );
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
 

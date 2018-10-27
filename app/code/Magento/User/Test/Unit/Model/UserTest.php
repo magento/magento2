@@ -6,9 +6,7 @@
 
 namespace Magento\User\Test\Unit\Model;
 
-use Magento\User\Helper\Data as UserHelper;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\User\Model\User;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Test class for \Magento\User\Model\User testing
@@ -18,17 +16,10 @@ use Magento\User\Model\User;
  */
 class UserTest extends \PHPUnit\Framework\TestCase
 {
-<<<<<<< HEAD
-    /** @var User */
-    private $model;
-
-    /** @var UserHelper|\PHPUnit_Framework_MockObject_MockObject */
-=======
     /** @var \Magento\User\Model\User */
     private $model;
 
     /** @var \Magento\User\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
->>>>>>> upstream/2.2-develop
     private $userDataMock;
 
     /**
@@ -37,22 +28,14 @@ class UserTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-<<<<<<< HEAD
-        $this->userDataMock = $this->getMockBuilder(UserHelper::class)
-=======
         $this->userDataMock = $this->getMockBuilder(\Magento\User\Helper\Data::class)
->>>>>>> upstream/2.2-develop
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-<<<<<<< HEAD
-        $objectManagerHelper = new ObjectManager($this);
-=======
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
->>>>>>> upstream/2.2-develop
         $this->model = $objectManagerHelper->getObject(
-            User::class,
+            \Magento\User\Model\User::class,
             [
                 'userData' => $this->userDataMock,
             ]
@@ -90,15 +73,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testChangeResetPasswordLinkToken()
     {
         $token = '1';
-        $this->assertInstanceOf(
-            User::class,
-            $this->model->changeResetPasswordLinkToken($token)
-        );
+        $this->assertInstanceOf(\Magento\User\Model\User::class, $this->model->changeResetPasswordLinkToken($token));
         $this->assertEquals($token, $this->model->getRpToken());
-        $this->assertInternalType(
-            'string',
-            $this->model->getRpTokenCreatedAt()
-        );
+        $this->assertInternalType('string', $this->model->getRpTokenCreatedAt());
     }
 
     /**
@@ -121,8 +98,6 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->userDataMock->expects($this->once())->method('getResetPasswordLinkExpirationPeriod')->willReturn(0);
         $this->assertTrue($this->model->isResetPasswordLinkTokenExpired());
     }
-<<<<<<< HEAD
-=======
 
     /**
      * @return void
@@ -136,5 +111,4 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->userDataMock->expects($this->once())->method('getResetPasswordLinkExpirationPeriod')->willReturn(1);
         $this->assertFalse($this->model->isResetPasswordLinkTokenExpired());
     }
->>>>>>> upstream/2.2-develop
 }

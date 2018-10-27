@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-<<<<<<< HEAD
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
-
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMoveAnchoredCategoryTest">
-        <annotations>
-            <features value="Catalog"/>
-            <stories value="Edit categories"/>
-            <title value="Admin should be able to move a category via categories tree and changes should be applied on frontend without a forced cache cleaning"/>
-            <description value="Admin should be able to move a category via categories tree and changes should be applied on frontend without a forced cache cleaning"/>
-=======
  /**
   * Copyright © Magento, Inc. All rights reserved.
   * See COPYING.txt for license details.
@@ -28,7 +13,6 @@
             <features value="Category Moving"/>
             <title value="Move Anchored Category with Products"/>
             <description value="You should be able to move a category via categories tree and made changes should be applied on frontend without forced cache cleaning"/>
->>>>>>> upstream/2.2-develop
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-76273"/>
             <group value="category"/>
@@ -135,8 +119,4 @@
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$simpleSubCategoryOne.name$$" stepKey="seeSubCategoryWithParentInBreadcrumbsOnSubCategoryWithParent3"/>
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$productOne.name$$" stepKey="seeProductInBreadcrumbsOnSubCategoryOne3"/>
     </test>
-<<<<<<< HEAD
 </tests>
-=======
-</tests>
->>>>>>> upstream/2.2-develop

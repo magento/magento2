@@ -5,12 +5,8 @@
  */
 namespace Magento\Framework\Search\Dynamic;
 
-<<<<<<< HEAD
-=======
 use Magento\Framework\App\Config\ScopeConfigInterface;
->>>>>>> upstream/2.2-develop
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Search\EngineResolverInterface;
 
 /**
  * @api
@@ -29,16 +25,20 @@ class DataProviderFactory
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param EngineResolverInterface $engineResolver
+     * @param ScopeConfigInterface $scopeConfig
+     * @param string $configPath
      * @param string[] $dataProviders
+     * @param string $scope
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        EngineResolverInterface $engineResolver,
-        $dataProviders
+        ScopeConfigInterface $scopeConfig,
+        $configPath,
+        $dataProviders,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT
     ) {
         $this->objectManager = $objectManager;
-        $configValue = $engineResolver->getCurrentSearchEngine();
+        $configValue = $scopeConfig->getValue($configPath, $scope);
         if (isset($dataProviders[$configValue])) {
             $this->dataProvider = $dataProviders[$configValue];
         } else {
@@ -57,7 +57,7 @@ class DataProviderFactory
         $dataProvider = $this->objectManager->create($this->dataProvider, $data);
         if (!$dataProvider instanceof DataProviderInterface) {
             throw new \LogicException(
-                'DataProvider not instance of interface ' . DataProviderInterface::class
+                'DataProvider not instance of interface \Magento\Framework\Search\Dynamic\DataProviderInterface'
             );
         }
         return $dataProvider;

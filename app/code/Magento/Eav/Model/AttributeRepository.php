@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Model;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
@@ -88,7 +87,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         try {
             $this->eavResource->save($attribute);
         } catch (\Exception $e) {
-            throw new StateException(__("The attribute can't be saved."));
+            throw new StateException(__('Cannot save attribute'));
         }
         return $attribute;
     }
@@ -164,10 +163,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         $attribute = $this->eavConfig->getAttribute($entityTypeCode, $attributeCode);
         if (!$attribute || !$attribute->getAttributeId()) {
             throw new NoSuchEntityException(
-                __(
-                    'The attribute with a "%1" attributeCode doesn\'t exist. Verify the attribute and try again.',
-                    $attributeCode
-                )
+                __('Attribute with attributeCode "%1" does not exist.', $attributeCode)
             );
         }
         return $attribute;
@@ -181,7 +177,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         try {
             $this->eavResource->delete($attribute);
         } catch (\Exception $e) {
-            throw new StateException(__("The attribute can't be deleted."));
+            throw new StateException(__('Cannot delete attribute.'));
         }
         return true;
     }
@@ -196,9 +192,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         $this->eavResource->load($attribute, $attributeId);
 
         if (!$attribute->getAttributeId()) {
-            throw new NoSuchEntityException(
-                __('The attribute with a "%1" ID doesn\'t exist. Verify the attribute and try again.', $attributeId)
-            );
+            throw new NoSuchEntityException(__('Attribute with id "%1" does not exist.', $attributeId));
         }
 
         $this->delete($attribute);

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\Filter;
@@ -109,7 +108,7 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
      * @expectedExceptionMessage No such entity with taxRuleId = 9999
      * @magentoDbIsolation enabled
      */
-    public function testSaveThrowsExceptionIdIfTargetTaxRuleDoesNotExist()
+    public function testSaveThrowsExceptionIdTargetTaxRulDoesNotExist()
     {
         $taxRuleDataObject = $this->taxRuleFactory->create();
         $taxRuleDataObject->setId(9999)
@@ -278,7 +277,7 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage "code" is required. Enter and try again.
+     * @expectedExceptionMessage code is a required field
      */
     public function testSaveThrowsExceptionIsRequiredFieldsAreMissing()
     {

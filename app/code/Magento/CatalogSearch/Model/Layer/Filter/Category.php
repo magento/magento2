@@ -24,16 +24,14 @@ class Category extends AbstractFilter
     private $dataProvider;
 
     /**
-     * Category constructor.
-     *
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Catalog\Model\Layer\Filter\DataProvider\CategoryFactory $categoryDataProviderFactory
+     * @param CategoryManagerFactory $categoryManager
      * @param array $data
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,

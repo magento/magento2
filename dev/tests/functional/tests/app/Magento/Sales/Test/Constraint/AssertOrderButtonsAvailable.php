@@ -34,7 +34,7 @@ class AssertOrderButtonsAvailable extends AbstractConstraint
             }
         }
 
-        \PHPUnit\Framework\Assert::assertEmpty(
+        \PHPUnit_Framework_Assert::assertEmpty(
             $absentButtons,
             "Next buttons was not found on page: \n" . implode(";\n", $absentButtons)
         );

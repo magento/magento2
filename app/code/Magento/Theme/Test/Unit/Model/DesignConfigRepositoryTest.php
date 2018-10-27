@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Theme\Test\Unit\Model;
 
 use Magento\Theme\Model\Data\Design\Config;
@@ -116,7 +115,7 @@ class DesignConfigRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage The config can't be saved because it's empty. Complete the config and try again.
+     * @expectedExceptionMessage Can not save empty config
      * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSaveWithoutConfig()

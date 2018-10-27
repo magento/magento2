@@ -76,7 +76,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
             ->method('getModeObject')
             ->will($this->returnValue($modeObjectMock));
 
-        $statusObject = $this->getStatusObjectMock(['add']);
+        $statusObject = $this->getStatucObjectMock(['add']);
         $statusObject
             ->expects($this->exactly(3))
             ->method('add');
@@ -124,7 +124,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
             ->method('getModeObject')
             ->will($this->returnValue($modeObjectMock));
 
-        $statusObject = $this->getStatusObjectMock(['toggleUpdateError']);
+        $statusObject = $this->getStatucObjectMock(['toggleUpdateError']);
         $statusObject
             ->expects($this->once())
             ->method('toggleUpdateError');
@@ -161,7 +161,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
      */
-    protected function getStatusObjectMock($methods = null)
+    protected function getStatucObjectMock($methods = null)
     {
         return $this->createPartialMock(\Magento\Setup\Model\Cron\Status::class, $methods);
     }

@@ -27,10 +27,5 @@ try {
     //Product already removed
 }
 
-/** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
-$stockRegistryStorage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
-$stockRegistryStorage->removeStockItem(1);
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

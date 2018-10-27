@@ -32,7 +32,7 @@ class Ftp
     }
 
     /**
-     * Wrapper for ftp_mkdir
+     * ftp_mkdir wrapper
      *
      * @param string $name
      * @return string the newly created directory name on success or <b>FALSE</b> on error.
@@ -148,7 +148,7 @@ class Ftp
     }
 
     /**
-     * Wrapper for ftp_fput
+     * ftp_fput wrapper
      *
      * @param string $remoteFile
      * @param resource $handle
@@ -163,7 +163,7 @@ class Ftp
     }
 
     /**
-     * Wrapper for ftp_put
+     * ftp_put wrapper
      *
      * @param string $remoteFile
      * @param string $localFile
@@ -200,7 +200,7 @@ class Ftp
     }
 
     /**
-     * Wrapper for ftp_raw
+     * ftp_raw wrapper
      *
      * @param string $cmd
      * @return array The server's response as an array of strings.
@@ -273,7 +273,7 @@ class Ftp
     }
 
     /**
-     * Wrapper for ftp_pasv
+     * ftp_pasv wrapper
      *
      * @param bool $pasv
      * @return bool
@@ -297,7 +297,7 @@ class Ftp
     }
 
     /**
-     * Wrapper for ftp_chmod
+     * ftp_chmod wrapper
      *
      * @param int $mode
      * @param string $remoteFile
@@ -310,7 +310,7 @@ class Ftp
     }
 
     /**
-     * Wrapper for ftp_chdir
+     * ftp_chdir wrapper
      *
      * @param string $dir
      * @return bool
@@ -322,7 +322,7 @@ class Ftp
     }
 
     /**
-     * Wrapper for ftp_cdup
+     * ftp_cdup wrapper
      *
      * @return bool
      */
@@ -333,7 +333,7 @@ class Ftp
     }
 
     /**
-     * Wrapper for ftp_get
+     * ftp_get wrapper
      *
      * @param string $localFile
      * @param string $remoteFile
@@ -350,7 +350,7 @@ class Ftp
     }
 
     /**
-     * Wrapper for ftp_nlist
+     * ftp_nlist wrapper
      *
      * @param string $dir
      * @return bool
@@ -363,7 +363,7 @@ class Ftp
     }
 
     /**
-     * Wrapper for ftp_rawlist
+     * ftp_rawlist wrapper
      *
      * @param string $dir
      * @param bool $recursive

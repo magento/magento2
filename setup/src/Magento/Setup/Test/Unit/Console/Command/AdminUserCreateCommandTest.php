@@ -11,15 +11,8 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\User\Model\UserValidationRules;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\QuestionHelper;
-<<<<<<< HEAD
-use Symfony\Component\Console\Input\InputOption;
-=======
->>>>>>> upstream/2.2-develop
 use Symfony\Component\Console\Tester\CommandTester;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -132,38 +125,11 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-<<<<<<< HEAD
-    /**
-     * @param int $mode
-     * @param string $description
-     * @dataProvider getOptionListDataProvider
-     */
-    public function testGetOptionsList($mode, $description)
-=======
     public function testGetOptionsList()
->>>>>>> upstream/2.2-develop
     {
         /* @var $argsList \Symfony\Component\Console\Input\InputArgument[] */
-        $argsList = $this->command->getOptionsList($mode);
+        $argsList = $this->command->getOptionsList();
         $this->assertEquals(AdminAccount::KEY_EMAIL, $argsList[2]->getName());
-        $this->assertEquals($description, $argsList[2]->getDescription());
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptionListDataProvider()
-    {
-        return [
-            [
-                'mode' => InputOption::VALUE_REQUIRED,
-                'description' => '(Required) Admin email',
-            ],
-            [
-                'mode' => InputOption::VALUE_OPTIONAL,
-                'description' => 'Admin email',
-            ],
-        ];
     }
 
     /**
@@ -192,13 +158,10 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
     public function validateDataProvider()
     {
         return [
-            [
-                [null, 'Doe', 'admin', 'test@test.com', '123123q', '123123q'],
-                ['"First Name" is required. Enter and try again.']
-            ],
+            [[null, 'Doe', 'admin', 'test@test.com', '123123q', '123123q'], ['First Name is a required field.']],
             [
                 ['John', null, null, 'test@test.com', '123123q', '123123q'],
-                ['"User Name" is required. Enter and try again.', '"Last Name" is required. Enter and try again.'],
+                ['User Name is a required field.', 'Last Name is a required field.'],
             ],
             [['John', 'Doe', 'admin', null, '123123q', '123123q'], ['Please enter a valid email.']],
             [

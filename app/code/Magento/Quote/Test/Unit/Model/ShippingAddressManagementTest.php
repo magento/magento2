@@ -5,10 +5,11 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Test\Unit\Model;
 
 use \Magento\Quote\Model\ShippingAddressManagement;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -82,10 +83,7 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
         $this->totalsCollectorMock = $this->createMock(\Magento\Quote\Model\Quote\TotalsCollector::class);
         $this->addressRepository = $this->createMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
 
-        $this->amountErrorMessageMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class,
-            ['getMessage']
-        );
+        $this->amountErrorMessageMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class, ['getMessage']);
 
         $this->service = $this->objectManager->getObject(
             \Magento\Quote\Model\ShippingAddressManagement::class,
@@ -123,10 +121,7 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
         $addressId = 1;
         $customerAddressId = 150;
 
-        $quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
-            ['getIsMultiShipping', 'isVirtual', 'validateMinimumAmount', 'setShippingAddress', 'getShippingAddress']
-        );
+        $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getIsMultiShipping', 'isVirtual', 'validateMinimumAmount', 'setShippingAddress', 'getShippingAddress']);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cart867')
@@ -173,7 +168,7 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
+     * @expectedExceptionMessage Cart contains virtual product(s) only. Shipping address is not applicable
      */
     public function testSetAddressForVirtualProduct()
     {
@@ -195,20 +190,17 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The address failed to save. Verify the address and try again.
+     * @expectedExceptionMessage Unable to save address. Please check input data.
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {
         $this->quoteAddressMock->expects($this->once())->method('save')->willThrowException(
-            new \Exception('The address failed to save. Verify the address and try again.')
+            new \Exception('Unable to save address. Please check input data.')
         );
 
         $customerAddressId = 150;
 
-        $quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
-            ['getIsMultiShipping', 'isVirtual', 'validateMinimumAmount', 'setShippingAddress', 'getShippingAddress']
-        );
+        $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getIsMultiShipping', 'isVirtual', 'validateMinimumAmount', 'setShippingAddress', 'getShippingAddress']);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cart867')
@@ -265,7 +257,7 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
+     * @expectedExceptionMessage Cart contains virtual product(s) only. Shipping address is not applicable
      */
     public function testGetAddressOfQuoteWithVirtualProducts()
     {

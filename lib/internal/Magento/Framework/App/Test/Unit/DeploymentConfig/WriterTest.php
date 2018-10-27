@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -244,7 +243,7 @@ class WriterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessage The "env.php" deployment config file isn't writable.
+     * @expectedExceptionMessage Deployment config file env.php is not writable.
      */
     public function testSaveConfigException()
     {

@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreStart
+// @codingStandardsIgnoreFile
+
 namespace My\NamespaceA;
 
 interface InterfaceA

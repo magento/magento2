@@ -232,8 +232,8 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getSimpleQtyToShip()
     {
-        $qty = $this->getQtyOrdered() - $this->getQtyShipped() - $this->getQtyCanceled();
-        return max(round($qty, 8), 0);
+        $qty = $this->getQtyOrdered() - $this->getQtyShipped() - $this->getQtyRefunded() - $this->getQtyCanceled();
+        return max($qty, 0);
     }
 
     /**
@@ -248,7 +248,7 @@ class Item extends AbstractModel implements OrderItemInterface
         }
 
         $qty = $this->getQtyOrdered() - $this->getQtyInvoiced() - $this->getQtyCanceled();
-        return max(round($qty, 8), 0);
+        return max($qty, 0);
     }
 
     /**
@@ -483,7 +483,6 @@ class Item extends AbstractModel implements OrderItemInterface
 
     /**
      * Get product options array by code.
-     *
      * If code is null return all options
      *
      * @param string $code
@@ -541,7 +540,8 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return checking of what calculation type was for this product
+     * Return checking of what calculation
+     * type was for this product
      *
      * @return bool
      */
@@ -581,7 +581,8 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return checking of what shipment type was for this product
+     * Return checking of what shipment
+     * type was for this product
      *
      * @return bool
      */
@@ -604,9 +605,9 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * This is Dummy item or not.
-     *
-     * If $shipment is true then we checking this for shipping situation if not, we checking this for calculation.
+     * This is Dummy item or not
+     * if $shipment is true then we checking this for shipping situation if not
+     * then we checking this for calculation
      *
      * @param bool $shipment
      * @return bool
@@ -651,9 +652,8 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return formatted buy request.
-     *
-     * This object is holding request received from product view page with keys and options for configured product.
+     * Returns formatted buy request - object, holding request received from
+     * product view page with keys and options for configured product
      *
      * @return \Magento\Framework\DataObject
      */
@@ -703,7 +703,7 @@ class Item extends AbstractModel implements OrderItemInterface
     //@codeCoverageIgnoreStart
 
     /**
-     * Return additional_data
+     * Returns additional_data
      *
      * @return string|null
      */
@@ -713,7 +713,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return amount_refunded
+     * Returns amount_refunded
      *
      * @return float|null
      */
@@ -723,9 +723,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return applied_rule_ids
-     *
-     * Rules are comma separated if there are more than one.
+     * Returns applied_rule_ids
      *
      * @return string|null
      */
@@ -735,7 +733,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_amount_refunded
+     * Returns base_amount_refunded
      *
      * @return float|null
      */
@@ -745,7 +743,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_cost
+     * Returns base_cost
      *
      * @return float|null
      */
@@ -755,7 +753,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_discount_amount
+     * Returns base_discount_amount
      *
      * @return float|null
      */
@@ -765,7 +763,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_discount_invoiced
+     * Returns base_discount_invoiced
      *
      * @return float|null
      */
@@ -775,7 +773,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_discount_refunded
+     * Returns base_discount_refunded
      *
      * @return float|null
      */
@@ -785,7 +783,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_discount_tax_compensation_amount
+     * Returns base_discount_tax_compensation_amount
      *
      * @return float|null
      */
@@ -795,7 +793,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_discount_tax_compensation_invoiced
+     * Returns base_discount_tax_compensation_invoiced
      *
      * @return float|null
      */
@@ -805,7 +803,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_discount_tax_compensation_refunded
+     * Returns base_discount_tax_compensation_refunded
      *
      * @return float|null
      */
@@ -815,7 +813,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_original_price
+     * Returns base_original_price
      *
      * @return float|null
      */
@@ -825,7 +823,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_price
+     * Returns base_price
      *
      * @return float|null
      */
@@ -835,7 +833,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_price_incl_tax
+     * Returns base_price_incl_tax
      *
      * @return float|null
      */
@@ -845,7 +843,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_row_invoiced
+     * Returns base_row_invoiced
      *
      * @return float|null
      */
@@ -855,7 +853,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_row_total
+     * Returns base_row_total
      *
      * @return float|null
      */
@@ -865,7 +863,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_row_total_incl_tax
+     * Returns base_row_total_incl_tax
      *
      * @return float|null
      */
@@ -875,7 +873,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_tax_amount
+     * Returns base_tax_amount
      *
      * @return float|null
      */
@@ -885,7 +883,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_tax_before_discount
+     * Returns base_tax_before_discount
      *
      * @return float|null
      */
@@ -895,7 +893,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_tax_invoiced
+     * Returns base_tax_invoiced
      *
      * @return float|null
      */
@@ -905,7 +903,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_tax_refunded
+     * Returns base_tax_refunded
      *
      * @return float|null
      */
@@ -915,7 +913,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_weee_tax_applied_amount
+     * Returns base_weee_tax_applied_amount
      *
      * @return float|null
      */
@@ -925,7 +923,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_weee_tax_applied_row_amnt
+     * Returns base_weee_tax_applied_row_amnt
      *
      * @return float|null
      */
@@ -935,7 +933,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_weee_tax_disposition
+     * Returns base_weee_tax_disposition
      *
      * @return float|null
      */
@@ -945,7 +943,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return base_weee_tax_row_disposition
+     * Returns base_weee_tax_row_disposition
      *
      * @return float|null
      */
@@ -955,7 +953,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return created_at
+     * Returns created_at
      *
      * @return string|null
      */
@@ -965,7 +963,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setCreatedAt($createdAt)
     {
@@ -973,7 +971,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return description
+     * Returns description
      *
      * @return string|null
      */
@@ -983,7 +981,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return discount_amount
+     * Returns discount_amount
      *
      * @return float|null
      */
@@ -993,7 +991,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return discount_invoiced
+     * Returns discount_invoiced
      *
      * @return float|null
      */
@@ -1003,7 +1001,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return discount_percent
+     * Returns discount_percent
      *
      * @return float|null
      */
@@ -1013,7 +1011,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return discount_refunded
+     * Returns discount_refunded
      *
      * @return float|null
      */
@@ -1023,7 +1021,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return event_id
+     * Returns event_id
      *
      * @return int|null
      */
@@ -1033,7 +1031,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return ext_order_item_id
+     * Returns ext_order_item_id
      *
      * @return string|null
      */
@@ -1043,7 +1041,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return free_shipping
+     * Returns free_shipping
      *
      * @return int|null
      */
@@ -1053,7 +1051,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_base_price
+     * Returns gw_base_price
      *
      * @return float|null
      */
@@ -1063,7 +1061,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_base_price_invoiced
+     * Returns gw_base_price_invoiced
      *
      * @return float|null
      */
@@ -1073,7 +1071,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_base_price_refunded
+     * Returns gw_base_price_refunded
      *
      * @return float|null
      */
@@ -1083,7 +1081,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_base_tax_amount
+     * Returns gw_base_tax_amount
      *
      * @return float|null
      */
@@ -1093,7 +1091,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_base_tax_amount_invoiced
+     * Returns gw_base_tax_amount_invoiced
      *
      * @return float|null
      */
@@ -1103,7 +1101,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_base_tax_amount_refunded
+     * Returns gw_base_tax_amount_refunded
      *
      * @return float|null
      */
@@ -1113,7 +1111,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_id
+     * Returns gw_id
      *
      * @return int|null
      */
@@ -1123,7 +1121,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_price
+     * Returns gw_price
      *
      * @return float|null
      */
@@ -1133,7 +1131,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_price_invoiced
+     * Returns gw_price_invoiced
      *
      * @return float|null
      */
@@ -1143,7 +1141,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_price_refunded
+     * Returns gw_price_refunded
      *
      * @return float|null
      */
@@ -1153,7 +1151,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_tax_amount
+     * Returns gw_tax_amount
      *
      * @return float|null
      */
@@ -1163,7 +1161,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_tax_amount_invoiced
+     * Returns gw_tax_amount_invoiced
      *
      * @return float|null
      */
@@ -1173,7 +1171,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return gw_tax_amount_refunded
+     * Returns gw_tax_amount_refunded
      *
      * @return float|null
      */
@@ -1183,7 +1181,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return discount_tax_compensation_amount
+     * Returns discount_tax_compensation_amount
      *
      * @return float|null
      */
@@ -1193,7 +1191,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return discount_tax_compensation_canceled
+     * Returns discount_tax_compensation_canceled
      *
      * @return float|null
      */
@@ -1203,7 +1201,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return discount_tax_compensation_invoiced
+     * Returns discount_tax_compensation_invoiced
      *
      * @return float|null
      */
@@ -1213,7 +1211,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return discount_tax_compensation_refunded
+     * Returns discount_tax_compensation_refunded
      *
      * @return float|null
      */
@@ -1223,7 +1221,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return is_qty_decimal
+     * Returns is_qty_decimal
      *
      * @return int|null
      */
@@ -1233,7 +1231,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return is_virtual
+     * Returns is_virtual
      *
      * @return int|null
      */
@@ -1243,7 +1241,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return item_id
+     * Returns item_id
      *
      * @return int|null
      */
@@ -1253,7 +1251,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return locked_do_invoice
+     * Returns locked_do_invoice
      *
      * @return int|null
      */
@@ -1263,7 +1261,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return locked_do_ship
+     * Returns locked_do_ship
      *
      * @return int|null
      */
@@ -1273,7 +1271,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return name
+     * Returns name
      *
      * @return string|null
      */
@@ -1283,7 +1281,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return no_discount
+     * Returns no_discount
      *
      * @return int|null
      */
@@ -1293,7 +1291,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return order_id
+     * Returns order_id
      *
      * @return int|null
      */
@@ -1303,7 +1301,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return parent_item_id
+     * Returns parent_item_id
      *
      * @return int|null
      */
@@ -1313,7 +1311,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return price
+     * Returns price
      *
      * @return float|null
      */
@@ -1323,7 +1321,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return price_incl_tax
+     * Returns price_incl_tax
      *
      * @return float|null
      */
@@ -1333,7 +1331,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return product_id
+     * Returns product_id
      *
      * @return int|null
      */
@@ -1343,7 +1341,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return product_type
+     * Returns product_type
      *
      * @return string|null
      */
@@ -1353,7 +1351,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return qty_backordered
+     * Returns qty_backordered
      *
      * @return float|null
      */
@@ -1363,7 +1361,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return qty_canceled
+     * Returns qty_canceled
      *
      * @return float|null
      */
@@ -1373,7 +1371,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return qty_invoiced
+     * Returns qty_invoiced
      *
      * @return float|null
      */
@@ -1383,7 +1381,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return qty_ordered
+     * Returns qty_ordered
      *
      * @return float|null
      */
@@ -1393,7 +1391,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return qty_refunded
+     * Returns qty_refunded
      *
      * @return float|null
      */
@@ -1403,7 +1401,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return qty_returned
+     * Returns qty_returned
      *
      * @return float|null
      */
@@ -1413,7 +1411,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return qty_shipped
+     * Returns qty_shipped
      *
      * @return float|null
      */
@@ -1423,7 +1421,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return quote_item_id
+     * Returns quote_item_id
      *
      * @return int|null
      */
@@ -1433,7 +1431,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return row_invoiced
+     * Returns row_invoiced
      *
      * @return float|null
      */
@@ -1443,7 +1441,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return row_total
+     * Returns row_total
      *
      * @return float|null
      */
@@ -1453,7 +1451,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return row_total_incl_tax
+     * Returns row_total_incl_tax
      *
      * @return float|null
      */
@@ -1463,7 +1461,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return row_weight
+     * Returns row_weight
      *
      * @return float|null
      */
@@ -1473,7 +1471,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return sku
+     * Returns sku
      *
      * @return string
      */
@@ -1483,7 +1481,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return store_id
+     * Returns store_id
      *
      * @return int|null
      */
@@ -1493,7 +1491,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return tax_amount
+     * Returns tax_amount
      *
      * @return float|null
      */
@@ -1503,7 +1501,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return tax_before_discount
+     * Returns tax_before_discount
      *
      * @return float|null
      */
@@ -1513,7 +1511,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return tax_canceled
+     * Returns tax_canceled
      *
      * @return float|null
      */
@@ -1523,7 +1521,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return tax_invoiced
+     * Returns tax_invoiced
      *
      * @return float|null
      */
@@ -1533,7 +1531,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return tax_percent
+     * Returns tax_percent
      *
      * @return float|null
      */
@@ -1543,7 +1541,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return tax_refunded
+     * Returns tax_refunded
      *
      * @return float|null
      */
@@ -1553,7 +1551,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return updated_at
+     * Returns updated_at
      *
      * @return string|null
      */
@@ -1563,7 +1561,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return weee_tax_applied
+     * Returns weee_tax_applied
      *
      * @return string|null
      */
@@ -1573,7 +1571,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return weee_tax_applied_amount
+     * Returns weee_tax_applied_amount
      *
      * @return float|null
      */
@@ -1583,7 +1581,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return weee_tax_applied_row_amount
+     * Returns weee_tax_applied_row_amount
      *
      * @return float|null
      */
@@ -1593,7 +1591,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return weee_tax_disposition
+     * Returns weee_tax_disposition
      *
      * @return float|null
      */
@@ -1603,7 +1601,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return weee_tax_row_disposition
+     * Returns weee_tax_row_disposition
      *
      * @return float|null
      */
@@ -1613,7 +1611,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return weight
+     * Returns weight
      *
      * @return float|null
      */
@@ -1623,7 +1621,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUpdatedAt($timestamp)
     {
@@ -1631,7 +1629,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setItemId($id)
     {
@@ -1639,7 +1637,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setOrderId($id)
     {
@@ -1647,7 +1645,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setParentItemId($id)
     {
@@ -1655,7 +1653,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setQuoteItemId($id)
     {
@@ -1663,7 +1661,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setStoreId($id)
     {
@@ -1671,7 +1669,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setProductId($id)
     {
@@ -1679,7 +1677,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setProductType($productType)
     {
@@ -1687,7 +1685,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setWeight($weight)
     {
@@ -1695,7 +1693,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setIsVirtual($isVirtual)
     {
@@ -1703,7 +1701,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setSku($sku)
     {
@@ -1711,7 +1709,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setName($name)
     {
@@ -1719,7 +1717,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setDescription($description)
     {
@@ -1727,7 +1725,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setAppliedRuleIds($appliedRuleIds)
     {
@@ -1735,7 +1733,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setAdditionalData($additionalData)
     {
@@ -1743,7 +1741,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setIsQtyDecimal($isQtyDecimal)
     {
@@ -1751,7 +1749,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setNoDiscount($noDiscount)
     {
@@ -1759,7 +1757,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setQtyBackordered($qtyBackordered)
     {
@@ -1767,7 +1765,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setQtyCanceled($qtyCanceled)
     {
@@ -1775,7 +1773,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setQtyInvoiced($qtyInvoiced)
     {
@@ -1783,7 +1781,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setQtyOrdered($qtyOrdered)
     {
@@ -1791,7 +1789,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setQtyRefunded($qtyRefunded)
     {
@@ -1799,7 +1797,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setQtyShipped($qtyShipped)
     {
@@ -1807,7 +1805,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseCost($baseCost)
     {
@@ -1815,7 +1813,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setPrice($price)
     {
@@ -1823,7 +1821,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBasePrice($price)
     {
@@ -1831,7 +1829,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setOriginalPrice($price)
     {
@@ -1839,7 +1837,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseOriginalPrice($price)
     {
@@ -1847,7 +1845,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setTaxPercent($taxPercent)
     {
@@ -1855,7 +1853,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setTaxAmount($amount)
     {
@@ -1863,7 +1861,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseTaxAmount($amount)
     {
@@ -1871,7 +1869,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setTaxInvoiced($taxInvoiced)
     {
@@ -1879,7 +1877,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseTaxInvoiced($baseTaxInvoiced)
     {
@@ -1887,7 +1885,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setDiscountPercent($discountPercent)
     {
@@ -1895,7 +1893,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setDiscountAmount($amount)
     {
@@ -1903,7 +1901,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseDiscountAmount($amount)
     {
@@ -1911,7 +1909,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setDiscountInvoiced($discountInvoiced)
     {
@@ -1919,7 +1917,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseDiscountInvoiced($baseDiscountInvoiced)
     {
@@ -1927,7 +1925,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setAmountRefunded($amountRefunded)
     {
@@ -1935,7 +1933,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseAmountRefunded($baseAmountRefunded)
     {
@@ -1943,7 +1941,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setRowTotal($amount)
     {
@@ -1951,7 +1949,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseRowTotal($amount)
     {
@@ -1959,7 +1957,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setRowInvoiced($rowInvoiced)
     {
@@ -1967,7 +1965,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseRowInvoiced($baseRowInvoiced)
     {
@@ -1975,7 +1973,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setRowWeight($rowWeight)
     {
@@ -1983,7 +1981,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseTaxBeforeDiscount($baseTaxBeforeDiscount)
     {
@@ -1991,7 +1989,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setTaxBeforeDiscount($taxBeforeDiscount)
     {
@@ -1999,7 +1997,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setExtOrderItemId($id)
     {
@@ -2007,7 +2005,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setLockedDoInvoice($flag)
     {
@@ -2015,7 +2013,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setLockedDoShip($flag)
     {
@@ -2023,7 +2021,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setPriceInclTax($amount)
     {
@@ -2031,7 +2029,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBasePriceInclTax($amount)
     {
@@ -2039,7 +2037,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setRowTotalInclTax($amount)
     {
@@ -2047,7 +2045,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseRowTotalInclTax($amount)
     {
@@ -2055,7 +2053,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setDiscountTaxCompensationAmount($amount)
     {
@@ -2063,7 +2061,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseDiscountTaxCompensationAmount($amount)
     {
@@ -2071,7 +2069,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setDiscountTaxCompensationInvoiced($discountTaxCompensationInvoiced)
     {
@@ -2079,7 +2077,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseDiscountTaxCompensationInvoiced($baseDiscountTaxCompensationInvoiced)
     {
@@ -2090,7 +2088,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setDiscountTaxCompensationRefunded($discountTaxCompensationRefunded)
     {
@@ -2098,7 +2096,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseDiscountTaxCompensationRefunded($baseDiscountTaxCompensationRefunded)
     {
@@ -2109,7 +2107,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setTaxCanceled($taxCanceled)
     {
@@ -2117,7 +2115,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setDiscountTaxCompensationCanceled($discountTaxCompensationCanceled)
     {
@@ -2125,7 +2123,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setTaxRefunded($taxRefunded)
     {
@@ -2133,7 +2131,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseTaxRefunded($baseTaxRefunded)
     {
@@ -2141,7 +2139,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setDiscountRefunded($discountRefunded)
     {
@@ -2149,7 +2147,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseDiscountRefunded($baseDiscountRefunded)
     {
@@ -2157,7 +2155,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwId($id)
     {
@@ -2165,7 +2163,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwBasePrice($price)
     {
@@ -2173,7 +2171,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwPrice($price)
     {
@@ -2181,7 +2179,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwBaseTaxAmount($amount)
     {
@@ -2189,7 +2187,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwTaxAmount($amount)
     {
@@ -2197,7 +2195,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwBasePriceInvoiced($gwBasePriceInvoiced)
     {
@@ -2205,7 +2203,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwPriceInvoiced($gwPriceInvoiced)
     {
@@ -2213,7 +2211,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwBaseTaxAmountInvoiced($gwBaseTaxAmountInvoiced)
     {
@@ -2221,7 +2219,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwTaxAmountInvoiced($gwTaxAmountInvoiced)
     {
@@ -2229,7 +2227,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwBasePriceRefunded($gwBasePriceRefunded)
     {
@@ -2237,7 +2235,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwPriceRefunded($gwPriceRefunded)
     {
@@ -2245,7 +2243,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwBaseTaxAmountRefunded($gwBaseTaxAmountRefunded)
     {
@@ -2253,7 +2251,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setGwTaxAmountRefunded($gwTaxAmountRefunded)
     {
@@ -2261,7 +2259,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setFreeShipping($freeShipping)
     {
@@ -2269,7 +2267,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setQtyReturned($qtyReturned)
     {
@@ -2277,7 +2275,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setEventId($id)
     {
@@ -2285,7 +2283,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseWeeeTaxAppliedAmount($amount)
     {
@@ -2293,7 +2291,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseWeeeTaxAppliedRowAmnt($amnt)
     {
@@ -2301,7 +2299,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setWeeeTaxAppliedAmount($amount)
     {
@@ -2309,7 +2307,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setWeeeTaxAppliedRowAmount($amount)
     {
@@ -2317,7 +2315,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setWeeeTaxApplied($weeeTaxApplied)
     {
@@ -2325,7 +2323,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setWeeeTaxDisposition($weeeTaxDisposition)
     {
@@ -2333,7 +2331,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setWeeeTaxRowDisposition($weeeTaxRowDisposition)
     {
@@ -2341,7 +2339,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseWeeeTaxDisposition($baseWeeeTaxDisposition)
     {
@@ -2349,7 +2347,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition)
     {
@@ -2357,7 +2355,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getProductOption()
     {
@@ -2365,7 +2363,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setProductOption(\Magento\Catalog\Api\Data\ProductOptionInterface $productOption)
     {
@@ -2373,7 +2371,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\OrderItemExtensionInterface|null
      */
@@ -2383,7 +2381,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param \Magento\Sales\Api\Data\OrderItemExtensionInterface $extensionAttributes
      * @return $this

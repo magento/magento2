@@ -25,7 +25,7 @@ class AssertProductCompareSuccessRemoveAllProductsMessage extends AbstractConstr
     public function processAssert(CatalogProductView $catalogProductView)
     {
         $actualMessage = $catalogProductView->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

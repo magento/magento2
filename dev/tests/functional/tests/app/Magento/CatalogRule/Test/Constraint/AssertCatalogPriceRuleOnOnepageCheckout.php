@@ -63,7 +63,7 @@ class AssertCatalogPriceRuleOnOnepageCheckout extends AbstractConstraint
         $actualPrices['sub_total'] = $checkoutOnepage->getReviewBlock()->getSubtotal();
         $expectedPrices['grand_total'] = $cartPrice['grand_total'];
         $expectedPrices['sub_total'] = $cartPrice['sub_total'];
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $expectedPrices,
             $actualPrices,
             'Wrong total cart prices are displayed.'

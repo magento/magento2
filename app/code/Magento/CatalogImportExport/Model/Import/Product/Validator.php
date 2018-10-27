@@ -150,12 +150,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             $doCheck = true;
         }
 
-        if ($doCheck === true) {
-            return isset($rowData[$attrCode])
-                && strlen(trim($rowData[$attrCode]))
-                && trim($rowData[$attrCode]) !== $this->context->getEmptyAttributeValueConstant();
-        }
-        return true;
+        return $doCheck ? isset($rowData[$attrCode]) && strlen(trim($rowData[$attrCode])) : true;
     }
 
     /**
@@ -193,11 +188,6 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if (!strlen(trim($rowData[$attrCode]))) {
             return true;
         }
-
-        if ($rowData[$attrCode] === $this->context->getEmptyAttributeValueConstant() && !$attrParams['is_required']) {
-            return true;
-        }
-
         switch ($attrParams['type']) {
             case 'varchar':
             case 'text':
@@ -218,12 +208,6 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                     if (!$valid) {
                         break;
                     }
-                }
-
-                $uniqueValues = array_unique($values);
-                if (count($uniqueValues) != count($values)) {
-                    $valid = false;
-                    $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES]);
                 }
                 break;
             case 'datetime':

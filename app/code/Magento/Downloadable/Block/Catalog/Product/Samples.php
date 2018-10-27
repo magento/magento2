@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Downloadable\Block\Catalog\Product;
 
 use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;
@@ -56,10 +58,7 @@ class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
         if ($this->getProduct()->getSamplesTitle()) {
             return $this->getProduct()->getSamplesTitle();
         }
-        return $this->_scopeConfig->getValue(
-            \Magento\Downloadable\Model\Sample::XML_PATH_SAMPLES_TITLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Sample::XML_PATH_SAMPLES_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -70,9 +69,6 @@ class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getIsOpenInNewWindow()
     {
-        return $this->_scopeConfig->isSetFlag(
-            \Magento\Downloadable\Model\Link::XML_PATH_TARGET_NEW_WINDOW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return $this->_scopeConfig->isSetFlag(\Magento\Downloadable\Model\Link::XML_PATH_TARGET_NEW_WINDOW, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 }

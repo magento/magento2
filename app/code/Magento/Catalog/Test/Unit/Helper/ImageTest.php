@@ -5,12 +5,10 @@
  */
 namespace Magento\Catalog\Test\Unit\Helper;
 
-use Magento\Catalog\Helper\Image;
-
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Image
+     * @var \Magento\Catalog\Helper\Image
      */
     protected $helper;
 
@@ -65,7 +63,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->helper = new Image(
+        $this->helper = new \Magento\Catalog\Helper\Image(
             $this->context,
             $this->imageFactory,
             $this->assetRepository,
@@ -120,7 +118,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->prepareWatermarkProperties($data);
 
         $this->assertInstanceOf(
-            Image::class,
+            \Magento\Catalog\Helper\Image::class,
             $this->helper->init($productMock, $imageId, $attributes)
         );
     }
@@ -162,7 +160,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $configViewMock->expects($this->once())
             ->method('getMediaAttributes')
-            ->with('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId)
+            ->with('Magento_Catalog', 'images', $imageId)
             ->willReturn($data);
 
         $this->viewConfig->expects($this->once())

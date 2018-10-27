@@ -5,14 +5,11 @@
  */
 namespace Magento\SampleData\Model;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Config\Composer\Package;
 use Magento\Framework\Config\Composer\PackageFactory;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 /**
  * Sample Data dependency
@@ -30,49 +27,42 @@ class Dependency
     protected $composerInformation;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @var PackageFactory
      */
     private $packageFactory;
 
     /**
-     * @var ComponentRegistrarInterface
+     * @var ComponentRegistrar
      */
     private $componentRegistrar;
 
     /**
-     * @var ReadFactory
-     */
-    private $directoryReadFactory;
-
-    /**
-     * Initialize dependencies.
-     *
      * @param ComposerInformation $composerInformation
-     * @param Filesystem $filesystem @deprecated 2.3.0 $directoryReadFactory is used instead
+     * @param Filesystem $filesystem
      * @param PackageFactory $packageFactory
-     * @param ComponentRegistrarInterface $componentRegistrar
-     * @param Filesystem\Directory\ReadFactory|null $directoryReadFactory
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param ComponentRegistrar $componentRegistrar
      */
     public function __construct(
         ComposerInformation $composerInformation,
         Filesystem $filesystem,
         PackageFactory $packageFactory,
-        ComponentRegistrarInterface $componentRegistrar,
-        \Magento\Framework\Filesystem\Directory\ReadFactory $directoryReadFactory = null
+        ComponentRegistrar $componentRegistrar
     ) {
         $this->composerInformation = $composerInformation;
+        $this->filesystem = $filesystem;
         $this->packageFactory = $packageFactory;
         $this->componentRegistrar = $componentRegistrar;
-        $this->directoryReadFactory = $directoryReadFactory ?:
-            ObjectManager::getInstance()->get(ReadFactory::class);
     }
 
     /**
      * Retrieve list of sample data packages from suggests
      *
      * @return array
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function getSampleDataPackages()
     {
@@ -81,7 +71,7 @@ class Dependency
         $suggests = array_merge($suggests, $this->getSuggestsFromModules());
         foreach ($suggests as $name => $version) {
             if (strpos($version, self::SAMPLE_DATA_SUGGEST) === 0) {
-                $installExtensions[$name] = trim(substr($version, strlen(self::SAMPLE_DATA_SUGGEST)));
+                $installExtensions[$name] = substr($version, strlen(self::SAMPLE_DATA_SUGGEST));
             }
         }
         return $installExtensions;
@@ -91,13 +81,19 @@ class Dependency
      * Retrieve suggested sample data packages from modules composer.json
      *
      * @return array
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function getSuggestsFromModules()
     {
         $suggests = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $package = $this->getModuleComposerPackage($moduleDir);
+            $file = $moduleDir . '/composer.json';
+
+            if (!file_exists($file) || !is_readable($file)) {
+                continue;
+            }
+
+            /** @var Package $package */
+            $package = $this->getModuleComposerPackage($file);
             $suggest = json_decode(json_encode($package->get('suggest')), true);
             if (!empty($suggest)) {
                 $suggests += $suggest;
@@ -109,26 +105,11 @@ class Dependency
     /**
      * Load package
      *
-     * @param string $moduleDir
+     * @param string $file
      * @return Package
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
-    private function getModuleComposerPackage($moduleDir)
+    protected function getModuleComposerPackage($file)
     {
-        /*
-         * Also look in parent directory of registered module directory to allow modules to follow the pds/skeleton
-         * standard and have their source code in a "src" subdirectory of the repository
-         *
-         * see: https://github.com/php-pds/skeleton
-         */
-        foreach ([$moduleDir, $moduleDir . DIRECTORY_SEPARATOR . '..'] as $dir) {
-            /** @var Filesystem\Directory\ReadInterface $directory */
-            $directory = $this->directoryReadFactory->create($dir);
-            if ($directory->isExist('composer.json') && $directory->isReadable('composer.json')) {
-                /** @var Package $package */
-                return $this->packageFactory->create(['json' => json_decode($directory->readFile('composer.json'))]);
-            }
-        }
-        return $this->packageFactory->create(['json' => new \stdClass]);
+        return $this->packageFactory->create(['json' => json_decode(file_get_contents($file))]);
     }
 }

@@ -29,7 +29,7 @@ class Input extends AbstractFilter
      *
      * @return void
      */
-    public function prepare(): void
+    public function prepare()
     {
         $this->wrappedComponent = $this->uiComponentFactory->create(
             $this->getName(),
@@ -62,16 +62,12 @@ class Input extends AbstractFilter
      *
      * @return void
      */
-    protected function applyFilter(): void
+    protected function applyFilter()
     {
         if (isset($this->filterData[$this->getName()])) {
             $value = str_replace(['%', '_'], ['\%', '\_'], $this->filterData[$this->getName()]);
 
-<<<<<<< HEAD
-            if ($value || $value === '0') {
-=======
             if (!$this->isEmptyValue($value)) {
->>>>>>> upstream/2.2-develop
                 $filter = $this->filterBuilder->setConditionType('like')
                     ->setField($this->getName())
                     ->setValue(sprintf('%%%s%%', $value))

@@ -53,7 +53,7 @@ function setCustomErrorHandler()
 
                 $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
 
-                throw new \PHPUnit\Framework\Exception(
+                throw new \PHPUnit_Framework_Exception(
                     sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
                     $errNo
                 );

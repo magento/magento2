@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -177,7 +176,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The order address couldn't be deleted.
+     * @expectedExceptionMessage Could not delete order address
      */
     public function testDeleteWithException()
     {
@@ -234,7 +233,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The order address couldn't be saved.
+     * @expectedExceptionMessage Could not save order address
      */
     public function testSaveWithException()
     {

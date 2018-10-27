@@ -1,6 +1,2 @@
 # Format: <componentType=module|library|theme|language|*> <componentName> <globPattern> or simply <globPattern>
-<<<<<<< HEAD
 * * /
-=======
-* * /
->>>>>>> upstream/2.2-develop

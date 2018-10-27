@@ -77,8 +77,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Render element attributes
-     *
      * @param string $elementType
      * @return string
      */
@@ -92,8 +90,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Render head content
-     *
      * @return string
      */
     public function renderHeadContent()
@@ -108,8 +104,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Render title
-     *
      * @return string
      */
     public function renderTitle()
@@ -118,8 +112,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Render metadata
-     *
      * @return string
      */
     public function renderMetadata()
@@ -139,25 +131,12 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Process metadata content
-     *
      * @param string $name
      * @param string $content
      * @return string
      */
     protected function processMetadataContent($name, $content)
     {
-<<<<<<< HEAD
-        $method = 'get' . $this->string->upperCaseWords($name, '_', '');
-        if ($name === 'title') {
-            if (!$content) {
-                $content = $this->escaper->escapeHtml($this->pageConfig->$method()->get());
-            }
-            return $content;
-        }
-        if (method_exists($this->pageConfig, $method)) {
-            $content = $this->pageConfig->$method();
-=======
         switch ($name) {
             case Config::META_DESCRIPTION:
                 return $this->pageConfig->getDescription();
@@ -182,13 +161,10 @@ class Renderer implements RendererInterface
 
             default:
                 return $content;
->>>>>>> upstream/2.2-develop
         }
     }
 
     /**
-     * Returns metadata template
-     *
      * @param string $name
      * @return bool|string
      */
@@ -223,8 +199,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Favicon preparation
-     *
      * @return void
      */
     public function prepareFavicon()
@@ -290,8 +264,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Process assets merge
-     *
      * @param array $groupAssets
      * @param \Magento\Framework\View\Asset\PropertyGroup $group
      * @return array
@@ -308,8 +280,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Returns group attributes
-     *
      * @param \Magento\Framework\View\Asset\PropertyGroup $group
      * @return string|null
      */
@@ -331,8 +301,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Add default attributes
-     *
      * @param string $contentType
      * @param string $attributes
      * @return string
@@ -352,8 +320,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Returns assets template
-     *
      * @param string $contentType
      * @param string|null $attributes
      * @return string
@@ -374,8 +340,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Process IE condition
-     *
      * @param string $groupHtml
      * @param \Magento\Framework\View\Asset\PropertyGroup $group
      * @return string
@@ -429,8 +393,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Returns available groups.
-     *
      * @return array
      */
     public function getAvailableResultGroups()

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Test\Unit\Model\Quote\Payment;
 
 use Magento\Payment\Model\Method\Substitution;
@@ -41,10 +43,7 @@ class ToOrderPaymentTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->paymentMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Payment::class,
-            ['getCcNumber', 'getCcCid', 'getMethodInstance', 'getAdditionalInformation']
-        );
+        $this->paymentMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Payment::class, ['getCcNumber', 'getCcCid', 'getMethodInstance', 'getAdditionalInformation']);
         $this->objectCopyMock = $this->createMock(\Magento\Framework\DataObject\Copy::class);
         $this->orderPaymentRepositoryMock = $this->getMockForAbstractClass(
             \Magento\Sales\Api\OrderPaymentRepositoryInterface::class,
@@ -120,11 +119,7 @@ class ToOrderPaymentTest extends \PHPUnit\Framework\TestCase
         $this->orderPaymentRepositoryMock->expects($this->once())->method('create')->willReturn($orderPayment);
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with(
-                $orderPayment,
-                array_merge($paymentData, $data),
-                \Magento\Sales\Api\Data\OrderPaymentInterface::class
-            )
+            ->with($orderPayment, array_merge($paymentData, $data), \Magento\Sales\Api\Data\OrderPaymentInterface::class)
             ->willReturnSelf();
 
         $this->assertSame($orderPayment, $this->converter->convert($this->paymentMock, $data));

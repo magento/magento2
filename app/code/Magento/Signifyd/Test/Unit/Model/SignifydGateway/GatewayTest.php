@@ -155,15 +155,10 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ->method('makeApiCall')
             ->willThrowException(new ApiCallException($apiCallFailureMessage));
 
-<<<<<<< HEAD
-        $this->expectException(GatewayException::class);
-        $this->expectExceptionMessage($apiCallFailureMessage);
-=======
         $this->expectException(
             GatewayException::class,
             $apiCallFailureMessage
         );
->>>>>>> upstream/2.2-develop
         $this->gateway->createCase($dummyOrderId);
     }
 
@@ -247,15 +242,10 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ->method('makeApiCall')
             ->willThrowException(new ApiCallException($apiCallFailureMessage));
 
-<<<<<<< HEAD
-        $this->expectException(GatewayException::class);
-        $this->expectExceptionMessage($apiCallFailureMessage);
-=======
         $this->expectException(
             GatewayException::class,
             $apiCallFailureMessage
         );
->>>>>>> upstream/2.2-develop
         $result = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
         $this->assertEquals('Api call failed', $result);
     }
@@ -425,11 +415,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
      * @param int $storeId
      * @return void
      */
-<<<<<<< HEAD
-    private function withOrderEntity(int $orderId, int $storeId): void
-=======
     private function withOrderEntity($orderId, $storeId)
->>>>>>> upstream/2.2-develop
     {
         $orderEntity = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
@@ -448,11 +434,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
      * @param int $storeId
      * @return void
      */
-<<<<<<< HEAD
-    private function withCaseEntity(int $caseId, int $storeId): void
-=======
     private function withCaseEntity($caseId, $storeId)
->>>>>>> upstream/2.2-develop
     {
         $orderId = 1;
 

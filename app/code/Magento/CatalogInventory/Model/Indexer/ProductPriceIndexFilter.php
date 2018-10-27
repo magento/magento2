@@ -68,11 +68,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-<<<<<<< HEAD
-    public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = []) : void
-=======
     public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = [])
->>>>>>> upstream/2.2-develop
     {
         if ($this->stockConfiguration->isShowOutOfStock()) {
             return;

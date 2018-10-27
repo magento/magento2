@@ -6,10 +6,9 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Edit extends \Magento\Tax\Controller\Adminhtml\Rule implements HttpGetActionInterface
+class Edit extends \Magento\Tax\Controller\Adminhtml\Rule
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect

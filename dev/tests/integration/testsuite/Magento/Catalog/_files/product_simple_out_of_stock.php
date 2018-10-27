@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
 /** @var \Magento\TestFramework\ObjectManager $objectManager */
@@ -21,12 +16,8 @@ $categoryLinkManagement = $objectManager->get(\Magento\Catalog\Api\CategoryLinkM
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-<<<<<<< HEAD
-    ->setAttributeSetId($product->getDefaultAttributeSetId())
-=======
     ->setId(1)
     ->setAttributeSetId(4)
->>>>>>> upstream/2.2-develop
     ->setWebsiteIds([1])
     ->setName('Simple Product')
     ->setSku('simple-out-of-stock')
@@ -47,12 +38,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             'is_qty_decimal'            => 0,
             'is_in_stock'               => 0,
         ]
-<<<<<<< HEAD
-    )
-    ->setCanSaveCustomOptions(true)
-=======
     )->setCanSaveCustomOptions(true)
->>>>>>> upstream/2.2-develop
     ->setHasOptions(true);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */

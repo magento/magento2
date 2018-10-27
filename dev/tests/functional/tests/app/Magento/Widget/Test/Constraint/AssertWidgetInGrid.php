@@ -33,7 +33,7 @@ class AssertWidgetInGrid extends AbstractConstraint
     {
         $filter = ['title' => $widget->getTitle(), 'theme_id' => $widget->getThemeId()];
         $widgetInstanceIndex->open();
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $widgetInstanceIndex->getWidgetGrid()->isRowVisible($filter),
             'Widget with title \'' . $widget->getTitle() . '\' is absent in Widget grid.'
         );

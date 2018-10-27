@@ -258,7 +258,7 @@ class Provider implements TokenProviderInterface
     {
         if (!$this->validateOauthToken($token)) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('The token length is invalid. Check the length and try again.')
+                __('Token is not the correct length')
             );
         }
 

@@ -40,7 +40,7 @@ class AssertProductNameOnDifferentStoreViews extends AbstractConstraint
         foreach ($stores as $store) {
             $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store->getName());
             $cmsIndex->getLinksBlock()->waitWelcomeMessage();
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $productNames[$store->getStoreId()],
                 $catalogProductView->getViewBlock()->getProductName(),
                 sprintf('Wrong product name is displayed for %s store view.', $store->getName())

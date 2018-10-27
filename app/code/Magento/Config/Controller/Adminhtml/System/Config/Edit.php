@@ -6,9 +6,7 @@
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Edit extends AbstractScopeConfig implements HttpGetActionInterface
+class Edit extends AbstractScopeConfig
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

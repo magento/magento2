@@ -10,14 +10,6 @@ use Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped as Renderer;
 
 class GroupedTest extends \PHPUnit\Framework\TestCase
 {
-<<<<<<< HEAD
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $scopeConfig;
-
-    /** @var Renderer */
-    private $renderer;
-
-=======
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -31,7 +23,6 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
->>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         parent::setUp();

@@ -3,19 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-<<<<<<< HEAD
-=======
 use Magento\Downloadable\Model\Link;
 use Magento\Store\Model\Store;
->>>>>>> upstream/2.2-develop
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\Downloadable\Model\Link;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -25,7 +18,6 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -121,7 +113,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $expectedMessage = "The product that was requested doesn't exist. Verify the product and try again.";
+        $expectedMessage = 'Requested product doesn\'t exist';
 
         try {
             $this->_webApiCall($serviceInfo, ['sku' => $invalidSku]);
@@ -157,15 +149,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
-<<<<<<< HEAD
-     * Load website by website code
-     *
-     * @param $websiteCode
-     * @return Website
-     */
-    private function loadWebsiteByCode($websiteCode)
-    {
-=======
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_sku_with_slash.php
      */
     public function testGetBySkuWithSlash()
@@ -188,7 +171,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     private function loadWebsiteByCode(string $websiteCode): Website
     {
         /** @var WebsiteRepository $websiteRepository */
->>>>>>> upstream/2.2-develop
         $websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepository::class);
         try {
             $website = $websiteRepository->get($websiteCode);
@@ -223,11 +205,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'attribute_set_id' => 4,
                 'name' =>  "Test API 1",
                 'price' =>  254.13,
-<<<<<<< HEAD
-                'sku' => '1234'
-=======
                 'sku' => '1234',
->>>>>>> upstream/2.2-develop
             ]
         ];
         $product2 = [
@@ -235,11 +213,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'attribute_set_id' => 4,
                 'name' =>  "Test API 1",
                 'price' =>  254.13,
-<<<<<<< HEAD
-                'sku' => '1235'
-=======
                 'sku' => '1235',
->>>>>>> upstream/2.2-develop
             ]
         ];
 
@@ -271,7 +245,12 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
         /** @var Website $website */
-        $website = $this->loadWebsiteByCode('second_website');
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Website::class);
+        $website->load('second_website', 'code');
+
+        if (!$website->getId()) {
+            $this->fail("Couldn`t load website");
+        }
 
         $websitesData = [
             'website_ids' => [
@@ -293,6 +272,13 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testDeleteAllWebsiteAssociations()
     {
         $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
+        /** @var Website $website */
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Website::class);
+        $website->load('second_website', 'code');
+
+        if (!$website->getId()) {
+            $this->fail("Couldn`t load website");
+        }
 
         $websitesData = [
             'website_ids' => []
@@ -313,12 +299,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productBuilder = $this->getSimpleProductData();
         $productBuilder[ProductInterface::SKU] = 'test-test-sku';
         $productBuilder[ProductInterface::TYPE_ID] = 'simple';
+
         /** @var Website $website */
         $website = $this->loadWebsiteByCode('test_website');
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         $websitesData = [
             'website_ids' => [
                 1,
@@ -483,7 +466,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $this->_markTestAsRestOnly("In case of SOAP type casting is handled by PHP SoapServer, no need to test it");
         $expectedMessage = 'Error occurred during "price" processing. '
-            . 'The "invalid_format" value\'s type is invalid. The "float" type was expected. Verify and try again.';
+            . 'Invalid type for value: "invalid_format". Expected Type: "float".';
 
         try {
             $this->saveProduct(['name' => 'simple', 'price' => 'invalid_format', 'sku' => 'simple']);
@@ -532,13 +515,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $sku = $fixtureProduct[ProductInterface::SKU];
         $this->saveProduct($fixtureProduct);
         $this->expectException('Exception');
-<<<<<<< HEAD
-        $this->expectExceptionMessage(
-            "The product that was requested doesn't exist. Verify the product and try again."
-        );
-=======
         $this->expectExceptionMessage('Requested product doesn\'t exist');
->>>>>>> upstream/2.2-develop
 
         // Delete all with 'all' store code
         $this->deleteProduct($sku);
@@ -841,11 +818,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
-<<<<<<< HEAD
-    public function testUpdateWithExtensionAttributes(): void
-=======
     public function testUpdateWithExtensionAttributes()
->>>>>>> upstream/2.2-develop
     {
         $sku = 'downloadable-product';
         $linksKey = 'downloadable_product_links';
@@ -871,15 +844,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     protected function updateProduct($product)
     {
-        if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
-                ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
-                }
-            }
-        }
         $sku = $product[ProductInterface::SKU];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
             $product[ProductInterface::SKU] = null;
@@ -956,7 +920,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue(count($response['items']) > 0);
 
         $this->assertNotNull($response['items'][0]['sku']);
-        $this->assertNotNull($response['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']);
         $this->assertEquals('simple', $response['items'][0]['sku']);
 
         $index = null;
@@ -973,10 +936,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
-<<<<<<< HEAD
-=======
      * @return void
->>>>>>> upstream/2.2-develop
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testGetListWithAdditionalParams()
@@ -995,11 +955,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria) . '&fields=' .
                     $additionalParams,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
-<<<<<<< HEAD
-            ]
-=======
             ],
->>>>>>> upstream/2.2-develop
         ];
 
         $response = $this->_webApiCall($serviceInfo, $searchCriteria);
@@ -1016,11 +972,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertNotNull($response['items'][0]['custom_attributes'][$indexDescription]['attribute_code']);
         $this->assertNotNull($response['items'][0]['custom_attributes'][$indexDescription]['value']);
-<<<<<<< HEAD
-        $this->assertTrue(count($response['items'][0]['custom_attributes']) == 1);
-=======
         $this->assertCount(1, $response['items'][0]['custom_attributes']);
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -1066,7 +1018,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue(count($response['items']) == 1);
         $this->assertTrue(isset($response['items'][0]['sku']));
         $this->assertEquals('simple-2', $response['items'][0]['sku']);
-        $this->assertNotNull($response['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']);
     }
 
     /**
@@ -1213,9 +1164,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(3, $searchResult['total_count']);
         $this->assertEquals(1, count($searchResult['items']));
         $this->assertEquals('search_product_4', $searchResult['items'][0][ProductInterface::SKU]);
-        $this->assertNotNull(
-            $searchResult['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']
-        );
     }
 
     /**
@@ -1304,15 +1252,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     protected function saveProduct($product, $storeCode = null)
     {
-        if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
-                ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
-                }
-            }
-        }
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,

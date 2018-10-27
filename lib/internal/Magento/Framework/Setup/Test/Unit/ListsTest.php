@@ -58,9 +58,6 @@ class ListsTest extends \PHPUnit\Framework\TestCase
         $this->mockConfig->expects($this->any())
             ->method('getAllowedLocales')
             ->willReturn($this->expectedLocales);
-        $this->mockConfig->expects($this->any())
-            ->method('getAllowedCurrencies')
-            ->willReturn($this->expectedCurrencies);
 
         $this->lists = new Lists($this->mockConfig);
     }
@@ -75,14 +72,5 @@ class ListsTest extends \PHPUnit\Framework\TestCase
     {
         $locales = array_intersect($this->expectedLocales, array_keys($this->lists->getLocaleList()));
         $this->assertEquals($this->expectedLocales, $locales);
-    }
-
-    /**
-     * Test Lists:getCurrencyList() considering allowed currencies config values.
-     */
-    public function testGetCurrencyList()
-    {
-        $currencies = array_intersect($this->expectedCurrencies, array_keys($this->lists->getCurrencyList()));
-        $this->assertEquals($this->expectedCurrencies, $currencies);
     }
 }

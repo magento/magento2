@@ -115,7 +115,7 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
     }
 
     /**
-     * Return formatted attribute value from entity model
+     * Return formated attribute value from entity model
      *
      * @param string $format
      * @return array|string

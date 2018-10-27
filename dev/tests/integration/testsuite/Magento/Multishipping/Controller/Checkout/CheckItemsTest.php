@@ -163,11 +163,7 @@ class CheckItemsTest extends \Magento\TestFramework\TestCase\AbstractController
                 'request' => ['qty' => 101],
                 'response' => [
                     'success' => false,
-<<<<<<< HEAD
-                    'error_message' => 'The requested qty is not available']
-=======
                     'error_message' => 'We don\'t have as many "Simple Product" as you requested.']
->>>>>>> upstream/2.2-develop
             ],
             [
                 'request' => ['qty' => 230],

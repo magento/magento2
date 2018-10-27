@@ -5,8 +5,6 @@
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder;
@@ -15,7 +13,7 @@ use Magento\Backend\App\Action\Context;
 /**
  * Class Wizard
  */
-class Wizard extends Action implements HttpPostActionInterface, HttpGetActionInterface
+class Wizard extends Action
 {
     /**
      * Authorization level of a basic admin session

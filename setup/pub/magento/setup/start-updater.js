@@ -35,15 +35,14 @@ angular.module('start-updater', ['ngStorage'])
                 'dataOption': $localStorage.dataOption
             };
             $http.post('index.php/start-updater/update', payLoad)
-                .then(function successCallback(resp) {
-                    var data = resp.data;
-
-                    if (data.success) {
+                .success(function (data) {
+                    if (data['success']) {
                         $window.location.href = '../update/index.php';
                     } else {
-                        $scope.errorMessage = data.message;
+                        $scope.errorMessage = data['message'];
                     }
-                }, function errorCallback() {
+                })
+                .error(function (data) {
                     $scope.errorMessage = 'Something went wrong. Please try again.';
                 });
         };

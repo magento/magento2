@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-use \Magento\Framework\Component\ComponentRegistrar;
-
-ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'bar_en_gb', __DIR__);
+\Magento\Framework\Component\ComponentRegistrar::register(
+    \Magento\Framework\Component\ComponentRegistrar::LANGUAGE,
+    'bar_en_gb',
+    __DIR__
+);

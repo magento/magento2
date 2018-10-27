@@ -28,12 +28,12 @@ class AssertInterfaceLocaleAvailableOptions extends AbstractConstraint
         $dropdownLocales = []
     ) {
         if ($_ENV['mage_mode'] === 'production') {
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $locales->getList(Locales::TYPE_DEPLOYED),
                 $dropdownLocales
             );
         } else {
-            \PHPUnit\Framework\Assert::assertEmpty(
+            \PHPUnit_Framework_Assert::assertEmpty(
                 array_diff($dropdownLocales, $locales->getList(Locales::TYPE_ALL))
             );
         }

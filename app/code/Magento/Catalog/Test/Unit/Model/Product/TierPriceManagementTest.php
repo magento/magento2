@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Product\TierPriceManagement;
@@ -70,17 +72,11 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->repositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
-        $this->priceFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class,
-            ['create']
-        );
+        $this->priceFactoryMock = $this->createPartialMock(\Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class, ['create']);
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->websiteMock =
             $this->createPartialMock(\Magento\Store\Model\Website::class, ['getId', '__wakeup']);
-        $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getData', 'getIdBySku', 'load', '__wakeup', 'save', 'validate', 'setData']
-        );
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getData', 'getIdBySku', 'load', '__wakeup', 'save', 'validate', 'setData']);
         $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->priceModifierMock =
             $this->createMock(\Magento\Catalog\Model\Product\PriceModifier::class);
@@ -195,7 +191,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @message The product doesn't exist. Verify and try again.
+     * @message Such product doesn't exist
      */
     public function testDeleteTierPriceFromNonExistingProduct()
     {
@@ -331,7 +327,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Values in the attr1, attr2 attributes are invalid. Verify the values and try again.
+     * @expectedExceptionMessage Values of following attributes are invalid: attr1, attr2
      */
     public function testSetThrowsExceptionIfDoesntValidate()
     {

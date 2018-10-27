@@ -67,8 +67,8 @@
                                                         </button>
                                                     <?php else: ?>
                                                         <?php
-                                                        $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
-                                                        $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
+                                                            $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
+                                                            $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
                                                         ?>
                                                         <button class="action tocart primary" data-post='<?= /* @noEscape */ $postData ?>' type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
                                                             <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
@@ -103,7 +103,7 @@
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <?= ($iterator == count($items) + 1) ? '</li>' : '' ?>
+                        <?= ($iterator == count($items)+1) ? '</li>' : '' ?>
                     <?php endforeach ?>
                 </ol>
             </div>

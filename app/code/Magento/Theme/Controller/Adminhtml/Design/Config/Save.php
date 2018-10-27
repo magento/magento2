@@ -8,7 +8,6 @@ namespace Magento\Theme\Controller\Adminhtml\Design\Config;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Request\DataPersistorInterface;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Theme\Model\DesignConfigRepository;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
@@ -64,15 +63,9 @@ class Save extends Action
 
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
-     *
-     * @throws NotFoundException
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost()) {
-            throw new NotFoundException(__('Page not found.'));
-        }
-
         $resultRedirect = $this->resultRedirectFactory->create();
         $scope = $this->getRequest()->getParam('scope');
         $scopeId = (int)$this->getRequest()->getParam('scope_id');

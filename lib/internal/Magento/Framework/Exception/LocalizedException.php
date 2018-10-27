@@ -11,8 +11,6 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\Renderer\Placeholder;
 
 /**
- * Localized exception
- *
  * @api
  */
 class LocalizedException extends \Exception

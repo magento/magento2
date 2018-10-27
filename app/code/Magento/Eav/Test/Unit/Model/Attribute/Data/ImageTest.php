@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
 class ImageTest extends \PHPUnit\Framework\TestCase
@@ -24,12 +26,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
 
         $this->model = new \Magento\Eav\Model\Attribute\Data\Image(
-            $timezoneMock,
-            $loggerMock,
-            $localeResolverMock,
-            $urlEncoder,
-            $fileValidatorMock,
-            $filesystemMock
+            $timezoneMock, $loggerMock, $localeResolverMock, $urlEncoder, $fileValidatorMock, $filesystemMock
         );
     }
 
@@ -48,12 +45,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * @dataProvider validateValueDataProvider
      */
     public function testValidateValue(
-        $value,
-        $originalValue,
-        $isRequired,
-        $isAjaxRequest,
-        $rules,
-        $expectedResult
+        $value, $originalValue, $isRequired, $isAjaxRequest, $rules, $expectedResult
     ) {
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
         $entityMock->expects($this->any())->method('getData')->will($this->returnValue($originalValue));
@@ -143,7 +135,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'originalValue' => 'value',
                 'isRequired' => true,
                 'isAjaxRequest' => false,
-                'rules' => ['max_image_height' => 2],
+                'rules' => ['max_image_heght' => 2],
                 'expectedResult' => ['"Label" height exceeds allowed value of 2 px.']
             ],
             [
@@ -151,7 +143,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'originalValue' => 'value',
                 'isRequired' => true,
                 'isAjaxRequest' => false,
-                'rules' => ['max_image_height' => 2000],
+                'rules' => ['max_image_heght' => 2000],
                 'expectedResult' => true
             ],
             [
@@ -159,7 +151,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'originalValue' => 'value',
                 'isRequired' => true,
                 'isAjaxRequest' => false,
-                'rules' => ['max_image_height' => 2, 'max_image_width' => 2],
+                'rules' => ['max_image_heght' => 2, 'max_image_width' => 2],
                 'expectedResult' => [
                     '"Label" width exceeds allowed value of 2 px.',
                     '"Label" height exceeds allowed value of 2 px.',
@@ -167,4 +159,4 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-}
+};

@@ -5,11 +5,10 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Index extends ExportController implements HttpGetActionInterface
+class Index extends ExportController
 {
     /**
      * Index action.

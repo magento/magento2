@@ -123,7 +123,7 @@ define([
             prop = this.map[this.identificationDRProperty];
 
             this.insertData(_.reject(this.source.get(this.dataProvider), function (recordData) {
-                return recordData[prop].toString() === data[prop].toString();
+                return ~~recordData[prop] === ~~data[prop];
             }, this));
         },
 
@@ -213,7 +213,7 @@ define([
                     return false;
                 }
 
-                changes.forEach(function (changedObject) {
+                changes.each(function (changedObject) {
                     this.mappingValue(changedObject);
                 }, this);
             }
@@ -265,7 +265,7 @@ define([
                 changes = [],
                 obj = {};
 
-            max.forEach(function (record, index) {
+            max.each(function (record, index) {
                 obj[this.map[this.identificationDRProperty]] = record[this.map[this.identificationDRProperty]];
 
                 if (!_.where(this.cacheGridData, obj).length) {

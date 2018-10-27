@@ -41,45 +41,18 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-<<<<<<< HEAD
-    /**
-     * @return void
-     */
-    public function testSendResponse(): void
-=======
     public function testSendResponse()
->>>>>>> upstream/2.2-develop
     {
         $filePath = 'file_path';
         $headers = $this->getMockBuilder(\Zend\Http\Headers::class)->getMock();
         $this->response->setFilePath($filePath);
         $this->response->setHeaders($headers);
-<<<<<<< HEAD
-        $this->transferAdapter
-            ->expects($this->atLeastOnce())
-            ->method('send')
-            ->with(
-                [
-                    'filepath' => $filePath,
-                    'headers' => $headers,
-                ]
-            );
-
-        $this->response->sendResponse();
-    }
-
-    /**
-     * @return void
-     */
-    public function testSendResponseWithoutFilePath(): void
-=======
         $this->transferAdapter->expects($this->atLeastOnce())->method('send')
             ->with(['filepath' => $filePath, 'headers' => $headers]);
         $this->response->sendResponse();
     }
 
     public function testSendResponseWithoutFilePath()
->>>>>>> upstream/2.2-develop
     {
         $this->transferAdapter->expects($this->never())->method('send');
         $this->response->sendResponse();

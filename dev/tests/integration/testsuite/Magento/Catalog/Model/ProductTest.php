@@ -3,10 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
@@ -38,9 +34,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp()
     {
         $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -51,10 +44,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @return void
-     */
     public static function tearDownAfterClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -76,9 +65,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @return void
-     */
     public function testCanAffectOptions()
     {
         $this->assertFalse($this->_model->canAffectOptions());
@@ -118,9 +104,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $crud->testCrud();
     }
 
-    /**
-     * @return void
-     */
     public function testCleanCache()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -141,9 +124,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testAddImageToMediaGallery()
     {
         // Model accepts only files in tmp media path, we need to copy fixture file there
@@ -351,9 +331,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($model->getIsVirtual());
     }
 
-    /**
-     * @return void
-     */
     public function testToArray()
     {
         $this->assertEquals([], $this->_model->toArray());
@@ -361,9 +338,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['sku' => 'sku', 'name' => 'name'], $this->_model->toArray());
     }
 
-    /**
-     * @return void
-     */
     public function testFromArray()
     {
         $this->_model->fromArray(['sku' => 'sku', 'name' => 'name', 'stock_item' => ['key' => 'value']]);
@@ -435,9 +409,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testProcessBuyRequest()
     {
         $request = new \Magento\Framework\DataObject();
@@ -446,9 +417,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('errors', $result->getData());
     }
 
-    /**
-     * @return void
-     */
     public function testValidate()
     {
         $this->_model->setTypeId(
@@ -517,10 +485,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $validationResult = $this->_model->validate();
         $this->assertCount(1, $validationResult);
-
         $this->assertContains(
-            'The value of the "' . $attribute->getDefaultFrontendLabel() .
-            '" attribute isn\'t unique. Set a unique value and try again.',
+            'The value of attribute "' . $attribute->getDefaultFrontendLabel() . '" must be unique',
             $validationResult
         );
     }
@@ -594,9 +560,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-<<<<<<< HEAD
-     * Check stock status changing if backorders functionality enabled.
-=======
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
      */
     public function testSaveWithDifferentQty()
@@ -635,22 +598,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check stock status changing if backorders functionality enabled
->>>>>>> upstream/2.2-develop
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
      * @dataProvider productWithBackordersDataProvider
      * @param int $qty
      * @param int $stockStatus
      * @param bool $expectedStockStatus
-<<<<<<< HEAD
-     *
-     * @return void
-     */
-    public function testSaveWithBackordersEnabled(int $qty, int $stockStatus, bool $expectedStockStatus): void
-=======
      */
     public function testSaveWithBackordersEnabled(int $qty, int $stockStatus, bool $expectedStockStatus)
->>>>>>> upstream/2.2-develop
     {
         $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
         $stockItem = $product->getExtensionAttributes()->getStockItem();
@@ -658,11 +613,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $stockData = [
             'backorders' => 1,
             'qty' => $qty,
-<<<<<<< HEAD
-            'is_in_stock' => $stockStatus,
-=======
             'is_in_stock' => $stockStatus
->>>>>>> upstream/2.2-develop
         ];
         $product->setStockData($stockData);
         $product->save();

@@ -6,7 +6,6 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\ModuleUninstaller;
-use Magento\Framework\Setup\Patch\PatchApplier;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,11 +47,6 @@ class ModuleUninstallerTest extends \PHPUnit\Framework\TestCase
      */
     private $moduleRegistryUninstaller;
 
-    /**
-     * @var PatchApplier|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $patchApplierMock;
-
     public function setUp()
     {
         $this->moduleRegistryUninstaller = $this->createMock(\Magento\Setup\Model\ModuleRegistryUninstaller::class);
@@ -69,7 +63,6 @@ class ModuleUninstallerTest extends \PHPUnit\Framework\TestCase
         $this->collector = $this->createMock(\Magento\Setup\Model\UninstallCollector::class);
 
         $this->setup = $this->createMock(\Magento\Setup\Module\Setup::class);
-        $this->patchApplierMock = $this->createMock(PatchApplier::class);
         $setupFactory = $this->createMock(\Magento\Setup\Module\SetupFactory::class);
         $setupFactory->expects($this->any())->method('create')->willReturn($this->setup);
 
@@ -100,20 +93,10 @@ class ModuleUninstallerTest extends \PHPUnit\Framework\TestCase
 
         $this->output->expects($this->atLeastOnce())->method('writeln');
 
-        $this->objectManager->expects($this->any())
+        $this->objectManager->expects($this->once())
             ->method('get')
-            ->willReturnMap(
-                [
-                    [\Magento\Framework\Module\ModuleResource::class, $resource],
-                    [PatchApplier::class, $this->patchApplierMock]
-                ]
-            );
-        $this->patchApplierMock->expects($this->exactly(2))->method('revertDataPatches')->willReturnMap(
-            [
-                ['moduleA'],
-                ['moduleB']
-            ]
-        );
+            ->with(\Magento\Framework\Module\ModuleResource::class)
+            ->willReturn($resource);
         $this->uninstaller->uninstallData($this->output, ['moduleA', 'moduleB']);
     }
 

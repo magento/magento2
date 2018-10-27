@@ -19,14 +19,6 @@ use Magento\CatalogRule\Model\Rule\Condition\CombineFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-<<<<<<< HEAD
-use Magento\Framework\App\Cache\TypeListInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\Data\FormFactory;
-use Magento\Framework\DataObject;
-use Magento\Framework\DataObject\IdentityInterface;
-=======
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
@@ -34,7 +26,6 @@ use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Data\FormFactory;
->>>>>>> upstream/2.2-develop
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Model\ResourceModel\Iterator;
@@ -43,10 +34,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\StoreManagerInterface;
-<<<<<<< HEAD
-use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
-=======
->>>>>>> upstream/2.2-develop
 
 /**
  * Catalog Rule data model
@@ -176,11 +163,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     /**
      * @var ConditionsToCollectionApplier
      */
-<<<<<<< HEAD
-    private $conditionsToCollectionApplier;
-=======
     protected $conditionsToCollectionApplier;
->>>>>>> upstream/2.2-develop
 
     /**
      * @var array
@@ -217,14 +200,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-<<<<<<< HEAD
-     * @param \Magento\CatalogRule\Model\ResourceModel\RuleResourceModel|null $ruleResourceModel
-     * @param ConditionsToCollectionApplier $conditionsToCollectionApplier
-     *
-=======
      * @param ConditionsToCollectionApplier $conditionsToCollectionApplier
      * @param RuleResourceModel|null $ruleResourceModel
->>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -250,13 +227,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         ExtensionAttributesFactory $extensionFactory = null,
         AttributeValueFactory $customAttributeFactory = null,
         Json $serializer = null,
-<<<<<<< HEAD
-        RuleResourceModel $ruleResourceModel = null,
-        ConditionsToCollectionApplier $conditionsToCollectionApplier = null
-=======
         ConditionsToCollectionApplier $conditionsToCollectionApplier = null,
         RuleResourceModel $ruleResourceModel = null
->>>>>>> upstream/2.2-develop
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_storeManager = $storeManager;
@@ -271,10 +243,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $this->dateTime = $dateTime;
         $this->_ruleProductProcessor = $ruleProductProcessor;
         $this->ruleResourceModel = $ruleResourceModel ?: ObjectManager::getInstance()->get(RuleResourceModel::class);
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         $this->conditionsToCollectionApplier = $conditionsToCollectionApplier
             ?? ObjectManager::getInstance()->get(ConditionsToCollectionApplier::class);
 
@@ -403,11 +371,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-<<<<<<< HEAD
-     * Check if we can use mapping for rule conditions
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @return bool
      */
     private function canPreMapProducts()
@@ -642,14 +605,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $productIds = $this->_productIds ? array_keys(array_filter($this->_productIds, function (array $data) {
             return array_filter($data);
         })) : [];
-<<<<<<< HEAD
-        $this->_ruleProductProcessor->reindexList($productIds);
-=======
 
         if (!empty($productIds)) {
             $this->_ruleProductProcessor->reindexList($productIds);
         }
->>>>>>> upstream/2.2-develop
     }
 
     /**

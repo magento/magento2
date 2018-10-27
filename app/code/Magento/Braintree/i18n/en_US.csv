@@ -192,7 +192,4 @@ Currency,Currency
 "Too many concurrent attempts to refund this transaction. Try again later.","Too many concurrent attempts to refund this transaction. Try again later."
 "Too many concurrent attempts to void this transaction. Try again later.","Too many concurrent attempts to void this transaction. Try again later."
 "Braintree Settlement","Braintree Settlement"
-<<<<<<< HEAD
-=======
 "The Payment Token is not available to perform the request.","The Payment Token is not available to perform the request."
->>>>>>> upstream/2.2-develop

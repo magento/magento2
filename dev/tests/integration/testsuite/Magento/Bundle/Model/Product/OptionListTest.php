@@ -21,9 +21,6 @@ class OptionListTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    /**
-     * Set up
-     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

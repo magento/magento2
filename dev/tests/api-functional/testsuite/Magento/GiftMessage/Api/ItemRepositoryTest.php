@@ -5,6 +5,8 @@
  */
 namespace Magento\GiftMessage\Api;
 
+// @codingStandardsIgnoreFile
+
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class ItemRepositoryTest extends WebapiAbstract
@@ -73,8 +75,7 @@ class ItemRepositoryTest extends WebapiAbstract
 
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = $this->objectManager->create(
-            \Magento\Integration\Api\CustomerTokenServiceInterface::class
+        $customerTokenService = $this->objectManager->create(\Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -161,8 +162,7 @@ class ItemRepositoryTest extends WebapiAbstract
 
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = $this->objectManager->create(
-            \Magento\Integration\Api\CustomerTokenServiceInterface::class
+        $customerTokenService = $this->objectManager->create(\Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 

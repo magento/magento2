@@ -6,9 +6,7 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Newsletter\Controller\Adminhtml\Template implements HttpGetActionInterface
+class Index extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
     /**
      * View Templates list

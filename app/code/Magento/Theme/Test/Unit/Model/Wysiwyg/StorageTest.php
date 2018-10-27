@@ -164,9 +164,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testUploadInvalidFile()
     {
-        $uploader = $this->_prepareUploader();
+        $uplaoder = $this->_prepareUploader();
 
-        $uploader->expects($this->once())->method('save')->will($this->returnValue(null));
+        $uplaoder->expects($this->once())->method('save')->will($this->returnValue(null));
 
         $this->_storageModel->uploadFile($this->_storageRoot);
     }

@@ -91,7 +91,7 @@ class AssertCustomerForm extends AbstractConstraint
 
         $dataForm = $pageCustomerIndexEdit->getCustomerForm()->getDataCustomer($customer, $address);
         $dataDiff = $this->verify($data, $dataForm);
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             empty($dataDiff),
             'Customer data on edit page(backend) not equals to passed from fixture.'
             . "\nFailed values: " . implode(', ', $dataDiff)
@@ -148,13 +148,13 @@ class AssertCustomerForm extends AbstractConstraint
         $customerGroupName = $customer->getGroupId();
 
         if ($customerGroupName) {
-            \PHPUnit\Framework\Assert::assertNotEmpty(
+            \PHPUnit_Framework_Assert::assertNotEmpty(
                 $formData['customer']['group_id'],
                 'Customer Group value is empty.'
             );
 
             if (!empty($formData['customer']['group_id'])) {
-                \PHPUnit\Framework\Assert::assertContains(
+                \PHPUnit_Framework_Assert::assertContains(
                     $customerGroupName,
                     $formData['customer']['group_id'],
                     'Customer Group name is incorrect.'

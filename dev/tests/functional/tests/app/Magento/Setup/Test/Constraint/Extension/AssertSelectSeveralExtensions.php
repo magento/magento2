@@ -25,7 +25,7 @@ class AssertSelectSeveralExtensions extends AbstractConstraint
     public function processAssert(AbstractGrid $grid, array $extensions)
     {
         $extensions = $grid->selectSeveralExtensions($extensions);
-        \PHPUnit\Framework\Assert::assertEmpty(
+        \PHPUnit_Framework_Assert::assertEmpty(
             $extensions,
             'Next extensions are not found on the grid: ' . $this->getExtensionsNames($extensions)
         );

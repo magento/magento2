@@ -55,7 +55,7 @@
             "": "app/code/"
         },
         "files": [
-            "app/registration.php"
+            "app/etc/NonComposerComponentRegistration.php"
         ]
     },
     "autoload-dev": {

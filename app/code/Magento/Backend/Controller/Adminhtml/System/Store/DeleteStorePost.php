@@ -1,22 +1,16 @@
 <?php
 /**
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
-<<<<<<< HEAD
-use Magento\Framework\App\Action\HttpPostActionInterface;
-=======
 use Magento\Framework\App\Request\Http as HttpRequest;
->>>>>>> upstream/2.2-develop
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
 
-/**
- * Delete store view.
- */
-class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpPostActionInterface
+class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
      * Delete store view post action

@@ -28,7 +28,7 @@ class AssertProductReviewBackendSuccessSaveMessage extends AbstractConstraint
      */
     public function processAssert(ReviewIndex $reviewIndex)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $reviewIndex->getMessagesBlock()->getSuccessMessage(),
             'Wrong success message is displayed.'

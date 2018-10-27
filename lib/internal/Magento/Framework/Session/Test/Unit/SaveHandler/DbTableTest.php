@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Session\Test\Unit\SaveHandler;
 
 class DbTableTest extends \PHPUnit\Framework\TestCase
@@ -89,7 +88,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\SessionException
-     * @expectedExceptionMessage The write connection to the database isn't available. Please try again later.
+     * @expectedExceptionMessage Write DB connection is not available
      */
     public function testCheckConnectionNoConnection()
     {
@@ -106,7 +105,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\SessionException
-     * @expectedExceptionMessage The database storage table doesn't exist. Verify the table and try again.
+     * @expectedExceptionMessage DB storage table does not exist
      */
     public function testCheckConnectionNoTable()
     {

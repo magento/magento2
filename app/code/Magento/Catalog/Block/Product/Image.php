@@ -11,6 +11,8 @@ namespace Magento\Catalog\Block\Product;
  * @method string getWidth()
  * @method string getHeight()
  * @method string getLabel()
+ * @method mixed getResizedImageWidth()
+ * @method mixed getResizedImageHeight()
  * @method float getRatio()
  * @method string getCustomAttributes()
  * @since 100.0.2

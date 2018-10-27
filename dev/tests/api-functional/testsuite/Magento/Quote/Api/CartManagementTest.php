@@ -237,7 +237,7 @@ class CartManagementTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
+     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart is not anonymous.
      */
     public function testAssignCustomerThrowsExceptionIfTargetCartIsNotAnonymous()
     {
@@ -272,7 +272,7 @@ class CartManagementTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_non_default_website_id.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The customer can't be assigned to the cart. The cart belongs to a different store.
+     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart belongs to different store.
      */
     public function testAssignCustomerThrowsExceptionIfCartIsAssignedToDifferentStore()
     {
@@ -309,6 +309,7 @@ class CartManagementTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      * @expectedException \Exception
+     * @expectedExceptionMessage Cannot assign customer to the given cart. Customer already has active cart.
      */
     public function testAssignCustomerThrowsExceptionIfCustomerAlreadyHasActiveCart()
     {
@@ -343,10 +344,6 @@ class CartManagementTest extends WebapiAbstract
             'storeId' => 1,
         ];
         $this->_webApiCall($serviceInfo, $requestData);
-
-        $this->expectExceptionMessage(
-            "The customer can't be assigned to the cart because the customer already has an active cart."
-        );
     }
 
     /**

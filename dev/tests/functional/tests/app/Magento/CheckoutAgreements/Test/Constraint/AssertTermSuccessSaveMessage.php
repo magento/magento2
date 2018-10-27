@@ -28,7 +28,7 @@ class AssertTermSuccessSaveMessage extends AbstractConstraint
      */
     public function processAssert(CheckoutAgreementIndex $agreementIndex)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_SAVE_MESSAGE,
             $agreementIndex->getMessagesBlock()->getSuccessMessage(),
             'Wrong success message is displayed.'

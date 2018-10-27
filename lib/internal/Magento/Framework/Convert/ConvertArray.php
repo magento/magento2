@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Convert;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -25,11 +24,7 @@ class ConvertArray
     public function assocToXml(array $array, $rootName = '_')
     {
         if (empty($rootName) || is_numeric($rootName)) {
-            throw new LocalizedException(
-                new \Magento\Framework\Phrase(
-                    "The root element can't be empty or use numbers. Change the element and try again."
-                )
-            );
+            throw new LocalizedException(new \Magento\Framework\Phrase('Root element must not be empty or numeric'));
         }
 
         $xmlStr = <<<XML
@@ -39,9 +34,7 @@ XML;
         $xml = new \SimpleXMLElement($xmlStr);
         foreach (array_keys($array) as $key) {
             if (is_numeric($key)) {
-                throw new LocalizedException(
-                    new \Magento\Framework\Phrase('An error occurred. Use non-numeric array root keys and try again.')
-                );
+                throw new LocalizedException(new \Magento\Framework\Phrase('Array root keys must not be numeric.'));
             }
         }
         return self::_assocToXml($array, $rootName, $xml);
@@ -84,8 +77,7 @@ XML;
                     if ($key === $rootName) {
                         throw new LocalizedException(
                             new \Magento\Framework\Phrase(
-                                "An associative key can't be the same as its parent associative key. "
-                                . "Verify and try again."
+                                'Associative key must not be the same as its parent associative key.'
                             )
                         );
                     }
@@ -102,9 +94,7 @@ XML;
         }
         if ($hasNumericKey && $hasStringKey) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase(
-                    "Associative and numeric keys can't be mixed at one level. Verify and try again."
-                )
+                new \Magento\Framework\Phrase('Associative and numeric keys must not be mixed at one level.')
             );
         }
         return $xml;

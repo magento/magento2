@@ -20,9 +20,6 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -34,13 +31,8 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
      * @magentoDbIsolation disabled
-<<<<<<< HEAD
-     *
-     * @return void
-=======
->>>>>>> upstream/2.2-develop
      */
-    public function testPrepareData(): void
+    public function testPrepareData()
     {
         $parsedAdditionalAttributes = 'text_attribute=!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/'
             . ',text_attribute2=,';
@@ -70,24 +62,13 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Bundle/_files/product.php
      * @magentoDbIsolation disabled
-<<<<<<< HEAD
-     *
-     * @return void
-     */
-    public function testPrepareDataWithDifferentStoreValues(): void
-=======
      */
     public function testPrepareDataWithDifferentStoreValues()
->>>>>>> upstream/2.2-develop
     {
         $storeCode = 'default';
         $expectedNames = [
             'name' => 'Bundle Product Items',
-<<<<<<< HEAD
-            'name_' . $storeCode => 'Bundle Product Items_' . $storeCode,
-=======
             'name_' . $storeCode => 'Bundle Product Items_' . $storeCode
->>>>>>> upstream/2.2-develop
         ];
         $parsedAdditionalAttributes = 'text_attribute=!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/'
             . ',text_attribute2=,';
@@ -114,24 +95,14 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         $bundleValues = array_map(
             function ($input) {
                 $data = explode('=', $input);
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
                 return [$data[0] => $data[1]];
             },
             explode(',', $result['bundle_values'])
         );
         $actualNames = [
             'name' => array_column($bundleValues, 'name')[0],
-<<<<<<< HEAD
-            'name' . '_' . $store->getCode() => array_column($bundleValues, 'name' . '_' . $store->getCode())[0],
-        ];
-
-=======
             'name' . '_' . $store->getCode() => array_column($bundleValues, 'name' . '_' . $store->getCode())[0]
         ];
->>>>>>> upstream/2.2-develop
         self::assertSame($expectedNames, $actualNames);
     }
 }

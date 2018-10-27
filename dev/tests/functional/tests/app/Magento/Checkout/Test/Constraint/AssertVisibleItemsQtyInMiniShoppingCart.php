@@ -40,7 +40,7 @@ class AssertVisibleItemsQtyInMiniShoppingCart extends AbstractConstraint
             }
         }
 
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $minicartMaxVisibleCartItemsCount,
             $presentItems,
             'Wrong quantity of visible Cart items in mini shopping cart'

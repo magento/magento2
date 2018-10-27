@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Url\Test\Unit;
 
 class ScopeResolverTest extends \PHPUnit\Framework\TestCase
@@ -51,7 +50,7 @@ class ScopeResolverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The scope object is invalid. Verify the scope object and try again.
+     * @expectedExceptionMessage Invalid scope object
      */
     public function testGetScopeException()
     {

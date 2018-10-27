@@ -16,12 +16,9 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-<<<<<<< HEAD
-=======
 /**
  * Class ExportDataHandlerTest
  */
->>>>>>> upstream/2.2-develop
 class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**

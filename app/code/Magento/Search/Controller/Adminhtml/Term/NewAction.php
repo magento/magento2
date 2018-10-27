@@ -5,11 +5,10 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Controller\ResultFactory;
 
-class NewAction extends TermController implements HttpGetActionInterface
+class NewAction extends TermController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Forward

@@ -35,9 +35,10 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * Retrieve Full Option values array
-     * @inheritdoc
+     *
+     * @return array
      */
-    public function getAllOptions($withEmpty = true, $defaultValues = false)
+    public function getAllOptions()
     {
         if ($this->_options === null) {
             $this->_options = $this->_storeCollectionFactory->create()->load()->toOptionArray();

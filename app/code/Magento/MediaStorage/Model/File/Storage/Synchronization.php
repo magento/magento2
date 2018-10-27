@@ -7,9 +7,7 @@ namespace Magento\MediaStorage\Model\File\Storage;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
-use Magento\Framework\Filesystem\File\WriteInterface;
-use Magento\MediaStorage\Service\ImageResize;
-use Magento\MediaStorage\Model\File\Storage\Database;
+use Magento\Framework\Filesystem\File\Write;
 
 /**
  * Class Synchronization
@@ -19,7 +17,7 @@ class Synchronization
     /**
      * Database storage factory
      *
-     * @var DatabaseFactory
+     * @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory
      */
     protected $storageFactory;
 
@@ -31,11 +29,11 @@ class Synchronization
     protected $mediaDirectory;
 
     /**
-     * @param DatabaseFactory $storageFactory
+     * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageFactory
      * @param DirectoryWrite $directory
      */
     public function __construct(
-        DatabaseFactory $storageFactory,
+        \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageFactory,
         DirectoryWrite $directory
     ) {
         $this->storageFactory = $storageFactory;
@@ -51,14 +49,14 @@ class Synchronization
      */
     public function synchronize($relativeFileName)
     {
-        /** @var $storage Database */
+        /** @var $storage \Magento\MediaStorage\Model\File\Storage\Database */
         $storage = $this->storageFactory->create();
         try {
             $storage->loadByFilename($relativeFileName);
         } catch (\Exception $e) {
         }
         if ($storage->getId()) {
-            /** @var WriteInterface $file */
+            /** @var \Magento\Framework\Filesystem\File\WriteInterface $file */
             $file = $this->mediaDirectory->openFile($relativeFileName, 'w');
             try {
                 $file->lock();

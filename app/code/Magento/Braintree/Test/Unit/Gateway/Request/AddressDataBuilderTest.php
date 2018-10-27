@@ -8,16 +8,12 @@ namespace Magento\Braintree\Test\Unit\Gateway\Request;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Request\AddressDataBuilder;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
-<<<<<<< HEAD
-use Magento\Braintree\Gateway\SubjectReader;
-=======
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
->>>>>>> upstream/2.2-develop
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Tests \Magento\Braintree\Gateway\Request\AddressDataBuilder.
+ * Class AddressDataBuilderTest
  */
 class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,14 +32,6 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $builder;
 
-<<<<<<< HEAD
-    /**
-     * @var SubjectReader|MockObject
-     */
-    private $subjectReaderMock;
-
-=======
->>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
@@ -122,7 +110,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                     'city' => 'Chicago',
                     'region_code' => 'IL',
                     'country_id' => 'US',
-                    'post_code' => '00000',
+                    'post_code' => '00000'
                 ],
                 [
                     AddressDataBuilder::SHIPPING_ADDRESS => [
@@ -134,7 +122,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                         AddressDataBuilder::LOCALITY => 'Chicago',
                         AddressDataBuilder::REGION => 'IL',
                         AddressDataBuilder::POSTAL_CODE => '00000',
-                        AddressDataBuilder::COUNTRY_CODE => 'US',
+                        AddressDataBuilder::COUNTRY_CODE => 'US'
 
                     ],
                     AddressDataBuilder::BILLING_ADDRESS => [
@@ -146,10 +134,10 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                         AddressDataBuilder::LOCALITY => 'Chicago',
                         AddressDataBuilder::REGION => 'IL',
                         AddressDataBuilder::POSTAL_CODE => '00000',
-                        AddressDataBuilder::COUNTRY_CODE => 'US',
-                    ],
-                ],
-            ],
+                        AddressDataBuilder::COUNTRY_CODE => 'US'
+                    ]
+                ]
+            ]
         ];
     }
 

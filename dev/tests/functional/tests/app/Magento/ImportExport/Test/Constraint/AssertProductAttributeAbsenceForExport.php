@@ -37,7 +37,7 @@ class AssertProductAttributeAbsenceForExport extends AbstractConstraint
             'attribute_code' => $attribute->getAttributeCode(),
         ];
 
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $exportIndex->getFilterExport()->isRowVisible($filter),
             'Attribute \'' . $attribute->getFrontendLabel() . '\' is present in Filter export grid'
         );

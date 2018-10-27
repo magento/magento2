@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 use Magento\Paypal\Model\Info;
 
 return [
@@ -76,7 +78,7 @@ return [
             ],
             'last_trans_id' => [
                 'label' => 'Last Transaction ID',
-                'value' => null,
+                'value' => NULL,
             ]
         ],
     ],
@@ -145,7 +147,7 @@ return [
             ],
             'last_trans_id' => [
                 'label' => 'Last Transaction ID',
-                'value' => null,
+                'value' => NULL,
             ]
         ]
     ]

@@ -53,7 +53,7 @@ class AssertProductInCatalogNewProductsList extends AbstractConstraint
 
         $cmsIndex->open();
 
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             $product->getName(),
             $this->catalogCategoryView->getViewBlock()->getProductsFromCatalogNewProductsListBlock(),
             'Product is absent on Catalog New Products List block on Category page.'

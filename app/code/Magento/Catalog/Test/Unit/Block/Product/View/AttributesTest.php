@@ -7,10 +7,7 @@
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
 use \PHPUnit\Framework\TestCase;
-<<<<<<< HEAD
-=======
 use \Magento\Framework\Phrase;
->>>>>>> upstream/2.2-develop
 use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use \Magento\Catalog\Model\Product;

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
 use Magento\Paypal\Block\Payment\Info;
@@ -278,7 +277,7 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The payment couldn't be processed at this time. Please try again later.
+     * @expectedExceptionMessage Error processing payment. Please try again later.
      */
     public function testAuthorizeValidationException()
     {

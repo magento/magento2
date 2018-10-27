@@ -5,12 +5,10 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Controller\ResultFactory;
 
-class GetFilter extends ExportController implements HttpGetActionInterface, HttpPostActionInterface
+class GetFilter extends ExportController
 {
     /**
      * Get grid-filter of entity attributes action.

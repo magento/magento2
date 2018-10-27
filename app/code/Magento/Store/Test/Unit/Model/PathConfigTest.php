@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Store\Model\StoreManagerInterface;

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order;
 
 use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
@@ -105,15 +104,13 @@ class ItemRepository implements OrderItemRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new InputException(__('An ID is needed. Set the ID and try again.'));
+            throw new InputException(__('ID required'));
         }
         if (!isset($this->registry[$id])) {
             /** @var OrderItemInterface $orderItem */
             $orderItem = $this->metadata->getNewInstance()->load($id);
             if (!$orderItem->getItemId()) {
-                throw new NoSuchEntityException(
-                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
-                );
+                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
 
             $this->addProductOption($orderItem);

@@ -6,9 +6,6 @@
 
 namespace Magento\Reports\Block\Adminhtml\Grid;
 
-/**
- * Backend reports grid
- */
 class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -94,8 +91,9 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Get resource collection name
      *
-     * @return string
      * @codeCoverageIgnore
+     *
+     * @return string
      */
     public function getResourceCollectionName()
     {
@@ -103,8 +101,6 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Return reports collection
-     *
      * @return \Magento\Framework\Data\Collection
      */
     public function getCollection()
@@ -116,8 +112,6 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Retrieve array of columns that should be aggregated
-     *
      * @return array
      */
     protected function _getAggregatedColumns()
@@ -193,8 +187,6 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Apply sorting and filtering to collection
-     *
      * @return $this|\Magento\Backend\Block\Widget\Grid
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -284,8 +276,6 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Return count totals
-     *
      * @return array
      */
     public function getCountTotals()
@@ -325,8 +315,6 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Retrieve subtotal items
-     *
      * @return array
      */
     public function getSubTotals()
@@ -368,8 +356,6 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Return current currency code
-     *
      * @return string|\Magento\Directory\Model\Currency $currencyCode
      */
     public function getCurrentCurrencyCode()
@@ -409,7 +395,6 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * Adds custom filter to resource collection
-     *
      * Can be overridden in child classes if custom filter needed
      *
      * @param \Magento\Reports\Model\ResourceModel\Report\Collection\AbstractCollection $collection
@@ -424,11 +409,6 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-<<<<<<< HEAD
-     * Return stores by website, group and store id
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */

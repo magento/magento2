@@ -78,7 +78,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function loadAttributeOptions()
     {
@@ -107,9 +107,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
     /**
      * {@inheritdoc}
-     *
-     * @param array &$attributes
-     * @return void
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
@@ -128,11 +125,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $attribute = $this->getAttributeObject();
 
         if ($collection->isEnabledFlat()) {
-<<<<<<< HEAD
-            if ($attribute->isEnabledInFlat()) {
-=======
             if ($this->isEnabledInFlat($attribute)) {
->>>>>>> upstream/2.2-develop
                 $alias = array_keys($collection->getSelect()->getPart('from'))[0];
                 $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.' . $attribute->getAttributeCode();
             } else {
@@ -241,8 +234,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
     public function getMappedSqlField()
     {
@@ -262,9 +253,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
-     * @return $this
      */
     public function collectValidatedAttributes($productCollection)
     {

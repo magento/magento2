@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Paypal\Model;
 
 use Magento\Paypal\Model\Api\AbstractApi;
@@ -123,7 +125,7 @@ class Pro
     /**
      * Config instance setter
      *
-     * @param \Magento\Paypal\Model\Config $instance
+     * @param \Magento\Paypal\Model\Config $instace
      * @param int|null $storeId
      * @return $this
      */
@@ -298,9 +300,7 @@ class Pro
             $isFullRefund = !$canRefundMore &&
                 0 == (double)$order->getBaseTotalOnlineRefunded() + (double)$order->getBaseTotalOfflineRefunded();
             $api->setRefundType(
-                $isFullRefund
-                    ? \Magento\Paypal\Model\Config::REFUND_TYPE_FULL
-                    : \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL
+                $isFullRefund ? \Magento\Paypal\Model\Config::REFUND_TYPE_FULL : \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL
             );
             $api->callRefundTransaction();
             $this->_importRefundResultToPayment($api, $payment, $canRefundMore);

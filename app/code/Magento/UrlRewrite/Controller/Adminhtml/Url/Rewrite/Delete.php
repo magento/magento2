@@ -6,9 +6,7 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
-
-class Delete extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implements HttpPostActionInterface
+class Delete extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
     /**
      * URL rewrite delete action

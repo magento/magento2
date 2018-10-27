@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -170,7 +169,7 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The shipment couldn't be deleted.
+     * @expectedExceptionMessage Could not delete shipment
      */
     public function testDeleteWithException()
     {
@@ -227,7 +226,7 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The shipment couldn't be saved.
+     * @expectedExceptionMessage Could not save shipment
      */
     public function testSaveWithException()
     {

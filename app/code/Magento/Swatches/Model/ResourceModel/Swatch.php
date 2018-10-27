@@ -39,17 +39,10 @@ class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-<<<<<<< HEAD
-     * Cleaned swatch option values when switching to dropdown input type.
-     *
-     * @param array $optionIDs
-     * @param int $type
-=======
      * Cleaned swatch option values when switching to dropdown input type
      *
      * @param $optionIDs
      * @param $type
->>>>>>> upstream/2.2-develop
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function clearSwatchOptionByOptionIdAndType($optionIDs, $type = null)

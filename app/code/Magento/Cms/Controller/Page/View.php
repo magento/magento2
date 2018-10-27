@@ -6,14 +6,7 @@
  */
 namespace Magento\Cms\Controller\Page;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\Action;
-
-/**
- * Custom page for storefront. Needs to be accessible by POST because of the store switching.
- */
-class View extends Action implements HttpGetActionInterface, HttpPostActionInterface
+class View extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory

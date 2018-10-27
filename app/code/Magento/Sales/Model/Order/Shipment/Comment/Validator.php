@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order\Shipment\Comment;
 
 use Magento\Sales\Model\Order\Shipment\Comment;
@@ -35,7 +34,7 @@ class Validator
         $commentData = $comment->getData();
         foreach ($this->required as $code => $label) {
             if (!$comment->hasData($code)) {
-                $errors[$code] = sprintf('"%s" is required. Enter and try again.', $label);
+                $errors[$code] = sprintf('%s is a required field', $label);
             } elseif (empty($commentData[$code])) {
                 $errors[$code] = sprintf('%s can not be empty', $label);
             }

@@ -167,11 +167,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         array $weeeTaxCalculationsByEntity,
         $websitePassed,
         string $expectedFptLabel
-<<<<<<< HEAD
-    ): void {
-=======
     ) {
->>>>>>> upstream/2.2-develop
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $website = $this->createMock(\Magento\Store\Model\Website::class);
         $store = $this->createMock(\Magento\Store\Model\Store::class);
@@ -269,17 +265,17 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      * Test getWeeeAmountExclTax method
      *
      * @param string $productTypeId
-     * @param string $productPriceType
+     * @param string $prodcuctPriceType
      * @dataProvider getWeeeAmountExclTaxDataProvider
      */
-    public function testGetWeeeAmountExclTax($productTypeId, $productPriceType)
+    public function testGetWeeeAmountExclTax($productTypeId, $prodcuctPriceType)
     {
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTypeId', 'getPriceType'])
             ->getMock();
         $product->expects($this->any())->method('getTypeId')->willReturn($productTypeId);
-        $product->expects($this->any())->method('getPriceType')->willReturn($productPriceType);
+        $product->expects($this->any())->method('getPriceType')->willReturn($prodcuctPriceType);
         $weeeDataHelper = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAmountExclTax'])

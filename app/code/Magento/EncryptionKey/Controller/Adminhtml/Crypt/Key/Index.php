@@ -6,12 +6,10 @@
  */
 namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
 /**
  * Key Index action
  */
-class Index extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key implements HttpGetActionInterface
+class Index extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
 {
     /**
      * Render main page with form

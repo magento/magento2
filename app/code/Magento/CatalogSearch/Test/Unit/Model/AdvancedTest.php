@@ -274,10 +274,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $optionText
-<<<<<<< HEAD
-=======
      *
->>>>>>> upstream/2.2-develop
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function createSource($optionText = 'optionText')

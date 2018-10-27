@@ -35,7 +35,7 @@ class AssertCustomerIsSubscribedToNewsletter extends AbstractConstraint
         ];
 
         $subscriberIndex->open();
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $subscriberIndex->getSubscriberGrid()->isRowVisible($filter),
             'Customer with email \'' . $customer->getEmail() . '\' is absent in Newsletter Subscribers grid.'
         );

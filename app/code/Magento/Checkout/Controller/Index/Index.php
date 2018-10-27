@@ -4,14 +4,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-declare(strict_types=1);
-
 namespace Magento\Checkout\Controller\Index;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Checkout\Controller\Onepage implements HttpGetActionInterface
+class Index extends \Magento\Checkout\Controller\Onepage
 {
     /**
      * Checkout page
@@ -23,7 +18,7 @@ class Index extends \Magento\Checkout\Controller\Onepage implements HttpGetActio
         /** @var \Magento\Checkout\Helper\Data $checkoutHelper */
         $checkoutHelper = $this->_objectManager->get(\Magento\Checkout\Helper\Data::class);
         if (!$checkoutHelper->canOnepageCheckout()) {
-            $this->messageManager->addErrorMessage(__('One-page checkout is turned off.'));
+            $this->messageManager->addError(__('One-page checkout is turned off.'));
             return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
 
@@ -33,7 +28,7 @@ class Index extends \Magento\Checkout\Controller\Onepage implements HttpGetActio
         }
 
         if (!$this->_customerSession->isLoggedIn() && !$checkoutHelper->isAllowedGuestCheckout($quote)) {
-            $this->messageManager->addErrorMessage(__('Guest checkout is disabled.'));
+            $this->messageManager->addError(__('Guest checkout is disabled.'));
             return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
 

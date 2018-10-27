@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Backend\Model\Config\SessionLifetime;
 
 use Magento\Framework\App\Config\Value;
@@ -30,17 +29,14 @@ class BackendModel extends Value
      */
     public function beforeSave()
     {
-        $value = (int)$this->getValue();
+        $value = (int) $this->getValue();
         if ($value > self::MAX_LIFETIME) {
             throw new LocalizedException(
-                __(
-                    'The Admin session lifetime is invalid. '
-                    . 'Set the lifetime to 31536000 seconds (one year) or shorter and try again.'
-                )
+                __('Admin session lifetime must be less than or equal to 31536000 seconds (one year)')
             );
         } elseif ($value < self::MIN_LIFETIME) {
             throw new LocalizedException(
-                __('The Admin session lifetime is invalid. Set the lifetime to 60 seconds or longer and try again.')
+                __('Admin session lifetime must be greater than or equal to 60 seconds')
             );
         }
         return parent::beforeSave();

@@ -6,9 +6,7 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Cms\Controller\Adminhtml\Block implements HttpGetActionInterface
+class Index extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

@@ -29,7 +29,7 @@ class AssertIntegrationSuccessDeleteMessage extends AbstractConstraint
     {
         $expectedMessage = sprintf(self::SUCCESS_DELETE_MESSAGE, $integration->getName());
         $actualMessage = $integrationIndexPage->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $expectedMessage,
             $actualMessage,
             'Wrong success message is displayed.'

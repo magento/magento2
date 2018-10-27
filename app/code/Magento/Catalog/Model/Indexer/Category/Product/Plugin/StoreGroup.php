@@ -9,10 +9,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\Indexer\Category\Product;
-<<<<<<< HEAD
-=======
 use Magento\Framework\App\ObjectManager;
->>>>>>> upstream/2.2-develop
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 class StoreGroup
@@ -101,11 +98,7 @@ class StoreGroup
     public function afterDelete(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $storeGroup)
     {
         foreach ($storeGroup->getStores() as $store) {
-<<<<<<< HEAD
-            $this->tableMaintainer->dropTablesForStore((int)$store->getId());
-=======
             $this->tableMaintainer->dropTablesForStore($store->getId());
->>>>>>> upstream/2.2-develop
         }
         return $objectResource;
     }

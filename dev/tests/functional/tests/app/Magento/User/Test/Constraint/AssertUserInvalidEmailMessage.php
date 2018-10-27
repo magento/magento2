@@ -32,7 +32,7 @@ class AssertUserInvalidEmailMessage extends AbstractConstraint
     {
         $expectedMessage = sprintf(self::ERROR_MESSAGE, $user->getEmail());
         $actualMessage = $userEdit->getMessagesBlock()->getErrorMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $expectedMessage,
             $actualMessage,
             'Wrong error message is displayed.'

@@ -101,13 +101,8 @@ define([
 
             expect(suggestInstance.dropdown.hasClass('wrapper-test')).toBe(true);
             expect(suggestInstance.dropdown.is(':hidden')).toBe(true);
-<<<<<<< HEAD
-            expect(suggestInstance.element.closest('.test-input-wrapper').length).toBeGreaterThan(0);
-            expect(suggestInstance.element.closest('.' + options.className).length).toBeGreaterThan(0);
-=======
             expect(suggestInstance.element.closest('.test-input-wrapper').size()).toBeGreaterThan(0);
             expect(suggestInstance.element.closest('.' + options.className).size()).toBeGreaterThan(0);
->>>>>>> upstream/2.2-develop
             expect(suggestInstance.element.attr('autocomplete')).toBe('off');
 
             options.appendMethod = 'before';

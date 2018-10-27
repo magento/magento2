@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Webapi\Controller;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -14,16 +13,15 @@ use Magento\Framework\Webapi\ErrorProcessor;
 use Magento\Framework\Webapi\Request;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
+use Magento\Framework\Webapi\Rest\Response\FieldsFilter;
 use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
-<<<<<<< HEAD
-=======
 use Magento\Webapi\Model\Rest\Swagger\Generator;
->>>>>>> upstream/2.2-develop
 use Magento\Webapi\Controller\Rest\RequestProcessorPool;
 
 /**
@@ -34,11 +32,7 @@ use Magento\Webapi\Controller\Rest\RequestProcessorPool;
  */
 class Rest implements \Magento\Framework\App\FrontControllerInterface
 {
-    /**
-     * Path for accessing REST API schema
-     *
-     * @deprecated 100.3.0
-     */
+    /** Path for accessing REST API schema */
     const SCHEMA_PATH = '/schema';
 
     /**
@@ -101,6 +95,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $areaList;
 
     /**
+     * @var \Magento\Framework\Webapi\Rest\Response\FieldsFilter
+     */
+    protected $fieldsFilter;
+
+    /**
      * @var \Magento\Framework\Session\Generic
      */
     protected $session;
@@ -112,9 +111,14 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $paramsOverrider;
 
     /**
-     * @var RequestProcessorPool
+     * @var \Magento\Framework\Webapi\ServiceOutputProcessor
      */
-    protected $requestProcessorPool;
+    protected $serviceOutputProcessor;
+
+    /**
+     * @var \Magento\Webapi\Model\Rest\Swagger\Generator
+     */
+    protected $swaggerGenerator;
 
     /**
      * @var RequestProcessorPool
@@ -126,6 +130,16 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @deprecated 100.1.0
      */
     private $storeManager;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var Rest\InputParamsResolver
+     */
+    private $inputParamsResolver;
 
     /**
      * Initialize dependencies
@@ -140,9 +154,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param ErrorProcessor $errorProcessor
      * @param PathProcessor $pathProcessor
      * @param \Magento\Framework\App\AreaList $areaList
+     * @param FieldsFilter $fieldsFilter
      * @param ParamsOverrider $paramsOverrider
+     * @param ServiceOutputProcessor $serviceOutputProcessor
+     * @param Generator $swaggerGenerator ,
      * @param StoreManagerInterface $storeManager
-     * @param RequestProcessorPool $requestProcessorPool
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -158,9 +174,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         ErrorProcessor $errorProcessor,
         PathProcessor $pathProcessor,
         \Magento\Framework\App\AreaList $areaList,
+        FieldsFilter $fieldsFilter,
         ParamsOverrider $paramsOverrider,
-        StoreManagerInterface $storeManager,
-        RequestProcessorPool $requestProcessorPool
+        ServiceOutputProcessor $serviceOutputProcessor,
+        Generator $swaggerGenerator,
+        StoreManagerInterface $storeManager
     ) {
         $this->_router = $router;
         $this->_request = $request;
@@ -172,11 +190,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->_errorProcessor = $errorProcessor;
         $this->_pathProcessor = $pathProcessor;
         $this->areaList = $areaList;
+        $this->fieldsFilter = $fieldsFilter;
         $this->paramsOverrider = $paramsOverrider;
+        $this->serviceOutputProcessor = $serviceOutputProcessor;
+        $this->swaggerGenerator = $swaggerGenerator;
         $this->storeManager = $storeManager;
-<<<<<<< HEAD
-        $this->requestProcessorPool = $requestProcessorPool;
-=======
         $this->requestProcessorPool = $this->_objectManager->get(RequestProcessorPool::class);
     }
 
@@ -204,7 +222,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     public function setDeploymentConfig(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
     {
         $this->deploymentConfig = $deploymentConfig;
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -255,7 +272,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         if (!$this->_route) {
             $this->_route = $this->_router->match($this->_request);
         }
-
         return $this->_route;
     }
 
@@ -273,14 +289,12 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         if (!$this->authorization->isAllowed($route->getAclResources())) {
             $params = ['resources' => implode(', ', $route->getAclResources())];
             throw new AuthorizationException(
-                __("The consumer isn't authorized to access %resources.", $params)
+                __('Consumer is not authorized to access %resources', $params)
             );
         }
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Execute schema request
      *
      * @return void
@@ -335,7 +349,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     }
 
     /**
->>>>>>> upstream/2.2-develop
      * Validate request
      *
      * @throws AuthorizationException
@@ -355,5 +368,21 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         ) {
             throw new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
         }
+    }
+
+    /**
+     * The getter function to get InputParamsResolver object
+     *
+     * @return \Magento\Webapi\Controller\Rest\InputParamsResolver
+     *
+     * @deprecated 100.1.0
+     */
+    private function getInputParamsResolver()
+    {
+        if ($this->inputParamsResolver === null) {
+            $this->inputParamsResolver = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Webapi\Controller\Rest\InputParamsResolver::class);
+        }
+        return $this->inputParamsResolver;
     }
 }

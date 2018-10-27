@@ -37,7 +37,7 @@ class AssertUrlRewriteUpdatedProductInGrid extends AbstractConstraint
             'request_path' => $url,
             'target_path' => $targetPath,
         ];
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter, true, false),
             "URL Rewrite with request path '$url' is absent in grid."
         );
@@ -45,7 +45,7 @@ class AssertUrlRewriteUpdatedProductInGrid extends AbstractConstraint
         $categoryInitial = $initialProduct->getDataFieldConfig('category_ids')['source']->getCategories()[0];
         $targetPath = "catalog/product/view/id/{$initialProduct->getId()}/category/{$categoryInitial->getId()}";
 
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible(['target_path' => $targetPath], true, false),
             "URL Rewrite with target path '$targetPath' is present in grid."
         );

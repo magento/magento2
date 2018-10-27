@@ -166,7 +166,7 @@ define([
                                 if (request.length === 0) {
                                     if (!massActionTrigger) {
                                         alert({
-                                            content: $.mage.__('An item needs to be selected. Select and try again.')
+                                            content: $.mage.__('Please select items.')
                                         });
                                     }
 

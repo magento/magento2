@@ -5,13 +5,12 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultFactory;
 
-class Edit extends TermController implements HttpGetActionInterface
+class Edit extends TermController
 {
     /**
      * Core registry

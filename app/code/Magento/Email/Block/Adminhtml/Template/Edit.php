@@ -7,7 +7,6 @@ namespace Magento\Email\Block\Adminhtml\Template;
 
 use Magento\Backend\Block\Widget;
 use Magento\Backend\Block\Widget\ContainerInterface;
-use Magento\Email\Model\BackendTemplate;
 
 /**
  * Adminhtml system template edit block
@@ -20,7 +19,6 @@ class Edit extends Widget implements ContainerInterface
 {
     /**
      * @var \Magento\Framework\Registry
-     * @deprecated since 2.3.0 in favor of stateful global objects elimination.
      */
     protected $_registryManager;
 
@@ -219,13 +217,7 @@ class Edit extends Widget implements ContainerInterface
             null
         );
         $this->toolbar->pushButtons($this, $this->buttonList);
-        $this->addChild(
-            'form',
-            \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
-            [
-                'email_template' => $this->getEmailTemplate()
-            ]
-        );
+        $this->addChild('form', \Magento\Email\Block\Adminhtml\Template\Edit\Form::class);
         return parent::_prepareLayout();
     }
 
@@ -375,7 +367,7 @@ class Edit extends Widget implements ContainerInterface
      */
     public function getEmailTemplate()
     {
-        return $this->getData('email_template');
+        return $this->_registryManager->registry('current_email_template');
     }
 
     /**
@@ -396,7 +388,7 @@ class Edit extends Widget implements ContainerInterface
      */
     public function getCurrentlyUsedForPaths($asJSON = true)
     {
-        /** @var $template BackendTemplate */
+        /** @var $template \Magento\Email\Model\BackendTemplate */
         $template = $this->getEmailTemplate();
         $paths = $template->getSystemConfigPathsWhereCurrentlyUsed();
         $pathsParts = $this->_getSystemConfigPathsParts($paths);

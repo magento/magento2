@@ -7,10 +7,6 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-<<<<<<< HEAD
-use Magento\Customer\Api\Data\CustomerInterface;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Customer\Model\Delegation\Data\NewOperation;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Framework\Api\DataObjectHelper;
@@ -164,20 +160,16 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function save(CustomerInterface $customer, $passwordHash = null)
+    public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
         /** @var NewOperation|null $delegatedNewOperation */
-<<<<<<< HEAD
-        $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
-=======
         $delegatedNewOperation = !$customer->getId()
             ? $this->delegatedStorage->consumeNewOperation() : null;
->>>>>>> upstream/2.2-develop
         $prevCustomerData = null;
         $prevCustomerDataArr = null;
         if ($customer->getId()) {
@@ -191,16 +183,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
             $prevCustomerData
         );
+
         $origAddresses = $customer->getAddresses();
         $customer->setAddresses([]);
-<<<<<<< HEAD
-        $customerData = $this->extensibleDataObjectConverter->toNestedArray($customer, [], CustomerInterface::class);
-        $customer->setAddresses($origAddresses);
-        /** @var Customer $customerModel */
-        $customerModel = $this->customerFactory->create(['data' => $customerData]);
-        //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
-        $customerModel->setId($customer->getId());
-=======
         $customerData = $this->extensibleDataObjectConverter->toNestedArray(
             $customer,
             [],
@@ -215,18 +200,17 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         //so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());
 
->>>>>>> upstream/2.2-develop
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
             $customerModel->setStoreId($this->storeManager->getStore()->getId());
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         $this->populateCustomerWithSecureData($customerModel, $passwordHash);
+
         // If customer email was changed, reset RpToken info
-        if ($prevCustomerData && $prevCustomerData->getEmail() !== $customerModel->getEmail()) {
+        if ($prevCustomerData
+            && $prevCustomerData->getEmail() !== $customerModel->getEmail()
+        ) {
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
@@ -246,24 +230,18 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 $prevCustomerDataArr['default_shipping']
             );
         }
+
         $customerModel->save();
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         if (!$customer->getAddresses()
             && $delegatedNewOperation
             && $delegatedNewOperation->getCustomer()->getAddresses()
         ) {
-<<<<<<< HEAD
-            $customer->setAddresses($delegatedNewOperation->getCustomer()->getAddresses());
-=======
             $customer->setAddresses(
                 $delegatedNewOperation->getCustomer()->getAddresses()
             );
->>>>>>> upstream/2.2-develop
         }
         if ($customer->getAddresses() !== null) {
             if ($customer->getId()) {
@@ -297,12 +275,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             [
                 'customer_data_object' => $savedCustomer,
                 'orig_customer_data_object' => $prevCustomerData,
-<<<<<<< HEAD
-                'delegate_data' => $delegatedNewOperation ? $delegatedNewOperation->getAdditionalData() : [],
-=======
                 'delegate_data' => $delegatedNewOperation
                     ? $delegatedNewOperation->getAdditionalData() : []
->>>>>>> upstream/2.2-develop
             ]
         );
 
@@ -339,7 +313,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($email, $websiteId = null)
     {
@@ -348,7 +322,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getById($customerId)
     {
@@ -357,7 +331,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -367,7 +341,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $collection = $this->customerFactory->create()->getCollection();
         $this->extensionAttributesJoinProcessor->process(
             $collection,
-            CustomerInterface::class
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         // This is needed to make sure all the attributes are properly loaded
         foreach ($this->customerMetadata->getAllAttributesMetadata() as $metadata) {
@@ -397,15 +371,15 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function delete(CustomerInterface $customer)
+    public function delete(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
         return $this->deleteById($customer->getId());
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function deleteById($customerId)
     {

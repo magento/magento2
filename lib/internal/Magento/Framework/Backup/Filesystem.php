@@ -7,15 +7,6 @@
 namespace Magento\Framework\Backup;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Archive\Gz;
-use Magento\Framework\Backup\Archive\Tar;
-use Magento\Framework\Backup\Exception\NotEnoughFreeSpace;
-use Magento\Framework\Backup\Exception\NotEnoughPermissions;
-use Magento\Framework\Backup\Filesystem\Helper;
-use Magento\Framework\Backup\Filesystem\Rollback\Fs;
-use Magento\Framework\Backup\Filesystem\Rollback\Ftp;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
 
 /**
  * Class to work with filesystem backups
@@ -67,19 +58,19 @@ class Filesystem extends AbstractBackup
     protected $_ftpPath;
 
     /**
-     * @var Ftp
+     * @var \Magento\Framework\Backup\Filesystem\Rollback\Ftp
      */
     protected $rollBackFtp;
 
     /**
-     * @var Fs
+     * @var \Magento\Framework\Backup\Filesystem\Rollback\Fs
      */
     protected $rollBackFs;
 
     /**
      * Implementation Rollback functionality for Filesystem
      *
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
     public function rollback()
@@ -99,7 +90,7 @@ class Filesystem extends AbstractBackup
     /**
      * Implementation Create Backup functionality for Filesystem
      *
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return boolean
      */
     public function create()
@@ -111,41 +102,41 @@ class Filesystem extends AbstractBackup
 
         $this->_checkBackupsDir();
 
-        $fsHelper = new Helper();
+        $fsHelper = new \Magento\Framework\Backup\Filesystem\Helper();
 
         $filesInfo = $fsHelper->getInfo(
             $this->getRootDir(),
-            Helper::INFO_READABLE |
-            Helper::INFO_SIZE,
+            \Magento\Framework\Backup\Filesystem\Helper::INFO_READABLE |
+            \Magento\Framework\Backup\Filesystem\Helper::INFO_SIZE,
             $this->getIgnorePaths()
         );
 
         if (!$filesInfo['readable']) {
-            throw new NotEnoughPermissions(
-                new Phrase('Not enough permissions to read files for backup')
+            throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(
+                new \Magento\Framework\Phrase('Not enough permissions to read files for backup')
             );
         }
         $this->validateAvailableDiscSpace($this->getBackupsDir(), $filesInfo['size']);
 
         $tarTmpPath = $this->_getTarTmpPath();
 
-        $tarPacker = new Tar();
+        $tarPacker = new \Magento\Framework\Backup\Archive\Tar();
         $tarPacker->setSkipFiles($this->getIgnorePaths())->pack($this->getRootDir(), $tarTmpPath, true);
 
         if (!is_file($tarTmpPath) || filesize($tarTmpPath) == 0) {
-            throw new LocalizedException(
-                new Phrase('Failed to create backup')
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Failed to create backup')
             );
         }
 
         $backupPath = $this->getBackupPath();
 
-        $gzPacker = new Gz();
+        $gzPacker = new \Magento\Framework\Archive\Gz();
         $gzPacker->pack($tarTmpPath, $backupPath);
 
         if (!is_file($backupPath) || filesize($backupPath) == 0) {
-            throw new LocalizedException(
-                new Phrase('Failed to create backup')
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Failed to create backup')
             );
         }
 
@@ -161,15 +152,15 @@ class Filesystem extends AbstractBackup
      * @param string $backupDir
      * @param int $size
      * @return void
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateAvailableDiscSpace($backupDir, $size)
     {
         $freeSpace = disk_free_space($backupDir);
         $requiredSpace = 2 * $size;
         if ($requiredSpace > $freeSpace) {
-            throw new NotEnoughFreeSpace(
-                new Phrase(
+            throw new \Magento\Framework\Backup\Exception\NotEnoughFreeSpace(
+                new \Magento\Framework\Phrase(
                     'Warning: necessary space for backup is ' . (ceil($requiredSpace) / 1024)
                     . 'MB, but your free disc space is ' . (ceil($freeSpace) / 1024) . 'MB.'
                 )
@@ -278,7 +269,7 @@ class Filesystem extends AbstractBackup
      * Check backups directory existence and whether it's writeable
      *
      * @return void
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _checkBackupsDir()
     {
@@ -288,8 +279,8 @@ class Filesystem extends AbstractBackup
             $backupsDirParentDirectory = basename($backupsDir);
 
             if (!is_writeable($backupsDirParentDirectory)) {
-                throw new NotEnoughPermissions(
-                    new Phrase('Cant create backups directory')
+                throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(
+                    new \Magento\Framework\Phrase('Cant create backups directory')
                 );
             }
 
@@ -298,8 +289,8 @@ class Filesystem extends AbstractBackup
         }
 
         if (!is_writable($backupsDir)) {
-            throw new NotEnoughPermissions(
-                new Phrase('Backups directory is not writeable')
+            throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(
+                new \Magento\Framework\Phrase('Backups directory is not writeable')
             );
         }
     }
@@ -316,14 +307,14 @@ class Filesystem extends AbstractBackup
     }
 
     /**
-     * @return Ftp
+     * @return \Magento\Framework\Backup\Filesystem\Rollback\Ftp
      * @deprecated 100.2.0
      */
     protected function getRollBackFtp()
     {
         if (!$this->rollBackFtp) {
             $this->rollBackFtp = ObjectManager::getInstance()->create(
-                Ftp::class,
+                \Magento\Framework\Backup\Filesystem\Rollback\Ftp::class,
                 ['snapshotObject' => $this]
             );
         }
@@ -332,14 +323,14 @@ class Filesystem extends AbstractBackup
     }
 
     /**
-     * @return Fs
+     * @return \Magento\Framework\Backup\Filesystem\Rollback\Fs
      * @deprecated 100.2.0
      */
     protected function getRollBackFs()
     {
         if (!$this->rollBackFs) {
             $this->rollBackFs = ObjectManager::getInstance()->create(
-                Fs::class,
+                \Magento\Framework\Backup\Filesystem\Rollback\Fs::class,
                 ['snapshotObject' => $this]
             );
         }

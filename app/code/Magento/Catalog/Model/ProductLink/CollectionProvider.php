@@ -9,9 +9,6 @@ namespace Magento\Catalog\Model\ProductLink;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Provides a collection of linked product items (crosssells, related, upsells, ...)
- */
 class CollectionProvider
 {
     /**
@@ -45,7 +42,7 @@ class CollectionProvider
     public function getCollection(\Magento\Catalog\Model\Product $product, $type)
     {
         if (!isset($this->providers[$type])) {
-            throw new NoSuchEntityException(__("The collection provider isn't registered."));
+            throw new NoSuchEntityException(__('Collection provider is not registered'));
         }
 
         $products = $this->providers[$type]->getLinkedProducts($product);
@@ -58,13 +55,8 @@ class CollectionProvider
         }
 
         usort($sorterItems, function ($itemA, $itemB) {
-<<<<<<< HEAD
-            $posA = (int)$itemA['position'];
-            $posB = (int)$itemB['position'];
-=======
             $posA = intval($itemA['position']);
             $posB = intval($itemB['position']);
->>>>>>> upstream/2.2-develop
 
             return $posA <=> $posB;
         });

@@ -5,8 +5,6 @@
  */
 namespace Magento\GoogleAdwords\Test\Unit\Observer;
 
-use Magento\GoogleAdwords\Helper\Data;
-
 class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -130,11 +128,8 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
     {
         $ordersIds = [1, 2, 3];
         $conversionValue = 0;
-        $conversionCurrency = 'USD';
         $this->_helperMock->expects($this->once())->method('isGoogleAdwordsActive')->will($this->returnValue(true));
         $this->_helperMock->expects($this->once())->method('isDynamicConversionValue')->will($this->returnValue(true));
-        $this->_helperMock->expects($this->once())->method('hasSendConversionValueCurrency')
-            ->will($this->returnValue(true));
         $this->_eventMock->expects($this->once())->method('getOrderIds')->will($this->returnValue($ordersIds));
         $this->_eventObserverMock->expects(
             $this->once()
@@ -144,10 +139,7 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_eventMock)
         );
 
-        $orderMock = $this->createMock(\Magento\Sales\Api\Data\OrderInterface::class);
-        $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn($conversionCurrency);
-
-        $iteratorMock = new \ArrayIterator([$orderMock]);
+        $iteratorMock = $this->createMock(\Iterator::class);
         $this->_collectionMock->expects($this->any())->method('getIterator')->will($this->returnValue($iteratorMock));
         $this->_collectionMock->expects(
             $this->once()
@@ -158,18 +150,12 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
             ['in' => $ordersIds]
         );
         $this->_registryMock->expects(
-            $this->atLeastOnce()
+            $this->once()
         )->method(
             'register'
-        )->withConsecutive(
-            [
-                Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME,
-                $conversionCurrency
-            ],
-            [
-                Data::CONVERSION_VALUE_REGISTRY_NAME,
-                $conversionValue,
-            ]
+        )->with(
+            \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_REGISTRY_NAME,
+            $conversionValue
         );
 
         $this->assertSame($this->_model, $this->_model->execute($this->_eventObserverMock));

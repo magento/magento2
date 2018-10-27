@@ -30,9 +30,6 @@ class EavValidationRulesTest extends \PHPUnit\Framework\TestCase
      */
     protected $attributeMock;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -46,13 +43,11 @@ class EavValidationRulesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $attributeInputType
-     * @param mixed $validateRules
      * @param array $data
      * @param array $expected
      * @dataProvider buildDataProvider
      */
-    public function testBuild($attributeInputType, $validateRules, $data, $expected): void
+    public function testBuild($attributeInputType, $validateRules, $data, $expected)
     {
         $this->attributeMock->expects($this->once())->method('getFrontendInput')->willReturn($attributeInputType);
         $this->attributeMock->expects($this->any())->method('getValidateRules')->willReturn($validateRules);

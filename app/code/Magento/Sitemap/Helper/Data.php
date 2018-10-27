@@ -3,17 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sitemap\Helper;
-
-use Magento\Sitemap\Model\ItemProvider\CategoryConfigReader;
-use Magento\Sitemap\Model\ItemProvider\CmsPageConfigReader;
-use Magento\Sitemap\Model\ItemProvider\ProductConfigReader;
-use Magento\Sitemap\Model\SitemapConfigReader;
-use Magento\Store\Model\ScopeInterface;
 
 /**
- * @deprecated
+ * Sitemap data helper
+ *
  */
+namespace Magento\Sitemap\Helper;
+
+use Magento\Store\Model\ScopeInterface;
+
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
@@ -70,8 +68,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return int
-     * @deprecated
-     * @see SitemapConfigReader::getMaximumLinesNumber()
      */
     public function getMaximumLinesNumber($storeId)
     {
@@ -87,8 +83,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return int
-     * @deprecated
-     * @see SitemapConfigReader::getMaximumFileSize()
      */
     public function getMaximumFileSize($storeId)
     {
@@ -104,8 +98,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @deprecated
-     * @see CategoryConfigReader::getChangeFrequency()
      */
     public function getCategoryChangefreq($storeId)
     {
@@ -121,8 +113,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @deprecated
-     * @see ProductConfigReader::getChangeFrequency()
      */
     public function getProductChangefreq($storeId)
     {
@@ -138,8 +128,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @deprecated
-     * @see CmsPageConfigReader::getChangeFrequency()
      */
     public function getPageChangefreq($storeId)
     {
@@ -155,8 +143,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @deprecated
-     * @see CategoryConfigReader::getPriority()
      */
     public function getCategoryPriority($storeId)
     {
@@ -172,8 +158,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @deprecated
-     * @see ProductConfigReader::getPriority()
      */
     public function getProductPriority($storeId)
     {
@@ -189,8 +173,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @deprecated
-     * @see CmsPageConfigReader::getPriority()
      */
     public function getPagePriority($storeId)
     {
@@ -206,8 +188,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return int
-     * @deprecated
-     * @see SitemapConfigReader::getEnableSubmissionRobots()
      */
     public function getEnableSubmissionRobots($storeId)
     {
@@ -223,8 +203,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
-     * @deprecated
-     * @see SitemapConfigReader::getProductImageIncludePolicy()
      */
     public function getProductImageIncludePolicy($storeId)
     {
@@ -239,8 +217,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get list valid paths for generate a sitemap XML file
      *
      * @return string[]
-     * @deprecated
-     * @see SitemapConfigReader::getValidPaths()
      */
     public function getValidPaths()
     {

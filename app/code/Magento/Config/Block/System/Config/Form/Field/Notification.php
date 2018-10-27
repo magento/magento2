@@ -10,7 +10,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Backend system config datetime field renderer
- *
  * @api
  * @since 100.0.2
  */
@@ -36,8 +35,6 @@ class Notification extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
-     * Returns element html
-     *
      * @param AbstractElement $element
      * @return string
      */
@@ -47,10 +44,6 @@ class Notification extends \Magento\Config\Block\System\Config\Form\Field
         $format = $this->_localeDate->getDateTimeFormat(
             \IntlDateFormatter::MEDIUM
         );
-<<<<<<< HEAD
-        return $this->dateTimeFormatter->formatObject($this->_localeDate->date((int) $element->getValue()), $format);
-=======
         return $this->dateTimeFormatter->formatObject($this->_localeDate->date((int)$element->getValue()), $format);
->>>>>>> upstream/2.2-develop
     }
 }

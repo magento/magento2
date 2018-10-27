@@ -83,11 +83,7 @@ class Menu extends \ArrayObject
             }
             $parentItem->getChildren()->add($item, null, $index);
         } else {
-<<<<<<< HEAD
-            $index = (int) $index;
-=======
             $index = (int)$index;
->>>>>>> upstream/2.2-develop
             if (!isset($this[$index])) {
                 $this->offsetSet($index, $item);
                 $this->_logger->info(

@@ -5,10 +5,6 @@
  */
 namespace Magento\Analytics\Controller\Adminhtml\Reports;
 
-<<<<<<< HEAD
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Analytics\Model\Exception\State\SubscriptionUpdateException;
 use Magento\Analytics\Model\ReportUrlProvider;
 use Magento\Backend\App\Action;
@@ -20,11 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Provide redirect to resource with reports.
  */
-<<<<<<< HEAD
-class Show extends Action implements HttpGetActionInterface
-=======
 class Show extends Action
->>>>>>> upstream/2.2-develop
 {
     /**
      * @var ReportUrlProvider
@@ -32,14 +24,6 @@ class Show extends Action
     private $reportUrlProvider;
 
     /**
-<<<<<<< HEAD
-     * @inheritdoc
-     */
-    const ADMIN_RESOURCE = 'Magento_Analytics::analytics_settings';
-
-    /**
-=======
->>>>>>> upstream/2.2-develop
      * @param Context $context
      * @param ReportUrlProvider $reportUrlProvider
      */
@@ -52,8 +36,6 @@ class Show extends Action
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Check admin permissions for this controller.
      *
      * @return boolean
@@ -64,7 +46,6 @@ class Show extends Action
     }
 
     /**
->>>>>>> upstream/2.2-develop
      * Redirect to resource with reports.
      *
      * @return Redirect $resultRedirect

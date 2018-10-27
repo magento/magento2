@@ -11,9 +11,6 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 
-/**
- * Rate toolbar block
- */
 class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
 {
     /**
@@ -49,8 +46,6 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     }
 
     /**
-     * Init model
-     *
      * @return void
      */
     protected function _construct()
@@ -102,8 +97,6 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     }
 
     /**
-     * Prepare layout
-     *
      * @return $this
      */
     protected function _prepareLayout()

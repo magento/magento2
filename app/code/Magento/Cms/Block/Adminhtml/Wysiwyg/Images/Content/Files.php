@@ -75,7 +75,7 @@ class Files extends \Magento\Backend\Block\Template
     }
 
     /**
-     * File identifier getter
+     * File idetifier getter
      *
      * @param  \Magento\Framework\DataObject $file
      * @return string

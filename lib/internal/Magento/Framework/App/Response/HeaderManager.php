@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App\Response;
 
 use Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface;
@@ -25,7 +24,7 @@ class HeaderManager
     {
         foreach ($headerProviderList as $header) {
             if (!($header instanceof HeaderProviderInterface)) {
-                throw new LocalizedException(new Phrase('The header provider is invalid. Verify and try again.'));
+                throw new LocalizedException(new Phrase('Invalid header provider'));
             }
         }
         $this->headerProviders = $headerProviderList;

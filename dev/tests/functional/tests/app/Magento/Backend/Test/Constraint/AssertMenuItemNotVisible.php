@@ -25,7 +25,7 @@ class AssertMenuItemNotVisible extends AbstractConstraint
     {
         $dashboard->open();
 
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $dashboard->getMenuBlock()->isMenuItemVisible($menuItem),
             'Menu item ' . $menuItem . '  is supposed to be not visible.'
         );

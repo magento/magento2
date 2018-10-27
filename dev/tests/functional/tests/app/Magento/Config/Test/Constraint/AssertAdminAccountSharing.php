@@ -20,7 +20,7 @@ class AssertAdminAccountSharing extends AbstractConstraint
      */
     public function processAssert(AdminAccountSharing $adminAccountSharing)
     {
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $adminAccountSharing->getAdminForm()->adminAccountSharingAvailability(),
             'Admin Account Sharing Option is not available'
         );

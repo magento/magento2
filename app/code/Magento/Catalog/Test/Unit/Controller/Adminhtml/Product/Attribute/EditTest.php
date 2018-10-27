@@ -63,11 +63,6 @@ class EditTest extends \PHPUnit\Framework\TestCase
     protected $session;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $presentation;
-
-    /**
      * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $pageTitle;
@@ -86,6 +81,11 @@ class EditTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
 
     protected function setUp()
     {
@@ -128,11 +128,6 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->presentation = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation::class
-        )->disableOriginalConstructor()
-            ->getMock();
-
         $this->blockTemplate = $this->getMockBuilder(\Magento\Backend\Block\Template::class)
             ->setMethods(['setIsPopup'])
             ->disableOriginalConstructor()
@@ -147,8 +142,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $this->context->expects($this->any())->method('getResultPageFactory')->willReturn($this->resultPageFactory);
         $this->context->expects($this->any())->method('getSession')->willReturn($this->session);
 
-        $objectManager = new ObjectManager($this);
-        $this->editController = $objectManager->getObject(
+        $this->objectManager = new ObjectManager($this);
+        $this->editController = $this->objectManager->getObject(
             \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Edit::class,
             [
                 'context' => $this->context,
@@ -174,10 +169,9 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->willReturn($this->eavAttribute);
         $this->objectManagerMock->expects($this->any())->method('get')
-            ->willReturnMap([
-                [\Magento\Backend\Model\Session::class, $this->session],
-                [\Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation::class, $this->presentation]
-            ]);
+            ->with(\Magento\Backend\Model\Session::class)
+            ->willReturn($this->session);
+
         $this->eavAttribute->expects($this->once())->method('setEntityTypeId')->willReturnSelf();
         $this->eavAttribute->expects($this->once())->method('addData')->with($attributesData)->willReturnSelf();
         $this->eavAttribute->expects($this->any())->method('getName')->willReturn(null);
@@ -225,10 +219,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->willReturn($this->eavAttribute);
         $this->objectManagerMock->expects($this->any())->method('get')
-            ->willReturnMap([
-                [\Magento\Backend\Model\Session::class, $this->session],
-                [\Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation::class, $this->presentation]
-            ]);
+            ->with(\Magento\Backend\Model\Session::class)
+            ->willReturn($this->session);
 
         $this->eavAttribute->expects($this->once())->method('setEntityTypeId')->willReturnSelf();
         $this->eavAttribute->expects($this->once())->method('addData')->with($attributesData)->willReturnSelf();

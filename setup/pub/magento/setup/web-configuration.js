@@ -124,24 +124,22 @@ angular.module('web-configuration', ['ngStorage'])
         $scope.validateUrl = function () {
             if (!$scope.webconfig.submitted) {
                 $http.post('index.php/url-check', $scope.config)
-                    .then(function successCallback(resp) {
-                        $scope.validateUrl.result = resp.data;
-
+                    .success(function (data) {
+                        $scope.validateUrl.result = data;
                         if ($scope.validateUrl.result.successUrl && $scope.validateUrl.result.successSecureUrl) {
                             $scope.nextState();
                         }
-
                         if (!$scope.validateUrl.result.successUrl) {
                             $scope.webconfig.submitted = true;
                             $scope.webconfig.base_url.$setValidity('url', false);
                         }
-
                         if (!$scope.validateUrl.result.successSecureUrl) {
                             $scope.webconfig.submitted = true;
                             $scope.webconfig.https.$setValidity('url', false);
                         }
-                    }, function errorCallback(resp) {
-                        $scope.validateUrl.failed = resp.data;
+                    })
+                    .error(function (data) {
+                        $scope.validateUrl.failed = data;
                     });
             }
         };

@@ -5,28 +5,13 @@
   * See COPYING.txt for license details.
   */
 -->
-<<<<<<< HEAD
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-=======
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
->>>>>>> upstream/2.2-develop
     <actionGroup name="CreateCustomStoreViewActionGroup">
         <arguments>
             <argument name="storeGroupName" defaultValue="customStoreGroup.name"/>
         </arguments>
-<<<<<<< HEAD
-        <amOnPage  url="{{AdminSystemStoreViewPage.url}}" stepKey="amOnAdminSystemStoreViewPage"/>
-        <waitForPageLoad time="30" stepKey="waitForProductPageLoad"/>
-        <selectOption userInput="{{storeGroupName}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
-        <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
-        <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
-        <selectOption userInput="{{customStore.is_active}}" selector="{{AdminNewStoreSection.statusDropdown}}" stepKey="selectStoreViewStatus"/>
-        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreViewButton"/>
-        <waitForElementVisible selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" stepKey="waitForAcceptNewStoreViewCreationButton" />
-=======
         <amOnPage stepKey="amOnAdminSystemStorePage"  url="{{AdminSystemStorePage.url}}"/>
         <click stepKey="clickCreateStoreViewButton" selector="{{AdminStoresMainActionsSection.createStoreViewButton}}"/>
         <waitForPageLoad time="30" stepKey="waitForProductPageLoad"/>
@@ -35,7 +20,6 @@
         <fillField stepKey="fillStoreViewCode" selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{customStore.code}}"/>
         <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" stepKey="selectStoreViewStatus" userInput="{{customStore.is_active}}"/>
         <click stepKey="clickSaveStoreViewButton" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
->>>>>>> upstream/2.2-develop
         <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="clickAcceptNewStoreViewCreationButton"/>
     </actionGroup>
 </actionGroups>

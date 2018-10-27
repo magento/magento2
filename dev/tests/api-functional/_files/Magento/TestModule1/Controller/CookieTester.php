@@ -42,7 +42,7 @@ abstract class CookieTester implements \Magento\Framework\App\ActionInterface
         CookieMetadataFactory $cookieMetadataFactory
     ) {
         $this->cookieManager = $cookieManager;
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->cookieMetadataFacory = $cookieMetadataFactory;
         $this->_response = $context->getResponse();
         $this->request = $context->getRequest();
     }
@@ -52,7 +52,7 @@ abstract class CookieTester implements \Magento\Framework\App\ActionInterface
      */
     protected function getCookieMetadataFactory()
     {
-        return $this->cookieMetadataFactory;
+        return $this->cookieMetadataFacory;
     }
 
     /**

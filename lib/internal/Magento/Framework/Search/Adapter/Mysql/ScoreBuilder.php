@@ -9,8 +9,6 @@ namespace Magento\Framework\Search\Adapter\Mysql;
  * Class for generating sql condition for calculating store manager
  *
  * @api
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class ScoreBuilder
 {

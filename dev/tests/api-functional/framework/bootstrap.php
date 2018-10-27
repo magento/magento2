@@ -17,10 +17,6 @@ $fixtureBaseDir = $integrationTestsDir . '/testsuite';
 if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
 if (!defined('INTEGRATION_TESTS_DIR')) {
     define('INTEGRATION_TESTS_DIR', $integrationTestsDir);
 }

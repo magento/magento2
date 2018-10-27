@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type;
 
 use Magento\Checkout\Model\Session;
@@ -123,14 +122,11 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     private $quoteRepositoryMock;
 
     /**
-<<<<<<< HEAD
-=======
      * @var PHPUnit_Framework_MockObject_MockObject
      */
     private $scopeConfigMock;
 
     /**
->>>>>>> upstream/2.2-develop
      * @var OrderFactory|PHPUnit_Framework_MockObject_MockObject
      */
     private $orderFactoryMock;
@@ -181,11 +177,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->customerSessionMock = $this->createSimpleMock(CustomerSession::class);
         $this->orderFactoryMock = $this->createSimpleMock(OrderFactory::class);
         $eventManagerMock = $this->createSimpleMock(ManagerInterface::class);
-<<<<<<< HEAD
-        $scopeConfigMock = $this->createSimpleMock(ScopeConfigInterface::class);
-=======
         $this->scopeConfigMock = $this->createSimpleMock(ScopeConfigInterface::class);
->>>>>>> upstream/2.2-develop
         $this->sessionMock = $this->createSimpleMock(Generic::class);
         $addressFactoryMock = $this->createSimpleMock(AddressFactory::class);
         $this->toOrderMock = $this->createSimpleMock(ToOrder::class);
@@ -236,11 +228,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             $this->orderFactoryMock,
             $this->addressRepositoryMock,
             $eventManagerMock,
-<<<<<<< HEAD
-            $scopeConfigMock,
-=======
             $this->scopeConfigMock,
->>>>>>> upstream/2.2-develop
             $this->sessionMock,
             $addressFactoryMock,
             $this->toOrderMock,
@@ -319,7 +307,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Verify the shipping address information and continue.
+     * @expectedExceptionMessage Please check shipping address information.
      */
     public function testSetShippingItemsInformationForAddressLeak()
     {
@@ -348,7 +336,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->model, $this->model->setShippingItemsInformation($info));
     }
 
-    public function testUpdateQuoteCustomerShippingAddress()
+    public function testupdateQuoteCustomerShippingAddress()
     {
         $addressId = 42;
         $customerAddressId = 42;
@@ -365,9 +353,9 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Verify the shipping address information and continue.
+     * @expectedExceptionMessage Please check shipping address information.
      */
-    public function testUpdateQuoteCustomerShippingAddressForAddressLeak()
+    public function testupdateQuoteCustomerShippingAddressForAddressLeak()
     {
         $addressId = 43;
         $customerAddressId = 42;
@@ -395,7 +383,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Verify the billing address information and continue.
+     * @expectedExceptionMessage Please check billing address information.
      */
     public function testSetQuoteCustomerBillingAddressForAddressLeak()
     {
@@ -444,11 +432,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-<<<<<<< HEAD
-    public function testCreateOrders(): void
-=======
     public function testCreateOrders()
->>>>>>> upstream/2.2-develop
     {
         $addressTotal = 5;
         $productType = \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE;
@@ -634,15 +618,8 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @param string $paymentProviderCode
      * @param Address|PHPUnit_Framework_MockObject_MockObject $shippingAddressMock
      * @param Address|PHPUnit_Framework_MockObject_MockObject $billingAddressMock
-<<<<<<< HEAD
-     *
-     * @return void
-     */
-    private function setQuoteMockData(string $paymentProviderCode, $shippingAddressMock, $billingAddressMock): void
-=======
      */
     private function setQuoteMockData(string $paymentProviderCode, $shippingAddressMock, $billingAddressMock)
->>>>>>> upstream/2.2-develop
     {
         $quoteId = 1;
         $paymentMock = $this->getPaymentMock($paymentProviderCode);
@@ -705,7 +682,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * Tests exception for addresses with country id not in the allowed countries list.
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Some addresses can't be used due to the configurations for specific countries.
+     * @expectedExceptionMessage Some addresses cannot be used due to country-specific configurations.
      */
     public function testCreateOrdersCountryNotPresentInAllowedListException()
     {

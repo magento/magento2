@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Backend\Model;
 
 use Magento\Framework\Exception\AuthenticationException;
@@ -149,12 +148,7 @@ class Auth
     public function login($username, $password)
     {
         if (empty($username) || empty($password)) {
-            self::throwException(
-                __(
-                    'The account sign-in was incorrect or your account is disabled temporarily. '
-                    . 'Please wait and try again later.'
-                )
-            );
+            self::throwException(__('You did not sign in correctly or your account is temporarily disabled.'));
         }
 
         try {
@@ -171,12 +165,7 @@ class Auth
             }
 
             if (!$this->getAuthStorage()->getUser()) {
-                self::throwException(
-                    __(
-                        'The account sign-in was incorrect or your account is disabled temporarily. '
-                        . 'Please wait and try again later.'
-                    )
-                );
+                self::throwException(__('You did not sign in correctly or your account is temporarily disabled.'));
             }
         } catch (PluginAuthenticationException $e) {
             $this->_eventManager->dispatch(
@@ -190,10 +179,7 @@ class Auth
                 ['user_name' => $username, 'exception' => $e]
             );
             self::throwException(
-                __(
-                    $e->getMessage()? : 'The account sign-in was incorrect or your account is disabled temporarily. '
-                        . 'Please wait and try again later.'
-                )
+                __($e->getMessage()? : 'You did not sign in correctly or your account is temporarily disabled.')
             );
         }
     }
@@ -229,7 +215,7 @@ class Auth
     public static function throwException(Phrase $msg = null)
     {
         if ($msg === null) {
-            $msg = __('An authentication error occurred. Verify and try again.');
+            $msg = __('Authentication error occurred.');
         }
         throw new AuthenticationException($msg);
     }

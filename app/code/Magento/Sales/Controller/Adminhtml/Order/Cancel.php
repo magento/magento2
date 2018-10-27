@@ -6,9 +6,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-
-class Cancel extends \Magento\Sales\Controller\Adminhtml\Order implements HttpPostActionInterface
+class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
      * Authorization level of a basic admin session
@@ -26,18 +24,18 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order implements HttpPo
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         if (!$this->isValidPostRequest()) {
-            $this->messageManager->addErrorMessage(__('You have not canceled the item.'));
+            $this->messageManager->addError(__('You have not canceled the item.'));
             return $resultRedirect->setPath('sales/*/');
         }
         $order = $this->_initOrder();
         if ($order) {
             try {
                 $this->orderManagement->cancel($order->getEntityId());
-                $this->messageManager->addSuccessMessage(__('You canceled the order.'));
+                $this->messageManager->addSuccess(__('You canceled the order.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage(__('You have not canceled the item.'));
+                $this->messageManager->addError(__('You have not canceled the item.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             }
             return $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);

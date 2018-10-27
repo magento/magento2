@@ -43,7 +43,7 @@ class AssertProductsQtyAndStockStatusInAdminPanel extends AbstractConstraint
             $actualQtyAndStockStatus['stock_status'] =
                 strtolower($productData['quantity_and_stock_status']['is_in_stock']);
 
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $actualQtyAndStockStatus,
                 $expectedQtyAndStockStatus,
                 'Expected and actual products qty and status are not equal.'

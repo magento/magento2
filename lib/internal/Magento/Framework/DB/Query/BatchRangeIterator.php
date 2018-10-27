@@ -34,12 +34,6 @@ class BatchRangeIterator implements BatchIteratorInterface
     private $rangeField;
 
     /**
-     * @var string
-     * @deprecated unused class property
-     */
-    private $rangeFieldAlias;
-
-    /**
      * @var int
      */
     private $batchSize;
@@ -86,7 +80,7 @@ class BatchRangeIterator implements BatchIteratorInterface
      * @param int $batchSize
      * @param string $correlationName
      * @param string|array $rangeField
-     * @param string $rangeFieldAlias @deprecated
+     * @param string $rangeFieldAlias
      */
     public function __construct(
         Select $select,
@@ -113,7 +107,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     public function current()
     {
         if (null === $this->currentSelect) {
-            $this->isValid = $this->currentOffset < $this->totalItemCount;
+            $this->isValid = ($this->currentOffset + $this->batchSize) <= $this->totalItemCount;
             $this->currentSelect = $this->initSelectObject();
         }
         return $this->currentSelect;
@@ -144,7 +138,7 @@ class BatchRangeIterator implements BatchIteratorInterface
         if (null === $this->currentSelect) {
             $this->current();
         }
-        $this->isValid = $this->currentOffset < $this->totalItemCount;
+        $this->isValid = ($this->batchSize + $this->currentOffset) <= $this->totalItemCount;
         $select = $this->initSelectObject();
         if ($this->isValid) {
             $this->iteration++;

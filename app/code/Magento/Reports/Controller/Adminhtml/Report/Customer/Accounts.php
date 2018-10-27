@@ -6,9 +6,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Customer;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Accounts extends \Magento\Reports\Controller\Adminhtml\Report\Customer implements HttpGetActionInterface
+class Accounts extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
     /**
      * New accounts action

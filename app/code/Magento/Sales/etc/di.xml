@@ -476,10 +476,7 @@
             <argument name="entityRelationComposite" xsi:type="object">CreditmemoRelationsComposite</argument>
         </arguments>
     </type>
-<<<<<<< HEAD
-=======
     
->>>>>>> upstream/2.2-develop
     <virtualType name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedOrderDataProvider" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
@@ -983,13 +980,6 @@
     </type>
     <type name="Magento\Sales\Model\ResourceModel\Order\Handler\Address">
         <plugin name="addressUpdate" type="Magento\Sales\Model\Order\Invoice\Plugin\AddressUpdate"/>
-    </type>
-    <type name="Magento\Framework\Console\CommandListInterface">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="encyption_payment_data_update" xsi:type="object">Magento\Sales\Console\Command\EncryptionPaymentDataUpdateCommand</item>
-            </argument>
-        </arguments>
     </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>

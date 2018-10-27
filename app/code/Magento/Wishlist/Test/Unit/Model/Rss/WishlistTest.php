@@ -278,7 +278,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
 
     public function testIsAllowed()
     {
-        $this->scopeConfig->expects($this->once())->method('isSetFlag')
+        $this->scopeConfig->expects($this->once())->method('getValue')
             ->with('rss/wishlist/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
         $this->assertTrue($this->model->isAllowed());

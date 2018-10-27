@@ -6,9 +6,7 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-
-class Drop extends \Magento\Newsletter\Controller\Adminhtml\Template implements HttpPostActionInterface
+class Drop extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
     /**
      * Drop Newsletter Template

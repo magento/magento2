@@ -6,7 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\Controller\ResultFactory;
@@ -16,7 +15,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
+class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
@@ -83,22 +82,18 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implement
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $productIds = $collection->getAllIds();
-        $requestStoreId = $storeId = $this->getRequest()->getParam('store', null);
-        $filterRequest = $this->getRequest()->getParam('filters', null);
+        $storeId = (int) $this->getRequest()->getParam('store', 0);
         $status = (int) $this->getRequest()->getParam('status');
+        $filters = (array)$this->getRequest()->getParam('filters', []);
 
-        if (null !== $storeId && null !== $filterRequest) {
-            $storeId = (isset($filterRequest['store_id'])) ? (int) $filterRequest['store_id'] : 0;
+        if (isset($filters['store_id'])) {
+            $storeId = (int)$filters['store_id'];
         }
 
         try {
             $this->_validateMassStatus($productIds, $status);
             $this->_objectManager->get(\Magento\Catalog\Model\Product\Action::class)
-<<<<<<< HEAD
-                ->updateAttributes($productIds, ['status' => $status], (int) $storeId);
-=======
                 ->updateAttributes($productIds, ['status' => $status], $storeId);
->>>>>>> upstream/2.2-develop
             $this->messageManager->addSuccessMessage(
                 __('A total of %1 record(s) have been updated.', count($productIds))
             );
@@ -106,14 +101,11 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implement
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage(
-                $e,
-                __('Something went wrong while updating the product(s) status.')
-            );
+            $this->_getSession()->addException($e, __('Something went wrong while updating the product(s) status.'));
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath('catalog/*/', ['store' => $requestStoreId]);
+        return $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
     }
 }

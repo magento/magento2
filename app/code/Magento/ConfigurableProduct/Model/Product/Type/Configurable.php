@@ -1402,13 +1402,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $skipStockFilter = true
     ) {
         $collection = $this->getUsedProductCollection($product);
-<<<<<<< HEAD
-        if ($skipStockFilter) {
-            $collection->setFlag('has_stock_status_filter', true);
-        }
-        $collection
-            ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
-=======
 
         if ($skipStockFilter) {
             $collection->setFlag('has_stock_status_filter', true);
@@ -1416,7 +1409,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $collection
             ->addAttributeToSelect($this->getAttributesForCollection($product))
->>>>>>> upstream/2.2-develop
             ->addFilterByRequiredOptions()
             ->setStoreId($product->getStoreId());
 

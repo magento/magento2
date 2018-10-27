@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
+use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Response\CardDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
@@ -13,7 +14,7 @@ use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\SubjectReader;
 
 /**
- * Tests \Magento\Braintree\Gateway\Response\CardDetailsHandler.
+ * Class CardDetailsHandlerTest
  */
 class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -25,12 +26,12 @@ class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $paymentMock;
+    private $payment;
 
     /**
      * @var \Magento\Braintree\Gateway\Config\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $configMock;
+    private $config;
 
     /**
      * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
@@ -44,7 +45,7 @@ class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cardHandler = new CardDetailsHandler($this->configMock, $this->subjectReaderMock);
+        $this->cardHandler = new CardDetailsHandler($this->config, $this->subjectReaderMock);
     }
 
     /**
@@ -52,30 +53,30 @@ class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testHandle()
     {
-        $paymentDataMock = $this->getPaymentDataObjectMock();
+        $paymentData = $this->getPaymentDataObjectMock();
         $transaction = $this->getBraintreeTransaction();
 
-        $subject = ['payment' => $paymentDataMock];
+        $subject = ['payment' => $paymentData];
         $response = ['object' => $transaction];
 
         $this->subjectReaderMock->expects(self::once())
             ->method('readPayment')
             ->with($subject)
-            ->willReturn($paymentDataMock);
+            ->willReturn($paymentData);
         $this->subjectReaderMock->expects(self::once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
 
-        $this->paymentMock->expects(static::once())
+        $this->payment->expects(static::once())
             ->method('setCcLast4');
-        $this->paymentMock->expects(static::once())
+        $this->payment->expects(static::once())
             ->method('setCcExpMonth');
-        $this->paymentMock->expects(static::once())
+        $this->payment->expects(static::once())
             ->method('setCcExpYear');
-        $this->paymentMock->expects(static::once())
+        $this->payment->expects(static::once())
             ->method('setCcType');
-        $this->paymentMock->expects(static::exactly(2))
+        $this->payment->expects(static::exactly(2))
             ->method('setAdditionalInformation');
 
         $this->cardHandler->handle($subject, $response);
@@ -86,12 +87,12 @@ class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private function initConfigMock()
     {
-        $this->configMock = $this->getMockBuilder(Config::class)
+        $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCctypesMapper'])
             ->getMock();
 
-        $this->configMock->expects(static::once())
+        $this->config->expects(static::once())
             ->method('getCctypesMapper')
             ->willReturn([
                 'american-express' => 'AE',
@@ -109,7 +110,7 @@ class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private function getPaymentDataObjectMock()
     {
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
+        $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'setCcLast4',
@@ -127,7 +128,7 @@ class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects(static::once())
             ->method('getPayment')
-            ->willReturn($this->paymentMock);
+            ->willReturn($this->payment);
 
         return $mock;
     }

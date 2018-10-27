@@ -75,7 +75,6 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
         $emogrifier->setCss($css);
         $emogrifier->setHtml($html);
         $result = $emogrifier->emogrify();
-
         /**
          * This test was implemented for the issue which existed in the older version of Emogrifier.
          * Test was updated, as the library got updated as well.

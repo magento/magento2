@@ -6,8 +6,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\TestFramework\Backend\App;
+// @codingStandardsIgnoreFile
 
+namespace Magento\TestFramework\Backend\App;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
@@ -25,10 +26,8 @@ class Config extends \Magento\Backend\App\Config
      * @param \Magento\TestFramework\App\Config $appConfig
      * @param \Magento\TestFramework\App\MutableScopeConfig $mutableScopeConfig
      */
-    public function __construct(
-        \Magento\TestFramework\App\Config $appConfig,
-        \Magento\TestFramework\App\MutableScopeConfig $mutableScopeConfig
-    ) {
+    public function __construct(\Magento\TestFramework\App\Config $appConfig, \Magento\TestFramework\App\MutableScopeConfig $mutableScopeConfig)
+    {
         parent::__construct($appConfig);
         $this->mutableScopeConfig = $mutableScopeConfig;
     }

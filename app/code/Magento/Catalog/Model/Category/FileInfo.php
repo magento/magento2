@@ -9,7 +9,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
  * Class FileInfo
@@ -39,11 +38,6 @@ class FileInfo
     private $mediaDirectory;
 
     /**
-     * @var ReadInterface
-     */
-    private $baseDirectory;
-
-    /**
      * @param Filesystem $filesystem
      * @param Mime $mime
      */
@@ -69,20 +63,6 @@ class FileInfo
     }
 
     /**
-     * Get Base Directory read instance
-     *
-     * @return ReadInterface
-     */
-    private function getBaseDirectory()
-    {
-        if (!isset($this->baseDirectory)) {
-            $this->baseDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
-        }
-
-        return $this->baseDirectory;
-    }
-
-    /**
      * Retrieve MIME type of requested file
      *
      * @param string $fileName
@@ -90,7 +70,7 @@ class FileInfo
      */
     public function getMimeType($fileName)
     {
-        $filePath = $this->getFilePath($fileName);
+        $filePath = self::ENTITY_MEDIA_PATH . '/' . ltrim($fileName, '/');
         $absoluteFilePath = $this->getMediaDirectory()->getAbsolutePath($filePath);
 
         $result = $this->mime->getMimeType($absoluteFilePath);
@@ -105,7 +85,7 @@ class FileInfo
      */
     public function getStat($fileName)
     {
-        $filePath = $this->getFilePath($fileName);
+        $filePath = self::ENTITY_MEDIA_PATH . '/' . ltrim($fileName, '/');
 
         $result = $this->getMediaDirectory()->stat($filePath);
         return $result;
@@ -119,65 +99,9 @@ class FileInfo
      */
     public function isExist($fileName)
     {
-        $filePath = $this->getFilePath($fileName);
+        $filePath = self::ENTITY_MEDIA_PATH . '/' . ltrim($fileName, '/');
 
         $result = $this->getMediaDirectory()->isExist($filePath);
         return $result;
-    }
-
-    /**
-     * Construct and return file subpath based on filename relative to media directory
-     *
-     * @param string $fileName
-     * @return string
-     */
-    private function getFilePath($fileName)
-    {
-        $filePath = ltrim($fileName, '/');
-
-        $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath();
-        $isFileNameBeginsWithMediaDirectoryPath = $this->isBeginsWithMediaDirectoryPath($fileName);
-
-        // if the file is not using a relative path, it resides in the catalog/category media directory
-        $fileIsInCategoryMediaDir = !$isFileNameBeginsWithMediaDirectoryPath;
-
-        if ($fileIsInCategoryMediaDir) {
-            $filePath = self::ENTITY_MEDIA_PATH . '/' . $filePath;
-        } else {
-            $filePath = substr($filePath, strlen($mediaDirectoryRelativeSubpath));
-        }
-
-        return $filePath;
-    }
-
-    /**
-     * Checks for whether $fileName string begins with media directory path
-     *
-     * @param string $fileName
-     * @return bool
-     */
-    public function isBeginsWithMediaDirectoryPath($fileName)
-    {
-        $filePath = ltrim($fileName, '/');
-
-        $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath();
-        $isFileNameBeginsWithMediaDirectoryPath = strpos($filePath, $mediaDirectoryRelativeSubpath) === 0;
-
-        return $isFileNameBeginsWithMediaDirectoryPath;
-    }
-
-    /**
-     * Get media directory subpath relative to base directory path
-     *
-     * @return string
-     */
-    private function getMediaDirectoryPathRelativeToBaseDirectoryPath()
-    {
-        $baseDirectoryPath = $this->getBaseDirectory()->getAbsolutePath();
-        $mediaDirectoryPath = $this->getMediaDirectory()->getAbsolutePath();
-
-        $mediaDirectoryRelativeSubpath = substr($mediaDirectoryPath, strlen($baseDirectoryPath));
-
-        return $mediaDirectoryRelativeSubpath;
     }
 }

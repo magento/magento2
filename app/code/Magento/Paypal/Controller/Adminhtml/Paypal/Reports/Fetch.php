@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Paypal\Controller\Adminhtml\Paypal\Reports;
 
 use Magento\Framework\Controller\ResultFactory;
@@ -40,12 +42,7 @@ class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
                         \Magento\Paypal\Model\Report\Settlement::createConnection($config)
                     );
                     $this->messageManager->addSuccessMessage(
-                        __(
-                            'We fetched %1 report rows from "%2@%3."',
-                            $fetched,
-                            $config['username'],
-                            $config['hostname']
-                        )
+                        __('We fetched %1 report rows from "%2@%3."', $fetched, $config['username'], $config['hostname'])
                     );
                 } catch (\Exception $e) {
                     $this->messageManager->addExceptionMessage(

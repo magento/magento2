@@ -31,9 +31,10 @@ angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
 
         if (!$localStorage.store) {
             $http.get('index.php/customize-your-store/default-time-zone',{'responseType' : 'json'})
-                .then(function successCallback(resp) {
-                    $scope.store.timezone = resp.data.defaultTimeZone;
-                }, function errorCallback() {
+                .success(function (data) {
+                    $scope.store.timezone = data.defaultTimeZone;
+                })
+                .error(function (data) {
                     $scope.store.timezone = 'UTC';
                 });
         }
@@ -47,12 +48,9 @@ angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
             $localStorage.store = $scope.store;
             $scope.loading = true;
             $http.post('index.php/modules/all-modules-valid', $scope.store)
-                .then(function successCallback(resp) {
-                    $scope.checkModuleConstraints.result = resp.data;
-
-                    if ($scope.checkModuleConstraints.result !== undefined &&
-                        $scope.checkModuleConstraints.result.success
-                    ) {
+                .success(function (data) {
+                    $scope.checkModuleConstraints.result = data;
+                    if (($scope.checkModuleConstraints.result !== undefined) && ($scope.checkModuleConstraints.result.success)) {
                         $scope.loading = false;
                         $scope.nextState();
                     } else {
@@ -63,18 +61,17 @@ angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
         };
 
         if (!$scope.store.loadedAllModules) {
-            $http.get('index.php/modules').then(function successCallback(resp) {
-                $state.loadedModules = resp.data;
+            $http.get('index.php/modules').success(function (data) {
+                $state.loadedModules = data;
                 $scope.store.showModulesControl = true;
-
-                if (resp.data.error) {
+                if (data.error) {
                     $scope.updateOnExpand($scope.store.advanced);
-                    $scope.store.errorMessage = $sce.trustAsHtml(resp.data.error);
+                    $scope.store.errorMessage = $sce.trustAsHtml(data.error);
                 }
             });
         }
 
-        $state.loadModules = function () {
+        $state.loadModules = function(){
             if(!$scope.store.loadedAllModules) {
                 var allModules = $scope.$state.loadedModules.modules;
                 for (var eachModule in allModules) {
@@ -123,9 +120,8 @@ angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
             var allParameters = {'allModules' : $scope.store.allModules, 'selectedModules' : $scope.store.selectedModules, 'module' : module, 'status' : moduleStatus};
 
             $http.post('index.php/modules/validate', allParameters)
-                .then(function successCallback(resp) {
-                    $scope.checkModuleConstraints.result = resp.data;
-
+                .success(function (data) {
+                    $scope.checkModuleConstraints.result = data;
                     if ((($scope.checkModuleConstraints.result.error !== undefined) && (!$scope.checkModuleConstraints.result.success))) {
                         $scope.store.errorMessage = $sce.trustAsHtml($scope.checkModuleConstraints.result.error);
                         if (moduleStatus) {
@@ -134,7 +130,7 @@ angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
                             $scope.store.selectedModules.push(module);
                         }
                     } else {
-                        $state.loadedModules = resp.data;
+                        $state.loadedModules = data;
                         $scope.store.errorMessage = false;
                         $scope.store.showError = false;
                         $scope.store.errorFlag = false;

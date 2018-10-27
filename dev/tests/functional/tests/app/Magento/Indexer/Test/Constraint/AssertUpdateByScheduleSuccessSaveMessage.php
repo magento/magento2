@@ -29,7 +29,7 @@ class AssertUpdateByScheduleSuccessSaveMessage extends AbstractConstraint
     public function processAssert(IndexManagement $indexManagement, array $indexers)
     {
         $actualMessage = $indexManagement->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             sprintf(self::SUCCESS_SAVE_MESSAGE, count($indexers)),
             $actualMessage,
             'Wrong success message is displayed.'

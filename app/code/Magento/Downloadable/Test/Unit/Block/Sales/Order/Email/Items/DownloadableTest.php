@@ -59,7 +59,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
     {
         $item = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrderItemId'])
+            ->setMethods(['getId'])
             ->getMock();
         $linkPurchased = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased::class)
             ->disableOriginalConstructor()
@@ -73,12 +73,12 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
 
         $this->block->setData('item', $item);
         $this->purchasedFactory->expects($this->once())->method('create')->willReturn($linkPurchased);
-        $linkPurchased->expects($this->once())->method('load')->with('orderItemId', 'order_item_id')->willReturnSelf();
-        $item->expects($this->any())->method('getOrderItemId')->willReturn('orderItemId');
+        $linkPurchased->expects($this->once())->method('load')->with('itemId', 'order_item_id')->willReturnSelf();
+        $item->expects($this->any())->method('getId')->willReturn('itemId');
         $this->itemsFactory->expects($this->once())->method('create')->willReturn($itemCollection);
         $itemCollection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with('order_item_id', 'orderItemId')
+            ->with('order_item_id', 'itemId')
             ->willReturnSelf();
 
         $this->assertEquals($linkPurchased, $this->block->getLinks());

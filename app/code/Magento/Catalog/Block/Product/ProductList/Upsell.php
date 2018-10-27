@@ -4,9 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Catalog product upsell items block
@@ -15,8 +18,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @since 100.0.2
  */
-class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
-    \Magento\Framework\DataObject\IdentityInterface
+class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var int
@@ -169,13 +171,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
      */
     public function setColumnCount($columns)
     {
-<<<<<<< HEAD
-        if ((int) $columns > 0) {
-            $this->_columnCount = (int) $columns;
-=======
         if ((int)$columns > 0) {
             $this->_columnCount = (int)$columns;
->>>>>>> upstream/2.2-develop
         }
         return $this;
     }
@@ -217,13 +214,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
      */
     public function setItemLimit($type, $limit)
     {
-<<<<<<< HEAD
-        if ((int) $limit > 0) {
-            $this->_itemLimits[$type] = (int) $limit;
-=======
         if ((int)$limit > 0) {
             $this->_itemLimits[$type] = (int)$limit;
->>>>>>> upstream/2.2-develop
         }
         return $this;
     }

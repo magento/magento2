@@ -51,9 +51,9 @@ class ElementVisibilityCompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $firstExpects
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $firstExpects
      * @param bool $firstResult
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $secondExpects
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $secondExpects
      * @param bool $secondResult
      * @param bool $expectedResult
      * @dataProvider visibilityDataProvider
@@ -74,9 +74,9 @@ class ElementVisibilityCompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $firstExpects
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $firstExpects
      * @param bool $firstResult
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $secondExpects
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $secondExpects
      * @param bool $secondResult
      * @param bool $expectedResult
      * @dataProvider visibilityDataProvider

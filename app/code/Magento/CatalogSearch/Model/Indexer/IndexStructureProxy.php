@@ -7,9 +7,6 @@ namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Framework\Indexer\IndexStructureInterface;
 
-/**
- * Catalog search index structure proxy.
- */
 class IndexStructureProxy implements IndexStructureInterface
 {
     /**
@@ -32,7 +29,7 @@ class IndexStructureProxy implements IndexStructureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function delete(
         $index,
@@ -42,7 +39,7 @@ class IndexStructureProxy implements IndexStructureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function create(
         $index,

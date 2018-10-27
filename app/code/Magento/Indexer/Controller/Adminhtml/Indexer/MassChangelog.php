@@ -6,9 +6,7 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-
-class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer implements HttpPostActionInterface
+class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer
 {
     /**
      * Turn mview on for the given indexers

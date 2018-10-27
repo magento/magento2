@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
@@ -33,12 +28,6 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-<<<<<<< HEAD
-    /**
-     * Set up
-     */
-=======
->>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->_model = Bootstrap::getObjectManager()->create(
@@ -46,12 +35,6 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-<<<<<<< HEAD
-    /**
-     * Get price from indexer
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testGetPriceFromIndexer()
     {
         /** @var PriceTableResolver $tableResolver */
@@ -81,23 +64,11 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('19', $return[0]['max_price']);
     }
 
-<<<<<<< HEAD
-    /**
-     * Get price
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testGetPrice()
     {
         $this->assertEquals('test', $this->_model->getPrice(new DataObject(['price' => 'test'])));
     }
 
-<<<<<<< HEAD
-    /**
-     * Get final price
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testGetFinalPrice()
     {
         $repository = Bootstrap::getObjectManager()->create(
@@ -122,12 +93,6 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(14.0, $this->_model->getFinalPrice(5, $product));
     }
 
-<<<<<<< HEAD
-    /**
-     * Get formated price
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testGetFormatedPrice()
     {
         $repository = Bootstrap::getObjectManager()->create(
@@ -138,24 +103,12 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('<span class="price">$10.00</span>', $this->_model->getFormatedPrice($product));
     }
 
-<<<<<<< HEAD
-    /**
-     * Calculate price
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testCalculatePrice()
     {
         $this->assertEquals(10, $this->_model->calculatePrice(10, 8, '1970-12-12 23:59:59', '1971-01-01 01:01:01'));
         $this->assertEquals(8, $this->_model->calculatePrice(10, 8, '1970-12-12 23:59:59', '2034-01-01 01:01:01'));
     }
 
-<<<<<<< HEAD
-    /**
-     * Calculate special price
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testCalculateSpecialPrice()
     {
         $this->assertEquals(
@@ -168,12 +121,6 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-<<<<<<< HEAD
-    /**
-     * Is tier price fixed
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testIsTierPriceFixed()
     {
         $this->assertTrue($this->_model->isTierPriceFixed());

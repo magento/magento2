@@ -6,12 +6,11 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\App\ObjectManager;
 
-class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpGetActionInterface
+class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var Initialization\StockDataFilter
@@ -72,6 +71,11 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product implements
             $resultPage->setActiveMenu('Magento_Catalog::catalog_products');
             $resultPage->getConfig()->getTitle()->prepend(__('Products'));
             $resultPage->getConfig()->getTitle()->prepend(__('New Product'));
+        }
+
+        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
+        if ($block) {
+            $block->setStoreId($product->getStoreId());
         }
 
         return $resultPage;

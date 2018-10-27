@@ -6,6 +6,7 @@
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface as UiContext;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Filters\Type\Input;
@@ -36,18 +37,18 @@ class InputTest extends \PHPUnit\Framework\TestCase
     protected $filterModifierMock;
 
     /**
-     * @inheritdoc
+     * Set up
      */
     protected function setUp()
     {
         $this->contextMock = $this->getMockForAbstractClass(
-            ContextInterface::class,
+            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
             [],
             '',
             false
         );
         $this->uiComponentFactory = $this->createPartialMock(
-            UiComponentFactory::class,
+            \Magento\Framework\View\Element\UiComponentFactory::class,
             ['create']
         );
         $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
@@ -62,7 +63,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testGetComponentName(): void
+    public function testGetComponentName()
     {
         $this->contextMock->expects($this->never())->method('getProcessor');
         $date = new Input(
@@ -85,7 +86,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
      * @dataProvider getPrepareDataProvider
      * @return void
      */
-    public function testPrepare(string $name, array $filterData, ?array $expectedCondition): void
+    public function testPrepare($name, $filterData, $expectedCondition)
     {
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
@@ -93,7 +94,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var UiComponentInterface $uiComponent */
         $uiComponent = $this->getMockForAbstractClass(
-            UiComponentInterface::class,
+            \Magento\Framework\View\Element\UiComponentInterface::class,
             [],
             '',
             false
@@ -168,7 +169,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getPrepareDataProvider(): array
+    public function getPrepareDataProvider()
     {
         return [
             [

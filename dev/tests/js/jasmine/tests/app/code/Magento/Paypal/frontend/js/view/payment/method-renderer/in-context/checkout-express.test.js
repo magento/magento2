@@ -58,13 +58,6 @@ define([
                 });
         });
 
-        afterEach(function () {
-            try {
-                injector.clean();
-                injector.remove();
-            } catch (e) {}
-        });
-
         describe('"click" method checks', function () {
             it('check success request', function () {
                 mocks['Magento_Paypal/js/action/set-payment-method'].and.callFake(function () {

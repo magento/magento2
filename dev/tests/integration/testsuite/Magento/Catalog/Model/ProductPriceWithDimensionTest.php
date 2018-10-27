@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\Catalog\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -36,24 +31,12 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
-<<<<<<< HEAD
-    /**
-     * Set up
-     */
-=======
->>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->_model = Bootstrap::getObjectManager()->create(Product::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
     }
 
-<<<<<<< HEAD
-    /**
-     * Get price
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testGetPrice()
     {
         $this->assertEmpty($this->_model->getPrice());
@@ -61,12 +44,6 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(10.0, $this->_model->getPrice());
     }
 
-<<<<<<< HEAD
-    /**
-     * Get price model
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testGetPriceModel()
     {
         $default = $this->_model->getPriceModel();
@@ -98,12 +75,6 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('<span class="price">$0.00</span>', $this->_model->getFormatedPrice());
     }
 
-<<<<<<< HEAD
-    /**
-     * Set get final price
-     */
-=======
->>>>>>> upstream/2.2-develop
     public function testSetGetFinalPrice()
     {
         $this->assertEquals(0, $this->_model->getFinalPrice());
@@ -114,14 +85,8 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
-<<<<<<< HEAD
-     * @return void
-     */
-    public function testGetMinPrice(): void
-=======
      */
     public function testGetMinPrice()
->>>>>>> upstream/2.2-develop
     {
         $product = $this->productRepository->get('simple');
         $collection = Bootstrap::getObjectManager()->create(Collection::class);

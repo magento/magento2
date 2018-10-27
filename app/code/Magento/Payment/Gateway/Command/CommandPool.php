@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Payment\Gateway\Command;
 
 use Magento\Framework\ObjectManager\TMap;
@@ -49,9 +48,7 @@ class CommandPool implements CommandPoolInterface
     public function get($commandCode)
     {
         if (!isset($this->commands[$commandCode])) {
-            throw new NotFoundException(
-                __('The "%1" command doesn\'t exist. Verify the command and try again.', $commandCode)
-            );
+            throw new NotFoundException(__('Command %1 does not exist.', $commandCode));
         }
 
         return $this->commands[$commandCode];

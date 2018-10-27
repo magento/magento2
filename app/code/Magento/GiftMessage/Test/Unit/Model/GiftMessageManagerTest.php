@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\GiftMessage\Test\Unit\Model;
 
 use Magento\GiftMessage\Model\GiftMessageManager;
@@ -51,9 +53,7 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
         $this->messageFactoryMock =
             $this->createPartialMock(\Magento\GiftMessage\Model\MessageFactory::class, ['create', '__wakeup']);
 
-        $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
-            [
+        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, [
                 'setGiftMessageId',
                 'getGiftMessageId',
                 'save',
@@ -63,42 +63,30 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
                 'getShippingAddress',
                 '__wakeup',
                 'getCustomerId'
-            ]
-        );
-        $this->quoteItemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            [
+            ]);
+        $this->quoteItemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, [
                 'setGiftMessageId',
                 'getGiftMessageId',
                 'save',
                 '__wakeup'
-            ]
-        );
+            ]);
 
-        $this->quoteAddressMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            [
+        $this->quoteAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, [
                 'getGiftMessageId',
                 'setGiftMessageId',
                 'getItemById',
                 'save',
                 '__wakeup'
-            ]
-        );
+            ]);
 
-        $this->quoteAddressItemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address\Item::class,
-            [
+        $this->quoteAddressItemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address\Item::class, [
                 'getGiftMessageId',
                 'setGiftMessageId',
                 'save',
                 '__wakeup'
-            ]
-        );
+            ]);
 
-        $this->giftMessageMock = $this->createPartialMock(
-            \Magento\GiftMessage\Model\Message::class,
-            [
+        $this->giftMessageMock = $this->createPartialMock(\Magento\GiftMessage\Model\Message::class, [
                 'setSender',
                 'setRecipient',
                 'setMessage',
@@ -111,8 +99,7 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
                 'save',
                 '__wakeup',
                 'load'
-            ]
-        );
+            ]);
 
         $this->model = new \Magento\GiftMessage\Model\GiftMessageManager($this->messageFactoryMock);
     }
@@ -121,6 +108,7 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
     {
         $giftMessages = '';
         $this->messageFactoryMock->expects($this->never())->method('create');
+
         $this->model->add($giftMessages, $this->quoteMock);
     }
 
@@ -312,7 +300,7 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The gift message couldn't be added to Cart.
+     * @expectedExceptionMessage Could not add gift message to shopping cart
      */
     public function testSetMessageCouldNotAddGiftMessageException()
     {

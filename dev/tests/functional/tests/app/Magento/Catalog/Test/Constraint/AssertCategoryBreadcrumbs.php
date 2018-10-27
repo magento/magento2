@@ -46,12 +46,12 @@ class AssertCategoryBreadcrumbs extends AbstractConstraint
         $this->openCategory($category);
 
         $breadcrumbs = $this->getBreadcrumbs($category);
-        \PHPUnit\Framework\Assert::assertNotEmpty(
+        \PHPUnit_Framework_Assert::assertNotEmpty(
             $breadcrumbs,
             'No breadcrumbs on category \'' . $category->getName() . '\' page.'
         );
         $pageBreadcrumbs = $catalogCategoryView->getBreadcrumbs()->getText();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $breadcrumbs,
             $pageBreadcrumbs,
             'Wrong breadcrumbs of category page.'

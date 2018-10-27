@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\MediaStorage\Model\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -169,7 +171,7 @@ class Storage extends AbstractModel
      */
     public function getStorageModel($storage = null, $params = [])
     {
-        if ($storage === null) {
+        if (is_null($storage)) {
             $storage = $this->_coreFileStorage->getCurrentStorageCode();
         }
 
@@ -293,10 +295,7 @@ class Storage extends AbstractModel
             $config['allowed_resources'][] = $allowedResource;
         }
 
-        $config['update_time'] = $this->_scopeConfig->getValue(
-            self::XML_PATH_MEDIA_UPDATE_TIME,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $config['update_time'] = $this->_scopeConfig->getValue(self::XML_PATH_MEDIA_UPDATE_TIME, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 
         return $config;
     }

@@ -10,15 +10,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
-<<<<<<< HEAD
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\App\ObjectManager;
-=======
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
->>>>>>> upstream/2.2-develop
 
 /**
  * Subscriber model
@@ -106,11 +100,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Date
-<<<<<<< HEAD
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-=======
      * @var DateTime
->>>>>>> upstream/2.2-develop
      */
     private $dateTime;
 
@@ -167,11 +157,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-<<<<<<< HEAD
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime|null $dateTime
-=======
      * @param DateTime|null $dateTime
->>>>>>> upstream/2.2-develop
      * @param CustomerInterfaceFactory|null $customerFactory
      * @param DataObjectHelper|null $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -190,11 +176,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-<<<<<<< HEAD
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null,
-=======
         DateTime $dateTime = null,
->>>>>>> upstream/2.2-develop
         CustomerInterfaceFactory $customerFactory = null,
         DataObjectHelper $dataObjectHelper = null
     ) {
@@ -203,13 +185,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_customerSession = $customerSession;
-        $this->dateTime = $dateTime ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Stdlib\DateTime\DateTime::class
-        );
-        $this->customerFactory = $customerFactory ?: ObjectManager::getInstance()
-            ->get(CustomerInterfaceFactory::class);
-        $this->dataObjectHelper = $dataObjectHelper ?: ObjectManager::getInstance()
-            ->get(DataObjectHelper::class);
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
@@ -550,7 +525,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Unsubscribe the customer with the id provided
+     * unsubscribe the customer with the id provided
      *
      * @param int $customerId
      * @return $this
@@ -637,17 +612,16 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->setStatus($status);
 
-        $storeId = $customerData->getStoreId();
-        if ((int)$customerData->getStoreId() === 0) {
-            $storeId = $this->_storeManager->getWebsite($customerData->getWebsiteId())->getDefaultStore()->getId();
-        }
-
         if (!$this->getId()) {
+            $storeId = $customerData->getStoreId();
+            if ($customerData->getStoreId() == 0) {
+                $storeId = $this->_storeManager->getWebsite($customerData->getWebsiteId())->getDefaultStore()->getId();
+            }
             $this->setStoreId($storeId)
                 ->setCustomerId($customerData->getId())
                 ->setEmail($customerData->getEmail());
         } else {
-            $this->setStoreId($storeId)
+            $this->setStoreId($customerData->getStoreId())
                 ->setEmail($customerData->getEmail());
         }
 

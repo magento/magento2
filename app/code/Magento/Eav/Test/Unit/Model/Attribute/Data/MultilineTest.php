@@ -21,24 +21,13 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
      */
     protected $stringMock;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp()
     {
-<<<<<<< HEAD
-        /** @var TimezoneInterface $timezoneMock */
-        $timezoneMock = $this->createMock(TimezoneInterface::class);
-        /** @var \Psr\Log\LoggerInterface $loggerMock */
-        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        /** @var ResolverInterface $localeResolverMock */
-=======
         /** @var \PHPUnit_Framework_MockObject_MockObject | TimezoneInterface $timezoneMock */
         $timezoneMock = $this->createMock(TimezoneInterface::class);
         /** @var \PHPUnit_Framework_MockObject_MockObject | \Psr\Log\LoggerInterface $loggerMock */
         $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         /** @var \PHPUnit_Framework_MockObject_MockObject | ResolverInterface $localeResolverMock */
->>>>>>> upstream/2.2-develop
         $localeResolverMock = $this->createMock(ResolverInterface::class);
         $this->stringMock = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
 

@@ -38,7 +38,7 @@ class AssertProductPriceOnDifferentStoreViews extends AbstractConstraint
         foreach ($stores as $store) {
             $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store->getName());
             $cmsIndex->getLinksBlock()->waitWelcomeMessage();
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 '9.99',
                 $catalogProductView->getViewBlock()->getPriceBlock()->getPrice(),
                 sprintf('Wrong product price is displayed for %s store view.', $store->getName())

@@ -392,7 +392,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * Retrieve Quantity Increments
      *
-     * @return int|float|false
+     * @return int|false
      */
     public function getQtyIncrements()
     {
@@ -401,18 +401,8 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
                 if ($this->getUseConfigQtyIncrements()) {
                     $this->qtyIncrements = $this->stockConfiguration->getQtyIncrements($this->getStoreId());
                 } else {
-<<<<<<< HEAD
-                    $this->qtyIncrements = $this->getData(static::QTY_INCREMENTS);
-                }
-
-                if ($this->getIsQtyDecimal()) { // Cast accordingly to decimal qty usage
-                    $this->qtyIncrements = (float) $this->qtyIncrements;
-                } else {
-                    $this->qtyIncrements = (int) $this->qtyIncrements;
-=======
                     $qtyIncrements = $this->getData(static::QTY_INCREMENTS);
                     $this->qtyIncrements = $this->getIsQtyDecimal() ? (float) $qtyIncrements : (int) $qtyIncrements;
->>>>>>> upstream/2.2-develop
                 }
             }
             if ($this->qtyIncrements <= 0) {

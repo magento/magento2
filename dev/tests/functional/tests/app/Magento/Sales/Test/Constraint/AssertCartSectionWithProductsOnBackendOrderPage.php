@@ -28,7 +28,7 @@ class AssertCartSectionWithProductsOnBackendOrderPage extends AbstractConstraint
             $expectedItemNames[] = $product->getName();
         }
         $itemsNames = $orderCreateIndex->getBackendOrderSidebarBlock()->getCartItemsNames();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             sort($expectedItemNames),
             sort($itemsNames),
             "Customer's Shopping Cart section on Order Create backend page doesn't contain correct products."

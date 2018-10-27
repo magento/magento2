@@ -6,10 +6,9 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
 
-class Index extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements HttpGetActionInterface
+class Index extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
     /**
      * Index action

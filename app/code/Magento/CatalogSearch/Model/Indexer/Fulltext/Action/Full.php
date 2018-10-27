@@ -333,10 +333,6 @@ class Full
                 'relation.parent_id = cpe.' . $linkField,
                 ['cpe.entity_id']
             );
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/2.2-develop
         return $connection->fetchCol($select);
     }
 

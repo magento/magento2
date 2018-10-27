@@ -10,10 +10,6 @@ namespace Magento\Quote\Model\ValidationRules;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
-<<<<<<< HEAD
-use Magento\Store\Model\ScopeInterface;
-=======
->>>>>>> upstream/2.2-develop
 
 /**
  * @inheritdoc
@@ -58,22 +54,10 @@ class AllowedCountryValidationRule implements QuoteValidationRuleInterface
         $validationErrors = [];
 
         if (!$quote->isVirtual()) {
-<<<<<<< HEAD
-            $shippingAddress = $quote->getShippingAddress();
-            $shippingAddress->setStoreId($quote->getStoreId());
-            $validationResult =
-                in_array(
-                    $shippingAddress->getCountryId(),
-                    $this->allowedCountryReader->getAllowedCountries(
-                        ScopeInterface::SCOPE_STORE,
-                        $quote->getStoreId()
-                    )
-=======
             $validationResult =
                 in_array(
                     $quote->getShippingAddress()->getCountryId(),
                     $this->allowedCountryReader->getAllowedCountries()
->>>>>>> upstream/2.2-develop
                 );
             if (!$validationResult) {
                 $validationErrors = [__($this->generalMessage)];

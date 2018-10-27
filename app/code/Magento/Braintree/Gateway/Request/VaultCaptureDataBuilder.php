@@ -6,10 +6,7 @@
 namespace Magento\Braintree\Gateway\Request;
 
 use Magento\Braintree\Gateway\SubjectReader;
-<<<<<<< HEAD
-=======
 use Magento\Payment\Gateway\Command\CommandException;
->>>>>>> upstream/2.2-develop
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
 

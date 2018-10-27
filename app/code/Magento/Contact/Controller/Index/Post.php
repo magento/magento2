@@ -4,10 +4,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Contact\Controller\Index;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\MailInterface;
 use Magento\Framework\App\Action\Context;
@@ -18,7 +16,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 
-class Post extends \Magento\Contact\Controller\Index implements HttpPostActionInterface
+class Post extends \Magento\Contact\Controller\Index
 {
     /**
      * @var DataPersistorInterface
@@ -110,13 +108,13 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
     {
         $request = $this->getRequest();
         if (trim($request->getParam('name')) === '') {
-            throw new LocalizedException(__('Enter the Name and try again.'));
+            throw new LocalizedException(__('Name is missing'));
         }
         if (trim($request->getParam('comment')) === '') {
-            throw new LocalizedException(__('Enter the comment and try again.'));
+            throw new LocalizedException(__('Comment is missing'));
         }
         if (false === \strpos($request->getParam('email'), '@')) {
-            throw new LocalizedException(__('The email address is invalid. Verify the email address and try again.'));
+            throw new LocalizedException(__('Invalid email address'));
         }
         if (trim($request->getParam('hideit')) !== '') {
             throw new \Exception();

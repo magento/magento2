@@ -34,12 +34,6 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
      */
     private $mediaDirectory;
 
-<<<<<<< HEAD
-    /**
-     * @inheritdoc
-     */
-=======
->>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -58,14 +52,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-<<<<<<< HEAD
-    /**
-     * @return void
-     */
-    public function testSaveFileToTmpDir(): void
-=======
     public function testSaveFileToTmpDir()
->>>>>>> upstream/2.2-develop
     {
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
@@ -89,14 +76,8 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage File validation failed.
-<<<<<<< HEAD
-     * @return void
-     */
-    public function testSaveFileToTmpDirWithWrongExtension(): void
-=======
      */
     public function testSaveFileToTmpDirWithWrongExtension()
->>>>>>> upstream/2.2-develop
     {
         $fileName = 'text.txt';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
@@ -120,14 +101,8 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage File validation failed.
-<<<<<<< HEAD
-     * @return void
-     */
-    public function testSaveFileToTmpDirWithWrongFile(): void
-=======
      */
     public function testSaveFileToTmpDirWithWrongFile()
->>>>>>> upstream/2.2-develop
     {
         $fileName = 'file.gif';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);

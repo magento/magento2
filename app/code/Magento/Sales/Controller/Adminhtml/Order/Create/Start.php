@@ -5,10 +5,9 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
 
-class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create implements HttpGetActionInterface
+class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
      * Start order create action

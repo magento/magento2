@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-<<<<<<< HEAD
-declare(strict_types=1);
-
-=======
->>>>>>> upstream/2.2-develop
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 /**

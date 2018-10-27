@@ -20,8 +20,6 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 
     const FLAG_REFERENCE = 'passedByReference';
 
-    const FLAG_VARIADIC = 'variadic';
-
     /**#@-*/
 
     /**
@@ -40,7 +38,6 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
         self::FLAG_FINAL => 'isFinal',
         self::FLAG_ABSTRACT => 'isAbstract',
         self::FLAG_REFERENCE => 'getPassedByReference',
-        self::FLAG_VARIADIC => 'getVariadic',
     ];
 
     /**
@@ -68,13 +65,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
             'final' => true,
             'static' => true,
             'parameters' => [
-                [
-                    'name' => 'data',
-                    'type' => 'array',
-                    'defaultValue' => [],
-                    'passedByReference' => true,
-                    'variadic' => false
-                ],
+                ['name' => 'data', 'type' => 'array', 'defaultValue' => [], 'passedByReference' => true],
             ],
             'body' => 'return 1;',
             'docblock' => ['shortDescription' => 'test short description'],
@@ -214,9 +205,6 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
                         $actualDefaultValue = $actualParameter->getDefaultValue();
                         $this->assertEquals($parameterData['defaultValue'], $actualDefaultValue->getValue());
                     }
-
-                    // assert variadic flag
-                    $this->_assertFlag(self::FLAG_VARIADIC, $parameterData, $actualParameter);
                 }
             }
 

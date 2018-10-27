@@ -54,8 +54,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /** @var Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $collectionMock;
 
-    /** @var FormatInterface */
-    protected $format;
+    /** @var FormatInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $formatMock;
 
     /** @var AttributeLoaderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeLoaderInterfaceMock;
@@ -134,11 +134,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-<<<<<<< HEAD
-        $this->format = new Format(
-=======
         $this->formatMock = new Format(
->>>>>>> upstream/2.2-develop
             $this->getMockBuilder(ScopeResolverInterface::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(ResolverInterface::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(CurrencyFactory::class)->disableOriginalConstructor()->getMock()
@@ -152,7 +148,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $this->productRepositoryMock,
             $this->productMock,
             $this->collectionMock,
-            $this->format
+            $this->formatMock
         );
     }
 
@@ -211,10 +207,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($url, $this->model->getValueElementChooserUrl());
     }
 
-    /**
-     * test ValidateCategoriesIgnoresVisibility
-     */
-    public function testValidateCategoriesIgnoresVisibility(): void
+    public function testValidateCategoriesIgnoresVisibility()
     {
         /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)

@@ -21,11 +21,7 @@ class AssertProductComparePage extends AbstractConstraint
      *
      * @var int
      */
-<<<<<<< HEAD
-    private $priceFormat = 2;
-=======
     protected $priceFormat = 2;
->>>>>>> upstream/2.2-develop
 
     /**
      * Product attribute on compare product page
@@ -80,11 +76,7 @@ class AssertProductComparePage extends AbstractConstraint
                 $actualAttributeValue =
                     $comparePage->getCompareProductsBlock()->{'getProduct' . $attribute}($key + 1, $value);
 
-<<<<<<< HEAD
-                \PHPUnit\Framework\Assert::assertEquals(
-=======
                 \PHPUnit_Framework_Assert::assertEquals(
->>>>>>> upstream/2.2-develop
                     $expectedAttributeValue,
                     $actualAttributeValue,
                     'Product "' . $product->getName() . '" has "' . $attribute . '" value different from fixture one.'

@@ -5,14 +5,8 @@
   * See COPYING.txt for license details.
   */
 -->
-<<<<<<< HEAD
-
-<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-=======
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
->>>>>>> upstream/2.2-develop
     <entity name="ProductOptionField" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionField</data>
@@ -23,19 +17,6 @@
         <data key="price_type">fixed</data>
         <data key="max_characters">0</data>
     </entity>
-<<<<<<< HEAD
-    <entity name="ProductOptionField2" type="product_option">
-        <var key="product_sku" entityType="product" entityKey="sku" />
-        <data key="title">OptionField2</data>
-        <data key="type">field</data>
-        <data key="is_require">true</data>
-        <data key="sort_order">1</data>
-        <data key="price">20</data>
-        <data key="price_type">fixed</data>
-        <data key="max_characters">0</data>
-    </entity>
-=======
->>>>>>> upstream/2.2-develop
     <entity name="ProductOptionArea" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionArea</data>

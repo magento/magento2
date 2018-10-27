@@ -40,16 +40,16 @@ class AssertAttributeSetForm extends AbstractConstraint
         ];
         $productSet->open();
         $productSet->getGrid()->searchAndOpen($filterAttribute);
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $filterAttribute['set_name'],
             $productSetEdit->getAttributeSetEditBlock()->getAttributeSetName(),
-            'The attribute set wasn\'t found.'
+            'Attribute Set not found'
             . "\nExpected: " . $filterAttribute['set_name']
             . "\nActual: " . $productSetEdit->getAttributeSetEditBlock()->getAttributeSetName()
         );
         if ($productAttribute !== null) {
             $attributeLabel = $productAttribute->getFrontendLabel();
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $productSetEdit->getAttributeSetEditBlock()->checkProductAttribute($attributeLabel),
                 "Product Attribute is absent on Attribute Set Groups"
             );

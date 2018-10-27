@@ -8,16 +8,12 @@ namespace Magento\Framework\Search\Adapter\Mysql\Query\Builder;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 
 /**
- * MySQL search query builder.
+ * Interface \Magento\Framework\Search\Adapter\Mysql\Query\Builder\QueryInterface
  *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 interface QueryInterface
 {
     /**
-     * Build query.
-     *
      * @param \Magento\Framework\Search\Adapter\Mysql\ScoreBuilder $scoreBuilder
      * @param \Magento\Framework\DB\Select $select
      * @param \Magento\Framework\Search\Request\QueryInterface $query

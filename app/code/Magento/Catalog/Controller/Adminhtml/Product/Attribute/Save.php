@@ -7,25 +7,6 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-<<<<<<< HEAD
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\Redirect;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
-use Magento\Catalog\Helper\Product;
-use Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation;
-use Magento\Framework\Serialize\Serializer\FormData;
-use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
-use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
-use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
-use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
-use Magento\Eav\Model\Entity\Attribute\Set;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Cache\FrontendInterface;
-use Magento\Framework\Controller\Result\Json;
-=======
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
@@ -38,7 +19,6 @@ use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\Cache\FrontendInterface;
->>>>>>> upstream/2.2-develop
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -49,15 +29,9 @@ use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
- * Product attribute save controller.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-<<<<<<< HEAD
-class Save extends Attribute implements HttpPostActionInterface
-=======
 class Save extends Attribute
->>>>>>> upstream/2.2-develop
 {
     /**
      * @var BuildFactory
@@ -95,40 +69,17 @@ class Save extends Attribute
     private $layoutFactory;
 
     /**
-<<<<<<< HEAD
-     * @var Presentation
-     */
-    private $presentation;
-
-    /**
-     * @var FormData|null
-     */
-    private $formDataSerializer;
-
-    /**
-     * @param Context $context
-     * @param FrontendInterface $attributeLabelCache
-     * @param Registry $coreRegistry
-     * @param PageFactory $resultPageFactory
-     * @param BuildFactory $buildFactory
-=======
      * @param Context $context
      * @param FrontendInterface $attributeLabelCache
      * @param Registry $coreRegistry
      * @param BuildFactory $buildFactory
      * @param PageFactory $resultPageFactory
->>>>>>> upstream/2.2-develop
      * @param AttributeFactory $attributeFactory
      * @param ValidatorFactory $validatorFactory
      * @param CollectionFactory $groupCollectionFactory
      * @param FilterManager $filterManager
      * @param Product $productHelper
      * @param LayoutFactory $layoutFactory
-<<<<<<< HEAD
-     * @param Presentation|null $presentation
-     * @param FormData|null $formDataSerializer
-=======
->>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -142,13 +93,7 @@ class Save extends Attribute
         CollectionFactory $groupCollectionFactory,
         FilterManager $filterManager,
         Product $productHelper,
-<<<<<<< HEAD
-        LayoutFactory $layoutFactory,
-        Presentation $presentation = null,
-        FormData $formDataSerializer = null
-=======
         LayoutFactory $layoutFactory
->>>>>>> upstream/2.2-develop
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
@@ -158,41 +103,17 @@ class Save extends Attribute
         $this->validatorFactory = $validatorFactory;
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->layoutFactory = $layoutFactory;
-        $this->presentation = $presentation ?: ObjectManager::getInstance()->get(Presentation::class);
-        $this->formDataSerializer = $formDataSerializer
-            ?: ObjectManager::getInstance()->get(FormData::class);
     }
 
     /**
-<<<<<<< HEAD
-     * @inheritdoc
-     *
-=======
->>>>>>> upstream/2.2-develop
      * @return Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @throws \Zend_Validate_Exception
      */
     public function execute()
     {
-        try {
-            $optionData = $this->formDataSerializer
-                ->unserialize($this->getRequest()->getParam('serialized_options', '[]'));
-        } catch (\InvalidArgumentException $e) {
-            $message = __("The attribute couldn't be saved due to an error. Verify your information and try again. "
-                . "If the error persists, please try again later.");
-            $this->messageManager->addErrorMessage($message);
-            return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
-        }
-
         $data = $this->getRequest()->getPostValue();
-        $data = array_replace_recursive(
-            $data,
-            $optionData
-        );
-
         if ($data) {
             $this->preprocessOptionsData($data);
             $setId = $this->getRequest()->getParam('set');
@@ -203,11 +124,7 @@ class Save extends Attribute
                 $name = trim($name);
 
                 try {
-<<<<<<< HEAD
-                    /** @var Set $attributeSet */
-=======
                     /** @var $attributeSet Set */
->>>>>>> upstream/2.2-develop
                     $attributeSet = $this->buildFactory->create()
                         ->setEntityTypeId($this->_entityTypeId)
                         ->setSkeletonId($setId)
@@ -230,11 +147,7 @@ class Save extends Attribute
 
             $attributeId = $this->getRequest()->getParam('attribute_id');
 
-<<<<<<< HEAD
-            /** @var ProductAttributeInterface $model */
-=======
             /** @var $model ProductAttributeInterface */
->>>>>>> upstream/2.2-develop
             $model = $this->attributeFactory->create();
             if ($attributeId) {
                 $model->load($attributeId);
@@ -267,11 +180,7 @@ class Save extends Attribute
 
             //validate frontend_input
             if (isset($data['frontend_input'])) {
-<<<<<<< HEAD
-                /** @var Validator $inputType */
-=======
                 /** @var $inputType Validator */
->>>>>>> upstream/2.2-develop
                 $inputType = $this->validatorFactory->create();
                 if (!$inputType->isValid($data['frontend_input'])) {
                     foreach ($inputType->getMessages() as $message) {
@@ -286,18 +195,10 @@ class Save extends Attribute
                 }
             }
 
-<<<<<<< HEAD
-            $data = $this->presentation->convertPresentationDataToInputType($data);
-
-            if ($attributeId) {
-                if (!$model->getId()) {
-                    $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
-=======
             if ($attributeId) {
                 if (!$model->getId()) {
                     $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
 
->>>>>>> upstream/2.2-develop
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
                 // entity type check
@@ -412,10 +313,6 @@ class Save extends Attribute
     }
 
     /**
-<<<<<<< HEAD
-     * Provides an initialized Result object.
-     *
-=======
      * Extract options data from serialized options field and append to data array.
      *
      * This logic is required to overcome max_input_vars php limit
@@ -439,7 +336,6 @@ class Save extends Attribute
     }
 
     /**
->>>>>>> upstream/2.2-develop
      * @param string $path
      * @param array $params
      * @param array $response

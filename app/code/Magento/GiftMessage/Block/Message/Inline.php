@@ -278,21 +278,12 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @deprecated Misspelled method
-     * @see getItemsHasMessages
-     */
-    public function getItemsHasMesssages()
-    {
-        return $this->getItemsHasMessages();
-    }
-
-    /**
      * Check if items has messages
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getItemsHasMessages()
+    public function getItemsHasMesssages()
     {
         foreach ($this->getItems() as $item) {
             if ($item->getGiftMessageId()) {
@@ -371,6 +362,9 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function getImage($product, $imageId, $attributes = [])
     {
-        return $this->imageBuilder->create($product, $imageId, $attributes);
+        return $this->imageBuilder->setProduct($product)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
     }
 }

@@ -6,19 +6,13 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
-use Magento\Customer\Controller\AbstractAccount;
 
-/**
- * Sign out a customer.
- */
-class Logout extends AbstractAccount implements HttpGetActionInterface, HttpPostActionInterface
+class Logout extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var Session

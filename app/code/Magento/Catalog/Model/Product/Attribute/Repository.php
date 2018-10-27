@@ -118,12 +118,9 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setAttributeId($existingModel->getAttributeId());
             $attribute->setIsUserDefined($existingModel->getIsUserDefined());
             $attribute->setFrontendInput($existingModel->getFrontendInput());
-<<<<<<< HEAD
-=======
             if ($attribute->getIsUserDefined()) {
                 $this->processAttributeData($attribute);
             }
->>>>>>> upstream/2.2-develop
 
             $this->updateDefaultFrontendLabel($attribute, $existingModel);
         } else {
@@ -254,8 +251,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Process attribute data based on attribute frontend input type.
      *
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
@@ -275,7 +270,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
->>>>>>> upstream/2.2-develop
      * This method sets default frontend value using given default frontend value or frontend value from admin store
      * if default frontend value is not presented.
      * If both default frontend label and admin store frontend label are not given it throws exception

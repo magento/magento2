@@ -6,7 +6,6 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Model\Block;
@@ -15,7 +14,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 
-class Save extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostActionInterface
+class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
      * @var DataPersistorInterface
@@ -92,14 +91,10 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostAc
                 $this->blockRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the block.'));
                 $this->dataPersistor->clear('cms_block');
-<<<<<<< HEAD
-                return $this->processBlockReturn($model, $data, $resultRedirect);
-=======
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath('*/*/edit', ['block_id' => $model->getId()]);
                 }
                 return $resultRedirect->setPath('*/*/');
->>>>>>> upstream/2.2-develop
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
@@ -107,38 +102,8 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostAc
             }
 
             $this->dataPersistor->set('cms_block', $data);
-            return $resultRedirect->setPath('*/*/edit', ['block_id' => $id]);
+            return $resultRedirect->setPath('*/*/edit', ['block_id' => $this->getRequest()->getParam('block_id')]);
         }
         return $resultRedirect->setPath('*/*/');
-    }
-
-    /**
-     * Process and set the block return
-     *
-     * @param \Magento\Cms\Model\Block $model
-     * @param array $data
-     * @param \Magento\Framework\Controller\ResultInterface $resultRedirect
-     * @return \Magento\Framework\Controller\ResultInterface
-     */
-    private function processBlockReturn($model, $data, $resultRedirect)
-    {
-        $redirect = $data['back'] ?? 'close';
-
-        if ($redirect ==='continue') {
-            $resultRedirect->setPath('*/*/edit', ['block_id' => $model->getId()]);
-        } else if ($redirect === 'close') {
-            $resultRedirect->setPath('*/*/');
-        } else if ($redirect === 'duplicate') {
-            $duplicateModel = $this->blockFactory->create(['data' => $data]);
-            $duplicateModel->setId(null);
-            $duplicateModel->setIdentifier($data['identifier'] . '-' . uniqid());
-            $duplicateModel->setIsActive(Block::STATUS_DISABLED);
-            $this->blockRepository->save($duplicateModel);
-            $id = $duplicateModel->getId();
-            $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
-            $this->dataPersistor->set('cms_block', $data);
-            $resultRedirect->setPath('*/*/edit', ['block_id' => $id]);
-        }
-        return $resultRedirect;
     }
 }

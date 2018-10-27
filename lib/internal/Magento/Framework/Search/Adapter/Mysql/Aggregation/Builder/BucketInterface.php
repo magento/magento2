@@ -11,16 +11,12 @@ use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 
 /**
- * MySQL search aggregation bucket builder.
+ * Interface \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\BucketInterface
  *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 interface BucketInterface
 {
     /**
-     * Build bucket.
-     *
      * @param DataProviderInterface $dataProvider
      * @param Dimension[] $dimensions
      * @param RequestBucketInterface $bucket

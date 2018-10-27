@@ -8,7 +8,6 @@ require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_associated.php'
 require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_virtual_in_stock.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 /** @var $product \Magento\Catalog\Model\Product */
@@ -61,8 +60,7 @@ $productLink->setSku($product->getSku())
     ->setQty(2);
 $newLinks[] = $productLink;
 $product->setProductLinks($newLinks);
-$product->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);
-$productRepository->save($product);
+$product->save();
 
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

@@ -9,10 +9,7 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
-<<<<<<< HEAD
-=======
 use Magento\Framework\App\ObjectManager;
->>>>>>> upstream/2.2-develop
 
 /**
  * Returns information for "Recently Ordered" widget.
@@ -79,11 +76,7 @@ class LastOrderedItems implements SectionSourceInterface
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param ProductRepositoryInterface $productRepository
-<<<<<<< HEAD
-     * @param LoggerInterface $logger
-=======
      * @param LoggerInterface|null $logger
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
@@ -92,11 +85,7 @@ class LastOrderedItems implements SectionSourceInterface
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         ProductRepositoryInterface $productRepository,
-<<<<<<< HEAD
-        LoggerInterface $logger
-=======
         LoggerInterface $logger = null
->>>>>>> upstream/2.2-develop
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_orderConfig = $orderConfig;
@@ -104,11 +93,7 @@ class LastOrderedItems implements SectionSourceInterface
         $this->stockRegistry = $stockRegistry;
         $this->_storeManager = $storeManager;
         $this->productRepository = $productRepository;
-<<<<<<< HEAD
-        $this->logger = $logger;
-=======
         $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
->>>>>>> upstream/2.2-develop
     }
 
     /**

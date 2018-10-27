@@ -10,12 +10,6 @@ use Magento\Framework\Search\Request\QueryInterface;
 
 // @codeCoverageIgnore
 
-/**
- * MySQL search query match container.
- *
- * @deprecated
- * @see \Magento\ElasticSearch
- */
 class MatchContainer
 {
     /**
@@ -40,8 +34,6 @@ class MatchContainer
     }
 
     /**
-     * Get request.
-     *
      * @return QueryInterface
      */
     public function getRequest()
@@ -50,8 +42,6 @@ class MatchContainer
     }
 
     /**
-     * Get condition type.
-     *
      * @return string
      */
     public function getConditionType()

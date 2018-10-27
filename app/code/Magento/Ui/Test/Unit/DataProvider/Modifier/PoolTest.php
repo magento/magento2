@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Ui\Test\Unit\DataProvider\Modifier;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -101,7 +100,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The parameter "sortOrder" is missing. Set the "sortOrder" and try again.
+     * @expectedExceptionMessage Parameter "sortOrder" must be present.
      */
     public function testWithSortOrderException()
     {
@@ -120,7 +119,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The parameter "class" is missing. Set the "class" and try again.
+     * @expectedExceptionMessage Parameter "class" must be present.
      */
     public function testWithClassException()
     {

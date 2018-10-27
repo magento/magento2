@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Config\Model\Config;
 
 use Magento\Framework\Exception\ValidatorException;
@@ -43,7 +42,7 @@ class PathValidator
         $allPaths = $this->structure->getFieldPaths();
 
         if (!array_key_exists($path, $allPaths)) {
-            throw new ValidatorException(__('The "%1" path doesn\'t exist. Verify and try again.', $path));
+            throw new ValidatorException(__('The "%1" path does not exist', $path));
         }
 
         return true;

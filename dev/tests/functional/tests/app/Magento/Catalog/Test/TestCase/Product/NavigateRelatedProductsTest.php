@@ -185,7 +185,7 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
      */
     protected function assertAbsentRelatedSellSection()
     {
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $this->catalogProductView->getRelatedProductBlock()->isVisible(),
             "Related section is present."
         );
@@ -214,7 +214,7 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
 
         asort($fixtureData);
         asort($pageData);
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $pageData,
             $fixtureData,
             'Wrong products are displayed in related section.'
@@ -232,7 +232,7 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
         $this->checkoutCart->open();
 
         foreach ($checkoutProducts as $product) {
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 $this->checkoutCart->getCartBlock()->getCartItem($product)->isVisible(),
                 "Product {$product->getName()} absent in cart."
             );

@@ -30,7 +30,7 @@ class AssertOrderStatusSuccessCreateMessage extends AbstractConstraint
     public function processAssert(OrderStatusIndex $orderStatusIndexPage)
     {
         $actualMessage = $orderStatusIndexPage->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

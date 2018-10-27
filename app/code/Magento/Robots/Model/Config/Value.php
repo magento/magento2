@@ -14,11 +14,9 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreResolver;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Backend model for design/search_engine_robots/custom_instructions configuration value.
- *
  * Required to implement Page Cache functionality.
  *
  * @api
@@ -40,9 +38,9 @@ class Value extends ConfigValue implements IdentityInterface
     protected $_cacheTag = true;
 
     /**
-     * @var StoreManagerInterface
+     * @var StoreResolver
      */
-    private $storeManager;
+    private $storeResolver;
 
     /**
      * @param Context $context
@@ -50,12 +48,9 @@ class Value extends ConfigValue implements IdentityInterface
      * @param ScopeConfigInterface $config
      * @param TypeListInterface $cacheTypeList
      * @param StoreResolver $storeResolver
-     * @param StoreManagerInterface|null $storeManager
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -63,13 +58,11 @@ class Value extends ConfigValue implements IdentityInterface
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         StoreResolver $storeResolver,
-        StoreManagerInterface $storeManager = null,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(StoreManagerInterface::class);
+        $this->storeResolver = $storeResolver;
 
         parent::__construct(
             $context,
@@ -91,7 +84,7 @@ class Value extends ConfigValue implements IdentityInterface
     public function getIdentities()
     {
         return [
-            self::CACHE_TAG . '_' . $this->storeManager->getStore()->getId(),
+            self::CACHE_TAG . '_' . $this->storeResolver->getCurrentStoreId(),
         ];
     }
 }

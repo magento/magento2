@@ -13,11 +13,6 @@ namespace Magento\Customer\Model\ResourceModel\Group;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * @var string
-     */
-    protected $_idFieldName = 'customer_group_id';
-
-    /**
      * Resource initialization
      *
      * @return void

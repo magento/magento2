@@ -481,8 +481,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, 0);
                 return false;
             }
+        } else {
+            return false;
         }
-        return false;
     }
 
     /**

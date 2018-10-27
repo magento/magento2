@@ -71,8 +71,7 @@ class Generator
         $locale = $this->factory->createLocale($locale);
         $dictionary = $this->dictionaryLoader->load($dictionaryPath);
 
-        $phrases = $dictionary->getPhrases();
-        if (!is_array($phrases) || !count($phrases)) {
+        if (!count($dictionary->getPhrases())) {
             throw new \UnexpectedValueException('No phrases have been found by the specified path.');
         }
 

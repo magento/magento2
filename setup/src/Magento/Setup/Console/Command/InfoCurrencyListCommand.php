@@ -6,12 +6,10 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Symfony\Component\Console\Helper\TableFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use Magento\Framework\Setup\Lists;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Command prints list of available currencies
@@ -26,18 +24,11 @@ class InfoCurrencyListCommand extends Command
     private $lists;
 
     /**
-     * @var TableFactory
-     */
-    private $tableHelperFactory;
-
-    /**
      * @param Lists $lists
-     * @param TableFactory $tableHelperFactory
      */
-    public function __construct(Lists $lists, TableFactory $tableHelperFactory = null)
+    public function __construct(Lists $lists)
     {
         $this->lists = $lists;
-        $this->tableHelperFactory = $tableHelperFactory ?: ObjectManager::getInstance()->create(TableFactory::class);
         parent::__construct();
     }
 
@@ -57,18 +48,14 @@ class InfoCurrencyListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $tableHelper = $this->tableHelperFactory->create(['output' => $output]);
-        $tableHelper->setHeaders(['Currency', 'Code']);
+        $table = $this->getHelperSet()->get('table');
+        $table->setHeaders(['Currency', 'Code']);
 
         foreach ($this->lists->getCurrencyList() as $key => $currency) {
-            $tableHelper->addRow([$currency, $key]);
+            $table->addRow([$currency, $key]);
         }
 
-<<<<<<< HEAD
-        $tableHelper->render();
-=======
         $table->render($output);
->>>>>>> upstream/2.2-develop
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

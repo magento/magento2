@@ -44,12 +44,6 @@ var config = {
         mixins: {
             'Magento_Theme/js/view/breadcrumbs': {
                 'Magento_Theme/js/view/add-home-breadcrumb': true
-<<<<<<< HEAD
-            },
-            'jquery/jquery-ui': {
-                'jquery/patches/jquery-ui': true
-=======
->>>>>>> upstream/2.2-develop
             }
         }
     }

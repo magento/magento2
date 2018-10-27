@@ -21,7 +21,7 @@ class AssertGridFullTextSearch extends AbstractConstraint
     public function processAssert(array $results)
     {
         foreach ($results as $itemId => $ids) {
-            \PHPUnit\Framework\Assert::assertCount(
+            \PHPUnit_Framework_Assert::assertCount(
                 1,
                 $ids,
                 sprintf(
@@ -31,7 +31,7 @@ class AssertGridFullTextSearch extends AbstractConstraint
                 )
             );
             $actualItemId = $ids[0];
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $itemId,
                 $actualItemId,
                 sprintf(

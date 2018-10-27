@@ -29,7 +29,7 @@ class AssertVideoProductView extends AbstractConstraint
         InjectableFixture $product
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $catalogProductView->getViewBlock()->isVideoVisible(),
             'Product video is not displayed on product view when it should.'
         );

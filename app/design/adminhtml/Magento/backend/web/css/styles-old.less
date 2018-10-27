@@ -279,6 +279,7 @@
     .nested .choice .label,
     .nested .choice .control {
         float: none;
+        width: auto;
         position: static;
         left: auto;
         text-align: left;
@@ -1214,7 +1215,6 @@
         -webkit-user-select: none; // use in 41 Chrome
         -moz-user-select: none; // use in 36 Firefox
         -ms-user-select: none; // use in 11 IE
-        user-select: none;
         min-height: 39px;
     }
 
@@ -3901,6 +3901,117 @@
     #category_tab_content {
         .ui-tabs-panel {
             border-top: 1px solid #adadad;
+        }
+    }
+}
+
+//
+//  IE9 styles
+//  ---------------------------------------------
+
+.ie9 {
+    .admin__scope-old {
+        select {
+            &:not([multiple]) {
+                padding-right: 4px;
+                min-width: 0;
+            }
+        }
+
+        //  Table Filters
+        .filter select {
+            &:not([multiple]) {
+                padding-right: 0;
+            }
+        }
+
+        .adminhtml-widget-instance-edit {
+            .grid-chooser .control {
+                margin-top: -18px;
+            }
+        }
+        .page-layout-admin-1column .page-columns,
+        .catalog-product-edit,
+        .catalog-product-new,
+        .catalog-category-edit {
+            table.data {
+                table-layout: fixed;
+                word-wrap: break-word;
+
+                th {
+                    word-wrap: normal;
+                    overflow: hidden;
+                    vertical-align: top;
+
+                    > span {
+                        white-space: normal;
+                    }
+                }
+
+                th:not(.col-select):not(.col-id):not(.col-severity),
+                td:not(.col-select):not(.col-id):not(.col-severity) {
+                    width: auto;
+                }
+            }
+        }
+
+        #setGrid_table,
+        #attributeGrid_table,
+        .custom-options .data-table,
+        .ui-dialog .data,
+        .page-layout-admin-1column .page-columns .data,
+        .catalog-category-edit .data {
+            word-wrap: break-word;
+            table-layout: fixed;
+        }
+
+        .fieldset-wrapper {
+            table.data {
+                table-layout: inherit;
+                word-wrap: normal;
+            }
+        }
+
+        .sales-order-create-index table.data,
+        .sales-order-create-index .fieldset-wrapper table.data {
+            table-layout: fixed;
+            word-wrap: break-word;
+
+            th {
+                word-wrap: normal;
+                overflow: hidden;
+                vertical-align: top;
+
+                > span {
+                    white-space: normal;
+                }
+            }
+        }
+
+        .entry-edit .product-options .grouped-items-table {
+            table-layout: fixed;
+            word-wrap: break-word;
+
+            th {
+                word-wrap: normal;
+                overflow: hidden;
+                vertical-align: top;
+
+                > span {
+                    white-space: normal;
+                }
+            }
+        }
+
+        .catalog-category-edit,
+        .adminhtml-cache-index,
+        .adminhtml-process-list,
+        .indexer-indexer-list,
+        .adminhtml-notification-index {
+            table.data {
+                table-layout: inherit;
+                word-wrap: normal;
+            }
         }
     }
 }

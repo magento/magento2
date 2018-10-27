@@ -27,7 +27,7 @@ class AssertExpressCancelledMessage extends AbstractConstraint
      */
     public function processAssert(CheckoutCart $checkoutCart)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $checkoutCart->getMessagesBlock()->getSuccessMessage(),
             'Success message about Express Checkout cancellation is not present or wrong.'

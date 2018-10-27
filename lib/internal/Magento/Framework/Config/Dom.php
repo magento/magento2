@@ -83,7 +83,6 @@ class Dom
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private static $resolvedSchemaPaths = [];
 
@@ -122,7 +121,6 @@ class Dom
      *
      * @param string $errorFormat
      * @return string[]
-     * @since 2.1.0
      */
     private static function getXmlErrors($errorFormat)
     {
@@ -277,10 +275,7 @@ class Dom
         $node = null;
         if ($matchedNodes->length > 1) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase(
-                    "More than one node matching the query: %1, Xml is: %2",
-                    [$nodePath, $this->dom->saveXML()]
-                )
+                new \Magento\Framework\Phrase("More than one node matching the query: %1", [$nodePath])
             );
         } elseif ($matchedNodes->length == 1) {
             $node = $matchedNodes->item(0);

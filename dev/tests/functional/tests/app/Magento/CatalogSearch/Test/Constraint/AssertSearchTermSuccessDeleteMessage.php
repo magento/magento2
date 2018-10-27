@@ -33,7 +33,7 @@ class AssertSearchTermSuccessDeleteMessage extends AbstractConstraint
     public function processAssert(CatalogSearchIndex $indexPage)
     {
         $actualMessage = $indexPage->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

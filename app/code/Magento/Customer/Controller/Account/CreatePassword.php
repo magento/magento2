@@ -1,5 +1,6 @@
 <?php
 /**
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -7,16 +8,10 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-/**
- * Class CreatePassword
- *
- * @package Magento\Customer\Controller\Account
- */
-class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
+class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
@@ -65,14 +60,10 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
         }
 
         try {
-<<<<<<< HEAD
-            $this->accountManagement->validateResetPasswordLinkToken(null, $resetPasswordToken);
-=======
             $this->accountManagement->validateResetPasswordLinkToken(
                 0,
                 $resetPasswordToken
             );
->>>>>>> upstream/2.2-develop
 
             if ($isDirectLink) {
                 $this->session->setRpToken($resetPasswordToken);

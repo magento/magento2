@@ -5,11 +5,10 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Save extends RatingController implements HttpPostActionInterface
+class Save extends RatingController
 {
     /**
      * Save rating
@@ -18,7 +17,7 @@ class Save extends RatingController implements HttpPostActionInterface
      */
     public function execute()
     {
-        $this->initEntityId();
+        $this->initEnityId();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($this->getRequest()->getPostValue()) {

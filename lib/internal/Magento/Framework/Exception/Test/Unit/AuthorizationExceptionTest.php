@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Exception\Test\Unit;
 
 use \Magento\Framework\Exception\AuthorizationException;
@@ -18,10 +17,10 @@ class AuthorizationExceptionTest extends \PHPUnit\Framework\TestCase
     {
         $authorizationException = new AuthorizationException(
             new Phrase(
-                'The consumer isn\'t authorized to access %resources.',
+                'Consumer is not authorized to access %resources',
                 ['consumer_id' => 1, 'resources' => 'record2']
             )
         );
-        $this->assertSame("The consumer isn't authorized to access record2.", $authorizationException->getMessage());
+        $this->assertSame('Consumer is not authorized to access record2', $authorizationException->getMessage());
     }
 }

@@ -21,11 +21,7 @@ define([
          * @return {*}
          */
         getShippingMethodTitle: function () {
-<<<<<<< HEAD
-            var shippingMethod = '',
-=======
             var shippingMethod,
->>>>>>> upstream/2.2-develop
                 shippingMethodTitle = '';
 
             if (!this.isCalculated()) {
@@ -37,13 +33,7 @@ define([
                 shippingMethodTitle = ' - ' + shippingMethod['method_title'];
             }
 
-<<<<<<< HEAD
-            return shippingMethod ?
-                shippingMethod['carrier_title'] + shippingMethodTitle :
-                shippingMethod['carrier_title'];
-=======
             return shippingMethod ? shippingMethod['carrier_title'] + shippingMethodTitle : '';
->>>>>>> upstream/2.2-develop
         },
 
         /**

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Webapi;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -35,8 +37,7 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
 
     public function testMultiServiceWsdl()
     {
-        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}"
-            . "?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2";
+        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2";
         $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV1,testModule5AllSoapAndRestV2';
         $wsdlContent = $this->_convertXmlToString($this->_getWsdlContent($wsdlUrl));
         $this->isSingleService = false;
@@ -71,7 +72,7 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
         $responseContent = curl_exec($connection);
         $this->assertEquals(curl_getinfo($connection, CURLINFO_HTTP_CODE), 401);
-        $this->assertContains("The consumer isn't authorized to access %resources.", $responseContent);
+        $this->assertContains("Consumer is not authorized to access %resources", $responseContent);
     }
 
     public function testInvalidWsdlUrlNoServices()
@@ -505,11 +506,11 @@ FIRST_PORT_TYPE;
             $secondPortType = <<< SECOND_PORT_TYPE
 <portType name="testModule5AllSoapAndRestV2PortType">
 SECOND_PORT_TYPE;
-            $this->assertContains(
-                $this->_convertXmlToString($secondPortType),
-                $wsdlContent,
-                'Port type declaration is missing or invalid'
-            );
+        $this->assertContains(
+            $this->_convertXmlToString($secondPortType),
+            $wsdlContent,
+            'Port type declaration is missing or invalid'
+        );
         }
 
         if ($this->isSingleService) {
@@ -858,7 +859,6 @@ PARAM_COMPLEX_TYPE;
             'Details parameter complex types declaration is invalid.'
         );
 
-        // @codingStandardsIgnoreStart
         if ($this->isSingleService) {
             $detailsWrappedErrorType = <<< WRAPPED_ERROR_COMPLEX_TYPE
 <xsd:complexType name="WrappedError">
@@ -906,7 +906,6 @@ WRAPPED_ERROR_COMPLEX_TYPE;
 </xsd:complexType>
 WRAPPED_ERROR_COMPLEX_TYPE;
         }
-        // @codingStandardsIgnoreEnd
         $this->assertContains(
             $this->_convertXmlToString($detailsWrappedErrorType),
             $wsdlContent,
@@ -937,7 +936,6 @@ PARAMETERS_COMPLEX_TYPE;
         );
 
         if ($this->isSingleService) {
-            // @codingStandardsIgnoreStart
             $detailsWrappedErrorsType = <<< WRAPPED_ERRORS_COMPLEX_TYPE
 <xsd:complexType name="ArrayOfWrappedError">
     <xsd:annotation>

@@ -52,7 +52,7 @@ class AssertExtensionAndVersionCheck extends AbstractConstraint
                 $message = '';
         }
 
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             $message,
             $setupWizard->getUpdaterExtension()->getMessage(),
             'Extension name and version check is incorrect.'

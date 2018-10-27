@@ -10,17 +10,12 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Framework\App\CacheInterface;
-<<<<<<< HEAD
-
-/**
-=======
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\DataInterfaceFactory;
 
 /**
  * Class CanViewNotification
  *
->>>>>>> upstream/2.2-develop
  * Dynamic validator for UI release notification, manage UI component visibility.
  * Return true if the logged in user has not seen the notification.
  */
@@ -61,44 +56,31 @@ class CanViewNotification implements VisibilityConditionInterface
     private $cacheStorage;
 
     /**
-<<<<<<< HEAD
-=======
      * @var DataInterfaceFactory
      */
     private $configFactory;
 
     /**
->>>>>>> upstream/2.2-develop
      * CanViewNotification constructor.
      *
      * @param Logger $viewerLogger
      * @param Session $session
      * @param ProductMetadataInterface $productMetadata
      * @param CacheInterface $cacheStorage
-<<<<<<< HEAD
-=======
      * @param DataInterfaceFactory|null $configFactory
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         Logger $viewerLogger,
         Session $session,
         ProductMetadataInterface $productMetadata,
-<<<<<<< HEAD
-        CacheInterface $cacheStorage
-=======
         CacheInterface $cacheStorage,
         DataInterfaceFactory $configFactory = null
->>>>>>> upstream/2.2-develop
     ) {
         $this->viewerLogger = $viewerLogger;
         $this->session = $session;
         $this->productMetadata = $productMetadata;
         $this->cacheStorage = $cacheStorage;
-<<<<<<< HEAD
-=======
         $this->configFactory = $configFactory ?? ObjectManager::getInstance()->get(DataInterfaceFactory::class);
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -108,11 +90,8 @@ class CanViewNotification implements VisibilityConditionInterface
      */
     public function isVisible(array $arguments)
     {
-<<<<<<< HEAD
-=======
         $config = $this->configFactory->create(['componentName' => 'release_notification']);
         $releaseContentVerion = $config->get('release_notification/arguments/data/releaseContentVersion');
->>>>>>> upstream/2.2-develop
         $userId = $this->session->getUser()->getId();
         $cacheKey = self::$cachePrefix . $userId;
         $value = $this->cacheStorage->load($cacheKey);
@@ -124,8 +103,6 @@ class CanViewNotification implements VisibilityConditionInterface
             );
             $this->cacheStorage->save(false, $cacheKey);
         }
-<<<<<<< HEAD
-=======
         if ($value) {
             $value = version_compare(
                 $this->productMetadata->getVersion(),
@@ -134,7 +111,6 @@ class CanViewNotification implements VisibilityConditionInterface
             );
         }
         
->>>>>>> upstream/2.2-develop
         return (bool)$value;
     }
 

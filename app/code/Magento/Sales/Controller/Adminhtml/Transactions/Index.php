@@ -6,10 +6,9 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\Model\View\Result\Page;
 
-class Index extends \Magento\Sales\Controller\Adminhtml\Transactions implements HttpGetActionInterface
+class Index extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**
      * @return Page

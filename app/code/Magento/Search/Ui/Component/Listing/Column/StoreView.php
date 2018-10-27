@@ -46,7 +46,6 @@ class StoreView extends Column
      *
      * @param array $dataSource
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -63,7 +62,6 @@ class StoreView extends Column
      *
      * @param array $item
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function prepareItem(array $item)
     {

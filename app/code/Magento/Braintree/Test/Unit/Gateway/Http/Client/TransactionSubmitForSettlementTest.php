@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
- * Tests \Magento\Braintree\Gateway\Http\Client\TransactionSubmitForSettlement.
+ * Class TransactionSubmitForSettlementTest
  */
 class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
 {
@@ -27,45 +27,22 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Logger|MockObject
      */
-    private $loggerMock;
+    private $logger;
 
     /**
      * @var BraintreeAdapter|MockObject
      */
-    private $adapterMock;
+    private $adapter;
 
     protected function setUp()
     {
-<<<<<<< HEAD
-        /** @var LoggerInterface|MockObject $criticalLoggerMock */
-        $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->loggerMock = $this->getMockBuilder(Logger::class)
-=======
         /** @var LoggerInterface|MockObject $criticalLogger */
         $criticalLogger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->logger = $this->getMockBuilder(Logger::class)
->>>>>>> upstream/2.2-develop
             ->disableOriginalConstructor()
             ->setMethods(['debug'])
             ->getMock();
 
-<<<<<<< HEAD
-        $this->adapterMock = $this->getMockBuilder(BraintreeAdapter::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['submitForSettlement'])
-            ->getMock();
-        /** @var BraintreeAdapterFactory|MockObject $adapterFactoryMock */
-        $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $adapterFactoryMock->method('create')
-            ->willReturn($this->adapterMock);
-
-        $this->client = new TransactionSubmitForSettlement(
-            $criticalLoggerMock,
-            $this->loggerMock,
-            $adapterFactoryMock
-=======
         $this->adapter = $this->getMockBuilder(BraintreeAdapter::class)
             ->disableOriginalConstructor()
             ->setMethods(['submitForSettlement'])
@@ -81,7 +58,6 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
             $criticalLogger,
             $this->logger,
             $adapterFactory
->>>>>>> upstream/2.2-develop
         );
     }
 
@@ -92,12 +68,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
     public function testPlaceRequestWithException()
     {
         $exception = new \Exception('Transaction has been declined');
-<<<<<<< HEAD
-        $this->adapterMock->expects(static::once())
-            ->method('submitForSettlement')
-=======
         $this->adapter->method('submitForSettlement')
->>>>>>> upstream/2.2-develop
             ->willThrowException($exception);
 
         /** @var TransferInterface|MockObject $transferObject */
@@ -108,12 +79,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
     public function testPlaceRequest()
     {
         $data = new Successful(['success'], [true]);
-<<<<<<< HEAD
-        $this->adapterMock->expects(static::once())
-            ->method('submitForSettlement')
-=======
         $this->adapter->method('submitForSettlement')
->>>>>>> upstream/2.2-develop
             ->willReturn($data);
 
         /** @var TransferInterface|MockObject $transferObject */
@@ -134,7 +100,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
         $mock->method('getBody')
             ->willReturn([
                 'transaction_id' => 'vb4c6b',
-                'amount' => 124.00,
+                'amount' => 124.00
             ]);
 
         return $mock;

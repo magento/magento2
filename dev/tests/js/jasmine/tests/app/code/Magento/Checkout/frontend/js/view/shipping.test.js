@@ -77,13 +77,6 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
         });
     });
 
-    afterEach(function () {
-        try {
-            injector.clean();
-            injector.remove();
-        } catch (e) {}
-    });
-
     describe('Magento_Checkout/js/view/shipping', function () {
         describe('"navigate" method', function () {
             it('Check for return value.', function () {
@@ -169,9 +162,7 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
                 };
 
                 expect(obj.validateShippingInformation()).toBeFalsy();
-                expect(obj.errorValidationMessage()).toBe(
-                    'The shipping method is missing. Select the shipping method and try again.'
-                );
+                expect(obj.errorValidationMessage()).toBe('Please specify a shipping method.');
                 spyOn(mocks['Magento_Checkout/js/model/quote'], 'shippingMethod').and.returnValue(true);
                 spyOn(mocks['Magento_Customer/js/model/customer'], 'isLoggedIn').and.returnValue(true);
                 expect(obj.validateShippingInformation()).toBeFalsy();

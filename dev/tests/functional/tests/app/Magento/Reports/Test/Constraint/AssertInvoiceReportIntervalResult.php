@@ -32,7 +32,7 @@ class AssertInvoiceReportIntervalResult extends AbstractAssertInvoiceReportResul
         $this->searchInInvoiceReportGrid($invoiceReport);
         $invoiceResult = $this->salesInvoiceReport->getGridBlock()->getLastResult();
         $prepareInitialResult = $this->prepareExpectedResult($initialInvoiceResult);
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $prepareInitialResult,
             $invoiceResult,
             "Invoice report interval result not contains actual data."

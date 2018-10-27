@@ -3,10 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-declare(strict_types=1);
-=======
->>>>>>> upstream/2.2-develop
 
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Framework\Registry;
@@ -15,12 +11,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Model\Address;
 
 //Clearing websites.
-<<<<<<< HEAD
-include __DIR__ . '/../../Store/_files/websites_different_countries_rollback.php';
-=======
 include __DIR__
     . '/../../Store/_files/websites_different_countries_rollback.php';
->>>>>>> upstream/2.2-develop
 
 /** @var Registry $registry */
 $registry = Bootstrap::getObjectManager()->get(Registry::class);

@@ -24,7 +24,7 @@ class AssertSuccessMessage
      */
     public function processAssert(SetupWizard $setupWizard)
     {
-        \PHPUnit\Framework\Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertContains(
             static::SUCCESS_MESSAGE,
             $setupWizard->getSuccessMessage()->getDisableModuleStatus(),
             'Success message is incorrect.'

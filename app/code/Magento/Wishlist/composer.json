@@ -1,23 +1,7 @@
 {
     "name": "magento/module-wishlist",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
     "require": {
-<<<<<<< HEAD
-        "php": "~7.1.3||~7.2.0",
-        "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-catalog": "*",
-        "magento/module-catalog-inventory": "*",
-        "magento/module-checkout": "*",
-        "magento/module-customer": "*",
-        "magento/module-rss": "*",
-        "magento/module-sales": "*",
-        "magento/module-store": "*",
-        "magento/module-ui": "*"
-=======
         "php": "~7.0.13|~7.1.0",
         "magento/module-store": "100.2.*",
         "magento/module-customer": "101.0.*",
@@ -29,21 +13,17 @@
         "magento/module-sales": "101.0.*",
         "magento/framework": "101.0.*",
         "magento/module-ui": "101.0.*"
->>>>>>> upstream/2.2-develop
     },
     "suggest": {
-        "magento/module-configurable-product": "*",
-        "magento/module-downloadable": "*",
-        "magento/module-bundle": "*",
-        "magento/module-cookie": "*",
-        "magento/module-grouped-product": "*",
-        "magento/module-wishlist-sample-data": "*"
+        "magento/module-configurable-product": "100.2.*",
+        "magento/module-downloadable": "100.2.*",
+        "magento/module-bundle": "100.2.*",
+        "magento/module-cookie": "100.2.*",
+        "magento/module-grouped-product": "100.2.*",
+        "magento/module-wishlist-sample-data": "Sample Data version:100.2.*"
     },
     "type": "magento2-module",
-<<<<<<< HEAD
-=======
     "version": "101.0.4",
->>>>>>> upstream/2.2-develop
     "license": [
         "OSL-3.0",
         "AFL-3.0"

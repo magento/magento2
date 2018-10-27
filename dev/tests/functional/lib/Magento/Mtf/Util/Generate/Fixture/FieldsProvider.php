@@ -182,14 +182,14 @@ class FieldsProvider
      * Retrieve connection to resource specified by $resourceName.
      *
      * @param string $resourceName
-     * @return \Exception|false|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @return \Exception|false|\Magento\Framework\DB\Adapter\AdapterInterface|\Zend_Exception
      */
     protected function getConnection($resourceName)
     {
         try {
             $connection = $this->resource->getConnection($resourceName);
             return $connection;
-        } catch (\Exception $e) {
+        } catch (\Zend_Exception $e) {
             echo $e->getMessage() . PHP_EOL;
             return $e;
         }

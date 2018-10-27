@@ -34,7 +34,7 @@ class AssertAdvancedSearchProductResult extends AbstractConstraint
     ) {
         $expectedResult = $this->prepareExpectedResult($isVisibleInAdvancedSearch, $allProducts);
         $foundedProducts = $this->advancedSearchProducts($resultPage, $allProducts);
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $expectedResult,
             $foundedProducts,
             'Expected and founded products not the same.'

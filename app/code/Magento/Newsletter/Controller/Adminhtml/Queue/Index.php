@@ -6,14 +6,7 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Newsletter\Controller\Adminhtml\Queue as QueueAction;
-
-/**
- * Show newsletter queue. Needs to be accessible by POST because of filtering.
- */
-class Index extends QueueAction implements HttpGetActionInterface, HttpPostActionInterface
+class Index extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**
      * Queue list action

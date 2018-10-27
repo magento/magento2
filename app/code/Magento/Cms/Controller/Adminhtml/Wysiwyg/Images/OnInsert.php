@@ -34,31 +34,17 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      */
     public function execute()
     {
-<<<<<<< HEAD
-        $imagesHelper = $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
-        $request = $this->getRequest();
-=======
         $helper = $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $storeId = (int)$this->getRequest()->getParam('store');
->>>>>>> upstream/2.2-develop
 
-        $storeId = $request->getParam('store');
-
-        $filename = $request->getParam('filename');
-        $filename = $imagesHelper->idDecode($filename);
-
-        $asIs = $request->getParam('as_is');
-
-        $forceStaticPath = $request->getParam('force_static_path');
+        $filename = $this->getRequest()->getParam('filename');
+        $filename = $helper->idDecode($filename);
+        $asIs = $this->getRequest()->getParam('as_is');
 
         $this->_objectManager->get(\Magento\Catalog\Helper\Data::class)->setStoreId($storeId);
-        $imagesHelper->setStoreId($storeId);
+        $helper->setStoreId($storeId);
 
-        if ($forceStaticPath) {
-            $image = parse_url($imagesHelper->getCurrentUrl() . $filename, PHP_URL_PATH);
-        } else {
-            $image = $imagesHelper->getImageHtmlDeclaration($filename, $asIs);
-        }
+        $image = $helper->getImageHtmlDeclaration($filename, $asIs);
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();

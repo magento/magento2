@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Weee\Block\Renderer\Weee;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -11,8 +13,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 /**
  * Adminhtml weee tax item renderer
  */
-class Tax extends \Magento\Backend\Block\Widget implements
-    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var AbstractElement|null
@@ -95,13 +96,11 @@ class Tax extends \Magento\Backend\Block\Widget implements
     protected function _prepareLayout()
     {
         $this->addChild(
-            'add_button',
-            \Magento\Backend\Block\Widget\Button::class,
+            'add_button', \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Add Tax'), 'data_attribute' => ['action' => 'add-fpt-item'], 'class' => 'add']
         );
         $this->addChild(
-            'delete_button',
-            \Magento\Backend\Block\Widget\Button::class,
+            'delete_button', \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Delete Tax'),
                 'data_attribute' => ['action' => 'delete-fpt-item'],

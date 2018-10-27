@@ -25,7 +25,7 @@ class AssertCatalogPriceRuleSuccessDeleteMessage extends AbstractConstraint
     public function processAssert(CatalogRuleIndex $pageCatalogRuleIndex)
     {
         $actualMessage = $pageCatalogRuleIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

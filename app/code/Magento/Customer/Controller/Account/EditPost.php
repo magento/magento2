@@ -4,40 +4,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\EmailNotificationInterface;
-use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Request\InvalidRequestException;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Escaper;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
-<<<<<<< HEAD
-use Magento\Customer\Controller\AbstractAccount;
-use Magento\Framework\Phrase;
-=======
 use Magento\Framework\Escaper;
->>>>>>> upstream/2.2-develop
 
 /**
  * Class EditPost
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
+class EditPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * Form code for data extractor
@@ -88,11 +77,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     private $escaper;
 
     /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
@@ -108,11 +92,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
         CustomerExtractor $customerExtractor,
-<<<<<<< HEAD
-        ?Escaper $escaper = null
-=======
         Escaper $escaper = null
->>>>>>> upstream/2.2-develop
     ) {
         parent::__construct($context);
         $this->session = $customerSession;
@@ -158,30 +138,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     }
 
     /**
-     * @inheritDoc
-     */
-    public function createCsrfValidationException(
-        RequestInterface $request
-    ): ?InvalidRequestException {
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('*/*/edit');
-
-        return new InvalidRequestException(
-            $resultRedirect,
-            [new Phrase('Invalid Form Key. Please refresh the page.')]
-        );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateForCsrf(RequestInterface $request): ?bool
-    {
-        return null;
-    }
-
-    /**
      * Change customer email or password action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
@@ -216,11 +172,10 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                 $this->messageManager->addSuccess(__('You saved the account information.'));
                 return $resultRedirect->setPath('customer/account');
             } catch (InvalidEmailOrPasswordException $e) {
-                $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
+                $this->messageManager->addError($e->getMessage());
             } catch (UserLockedException $e) {
                 $message = __(
-                    'The account sign-in was incorrect or your account is disabled temporarily. '
-                    . 'Please wait and try again later.'
+                    'You did not sign in correctly or your account is temporarily disabled.'
                 );
                 $this->session->logout();
                 $this->session->start();
@@ -240,10 +195,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             $this->session->setCustomerFormData($this->getRequest()->getPostValue());
         }
 
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('*/*/edit');
-        return $resultRedirect;
+        return $resultRedirect->setPath('*/*/edit');
     }
 
     /**
@@ -342,9 +294,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                     $this->getRequest()->getPost('current_password')
                 );
             } catch (InvalidEmailOrPasswordException $e) {
-                throw new InvalidEmailOrPasswordException(
-                    __("The password doesn't match this account. Verify the password and try again.")
-                );
+                throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
             }
         }
     }

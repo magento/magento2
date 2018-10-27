@@ -60,15 +60,15 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
                 'commit',
                 'clean',
             ])->disableOriginalConstructor()->getMock();
-        $this->resource->expects($this->any())->method('getIdFieldName')->willReturn('visitor_id');
-        $this->resource->expects($this->any())->method('addCommitCallback')->willReturnSelf();
+        $this->resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('visitor_id'));
+        $this->resource->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
 
         $arguments = $this->objectManagerHelper->getConstructArguments(
             \Magento\Customer\Model\Visitor::class,
             [
                 'registry' => $this->registry,
                 'session' => $this->session,
-                'resource' => $this->resource,
+                'resource' => $this->resource
             ]
         );
 
@@ -79,12 +79,8 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
     {
         $oldSessionId = 'asdfhasdfjhkj2198sadf8sdf897';
         $newSessionId = 'bsdfhasdfjhkj2198sadf8sdf897';
-<<<<<<< HEAD
-        $this->session->expects($this->any())->method('getSessionId')->willReturn($newSessionId);
-=======
         $this->session->expects($this->any())->method('getSessionId')
             ->will($this->returnValue($newSessionId));
->>>>>>> upstream/2.2-develop
         $this->session->expects($this->atLeastOnce())->method('getVisitorData')
             ->willReturn(['session_id' => $oldSessionId]);
         $this->visitor->initByRequest(null);
@@ -105,7 +101,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
                 'registry' => $this->registry,
                 'session' => $this->session,
                 'resource' => $this->resource,
-                'ignores' => ['test_route_name' => true],
+                'ignores' => ['test_route_name' => true]
             ]
         );
         $request = new \Magento\Framework\DataObject(['route_name' => 'test_route_name']);
@@ -168,7 +164,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
     public function testClean()
     {
-        $this->resource->expects($this->once())->method('clean')->with($this->visitor)->willReturnSelf();
+        $this->resource->expects($this->once())->method('clean')->with($this->visitor)->will($this->returnSelf());
         $this->visitor->clean();
     }
 }

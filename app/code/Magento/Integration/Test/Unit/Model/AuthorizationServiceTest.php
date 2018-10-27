@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Authorization\Model\ResourceModel\Rules;
@@ -178,6 +177,7 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Sorry, something went wrong granting permissions.
      */
     public function testGrantPermissionsException()
     {
@@ -197,10 +197,6 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
         $this->rulesMock->expects($this->any())->method('saveRel')->will($this->throwException(new \Exception()));
 
         $this->integrationAuthorizationService->grantPermissions(self::INTEGRATION_ID, $this->resources);
-
-        $this->expectExceptionMessage(
-            'An error occurred during the attempt to grant permissions. For details, see the exceptions log.'
-        );
     }
 
     public function testGrantAllPermissions()

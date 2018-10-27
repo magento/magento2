@@ -5,13 +5,10 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Message\Error;
-use Magento\Customer\Controller\Adminhtml\Index as CustomerAction;
 
-class Validate extends CustomerAction implements HttpPostActionInterface, HttpGetActionInterface
+class Validate extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
      * Customer validation

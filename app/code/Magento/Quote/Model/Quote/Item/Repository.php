@@ -4,7 +4,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Framework\App\ObjectManager;
@@ -104,14 +103,14 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         $quoteItem = $quote->getItemById($itemId);
         if (!$quoteItem) {
             throw new NoSuchEntityException(
-                __('The %1 Cart doesn\'t contain the %2 item.', $cartId, $itemId)
+                __('Cart %1 doesn\'t contain item  %2', $cartId, $itemId)
             );
         }
         try {
             $quote->removeItem($itemId);
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__("The item couldn't be removed from the quote."));
+            throw new CouldNotSaveException(__('Could not remove item from quote'));
         }
 
         return true;

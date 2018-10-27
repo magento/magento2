@@ -48,10 +48,7 @@ class WebapiProductUrlPathGenerator extends ProductUrlPathGenerator
         if ($urlKey === '' || $urlKey === null) {
             $urlKey = $this->prepareUrlKey($product->formatUrlKey($product->getName()));
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         return $product->formatUrlKey($urlKey);
     }
 

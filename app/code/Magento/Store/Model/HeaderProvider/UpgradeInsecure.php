@@ -33,8 +33,6 @@ class UpgradeInsecure extends \Magento\Framework\App\Response\HeaderProvider\Abs
     protected $scopeConfig;
 
     /**
-     * UpgradeInsecure constructor.
-     *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
@@ -43,11 +41,11 @@ class UpgradeInsecure extends \Magento\Framework\App\Response\HeaderProvider\Abs
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function canApply()
     {
-        return $this->scopeConfig->isSetFlag(Store::XML_PATH_SECURE_IN_FRONTEND)
+        return (bool)$this->scopeConfig->isSetFlag(Store::XML_PATH_SECURE_IN_FRONTEND)
             && $this->scopeConfig->isSetFlag(Store::XML_PATH_SECURE_IN_ADMINHTML)
             && $this->scopeConfig->isSetFlag(Store::XML_PATH_ENABLE_UPGRADE_INSECURE);
     }

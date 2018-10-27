@@ -6,9 +6,7 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement implements HttpGetActionInterface
+class Index extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
 {
     /**
      * @return void

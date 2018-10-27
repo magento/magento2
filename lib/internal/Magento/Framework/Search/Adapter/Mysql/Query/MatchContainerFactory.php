@@ -7,9 +7,6 @@ namespace Magento\Framework\Search\Adapter\Mysql\Query;
 
 /**
  * MatchContainer Factory
- *
- * @deprecated
- * @see \Magento\ElasticSearch
  */
 class MatchContainerFactory
 {

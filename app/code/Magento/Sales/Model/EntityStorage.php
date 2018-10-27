@@ -45,7 +45,7 @@ class EntityStorage
             throw new \Magento\Framework\Exception\InputException(__('Identifying Fields required'));
         }
         if (!$object->getId()) {
-            throw new \Magento\Framework\Exception\InputException(__('An ID is needed. Set the ID and try again.'));
+            throw new \Magento\Framework\Exception\InputException(__('Id required'));
         }
         $this->storageMapper[$storageName][$this->getHash($identifyingFields)] = $object->getId();
         $this->registry[$object->getId()] = $object;

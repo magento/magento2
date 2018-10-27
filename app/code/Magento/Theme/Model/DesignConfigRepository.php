@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Theme\Model;
 
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -86,9 +85,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
         if (!($designConfig->getExtensionAttributes() &&
             $designConfig->getExtensionAttributes()->getDesignConfigData())
         ) {
-            throw new LocalizedException(
-                __("The config can't be saved because it's empty. Complete the config and try again.")
-            );
+            throw new LocalizedException(__('Can not save empty config'));
         }
 
         $this->getValidator()->validate($designConfig);
@@ -108,9 +105,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
         if (!($designConfig->getExtensionAttributes() &&
             $designConfig->getExtensionAttributes()->getDesignConfigData())
         ) {
-            throw new LocalizedException(
-                __("The config can't be saved because it's empty. Complete the config and try again.")
-            );
+            throw new LocalizedException(__('Can not save empty config'));
         }
 
         $this->configStorage->delete($designConfig);

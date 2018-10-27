@@ -30,7 +30,7 @@ class AssertAddToCartButtonAbsentOnProductPage extends AbstractConstraint
         CatalogProductView $catalogProductView
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $catalogProductView->getViewBlock()->isVisibleAddToCardButton(),
             'Button "Add to Cart" is present on product page.'
         );

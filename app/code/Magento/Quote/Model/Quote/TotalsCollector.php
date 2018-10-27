@@ -103,8 +103,6 @@ class TotalsCollector
     }
 
     /**
-     * Collect quote totals.
-     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return Address\Total
      */
@@ -117,8 +115,6 @@ class TotalsCollector
     }
 
     /**
-     * Collect quote.
-     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote\Address\Total
      */
@@ -176,8 +172,6 @@ class TotalsCollector
     }
 
     /**
-     * Validate coupon code.
-     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      */
@@ -238,8 +232,6 @@ class TotalsCollector
     }
 
     /**
-     * Collect address total.
-     *
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address $address
      * @return Address\Total

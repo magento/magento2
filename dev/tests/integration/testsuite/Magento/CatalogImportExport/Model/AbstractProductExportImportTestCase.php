@@ -51,8 +51,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         'custom_design_from',
         'updated_in',
         'tax_class_id',
-        'description',
-        'is_salable', // stock indexation is not performed during import
+        'description'
     ];
 
     protected function setUp()
@@ -289,6 +288,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
             'row_id',
             'entity_id',
             'tier_price',
+            'is_salable',
             'media_gallery'
         ];
         $skippedAttributes = array_merge($replacedAttributes, $skippedAttributes);
@@ -320,10 +320,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
 
         while ($index > 0) {
             $index--;
-<<<<<<< HEAD
-=======
             $productRepository->cleanCache();
->>>>>>> upstream/2.2-develop
             $newProduct = $productRepository->get($skus[$index], false, Store::DEFAULT_STORE_ID, true);
             // check original product is deleted
             $origProduct = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load($ids[$index]);

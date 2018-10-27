@@ -174,6 +174,7 @@ switch ($type = $block->getType()) {
         <?php endif; ?>
         <div class="products wrapper grid products-grid products-<?= /* @escapeNotVerified */ $type ?>">
             <ol class="products list items product-items">
+                <?php $iterator = 1; ?>
                 <?php foreach ($items as $_item): ?>
                 <?php $available = ''; ?>
                 <?php if (!$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>
@@ -182,9 +183,9 @@ switch ($type = $block->getType()) {
                     <?php endif; ?>
                 <?php endif; ?>
                 <?php if ($type == 'related' || $type == 'upsell'): ?>
-                    <li class="item product product-item" style="display: none;">
+                    <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="item product product-item" style="display: none;">' : '</li><li class="item product product-item" style="display: none;">' ?>
                 <?php else: ?>
-                    <li class="item product product-item">
+                    <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
                 <?php endif; ?>
                 <div class="product-item-info <?= /* @escapeNotVerified */ $available ?>">
                     <?= /* @escapeNotVerified */ '<!-- ' . $image . '-->' ?>
@@ -251,7 +252,7 @@ switch ($type = $block->getType()) {
                             <?php endif; ?>
                         </div>
                     </div>
-                </li>
+                    <?= ($iterator == count($items)+1) ? '</li>' : '' ?>
                 <?php endforeach ?>
             </ol>
         </div>

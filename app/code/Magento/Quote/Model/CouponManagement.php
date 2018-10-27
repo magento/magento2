@@ -54,10 +54,7 @@ class CouponManagement implements CouponManagementInterface
         /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->getItemsCount()) {
-            throw new NoSuchEntityException(__('The "%1" Cart doesn\'t contain products.', $cartId));
-        }
-        if (!$quote->getStoreId()) {
-            throw new NoSuchEntityException(__('Cart isn\'t assigned to correct store'));
+            throw new NoSuchEntityException(__('Cart %1 doesn\'t contain products', $cartId));
         }
         if (!$quote->getStoreId()) {
             throw new NoSuchEntityException(__('Cart isn\'t assigned to correct store'));
@@ -68,12 +65,10 @@ class CouponManagement implements CouponManagementInterface
             $quote->setCouponCode($couponCode);
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(
-                __("The coupon code couldn't be applied. Verify the coupon code and try again.")
-            );
+            throw new CouldNotSaveException(__('Could not apply coupon code'));
         }
         if ($quote->getCouponCode() != $couponCode) {
-            throw new NoSuchEntityException(__("The coupon code isn't valid. Verify the code and try again."));
+            throw new NoSuchEntityException(__('Coupon code is not valid'));
         }
         return true;
     }
@@ -86,21 +81,17 @@ class CouponManagement implements CouponManagementInterface
         /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->getItemsCount()) {
-            throw new NoSuchEntityException(__('The "%1" Cart doesn\'t contain products.', $cartId));
+            throw new NoSuchEntityException(__('Cart %1 doesn\'t contain products', $cartId));
         }
         $quote->getShippingAddress()->setCollectShippingRates(true);
         try {
             $quote->setCouponCode('');
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
-            throw new CouldNotDeleteException(
-                __("The coupon code couldn't be deleted. Verify the coupon code and try again.")
-            );
+            throw new CouldNotDeleteException(__('Could not delete coupon code'));
         }
         if ($quote->getCouponCode() != '') {
-            throw new CouldNotDeleteException(
-                __("The coupon code couldn't be deleted. Verify the coupon code and try again.")
-            );
+            throw new CouldNotDeleteException(__('Could not delete coupon code'));
         }
         return true;
     }

@@ -22,7 +22,7 @@ class AssertBillingAddressAbsentInPayment extends AbstractConstraint
      */
     public function processAssert(CheckoutOnepage $checkoutOnepage)
     {
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             $checkoutOnepage->getPaymentBlock()
                 ->getSelectedPaymentMethodBlock()
                 ->getBillingBlock()

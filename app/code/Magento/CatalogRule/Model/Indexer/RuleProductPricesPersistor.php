@@ -26,15 +26,6 @@ class RuleProductPricesPersistor
     private $dateFormat;
 
     /**
-<<<<<<< HEAD
-     * @var ActiveTableSwitcher
-=======
-     * @var TableSwapper
->>>>>>> upstream/2.2-develop
-     */
-    private $tableSwapper;
-
-    /**
      * @var TableSwapper
      */
     private $tableSwapper;
@@ -44,11 +35,8 @@ class RuleProductPricesPersistor
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ActiveTableSwitcher $activeTableSwitcher
      * @param TableSwapper|null $tableSwapper
-<<<<<<< HEAD
-=======
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime $dateFormat,
@@ -58,10 +46,6 @@ class RuleProductPricesPersistor
     ) {
         $this->dateFormat = $dateFormat;
         $this->resource = $resource;
-<<<<<<< HEAD
-        $this->activeTableSwitcher = $activeTableSwitcher;
-=======
->>>>>>> upstream/2.2-develop
         $this->tableSwapper = $tableSwapper ??
             ObjectManager::getInstance()->get(TableSwapper::class);
     }

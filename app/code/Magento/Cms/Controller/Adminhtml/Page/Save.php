@@ -6,13 +6,12 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Cms\Model\Page;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class Save extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session
@@ -45,13 +44,8 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      * @param Action\Context $context
      * @param PostDataProcessor $dataProcessor
      * @param DataPersistorInterface $dataPersistor
-<<<<<<< HEAD
-     * @param \Magento\Cms\Model\PageFactory|null $pageFactory
-     * @param \Magento\Cms\Api\PageRepositoryInterface|null $pageRepository
-=======
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         Action\Context $context,
@@ -117,49 +111,19 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             try {
                 $this->pageRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
-                return $this->processResultRedirect($model, $resultRedirect, $data);
+                $this->dataPersistor->clear('cms_page');
+                if ($this->getRequest()->getParam('back')) {
+                    return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
+                }
+                return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
-                $this->messageManager->addExceptionMessage($e->getPrevious() ?: $e);
+                $this->messageManager->addExceptionMessage($e->getPrevious() ?:$e);
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the page.'));
             }
 
             $this->dataPersistor->set('cms_page', $data);
             return $resultRedirect->setPath('*/*/edit', ['page_id' => $this->getRequest()->getParam('page_id')]);
-        }
-        return $resultRedirect->setPath('*/*/');
-    }
-
-    /**
-     * Process result redirect
-     *
-     * @param \Magento\Cms\Api\Data\PageInterface $model
-     * @param \Magento\Backend\Model\View\Result\Redirect $resultRedirect
-     * @param array $data
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws LocalizedException
-     */
-    private function processResultRedirect($model, $resultRedirect, $data)
-    {
-        if ($this->getRequest()->getParam('back', false) === 'duplicate') {
-            $newPage = $this->pageFactory->create(['data' => $data]);
-            $newPage->setId(null);
-            $identifier = $model->getIdentifier() . '-' . uniqid();
-            $newPage->setIdentifier($identifier);
-            $newPage->setIsActive(false);
-            $this->pageRepository->save($newPage);
-            $this->messageManager->addSuccessMessage(__('You duplicated the page.'));
-            return $resultRedirect->setPath(
-                '*/*/edit',
-                [
-                    'page_id' => $newPage->getId(),
-                    '_current' => true
-                ]
-            );
-        }
-        $this->dataPersistor->clear('cms_page');
-        if ($this->getRequest()->getParam('back')) {
-            return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
         }
         return $resultRedirect->setPath('*/*/');
     }

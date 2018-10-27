@@ -8,18 +8,11 @@
 namespace Magento\Framework\App\Router;
 
 /**
- * Base router implementation.
- *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Base implements \Magento\Framework\App\RouterInterface
 {
-    /**
-     * No route constant used for request
-     */
-    const NO_ROUTE = 'noroute';
-
     /**
      * @var \Magento\Framework\App\ActionFactory
      */
@@ -310,7 +303,7 @@ class Base implements \Magento\Framework\App\RouterInterface
             if ($actionInstance === null) {
                 return null;
             }
-            $action = self::NO_ROUTE;
+            $action = 'noroute';
         }
 
         // set values only after all the checks are done
@@ -340,7 +333,6 @@ class Base implements \Magento\Framework\App\RouterInterface
 
     /**
      * Check that request uses https protocol if it should.
-     *
      * Function redirects user to correct URL if needed.
      *
      * @param \Magento\Framework\App\RequestInterface $request

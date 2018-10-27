@@ -54,7 +54,7 @@ class AssertProductReviewForm extends AbstractAssertForm
 
         $error = $this->verifyData($fixtureData, $formData);
 
-        \PHPUnit\Framework\Assert::assertEmpty($error, $error);
+        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
     }
 
     /**

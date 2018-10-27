@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogInventory\Model\Stock;
 
 use Magento\CatalogInventory\Api\Data\StockCollectionInterfaceFactory;
@@ -85,7 +84,7 @@ class StockRepository implements StockRepositoryInterface
         try {
             $this->resource->save($stock);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('The stock was unable to be saved. Please try again.'), $exception);
+            throw new CouldNotSaveException(__('Unable to save Stock'), $exception);
         }
         return $stock;
     }
@@ -100,9 +99,7 @@ class StockRepository implements StockRepositoryInterface
         $stock = $this->stockFactory->create();
         $this->resource->load($stock, $stockId);
         if (!$stock->getId()) {
-            throw new NoSuchEntityException(
-                __('The stock with the "%1" ID wasn\'t found. Verify the ID and try again.', $stockId)
-            );
+            throw new NoSuchEntityException(__('Stock with id "%1" does not exist.', $stockId));
         }
         return $stock;
     }

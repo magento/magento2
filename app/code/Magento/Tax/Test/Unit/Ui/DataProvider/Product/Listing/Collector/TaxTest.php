@@ -54,9 +54,6 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      */
     private $formattedPriceInfoBuilder;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
@@ -71,12 +68,10 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->priceInfoFactory = $this->getMockBuilder(PriceInfoInterfaceFactory::class)
-            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->priceInfoExtensionFactory = $this->getMockBuilder(PriceInfoExtensionInterfaceFactory::class)
-            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->formattedPriceInfoBuilder = $this->getMockBuilder(FormattedPriceInfoBuilder::class)
@@ -91,9 +86,6 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testCollect()
     {
         $amountValue = 10;

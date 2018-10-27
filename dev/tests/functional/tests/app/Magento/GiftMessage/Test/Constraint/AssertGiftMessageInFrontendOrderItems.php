@@ -66,7 +66,7 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
                 $expectedData = [];
             }
 
-            \PHPUnit\Framework\Assert::assertEquals(
+            \PHPUnit_Framework_Assert::assertEquals(
                 $expectedData,
                 $customerOrderView->getGiftMessageForItemBlock()->getGiftMessage($product->getName()),
                 'Wrong gift message is displayed on "' . $product->getName() . '" item.'

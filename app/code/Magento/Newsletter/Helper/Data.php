@@ -27,7 +27,7 @@ class Data
     }
 
     /**
-     * Retrieve subscription confirmation url
+     * Retrieve subsription confirmation url
      *
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @return string
@@ -43,7 +43,7 @@ class Data
     }
 
     /**
-     * Retrieve unsubscription url
+     * Retrieve unsubsription url
      *
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @return string

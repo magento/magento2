@@ -4,10 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Test\Php;
 
 use Magento\Framework\App\Utility\Files;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
@@ -69,28 +70,19 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      * @param array $fileTypes
      * @param string $changedFilesBaseDir
      * @param string $baseFilesFolder
-     * @param string $whitelistFile
      * @return array
      */
-    public static function getWhitelist(
-        $fileTypes = ['php'],
-        $changedFilesBaseDir = '',
-        $baseFilesFolder = '',
-        $whitelistFile = '/_files/whitelist/common.txt'
-    ) {
+    public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = '', $baseFilesFolder = '')
+    {
         $changedFiles = self::getChangedFilesList($changedFilesBaseDir);
         if (empty($changedFiles)) {
             return [];
         }
 
         $globPatternsFolder = ('' !== $baseFilesFolder) ? $baseFilesFolder : self::getBaseFilesFolder();
-        try {
-            $directoriesToCheck = Files::init()->readLists($globPatternsFolder . $whitelistFile);
-        } catch (\Exception $e) {
-            // no directories matched white list
-            return [];
-        }
+        $directoriesToCheck = Files::init()->readLists($globPatternsFolder . '/_files/whitelist/common.txt');
         $targetFiles = self::filterFiles($changedFiles, $fileTypes, $directoriesToCheck);
+
         return $targetFiles;
     }
 
@@ -111,74 +103,30 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     private static function getChangedFilesList($changedFilesBaseDir)
     {
-        return self::getFilesFromListFile(
-            $changedFilesBaseDir,
-            'changed_files*',
-            function () {
-                // if no list files, probably, this is the dev environment
-                @exec('git diff --name-only', $changedFiles);
-                @exec('git diff --cached --name-only', $addedFiles);
-                $changedFiles = array_unique(array_merge($changedFiles, $addedFiles));
-                return $changedFiles;
-            }
-        );
-    }
+        $changedFiles = [];
 
-    /**
-     * This method loads list of added files.
-     *
-     * @param string $changedFilesBaseDir
-     * @return string[]
-     */
-    private static function getAddedFilesList($changedFilesBaseDir)
-    {
-        return self::getFilesFromListFile(
-            $changedFilesBaseDir,
-            'changed_files*.added.*',
-            function () {
-                // if no list files, probably, this is the dev environment
-                @exec('git diff --cached --name-only', $addedFiles);
-                return $addedFiles;
-            }
-        );
-    }
-
-    /**
-     * Read files from generated lists.
-     *
-     * @param string $listsBaseDir
-     * @param string $listFilePattern
-     * @param callable $noListCallback
-     * @return string[]
-     */
-    private static function getFilesFromListFile($listsBaseDir, $listFilePattern, $noListCallback)
-    {
-        $filesDefinedInList = [];
-
-        $globFilesListPattern = ($listsBaseDir ?: self::getChangedFilesBaseDir())
-            . '/_files/' . $listFilePattern;
+        $globFilesListPattern = ($changedFilesBaseDir ?: self::getChangedFilesBaseDir()) . '/_files/changed_files*';
         $listFiles = glob($globFilesListPattern);
         if (count($listFiles)) {
             foreach ($listFiles as $listFile) {
-                $filesDefinedInList = array_merge(
-                    $filesDefinedInList,
+                $changedFiles = array_merge(
+                    $changedFiles,
                     file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
                 );
             }
         } else {
-            $filesDefinedInList = call_user_func($noListCallback);
+            // if no list files, probably, this is the dev environment
+            @exec('git diff --name-only', $changedFiles);
         }
 
         array_walk(
-            $filesDefinedInList,
+            $changedFiles,
             function (&$file) {
                 $file = BP . '/' . $file;
             }
         );
 
-        $filesDefinedInList = array_values(array_unique($filesDefinedInList));
-
-        return $filesDefinedInList;
+        return $changedFiles;
     }
 
     /**
@@ -248,48 +196,23 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     private function getFullWhitelist()
     {
-        try {
-            return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
-        } catch (\Exception $e) {
-            // nothing is whitelisted
-            return [];
-        }
+        return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
     }
 
-    /**
-     * Test code quality using phpcs
-     */
     public function testCodeStyle()
     {
-<<<<<<< HEAD
-        $isFullScan = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1';
-=======
         $whiteList = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1'
             ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']);
 
->>>>>>> upstream/2.2-develop
         $reportFile = self::$reportDir . '/phpcs_report.txt';
-        if (!file_exists($reportFile)) {
-            touch($reportFile);
-        }
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
-        $result = $codeSniffer->run($isFullScan ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']));
-        $report = file_get_contents($reportFile);
         $this->assertEquals(
             0,
-<<<<<<< HEAD
-            $result,
-            "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . $report
-=======
             $result = $codeSniffer->run($whiteList),
             "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . file_get_contents($reportFile)
->>>>>>> upstream/2.2-develop
         );
     }
 
-    /**
-     * Test code quality using phpmd
-     */
     public function testCodeMess()
     {
         $reportFile = self::$reportDir . '/phpmd_report.txt';
@@ -318,9 +241,6 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * Test code quality using phpcpd
-     */
     public function testCopyPaste()
     {
         $reportFile = self::$reportDir . '/phpcpd_report.xml';
@@ -347,44 +267,6 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(
             $result,
             "PHP Copy/Paste Detector has found error(s):" . PHP_EOL . $output
-        );
-    }
-
-    /**
-     * Tests whitelisted files for strict type declarations.
-     */
-    public function testStrictTypes()
-    {
-        $changedFiles = self::getAddedFilesList('');
-
-        try {
-            $blackList = Files::init()->readLists(
-                self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt'
-            );
-        } catch (\Exception $e) {
-            // nothing matched black list
-            $blackList = [];
-        }
-
-        $toBeTestedFiles = array_diff(
-            self::filterFiles($changedFiles, ['php'], []),
-            $blackList
-        );
-
-        $filesMissingStrictTyping = [];
-        foreach ($toBeTestedFiles as $fileName) {
-            $file = file_get_contents($fileName);
-            if (strstr($file, 'strict_types=1') === false) {
-                $filesMissingStrictTyping[] = $fileName;
-            }
-        }
-
-        $this->assertEquals(
-            0,
-            count($filesMissingStrictTyping),
-            "Following files are missing strict type declaration:"
-            . PHP_EOL
-            . implode(PHP_EOL, $filesMissingStrictTyping)
         );
     }
 }

@@ -9,12 +9,6 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 
-/**
- * MySQL search aggregation term builder.
- *
- * @deprecated
- * @see \Magento\ElasticSearch
- */
 class Term implements BucketInterface
 {
     /**
@@ -31,7 +25,7 @@ class Term implements BucketInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function build(
         DataProviderInterface $dataProvider,

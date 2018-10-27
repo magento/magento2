@@ -164,7 +164,7 @@ class CreditmemoCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('email', $result);
     }
 
-    public function testSetCustomerName()
+    public function testSetCusomerName()
     {
         $this->identity->setCustomerName('name');
         $result = $this->identity->getCustomerName();

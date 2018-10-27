@@ -104,7 +104,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Retrieve currently edited product model
+     * Retirve currently edited product model
      *
      * @return \Magento\Catalog\Model\Product
      */
@@ -315,7 +315,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Retrieve grid URL
+     * Rerieve grid URL
      *
      * @return string
      */

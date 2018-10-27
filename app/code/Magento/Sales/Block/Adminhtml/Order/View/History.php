@@ -88,8 +88,7 @@ class History extends \Magento\Backend\Block\Template
      */
     public function canSendCommentEmail()
     {
-        return $this->_salesData->canSendOrderCommentEmail($this->getOrder()->getStore()->getId())
-            && $this->_authorization->isAllowed('Magento_Sales::email');
+        return $this->_salesData->canSendOrderCommentEmail($this->getOrder()->getStore()->getId());
     }
 
     /**

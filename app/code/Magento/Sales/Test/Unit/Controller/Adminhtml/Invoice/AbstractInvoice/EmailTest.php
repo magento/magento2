@@ -89,9 +89,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      */
     protected $invoiceManagement;
 
-    /**
-     * Test setup
-     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -156,9 +153,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * testEmail
-     */
     public function testEmail()
     {
         $invoiceId = 10000031;
@@ -202,7 +196,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->with($invoiceId)
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccessMessage')
+            ->method('addSuccess')
             ->with('You sent the message.');
 
         $this->resultRedirectFactory->expects($this->atLeastOnce())
@@ -215,9 +209,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Backend\Model\View\Result\Redirect::class, $this->invoiceEmail->execute());
     }
 
-    /**
-     * testEmailNoInvoiceId
-     */
     public function testEmailNoInvoiceId()
     {
         $this->request->expects($this->once())
@@ -235,9 +226,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Backend\Model\View\Result\Forward::class, $this->invoiceEmail->execute());
     }
 
-    /**
-     * testEmailNoInvoice
-     */
     public function testEmailNoInvoice()
     {
         $invoiceId = 10000031;

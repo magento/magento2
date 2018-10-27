@@ -6,8 +6,6 @@
 namespace Magento\Translation\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
-use Magento\Translation\Model\Inline\File as TranslationFile;
 
 /**
  * A service for handling Translation config files
@@ -35,26 +33,18 @@ class FileManager
     private $driverFile;
 
     /**
-     * @var TranslationFile
-     */
-    private $translationFile;
-
-    /**
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
-     * @param \Magento\Framework\Filesystem\Driver\File $driverFile
-     * @param TranslationFile $translationFile
+     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
+     * @param \Magento\Framework\Filesystem\Driver\File $driverFile,
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
-        \Magento\Framework\Filesystem\Driver\File $driverFile,
-        \Magento\Translation\Model\Inline\File $translationFile = null
+        \Magento\Framework\Filesystem\Driver\File $driverFile
     ) {
         $this->assetRepo = $assetRepo;
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
-        $this->translationFile = $translationFile ?: ObjectManager::getInstance()->get(TranslationFile::class);
     }
 
     /**
@@ -119,22 +109,5 @@ class FileManager
             $this->driverFile->createDirectory($translationDir);
         }
         $this->driverFile->filePutContents($this->getTranslationFileFullPath(), $content);
-    }
-
-    /**
-     * Calculate translation file version hash.
-     *
-     * @return string
-     */
-    public function getTranslationFileVersion()
-    {
-        $translationFile = $this->getTranslationFileFullPath();
-        $translationFileHash = '';
-
-        if ($this->driverFile->isExists($translationFile)) {
-            $translationFileHash = sha1_file($translationFile);
-        }
-
-        return sha1($translationFileHash . $this->getTranslationFilePath());
     }
 }

@@ -6,22 +6,14 @@
 
 namespace Magento\Customer\Test\Block\Adminhtml\Group;
 
-use \Magento\Ui\Test\Block\Adminhtml\DataGrid;
-use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Backend\Test\Block\Widget\Grid;
 
 /**
  * Class CustomerGroupGrid
  * Adminhtml customer group grid
  */
-class CustomerGroupGrid extends DataGrid
+class CustomerGroupGrid extends Grid
 {
-    /**
-     * Select action toggle.
-     *
-     * @var string
-     */
-    protected $selectAction = '.action-select';
-
     /**
      * Initialize block elements
      *
@@ -29,25 +21,14 @@ class CustomerGroupGrid extends DataGrid
      */
     protected $filters = [
         'code' => [
-            'selector' => '.admin__data-grid-filters input[name*=customer_group_code]',
-        ],
-        'tax_class_id' => [
-            'selector' => '.admin__data-grid-filters select[name*=tax_class_id]',
-            'input' => 'select'
+            'selector' => '#customerGroupGrid_filter_type',
         ],
     ];
 
     /**
-     * Click on "Edit" link.
+     * Locator value for grid to click
      *
-     * @param SimpleElement $rowItem
-     * @return void
+     * @var string
      */
-    protected function clickEditLink(SimpleElement $rowItem)
-    {
-        if ($rowItem->find($this->selectAction)->isVisible()) {
-            $rowItem->find($this->selectAction)->click();
-        }
-        $rowItem->find($this->editLink)->click();
-    }
+    protected $editLink = 'td[data-column="time"]';
 }

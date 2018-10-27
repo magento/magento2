@@ -97,15 +97,15 @@ class SaveHandler
 
         try {
             $linkTypesToId = $this->linkTypeProvider->getLinkTypes();
-            $productHydrator = $this->metadataPool->getHydrator(ProductInterface::class);
-            $productData = $productHydrator->extract($product);
+            $prodyctHydrator = $this->metadataPool->getHydrator(ProductInterface::class);
+            $productData = $prodyctHydrator->extract($product);
             $this->linkResource->saveProductLinks(
                 $productData[$this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()],
                 $links,
                 $linkTypesToId[$entity->getLinkType()]
             );
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('The linked products data is invalid. Verify the data and try again.'));
+            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
         }
         return $entity;
     }

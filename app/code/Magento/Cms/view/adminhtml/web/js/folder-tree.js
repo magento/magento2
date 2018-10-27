@@ -77,28 +77,18 @@ define([
         treeLoaded: function () {
             var path = this.options.currentPath,
                 tree = this.element,
-                lastExistentFolderEl,
 
                 /**
-                 * Recursively open folders specified in path array.
+                 * Recursive open.
                  */
                 recursiveOpen = function () {
-                    var folderEl = $('[data-id="' + path.pop() + '"]');
+                    var el = $('[data-id="' + path.pop() + '"]');
 
-                    // if folder doesn't exist, select the last opened folder
-                    if (!folderEl.length) {
-                        tree.jstree('select_node', lastExistentFolderEl);
-
-                        return;
-                    }
-
-                    lastExistentFolderEl = folderEl;
-
-                    if (path.length) {
-                        tree.jstree('open_node', folderEl, recursiveOpen);
+                    if (path.length > 1) {
+                        tree.jstree('open_node', el, recursiveOpen);
                     } else {
-                        tree.jstree('open_node', folderEl, function () {
-                            tree.jstree('select_node', folderEl);
+                        tree.jstree('open_node', el, function () {
+                            tree.jstree('select_node', el);
                         });
                     }
                 };
@@ -124,7 +114,7 @@ define([
                     metadata: {
                         node: codeCopy
                     },
-                    state: node.state || 'closed'
+                    state: 'closed'
                 };
             });
         }

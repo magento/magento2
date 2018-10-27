@@ -79,7 +79,7 @@ class AssertAdvancedSearchProductsResult extends AbstractConstraint
             }
         }
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             empty($errors),
             "The following errors occurred:\n" . implode("\n", $errors)
         );

@@ -6,9 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute implements HttpGetActionInterface
+class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory

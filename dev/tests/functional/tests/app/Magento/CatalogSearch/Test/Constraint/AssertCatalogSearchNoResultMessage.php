@@ -27,7 +27,7 @@ class AssertCatalogSearchNoResultMessage extends AbstractConstraint
      */
     public function processAssert(CatalogsearchResult $catalogSearchResult)
     {
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $catalogSearchResult->getSearchResultBlock()->isVisibleMessages(self::NOTICE_MESSAGE),
             'Wrong message is displayed or no message at all.'
         );

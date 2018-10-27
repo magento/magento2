@@ -9,12 +9,10 @@ namespace Magento\Store\App\Action\Plugin;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
-<<<<<<< HEAD
-=======
 use Magento\Framework\Phrase;
->>>>>>> upstream/2.2-develop
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
+use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\RequestInterface;
@@ -63,7 +61,7 @@ class Context
     }
 
     /**
-     * Set store and currency to http context.
+     * Set store and currency to http context
      *
      * @param AbstractAction $subject
      * @param RequestInterface $request
@@ -82,7 +80,7 @@ class Context
 
         /** @var string|array|null $storeCode */
         $storeCode = $request->getParam(
-            \Magento\Store\Model\StoreManagerInterface::PARAM_NAME,
+            StoreResolverInterface::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
         if (is_array($storeCode)) {
@@ -108,13 +106,8 @@ class Context
     /**
      * Take action in case of invalid store requested.
      *
-<<<<<<< HEAD
-     * @param \Throwable|null $previousException
-     * @return void
-=======
      * @param \Throwable|null  $previousException
      *
->>>>>>> upstream/2.2-develop
      * @throws NotFoundException
      */
     private function processInvalidStoreRequested(
@@ -135,16 +128,6 @@ class Context
      * Update context accordingly to the store found.
      *
      * @param StoreInterface $store
-<<<<<<< HEAD
-     * @return void
-     */
-    private function updateContext(StoreInterface $store)
-    {
-        $this->httpContext->setValue(
-            StoreManagerInterface::CONTEXT_STORE,
-            $store->getCode(),
-            $this->storeManager->getDefaultStoreView()->getCode()
-=======
      */
     private function updateContext(StoreInterface $store)
     {
@@ -154,11 +137,8 @@ class Context
             StoreManagerInterface::CONTEXT_STORE,
             $store->getCode(),
             $defaultStore->getCode()
->>>>>>> upstream/2.2-develop
         );
 
-        /** @var StoreInterface $defaultStore */
-        $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
         $this->httpContext->setValue(
             HttpContext::CONTEXT_CURRENCY,
             $this->session->getCurrencyCode()
@@ -168,11 +148,7 @@ class Context
     }
 
     /**
-<<<<<<< HEAD
-     * Check if there is a need to find the current store.
-=======
      * Check if there a need to find the current store.
->>>>>>> upstream/2.2-develop
      *
      * @return bool
      */

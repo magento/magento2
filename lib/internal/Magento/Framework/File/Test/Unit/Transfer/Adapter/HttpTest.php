@@ -24,9 +24,6 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     private $mime;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp()
     {
         $this->response = $this->createPartialMock(
@@ -37,10 +34,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->object = new Http($this->response, $this->mime);
     }
 
-    /**
-     * @return void
-     */
-    public function testSend(): void
+    public function testSend()
     {
         $file = __DIR__ . '/../../_files/javascript.js';
         $contentType = 'content/type';
@@ -85,36 +79,10 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->object->send(['filepath' => $file, 'headers' => $headers]);
     }
     /**
-     * @return void
-     */
-    public function testSendWithOptions(): void
-    {
-        $file = __DIR__ . '/../../_files/javascript.js';
-        $contentType = 'content/type';
-
-        $headers = $this->getMockBuilder(\Zend\Http\Headers::class)->getMock();
-        $this->response->expects($this->atLeastOnce())
-            ->method('setHeader')
-            ->withConsecutive(['Content-length', filesize($file)], ['Content-Type', $contentType]);
-        $this->response->expects($this->atLeastOnce())
-            ->method('setHeaders')
-            ->with($headers);
-        $this->response->expects($this->once())
-            ->method('sendHeaders');
-        $this->mime->expects($this->once())
-            ->method('getMimeType')
-            ->with($file)
-            ->will($this->returnValue($contentType));
-        $this->expectOutputString(file_get_contents($file));
-
-        $this->object->send(['filepath' => $file, 'headers' => $headers]);
-    }
-    /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Filename is not set
-     * @return void
      */
-    public function testSendNoFileSpecifiedException(): void
+    public function testSendNoFileSpecifiedException()
     {
         $this->object->send([]);
     }
@@ -122,9 +90,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage File 'nonexistent.file' does not exists
-     * @return void
      */
-    public function testSendNoFileExistException(): void
+    public function testSendNoFileExistException()
     {
         $this->object->send('nonexistent.file');
     }

@@ -117,7 +117,7 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The tokens couldn't be revoked.
+     * @expectedExceptionMessage The tokens could not be revoked.
      */
     public function testRevokeCustomerAccessTokenCannotRevoked()
     {

@@ -9,9 +9,6 @@ namespace Magento\CatalogSearch\Model\Layer\Search;
 
 use Magento\Catalog\Model\Layer\StateKeyInterface;
 
-/**
- * Catalog search state key for layered navigation.
- */
 class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey implements StateKeyInterface
 {
     /**
@@ -34,7 +31,8 @@ class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey implements
     }
 
     /**
-     * @inheritdoc
+     * @param \Magento\Catalog\Model\Category $category
+     * @return string|void
      */
     public function toString($category)
     {

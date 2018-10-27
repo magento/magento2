@@ -28,7 +28,7 @@ class AssertOrderReleaseFailMessage extends AbstractConstraint
      */
     public function processAssert(OrderIndex $orderIndex)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::FAIL_RELEASE_MESSAGE,
             $orderIndex->getMessagesBlock()->getErrorMessage()
         );

@@ -33,10 +33,6 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-<<<<<<< HEAD
-    public function truncateString($value, $length = 80, $etc = '...', &$remainder = '', $breakWords = true)
-    {
-=======
     public function truncateString(
         string $value,
         int $length = 80,
@@ -44,7 +40,6 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
         string &$remainder = '',
         bool $breakWords = true
     ): string {
->>>>>>> upstream/2.2-develop
         $this->truncateResult = $this->filterManager->truncateFilter(
             $value,
             ['length' => $length, 'etc' => $etc, 'breakWords' => $breakWords]

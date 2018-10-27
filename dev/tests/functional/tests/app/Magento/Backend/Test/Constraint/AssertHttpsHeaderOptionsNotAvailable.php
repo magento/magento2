@@ -62,7 +62,7 @@ class AssertHttpsHeaderOptionsNotAvailable extends AbstractConstraint
             $fieldName = $parts[2];
             $isVisible = $systemConfigEdit->getForm()->getGroup($tabName, $groupName)
                 ->isFieldVisible($tabName, $groupName, $fieldName);
-            \PHPUnit\Framework\Assert::assertTrue(
+            \PHPUnit_Framework_Assert::assertTrue(
                 !$isVisible,
                 $fieldName . " configuration is not visible."
             );

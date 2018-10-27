@@ -85,7 +85,6 @@ class Value extends AbstractDb
 
     /**
      * Proceed operations after object is saved
-     *
      * Save options store data
      *
      * @param AbstractModel $object

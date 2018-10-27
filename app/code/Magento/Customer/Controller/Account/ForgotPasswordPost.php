@@ -6,7 +6,6 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\Session;
@@ -19,7 +18,7 @@ use Magento\Framework\Exception\SecurityViolationException;
  * ForgotPasswordPost controller
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount implements HttpPostActionInterface
+class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
@@ -67,9 +66,7 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
         if ($email) {
             if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
                 $this->session->setForgottenEmail($email);
-                $this->messageManager->addErrorMessage(
-                    __('The email address is incorrect. Verify the email address and try again.')
-                );
+                $this->messageManager->addErrorMessage(__('Please correct the email address.'));
                 return $resultRedirect->setPath('*/*/forgotpassword');
             }
 

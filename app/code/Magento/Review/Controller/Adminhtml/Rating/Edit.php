@@ -5,18 +5,17 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Edit extends RatingController implements HttpGetActionInterface
+class Edit extends RatingController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $this->initEntityId();
+        $this->initEnityId();
         /** @var \Magento\Review\Model\Rating $ratingModel */
         $ratingModel = $this->_objectManager->create(\Magento\Review\Model\Rating::class);
         if ($this->getRequest()->getParam('id')) {

@@ -77,11 +77,6 @@ class File extends AbstractIo
     protected $_streamLocked = false;
 
     /**
-     * @var \Exception
-     */
-    private $_streamException;
-
-    /**
      * Destruct
      *
      * @return void

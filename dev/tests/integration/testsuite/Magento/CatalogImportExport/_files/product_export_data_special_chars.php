@@ -5,8 +5,6 @@
  */
 /** Create category */
 require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
-/** Create category with special chars */
-require dirname(dirname(__DIR__)) . '/Catalog/_files/catalog_category_with_slash.php';
 /** Create fixture store */
 require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
 /** Create product with multiselect attribute and values */
@@ -30,13 +28,10 @@ $productModel->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setWebsiteIds([1])
-<<<<<<< HEAD
-    ->setStockData(['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1])
-=======
     ->setCategoryIds([])
     ->setStockData(['qty' => 100, 'is_in_stock' => 1])
->>>>>>> upstream/2.2-develop
     ->setCanSaveCustomOptions(true)
-    ->setCategoryIds([333, 3331]);
+    ->setCategoryIds([333])
+    ->setUpSellLinkData([$product->getId() => ['position' => 1]]);
 
 $productModel->setOptions([])->save();

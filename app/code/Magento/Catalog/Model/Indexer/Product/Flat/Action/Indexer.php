@@ -183,8 +183,6 @@ class Indexer
     }
 
     /**
-     * Get MetadataPool instance
-     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()

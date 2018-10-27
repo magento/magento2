@@ -8,7 +8,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreStart
+// @codingStandardsIgnoreFile
 
 return [
     ['ADMIN_STORE_ID', 'Magento\Framework\AppInterface'],
@@ -712,6 +712,7 @@ return [
         'Magento\Sales\Block\Reorder\Sidebar',
         '\Magento\Sales\CustomerData\LastOrderedItems::SIDEBAR_ORDER_LIMIT',
     ],
+    ['ENTITY', 'Magento\Framework\App\Config\ValueInterface'],
     ['XML_PATH_ALLOW_CURRENCIES_INSTALLED', 'Magento\Framework\Locale\CurrencyInterface'],
     [
         'DEFAULT_CURRENCY',
@@ -949,8 +950,4 @@ return [
     ],
     ['TAB_GENERAL_CODE', 'Magento\Eav\Model\ResourceModel\Entity\Attribute\Group'],
     ['TAB_IMAGE_MANAGEMENT_CODE', 'Magento\Eav\Model\ResourceModel\Entity\Attribute\Group'],
-    [
-        'CALLBACK',
-        'Magento\Framework\MessageQueue\ConsumerConfiguration'
-    ],
 ];

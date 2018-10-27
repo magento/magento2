@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Test\Unit\Model\Layout;
 
 /**
@@ -37,10 +39,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
-        $this->checkoutSessionMock = $this->createPartialMock(
-            \Magento\Framework\Session\Generic::class,
-            ['clearStorage', 'setData', 'getData']
-        );
+        $this->checkoutSessionMock = $this->createPartialMock(\Magento\Framework\Session\Generic::class, ['clearStorage', 'setData', 'getData']);
         $this->checkoutSessionMock = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['clearStorage']);
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);

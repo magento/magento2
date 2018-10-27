@@ -10,8 +10,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select\SelectRenderer;
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Setup\SchemaListener;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -45,16 +43,6 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     protected $selectFactory;
 
     /**
-     * @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $schemaListenerMock;
-
-    /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $serializerMock;
-
-    /**
      * Setup
      */
     protected function setUp()
@@ -65,14 +53,9 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $selectFactory = $this->getMockBuilder(\Magento\Framework\DB\SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->schemaListenerMock = $this->getMockBuilder(SchemaListener::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+
         $this->_mockAdapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
-            ->setMethods(['beginTransaction', 'getTransactionLevel', 'getSchemaListener'])
+            ->setMethods(['beginTransaction', 'getTransactionLevel'])
             ->setConstructorArgs(
                 [
                     'string' => $string,
@@ -84,7 +67,6 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
                         'username' => 'user',
                         'password' => 'password',
                     ],
-                    'serializer' => $this->serializerMock
                 ]
             )
             ->getMock();
@@ -102,10 +84,10 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
                     '_commit',
                     '_rollBack',
                     'query',
-                    'fetchRow',
-                    'getSchemaListener'
+                    'fetchRow'
                 ]
-            )->setConstructorArgs(
+            )
+            ->setConstructorArgs(
                 [
                     'string' => $string,
                     'dateTime' => $dateTime,
@@ -116,16 +98,9 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
                         'username' => 'not_valid',
                         'password' => 'not_valid',
                     ],
-                    'serializer' => $this->serializerMock,
                 ]
             )
             ->getMock();
-        $this->_mockAdapter->expects($this->any())
-            ->method('getSchemaListener')
-            ->willReturn($this->schemaListenerMock);
-        $this->_adapter->expects($this->any())
-            ->method('getSchemaListener')
-            ->willReturn($this->schemaListenerMock);
 
         $profiler = $this->createMock(
             \Zend_Db_Profiler::class
@@ -220,7 +195,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Multiple queries can't be executed. Run a single query and try again.
+     * @expectedExceptionMessage Cannot execute multiple queries
      */
     public function testMultipleQueryException()
     {
@@ -489,9 +464,9 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     {
         $connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote', 'getSchemaListener']
+            ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote']
         );
-        $connectionMock->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
+
         $connectionMock->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));
         $connectionMock->expects($this->any())->method('quote')->will($this->returnArgument(0));
         $connectionMock->expects($this->once())->method('rawQuery')->with($expectedQuery);

@@ -417,29 +417,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                     'qty_increments' => 1,
                     'enable_qty_increments' => true,
                     'use_config_qty_increments' => true,
-<<<<<<< HEAD
-                    'is_qty_decimal' => false,
-                ],
-                1
-            ],
-            [
-                [
-                    'qty_increments' => 1.5,
-                    'enable_qty_increments' => true,
-                    'use_config_qty_increments' => true,
-                    'is_qty_decimal' => true,
-                ],
-                1.5
-            ],
-            [
-                [
-                    'qty_increments' => 1.5,
-                    'enable_qty_increments' => true,
-                    'use_config_qty_increments' => true,
-                    'is_qty_decimal' => false,
-=======
                     'is_qty_decimal' => false
->>>>>>> upstream/2.2-develop
                 ],
                 1
             ],
@@ -448,11 +426,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                     'qty_increments' => -2,
                     'enable_qty_increments' => true,
                     'use_config_qty_increments' => true,
-<<<<<<< HEAD
-                    'is_qty_decimal' => false,
-=======
                     'is_qty_decimal' => false
->>>>>>> upstream/2.2-develop
                 ],
                 false
             ],
@@ -461,11 +435,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                     'qty_increments' => 3,
                     'enable_qty_increments' => true,
                     'use_config_qty_increments' => false,
-<<<<<<< HEAD
-                    'is_qty_decimal' => false,
-=======
                     'is_qty_decimal' => false
->>>>>>> upstream/2.2-develop
                 ],
                 3
             ],

@@ -6,10 +6,6 @@
 
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
-<<<<<<< HEAD
-use Magento\Braintree\Gateway\SubjectReader;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\Braintree\Gateway\Request\VaultCaptureDataBuilder;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
@@ -19,11 +15,7 @@ use Magento\Vault\Model\PaymentToken;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
-<<<<<<< HEAD
- * Tests \Magento\Braintree\Gateway\Request\VaultCaptureDataBuilder.
-=======
  * Tests VaultCaptureDataBuilder.
->>>>>>> upstream/2.2-develop
  */
 class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -35,41 +27,35 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var PaymentDataObjectInterface|MockObject
      */
-    private $paymentDOMock;
+    private $paymentDO;
 
     /**
      * @var Payment|MockObject
      */
-    private $paymentMock;
+    private $payment;
 
     /**
      * @var SubjectReader|MockObject
      */
-    private $subjectReaderMock;
+    private $subjectReader;
 
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
+        $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
-<<<<<<< HEAD
-        $this->paymentDOMock->expects(static::once())
-            ->method('getPayment')
-            ->willReturn($this->paymentMock);
-=======
         $this->paymentDO->method('getPayment')
             ->willReturn($this->payment);
->>>>>>> upstream/2.2-develop
 
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->builder = new VaultCaptureDataBuilder($this->subjectReaderMock);
+        $this->builder = new VaultCaptureDataBuilder($this->subjectReader);
     }
 
     /**
@@ -80,11 +66,7 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
         $amount = 30.00;
         $token = '5tfm4c';
         $buildSubject = [
-<<<<<<< HEAD
-            'payment' => $this->paymentDOMock,
-=======
             'payment' => $this->paymentDO,
->>>>>>> upstream/2.2-develop
             'amount' => $amount,
         ];
 
@@ -93,18 +75,6 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
             'paymentMethodToken' => $token,
         ];
 
-<<<<<<< HEAD
-        $this->subjectReaderMock->expects(self::once())
-            ->method('readPayment')
-            ->with($buildSubject)
-            ->willReturn($this->paymentDOMock);
-        $this->subjectReaderMock->expects(self::once())
-            ->method('readAmount')
-            ->with($buildSubject)
-            ->willReturn($amount);
-
-        $paymentExtensionMock = $this->getMockBuilder(OrderPaymentExtension::class)
-=======
         $this->subjectReader->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDO);
@@ -114,26 +84,10 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 
         /** @var OrderPaymentExtension|MockObject $paymentExtension */
         $paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
->>>>>>> upstream/2.2-develop
             ->setMethods(['getVaultPaymentToken'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-<<<<<<< HEAD
-        $paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $paymentExtensionMock->expects(static::once())
-            ->method('getVaultPaymentToken')
-            ->willReturn($paymentTokenMock);
-        $this->paymentMock->expects(static::once())
-            ->method('getExtensionAttributes')
-            ->willReturn($paymentExtensionMock);
-
-        $paymentTokenMock->expects(static::once())
-            ->method('getGatewayToken')
-=======
         /** @var PaymentToken|MockObject $paymentToken */
         $paymentToken = $this->getMockBuilder(PaymentToken::class)
             ->disableOriginalConstructor()
@@ -145,13 +99,10 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($paymentExtension);
 
         $paymentToken->method('getGatewayToken')
->>>>>>> upstream/2.2-develop
             ->willReturn($token);
 
         $result = $this->builder->build($buildSubject);
         self::assertEquals($expected, $result);
-<<<<<<< HEAD
-=======
     }
 
     /**
@@ -187,6 +138,5 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
 
         $this->builder->build($buildSubject);
->>>>>>> upstream/2.2-develop
     }
 }

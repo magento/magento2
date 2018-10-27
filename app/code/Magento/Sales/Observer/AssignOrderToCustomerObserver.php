@@ -3,10 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
 declare(strict_types=1);
 
 namespace Magento\Sales\Observer;
@@ -35,11 +32,7 @@ class AssignOrderToCustomerObserver implements ObserverInterface
     }
 
     /**
-<<<<<<< HEAD
-     * {@inheritdoc}
-=======
      * @inheritDoc
->>>>>>> upstream/2.2-develop
      */
     public function execute(Observer $observer)
     {

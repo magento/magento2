@@ -20,10 +20,9 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Verify that hidden input is present in multiselect.
+     * Verify that hidden input is present in multiselect
      *
      * @covers \Magento\Framework\Data\Form\Element\Multiselect::getElementHtml
-     * @return void
      */
     public function testHiddenFieldPresentInMultiSelect()
     {
@@ -40,23 +39,13 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-<<<<<<< HEAD
-     * Verify that hidden input is present in multiselect when multiselect is disabled.
-     *
-     * @return void
-=======
      * Verify that hidden input is present in multiselect and it allow indicate is multiselect is disabled.
->>>>>>> upstream/2.2-develop
      */
     public function testHiddenDisabledFieldPresentInMultiSelect()
     {
         $fieldName = 'fieldName';
         $this->_model->setDisabled(true);
         $this->_model->setName($fieldName);
-<<<<<<< HEAD
-        $elementHtml = $this->_model->getElementHtml();
-        $this->assertContains('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
-=======
         $elementHtml = $this->_model->getElementHtml();
         $this->assertContains('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
     }
@@ -73,28 +62,10 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $this->_model->setName($fieldName);
         $elementHtml = $this->_model->getElementHtml();
         $this->assertNotContains('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
->>>>>>> upstream/2.2-develop
     }
 
     /**
-     * Verify that hidden input is not present in multiselect when multiselect is not disabled.
-     *
-     * @covers \Magento\Framework\Data\Form\Element\Multiselect::getElementHtml
-     * @return void
-     */
-    public function testHiddenDisabledFieldNotPresentInMultiSelect()
-    {
-        $fieldName = 'fieldName';
-        $this->_model->setDisabled(false);
-        $this->_model->setName($fieldName);
-        $elementHtml = $this->_model->getElementHtml();
-        $this->assertNotContains('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
-    }
-
-    /**
-     * Verify that js element is added.
-     *
-     * @return void
+     * Verify that js element is added
      */
     public function testGetAfterElementJs()
     {

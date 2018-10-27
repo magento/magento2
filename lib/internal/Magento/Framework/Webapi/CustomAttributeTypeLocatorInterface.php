@@ -15,17 +15,15 @@ interface CustomAttributeTypeLocatorInterface
      * Get Data Interface type for a given custom attribute code
      *
      * @param string $attributeCode
-     * @param string $entityType
+     * @param string $serviceClass
      * @return string
      */
-    public function getType($attributeCode, $entityType);
+    public function getType($attributeCode, $serviceClass);
 
     /**
      * Get list of all Data Interface corresponding to complex custom attribute types
      *
      * @return string[] array of Data Interface class names
-     * @deprecated
-     * @see \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::getDataTypes()
      */
     public function getAllServiceDataInterfaces();
 }

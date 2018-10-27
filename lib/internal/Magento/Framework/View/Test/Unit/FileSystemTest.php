@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Test for view filesystem model
  */
@@ -37,8 +39,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     protected $_staticFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_emailTemplateFileResolution;
 
@@ -50,22 +51,11 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->_fileResolution = $this->createMock(\Magento\Framework\View\Design\FileResolution\Fallback\File::class);
-        $this->_templateFileResolution = $this->createMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile::class
-        );
-        $this->_localeFileResolution = $this->createMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile::class
-        );
-        $this->_staticFileResolution = $this->createMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile::class
-        );
-        $this->_emailTemplateFileResolution = $this->createMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile::class
-        );
-        $this->_assetRepo = $this->createPartialMock(
-            \Magento\Framework\View\Asset\Repository::class,
-            ['extractScope', 'updateDesignParams', 'createAsset']
-        );
+        $this->_templateFileResolution = $this->createMock(\Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile::class);
+        $this->_localeFileResolution = $this->createMock(\Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile::class);
+        $this->_staticFileResolution = $this->createMock(\Magento\Framework\View\Design\FileResolution\Fallback\StaticFile::class);
+        $this->_emailTemplateFileResolution = $this->createMock(\Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile::class);
+        $this->_assetRepo = $this->createPartialMock(\Magento\Framework\View\Asset\Repository::class, ['extractScope', 'updateDesignParams', 'createAsset']);
 
         $this->_model = new \Magento\Framework\View\FileSystem(
             $this->_fileResolution,

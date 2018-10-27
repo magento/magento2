@@ -22,7 +22,7 @@ class AssertCategoryCannotBeDeleted extends AbstractConstraint
      */
     public function processAssert(CatalogCategoryEdit $catalogCategoryEdit)
     {
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $catalogCategoryEdit->getFormPageActions()->checkDeleteButton(),
             false,
             'Delete button is available for the category.'

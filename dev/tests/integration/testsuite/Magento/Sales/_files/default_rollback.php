@@ -25,10 +25,5 @@ foreach ($productCollection as $product) {
     $product->delete();
 }
 
-/** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
-$stockRegistryStorage = Bootstrap::getObjectManager()
-    ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
-$stockRegistryStorage->clean();
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

@@ -45,7 +45,7 @@ class AssertProductInCategoryOnCustomWebsite extends AbstractConstraint
             $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
         }
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $isProductVisible,
             'Product is absent on the category page.'
         );

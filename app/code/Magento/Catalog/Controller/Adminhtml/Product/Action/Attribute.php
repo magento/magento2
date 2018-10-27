@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
 
 use Magento\Backend\App\Action;
@@ -21,7 +23,7 @@ abstract class Attribute extends Action
     const ADMIN_RESOURCE = 'Magento_Catalog::update_attributes';
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute
+     *  @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute
      */
     protected $attributeHelper;
 
@@ -48,8 +50,8 @@ abstract class Attribute extends Action
         $productIds = $this->attributeHelper->getProductIds();
         if (!is_array($productIds)) {
             $error = __('Please select products for attributes update.');
-        } elseif (!$this->_objectManager->create(\Magento\Catalog\Model\Product::class)
-            ->isProductsHasSku($productIds)) {
+        } elseif (!$this->_objectManager->create(
+            \Magento\Catalog\Model\Product::class)->isProductsHasSku($productIds)) {
             $error = __('Please make sure to define SKU values for all processed products.');
         }
 

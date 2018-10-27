@@ -35,7 +35,7 @@ class AssertSalesReportTotalResult extends AbstractAssertSalesReportResult
         $this->searchInSalesReportGrid($salesReport);
         $salesResult = $this->prepareSalesResult($salesReportPage->getGridBlock()->getTotalResult());
         $prepareInitialResult = $this->prepareSalesResult($this->prepareExpectedResult($initialSalesTotalResult));
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             $prepareInitialResult,
             $salesResult,
             "Grand total Sales result is not correct."

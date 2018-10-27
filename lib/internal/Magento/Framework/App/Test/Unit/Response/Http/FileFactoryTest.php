@@ -230,7 +230,7 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Get model mock
      *
-     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit\Framework_MockObject_MockBuilder
      */
     private function getModelMock()
     {

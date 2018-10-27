@@ -36,7 +36,7 @@ class AssertProductInStock extends AbstractConstraint
     ) {
         // TODO fix initialization url for frontend page
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::STOCK_AVAILABILITY,
             $catalogProductView->getViewBlock()->stockAvailability(),
             'Control "' . self::STOCK_AVAILABILITY . '" is not visible.'

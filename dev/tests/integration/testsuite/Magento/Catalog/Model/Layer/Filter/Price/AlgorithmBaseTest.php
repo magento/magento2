@@ -38,7 +38,7 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine mysql
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @dataProvider pricesSegmentationDataProvider
      * @covers       \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */

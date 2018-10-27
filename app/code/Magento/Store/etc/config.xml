@@ -21,13 +21,13 @@
                 <merge_files>0</merge_files>
                 <minify_files>0</minify_files>
                 <minify_exclude>
-                    <tiny_mce>/tiny_mce/</tiny_mce>
+                    /tiny_mce/
                 </minify_exclude>
             </js>
             <css>
                 <minify_files>0</minify_files>
                 <minify_exclude>
-                    <tiny_mce>/tiny_mce/</tiny_mce>
+                    /tiny_mce/
                 </minify_exclude>
             </css>
             <image>

@@ -56,7 +56,7 @@ class ParamOverriderCartId implements ParamOverriderInterface
                 }
             }
         } catch (NoSuchEntityException $e) {
-            throw new NoSuchEntityException(__('Current customer does not have an active cart.'));
+            /* do nothing and just return null */
         }
         return null;
     }

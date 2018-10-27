@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Module\Di\Code\Reader;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -70,9 +69,7 @@ class ClassesScanner implements ClassesScannerInterface
             return $this->fileResults[$realPath];
         }
         if (!(bool)$realPath) {
-            throw new FileSystemException(
-                new \Magento\Framework\Phrase('The "%1" path is invalid. Verify the path and try again.', [$path])
-            );
+            throw new FileSystemException(new \Magento\Framework\Phrase('Invalid path: %1', [$path]));
         }
         $recursiveIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($realPath, \FilesystemIterator::FOLLOW_SYMLINKS),

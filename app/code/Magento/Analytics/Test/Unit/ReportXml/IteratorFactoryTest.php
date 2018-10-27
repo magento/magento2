@@ -8,12 +8,9 @@ namespace Magento\Analytics\Test\Unit\ReportXml;
 use Magento\Analytics\ReportXml\IteratorFactory;
 use Magento\Framework\ObjectManagerInterface;
 
-<<<<<<< HEAD
-=======
 /**
  * Class IteratorFactoryTest
  */
->>>>>>> upstream/2.2-develop
 class IteratorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-use \Magento\Framework\Component\ComponentRegistrar;
-
-ComponentRegistrar::register(ComponentRegistrar::THEME, 'frontend/FrameworkCssTest/parent', __DIR__);
+\Magento\Framework\Component\ComponentRegistrar::register(
+    \Magento\Framework\Component\ComponentRegistrar::THEME,
+    'frontend/FrameworkCssTest/parent',
+    __DIR__
+);

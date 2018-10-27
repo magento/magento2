@@ -8,10 +8,6 @@ namespace Magento\Swatches\Block\Product\Renderer\Listing;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Product as CatalogProduct;
 use Magento\Catalog\Model\Product;
-<<<<<<< HEAD
-use Magento\Catalog\Model\Product\Image\UrlBuilder;
-=======
->>>>>>> upstream/2.2-develop
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
@@ -43,10 +39,6 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
     private $variationPrices;
 
     /**
-<<<<<<< HEAD
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-=======
->>>>>>> upstream/2.2-develop
      * @param Context $context
      * @param ArrayUtils $arrayUtils
      * @param EncoderInterface $jsonEncoder
@@ -57,18 +49,11 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * @param ConfigurableAttributeData $configurableAttributeData
      * @param SwatchData $swatchHelper
      * @param Media $swatchMediaHelper
-<<<<<<< HEAD
-     * @param array $data
-     * @param SwatchAttributesProvider|null $swatchAttributesProvider
-     * @param \Magento\Framework\Locale\Format|null $localeFormat
-     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices|null $variationPrices
-=======
      * @param array $data other data
      * @param SwatchAttributesProvider $swatchAttributesProvider
      * @param \Magento\Framework\Locale\Format|null $localeFormat
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices|null $variationPrices
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
->>>>>>> upstream/2.2-develop
      */
     public function __construct(
         Context $context,

@@ -161,11 +161,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                 $this->getIndexTable($store->getId()),
                 ['product_id IN (?)' => $this->limitationByProducts]
             );
-<<<<<<< HEAD
-        }
-=======
         };
->>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -232,11 +228,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                         ->distinct()
                 )
             );
-<<<<<<< HEAD
-        }
-=======
         };
->>>>>>> upstream/2.2-develop
         $parentCategories = $categoryIds;
         foreach ($categoryIds as $categoryId) {
             $parentIds = explode('/', $this->getPathFromCategoryId($categoryId));

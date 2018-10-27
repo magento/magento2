@@ -10,7 +10,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 class FileInfoTest extends \PHPUnit\Framework\TestCase
 {
@@ -30,11 +29,6 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
     private $mediaDirectory;
 
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $baseDirectory;
-
-    /**
      * @var FileInfo
      */
     private $model;
@@ -42,9 +36,6 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->baseDirectory = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
 
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
@@ -55,19 +46,9 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
 
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::ROOT)
-            ->willReturn($this->baseDirectory);
-
         $this->mime = $this->getMockBuilder(Mime::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->baseDirectory->expects($this->any())
-            ->method('getAbsolutePath')
-            ->with(null)
-            ->willReturn('/a/b/c');
 
         $this->model = new FileInfo(
             $this->filesystem,
@@ -77,24 +58,16 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMimeType()
     {
+        $mediaPath = '/catalog/category';
+
         $fileName = '/filename.ext1';
-        $absoluteFilePath = '/a/b/c/pub/media/catalog/category/filename.ext1';
+        $absoluteFilePath = '/absolute_path/catalog/category/filename.ext1';
 
         $expected = 'ext1';
 
-        $this->mediaDirectory->expects($this->at(0))
+        $this->mediaDirectory->expects($this->once())
             ->method('getAbsolutePath')
-            ->with(null)
-            ->willReturn('/a/b/c/pub/media');
-
-        $this->mediaDirectory->expects($this->at(1))
-            ->method('getAbsolutePath')
-            ->with(null)
-            ->willReturn('/a/b/c/pub/media');
-
-        $this->mediaDirectory->expects($this->at(2))
-            ->method('getAbsolutePath')
-            ->with('/catalog/category/filename.ext1')
+            ->with($mediaPath. '/' . ltrim($fileName, '/'))
             ->willReturn($absoluteFilePath);
 
         $this->mime->expects($this->once())
@@ -113,11 +86,6 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
 
         $expected = ['size' => 1];
 
-        $this->mediaDirectory->expects($this->any())
-            ->method('getAbsolutePath')
-            ->with(null)
-            ->willReturn('/a/b/c/pub/media');
-
         $this->mediaDirectory->expects($this->once())
             ->method('stat')
             ->with($mediaPath . $fileName)
@@ -135,11 +103,6 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
         $mediaPath = '/catalog/category';
 
         $fileName = '/filename.ext1';
-
-        $this->mediaDirectory->expects($this->any())
-            ->method('getAbsolutePath')
-            ->with(null)
-            ->willReturn('/a/b/c/pub/media');
 
         $this->mediaDirectory->expects($this->once())
             ->method('isExist')

@@ -6,8 +6,7 @@
 namespace Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend;
 
 /**
- * Backend model for catalog search engine system config
- *
+ * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
@@ -44,7 +43,6 @@ class Engine extends \Magento\Framework\App\Config\Value
 
     /**
      * After save call
-     *
      * Invalidate catalog search index if engine was changed
      *
      * @return $this

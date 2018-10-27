@@ -6,13 +6,12 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Customer\Model\Registration;
 use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-class Create extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
+class Create extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var \Magento\Customer\Model\Registration

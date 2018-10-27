@@ -388,10 +388,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
                 }
             }
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         if ($this->getGroupByType($this->getData('type')) === self::OPTION_GROUP_FILE) {
             $this->cleanFileExtensions();
         }
@@ -939,20 +936,4 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     //@codeCoverageIgnoreEnd
-
-    /**
-     * Clears all non-accepted characters from file_extension field.
-     *
-     * @return void
-     */
-    private function cleanFileExtensions()
-    {
-        $rawExtensions = $this->getFileExtension();
-        $matches = [];
-        preg_match_all('/(?<extensions>[a-z0-9]+)/i', strtolower($rawExtensions), $matches);
-        if (!empty($matches)) {
-            $extensions = implode(', ', array_unique($matches['extensions']));
-        }
-        $this->setFileExtension($extensions);
-    }
 }

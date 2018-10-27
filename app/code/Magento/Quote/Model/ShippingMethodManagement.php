@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
@@ -108,7 +107,7 @@ class ShippingMethodManagement implements
         /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
-            throw new StateException(__('The shipping address is missing. Set the address and try again.'));
+            throw new StateException(__('Shipping address not set.'));
         }
 
         $shippingMethod = $shippingAddress->getShippingMethod();
@@ -142,7 +141,7 @@ class ShippingMethodManagement implements
 
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
-            throw new StateException(__('The shipping address is missing. Set the address and try again.'));
+            throw new StateException(__('Shipping address not set.'));
         }
         $shippingAddress->collectShippingRates();
         $shippingRates = $shippingAddress->getGroupedAllShippingRates();
@@ -170,7 +169,7 @@ class ShippingMethodManagement implements
         try {
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('The shipping method can\'t be set. %1', $e->getMessage()));
+            throw new CouldNotSaveException(__('Cannot set shipping method. %1', $e->getMessage()));
         }
         return true;
     }
@@ -181,11 +180,7 @@ class ShippingMethodManagement implements
      * @param string $methodCode The shipping method code.
      * @return void
      * @throws InputException The shipping method is not valid for an empty cart.
-<<<<<<< HEAD
-     * @throws NoSuchEntityException CThe Cart includes virtual product(s) only, so a shipping address is not used.
-=======
      * @throws NoSuchEntityException Cart contains only virtual products. Shipping method is not applicable.
->>>>>>> upstream/2.2-develop
      * @throws StateException The billing or shipping address is not set.
      * @throws \Exception
      */
@@ -194,24 +189,18 @@ class ShippingMethodManagement implements
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if (0 == $quote->getItemsCount()) {
-            throw new InputException(
-                __('The shipping method can\'t be set for an empty cart. Add an item to cart and try again.')
-            );
+            throw new InputException(__('Shipping method is not applicable for empty cart'));
         }
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
-                __('The Cart includes virtual product(s) only, so a shipping address is not used.')
+                __('Cart contains virtual product(s) only. Shipping method is not applicable.')
             );
         }
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
             // Remove empty quote address
             $this->quoteAddressResource->delete($shippingAddress);
-<<<<<<< HEAD
-            throw new StateException(__('The shipping address is missing. Set the address and try again.'));
-=======
             throw new StateException(__('Shipping address is not set'));
->>>>>>> upstream/2.2-develop
         }
         $shippingAddress->setShippingMethod($carrierCode . '_' . $methodCode);
     }

@@ -91,7 +91,7 @@ class Config
      */
     public function isNewRelicEnabled()
     {
-        return $this->scopeConfig->isSetFlag('newrelicreporting/general/enable');
+        return (bool)$this->scopeConfig->getValue('newrelicreporting/general/enable');
     }
 
     /**
@@ -181,7 +181,7 @@ class Config
      */
     public function isCronEnabled()
     {
-        return $this->scopeConfig->isSetFlag('newrelicreporting/cron/enable_cron');
+        return (bool)$this->scopeConfig->getValue('newrelicreporting/cron/enable_cron');
     }
 
     /**

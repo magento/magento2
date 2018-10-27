@@ -24,7 +24,7 @@ class AssertModuleInGrid extends AbstractConstraint
      */
     public function processAssert(SetupWizard $setupWizard, $moduleName)
     {
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $setupWizard->getModuleGrid()->findModuleByName($moduleName)->isVisible(),
             'Module was not found in grid.'
         );

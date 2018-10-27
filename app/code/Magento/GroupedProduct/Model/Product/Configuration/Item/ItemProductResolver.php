@@ -40,27 +40,16 @@ class ItemProductResolver implements ItemResolverInterface
     /**
      * {@inheritdoc}
      */
-<<<<<<< HEAD
-    public function getFinalProduct(ItemInterface $item) : ProductInterface
-=======
     public function getFinalProduct(ItemInterface $item): ProductInterface
->>>>>>> upstream/2.2-develop
     {
         /**
          * Show grouped product thumbnail if it must be always shown according to the related setting in system config
          * or if child product thumbnail is not available.
          */
-<<<<<<< HEAD
-
-        $childProduct = $item->getProduct();
-        $finalProduct = $childProduct;
-        $parentProduct = $this->getParentProduct($item);
-=======
         $childProduct = $item->getProduct();
         $finalProduct = $childProduct;
         $parentProduct = $this->getParentProduct($item);
 
->>>>>>> upstream/2.2-develop
         if ($childProduct !== $parentProduct) {
             $configValue = $this->scopeConfig->getValue(
                 self::CONFIG_THUMBNAIL_SOURCE,
@@ -73,10 +62,7 @@ class ItemProductResolver implements ItemResolverInterface
                     ? $parentProduct
                     : $childProduct;
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/2.2-develop
         return $finalProduct;
     }
 
@@ -90,17 +76,11 @@ class ItemProductResolver implements ItemResolverInterface
     {
         $option = $item->getOptionByCode('product_type');
         $product = $item->getProduct();
-<<<<<<< HEAD
-        if ($option) {
-            $product = $option->getProduct();
-        }
-=======
 
         if ($option) {
             $product = $option->getProduct();
         }
 
->>>>>>> upstream/2.2-develop
         return $product;
     }
 }

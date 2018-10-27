@@ -419,7 +419,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Set Salable Filter.
-     *
      * This filter apply Salable Product Types Filter to product collection.
      *
      * @param bool $flag
@@ -433,7 +432,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Set In Stock Filter.
-     *
      * This filter remove items with no salable product.
      *
      * @param bool $flag
@@ -481,11 +479,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         if (isset($constraints['to'])) {
             $firstDay = new \DateTime();
-<<<<<<< HEAD
-            $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . ((int)($constraints['to']) + 1) . ' day');
-=======
             $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . ((int)$constraints['to'] + 1) . ' day');
->>>>>>> upstream/2.2-develop
             $filter['from'] = $firstDay;
         }
 
@@ -574,8 +568,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * After load data
-     *
      * @return $this
      */
     protected function _afterLoadData()

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
 use Magento\Checkout\Helper\Cart as CartHelper;
@@ -198,7 +197,7 @@ class FromcartTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManager->expects($this->once())
             ->method('addErrorMessage')
-            ->with(__("The cart item doesn't exist."))
+            ->with(__('The requested cart item doesn\'t exist.'))
             ->willReturnSelf();
 
         $this->resultRedirect->expects($this->once())

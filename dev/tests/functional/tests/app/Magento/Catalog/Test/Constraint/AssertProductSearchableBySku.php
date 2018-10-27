@@ -68,7 +68,7 @@ class AssertProductSearchableBySku extends AbstractConstraint
             list($this->errorMessage, $this->successfulMessage) = [$this->successfulMessage, $this->errorMessage];
         }
 
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $isVisible,
             $this->errorMessage
         );

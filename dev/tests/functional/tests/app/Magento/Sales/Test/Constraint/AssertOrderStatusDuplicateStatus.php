@@ -26,7 +26,7 @@ class AssertOrderStatusDuplicateStatus extends AbstractConstraint
     public function processAssert(OrderStatusNew $orderStatusNewPage)
     {
         $actualMessage = $orderStatusNewPage->getMessagesBlock()->getErrorMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
             self::DUPLICATE_MESSAGE,
             $actualMessage,
             'Wrong duplicate message is displayed.'

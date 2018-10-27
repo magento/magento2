@@ -6,7 +6,7 @@
 
 namespace Magento\Webapi;
 
-use Magento\TestFramework\TestCase\Webapi\Adapter\Rest\RestClient;
+use Magento\TestFramework\TestCase\Webapi\Adapter\Rest\CurlClient;
 
 class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -38,10 +38,9 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
-        $expectedMessage =
-            '{"message":"\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"item"}}';
+        $expectedMessage = '{"message":"%fieldName is a required field.","parameters":{"fieldName":"item"}}';
         try {
-            $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
+            $this->_webApiCall($serviceInfo, CurlClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $this->assertContains(
@@ -65,10 +64,9 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
-        $expectedMessage =
-            '{"message":"\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"entityItem"}}';
+        $expectedMessage = '{"message":"%fieldName is a required field.","parameters":{"fieldName":"entityItem"}}';
         try {
-            $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
+            $this->_webApiCall($serviceInfo, CurlClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $this->assertContains(
