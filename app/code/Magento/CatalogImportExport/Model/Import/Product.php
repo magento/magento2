@@ -1364,12 +1364,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $categoriesIn[] = ['product_id' => $productId, 'category_id' => $categoryId, 'position' => 1];
                 }
             }
-            if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
-                $this->_connection->delete(
-                    $tableName,
-                    $this->_connection->quoteInto('product_id IN (?)', $delProductId)
-                );
-            }
+
+            /* Remove all categories from product */
+            $this->_connection->delete(
+                $tableName,
+                $this->_connection->quoteInto('product_id IN (?)', $delProductId)
+            );
+
             if ($categoriesIn) {
                 $this->_connection->insertOnDuplicate($tableName, $categoriesIn, ['product_id', 'category_id']);
             }
