@@ -66,6 +66,13 @@ class InvalidateLogger
         $this->logger->critical($message, $this->makeParams($params));
     }
 
+    /**
+     * Log warning
+     *
+     * @param string $message
+     * @param mixed $params
+     * @return void
+     */
     public function warning($message, $params)
     {
         $this->logger->warning($message, $this->makeParams($params));
