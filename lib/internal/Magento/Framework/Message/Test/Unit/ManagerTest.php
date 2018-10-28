@@ -304,7 +304,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')->with($type, $message)
             ->will($this->returnValue($this->messageMock));
-        $this->model->{$methodName}($message, 'group');
+        $this->model->$methodName($message, 'group');
         $this->assertTrue($this->model->hasMessages());
     }
 
@@ -337,7 +337,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getItems')
             ->will($this->returnValue([new TestingMessage('text')]));
-        $messageCollection->expects($this->{$expectation}())->method('addMessage');
+        $messageCollection->expects($this->$expectation())->method('addMessage');
         $this->model->addUniqueMessages([$messages]);
     }
 

@@ -104,7 +104,7 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
     private function performAction(string $actionName): void
     {
         if (method_exists(__CLASS__, $actionName)) {
-            $this->{$actionName}();
+            $this->$actionName();
         }
     }
 

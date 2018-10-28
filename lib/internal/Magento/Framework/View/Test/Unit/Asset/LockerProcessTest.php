@@ -77,7 +77,7 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
         $this->filesystemMock->expects(self::once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::VAR_DIR)
-            ->willReturn($this->{$method}());
+            ->willReturn($this->$method());
 
         $this->lockerProcess->lockProcess(self::LOCK_NAME);
     }

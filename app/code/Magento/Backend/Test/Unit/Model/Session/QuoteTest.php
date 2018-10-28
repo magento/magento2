@@ -323,7 +323,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $dataCustomerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerRepositoryMock->expects($this->{$expectedNumberOfInvokes}())
+        $this->customerRepositoryMock->expects($this->$expectedNumberOfInvokes())
             ->method('getById')
             ->with($customerId)
             ->willReturn($dataCustomerMock);
@@ -342,7 +342,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $quoteMock->expects($this->once())
             ->method('setStoreId')
             ->with($storeId);
-        $quoteMock->expects($this->{$expectedNumberOfInvokes}())
+        $quoteMock->expects($this->$expectedNumberOfInvokes())
             ->method('assignCustomer')
             ->with($dataCustomerMock);
         $quoteMock->expects($this->once())

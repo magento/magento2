@@ -671,7 +671,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if ($this->_queryHook) {
             $object = $this->_queryHook['object'];
             $method = $this->_queryHook['method'];
-            $object->{$method}($sql, $bind);
+            $object->$method($sql, $bind);
         }
 
         return $this;

@@ -145,7 +145,7 @@ class CreateCustomerBackendEntityTest extends Injectable
             }
         }
 
-        $this->pageCustomerIndexNew->getPageActionsBlock()->{$customerAction}();
+        $this->pageCustomerIndexNew->getPageActionsBlock()->$customerAction();
     }
 
     /**

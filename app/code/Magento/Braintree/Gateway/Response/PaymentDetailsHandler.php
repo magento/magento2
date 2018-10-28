@@ -72,10 +72,10 @@ class PaymentDetailsHandler implements HandlerInterface
         //remove previously set payment nonce
         $payment->unsAdditionalInformation(DataAssignObserver::PAYMENT_METHOD_NONCE);
         foreach ($this->additionalInformationMapping as $item) {
-            if (!isset($transaction->{$item})) {
+            if (!isset($transaction->$item)) {
                 continue;
             }
-            $payment->setAdditionalInformation($item, $transaction->{$item});
+            $payment->setAdditionalInformation($item, $transaction->$item);
         }
     }
 }

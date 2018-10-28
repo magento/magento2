@@ -565,7 +565,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         $this->assertContains($expectedMessage, $soapFault->getMessage(), "Fault message is invalid.");
 
         $errorDetailsNode = 'GenericFault';
-        $errorDetails = isset($soapFault->detail->{$errorDetailsNode}) ? $soapFault->detail->{$errorDetailsNode} : null;
+        $errorDetails = isset($soapFault->detail->$errorDetailsNode) ? $soapFault->detail->$errorDetailsNode : null;
         if (!empty($expectedErrorParams) || !empty($expectedWrappedErrors)) {
             /** Check SOAP fault details */
             $this->assertNotNull($errorDetails, "Details must be present.");
@@ -583,7 +583,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
                 /** Developer mode changes tested behavior and it cannot properly be tested for now */
                 $this->assertContains(
                     $traceString,
-                    $errorDetails->{$traceNode},
+                    $errorDetails->$traceNode,
                     'Trace Information is incorrect.'
                 );
             } else {
@@ -610,14 +610,14 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
             $paramKey = Fault::NODE_DETAIL_PARAMETER_KEY;
             $paramValue = Fault::NODE_DETAIL_PARAMETER_VALUE;
             $actualParams = [];
-            if (isset($errorDetails->{$paramsNode}->{$paramNode})) {
-                if (is_array($errorDetails->{$paramsNode}->{$paramNode})) {
-                    foreach ($errorDetails->{$paramsNode}->{$paramNode} as $param) {
-                        $actualParams[$param->{$paramKey}] = $param->{$paramValue};
+            if (isset($errorDetails->$paramsNode->$paramNode)) {
+                if (is_array($errorDetails->$paramsNode->$paramNode)) {
+                    foreach ($errorDetails->$paramsNode->$paramNode as $param) {
+                        $actualParams[$param->$paramKey] = $param->$paramValue;
                     }
                 } else {
-                    $param = $errorDetails->{$paramsNode}->{$paramNode};
-                    $actualParams[$param->{$paramKey}] = $param->{$paramValue};
+                    $param = $errorDetails->$paramsNode->$paramNode;
+                    $actualParams[$param->$paramKey] = $param->$paramValue;
                 }
             }
             $this->assertEquals(
@@ -626,7 +626,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
                 "Parameters in fault details are invalid."
             );
         } else {
-            $this->assertFalse(isset($errorDetails->{$paramsNode}), "Parameters are not expected in fault details.");
+            $this->assertFalse(isset($errorDetails->$paramsNode), "Parameters are not expected in fault details.");
         }
     }
 
@@ -642,8 +642,8 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         if ($expectedWrappedErrors) {
             $wrappedErrorNode = Fault::NODE_DETAIL_WRAPPED_ERROR;
             $actualWrappedErrors = [];
-            if (isset($errorDetails->{$wrappedErrorsNode}->{$wrappedErrorNode})) {
-                $errorNode = $errorDetails->{$wrappedErrorsNode}->{$wrappedErrorNode};
+            if (isset($errorDetails->$wrappedErrorsNode->$wrappedErrorNode)) {
+                $errorNode = $errorDetails->$wrappedErrorsNode->$wrappedErrorNode;
                 if (is_array($errorNode)) {
                     foreach ($errorNode as $error) {
                         $actualWrappedErrors[] = $this->getActualWrappedErrors($error);
@@ -659,7 +659,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
             );
         } else {
             $this->assertFalse(
-                isset($errorDetails->{$wrappedErrorsNode}),
+                isset($errorDetails->$wrappedErrorsNode),
                 "Wrapped errors are not expected in fault details."
             );
         }

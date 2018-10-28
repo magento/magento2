@@ -102,7 +102,7 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
         $conditionEntity = explode('|', trim($catalogPriceRule['data']['rule'], '[]'))[0];
         $actionName = 'get' . $conditionEntity;
         if (method_exists($this, $actionName)) {
-            $result = $this->{$actionName}($product);
+            $result = $this->$actionName($product);
             foreach ($result as $key => $value) {
                 $catalogPriceRule['data']['rule'] = str_replace($key, $value, $catalogPriceRule['data']['rule']);
             }

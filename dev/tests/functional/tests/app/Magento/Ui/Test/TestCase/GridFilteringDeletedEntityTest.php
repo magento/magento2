@@ -83,7 +83,7 @@ class GridFilteringDeletedEntityTest extends Injectable
 
         $page->open();
         /** @var DataGrid $gridBlock */
-        $gridBlock = $page->{$gridRetriever}();
+        $gridBlock = $page->$gridRetriever();
         $gridBlock->resetFilter();
 
         foreach ($filters as $itemFilters) {

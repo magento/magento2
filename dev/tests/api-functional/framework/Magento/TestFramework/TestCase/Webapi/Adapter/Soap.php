@@ -52,7 +52,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     {
         $soapOperation = $this->_getSoapOperation($serviceInfo);
         $arguments = $this->_converter->convertKeysToCamelCase($arguments);
-        $soapResponse = $this->_getSoapClient($serviceInfo, $storeCode)->{$soapOperation}($arguments);
+        $soapResponse = $this->_getSoapClient($serviceInfo, $storeCode)->$soapOperation($arguments);
         //Convert to snake case for tests to use same assertion data for both SOAP and REST tests
         $result = (is_array($soapResponse) || is_object($soapResponse))
             ? $this->toSnakeCase($this->_converter->convertStdObjectToArray($soapResponse, true))

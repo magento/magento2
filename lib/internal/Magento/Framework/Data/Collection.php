@@ -531,7 +531,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
             }
         } else {
             foreach ($this->getItems() as $item) {
-                $item->{$objMethod}(...$args);
+                $item->$objMethod(...$args);
             }
         }
     }

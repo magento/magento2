@@ -125,7 +125,7 @@ class UpdateCustomVariableEntityTest extends Injectable
         $this->systemVariableIndexPage->getSystemVariableGrid()->searchAndOpen($filter);
         $this->systemVariableNewPage->getFormPageActions()->selectStoreView($this->store->getData('name'));
         $this->systemVariableNewPage->getSystemVariableForm()->fill($customVariable);
-        $this->systemVariableNewPage->getFormPageActions()->{$saveAction}();
+        $this->systemVariableNewPage->getFormPageActions()->$saveAction();
         return [
             'storeOrigin' => $this->store,
             'customVariableOrigin' => $customVariableOrigin

@@ -241,7 +241,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             Stock::DEFAULT_STOCK_ID
         );
         $method = $isFilterInStock ? 'join' : 'joinLeft';
-        $collection->getSelect()->{$method}(
+        $collection->getSelect()->$method(
             ['stock_status_index' => $this->getMainTable()],
             $joinCondition,
             ['is_salable' => 'stock_status']

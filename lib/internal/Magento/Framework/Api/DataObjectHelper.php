@@ -122,7 +122,7 @@ class DataObjectHelper
                     if ($methodName === 'setExtensionAttributes' && $value === null) {
                         // Cannot pass a null value to a method with a typed parameter
                     } else {
-                        $dataObject->{$methodName}($value);
+                        $dataObject->$methodName($value);
                     }
                 } else {
                     $getterMethodName = 'get' . $camelCaseKey;
@@ -157,7 +157,7 @@ class DataObjectHelper
         }
         $returnType = $this->methodsMapProcessor->getMethodReturnType($interfaceName, $getterMethodName);
         if ($this->typeProcessor->isTypeSimple($returnType)) {
-            $dataObject->{$methodName}($value);
+            $dataObject->$methodName($value);
             return $this;
         }
 
@@ -169,7 +169,7 @@ class DataObjectHelper
                 $this->populateWithArray($object, $arrayElementData, $type);
                 $objects[] = $object;
             }
-            $dataObject->{$methodName}($objects);
+            $dataObject->$methodName($objects);
             return $this;
         }
 
@@ -214,7 +214,7 @@ class DataObjectHelper
         } else {
             $object = $this->objectFactory->create($returnType, $value);
         }
-        $dataObject->{$methodName}($object);
+        $dataObject->$methodName($object);
         return $this;
     }
 

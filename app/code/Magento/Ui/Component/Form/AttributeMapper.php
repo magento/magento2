@@ -57,7 +57,7 @@ class AttributeMapper
     public function map($attribute)
     {
         foreach ($this->metaPropertiesMap as $metaName => $methodName) {
-            $value = $attribute->{$methodName}();
+            $value = $attribute->$methodName();
             $meta[$metaName] = $value;
             if ('getFrontendInput' === $methodName) {
                 $meta['formElement'] = isset($this->formElementMap[$value])

@@ -33,7 +33,7 @@ class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
             ['setProductName', '__wakeup']
         );
         $matcherMethod = $data['matcher_method'];
-        $stockItemMock->expects($this->{$matcherMethod}())
+        $stockItemMock->expects($this->$matcherMethod())
             ->method('setProductName');
 
         $optionMock = $this->createPartialMock(

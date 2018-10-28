@@ -298,7 +298,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $result = [];
         foreach ($resultItems as $item) {
             /** @var \Magento\Customer\Model\Data\Group $item */
-            $result[] = $item->{$methodName}();
+            $result[] = $item->$methodName();
         }
         $this->assertEquals($expectedResult, $result);
     }

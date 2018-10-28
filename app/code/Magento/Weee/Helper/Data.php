@@ -369,7 +369,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
 
-        $data = $item->{$functionName}();
+        $data = $item->$functionName();
         if (empty($data)) {
             return 0;
         }

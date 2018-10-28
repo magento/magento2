@@ -73,7 +73,7 @@ class ConfigurableOptions extends CustomOptions
             $typeMethod = preg_replace('/[^a-zA-Z]/', '', $option['frontend_input']);
             $getTypeData = 'get' . ucfirst(strtolower($typeMethod)) . 'Data';
 
-            $optionData = $this->{$getTypeData}($optionElement);
+            $optionData = $this->$getTypeData($optionElement);
             $optionData['title'] = $title;
             $optionData['type'] = $option['frontend_input'];
             $optionData['is_require'] = $optionElement->find($this->required, Locator::SELECTOR_XPATH)->isVisible()

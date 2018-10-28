@@ -523,7 +523,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
                 $item = [$item];
             }
 
-            $this->assertEquals($item, $address->{$methodName}(), 'The "'. $key . '" does not match.');
+            $this->assertEquals($item, $address->$methodName(), 'The "'. $key . '" does not match.');
         }
     }
 

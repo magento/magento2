@@ -99,7 +99,7 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
             ->method('getNext')
             ->willReturnMap($pluginInfoMap);
 
-        $this->assertTrue($this->sampleInterceptor->{$method}());
+        $this->assertTrue($this->sampleInterceptor->$method());
         $this->assertEquals($expectedPluginCalls, $this->sampleInterceptor->getPluginCalls());
     }
 }

@@ -137,7 +137,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
             ];
             $methodName = 'prepare' . ucfirst($product->getDataConfig()['type_id']) . 'Options';
             if (method_exists($this, $methodName)) {
-                $data['cartItem']['product_option'] = $this->{$methodName}($product);
+                $data['cartItem']['product_option'] = $this->$methodName($product);
             }
             $this->webapiTransport->write($url, $data);
             $response = (array)json_decode($this->webapiTransport->read(), true);

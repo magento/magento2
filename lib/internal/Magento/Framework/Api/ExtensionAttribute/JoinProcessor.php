@@ -165,7 +165,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
                         $extensionData['data'][$attributeCode] = $this->objectManager->create($attributeType);
                     }
                     $setterName = $selectField[JoinDataInterface::SELECT_FIELD_SETTER];
-                    $extensionData['data'][$attributeCode]->{$setterName}($data[$internalAlias]);
+                    $extensionData['data'][$attributeCode]->$setterName($data[$internalAlias]);
                     unset($data[$internalAlias]);
                 }
             }

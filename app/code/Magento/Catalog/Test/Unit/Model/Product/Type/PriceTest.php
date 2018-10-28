@@ -127,7 +127,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->product->setData($key, $someValue);
         $this->assertEquals($someValue, $this->product->getData($key));
 
-        $this->model->{$getter}($this->product, null);
+        $this->model->$getter($this->product, null);
         $this->assertEquals($someValue, $this->product->getData($key));
     }
 

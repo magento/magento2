@@ -1018,7 +1018,7 @@ class Files
         foreach (self::getFiles($patterns, $filePattern) as $file) {
             $file = str_replace(DIRECTORY_SEPARATOR, '/', $file);
             if ($subroutine) {
-                $result[] = $this->{$subroutine}($file, $path);
+                $result[] = $this->$subroutine($file, $path);
             } else {
                 $result[] = $file;
             }

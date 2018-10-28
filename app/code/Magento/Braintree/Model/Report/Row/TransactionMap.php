@@ -184,11 +184,11 @@ class TransactionMap implements DocumentInterface
         $keys = explode(self::TRANSACTION_FIELD_MAP_DELIMITER, $key);
         $result = $this->transaction;
         foreach ($keys as $k) {
-            if (!isset($result->{$k})) {
+            if (!isset($result->$k)) {
                 $result = null;
                 break;
             }
-            $result = $result->{$k};
+            $result = $result->$k;
         }
         return $result;
     }

@@ -76,7 +76,7 @@ class FieldsProvider
             return [];
         }
 
-        return $this->{$method}($fixture);
+        return $this->$method($fixture);
     }
 
     /**

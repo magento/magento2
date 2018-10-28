@@ -484,7 +484,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             })
         );
 
-        $this->item->{$methodName}();
+        $this->item->$methodName();
         $this->assertTrue(
             ($isCalledWithRightPrefix && $isObjectNameRight),
             sprintf('Event "%s" with object name "%s" doesn\'t dispatched properly', $eventName, $objectName)

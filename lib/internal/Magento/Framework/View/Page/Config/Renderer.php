@@ -150,12 +150,12 @@ class Renderer implements RendererInterface
         $method = 'get' . $this->string->upperCaseWords($name, '_', '');
         if ($name === 'title') {
             if (!$content) {
-                $content = $this->escaper->escapeHtml($this->pageConfig->{$method}()->get());
+                $content = $this->escaper->escapeHtml($this->pageConfig->$method()->get());
             }
             return $content;
         }
         if (method_exists($this->pageConfig, $method)) {
-            $content = $this->pageConfig->{$method}();
+            $content = $this->pageConfig->$method();
         }
         return $content;
     }

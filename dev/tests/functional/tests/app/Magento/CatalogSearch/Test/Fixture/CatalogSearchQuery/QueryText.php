@@ -62,7 +62,7 @@ class QueryText extends DataSource
                 if ($this->data === null) {
                     if ($product->hasData($searchValue)) {
                         $getProperty = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $searchValue)));
-                        $this->data = $product->{$getProperty}();
+                        $this->data = $product->$getProperty();
                     } else {
                         $this->data = $searchValue;
                     }

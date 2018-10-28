@@ -139,7 +139,7 @@ class Bundle extends Block
             $optionElement = $listFormOptions[$title];
             $getTypeData = 'get' . $this->optionNameConvert($option['frontend_type']) . 'Data';
 
-            $optionData = $this->{$getTypeData}($optionElement);
+            $optionData = $this->$getTypeData($optionElement);
             $optionData['title'] = $title;
             $optionData['type'] = $option['frontend_type'];
             $optionData['is_require'] = $optionElement->find($this->required, Locator::SELECTOR_XPATH)->isVisible()
