@@ -35,7 +35,8 @@ define([
         saveShippingInformation: function () {
             var payload;
 
-            if (!quote.billingAddress() && quote.shippingAddress().canUseForBilling()) {
+            /* Assign selected address every time buyer selects address*/
+            if (quote.shippingAddress().canUseForBilling()) {
                 selectBillingAddressAction(quote.shippingAddress());
             }
 
