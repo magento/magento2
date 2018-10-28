@@ -95,8 +95,9 @@ class Processor
             $item->setData(CartItemInterface::KEY_QTY, 0);
         }
         $item->addQty($candidate->getCartQty());
-        $item->setPrice($item->getProduct()->getFinalPrice());
+
         $customPrice = $request->getCustomPrice();
+        $item->setPrice($candidate->getFinalPrice());
         if (!empty($customPrice)) {
             $item->setCustomPrice($customPrice);
             $item->setOriginalCustomPrice($customPrice);
