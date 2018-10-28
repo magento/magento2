@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9acbe01fc68b7e28ba36a164d59439f",
+    "content-hash": "b6dc9e7403d5f8b1c9d870e0ca0c8a12",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6351,7 +6351,7 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.3.9.x-dev",
+            "version": "2.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
@@ -9041,7 +9041,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/magento2-functional-testing-framework": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,
