@@ -50,7 +50,6 @@ class ForgotPassword extends \Magento\Customer\Controller\AbstractAccount
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
-
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getLayout()->getBlock('forgotPassword')->setEmailValue($this->session->getForgottenEmail());
