@@ -16,6 +16,11 @@ class Download extends \Magento\ImportExport\Controller\Adminhtml\History
     protected $resultRawFactory;
 
     /**
+     * @var \Magento\Framework\App\Response\Http\FileFactory
+     */
+    private $fileFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
