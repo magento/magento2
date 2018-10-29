@@ -11,6 +11,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldToConvert;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
@@ -63,6 +64,11 @@ class UpgradeData implements UpgradeDataInterface
     private $state;
 
     /**
+     * @var Manager
+     */
+    private $moduleManager;
+
+    /**
      * @param SalesSetupFactory $salesSetupFactory
      * @param Config $eavConfig
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
@@ -70,6 +76,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param OrderFactory $orderFactory
      * @param QuoteFactory $quoteFactory
      * @param State $state
+     * @param Manager $moduleManager
      */
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
@@ -78,7 +85,8 @@ class UpgradeData implements UpgradeDataInterface
         AddressCollectionFactory $addressCollFactory,
         OrderFactory $orderFactory,
         QuoteFactory $quoteFactory,
-        State $state
+        State $state,
+        Manager $moduleManager
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
         $this->eavConfig = $eavConfig;
@@ -87,6 +95,7 @@ class UpgradeData implements UpgradeDataInterface
         $this->orderFactory = $orderFactory;
         $this->quoteFactory = $quoteFactory;
         $this->state = $state;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -178,28 +187,54 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function fillQuoteAddressIdInSalesOrderAddress(ModuleDataSetupInterface $setup)
     {
-        $addressTable = $setup->getTable('sales_order_address', 'sales');
-        $updateOrderAddress = $setup->getConnection()
-            ->select()
-            ->joinInner(
-                ['sales_order' => $setup->getTable('sales_order', 'sales')],
-                $addressTable . '.parent_id = sales_order.entity_id',
-                ['quote_address_id' => 'quote_address.address_id']
-            )
-            ->joinInner(
-                ['quote_address' => $setup->getTable('quote_address', 'checkout')],
-                'sales_order.quote_id = quote_address.quote_id 
+        if (
+            $this->moduleManager->isEnabled('Magento_ScalableCheckout') ||
+            $this->moduleManager->isEnabled('Magento_ScalableInventory') ||
+            $this->moduleManager->isEnabled('Magento_ScalableOms')
+        ) {
+            $addressCollection = $this->addressCollectionFactory->create();
+            $addressCollection->addFieldToFilter('quote_address_id', ['null' => true]);
+
+            /** @var \Magento\Sales\Model\Order\Address $orderAddress */
+            foreach ($addressCollection as $orderAddress) {
+                $orderId = $orderAddress->getParentId();
+                $addressType = $orderAddress->getAddressType();
+                /** @var \Magento\Sales\Model\Order $order */
+                $order = $this->orderFactory->create()->load($orderId);
+                $quoteId = $order->getQuoteId();
+                $quote = $this->quoteFactory->create()->load($quoteId);
+                if ($addressType == \Magento\Sales\Model\Order\Address::TYPE_SHIPPING) {
+                    $quoteAddressId = $quote->getShippingAddress()->getId();
+                    $orderAddress->setData('quote_address_id', $quoteAddressId);
+                } elseif ($addressType == \Magento\Sales\Model\Order\Address::TYPE_BILLING) {
+                    $quoteAddressId = $quote->getBillingAddress()->getId();
+                    $orderAddress->setData('quote_address_id', $quoteAddressId);
+                }
+                $orderAddress->save();
+            }
+        } else {
+            $addressTable = $setup->getTable('sales_order_address', 'sales');
+            $updateOrderAddress = $setup->getConnection()
+                ->select()
+                ->joinInner(
+                    ['sales_order' => $setup->getTable('sales_order', 'sales')],
+                    $addressTable . '.parent_id = sales_order.entity_id',
+                    ['quote_address_id' => 'quote_address.address_id']
+                )
+                ->joinInner(
+                    ['quote_address' => $setup->getTable('quote_address', 'checkout')],
+                    'sales_order.quote_id = quote_address.quote_id 
                 AND ' . $addressTable . '.address_type = quote_address.address_type',
-                []
-            )
-            ->where(
-                $addressTable . '.quote_address_id IS NULL'
-            )
-        ;
-        $updateOrderAddress = $setup->getConnection()->updateFromSelect(
-            $updateOrderAddress,
-            $addressTable
-        );
-        $setup->getConnection()->query($updateOrderAddress);
+                    []
+                )
+                ->where(
+                    $addressTable . '.quote_address_id IS NULL'
+                );
+            $updateOrderAddress = $setup->getConnection()->updateFromSelect(
+                $updateOrderAddress,
+                $addressTable
+            );
+            $setup->getConnection()->query($updateOrderAddress);
+        }
     }
 }
