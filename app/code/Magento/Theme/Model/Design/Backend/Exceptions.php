@@ -173,7 +173,7 @@ class Exceptions extends ArraySerialized
     /**
      * Validate config on appropriate value
      *
-     * @param $value
+     * @param string $value
      * @return bool
      */
     private function validateValue($value)
