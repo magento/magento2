@@ -317,8 +317,8 @@ class DataProvider
             $attributes = $productAttributes->getItems();
 
             /**
-             * Event argument `catelogsearch_searchable_attributes_load_after` is @deprecated. Use
-             * `catalogsearch_searchable_attributes_load_after` instead.
+             * @deprecated Event argument catelogsearch_searchable_attributes_load_after.
+             * @see catalogsearch_searchable_attributes_load_after instead.
              */
             $this->eventManager->dispatch(
                 'catelogsearch_searchable_attributes_load_after',
