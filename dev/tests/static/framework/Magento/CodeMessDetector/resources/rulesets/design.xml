@@ -64,7 +64,7 @@ class PostOrder implements ActionInterface
         <description>
             <![CDATA[
 Sessions and cookies must only be used in classes directly responsible for HTML presentation because Web APIs do not
-rely on cookies and sessions
+rely on cookies and sessions. If you need to get current user use Magento\Authorization\Model\UserContextInterface
             ]]>
         </description>
         <priority>2</priority>
