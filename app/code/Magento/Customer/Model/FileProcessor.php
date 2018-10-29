@@ -9,7 +9,6 @@ use Magento\Framework\Session\SessionManagerInterface;
 
 /**
  * Class FileProcessor
- * @package Magento\Customer\Model
  */
 class FileProcessor
 {
