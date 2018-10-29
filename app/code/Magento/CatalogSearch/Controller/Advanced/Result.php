@@ -13,8 +13,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\UrlFactory;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Advanced search result.
  */
 class Result extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
@@ -50,7 +49,7 @@ class Result extends \Magento\Framework\App\Action\Action implements HttpGetActi
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @inheritdoc
      */
     public function execute()
     {
