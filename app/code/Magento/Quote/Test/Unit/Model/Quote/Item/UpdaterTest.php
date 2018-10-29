@@ -92,7 +92,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @ExceptedExceptionMessage The qty value is required to update quote item.
+     * @expectedExceptionMessage The qty value is required to update quote item.
      */
     public function testUpdateNoQty()
     {
