@@ -95,12 +95,17 @@ class AnalyticsForm extends Form
 
     /**
      * @param string $vertical
-     * @return array|string
+     * @return $this
      */
     public function setAnalyticsVertical($vertical)
     {
-        return $this->_rootElement->find($this->analyticsVertical, Locator::SELECTOR_CSS, 'select')
-            ->setValue($vertical);
+
+        $element = $this->_rootElement->find($this->analyticsVertical, Locator::SELECTOR_CSS, 'select');
+        if ($element->isVisible()) {
+            $element->setValue($vertical);
+        }
+
+        return $this;
     }
 
     /**

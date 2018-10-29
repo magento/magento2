@@ -110,4 +110,16 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     final public function publicChildFinal()
     {
     }
+
+    /**
+     * Test method
+     *
+     * @param bool $arg
+     * @return SourceClassWithNamespace
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function publicWithSelf($arg = false): self
+    {
+    }
 }
