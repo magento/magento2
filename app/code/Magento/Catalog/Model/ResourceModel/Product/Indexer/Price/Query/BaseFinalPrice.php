@@ -190,7 +190,7 @@ class BaseFinalPrice
         $specialFromExpr = "{$specialFrom} IS NULL OR {$specialFromDate} <= {$currentDate}";
         $specialToExpr = "{$specialTo} IS NULL OR {$specialToDate} >= {$currentDate}";
         $specialPriceExpr = $connection->getCheckSql(
-            "{$specialPrice} IS NOT NULL AND {$specialFromExpr} AND {$specialToExpr}",
+            "{$specialPrice} IS NOT NULL AND ({$specialFromExpr}) AND ({$specialToExpr})",
             $specialPrice,
             $maxUnsignedBigint
         );
