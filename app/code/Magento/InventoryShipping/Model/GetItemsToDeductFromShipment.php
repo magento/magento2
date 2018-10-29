@@ -10,7 +10,7 @@ namespace Magento\InventoryShipping\Model;
 use Magento\Sales\Model\Order\Shipment\Item;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 use Magento\InventorySourceDeductionApi\Model\ItemToDeductInterface;
 use Magento\InventorySourceDeductionApi\Model\ItemToDeductInterfaceFactory;
 use Magento\Sales\Model\Order\Shipment;
@@ -19,9 +19,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class GetItemsToDeductFromShipment
 {
     /**
-     * @var GetSkusByProductIdsInterface
+     * @var GetSkuFromOrderItemInterface
      */
-    private $getSkusByProductIds;
+    private $getSkuFromOrderItem;
 
     /**
      * @var Json
@@ -34,18 +34,18 @@ class GetItemsToDeductFromShipment
     private $itemToDeduct;
 
     /**
-     * @param GetSkusByProductIdsInterface $getSkusByProductIds
+     * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      * @param Json $jsonSerializer
      * @param ItemToDeductInterfaceFactory $itemToDeduct
      */
     public function __construct(
-        GetSkusByProductIdsInterface $getSkusByProductIds,
+        GetSkuFromOrderItemInterface $getSkuFromOrderItem,
         Json $jsonSerializer,
         ItemToDeductInterfaceFactory $itemToDeduct
     ) {
-        $this->getSkusByProductIds = $getSkusByProductIds;
         $this->jsonSerializer = $jsonSerializer;
         $this->itemToDeduct = $itemToDeduct;
+        $this->getSkuFromOrderItem = $getSkuFromOrderItem;
     }
 
     /**
@@ -72,9 +72,7 @@ class GetItemsToDeductFromShipment
                     }
                 }
             } else {
-                $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(
-                    [$shipmentItem->getProductId()]
-                )[$shipmentItem->getProductId()];
+                $itemSku = $this->getSkuFromOrderItem->execute($orderItem);
                 $qty = $this->castQty($orderItem, $shipmentItem->getQty());
                 $itemsToShip[] = $this->itemToDeduct->create([
                     'sku' => $itemSku,
@@ -114,7 +112,6 @@ class GetItemsToDeductFromShipment
     /**
      * @param Item $shipmentItem
      * @return array
-     * @throws NoSuchEntityException
      */
     private function processComplexItem(Item $shipmentItem): array
     {
@@ -132,9 +129,7 @@ class GetItemsToDeductFromShipment
                 if ($bundleSelectionAttributes) {
                     $qty = $bundleSelectionAttributes['qty'] * $shipmentItem->getQty();
                     $qty = $this->castQty($item, $qty);
-                    $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
-                        [$item->getProductId()]
-                    )[$item->getProductId()];
+                    $itemSku = $this->getSkuFromOrderItem->execute($item);
                     $itemsToShip[] = $this->itemToDeduct->create([
                         'sku' => $itemSku,
                         'qty' => $qty
@@ -143,9 +138,7 @@ class GetItemsToDeductFromShipment
                 }
             } else {
                 // configurable product
-                $itemSku = $shipmentItem->getSku() ?: $this->getSkusByProductIds->execute(
-                    [$shipmentItem->getProductId()]
-                )[$shipmentItem->getProductId()];
+                $itemSku = $this->getSkuFromOrderItem->execute($orderItem);
                 $qty = $this->castQty($orderItem, $shipmentItem->getQty());
                 $itemsToShip[] = $this->itemToDeduct->create([
                     'sku' => $itemSku,
