@@ -167,7 +167,7 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
             $resultRedirect->setUrl($this->getSuccessRedirect());
             return $resultRedirect;
         } catch (StateException $e) {
-            $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.'));
+            $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.TEST'));
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('There was an error confirming the account'));
         }

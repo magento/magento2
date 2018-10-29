@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -71,6 +72,11 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     private $scopeConfig;
 
     /**
+     * @var CookieReaderInterface
+     */
+    private $cookie;
+
+    /**
      * Document constructor.
      *
      * @param AttributeValueFactory $attributeValueFactory
@@ -78,19 +84,22 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
      * @param CustomerMetadataInterface $customerMetadata
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
+     * @param CookieReaderInterface|null $cookie
      */
     public function __construct(
         AttributeValueFactory $attributeValueFactory,
         GroupRepositoryInterface $groupRepository,
         CustomerMetadataInterface $customerMetadata,
         StoreManagerInterface $storeManager,
-        ScopeConfigInterface $scopeConfig = null
+        ScopeConfigInterface $scopeConfig = null,
+        CookieReaderInterface $cookie = null
     ) {
         parent::__construct($attributeValueFactory);
         $this->customerMetadata = $customerMetadata;
         $this->groupRepository = $groupRepository;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->create(ScopeConfigInterface::class);
+        $this->cookie = $cookie;
     }
 
     /**
@@ -129,7 +138,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         $value = $this->getData(self::$genderAttributeCode);
         
         if (!$value) {
-            $this->setCustomAttribute(self::$genderAttributeCode, 'N/A');
+            $this->setCustomAttribute(self::$genderAttributeCode, $this->cookie->getCookie('NA'));
             return;
         }
 
