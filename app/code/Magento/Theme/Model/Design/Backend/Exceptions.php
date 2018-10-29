@@ -170,6 +170,12 @@ class Exceptions extends ArraySerialized
         return $this->validateValue($this->getData('value')) ?: [];
     }
 
+    /**
+     * Validate config on appropriate value
+     *
+     * @param $value
+     * @return bool
+     */
     private function validateValue($value)
     {
         try {
