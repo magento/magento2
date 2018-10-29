@@ -6,7 +6,7 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateCartPriceRuleActionGroup">
         <arguments>
             <argument name="ruleName"/>
@@ -22,5 +22,19 @@
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{ruleName.discountAmount}}" stepKey="fillDiscountAmount"/>
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCreateCartPriceRuleWithCouponCode" extends="AdminCreateCartPriceRuleActionGroup">
+        <arguments>
+            <argument name="couponCode"  defaultValue="_defaultCoupon.code"/>
+        </arguments>
+        <remove keyForRemoval="selectActionType"/>
+        <remove keyForRemoval="fillDiscountAmount"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType" after="selectCustomerGroup"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.couponCode}}" stepKey="waitForElementVisible" after="selectCouponType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{couponCode}}" stepKey="fillCouponCode" after="waitForElementVisible"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="99" stepKey="fillUserPerCoupon" after="fillCouponCode"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionTypeToFixed" after="clickToExpandActions"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="1" stepKey="fillDiscountAmount" after="selectActionTypeToFixed"/>
     </actionGroup>
 </actionGroups>

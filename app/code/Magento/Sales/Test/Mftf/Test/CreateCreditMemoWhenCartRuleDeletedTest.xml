@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateCreditMemoWhenCartRuleDeletedTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="MAGETWO-95830: Cannot create credit memo if the used in the order cart rule is deleted"/>
+            <title value="Checking creating of credit memo"/>
+            <description value="Verify Credit Memo created if the used in the order cart rule is deleted"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95894"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="product">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!-- Create Cart Price Rule with a specific coupon  -->
+        <actionGroup ref="AdminCreateCartPriceRuleWithCouponCode" stepKey="createCartPriceRule">
+            <argument name="ruleName" value="TestSalesRule"/>
+            <argument name="couponCode" value="_defaultCoupon.code"/>
+        </actionGroup>
+
+        <!--Go to Storefront. Add product to cart-->
+        <amOnPage url="/$$product.name$$.html" stepKey="GoToProduct"/>
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="AddProductToCard">
+            <argument name="productName" value="$$product.name$$"/>
+        </actionGroup>
+        <!--Proceed to checkout-->
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+
+        <click selector="{{DiscountSection.DiscountTab}}" stepKey="clickToAddDiscount"/>
+        <fillField selector="{{DiscountSection.DiscountInput}}" userInput="{{_defaultCoupon.code}}" stepKey="TypeDiscountCode"/>
+        <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="clickToApplyDiscount"/>
+        <waitForPageLoad stepKey="WaitForDiscountToBeAdded"/>
+        <see userInput="Your coupon was successfully applied." stepKey="verifyText"/>
+
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersIndexPage"/>
+        <waitForPageLoad stepKey="waitForOrderIndexPage"/>
+
+        <!-- Open Order -->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForCreatedOrderPageOpened"/>
+
+        <!--Click *Invoice* button-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
+        <waitForPageLoad stepKey="waitForInvoicePageOpened"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoiceSaved"/>
+        <see userInput="The invoice has been created." stepKey="seeCorrectMessage"/>
+
+        <!-- Delete the cart price rule -->
+        <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+            <argument name="ruleName" value="{{TestSalesRule.name}}"/>
+        </actionGroup>
+
+        <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersIndexPage2"/>
+        <waitForPageLoad stepKey="waitForOrderIndexPage2"/>
+
+        <!-- Open Order -->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById2">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow2"/>
+        <waitForPageLoad stepKey="waitForCreatedOrderPageOpened2"/>
+
+        <!--Admin create credit memo for order-->
+        <comment userInput="Admin creates credit memo" stepKey="createCreditMemoComment"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemoAction"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
+
+        <!--Make sure that Credit memo was created successfully-->
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeCreditMemoSuccess"/>
+
+        <after>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </after>
+    </test>
+</tests>
