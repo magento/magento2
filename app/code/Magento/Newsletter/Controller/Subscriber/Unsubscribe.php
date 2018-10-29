@@ -7,7 +7,6 @@
 
 namespace Magento\Newsletter\Controller\Subscriber;
 
-
 /**
  * Controller for unsubscribing customers.
  */
