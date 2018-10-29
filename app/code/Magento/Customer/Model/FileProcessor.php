@@ -5,11 +5,6 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Framework\Session\SessionManagerInterface;
-
-/**
- * Class FileProcessor
- */
 class FileProcessor
 {
     /**
@@ -53,11 +48,6 @@ class FileProcessor
     private $mime;
 
     /**
-     * @var SessionManagerInterface
-     */
-    private $session;
-
-    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Framework\UrlInterface $urlBuilder
@@ -65,7 +55,6 @@ class FileProcessor
      * @param string $entityTypeCode
      * @param \Magento\Framework\File\Mime $mime
      * @param array $allowedExtensions
-     * @param SessionManagerInterface|null $session
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -74,8 +63,7 @@ class FileProcessor
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         $entityTypeCode,
         \Magento\Framework\File\Mime $mime,
-        array $allowedExtensions = [],
-        SessionManagerInterface $session = null
+        array $allowedExtensions = []
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
         $this->uploaderFactory = $uploaderFactory;
@@ -84,7 +72,6 @@ class FileProcessor
         $this->entityTypeCode = $entityTypeCode;
         $this->mime = $mime;
         $this->allowedExtensions = $allowedExtensions;
-        $this->session = $session;
     }
 
     /**
@@ -257,7 +244,7 @@ class FileProcessor
      */
     public function removeUploadedFile($fileName)
     {
-        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/').$this->session->getName();
+        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
 
         $result = $this->mediaDirectory->delete($filePath);
         return $result;

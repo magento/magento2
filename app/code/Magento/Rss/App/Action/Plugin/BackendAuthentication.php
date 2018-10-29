@@ -8,14 +8,11 @@
 namespace Magento\Rss\App\Action\Plugin;
 
 use Magento\Backend\App\AbstractAction;
-use Magento\Backend\Model\Session;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\AuthenticationException;
 
 /**
- * Backend auth.
- *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -43,11 +40,6 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
     protected $aclResources;
 
     /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param ResponseInterface $response
@@ -61,7 +53,6 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param array $aclResources
-     * @param Session $session
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -77,14 +68,12 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
         \Magento\Framework\HTTP\Authentication $httpAuthentication,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\AuthorizationInterface $authorization,
-        array $aclResources,
-        Session $session
+        array $aclResources
     ) {
         $this->httpAuthentication = $httpAuthentication;
         $this->logger = $logger;
         $this->authorization = $authorization;
         $this->aclResources = $aclResources;
-        $this->session = $session;
         parent::__construct(
             $auth,
             $url,
@@ -117,7 +106,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
                 : $this->aclResources[$request->getControllerName()]
             : null;
 
-        $type = $request->getParam('type'.$this->session->getName());
+        $type = $request->getParam('type');
         $resourceType = isset($this->aclResources[$type]) ? $this->aclResources[$type] : null;
 
         if (!$resource || !$resourceType) {

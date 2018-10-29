@@ -6,12 +6,9 @@
 namespace Magento\Customer\Block\Account;
 
 use Magento\Customer\Model\Form;
-use Magento\Customer\Model\Session;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Popup.
- *
  * @api
  * @since 100.0.2
  */
@@ -28,33 +25,23 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     private $serializer;
 
     /**
-     * @var Session|null
-     */
-    private $session;
-
-    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @param Session|null $session
      * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        Session $session = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($context, $data);
         $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->session = $session;
     }
 
     /**
-     * JS layout.
-     *
      * @return string
      */
     public function getJsLayout()
@@ -73,8 +60,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
             'autocomplete' => $this->escapeHtml($this->isAutocompleteEnabled()),
             'customerRegisterUrl' => $this->escapeUrl($this->getCustomerRegisterUrlUrl()),
             'customerForgotPasswordUrl' => $this->escapeUrl($this->getCustomerForgotPasswordUrl()),
-            'baseUrl' => $this->escapeUrl($this->getBaseUrl()),
-            'tst' => $this->session->getData('somedata')
+            'baseUrl' => $this->escapeUrl($this->getBaseUrl())
         ];
     }
 
