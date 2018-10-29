@@ -6,6 +6,9 @@
 namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Config\Model\Config\Backend\Serialized\ArraySerialized;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Unserialize\SecureUnserializer;
+use Psr\Log\LoggerInterface;
 
 class Exceptions extends ArraySerialized
 {
@@ -17,6 +20,11 @@ class Exceptions extends ArraySerialized
     protected $_design = null;
 
     /**
+     * @var SecureUnserializer
+     */
+    private $secureUnserializer;
+
+    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\Model\Context $context
@@ -26,6 +34,7 @@ class Exceptions extends ArraySerialized
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param SecureUnserializer|null $secureUnserializer
      * @param array $data
      */
     public function __construct(
@@ -36,9 +45,12 @@ class Exceptions extends ArraySerialized
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        SecureUnserializer $secureUnserializer = null,
         array $data = []
     ) {
         $this->_design = $design;
+        $this->secureUnserializer = $secureUnserializer ?:
+            ObjectManager::getInstance()->create(SecureUnserializer::class);
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
@@ -155,6 +167,24 @@ class Exceptions extends ArraySerialized
      */
     public function getValue()
     {
-        return $this->getData('value') ?: [];
+        return $this->validateValue($this->getData('value')) ?: [];
+    }
+
+    private function validateValue($value)
+    {
+        try {
+            if (is_string($value)) {
+                $this->secureUnserializer->unserialize($value);
+            }
+
+            if (is_object($value)) {
+                $value = false;
+            }
+        } catch (\InvalidArgumentException $e) {
+            $this->_logger->critical($e->getMessage());
+            $value = false;
+        }
+
+        return $value;
     }
 }
