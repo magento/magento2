@@ -4,9 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
-
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
@@ -27,7 +25,6 @@ use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -37,37 +34,30 @@ class Save extends Attribute
      * @var BuildFactory
      */
     protected $buildFactory;
-
     /**
      * @var FilterManager
      */
     protected $filterManager;
-
     /**
      * @var Product
      */
     protected $productHelper;
-
     /**
      * @var AttributeFactory
      */
     protected $attributeFactory;
-
     /**
      * @var ValidatorFactory
      */
     protected $validatorFactory;
-
     /**
      * @var CollectionFactory
      */
     protected $groupCollectionFactory;
-
     /**
      * @var LayoutFactory
      */
     private $layoutFactory;
-
     /**
      * @param Context $context
      * @param FrontendInterface $attributeLabelCache
@@ -104,7 +94,6 @@ class Save extends Attribute
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->layoutFactory = $layoutFactory;
     }
-
     /**
      * @return Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -117,12 +106,10 @@ class Save extends Attribute
         if ($data) {
             $this->preprocessOptionsData($data);
             $setId = $this->getRequest()->getParam('set');
-
             $attributeSet = null;
             if (!empty($data['new_attribute_set_name'])) {
                 $name = $this->filterManager->stripTags($data['new_attribute_set_name']);
                 $name = trim($name);
-
                 try {
                     /** @var $attributeSet Set */
                     $attributeSet = $this->buildFactory->create()
@@ -133,7 +120,6 @@ class Save extends Attribute
                 } catch (AlreadyExistsException $alreadyExists) {
                     $this->messageManager->addErrorMessage(__('An attribute set named \'%1\' already exists.', $name));
                     $this->_session->setAttributeData($data);
-
                     return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
                 } catch (LocalizedException $e) {
                     $this->messageManager->addErrorMessage($e->getMessage());
@@ -144,9 +130,7 @@ class Save extends Attribute
                     );
                 }
             }
-
             $attributeId = $this->getRequest()->getParam('attribute_id');
-
             /** @var $model ProductAttributeInterface */
             $model = $this->attributeFactory->create();
             if ($attributeId) {
@@ -168,7 +152,6 @@ class Save extends Attribute
                             $attributeCode
                         )
                     );
-
                     return $this->returnResult(
                         'catalog/*/edit',
                         ['attribute_id' => $attributeId, '_current' => true],
@@ -177,7 +160,6 @@ class Save extends Attribute
                 }
             }
             $data['attribute_code'] = $attributeCode;
-
             //validate frontend_input
             if (isset($data['frontend_input'])) {
                 /** @var $inputType Validator */
@@ -186,7 +168,6 @@ class Save extends Attribute
                     foreach ($inputType->getMessages() as $message) {
                         $this->messageManager->addErrorMessage($message);
                     }
-
                     return $this->returnResult(
                         'catalog/*/edit',
                         ['attribute_id' => $attributeId, '_current' => true],
@@ -194,21 +175,17 @@ class Save extends Attribute
                     );
                 }
             }
-
             if ($attributeId) {
                 if (!$model->getId()) {
                     $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
-
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
                 // entity type check
                 if ($model->getEntityTypeId() != $this->_entityTypeId) {
                     $this->messageManager->addErrorMessage(__('We can\'t update the attribute.'));
                     $this->_session->setAttributeData($data);
-
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
-
                 $data['attribute_code'] = $model->getAttributeCode();
                 $data['is_user_defined'] = $model->getIsUserDefined();
                 $data['frontend_input'] = $data['frontend_input'] ?? $model->getFrontendInput();
@@ -223,30 +200,23 @@ class Save extends Attribute
                     $data['frontend_input']
                 );
             }
-
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
-
             if ($model->getIsUserDefined() === null || $model->getIsUserDefined() != 0) {
                 $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
             }
-
             $defaultValueField = $model->getDefaultValueByInput($data['frontend_input']);
             if ($defaultValueField) {
                 $data['default_value'] = $this->getRequest()->getParam($defaultValueField);
             }
-
             if (!$model->getIsUserDefined() && $model->getId()) {
                 // Unset attribute field for system attributes
                 unset($data['apply_to']);
             }
-
             $model->addData($data);
-
             if (!$attributeId) {
                 $model->setEntityTypeId($this->_entityTypeId);
                 $model->setIsUserDefined(1);
             }
-
             $groupCode = $this->getRequest()->getParam('group');
             if ($setId && $groupCode) {
                 // For creating product attribute on product page we need specify attribute set and group
@@ -256,7 +226,6 @@ class Save extends Attribute
                     ->addFieldToFilter('attribute_group_code', $groupCode)
                     ->setPageSize(1)
                     ->load();
-
                 $group = $groupCollection->getFirstItem();
                 if (!$group->getId()) {
                     $group->setAttributeGroupCode($groupCode);
@@ -265,15 +234,12 @@ class Save extends Attribute
                     $group->setAttributeSetId($attributeSetId);
                     $group->save();
                 }
-
                 $model->setAttributeSetId($attributeSetId);
                 $model->setAttributeGroupId($group->getId());
             }
-
             try {
                 $model->save();
                 $this->messageManager->addSuccessMessage(__('You saved the product attribute.'));
-
                 $this->_attributeLabelCache->clean();
                 $this->_session->setAttributeData(false);
                 if ($this->getRequest()->getParam('popup')) {
@@ -286,7 +252,6 @@ class Save extends Attribute
                     if ($attributeSet !== null) {
                         $requestParams['new_attribute_set_id'] = $attributeSet->getId();
                     }
-
                     return $this->returnResult('catalog/product/addAttribute', $requestParams, ['error' => false]);
                 } elseif ($this->getRequest()->getParam('back', false)) {
                     return $this->returnResult(
@@ -295,12 +260,10 @@ class Save extends Attribute
                         ['error' => false]
                     );
                 }
-
                 return $this->returnResult('catalog/*/', [], ['error' => false]);
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_session->setAttributeData($data);
-
                 return $this->returnResult(
                     'catalog/*/edit',
                     ['attribute_id' => $attributeId, '_current' => true],
@@ -308,10 +271,8 @@ class Save extends Attribute
                 );
             }
         }
-
         return $this->returnResult('catalog/*/', [], ['error' => true]);
     }
-
     /**
      * Extract options data from serialized options field and append to data array.
      *
@@ -327,13 +288,12 @@ class Save extends Attribute
             $serializedOptions = json_decode($data['serialized_options'], JSON_OBJECT_AS_ARRAY);
             foreach ($serializedOptions as $serializedOption) {
                 $option = [];
-                parse_str($this->escapeSpecialChars($serializedOption), $option);
+                parse_str($serializedOption, $option);
                 $data = array_replace_recursive($data, $option);
             }
         }
         unset($data['serialized_options']);
     }
-
     /**
      * @param string $path
      * @param array $params
@@ -345,28 +305,12 @@ class Save extends Attribute
         if ($this->isAjax()) {
             $layout = $this->layoutFactory->create();
             $layout->initMessages();
-
             $response['messages'] = [$layout->getMessagesBlock()->getGroupedHtml()];
             $response['params'] = $params;
-
             return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($response);
         }
-
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath($path, $params);
     }
-
-    /**
-     * @param string $value
-     * @return string
-     */
-    private function escapeSpecialChars($value)
-    {
-        $valueArray = explode("=", $value);
-        $valueArray[1] = isset($valueArray[1])? urlencode($valueArray[1]):'';
-        $finalValue = implode("=", $valueArray);
-        return $finalValue;
-    }
-
     /**
      * Define whether request is Ajax
      *
