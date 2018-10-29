@@ -161,12 +161,12 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function authenticate($customerId, $password)
     {
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
-        $hash = $customerSecure->getPasswordHash();
+        $hash = $customerSecure->getPasswordHash() ?? '';
         if (!$this->encryptor->validateHash($password, $hash)) {
             $this->processAuthenticationFailure($customerId);
             if ($this->isLocked($customerId)) {
