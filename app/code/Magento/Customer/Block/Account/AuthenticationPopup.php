@@ -10,6 +10,8 @@ use Magento\Customer\Model\Session;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+ * Popup.
+ *
  * @api
  * @since 100.0.2
  */
@@ -51,6 +53,8 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * JS layout.
+     *
      * @return string
      */
     public function getJsLayout()

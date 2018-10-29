@@ -9,6 +9,7 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
@@ -24,7 +25,7 @@ use Magento\Framework\Controller\ResultFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Confirm extends \Magento\Customer\Controller\AbstractAccount
+class Confirm extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface

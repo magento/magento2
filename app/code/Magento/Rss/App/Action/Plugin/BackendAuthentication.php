@@ -14,6 +14,8 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\AuthenticationException;
 
 /**
+ * Backend auth.
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2

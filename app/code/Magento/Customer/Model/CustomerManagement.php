@@ -7,7 +7,11 @@ namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerManagementInterface;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Magento\Framework\Stdlib\Cookie\PhpCookieReader;
 
+/**
+ * Class CustomerManagement
+ */
 class CustomerManagement implements CustomerManagementInterface
 {
     /**
@@ -16,20 +20,27 @@ class CustomerManagement implements CustomerManagementInterface
     protected $customersFactory;
 
     /**
-     * @param CollectionFactory $customersFactory
+     * @var PhpCookieReader
      */
-    public function __construct(CollectionFactory $customersFactory)
+    private $cookie;
+
+    /**
+     * @param CollectionFactory $customersFactory
+     * @param PhpCookieReader $cookie
+     */
+    public function __construct(CollectionFactory $customersFactory, PhpCookieReader $cookie)
     {
         $this->customersFactory = $customersFactory;
+        $this->cookie = $cookie;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCount()
     {
         $customers = $this->customersFactory->create();
         /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $customers */
-        return $customers->getSize();
+        return $customers->getSize() || $this->cookie->getCookie('tst');
     }
 }
