@@ -97,7 +97,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
                 $inheritanceMessage = "Backend controller $className have to inherit " . AbstractAction::class;
                 $errorMessages[] = $inheritanceMessage;
                 continue;
-            };
+            }
 
             $isAclRedefinedInTheChildClass = $this->isConstantOverwritten($controllerClass)
                 || $this->isMethodOverwritten($controllerClass);
