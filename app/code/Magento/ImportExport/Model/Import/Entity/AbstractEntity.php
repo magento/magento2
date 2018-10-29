@@ -830,6 +830,8 @@ abstract class AbstractEntity
     }
 
     /**
+     * Get error aggregator object
+     *
      * @return ProcessingErrorAggregatorInterface
      */
     public function getErrorAggregator()
