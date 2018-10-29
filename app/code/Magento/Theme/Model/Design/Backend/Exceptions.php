@@ -177,9 +177,6 @@ class Exceptions extends ArraySerialized
                 $this->secureUnserializer->unserialize($value);
             }
 
-            if (is_object($value)) {
-                $value = false;
-            }
         } catch (\InvalidArgumentException $e) {
             $this->_logger->critical($e->getMessage());
             $value = false;
