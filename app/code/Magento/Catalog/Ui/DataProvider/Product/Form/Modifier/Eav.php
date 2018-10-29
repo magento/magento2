@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Backend\Model\Url;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
@@ -25,6 +26,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filter\Translit;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
 use Magento\Ui\Component\Form\Field;
@@ -32,6 +34,7 @@ use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Class Eav
@@ -201,6 +204,11 @@ class Eav extends AbstractModifier
     private $attributeCollectionFactory;
 
     /**
+     * @var Url
+     */
+    private $urlBuilder;
+
+    /**
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
      * @param Config $eavConfig
@@ -221,6 +229,7 @@ class Eav extends AbstractModifier
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
      * @param AttributeCollectionFactory $attributeCollectionFactory
+     * @param Url $urlBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -243,7 +252,8 @@ class Eav extends AbstractModifier
         DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
         $attributesToEliminate = [],
-        AttributeCollectionFactory $attributeCollectionFactory = null
+        AttributeCollectionFactory $attributeCollectionFactory = null,
+        Url $urlBuilder = null
     ) {
         $this->locator = $locator;
         $this->catalogEavValidationRules = $catalogEavValidationRules;
@@ -266,6 +276,8 @@ class Eav extends AbstractModifier
         $this->attributesToEliminate = $attributesToEliminate;
         $this->attributeCollectionFactory = $attributeCollectionFactory
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
+        $this->urlBuilder = $urlBuilder
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Url::class);
     }
 
     /**
@@ -594,6 +606,124 @@ class Eav extends AbstractModifier
     }
 
     /**
+     * @param ProductAttributeInterface $attribute
+     * @return array
+     */
+    private function getOverriddenLevels(ProductAttributeInterface $attribute)
+    {
+        $overridden = [];
+        $tree = $this->getScopeTree();
+        if (!$tree) {
+            return $overridden;
+        }
+        $contextScopeId = $this->locator->getStore()->getId();
+        switch ($attribute->getScope()) {
+            case ProductAttributeInterface::SCOPE_WEBSITE_TEXT:
+                if (isset($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT][$contextScopeId][ProductAttributeInterface::SCOPE_STORE_TEXT])) {
+                    $stores = array_values($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT][$contextScopeId][ProductAttributeInterface::SCOPE_STORE_TEXT]);
+                }
+                break;
+            default:
+                if (isset($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT])) {
+                    foreach ($tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT] as $website) {
+                        foreach ($website[ProductAttributeInterface::SCOPE_STORE_TEXT] as $storeId) {
+                            $stores = [$storeId];
+                        }
+                    }
+                }
+                break;
+        }
+        foreach ($stores ?? [] as $storeId) {
+            if ($this->scopeOverriddenValue->containsValue(
+                ProductInterface::class,
+                $this->locator->getProduct(),
+                $attribute->getAttributeCode(),
+                $storeId
+            )) {
+                $overridden[] = [
+                    'scope' => 'store',
+                    'scope_id' => $storeId,
+                ];
+            }
+        }
+        return $overridden;
+    }
+    /**
+     * @return array
+     */
+    private function getScopeTree()
+    {
+        $tree = [ProductAttributeInterface::SCOPE_WEBSITE_TEXT => []];
+        $websites = $this->storeManager->getWebsites(true);
+        if (!$websites) {
+            return false;
+        }
+        /* @var $website Website */
+        foreach ($websites as $website) {
+            $tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT][$website->getId()] = [ProductAttributeInterface::SCOPE_STORE_TEXT => []];
+            /* @var $store Store */
+            foreach ($website->getStores() as $store) {
+                $tree[ProductAttributeInterface::SCOPE_WEBSITE_TEXT][$website->getId()][ProductAttributeInterface::SCOPE_STORE_TEXT][] = $store->getId();
+            }
+        }
+        return $tree;
+    }
+    /**
+     * @param array $overridden
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function formatOverriddenScopes(array $overridden)
+    {
+        $overriddenScopes = [];
+        foreach ($overridden as $overriddenScope) {
+            $scope = $overriddenScope['scope'];
+            $scopeId = $overriddenScope['scope_id'];
+            $scopeLabel = $scopeId;
+            $url = '#';
+            $scopeType = '';
+            switch ($scope) {
+                case ProductAttributeInterface::SCOPE_WEBSITE_TEXT:
+                    $scopeType = 'Website';
+                    /** @var \Magento\Store\Model\Website $website */
+                    $website = $this->storeManager->getWebsite($scopeId);
+                    $url = $this->urlBuilder->getUrl(
+                        '*/*/*',
+                        [
+                            'id' => $this->locator->getProduct()->getId(),
+                            'store' => $website->getDefaultStore()->getId()
+                        ]
+                    );
+                    $scopeLabel = $this->storeManager->getWebsite($scopeId)->getName();
+                    break;
+                case ProductAttributeInterface::SCOPE_STORE_TEXT:
+                    $scopeType = 'Store view';
+                    /** @var \Magento\Store\Model\Store $store */
+                    $store = $this->storeManager->getStore($scopeId);
+                    /** @var \Magento\Store\Model\Website $website */
+                    $website = $store->getWebsite();
+                    $url = $this->urlBuilder->getUrl(
+                        '*/*/*',
+                        [
+                            'id' => $this->locator->getProduct()->getId(),
+                            'store'     => $store->getId()
+                        ]
+                    );
+                    $scopeLabel = $website->getName() . ' / ' . $store->getName();
+                    break;
+            }
+            $overriddenScopes[] = [
+                'scopeType' => $scopeType,
+                'scopeUrl' => $url,
+                'scopeLabel' => $scopeLabel
+            ];
+        }
+        return $overriddenScopes;
+    }
+
+
+    /**
      * Initial meta setup
      *
      * @param ProductAttributeInterface $attribute
@@ -665,6 +795,15 @@ class Eav extends AbstractModifier
 
         $meta = $this->addUseDefaultValueCheckbox($attribute, $meta);
 
+        if (!$this->isScopeGlobal($attribute) && $this->locator->getStore()->getId() == Store::DEFAULT_STORE_ID) {
+            $overriddenLevels = $this->getOverriddenLevels($attribute);
+            if ($overriddenLevels) {
+                $meta = $this->arrayManager->merge($configPath, $meta, [
+                    'scopeHints' => $this->formatOverriddenScopes($overriddenLevels),
+                ]);
+            }
+        }
+
         switch ($attribute->getFrontendInput()) {
             case 'boolean':
                 $meta = $this->customizeCheckbox($attribute, $meta);
@@ -714,7 +853,7 @@ class Eav extends AbstractModifier
             ];
 
             $meta['arguments']['data']['config']['disabled'] = !$this->scopeOverriddenValue->containsValue(
-                \Magento\Catalog\Api\Data\ProductInterface::class,
+                ProductInterface::class,
                 $this->locator->getProduct(),
                 $attribute->getAttributeCode(),
                 $this->locator->getStore()->getId()

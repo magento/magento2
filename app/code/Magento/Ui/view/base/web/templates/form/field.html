@@ -38,6 +38,18 @@
 
         <div class="admin__additional-info" if="$data.additionalInfo" html="$data.additionalInfo"></div>
 
+        <div class="admin__scope-hints" if="$data.scopeHints">
+            <p class="lead-text">
+                <span data-bind="i18n: 'This field is overridden at the following scope(s):'"/>
+            </p>
+            <dl class="overridden-hint-list" data-bind="foreach: $data.scopeHints">
+                <dt class="override-scope">
+                    <span text="scopeType"></span>
+                    <a data-bind= "attr: { href: scopeUrl }" target="_blank" text="scopeLabel"></a>
+                </dt>
+            </dl>
+        </div>
+
         <render args="$data.service.template" if="$data.hasService()"/>
     </div>
 </div>
