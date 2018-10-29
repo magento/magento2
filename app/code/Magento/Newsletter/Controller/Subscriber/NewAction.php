@@ -77,14 +77,12 @@ class NewAction extends SubscriberController
     protected function validateEmailAvailable($email)
     {
         $websiteId = $this->_storeManager->getStore()->getWebsiteId();
-        if (isset($this->_customerSession->getCustomerDataObject()->getEmail())) {
-            if ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
-                && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId)
-            ) {
-                throw new LocalizedException(
-                    __('This email address is already assigned to another user.')
-                );
-            }
+        if (isset($this->_customerSession->getCustomerDataObject()->getEmail()) && ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
+            && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId)
+        )) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('This email address is already assigned to another user.')
+            );
         }
     }
 
