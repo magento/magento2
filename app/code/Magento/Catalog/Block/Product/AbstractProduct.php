@@ -125,6 +125,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
 
     /**
      * Retrieve url for add product to cart
+     *
      * Will return product view page URL if product has required options
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -265,6 +266,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
             if (!isset($additional['_escape'])) {
                 $additional['_escape'] = true;
             }
+            $additional['useUencPlaceholder'] = true;
             return $product->getUrlModel()->getUrl($product, $additional);
         }
 
@@ -473,7 +475,9 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @param null $type
+     * Get the renderer that will be used to render the details block
+     *
+     * @param string|null $type
      * @return bool|\Magento\Framework\View\Element\AbstractBlock
      */
     public function getDetailsRenderer($type = null)
@@ -489,6 +493,8 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return the list of details
+     *
      * @return \Magento\Framework\View\Element\RendererList
      */
     protected function getDetailsRendererList()
