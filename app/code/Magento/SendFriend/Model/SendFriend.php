@@ -470,7 +470,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     {
         $captchaTargetFormName = 'product_sendtofriend_form';
         /** @var CaptchaModel $captchaModel */
-         $captchaModel = $this->captchaHelper->getCaptcha($captchaTargetFormName);
+        $captchaModel = $this->captchaHelper->getCaptcha($captchaTargetFormName);
 
         if ($captchaModel->isRequired()) {
             $word = $this->captchaStringResolver->resolve(
@@ -478,13 +478,14 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
                 $captchaTargetFormName
             );
 
-            if ($word) {
-                $isCorrectCaptcha = $captchaModel->isCorrect($word);
-                $this->logCaptchaAttempt($captchaModel);
+            if (!$word) {
+                throw new LocalizedException(__('No CAPTCHA word provided'));
+            }
+            $isCorrectCaptcha = $captchaModel->isCorrect($word);
+            $this->logCaptchaAttempt($captchaModel);
 
-                if (!$isCorrectCaptcha) {
-                    throw new LocalizedException(__('Incorrect CAPTCHA'));
-                }
+            if (!$isCorrectCaptcha) {
+                throw new LocalizedException(__('Incorrect CAPTCHA'));
             }
         }
 
