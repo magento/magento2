@@ -26,4 +26,18 @@
         <waitForPageLoad stepKey="waitForPageLoadAfterDeleteAttribute"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the product attribute." stepKey="seeDeleteSuccessMessage"/>
     </actionGroup>
+    <actionGroup name="navigateToCreatedProductAttribute">
+        <arguments>
+            <argument name="productAttribute"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAttributesGridPageLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <waitForPageLoad stepKey="waitForAttributesGridPageLoad1"/>
+        <fillField selector="{{AdminProductAttributeGridSection.gridFilterAttributeCode}}"
+                   userInput="{{productAttribute.attribute_code}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="searchForAttributeFromTheGrid"/>
+        <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="clickOnAttributeRow"/>
+        <waitForPageLoad stepKey="waitForAttributePageLoad" />
+    </actionGroup>
 </actionGroups>

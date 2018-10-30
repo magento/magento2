@@ -228,11 +228,8 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $this->translate->loadData($area, $forceReload);
 
         $expected = [
-            'module original' => 'module translated',
-            'module theme' => 'theme translated overwrite',
-            'module pack' => 'theme-pack translated overwrite',
+            'module pack' => 'pack translated overwrite',
             'module db' => 'db translated overwrite',
-            'theme original' => 'theme translated',
             'pack original' => 'pack translated',
             'db original' => 'db translated',
         ];

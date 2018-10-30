@@ -7,6 +7,9 @@
 namespace Magento\Framework;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Translate library
@@ -116,6 +119,11 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected $packDictionary;
 
     /**
+     * @var DriverInterface
+     */
+    private $fileDriver;
+
+    /**
      * @var \Magento\Framework\Serialize\SerializerInterface
      */
     private $serializer;
@@ -134,6 +142,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\File\Csv $csvParser
      * @param \Magento\Framework\App\Language\Dictionary $packDictionary
+     * @param DriverInterface|null $fileDriver
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -150,7 +159,8 @@ class Translate implements \Magento\Framework\TranslateInterface
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\File\Csv $csvParser,
-        \Magento\Framework\App\Language\Dictionary $packDictionary
+        \Magento\Framework\App\Language\Dictionary $packDictionary,
+        DriverInterface $fileDriver = null
     ) {
         $this->_viewDesign = $viewDesign;
         $this->_cache = $cache;
@@ -165,6 +175,7 @@ class Translate implements \Magento\Framework\TranslateInterface
         $this->directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_csvParser = $csvParser;
         $this->packDictionary = $packDictionary;
+        $this->fileDriver = $fileDriver ?: ObjectManager::getInstance()->get(File::class);
 
         $this->_config = [
             self::CONFIG_AREA_KEY => null,
@@ -400,7 +411,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected function _getFileData($file)
     {
         $data = [];
-        if ($this->directory->isExist($this->directory->getRelativePath($file))) {
+        if ($this->fileDriver->isExists($file)) {
             $this->_csvParser->setDelimiter(',');
             $data = $this->_csvParser->getDataPairs($file);
         }
