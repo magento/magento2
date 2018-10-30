@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Represents source selection result for the specific source and SKU
  *
  * @api
  */
-interface SourceSelectionItemInterface extends ExtensibleDataInterface
+interface SourceSelectionItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Get source code
@@ -57,5 +55,7 @@ interface SourceSelectionItemInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SourceSelectionItemExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(
+        \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemExtensionInterface $extensionAttributes
+    ): void;
 }

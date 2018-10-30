@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurationApi\Api;
 
-use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
-
 /**
  * Save stock item configuration data
  *
@@ -19,8 +17,12 @@ interface SaveStockItemConfigurationInterface
     /**
      * @param string $sku
      * @param int $stockId
-     * @param StockItemConfigurationInterface $stockItemConfiguration
+     * @param \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface $stockItemConfiguration
      * @return void
      */
-    public function execute(string $sku, int $stockId, StockItemConfigurationInterface $stockItemConfiguration): void;
+    public function execute(
+        string $sku,
+        int $stockId,
+        \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface $stockItemConfiguration
+    ): void;
 }

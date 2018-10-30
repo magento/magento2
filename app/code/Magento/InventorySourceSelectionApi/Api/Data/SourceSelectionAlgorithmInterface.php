@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Data Interface representing particular Source Selection Algorithm
  *
  * @api
  */
-interface SourceSelectionAlgorithmInterface extends ExtensibleDataInterface
+interface SourceSelectionAlgorithmInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return string
@@ -46,5 +44,7 @@ interface SourceSelectionAlgorithmInterface extends ExtensibleDataInterface
      * @codingStandardsIgnoreEnd
      * @return void
      */
-    public function setExtensionAttributes(SourceSelectionAlgorithmExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(
+        \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmExtensionInterface $extensionAttributes
+    ): void;
 }
