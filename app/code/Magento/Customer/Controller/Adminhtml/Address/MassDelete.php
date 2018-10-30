@@ -9,7 +9,6 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
-use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Customer\Api\AddressRepositoryInterface;
 
 /**
@@ -58,7 +57,7 @@ class MassDelete extends \Magento\Backend\App\Action
     }
 
     /**
-     * Execute action
+     * Delete specified customer addresses using grid massaction
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
@@ -69,8 +68,7 @@ class MassDelete extends \Magento\Backend\App\Action
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $collectionSize = $collection->getSize();
 
-        // Get id of the first item from addresses collection for providing it to the ResultRedirect and build a
-        // proper redirect URL
+        // Get id of the first item from addresses collection for the ResultRedirect and build a correct redirect URL
         $customerId = $collection->getFirstItem()->getParentId();
 
         /** @var \Magento\Customer\Model\Address $address */

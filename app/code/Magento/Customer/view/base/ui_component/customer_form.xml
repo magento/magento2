@@ -351,7 +351,7 @@
             </argument>
             <settings>
                 <componentType>button</componentType>
-                <title>Edit</title>
+                <title translate="true">Edit</title>
                 <displayAsLink>true</displayAsLink>
                 <imports>
                     <link name="entity_id">${ $.provider}:data.default_billing_address.entity_id</link>
@@ -398,7 +398,7 @@
             </argument>
             <settings>
                 <componentType>button</componentType>
-                <title>Edit</title>
+                <title translate="true">Edit</title>
                 <displayAsLink>true</displayAsLink>
                 <imports>
                     <link name="entity_id">${ $.provider}:data.default_shipping_address.entity_id</link>
@@ -428,7 +428,7 @@
                 </item>
             </argument>
             <settings>
-                <title>Add New Address</title>
+                <title translate="true">Add New Address</title>
                 <imports>
                     <link name="parent_id">${ $.provider}:data.customer_id</link>
                 </imports>
@@ -440,9 +440,8 @@
                     <option name="title" xsi:type="string">Add/Update Address</option>
                 </options>
             </settings>
-            <insertForm name="update_customer_address_form_loader" component="Magento_Customer/js/form/components/insert-form">
+            <insertForm name="update_customer_address_form_loader">
                 <settings>
-                    <!--<formSubmitType>ajax</formSubmitType>-->
                     <renderUrl path="mui/index/render_handle">
                         <param name="handle">customer_address_edit</param>
                         <param name="buttons">1</param>

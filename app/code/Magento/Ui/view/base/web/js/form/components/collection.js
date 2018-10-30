@@ -5,9 +5,6 @@
 
 /**
  * @api
- * @deprecated as customer addresses are handled by ui components.
- * This collection component manages rendering address list in Addresses tab of customer.
- * Now address list is rendered with ui component listing.
  */
 define([
     'underscore',
@@ -49,7 +46,6 @@ define([
          * @param {Object} elem - Incoming child.
          */
         initElement: function (elem) {
-            debugger;
             this._super();
 
             elem.activate();

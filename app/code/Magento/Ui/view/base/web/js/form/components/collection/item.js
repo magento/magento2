@@ -5,9 +5,6 @@
 
 /**
  * @api
- * @deprecated as customer addresses are handled by ui components.
- * This item component renders address list item preview in Addresses tab.
- * But now address list item is rendered with ui component in customer form.
  */
 define([
     'underscore',

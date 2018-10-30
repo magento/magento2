@@ -49,7 +49,7 @@ abstract class AbstractDefaultAddress extends Action
     }
 
     /**
-     * Execute action to change customer default address
+     * Execute action to set customer default billing or shipping address
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */

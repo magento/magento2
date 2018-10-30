@@ -48,7 +48,7 @@ class Validate extends \Magento\Backend\App\Action implements HttpPostActionInte
     }
 
     /**
-     * AJAX customer validation action
+     * AJAX customer address validation action
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
@@ -56,7 +56,7 @@ class Validate extends \Magento\Backend\App\Action implements HttpPostActionInte
     {
         /** @var \Magento\Framework\DataObject $response */
         $response = new \Magento\Framework\DataObject();
-        $response->setError(0);
+        $response->setError(false);
 
         /** @var \Magento\Framework\DataObject $validatedResponse */
         $validatedResponse = $this->validateCustomerAddress($response);
@@ -89,7 +89,7 @@ class Validate extends \Magento\Backend\App\Action implements HttpPostActionInte
                 $messages[] = $error;
             }
             $response->setMessages($messages);
-            $response->setError(1);
+            $response->setError(true);
         }
 
         return $response;

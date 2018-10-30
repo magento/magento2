@@ -60,7 +60,7 @@
                 <dataType>text</dataType>
             </settings>
         </field>
-        <field name="default_billing" sortOrder="1" formElement="checkbox">
+        <field name="default_billing" sortOrder="10" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="default" xsi:type="number">0</item>
@@ -83,7 +83,7 @@
                 </checkbox>
             </formElements>
         </field>
-        <field name="default_shipping" sortOrder="0" formElement="checkbox">
+        <field name="default_shipping" sortOrder="5" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="default" xsi:type="number">0</item>

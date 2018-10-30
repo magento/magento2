@@ -40,7 +40,7 @@ class Delete extends Action
     }
 
     /**
-     * Delete action
+     * Delete customer address action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      * @throws \Magento\Framework\Exception\LocalizedException

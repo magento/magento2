@@ -6,5 +6,5 @@
  */
 -->
 <customer-config>
-    <addresses-count>5</addresses-count>
+    <addresses-count>2</addresses-count>
 </customer-config>
