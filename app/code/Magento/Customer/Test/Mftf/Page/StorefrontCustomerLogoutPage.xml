@@ -5,12 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="CheckoutShippingPage" url="/checkout/#shipping" module="Checkout" area="storefront">
-        <section name="CheckoutShippingGuestInfoSection"/>
-        <section name="CheckoutShippingSection"/>
-        <section name="StorefrontCheckoutAddressPopupSection"/>
-    </page>
+    <page name="StorefrontCustomerLogoutPage" url="customer/account/logout/" area="storefront" module="Magento_Customer"/>
 </pages>
