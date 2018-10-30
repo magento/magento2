@@ -92,10 +92,10 @@
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategoryForSimpleProduct"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedProductOptionsBySimple" after="waitForGroupedProductModal">
+        <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedProductOptionsBySimple">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
-        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkSimpleProductFilterResult" after="filterGroupedProductOptionsBySimple"/>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkSimpleProductFilterResult"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedProductOptionsByVirtual">
             <argument name="product" value="$$virtualProduct$$"/>
         </actionGroup>
