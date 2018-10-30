@@ -64,11 +64,12 @@ class ItemProduct extends Form
                 $result[$key] = $this->getCheckoutData($item);
                 continue;
             }
+            $actionsKey = $this->actions[$key];
             $value = $this->_rootElement->find(
                 $item['selector'],
                 $item['strategy'],
                 $item['input']
-            )->$this->actions[$key]();
+            )->$actionsKey();
 
             $result[$key] = str_replace($currency, '', trim($value));
         }

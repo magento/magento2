@@ -136,8 +136,9 @@ class Messages extends Block
     public function clickLinkInMessage($messageType, $linkText)
     {
         if ($this->isVisibleMessage($messageType)) {
+            $message = $this->$messageType . 'Message';
             $this->_rootElement
-                ->find($this->$messageType . 'Message', Locator::SELECTOR_CSS)
+                ->find($message, Locator::SELECTOR_CSS)
                 ->find(sprintf($this->messageLink, $linkText), Locator::SELECTOR_XPATH)
                 ->click();
         }
