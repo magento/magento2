@@ -59,7 +59,7 @@ foreach ($subProductsSkus as $sku) {
         ->setLinkedProductSku($sku)
         ->setLinkedProductType($linkedProduct->getTypeId())
         ->getExtensionAttributes()
-        ->setQty(2);
+        ->setQty(2.5);
     $newLinks[] = $productLink;
 }
 $product->setProductLinks($newLinks);

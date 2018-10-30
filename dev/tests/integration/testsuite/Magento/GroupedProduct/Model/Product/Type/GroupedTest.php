@@ -214,7 +214,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 [
-                    'virtual-product' => 2, // This is a default quantity.
+                    'virtual-product' => 2.5, // This is a default quantity.
                 ],
             ],
             'Out of stock product are hidden #1' => [
@@ -242,7 +242,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 [
-                    'virtual-product' => 2, // This is a default quantity.
+                    'virtual-product' => 2.5, // This is a default quantity.
                 ],
             ],
         ];
