@@ -221,6 +221,7 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * Create product model from imported data for URL rewrite purposes.
+     * Also make a lookup for existing categories for this product if no categories are provided.
      *
      * @param array $rowData
      *
