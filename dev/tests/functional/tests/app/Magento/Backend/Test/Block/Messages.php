@@ -152,8 +152,10 @@ class Messages extends Block
      */
     public function isVisibleMessage($messageType)
     {
+        $message = $this->$messageType . 'Message';
+
         return $this->_rootElement
-            ->find($this->$messageType . 'Message', Locator::SELECTOR_CSS)
+            ->find($message, Locator::SELECTOR_CSS)
             ->isVisible();
     }
 
