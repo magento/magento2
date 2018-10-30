@@ -60,8 +60,9 @@ abstract class Reorder extends Action\Action
                 $this->messageManager->addErrorMessage(__('Invalid Form Key. Please refresh the page.'));
 
                 /** @var \Magento\Framework\Controller\Result\Redirect $redirect */
-                $redirect=$this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-                $redirect->setRefererUrl();
+                $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+                $redirect->setPath('*/*/history');
+
                 return $redirect;
             }
         } else {
