@@ -33,6 +33,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnCreationTestVariation4">
+            <data name="issue" xsi:type="string">MSI-1624</data>
             <data name="createProduct" xsi:type="string">configurable</data>
             <data name="product" xsi:type="string">catalogProductVirtual::required_fields</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -76,7 +77,8 @@
         <variation name="ProductTypeSwitchingOnCreationTestVariation9">
             <data name="createProduct" xsi:type="string">downloadable</data>
             <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="actionName" xsi:type="string">clearDownloadableData</data>
+            <data name="issue" xsi:type="string">MSI-1624</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid" />

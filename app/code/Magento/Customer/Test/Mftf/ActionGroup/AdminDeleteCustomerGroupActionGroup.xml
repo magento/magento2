@@ -5,11 +5,12 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteCustomerGroupActionGroup">
         <arguments>
-            <argument name="groupName" type="string"/>
+            <argument name="customerGroupName" type="string"/>
         </arguments>
         <amOnPage url="{{AdminCustomerGroupPage.url}}" stepKey="navigateToCustomersGroupPage"/>
         <waitForPageLoad stepKey="waitForPageOpened"/>

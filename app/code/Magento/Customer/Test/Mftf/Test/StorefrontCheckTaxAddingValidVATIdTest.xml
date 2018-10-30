@@ -50,6 +50,7 @@
             <argument name="customerTaxClassName" value="UK_zero"/>
         </actionGroup>
         <click stepKey="disableDefaultProdTaxClass" selector="{{AdminTaxRulesSection.defaultCustomerTaxClass}}"/>
+        <wait stepKey="waitForDisableDefaultProdTaxClass" time="2"/>
         <click stepKey="clickSaveBtn" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
         <waitForPageLoad stepKey="waitForSecondTaxRuleCreated"/>
 
@@ -129,7 +130,7 @@
 
             <!--Delete created customer group-->
             <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
-                <argument name="groupName" value="test_UK"/>
+                <argument name="customerGroupName" value="test_UK"/>
             </actionGroup>
 
             <createData entity="SetCustomerCreateNewAccountOptionsDefaultConfig" stepKey="setCustomerCreateNewAccountOptionsDefaultConfig"/>

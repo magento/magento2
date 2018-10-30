@@ -8,7 +8,12 @@
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Store\Model\Store;
 
+/**
+ * Flat item eraser. Used to clear items from the catalog flat table.
+ */
 class Eraser
 {
     /**
@@ -50,12 +55,7 @@ class Eraser
      */
     public function removeDeletedProducts(array &$ids, $storeId)
     {
-        $select = $this->connection->select()->from(
-            $this->productIndexerHelper->getTable('catalog_product_entity')
-        )->where(
-            'entity_id IN(?)',
-            $ids
-        );
+        $select = $this->getSelectForProducts($ids);
         $result = $this->connection->query($select);
 
         $existentProducts = [];
@@ -67,6 +67,61 @@ class Eraser
         $ids = $existentProducts;
 
         $this->deleteProductsFromStore($productsToDelete, $storeId);
+    }
+
+    /**
+     * Remove products with "Disabled" status from the flat table(s).
+     *
+     * @param array $ids
+     * @param int $storeId
+     * @return void
+     */
+    public function removeDisabledProducts(array &$ids, $storeId)
+    {
+        /* @var $statusAttribute \Magento\Eav\Model\Entity\Attribute */
+        $statusAttribute = $this->productIndexerHelper->getAttribute('status');
+
+        $select = $this->getSelectForProducts($ids);
+        $select->joinLeft(
+            ['status_global_attr' => $statusAttribute->getBackendTable()],
+            ' status_global_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
+            []
+        );
+        $select->joinLeft(
+            ['status_attr' => $statusAttribute->getBackendTable()],
+            ' status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            . ' AND status_attr.store_id = ' . $storeId,
+            []
+        );
+        $select->where('IFNULL(status_attr.value, status_global_attr.value) = ?', Status::STATUS_DISABLED);
+
+        $result = $this->connection->query($select);
+
+        $disabledProducts = [];
+        foreach ($result->fetchAll() as $product) {
+            $disabledProducts[] = $product['entity_id'];
+        }
+
+        if (!empty($disabledProducts)) {
+            $ids = array_diff($ids, $disabledProducts);
+            $this->deleteProductsFromStore($disabledProducts, $storeId);
+        }
+    }
+
+    /**
+     * Get Select object for existed products.
+     *
+     * @param array $ids
+     * @return \Magento\Framework\DB\Select
+     */
+    private function getSelectForProducts(array $ids)
+    {
+        $productTable = $this->productIndexerHelper->getTable('catalog_product_entity');
+        $select = $this->connection->select()->from($productTable)
+            ->columns('entity_id')
+            ->where('entity_id IN(?)', $ids);
+        return $select;
     }
 
     /**
