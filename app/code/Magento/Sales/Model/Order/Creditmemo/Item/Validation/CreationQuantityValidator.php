@@ -53,6 +53,10 @@ class CreationQuantityValidator implements ValidatorInterface
             return [__('The creditmemo contains product item that is not part of the original order.')];
         }
 
+        if ($orderItem->isDummy()) {
+            return [__('The creditmemo contains incorrect product items.')];
+        }
+
         if (!$this->isQtyAvailable($orderItem, $entity->getQty())) {
             return [__('The quantity to refund must not be greater than the unrefunded quantity.')];
         }

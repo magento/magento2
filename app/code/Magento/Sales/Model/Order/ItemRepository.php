@@ -228,6 +228,12 @@ class ItemRepository implements OrderItemRepositoryInterface
     {
         if ($parentId = $orderItem->getParentItemId()) {
             $orderItem->setParentItem($this->get($parentId));
+        } else {
+            foreach ($orderItem->getOrder()->getAllItems() as $item) {
+                if($item->getParentItemId() === $orderItem->getItemId()) {
+                    $item->setParentItem($orderItem);
+                }
+            }
         }
     }
 
