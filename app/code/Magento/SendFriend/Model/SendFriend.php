@@ -479,6 +479,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
             );
 
             if (!$word) {
+                $this->logCaptchaAttempt($captchaModel);
                 throw new LocalizedException(__('No CAPTCHA word provided'));
             }
             $isCorrectCaptcha = $captchaModel->isCorrect($word);
