@@ -8,6 +8,8 @@ namespace Magento\Catalog\Controller\Adminhtml;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Message\MessageInterface;
 
 /**
  * @magentoAppArea adminhtml
@@ -24,7 +26,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->dispatch('backend/catalog/product/save');
         $this->assertSessionMessages(
             $this->equalTo(['The product was unable to be saved. Please try again.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+            MessageInterface::TYPE_ERROR
         );
         $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
     }
@@ -44,7 +46,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+            MessageInterface::TYPE_SUCCESS
         );
     }
 
@@ -71,11 +73,11 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         );
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+            MessageInterface::TYPE_SUCCESS
         );
         $this->assertSessionMessages(
             $this->contains('You duplicated the product.'),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+            MessageInterface::TYPE_SUCCESS
         );
     }
 
@@ -260,9 +262,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
      * @param array $postData
      * @param array $tierPrice
      * @magentoDataFixture Magento/Catalog/_files/product_has_tier_price_show_as_low_as.php
-     * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
-     * @magentoDbIsolation disabled
      */
     public function testSaveActionTierPrice(array $postData, array $tierPrice)
     {
@@ -272,7 +272,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->dispatch('backend/catalog/product/save/id/' . $postData['id']);
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+            MessageInterface::TYPE_SUCCESS
         );
     }
 
@@ -349,8 +349,8 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
      */
     private function getProductData(array $tierPrice)
     {
-        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
-        $product = $repository->get('tier_prices')->getData();
+        $productRepositoryInterface = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepositoryInterface->get('tier_prices')->getData();
         $product['tier_price'] = $tierPrice;
         unset($product['entity_id']);
         return $product;
