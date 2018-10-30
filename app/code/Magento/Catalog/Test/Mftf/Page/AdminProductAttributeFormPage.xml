@@ -11,5 +11,6 @@
         <section name="AttributePropertiesSection"/>
         <section name="StorefrontPropertiesSection"/>
         <section name="AdvancedAttributePropertiesSection"/>
+        <section name="AdminAttributeOptionsSection"/>
     </page>
 </pages>
