@@ -22,6 +22,8 @@
         <element name="removeProductBtn" type="button" selector="//a[text()='Remove Product']"/>
         <element name="disableProductBtn" type="button" selector="//a[text()='Disable Product']"/>
         <element name="enableProductBtn" type="button" selector="//a[text()='Enable Product']"/>
+        <element name="confProductSku" type="input" selector="//*[@name='configurable-matrix[{{arg}}][sku]']" parameterized="true"/>
+        <element name="confProductSkuMessage" type="text" selector="//*[@name='configurable-matrix[{{arg}}][sku]']/following-sibling::label" parameterized="true"/>
     </section>
     <section name="AdminConfigurableProductFormSection">
         <element name="productWeight" type="input" selector=".admin__control-text[name='product[weight]']"/>
