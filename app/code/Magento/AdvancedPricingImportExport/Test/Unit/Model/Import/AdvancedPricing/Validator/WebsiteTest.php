@@ -25,11 +25,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
      */
     protected $website;
 
-    /**
-     * @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $websiteString;
-
     protected function setUp()
     {
         $this->webSiteModel = $this->getMockBuilder(\Magento\Store\Model\Website::class)
@@ -108,13 +103,13 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $this->webSiteModel->expects($this->once())->method('getBaseCurrency')->willReturn($currency);
 
         $expectedResult = AdvancedPricing::VALUE_ALL_WEBSITES . ' [' . $currencyCode . ']';
-        $this->websiteString = $this->getMockBuilder(
+        $websiteString = $this->getMockBuilder(
             \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website::class
         )
             ->setMethods(['_clearMessages', '_addMessages'])
             ->setConstructorArgs([$this->storeResolver, $this->webSiteModel])
             ->getMock();
-        $result = $this->websiteString->getAllWebsitesValue();
+        $result = $websiteString->getAllWebsitesValue();
 
         $this->assertEquals($expectedResult, $result);
     }
