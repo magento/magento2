@@ -214,7 +214,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 '_items' => [$this->getIndexerMock()],
             ]
         );
-        $this->assertEmpty($collection->{$methodName}(...$arguments));
+        $this->assertEmpty($collection->$methodName(...$arguments));
     }
 
     /**
@@ -273,7 +273,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 '_items' => [$this->getIndexerMock()],
             ]
         );
-        $this->assertInstanceOf(Collection::class, $collection->{$methodName}(...$arguments));
+        $this->assertInstanceOf(Collection::class, $collection->$methodName(...$arguments));
     }
 
     /**

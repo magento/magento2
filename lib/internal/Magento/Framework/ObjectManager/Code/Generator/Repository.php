@@ -284,7 +284,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getCreateFromArrayMethod()
     {
-        $body = "return \$this->{$this->_getSourcePersistorPropertyName()}->registerFromArray(\$data);";
+        $body = "return \$this->\$this->_getSourcePersistorPropertyName()->registerFromArray(\$data);";
         return [
             'name' => 'createFromArray',
             'parameters' => [
@@ -320,7 +320,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getCreateMethod()
     {
-        $body = "return \$this->{$this->_getSourcePersistorPropertyName()}->registerNew(\$entity);";
+        $body = "return \$this->\$this->_getSourcePersistorPropertyName()->registerNew(\$entity);";
         return [
             'name' => 'create',
             'parameters' => [
@@ -356,7 +356,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getFlushMethod()
     {
-        $body = "\$ids = \$this->{$this->_getSourcePersistorPropertyName()}->doPersist();\n"
+        $body = "\$ids = \$this->\$this->_getSourcePersistorPropertyName()->doPersist();\n"
             . "foreach (\$ids as \$id) {\n"
             . "unset(\$this->registry[\$id]);\n"
             . "}";
@@ -383,7 +383,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getSaveMethod()
     {
         $info = $this->getMethodParamAndReturnType('save');
-        $body = "\$this->{$this->_getSourcePersistorPropertyName()}->doPersistEntity(\$entity);\n"
+        $body = "\$this->\$this->_getSourcePersistorPropertyName()->doPersistEntity(\$entity);\n"
             . "return \$entity;";
         return [
             'name' => 'save',
@@ -422,8 +422,8 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getDeleteMethod()
     {
         $info = $this->getMethodParamAndReturnType('delete');
-        $body = "\$this->{$this->_getSourcePersistorPropertyName()}->registerDeleted(\$entity);\n"
-            . "return \$this->{$this->_getSourcePersistorPropertyName()}->doPersistEntity(\$entity);";
+        $body = "\$this->\$this->_getSourcePersistorPropertyName()->registerDeleted(\$entity);\n"
+            . "return \$this->\$this->_getSourcePersistorPropertyName()->doPersistEntity(\$entity);";
         return [
             'name' => 'delete',
             'parameters' => [
@@ -462,8 +462,8 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     {
         $info = $this->getMethodParamAndReturnType('deleteById');
         $body = "\$entity = \$this->get(\$id);\n"
-            . "\$this->{$this->_getSourcePersistorPropertyName()}->registerDeleted(\$entity);\n"
-            . "return \$this->{$this->_getSourcePersistorPropertyName()}->doPersistEntity(\$entity);";
+            . "\$this->\$this->_getSourcePersistorPropertyName()->registerDeleted(\$entity);\n"
+            . "return \$this->\$this->_getSourcePersistorPropertyName()->doPersistEntity(\$entity);";
         return [
             'name' => 'deleteById',
             'parameters' => [
@@ -500,7 +500,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getRemoveMethod()
     {
-        $body = "\$this->{$this->_getSourcePersistorPropertyName()}->registerDeleted(\$entity);";
+        $body = "\$this->\$this->_getSourcePersistorPropertyName()->registerDeleted(\$entity);";
         return [
             'name' => 'remove',
             'parameters' => [

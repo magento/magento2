@@ -18,7 +18,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
     public function testPhraseCreation($constructArguments, $getter, $result)
     {
         $phrase = new Phrase(...array_values($constructArguments));
-        $this->assertEquals($result, $phrase->{$getter}());
+        $this->assertEquals($result, $phrase->$getter());
     }
 
     /**
@@ -82,9 +82,9 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
     public function testAccessorMethods($value, $setter, $getter)
     {
         $phrase = new Phrase('phrase', 'translation');
-        $phrase->{$setter}($value);
+        $phrase->$setter($value);
 
-        $this->assertEquals($value, $phrase->{$getter}());
+        $this->assertEquals($value, $phrase->$getter());
     }
 
     /**

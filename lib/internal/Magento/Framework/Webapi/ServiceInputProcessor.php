@@ -253,7 +253,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                         )
                     );
                 }
-                $object->{$setterName}($setterValue);
+                $object->$setterName($setterValue);
             }
         }
         return $object;

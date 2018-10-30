@@ -237,7 +237,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $expectedFlagValue = isset($expectedData[$flagType]) && $expectedData[$flagType];
         $flagGetter = $this->_flagVerification[$flagType];
-        $this->assertEquals($expectedFlagValue, $actualObject->{$flagGetter}());
+        $this->assertEquals($expectedFlagValue, $actualObject->$flagGetter());
     }
 
     /**

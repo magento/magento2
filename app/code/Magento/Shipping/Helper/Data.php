@@ -74,7 +74,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _getTrackingUrl($key, $model, $method = 'getId')
     {
-        $urlPart = "{$key}:{$model->{$method}()}:{$model->getProtectCode()}";
+        $urlPart = "{$key}:{$model->$method()}:{$model->getProtectCode()}";
         $params = [
             '_scope' => $model->getStoreId(),
             '_nosid' => true,

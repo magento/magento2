@@ -203,7 +203,7 @@ class DataObject implements \ArrayAccess
     public function setDataUsingMethod($key, $args = [])
     {
         $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-        $this->{$method}($args);
+        $this->$method($args);
         return $this;
     }
 
@@ -217,7 +217,7 @@ class DataObject implements \ArrayAccess
     public function getDataUsingMethod($key, $args = null)
     {
         $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-        return $this->{$method}($args);
+        return $this->$method($args);
     }
 
     /**

@@ -244,7 +244,7 @@ class Copy
 
         $methodExists = method_exists($source, $method);
         if ($methodExists == true) {
-            $value = $source->{$method}();
+            $value = $source->$method();
         } else {
             // If we couldn't find the method, check if we can get it from the extension attributes
             $extensionAttributes = $source->getExtensionAttributes();
@@ -253,7 +253,7 @@ class Copy
             } else {
                 $extensionMethodExists = method_exists($extensionAttributes, $method);
                 if ($extensionMethodExists == true) {
-                    $value = $extensionAttributes->{$method}();
+                    $value = $extensionAttributes->$method();
                 } else {
                     throw new \InvalidArgumentException('Attribute in object does not exist.');
                 }
@@ -278,7 +278,7 @@ class Copy
 
         $methodExists = method_exists($target, $method);
         if ($methodExists == true) {
-            $target->{$method}($value);
+            $target->$method($value);
         } else {
             // If we couldn't find the method, check if we can set it from the extension attributes
             $extensionAttributes = $target->getExtensionAttributes();
@@ -287,7 +287,7 @@ class Copy
             }
             $extensionMethodExists = method_exists($extensionAttributes, $method);
             if ($extensionMethodExists == true) {
-                $extensionAttributes->{$method}($value);
+                $extensionAttributes->$method($value);
                 $target->setExtensionAttributes($extensionAttributes);
             } else {
                 throw new \InvalidArgumentException('Attribute in object does not exist.');

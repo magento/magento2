@@ -106,7 +106,7 @@ class ExtensionAttributesProcessor
                 continue;
             }
 
-            $value = $dataObject->{$methodName}();
+            $value = $dataObject->$methodName();
             if ($value === null) {
                 // all extension attributes are optional so don't need to check if isRequired
                 continue;

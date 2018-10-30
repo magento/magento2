@@ -786,7 +786,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $cond = '(' . implode(') AND (', $condArr) . ')';
 
         // join table
-        $this->getSelect()->{$joinMethod}(
+        $this->getSelect()->$joinMethod(
             [$tableAlias => $table],
             $cond,
             $field ? [$alias => $field] : []
@@ -863,7 +863,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $cond = '(' . implode(') AND (', $condArr) . ')';
 
         // join table
-        $this->getSelect()->{$joinMethod}([$tableAlias => $tableName], $cond, $fields);
+        $this->getSelect()->$joinMethod([$tableAlias => $tableName], $cond, $fields);
 
         return $this;
     }
@@ -1460,7 +1460,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     protected function _joinAttributeToSelect($method, $attribute, $tableAlias, $condition, $fieldCode, $fieldAlias)
     {
-        $this->getSelect()->{$method}(
+        $this->getSelect()->$method(
             [$tableAlias => $attribute->getBackend()->getTable()],
             '(' . implode(') AND (', $condition) . ')',
             [$fieldCode => $fieldAlias]

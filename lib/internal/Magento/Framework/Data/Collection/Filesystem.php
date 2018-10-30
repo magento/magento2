@@ -344,22 +344,22 @@ class Filesystem extends \Magento\Framework\Data\Collection
     private function _generateAndFilterAndSort($attributeName)
     {
         // generate custom data (as rows with columns) basing on the filenames
-        foreach ($this->{$attributeName} as $key => $filename) {
-            $this->{$attributeName}[$key] = $this->_generateRow($filename);
+        foreach ($this->$attributeName as $key => $filename) {
+            $this->$attributeName[$key] = $this->_generateRow($filename);
         }
 
         // apply filters on generated data
         if (!empty($this->_filters)) {
-            foreach ($this->{$attributeName} as $key => $row) {
+            foreach ($this->$attributeName as $key => $row) {
                 if (!$this->_filterRow($row)) {
-                    unset($this->{$attributeName}[$key]);
+                    unset($this->$attributeName[$key]);
                 }
             }
         }
 
         // sort (keys are lost!)
         if (!empty($this->_orders)) {
-            usort($this->{$attributeName}, [$this, '_usort']);
+            usort($this->$attributeName, [$this, '_usort']);
         }
     }
 

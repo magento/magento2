@@ -93,16 +93,16 @@ class Mapper
                     if ($toIsArray) {
                         $to[$keyTo] = $from[$keyFrom];
                     } elseif ($toIsVO) {
-                        $to->{$set}($keyTo, $from[$keyFrom]);
+                        $to->$set($keyTo, $from[$keyFrom]);
                     }
                 }
             } elseif ($fromIsVO) {
                 // get value if (any) value is found as in magic data or a non-empty value with declared getter
                 $value = null;
                 if ($shouldGet = $from->hasData($keyFrom)) {
-                    $value = $from->{$get}($keyFrom);
+                    $value = $from->$get($keyFrom);
                 } elseif (method_exists($from, $get)) {
-                    $value = $from->{$get}($keyFrom);
+                    $value = $from->$get($keyFrom);
                     if ($value) {
                         $shouldGet = true;
                     }
@@ -111,7 +111,7 @@ class Mapper
                     if ($toIsArray) {
                         $to[$keyTo] = $value;
                     } elseif ($toIsVO) {
-                        $to->{$set}($keyTo, $value);
+                        $to->$set($keyTo, $value);
                     }
                 }
             }
@@ -123,7 +123,7 @@ class Mapper
                 }
             } elseif ($toIsVO) {
                 if (!$to->hasData($keyTo)) {
-                    $to->{$set}($keyTo, $value);
+                    $to->$set($keyTo, $value);
                 }
             }
         }

@@ -31,7 +31,7 @@ class TabTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Block\Widget\Tab::class,
             ['data' => [$field => $value]]
         );
-        $this->assertEquals($expected, $object->{$method}());
+        $this->assertEquals($expected, $object->$method());
     }
 
     /**

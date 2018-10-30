@@ -247,7 +247,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getLoadEntityMethod()
     {
-        $body = "\$entity = \$this->{$this->_getSourceFactoryPropertyName()}->create()->load(\$key);\n"
+        $body = "\$entity = \$this->\$this->_getSourceFactoryPropertyName()->create()->load(\$key);\n"
             . "return \$entity;";
         return [
             'name' => 'loadEntity',
@@ -321,11 +321,11 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
             . "            \$data = \$this->entitiesPool[\$hash];\n"
             . "            \$entity = \$data['entity'];\n"
             . "            if (\$data['action'] == 'created') {\n"
-            . "                \$this->{$this->_getSourceResourcePropertyName()}->save(\$entity);\n"
+            . "                \$this->\$this->_getSourceResourcePropertyName()->save(\$entity);\n"
             . "                \$ids[] = \$entity->getId();\n"
             . "            } else {\n"
             . "                \$ids[] = \$entity->getId();\n"
-            . "                \$this->{$this->_getSourceResourcePropertyName()}->delete(\$entity);\n"
+            . "                \$this->\$this->_getSourceResourcePropertyName()->delete(\$entity);\n"
             . "            }\n"
             . "        }\n"
             . "        unset(\$this->entitiesPool[\$hash]);\n"
@@ -410,7 +410,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getRegisterFromArrayMethod()
     {
-        $body = "\$entity = \$this->{$this->_getSourceFactoryPropertyName()}->create(['data' => \$data]);\n"
+        $body = "\$entity = \$this->\$this->_getSourceFactoryPropertyName()->create(['data' => \$data]);\n"
             . "\$this->registerNew(\$entity);\n"
             . "return \$entity;";
         return [

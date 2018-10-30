@@ -31,7 +31,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ['translator' => [$translatorMock, 'translate']]
         );
 
-        $this->assertEquals($translatedStr, $translator->{$method}($strToTranslate));
+        $this->assertEquals($translatedStr, $translator->$method($strToTranslate));
     }
 
     /**

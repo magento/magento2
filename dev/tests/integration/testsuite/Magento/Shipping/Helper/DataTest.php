@@ -42,7 +42,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         }
 
         $model = $objectManager->create($modelName, $constructArgs);
-        $model->{$getIdMethod}($entityId);
+        $model->$getIdMethod($entityId);
 
         if (\Magento\Sales\Model\Order::class === $modelName) {
             $model->setProtectCode($code);
@@ -85,7 +85,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         }
 
         $model = $objectManager->create($modelName, $constructArgs);
-        $model->{$getIdMethod}($entityId);
+        $model->$getIdMethod($entityId);
 
         if (\Magento\Sales\Model\Order::class === $modelName) {
             $model->setProtectCode($code);

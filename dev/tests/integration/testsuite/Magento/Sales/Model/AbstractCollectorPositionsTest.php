@@ -77,7 +77,7 @@ abstract class AbstractCollectorPositionsTest extends \PHPUnit\Framework\TestCas
                 throw new \InvalidArgumentException('Unknown config type: ' . $configType);
         }
         $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($configClass);
-        return $config->{$methodGetCollectors}();
+        return $config->$methodGetCollectors();
     }
 
     /**

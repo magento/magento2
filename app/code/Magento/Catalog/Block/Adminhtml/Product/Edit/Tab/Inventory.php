@@ -138,7 +138,7 @@ class Inventory extends \Magento\Backend\Block\Widget
         if ($stockItem->getItemId()) {
             $method = 'get' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($field);
             if (is_callable([$stockItem, $method])) {
-                $value = $stockItem->{$method}();
+                $value = $stockItem->$method();
             }
         }
         return $value === null ? $this->stockConfiguration->getDefaultConfigValue($field) : $value;
@@ -156,7 +156,7 @@ class Inventory extends \Magento\Backend\Block\Widget
                 $field
             );
             if (method_exists($stockItem, $method)) {
-                return $stockItem->{$method}();
+                return $stockItem->$method();
             }
         }
         return $this->stockConfiguration->getDefaultConfigValue($field);

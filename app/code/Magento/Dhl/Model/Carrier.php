@@ -1237,8 +1237,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             $countriesXml = $directoryRead->readFile('countries.xml');
             $this->_countryParams = $this->_xmlElFactory->create(['data' => $countriesXml]);
         }
-        if (isset($this->_countryParams->{$countryCode})) {
-            $countryParams = new \Magento\Framework\DataObject($this->_countryParams->{$countryCode}->asArray());
+        if (isset($this->_countryParams->$countryCode)) {
+            $countryParams = new \Magento\Framework\DataObject($this->_countryParams->$countryCode->asArray());
         }
         return isset($countryParams) ? $countryParams : new \Magento\Framework\DataObject();
     }

@@ -106,7 +106,7 @@ class NomediaTest extends \PHPUnit\Framework\TestCase
         );
         $model->setRootDir($rootDir);
         $model->setBackupsDir($rootDir);
-        $model->{$action}();
+        $model->$action();
         $this->assertTrue($model->getIsSuccess());
 
         $this->assertEquals([$rootDir, $rootDir . '/media', $rootDir . '/pub/media'], $model->getIgnorePaths());

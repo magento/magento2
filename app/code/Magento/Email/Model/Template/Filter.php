@@ -413,7 +413,7 @@ class Filter extends \Magento\Framework\Filter\Template
         ) {
             $method = 'toHtml';
         }
-        return $block->{$method}();
+        return $block->$method();
     }
 
     /**

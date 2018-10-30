@@ -79,7 +79,7 @@ class DataObjectProcessor
                 continue;
             }
 
-            $value = $dataObject->{$methodName}();
+            $value = $dataObject->$methodName();
             $isMethodReturnValueRequired = $this->methodsMapProcessor->isMethodReturnValueRequired(
                 $dataObjectType,
                 $methodName

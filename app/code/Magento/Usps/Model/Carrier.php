@@ -1489,7 +1489,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $xml->addChild('POZipCode');
         $xml->addChild('ImageType', 'PDF');
 
-        $xml = $xmlWrap->{$rootNode}->asXML();
+        $xml = $xmlWrap->$rootNode->asXML();
 
         return $xml;
     }
@@ -1579,7 +1579,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $xml->addChild('WaiverOfSignature', $packageParams->getDeliveryConfirmation());
         $xml->addChild('ImageType', 'PDF');
 
-        $xml = $xmlWrap->{$rootNode}->asXML();
+        $xml = $xmlWrap->$rootNode->asXML();
 
         return $xml;
     }
@@ -1853,7 +1853,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $xml->addChild('Girth', $girth);
         }
 
-        $xml = $xmlWrap->{$rootNode}->asXML();
+        $xml = $xmlWrap->$rootNode->asXML();
 
         return $xml;
     }

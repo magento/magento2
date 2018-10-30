@@ -101,7 +101,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
                         'update_section',
                         [
                             'name' => $updateSection,
-                            'html' => $this->{$updateSectionFunction}(),
+                            'html' => $this->$updateSectionFunction(),
                         ]
                     );
                 }

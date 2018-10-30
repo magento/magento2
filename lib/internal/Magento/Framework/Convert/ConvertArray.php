@@ -97,7 +97,7 @@ XML;
                 }
             } else {
                 $xml->addChild($key);
-                self::_assocToXml($value, $key, $xml->{$key});
+                self::_assocToXml($value, $key, $xml->$key);
             }
         }
         if ($hasNumericKey && $hasStringKey) {

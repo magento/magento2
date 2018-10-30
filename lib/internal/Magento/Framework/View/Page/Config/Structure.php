@@ -222,7 +222,7 @@ class Structure
     {
         $result = [];
         foreach ($this->serializableProperties as $property) {
-            $result[$property] = $this->{$property};
+            $result[$property] = $this->$property;
         }
 
         return $result;
@@ -238,7 +238,7 @@ class Structure
     public function populateWithArray(array $data)
     {
         foreach ($this->serializableProperties as $property) {
-            $this->{$property} = $this->getArrayValueByKey($property, $data);
+            $this->$property = $this->getArrayValueByKey($property, $data);
         }
     }
 

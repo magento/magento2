@@ -93,7 +93,7 @@ class Php implements TemplateEngineInterface
      */
     public function __isset($name)
     {
-        return isset($this->_currentBlock->{$name});
+        return isset($this->_currentBlock->$name);
     }
 
     /**
@@ -107,7 +107,7 @@ class Php implements TemplateEngineInterface
      */
     public function __get($name)
     {
-        return $this->_currentBlock->{$name};
+        return $this->_currentBlock->$name;
     }
 
     /**

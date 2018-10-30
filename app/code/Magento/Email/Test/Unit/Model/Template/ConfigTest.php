@@ -299,9 +299,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetterMethodUnknownTemplate($getterMethod, $argument = null)
     {
         if (!$argument) {
-            $this->model->{$getterMethod}('unknown');
+            $this->model->$getterMethod('unknown');
         } else {
-            $this->model->{$getterMethod}('unknown', $argument);
+            $this->model->$getterMethod('unknown', $argument);
         }
     }
 
@@ -349,9 +349,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->readDirFactory
         );
         if (!$argument) {
-            $model->{$getterMethod}('fixture');
+            $model->$getterMethod('fixture');
         } else {
-            $model->{$getterMethod}('fixture', $argument);
+            $model->$getterMethod('fixture', $argument);
         }
     }
 

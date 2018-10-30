@@ -122,7 +122,7 @@ namespace Magento\Framework\Session {
             $model = $this->getModel();
             $options = [$option => $value];
             $model->setOptions($options);
-            $this->assertSame($value, $model->{$getter}());
+            $this->assertSame($value, $model->$getter());
         }
 
         public function optionsProvider()

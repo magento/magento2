@@ -1133,7 +1133,7 @@ class Payment extends Info implements OrderPaymentInterface
         if ($isOnline) {
             $method = $this->getMethodInstance();
             $method->setStore($order->getStoreId());
-            $method->{$gatewayCallback}($this);
+            $method->$gatewayCallback($this);
         }
         if ($this->checkIfTransactionExists()) {
             return $this;

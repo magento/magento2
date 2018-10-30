@@ -93,7 +93,7 @@ class DependencyDecoratorTest extends \PHPUnit\Framework\TestCase
             ->method($methodName)
             ->with(...$params)
             ->willReturn($result);
-        $this->assertSame($result, $dependencyDecorator->{$methodName}(...$params));
+        $this->assertSame($result, $dependencyDecorator->$methodName(...$params));
     }
 
     /**
@@ -119,7 +119,7 @@ class DependencyDecoratorTest extends \PHPUnit\Framework\TestCase
             ->method($methodName)
             ->with()
             ->willReturn($result);
-        $this->assertSame($result, $this->dependencyDecorator->{$methodName}());
+        $this->assertSame($result, $this->dependencyDecorator->$methodName());
     }
 
     /**
@@ -157,7 +157,7 @@ class DependencyDecoratorTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method($methodName)
             ->with(...$params);
-        $this->assertEmpty($this->dependencyDecorator->{$methodName}(...$params));
+        $this->assertEmpty($this->dependencyDecorator->$methodName(...$params));
     }
 
     /**
@@ -181,7 +181,7 @@ class DependencyDecoratorTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method($methodName)
             ->with(...$params);
-        $this->assertEquals($this->dependencyDecorator, $this->dependencyDecorator->{$methodName}(...$params));
+        $this->assertEquals($this->dependencyDecorator, $this->dependencyDecorator->$methodName(...$params));
     }
 
     /**

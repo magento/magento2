@@ -197,7 +197,7 @@ class Result extends \Magento\Backend\Block\Template
             $method = "add{$priority}";
 
             foreach ($messages as $message) {
-                $messagesBlock->{$method}($message);
+                $messagesBlock->$method($message);
             }
         }
         return $messagesBlock->toHtml();

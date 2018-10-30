@@ -116,17 +116,17 @@ class CartTest extends \PHPUnit\Framework\TestCase
             $getMethod = 'get' . $amountType;
             $addMethod = 'add' . $amountType;
 
-            $this->_model->{$setMethod}(10);
-            $this->assertEquals(10, $this->_model->{$getMethod}());
+            $this->_model->$setMethod(10);
+            $this->assertEquals(10, $this->_model->$getMethod());
 
-            $this->_model->{$addMethod}(5);
-            $this->assertEquals(15, $this->_model->{$getMethod}());
+            $this->_model->$addMethod(5);
+            $this->assertEquals(15, $this->_model->$getMethod());
 
-            $this->_model->{$addMethod}(-20);
-            $this->assertEquals(-5, $this->_model->{$getMethod}());
+            $this->_model->$addMethod(-20);
+            $this->assertEquals(-5, $this->_model->$getMethod());
 
-            $this->_model->{$setMethod}(10);
-            $this->assertEquals(10, $this->_model->{$getMethod}());
+            $this->_model->$setMethod(10);
+            $this->assertEquals(10, $this->_model->$getMethod());
         }
 
         // there is no method setSubtotal(), so test the following separately

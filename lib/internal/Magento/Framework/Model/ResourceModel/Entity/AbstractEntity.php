@@ -39,8 +39,8 @@ abstract class AbstractEntity
     {
         if ('' === $key) {
             return $this->_config;
-        } elseif (isset($this->_config->{$key})) {
-            return $this->_config->{$key};
+        } elseif (isset($this->_config->$key)) {
+            return $this->_config->$key;
         } else {
             return false;
         }

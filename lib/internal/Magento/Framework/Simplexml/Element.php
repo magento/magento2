@@ -132,7 +132,7 @@ class Element extends \SimpleXMLElement
                 //
                 $attributeValue = trim($attributeValue, '"');
                 $found = false;
-                foreach ($desc->{$nodeName} as $subdesc) {
+                foreach ($desc->$nodeName as $subdesc) {
                     if ((string)$subdesc[$attributeName] === $attributeValue) {
                         $found = true;
                         $desc = $subdesc;
@@ -143,7 +143,7 @@ class Element extends \SimpleXMLElement
                     $desc = false;
                 }
             } else {
-                $desc = $desc->{$nodeName};
+                $desc = $desc->$nodeName;
             }
             if (!$desc) {
                 return false;
@@ -391,13 +391,13 @@ class Element extends \SimpleXMLElement
 
         if (!$source->hasChildren()) {
             // handle string node
-            if (isset($this->{$sourceName})) {
+            if (isset($this->$sourceName)) {
                 // if target already has children return without regard
-                if ($this->{$sourceName}->hasChildren()) {
+                if ($this->$sourceName->hasChildren()) {
                     return $this;
                 }
                 if ($overwrite) {
-                    unset($this->{$sourceName});
+                    unset($this->$sourceName);
                 } else {
                     return $this;
                 }
@@ -411,8 +411,8 @@ class Element extends \SimpleXMLElement
             return $this;
         }
 
-        if (isset($this->{$sourceName})) {
-            $targetChild = $this->{$sourceName};
+        if (isset($this->$sourceName)) {
+            $targetChild = $this->$sourceName;
         }
 
         if ($targetChild === null) {
@@ -453,14 +453,14 @@ class Element extends \SimpleXMLElement
         $node = $this;
         foreach ($arr as $i => $nodeName) {
             if ($last === $i) {
-                if (!isset($node->{$nodeName}) || $overwrite) {
-                    $node->{$nodeName} = $value;
+                if (!isset($node->$nodeName) || $overwrite) {
+                    $node->$nodeName = $value;
                 }
             } else {
-                if (!isset($node->{$nodeName})) {
+                if (!isset($node->$nodeName)) {
                     $node = $node->addChild($nodeName);
                 } else {
-                    $node = $node->{$nodeName};
+                    $node = $node->$nodeName;
                 }
             }
         }

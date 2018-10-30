@@ -24,7 +24,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      */
     public function is($var, $value = true)
     {
-        $flag = $this->{$var};
+        $flag = $this->$var;
 
         if ($value === true) {
             $flag = strtolower((string)$flag);

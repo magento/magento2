@@ -83,7 +83,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
 
         if ($attribute->isScopeGlobal()) {
             $alias = 'ta_' . $attrCode;
-            $select->{$joinType}(
+            $select->$joinType(
                 [$alias => $attributeTable],
                 "{$alias}.{$productIdField} = {$entity} AND {$alias}.attribute_id = {$attributeId}" .
                 " AND {$alias}.store_id = 0",
@@ -94,7 +94,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
             $dAlias = 'tad_' . $attrCode;
             $sAlias = 'tas_' . $attrCode;
 
-            $select->{$joinType}(
+            $select->$joinType(
                 [$dAlias => $attributeTable],
                 "{$dAlias}.{$productIdField} = {$entity} AND {$dAlias}.attribute_id = {$attributeId}" .
                 " AND {$dAlias}.store_id = 0",

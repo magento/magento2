@@ -80,20 +80,20 @@ class Interceptor extends \Magento\Test\Di\Child
         $beforeFunc = __FUNCTION__ . 'Before';
         if (isset($this->_pluginList[$beforeFunc])) {
             foreach ($this->_pluginList[$beforeFunc] as $plugin) {
-                $param = $this->_objectManager->get($plugin)->{$beforeFunc}($param);
+                $param = $this->_objectManager->get($plugin)->$beforeFunc($param);
             }
         }
         $insteadFunc = __FUNCTION__;
         if (isset($this->_pluginList[$insteadFunc])) {
             $first = reset($this->_pluginList[$insteadFunc]);
-            $returnValue = $this->_objectManager->get($first)->{$insteadFunc}();
+            $returnValue = $this->_objectManager->get($first)->$insteadFunc();
         } else {
             $returnValue = $this->_getSubject()->wrap($param);
         }
         $afterFunc = __FUNCTION__ . 'After';
         if (isset($this->_pluginList[$afterFunc])) {
             foreach (array_reverse($this->_pluginList[$afterFunc]) as $plugin) {
-                $returnValue = $this->_objectManager->get($plugin)->{$afterFunc}($returnValue);
+                $returnValue = $this->_objectManager->get($plugin)->$afterFunc($returnValue);
             }
         }
         return $returnValue;

@@ -68,7 +68,7 @@ class ItemProduct extends Form
                 $item['selector'],
                 $item['strategy'],
                 $item['input']
-            )->{$this->actions[$key]}();
+            )->$this->actions[$key]();
 
             $result[$key] = str_replace($currency, '', trim($value));
         }

@@ -264,7 +264,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 $this->getDefaultStoreId()
             );
 
-            $this->getSelect()->{$method}(
+            $this->getSelect()->$method(
                 [$defAlias => $attribute->getBackend()->getTable()],
                 $defCondition,
                 []

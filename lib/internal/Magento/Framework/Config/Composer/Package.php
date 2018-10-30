@@ -68,7 +68,7 @@ class Package
         if ($result && $filter) {
             foreach ($result as $key => $value) {
                 if (!preg_match($filter, $key)) {
-                    unset($result->{$key});
+                    unset($result->$key);
                 }
             }
         }
@@ -90,9 +90,9 @@ class Package
             return false;
         }
         if (isset($chain[$index + 1])) {
-            return $this->traverseGet($json->{$property}, $chain, $index + 1);
+            return $this->traverseGet($json->$property, $chain, $index + 1);
         } else {
-            return $json->{$property};
+            return $json->$property;
         }
     }
 }

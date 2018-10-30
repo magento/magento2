@@ -233,7 +233,7 @@ class File
 
         foreach ($data as $part) {
             try {
-                $this->{$callback}($part);
+                $this->$callback($part);
             } catch (\Exception $e) {
                 $this->_errors[] = $e->getMessage();
                 $this->_logger->critical($e);

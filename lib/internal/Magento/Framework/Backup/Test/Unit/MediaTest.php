@@ -106,10 +106,10 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         );
         $model->setRootDir($rootDir);
         $model->setBackupsDir($rootDir);
-        $model->{$action}();
+        $model->$action();
         $this->assertTrue($model->getIsSuccess());
 
-        $this->assertTrue($model->{$action}());
+        $this->assertTrue($model->$action());
 
         $ignorePaths = $model->getIgnorePaths();
 

@@ -82,7 +82,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     {
         if ($getter = $this->getColumn()->getGetter()) {
             if (is_string($getter)) {
-                return $row->{$getter}();
+                return $row->$getter();
             } elseif (is_callable($getter)) {
                 return call_user_func($getter, $row);
             }

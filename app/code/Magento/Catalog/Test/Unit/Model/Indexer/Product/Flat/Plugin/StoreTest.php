@@ -43,7 +43,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSave($matcherMethod, $storeId)
     {
-        $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
+        $this->processorMock->expects($this->$matcherMethod())->method('markIndexerAsInvalid');
 
         $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
 
@@ -58,7 +58,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSaveSwitchStoreGroup($matcherMethod, $storeGroupChanged)
     {
-        $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
+        $this->processorMock->expects($this->$matcherMethod())->method('markIndexerAsInvalid');
 
         $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue(1));
 

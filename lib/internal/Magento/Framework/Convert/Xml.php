@@ -21,9 +21,9 @@ class Xml
     {
         $array = [];
         foreach ($xml as $key => $value) {
-            if (isset($value->{$key})) {
+            if (isset($value->$key)) {
                 $i = 0;
-                foreach ($value->{$key} as $v) {
+                foreach ($value->$key as $v) {
                     $array[$key][$i++] = (string)$v;
                 }
             } else {

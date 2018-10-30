@@ -94,7 +94,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($expectedOutput)
         );
-        $actualIds = $this->_model->{$method}($tags);
+        $actualIds = $this->_model->$method($tags);
         $this->assertEquals($expectedIds, $actualIds);
     }
 

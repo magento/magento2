@@ -122,7 +122,7 @@ class OutputTest extends \PHPUnit\Framework\TestCase
         try {
             $this->assertEquals(
                 $expectedResult,
-                $this->_helper->{$method}(uniqid(), "<p>line1</p>\nline2", $attributeName)
+                $this->_helper->$method(uniqid(), "<p>line1</p>\nline2", $attributeName)
             );
 
             $attribute->setIsHtmlAllowedOnFront($isHtml)->setIsWysiwygEnabled($isWysiwyg);

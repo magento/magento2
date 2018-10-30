@@ -196,7 +196,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($returnValue)
         );
 
-        $this->assertEquals($returnValue, $this->_helper->{$method}());
+        $this->assertEquals($returnValue, $this->_helper->$method());
     }
 
     public function testHasSendConversionValueCurrency()

@@ -647,7 +647,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
     {
         if (!empty($this->_lineItemExportItemsFilters[$publicKey])) {
             $callback = $this->_lineItemExportItemsFilters[$publicKey];
-            $value = method_exists($this, $callback) ? $this->{$callback}($value) : $callback($value);
+            $value = method_exists($this, $callback) ? $this->$callback($value) : $callback($value);
         }
 
         if (is_float($value)) {

@@ -265,7 +265,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
 
         foreach ($parts as $component => $method) {
             if (isset($data[$component])) {
-                $this->{$method}($data[$component]);
+                $this->$method($data[$component]);
             }
         }
         return $this;

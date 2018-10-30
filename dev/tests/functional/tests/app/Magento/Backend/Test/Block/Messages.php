@@ -137,7 +137,7 @@ class Messages extends Block
     {
         if ($this->isVisibleMessage($messageType)) {
             $this->_rootElement
-                ->find($this->{$messageType . 'Message'}, Locator::SELECTOR_CSS)
+                ->find($this->$messageType . 'Message', Locator::SELECTOR_CSS)
                 ->find(sprintf($this->messageLink, $linkText), Locator::SELECTOR_XPATH)
                 ->click();
         }
@@ -152,7 +152,7 @@ class Messages extends Block
     public function isVisibleMessage($messageType)
     {
         return $this->_rootElement
-            ->find($this->{$messageType . 'Message'}, Locator::SELECTOR_CSS)
+            ->find($this->$messageType . 'Message', Locator::SELECTOR_CSS)
             ->isVisible();
     }
 

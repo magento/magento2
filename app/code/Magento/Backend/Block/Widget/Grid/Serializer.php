@@ -44,7 +44,8 @@ class Serializer extends \Magento\Framework\View\Element\Template
             $grid = $this->getLayout()->getBlock($grid);
         }
         if ($grid instanceof \Magento\Backend\Block\Widget\Grid) {
-            $this->setGridBlock($grid)->setSerializeData($grid->{$this->getCallback()}());
+            $callback = $this->getCallback();
+            $this->setGridBlock($grid)->setSerializeData($grid->$callback());
         }
         return parent::_prepareLayout();
     }

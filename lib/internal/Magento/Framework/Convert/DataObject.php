@@ -138,7 +138,7 @@ class DataObject
         } else {
             // otherwise, turn it into a call to the item's getter method
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
-            return $item->{$methodName}();
+            return $item->$methodName();
         }
     }
 }

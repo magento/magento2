@@ -136,9 +136,9 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
     public function testGetObsoleteGetters($key, $method)
     {
         $value = uniqid();
-        $this->assertEmpty($this->_model->{$method}());
+        $this->assertEmpty($this->_model->$method());
         $this->_model->setData($key, $value);
-        $this->assertEquals($value, $this->_model->{$method}());
+        $this->assertEquals($value, $this->_model->$method());
     }
 
     public function getObsoleteGettersDataProvider()

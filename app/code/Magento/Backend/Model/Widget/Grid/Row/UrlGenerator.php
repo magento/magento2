@@ -77,7 +77,7 @@ class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorIn
     {
         $params = [];
         foreach ($this->_extraParamsTemplate as $paramKey => $paramValueMethod) {
-            $params[$paramKey] = $item->{$paramValueMethod}();
+            $params[$paramKey] = $item->$paramValueMethod();
         }
         return array_merge($this->_params, $params);
     }

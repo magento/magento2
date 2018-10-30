@@ -224,7 +224,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             );
         }
         if ($this->_hasLinkFilter) {
-            $select->{$joinType}(
+            $select->$joinType(
                 ['links' => $this->getTable('catalog_product_link')],
                 implode(' AND ', $joinCondition),
                 ['link_id']

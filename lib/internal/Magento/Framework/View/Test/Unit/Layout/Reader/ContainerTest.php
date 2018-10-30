@@ -241,6 +241,6 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             '<parent_element>' . $xml . '</parent_element>',
             \Magento\Framework\View\Layout\Element::class
         );
-        return $xml->{$elementType};
+        return $xml->$elementType;
     }
 }

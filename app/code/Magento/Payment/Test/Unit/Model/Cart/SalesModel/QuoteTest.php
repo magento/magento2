@@ -135,7 +135,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         }
         $quoteMock->expects($this->any())->method($method)->will($this->returnValue($address));
         $model = new \Magento\Payment\Model\Cart\SalesModel\Quote($quoteMock);
-        $this->assertEquals($getterMethod, $model->{$getterMethod}());
+        $this->assertEquals($getterMethod, $model->$getterMethod());
     }
 
     /**

@@ -57,7 +57,7 @@ class PhpUnitTest extends \PHPUnit\Framework\TestCase
     public function testDoNotFireEvent($method)
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
-        $this->_object->{$method}($this, new \PHPUnit\Framework\AssertionFailedError(), 0);
+        $this->_object->$method($this, new \PHPUnit\Framework\AssertionFailedError(), 0);
     }
 
     public function doNotFireEventDataProvider()

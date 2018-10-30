@@ -208,7 +208,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
 
         $calledTimes = $tierPrices ? 'once' : 'never';
-        $item->expects($this->{$calledTimes}())->method('getProductType')->will($this->returnValue($productType));
+        $item->expects($this->$calledTimes())->method('getProductType')->will($this->returnValue($productType));
         return $item;
     }
 

@@ -236,7 +236,7 @@ class Config
         $method = $info['method'];
 
         if (method_exists($object, $method)) {
-            $object->{$method}($instance);
+            $object->$method($instance);
         } elseif ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Method "%1" is not defined in "%2"', $method, get_class($object))

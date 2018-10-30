@@ -80,9 +80,9 @@ class Button extends AbstractRenderer
             $attributeValue = method_exists(
                 $this,
                 $methodName
-            ) ? $this->{$methodName}(
+            ) ? $this->$methodName(
                 $row
-            ) : $this->getColumn()->{$rowMethodName}();
+            ) : $this->getColumn()->$rowMethodName();
 
             if ($attributeValue) {
                 $attributes[] = sprintf(

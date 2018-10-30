@@ -387,7 +387,7 @@ class Template implements \Zend_Filter_Interface
                     $stackVars[$i]['variable'] = method_exists(
                         $stackVars[$i - 1]['variable'],
                         $caller
-                    ) ? $stackVars[$i - 1]['variable']->{$caller}() : $stackVars[$i - 1]['variable']->getData(
+                    ) ? $stackVars[$i - 1]['variable']->$caller() : $stackVars[$i - 1]['variable']->getData(
                         $stackVars[$i]['name']
                     );
                 } elseif ($stackVars[$i]['type'] == 'method') {

@@ -73,7 +73,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
     {
         foreach ($map as $arrayKey => $setterName) {
             if (isset($data[$arrayKey])) {
-                $object->{$setterName}($data[$arrayKey]);
+                $object->$setterName($data[$arrayKey]);
             }
         }
     }

@@ -73,7 +73,7 @@ class ObjectManager
             $object = $this->getObject($className, $arguments);
         } elseif (isset($this->_specialCases[$className])) {
             $method = $this->_specialCases[$className];
-            $object = $this->{$method}($className);
+            $object = $this->$method($className);
         }
 
         return $object;

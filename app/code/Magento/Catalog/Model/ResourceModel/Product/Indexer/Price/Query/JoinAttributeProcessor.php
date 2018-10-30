@@ -73,7 +73,7 @@ class JoinAttributeProcessor
 
         if ($attribute->isScopeGlobal()) {
             $alias = 'ta_' . $attributeCode;
-            $select->{$joinType}(
+            $select->$joinType(
                 [$alias => $attributeTable],
                 "{$alias}.{$productIdField} = e.{$productIdField} AND {$alias}.attribute_id = {$attributeId}" .
                 " AND {$alias}.store_id = 0",
@@ -84,7 +84,7 @@ class JoinAttributeProcessor
             $dAlias = 'tad_' . $attributeCode;
             $sAlias = 'tas_' . $attributeCode;
 
-            $select->{$joinType}(
+            $select->$joinType(
                 [$dAlias => $attributeTable],
                 "{$dAlias}.{$productIdField} = e.{$productIdField} AND {$dAlias}.attribute_id = {$attributeId}" .
                 " AND {$dAlias}.store_id = 0",

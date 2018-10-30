@@ -120,11 +120,11 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     {
         $this->_imitateTransactionStartRequest($eventName);
         $this->_expectTransactionStart($this->at(1));
-        $this->_object->{$method}($this);
+        $this->_object->$method($this);
 
         $this->_imitateTransactionRollbackRequest($eventName);
         $this->_expectTransactionRollback($this->at(1));
-        $this->_object->{$method}($this);
+        $this->_object->$method($this);
     }
 
     public function startAndRollbackTransactionDataProvider()
@@ -144,7 +144,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     {
         $this->_eventManager->expects($this->once())->method('fireEvent')->with($eventName);
         $this->_adapter->expects($this->never())->method($this->anything());
-        $this->_object->{$method}($this);
+        $this->_object->$method($this);
     }
 
     public function testEndTestSuiteDoNothing()

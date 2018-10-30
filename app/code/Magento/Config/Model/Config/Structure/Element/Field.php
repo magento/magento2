@@ -443,10 +443,10 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
         }
         if ($method) {
             if ($this->getType() == 'multiselect') {
-                $optionArray = $sourceModel->{$method}();
+                $optionArray = $sourceModel->$method();
             } else {
                 $optionArray = [];
-                foreach ($sourceModel->{$method}() as $key => $value) {
+                foreach ($sourceModel->$method() as $key => $value) {
                     if (is_array($value)) {
                         $optionArray[] = $value;
                     } else {

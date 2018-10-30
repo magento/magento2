@@ -67,13 +67,13 @@ class RefreshCustomerDataTest extends \PHPUnit\Framework\TestCase
             ->with($frontendSessionCookieName)
             ->willReturn($result);
 
-        $this->metadataFactory->expects($this->{$callCount}())
+        $this->metadataFactory->expects($this->$callCount())
             ->method('createCookieMetadata')
             ->willReturn($this->metadata);
-        $this->metadata->expects($this->{$callCount}())
+        $this->metadata->expects($this->$callCount())
             ->method('setPath')
             ->with('/');
-        $this->cookieManager->expects($this->{$callCount}())
+        $this->cookieManager->expects($this->$callCount())
             ->method('deleteCookie')
             ->with('mage-cache-sessid', $this->metadata);
 

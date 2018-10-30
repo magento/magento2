@@ -79,7 +79,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->getModel($this->validatorMock);
         $options = [$option => $value];
         $this->config->setOptions($options);
-        $this->assertSame($value, $this->config->{$getter}());
+        $this->assertSame($value, $this->config->$getter());
     }
 
     /**

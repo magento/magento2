@@ -132,7 +132,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     {
         $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->setId(10);
-        $url = $this->_helper->{$method}($product);
+        $url = $this->_helper->$method($product);
         $this->assertContains($expectedFullAction, $url);
     }
 

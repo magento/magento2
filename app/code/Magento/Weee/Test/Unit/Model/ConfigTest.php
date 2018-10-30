@@ -38,7 +38,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Weee\Model\Config */
         $model = new Config($scopeConfigMock, $taxData);
-        $this->assertEquals($expectedValue, $model->{$method}());
+        $this->assertEquals($expectedValue, $model->$method());
     }
 
     /**

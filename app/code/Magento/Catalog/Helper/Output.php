@@ -131,7 +131,7 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
     {
         foreach ($this->getHandlers($method) as $handler) {
             if (method_exists($handler, $method)) {
-                $result = $handler->{$method}($this, $result, $params);
+                $result = $handler->$method($this, $result, $params);
             }
         }
         return $result;

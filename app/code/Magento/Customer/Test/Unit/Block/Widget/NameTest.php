@@ -154,7 +154,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertFalse($this->_block->{$method}());
+        $this->assertFalse($this->_block->$method());
     }
 
     /**

@@ -123,7 +123,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     {
         $method = '_save' . $this->string->upperCaseWords($this->getRequest()->getParam('section'), '_', '');
         if (method_exists($this, $method)) {
-            $this->{$method}();
+            $this->$method();
         }
     }
 

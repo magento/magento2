@@ -187,7 +187,7 @@ class Config implements ConfigInterface
             foreach ($options as $option => $value) {
                 $setter = 'set' . $this->_stringHelper->upperCaseWords($option, '_', '');
                 if (method_exists($this, $setter)) {
-                    $this->{$setter}($value);
+                    $this->$setter($value);
                 } else {
                     $this->setOption($option, $value);
                 }

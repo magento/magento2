@@ -49,7 +49,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
             . '</' . Block::TYPE_BLOCK . '>';
 
         $xml = simplexml_load_string($xml, \Magento\Framework\View\Layout\Element::class);
-        return $xml->{$elementType};
+        return $xml->$elementType;
     }
 
     /**
