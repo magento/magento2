@@ -29,4 +29,9 @@
         <element name="addToColumnOptions" type="select" selector="#is_used_in_grid"/>
         <element name="useInFilterOptions" type="select" selector="#is_filterable_in_grid"/>
     </section>
+    <section name="AdminAttributeOptionsSection">
+        <element name="addOption" type="button" selector="#add_new_option_button"/>
+        <element name="nthOptionAdminLabel" type="input"
+                 selector="(//*[@id='manage-options-panel']//tr[{{var}}]//input[contains(@name, 'option[value]')])[1]" parameterized="true"/>
+    </section>
 </sections>
