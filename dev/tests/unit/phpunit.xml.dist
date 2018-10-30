@@ -57,47 +57,6 @@
                     <element key="expectedExceptionMessageRegExp">
                         <string>expectedExceptionMessageRegExp</string>
                     </element>
-
-                    <element key="expectedExceptionText">
-                        <string>expectedExceptionText</string>
-                    </element>
-                    <element key="expectedMessage">
-                        <string>expectedMessage</string>
-                    </element>
-                    <element key="message">
-                        <string>message</string>
-                    </element>
-                    <element key="exceptedExceptionMessage">
-                        <string>exceptedExceptionMessage</string>
-                    </element>
-                    <element key="exectedExceptionMessage">
-                        <string>exectedExceptionMessage</string>
-                    </element>
-                    <element key="ExceptedExceptionMessage">
-                        <string>ExceptedExceptionMessage</string>
-                    </element>
-                    <element key="expected">
-                        <string>expected</string>
-                    </element>
-                    <element key="expecteExceptionMessage">
-                        <string>expecteExceptionMessage</string>
-                    </element>
-                    <element key="true">
-                        <string>true</string>
-                    </element>
-                    <element key="assertException">
-                        <string>assertException</string>
-                    </element>
-                    <element key="paran">exceptionMessage
-                        <string>paran</string>
-                    </element>
-
-                    <element key="exceptionMessage">
-                        <string>exceptionMessage</string>
-                    </element>
-                    <element key="magentoAppArea">
-                        <string>magentoAppArea</string> <!-- \Magento\Logging\Test\Unit\Block\Adminhtml\Details\Renderer\DiffTest -->
-                    </element>
                 </array>
             </arguments>
         </listener>
