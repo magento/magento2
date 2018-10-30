@@ -52,7 +52,7 @@
         <index referenceId="PRODUCT_ALERT_PRICE_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index name="PRODUCT_ALERT_PRICE_STORE_ID" indexType="btree">
+        <index referenceId="PRODUCT_ALERT_PRICE_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -99,7 +99,7 @@
         <index referenceId="PRODUCT_ALERT_STOCK_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index name="PRODUCT_ALERT_STOCK_STORE_ID" indexType="btree">
+        <index referenceId="PRODUCT_ALERT_STOCK_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
