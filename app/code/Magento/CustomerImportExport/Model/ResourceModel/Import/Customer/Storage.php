@@ -44,10 +44,17 @@ class Storage
     protected $_byPagesIterator;
 
     /**
+     * @var CustomerCollectionFactory
+     */
+    private $customerCollectionFactory;
+
+    /**
+     * @param CustomerCollectionFactory $collectionFactory
      * @param CollectionByPagesIteratorFactory $colIteratorFactory
      * @param array $data
      */
     public function __construct(
+        CustomerCollectionFactory $collectionFactory,
         CollectionByPagesIteratorFactory $colIteratorFactory,
         array $data = []
     ) {
