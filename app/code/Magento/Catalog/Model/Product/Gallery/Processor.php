@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -183,6 +184,13 @@ class Processor
         $attrCode = $this->getAttribute()->getAttributeCode();
         $mediaGalleryData = $product->getData($attrCode);
         $position = 0;
+
+        $absoluteFilePath = $this->mediaDirectory->getAbsolutePath($file);
+        $imageMimeType = mime_content_type($absoluteFilePath);
+        $imageContent = file_get_contents($absoluteFilePath);
+        $imageBase64 = base64_encode($imageContent);
+        $imageName = pathinfo($destinationFile, PATHINFO_FILENAME);
+
         if (!is_array($mediaGalleryData)) {
             $mediaGalleryData = ['images' => []];
         }
@@ -195,11 +203,19 @@ class Processor
 
         $position++;
         $mediaGalleryData['images'][] = [
-            'file' => $fileName,
-            'position' => $position,
+            'file'       => $fileName,
+            'position'   => $position,
+            'label'      => '',
+            'disabled'   => (int)$exclude,
             'media_type' => 'image',
-            'label' => '',
-            'disabled' => (int)$exclude,
+            'types'      => $mediaAttribute,
+            'content'    => [
+                'data' => [
+                    ImageContentInterface::NAME                => $imageName,
+                    ImageContentInterface::BASE64_ENCODED_DATA => $imageBase64,
+                    ImageContentInterface::TYPE                => $imageMimeType,
+                ]
+            ]
         ];
 
         $product->setData($attrCode, $mediaGalleryData);
