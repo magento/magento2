@@ -43,6 +43,11 @@ class History extends \Magento\Framework\Model\AbstractModel
     protected $reportHelper;
 
     /**
+     * @var \Magento\Backend\Model\Auth\Session
+     */
+    private $session;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\Context $context
