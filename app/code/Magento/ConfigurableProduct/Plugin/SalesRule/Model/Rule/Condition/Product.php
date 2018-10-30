@@ -24,9 +24,10 @@ class Product
         \Magento\SalesRule\Model\Rule\Condition\Product $subject,
         \Magento\Framework\Model\AbstractModel $model
     ) {
-        $model->setProduct(
-            $this->getProductToValidate($subject, $model)
-        );
+        $product = $this->getProductToValidate($subject, $model);
+        if ($model->getProduct() !== $product) {
+            $model->setProduct($product);
+        }
     }
 
     /**
