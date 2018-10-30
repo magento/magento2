@@ -104,9 +104,9 @@ class Address extends AbstractCustomer
     /**
      * Region collection instance
      *
-     * @var string
+     * @var \Magento\Directory\Model\ResourceModel\Region\Collection
      */
-    protected $_regionCollection;
+    private $_regionCollection;
 
     /**
      * Countries and regions
