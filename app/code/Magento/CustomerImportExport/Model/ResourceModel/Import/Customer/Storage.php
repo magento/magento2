@@ -44,30 +44,13 @@ class Storage
     protected $_byPagesIterator;
 
     /**
-     * @var CustomerCollectionFactory
-     */
-    private $customerCollectionFactory;
-
-    /**
-     * Customer collection.
-     *
-     * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
-     */
-    private $_customerCollection;
-
-    /**
-     * @param CustomerCollectionFactory $collectionFactory
      * @param CollectionByPagesIteratorFactory $colIteratorFactory
      * @param array $data
      */
     public function __construct(
-        CustomerCollectionFactory $collectionFactory,
         CollectionByPagesIteratorFactory $colIteratorFactory,
         array $data = []
     ) {
-        $this->_customerCollection = isset(
-            $data['customer_collection']
-        ) ? $data['customer_collection'] : $collectionFactory->create();
         $this->_pageSize = isset($data['page_size']) ? $data['page_size'] : 0;
         $this->_byPagesIterator = isset(
             $data['collection_by_pages_iterator']
