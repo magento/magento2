@@ -230,6 +230,8 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     }
 
     /**
+     * Get bundle option price title.
+     *
      * @param \Magento\Catalog\Model\Product $selection
      * @param bool $includeContainer
      * @return string
