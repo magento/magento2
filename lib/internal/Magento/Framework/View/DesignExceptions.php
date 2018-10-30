@@ -6,7 +6,7 @@
 namespace Magento\Framework\View;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Unserialize\SecureUnserializer as Unserialize;
+use Magento\Framework\Unserialize\SecureUnserializer;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -36,7 +36,7 @@ class DesignExceptions
     protected $scopeType;
 
     /**
-     * @var Unserialize
+     * @var SecureUnserializer
      */
     private $secureUnserializer;
 
@@ -49,21 +49,21 @@ class DesignExceptions
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $exceptionConfigPath
      * @param string $scopeType
-     * @param Unserialize|null $secureUnserializer
+     * @param SecureUnserializer|null $secureUnserializer
      * @param LoggerInterface|null $logger
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $exceptionConfigPath,
         $scopeType,
-        Unserialize $secureUnserializer = null,
+        SecureUnserializer $secureUnserializer = null,
         LoggerInterface $logger = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->exceptionConfigPath = $exceptionConfigPath;
         $this->scopeType = $scopeType;
         $this->secureUnserializer = $secureUnserializer ?:
-            ObjectManager::getInstance()->create(Unserialize::class);
+            ObjectManager::getInstance()->create(SecureUnserializer::class);
         $this->logger = $logger ?: ObjectManager::getInstance()->create(LoggerInterface::class);
     }
 
