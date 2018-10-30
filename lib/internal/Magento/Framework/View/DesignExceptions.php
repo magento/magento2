@@ -6,7 +6,7 @@
 namespace Magento\Framework\View;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Unserialize\Unserialize;
+use Magento\Framework\Unserialize\SecureUnserializer as Unserialize;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -89,7 +89,7 @@ class DesignExceptions
 
         try {
             $expressions = $this->secureUnserializer->unserialize($expressions);
-        } catch (\Exception $e) {
+        } catch (\InvalidArgumentException $e) {
             $this->logger->critical($e->getMessage());
             return false;
         }

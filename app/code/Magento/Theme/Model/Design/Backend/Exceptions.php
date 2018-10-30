@@ -8,7 +8,6 @@ namespace Magento\Theme\Model\Design\Backend;
 use Magento\Config\Model\Config\Backend\Serialized\ArraySerialized;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Unserialize\SecureUnserializer;
-use Psr\Log\LoggerInterface;
 
 class Exceptions extends ArraySerialized
 {
@@ -182,7 +181,6 @@ class Exceptions extends ArraySerialized
             if (is_string($value)) {
                 $this->secureUnserializer->unserialize($value);
             }
-
         } catch (\InvalidArgumentException $e) {
             $this->_logger->critical($e->getMessage());
             $value = false;
