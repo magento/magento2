@@ -153,7 +153,7 @@ define([
 
         it('test subscribe when cart data was changed', function () {
             mocks['Magento_Customer/js/customer-data'].get('cart')({
-                data_id: 2
+                dataId: 2
             });
             expect(mocks['Magento_Checkout/js/model/cart/totals-processor/default'].estimateTotals).toHaveBeenCalled();
         });
