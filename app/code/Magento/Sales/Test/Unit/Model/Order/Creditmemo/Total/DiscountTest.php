@@ -292,7 +292,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
             ->method('getBaseShippingDiscountAmount');
         $this->orderMock->expects($this->once())
             ->method('getBaseShippingAmount')
-            ->willReturn( '0.0000');
+            ->willReturn('0.0000');
         $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
     }
 }

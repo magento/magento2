@@ -5,9 +5,14 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
+/**
+ * Discount total calculator
+ */
 class Discount extends AbstractTotal
 {
     /**
+     * Collect discount
+     *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -34,7 +39,7 @@ class Discount extends AbstractTotal
          */
         if ($baseShippingAmount && $order->getBaseShippingAmount() <= 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase("You can not refund shipping if there is no shipping amount.", [])
+                __("You can not refund shipping if there is no shipping amount.")
             );
         }
         if ($baseShippingAmount) {
