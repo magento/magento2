@@ -100,11 +100,11 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
             [
-                'getCustomOptions', 
-                '__wakeup', 
-                'getParentProductId', 
-                'getCartQty', 
-                'getStickWithinParent', 
+                'getCustomOptions',
+                '__wakeup',
+                'getParentProductId',
+                'getCartQty',
+                'getStickWithinParent',
                 'getFinalPrice']
         );
         $this->objectMock = $this->createPartialMock(
