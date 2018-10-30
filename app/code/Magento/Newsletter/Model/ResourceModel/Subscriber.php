@@ -52,6 +52,8 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $mathRandom;
 
     /**
+     * Store manager
+     *
      * @var StoreManagerInterface
      */
     private $storeManager;

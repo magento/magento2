@@ -600,6 +600,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         } elseif (($this->getStatus() == self::STATUS_UNCONFIRMED) && ($customerData->getConfirmation() === null)) {
             $status = self::STATUS_SUBSCRIBED;
             $sendInformationEmail = true;
+        } elseif (($this->getStatus() == self::STATUS_NOT_ACTIVE) && ($customerData->getConfirmation() === null)) {
+            $status = self::STATUS_NOT_ACTIVE;
         } else {
             $status = self::STATUS_UNSUBSCRIBED;
         }
@@ -616,16 +618,17 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->setStatus($status);
 
+        $storeId = $customerData->getStoreId();
+        if ((int)$customerData->getStoreId() === 0) {
+            $storeId = $this->_storeManager->getWebsite($customerData->getWebsiteId())->getDefaultStore()->getId();
+        }
+
         if (!$this->getId()) {
-            $storeId = $customerData->getStoreId();
-            if ($customerData->getStoreId() == 0) {
-                $storeId = $this->_storeManager->getWebsite($customerData->getWebsiteId())->getDefaultStore()->getId();
-            }
             $this->setStoreId($storeId)
                 ->setCustomerId($customerData->getId())
                 ->setEmail($customerData->getEmail());
         } else {
-            $this->setStoreId($customerData->getStoreId())
+            $this->setStoreId($storeId)
                 ->setEmail($customerData->getEmail());
         }
 

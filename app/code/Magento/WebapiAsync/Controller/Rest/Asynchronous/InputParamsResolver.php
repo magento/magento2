@@ -80,12 +80,14 @@ class InputParamsResolver
 
     /**
      * Process and resolve input parameters
+     *
      * Return array with validated input params
      * or throw \Exception if at least one request entity params is not valid
      *
      * @return array
      * @throws \Magento\Framework\Exception\InputException if no value is provided for required parameters
      * @throws \Magento\Framework\Webapi\Exception
+     * @throws \Magento\Framework\Exception\AuthorizationException
      */
     public function resolve()
     {
@@ -95,6 +97,13 @@ class InputParamsResolver
         $this->requestValidator->validate();
         $webapiResolvedParams = [];
         $inputData = $this->request->getRequestData();
+
+        $httpMethod = $this->request->getHttpMethod();
+        if ($httpMethod == \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE) {
+            $requestBodyParams = $this->request->getBodyParams();
+            $inputData = array_merge($requestBodyParams, $inputData);
+        }
+
         foreach ($inputData as $key => $singleEntityParams) {
             $webapiResolvedParams[$key] = $this->resolveBulkItemParams($singleEntityParams);
         }
@@ -103,6 +112,8 @@ class InputParamsResolver
     }
 
     /**
+     * Returns route.
+     *
      * @return \Magento\Webapi\Controller\Rest\Router\Route
      */
     public function getRoute()
@@ -111,6 +122,8 @@ class InputParamsResolver
     }
 
     /**
+     * Resolve parameters for service
+     *
      * Convert the input array from key-value format to a list of parameters
      * suitable for the specified class / method.
      *
