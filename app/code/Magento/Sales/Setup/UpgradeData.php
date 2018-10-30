@@ -16,6 +16,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory as AddressCollectionFactory;
 
 /**
@@ -178,27 +179,77 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function fillQuoteAddressIdInSalesOrderAddress(ModuleDataSetupInterface $setup)
     {
-        $addressTable = $setup->getTable('sales_order_address');
-        $updateOrderAddress = $setup->getConnection()
+        $this->fillQuoteAddressIdInSalesOrderAddressByType($setup,Address::TYPE_SHIPPING);
+        $this->fillQuoteAddressIdInSalesOrderAddressByType($setup,Address::TYPE_BILLING);
+    }
+
+    /**
+     * @param ModuleDataSetupInterface $setup
+     * @param string $address_type
+     */
+    public function fillQuoteAddressIdInSalesOrderAddressByType(ModuleDataSetupInterface $setup, $address_type)
+    {
+        $salesConnection = $setup->getConnection('sales');
+        $salesOrderTable = $setup->getTable('sales_order', 'sales');
+        $salesOrderAddressTable = $setup->getTable('sales_order_address', 'sales');
+
+        $query = $salesConnection
             ->select()
+            ->from($salesOrderAddressTable, ['entity_id', 'address_type'])
             ->joinInner(
-                ['sales_order' => $setup->getTable('sales_order')],
-                $addressTable . '.parent_id = sales_order.entity_id',
-                ['quote_address_id' => 'quote_address.address_id']
+                ['sales_order' => $salesOrderTable],
+                'sales_order_address.parent_id = sales_order.entity_id',
+                ['quote_id' => 'sales_order.quote_id']
             )
+            ->where('sales_order_address.quote_address_id IS NULL')
+            ->where('sales_order_address.address_type = ?', $address_type)
+            ->order('sales_order_address.entity_id')
+        ;
+
+        $batchSize = 5000;
+        $result = $salesConnection->query($query);
+        $count = $result->rowCount();
+        $batches = ceil($count / $batchSize);
+
+        for ($batch = $batches; $batch > 0; $batch--) {
+            $query->limitPage($batch, $batchSize);
+            $result = $salesConnection->fetchAssoc($query);
+            $this->fillQuoteAddressIdInSalesOrderAddressProcessBatch($setup, $result, $address_type);
+        }
+    }
+
+    /**
+     * @param ModuleDataSetupInterface $setup
+     * @param array $orderAddresses
+     * @param string $address_type
+     */
+    public function fillQuoteAddressIdInSalesOrderAddressProcessBatch(ModuleDataSetupInterface $setup, array $orderAddresses, $address_type)
+    {
+        $salesConnection = $setup->getConnection('sales');
+        $quoteConnection = $setup->getConnection('checkout');
+
+        $query = $quoteConnection
+            ->select()
+            ->from($setup->getTable('quote_address', 'checkout'), ['quote_id', 'address_id'])
             ->joinInner(
-                ['quote_address' => $setup->getTable('quote_address')],
-                'sales_order.quote_id = quote_address.quote_id 
-                AND ' . $addressTable . '.address_type = quote_address.address_type',
+                ['quote' => $setup->getTable('quote', 'checkout')],
+                'quote_address.quote_id = quote.entity_id',
                 []
             )
-            ->where(
-                $addressTable . '.quote_address_id IS NULL'
-            );
-        $updateOrderAddress = $setup->getConnection()->updateFromSelect(
-            $updateOrderAddress,
-            $addressTable
-        );
-        $setup->getConnection()->query($updateOrderAddress);
+            ->where('quote.entity_id in (?)', array_keys($orderAddresses))
+            ->where('address_type = ?', $address_type)
+        ;
+
+        $quoteAddresses = $quoteConnection->fetchAssoc($query);
+
+        $sql = "update `{$setup->getTable('sales_order_address')}` set `quote_address_id` = :quoteAddressId where `entity_id` = :orderAddressId";
+        $stmt = $salesConnection->prepare($sql);
+
+        foreach ($orderAddresses as $orderAddress) {
+            $stmt->execute([
+                'quoteAddressId' => $quoteAddresses[$orderAddress['quote_id']]['address_id'] ?? null,
+                'orderAddressId' => $orderAddress['entity_id'],
+            ]);
+        }
     }
 }
