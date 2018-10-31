@@ -9,6 +9,7 @@ define([
     'Magento_Ui/js/dynamic-rows/dynamic-rows-grid'
 ], function (_, registry, dynamicRowsGrid) {
     'use strict';
+
     return dynamicRowsGrid.extend({
 
         /**
@@ -192,15 +193,6 @@ define([
         },
 
         /**
-         * Returns start index for current page
-         *
-         * @return {number}
-         */
-        getStartIndex() {
-            return (~~this.currentPage() - 1) * this.pageSize;
-        },
-
-        /**
          * Return Page Boundary
          *
          * @return {number}
@@ -214,7 +206,7 @@ define([
          *
          * @return {number}
          */
-        getGlobalMaxPosition() {
+        getGlobalMaxPosition: function () {
             return _.max(this.recordData().map(function (r) {
                 return ~~r.position
             }));
