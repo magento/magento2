@@ -26,8 +26,13 @@ class Product
     ) {
         $product = $this->getProductToValidate($subject, $model);
         if ($model->getProduct() !== $product) {
-            $model->setProduct($product);
+            // We need to replace product only for validation and keep original product for all other cases.
+            $clone = clone $model;
+            $clone->setProduct($product);
+            $model = $clone;
         }
+
+        return [$model];
     }
 
     /**
