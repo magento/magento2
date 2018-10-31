@@ -14,6 +14,9 @@ use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\Store;
 
+/**
+ * Class for set or update url path.
+ */
 class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
 {
     /**
@@ -55,6 +58,8 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     }
 
     /**
+     * Method for update/set url path.
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -81,6 +86,8 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     }
 
     /**
+     * Update url path for children category.
+     *
      * @param Category $category
      * @return void
      */
@@ -121,6 +128,8 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     }
 
     /**
+     * Update url path for category.
+     *
      * @param Category $category
      * @return void
      */
