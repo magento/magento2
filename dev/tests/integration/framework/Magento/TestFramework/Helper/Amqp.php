@@ -13,26 +13,43 @@ namespace Magento\TestFramework\Helper;
  */
 class Amqp
 {
+    const CONFIG_PATH_HOST = 'queue/amqp/host';
+    const CONFIG_PATH_USER = 'queue/amqp/user';
+    const CONFIG_PATH_PASSWORD = 'queue/amqp/password';
+
     /**
      * @var Curl
      */
     private $curl;
 
     /**
+     * @var \Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * RabbitMQ API host
      *
      * @var string
      */
-    private $host = 'http://localhost:15672/api/';
+    private $host;
 
     /**
      * Initialize dependencies.
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      */
-    public function __construct()
-    {
+    public function __construct(
+        \Magento\Framework\App\DeploymentConfig $deploymentConfig
+    ) {
+        $this->deploymentConfig = $deploymentConfig ?? \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\App\DeploymentConfig::class);
         $this->curl = new Curl();
-        $this->curl->setCredentials('guest', 'guest');
+        $this->curl->setCredentials(
+            $this->deploymentConfig->get(self::CONFIG_PATH_USER),
+            $this->deploymentConfig->get(self::CONFIG_PATH_PASSWORD)
+        );
         $this->curl->addHeader('content-type', 'application/json');
+        $this->host = sprintf('http://%s:15672/api/', $this->deploymentConfig->get(self::CONFIG_PATH_HOST));
     }
 
     /**

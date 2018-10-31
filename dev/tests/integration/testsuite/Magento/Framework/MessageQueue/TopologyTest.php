@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfiguration
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfigOverride
@@ -25,7 +27,7 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->helper = new \Magento\TestFramework\Helper\Amqp();
+        $this->helper = Bootstrap::getObjectManager()->create(\Magento\TestFramework\Helper\Amqp::class);
         $this->declaredExchanges = $this->helper->getExchanges();
     }
 
