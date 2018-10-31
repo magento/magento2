@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Catalog product SKU backend attribute model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * Catalog product SKU backend attribute model.
+ */
 class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
@@ -97,6 +95,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     public function beforeSave($object)
     {
         $this->_generateUniqueSku($object);
+        $this->trimValue($object);
         return parent::beforeSave($object);
     }
 
@@ -126,5 +125,20 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         );
         $data = $connection->fetchOne($select, $bind);
         return abs((int)str_replace($value, '', $data));
+    }
+
+    /**
+     * Remove extra spaces from attribute value before save.
+     *
+     * @param Product $object
+     * @return void
+     */
+    private function trimValue($object)
+    {
+        $attrCode = $this->getAttribute()->getAttributeCode();
+        $value = $object->getData($attrCode);
+        if ($value) {
+            $object->setData($attrCode, trim($value));
+        }
     }
 }
