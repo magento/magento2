@@ -82,4 +82,7 @@
         <data key="uses_per_coupon">2</data>
         <data key="simple_free_shipping">1</data>
     </entity>
+    <entity name="SalesRule100PercentDiscount" extends="TestSalesRule" type="SalesRule">
+        <data key="discountAmount">100</data>
+    </entity>
 </entities>

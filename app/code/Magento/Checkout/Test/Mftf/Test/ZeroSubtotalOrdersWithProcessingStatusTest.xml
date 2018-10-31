@@ -29,7 +29,7 @@
         <after>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAdminOrdersGridFilters"/>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
-                <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
+                <argument name="ruleName" value="{{SalesRule100PercentDiscount.name}}"/>
             </actionGroup>
             <createData entity="ZeroSubtotalCheckoutPaymentMethodDefault" stepKey="disableZeroSubtotalCheckout"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
@@ -39,28 +39,10 @@
         </after>
 
         <!--Add New Rule-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceRulesPage"/>
-        <waitForPageLoad stepKey="waitForCartPriceRulesPage"/>
-        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRuleButton"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}"
-                   stepKey="fillRuleName"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website"
-                      stepKey="selectWebsite"/>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon"
-                      stepKey="selectCouponType"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{_defaultCoupon.code}}"
-                   stepKey="fillCouponCode"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="99"
-                   stepKey="fillUserPerCoupon"/>
-        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Percent of product price discount"
-                      stepKey="selectActionType"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="100"
-                   stepKey="fillDiscountAmount"/>
-        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
-        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule."
-             stepKey="seeSuccessMessageSavedRule"/>
+        <actionGroup ref="AdminCreateCartPriceRuleSpecificCouponActionGroup" stepKey="addNewRule">
+            <argument name="rule" value="SalesRule100PercentDiscount"/>
+            <argument name="userPerCoupon" value="99"/>
+        </actionGroup>
 
         <!--Open Product Page-->
         <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.name$$)}}" stepKey="openProductPage"/>
@@ -89,7 +71,7 @@
 
         <!--Verify that Created order is in Processing status-->
         <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$grabOrderNumber"/>
+            <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
         <waitForPageLoad stepKey="waitForCreatedOrderPageOpened"/>
