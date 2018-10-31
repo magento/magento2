@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AuthorizenetConfig" type="authorize_net_config">
+        <requiredEntity type="active">Active</requiredEntity>
+        <requiredEntity type="login">LoginId</requiredEntity>
+        <requiredEntity type="trans_key">TransactionKey</requiredEntity>
+        <requiredEntity type="trans_md5">TransMD5</requiredEntity>
+        <requiredEntity type="test">TestMode</requiredEntity>
+        <requiredEntity type="useccv">CVVVerification</requiredEntity>
+        <requiredEntity type="cgi_url">CGI_UTL</requiredEntity>
+        <requiredEntity type="cgi_url_td">CGI_URL_TD</requiredEntity>
+        <requiredEntity type="debug">Debug</requiredEntity>
+    </entity>
+    <entity name="Active" type="active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="LoginId" type="login">
+        <data key="value">4By5Q8m6</data>
+    </entity>
+    <entity name="TransactionKey" type="trans_key">
+        <data key="value">9pygB4X4n783TJbw</data>
+    </entity>
+    <entity name="TransMD5" type="trans_md5">
+        <data key="value">Md5Hash</data>
+    </entity>
+    <entity name="TestMode" type="test">
+        <data key="value">0</data>
+    </entity>
+    <entity name="CVVVerification" type="useccv">
+        <data key="value">1</data>
+    </entity>
+    <entity name="CGI_UTL" type="cgi_url">
+        <data key="value">https://test.authorize.net/gateway/transact.dll</data>
+    </entity>
+    <entity name="CGI_URL_TD" type="cgi_url_td">
+        <data key="value">https://apitest.authorize.net/xml/v1/request.api</data>
+    </entity>
+    <entity name="Debug" type="debug">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="AuthorizenetDefaultConfig" type="authorize_net_config">
+        <requiredEntity type="active">DefaultActive</requiredEntity>
+        <requiredEntity type="trans_key">DefaultTransactionKey</requiredEntity>
+        <requiredEntity type="trans_md5">DefaultTransMD5</requiredEntity>
+        <requiredEntity type="test">DefaultTestMode</requiredEntity>
+        <requiredEntity type="useccv">DefaultCVVVerification</requiredEntity>
+        <requiredEntity type="cgi_url">DefaultCGI_UTL</requiredEntity>
+        <requiredEntity type="cgi_url_td">DefaultCGI_URL_TD</requiredEntity>
+        <requiredEntity type="debug">DefaultDebugMode</requiredEntity>
+    </entity>
+    <entity name="DefaultDebug" type="debug">
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultActive" type="active">
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultLoginId" type="login">
+        <data key="value"></data>
+    </entity>
+    <entity name="DefaultTransactionKey" type="trans_key">
+        <data key="value"></data>
+    </entity>
+    <entity name="DefaultTransMD5" type="trans_md5">
+        <data key="value"></data>
+    </entity>
+    <entity name="DefaultTestMode" type="test">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DefaultCVVVerification" type="useccv">
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultCGI_UTL" type="cgi_url">
+        <data key="value">https://secure.authorize.net/gateway/transact.dll</data>
+    </entity>
+    <entity name="DefaultCGI_URL_TD" type="cgi_url_td">
+        <data key="value">https://api2.authorize.net/xml/v1/request.api</data>
+    </entity>
+
+    <entity name="DisableAuthorizenetConfig" type="authorize_net_config">
+        <requiredEntity type="disableConfig">DisableConfig</requiredEntity>
+    </entity>
+
+    <entity name="DisableConfig" type="disableConfig">
+        <data key="value">0</data>
+    </entity>
+</entities>
