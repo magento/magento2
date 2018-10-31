@@ -17,6 +17,7 @@ use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\InventoryShippingAdminUi\Ui\DataProvider\GetSourcesByStockIdSkuAndQty;
+use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 
 class SourceSelectionDataProvider extends AbstractDataProvider
 {
@@ -46,6 +47,11 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     private $getSourcesByStockIdSkuAndQty;
 
     /**
+     * @var GetSkuFromOrderItemInterface
+     */
+    private $getSkuFromOrderItem;
+
+    /**
      * @var array
      */
     private $sources = [];
@@ -59,6 +65,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param GetSourcesByStockIdSkuAndQty $getSourcesByStockIdSkuAndQty
+     * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -72,6 +79,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         GetStockItemConfigurationInterface $getStockItemConfiguration,
         GetSourcesByStockIdSkuAndQty $getSourcesByStockIdSkuAndQty,
+        GetSkuFromOrderItemInterface $getSkuFromOrderItem,
         array $meta = [],
         array $data = []
     ) {
@@ -81,6 +89,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->getSourcesByStockIdSkuAndQty = $getSourcesByStockIdSkuAndQty;
+        $this->getSkuFromOrderItem = $getSkuFromOrderItem;
     }
 
     /**
@@ -122,7 +131,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
 
             $qty = $orderItem->getSimpleQtyToShip();
             $qty = $this->castQty($orderItem, $qty);
-            $sku = $orderItem->getSku();
+            $sku = $this->getSkuFromOrderItem->execute($orderItem);
             $data[$orderId]['items'][] = [
                 'orderItemId' => $orderItemId,
                 'sku' => $sku,

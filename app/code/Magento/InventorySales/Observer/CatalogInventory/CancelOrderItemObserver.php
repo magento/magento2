@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
@@ -34,9 +34,9 @@ class CancelOrderItemObserver implements ObserverInterface
     private $salesEventFactory;
 
     /**
-     * @var GetSkusByProductIdsInterface
+     * @var GetSkuFromOrderItemInterface
      */
-    private $getSkusByProductIds;
+    private $getSkuFromOrderItem;
 
     /**
      * @var PlaceReservationsForSalesEventInterface
@@ -61,7 +61,7 @@ class CancelOrderItemObserver implements ObserverInterface
     /**
      * @param Processor $priceIndexer
      * @param SalesEventInterfaceFactory $salesEventFactory
-     * @param GetSkusByProductIdsInterface $getSkusByProductIds
+     * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
      * @param SalesChannelInterfaceFactory $salesChannelFactory
      * @param ItemToSellInterfaceFactory $itemsToSellFactory
@@ -70,7 +70,7 @@ class CancelOrderItemObserver implements ObserverInterface
     public function __construct(
         Processor $priceIndexer,
         SalesEventInterfaceFactory $salesEventFactory,
-        GetSkusByProductIdsInterface $getSkusByProductIds,
+        GetSkuFromOrderItemInterface $getSkuFromOrderItem,
         PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent,
         SalesChannelInterfaceFactory $salesChannelFactory,
         ItemToSellInterfaceFactory $itemsToSellFactory,
@@ -78,7 +78,7 @@ class CancelOrderItemObserver implements ObserverInterface
     ) {
         $this->priceIndexer = $priceIndexer;
         $this->salesEventFactory = $salesEventFactory;
-        $this->getSkusByProductIds = $getSkusByProductIds;
+        $this->getSkuFromOrderItem = $getSkuFromOrderItem;
         $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
         $this->salesChannelFactory = $salesChannelFactory;
         $this->itemsToSellFactory = $itemsToSellFactory;
@@ -95,20 +95,7 @@ class CancelOrderItemObserver implements ObserverInterface
         $item = $observer->getEvent()->getItem();
         $qty = $item->getQtyToCancel();
         if ($this->canCancelOrderItem($item) && $qty) {
-            try {
-                $productSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
-                    [$item->getProductId()]
-                )[$item->getProductId()];
-            } catch (NoSuchEntityException $e) {
-                /**
-                 * As it was decided the Inventory should not use data constraints depending on Catalog
-                 * (these two systems are not highly coupled, i.e. Magento does not sync data between them, so that
-                 * it's possible that SKU exists in Catalog, but does not exist in Inventory and vice versa)
-                 * it is necessary for Magento to have an ability to process placed orders even with
-                 * deleted or non-existing products
-                 */
-                return;
-            }
+            $productSku = $this->getSkuFromOrderItem->execute($item);
 
             $itemToSell = $this->itemsToSellFactory->create([
                 'sku' => $productSku,
