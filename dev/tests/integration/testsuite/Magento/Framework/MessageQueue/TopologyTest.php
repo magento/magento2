@@ -47,6 +47,7 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
         $name = $expectedConfig['name'];
         $this->assertArrayHasKey($name, $this->declaredExchanges);
         unset($this->declaredExchanges[$name]['message_stats']);
+        unset($this->declaredExchanges[$name]['user_who_performed_action']);
         $this->assertEquals(
             $expectedConfig,
             $this->declaredExchanges[$name],
