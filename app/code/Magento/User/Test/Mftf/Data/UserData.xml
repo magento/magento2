@@ -18,4 +18,18 @@
         <data key="lastName">Smith</data>
         <data key="password">admin123</data>
     </entity>
+    <entity name="Admin3" type="user">
+        <data key="username" unique="suffix">admin3</data>
+        <data key="firstname">admin3</data>
+        <data key="lastname">admin3</data>
+        <data key="email" unique="prefix">admin3WebUser@example.com</data>
+        <data key="password">123123q</data>
+        <data key="password_confirmation">123123q</data>
+        <data key="interface_local">en_US</data>
+        <data key="is_active">true</data>
+        <data key="current_password">123123q</data>
+        <array key="roles">
+            <item>1</item>
+        </array>
+    </entity>
 </entities>
