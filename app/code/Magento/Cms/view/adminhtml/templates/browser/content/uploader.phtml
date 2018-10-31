@@ -19,9 +19,9 @@ foreach ($filters as $media_type) {
 
 $resizeConfig = $block->getImageUploadConfigData()->getIsResizeEnabled()
     ? "{action: 'resize', maxWidth: "
-        . $block->getImageUploadMaxWidth()
+        . $block->escapeHtml($block->getImageUploadMaxWidth())
         . ", maxHeight: "
-        . $block->getImageUploadMaxHeight()
+        . $block->escapeHtml($block->getImageUploadMaxHeight())
         . "}"
     : "{action: 'resize'}";
 ?>
@@ -153,7 +153,7 @@ require([
             fileTypes: /^image\/(gif|jpeg|png)$/,
             maxFileSize: <?= (int) $block->getFileSizeService()->getMaxFileSize() ?> * 10
         },
-        <?= $block->escapeHtml($resizeConfig) ?>,
+        <?= /* @noEscape */ $resizeConfig ?>,
         {
             action: 'save'
         }]
