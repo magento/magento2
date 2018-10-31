@@ -176,7 +176,6 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getNewInstance')
             ->willReturn($orderItemMock);
 
-
         $model = $this->getModel($orderItemMock, $productType);
         $this->assertSame($orderItemMock, $model->get($orderItemId));
 
