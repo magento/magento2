@@ -46,6 +46,13 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected $_fieldsToSelect = null;
 
     /**
+     * Expression fields to select in query.
+     *
+     * @var array
+     */
+    private $expressionFieldsToSelect = [];
+
+    /**
      * Fields initial fields to select like id_field
      *
      * @var array|null
@@ -205,7 +212,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $columnsToSelect = [];
         foreach ($columns as $columnEntry) {
             list($correlationName, $column, $alias) = $columnEntry;
-            if ($correlationName !== 'main_table') {
+            if ($correlationName !== 'main_table' || isset($this->expressionFieldsToSelect[$alias])) {
                 // Add joined fields to select
                 if ($column instanceof \Zend_Db_Expr) {
                     $column = $column->__toString();
@@ -346,9 +353,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $fullExpression = str_replace('{{' . $fieldKey . '}}', $fieldItem, $fullExpression);
         }
 
-        $fullExpression = new \Zend_Db_Expr($fullExpression);
-        $this->_fieldsToSelect[$alias] = $fullExpression;
-        $this->_fieldsToSelectChanged = true;
+        $this->getSelect()->columns([$alias => $fullExpression]);
+        $this->expressionFieldsToSelect[$alias] = $fullExpression;
 
         return $this;
     }
