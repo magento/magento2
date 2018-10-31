@@ -10,5 +10,7 @@
     <page name="AdminEditCustomerPage" url="/customer/index/edit/id/{{var1}}" area="admin" module="Magento_Customer" parameterized="true">
         <section name="AdminCustomerAccountInformationSection"/>
         <section name="AdminCustomerMainActionsSection"/>
+        <section name="AdminCustomerAccountAddressSection"/>
+        <section name="AdminCustomerAccountEditAddressSection"/>
     </page>
 </pages>

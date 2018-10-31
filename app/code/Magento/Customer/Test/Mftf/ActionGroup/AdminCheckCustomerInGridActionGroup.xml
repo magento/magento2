@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCheckCustomerInGridActionGroup">
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <conditionalClick selector="{{AdminCustomerFiltersSection.clearFilters}}" dependentSelector="{{AdminCustomerFiltersSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilter"/>
+        <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="{{customer.email}}" stepKey="filterEmail"/>
+        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="{{customer.firstname}}" stepKey="assertFirstName"/>
+        <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="{{customer.lastname}}" stepKey="assertLastName"/>
+        <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="{{customer.email}}" stepKey="assertEmail"/>
+        <conditionalClick selector="{{AdminCustomerFiltersSection.clearFilters}}" dependentSelector="{{AdminCustomerFiltersSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+    </actionGroup>
+</actionGroups>
