@@ -87,7 +87,7 @@ class ItemProductResolver implements ItemResolverInterface
         );
         $childThumb = $childProduct->getData('thumbnail');
         return $configValue !== Thumbnail::OPTION_USE_PARENT_IMAGE
-            && $childThumb !== NULL
+            && $childThumb !== null
             && $childThumb !== 'no_selection';
     }
 }
