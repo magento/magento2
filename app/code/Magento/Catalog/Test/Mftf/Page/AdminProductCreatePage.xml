@@ -17,5 +17,6 @@
         <section name="AdminProductMessagesSection"/>
         <section name="AdminProductFormRelatedUpSellCrossSellSection"/>
         <section name="AdminProductFormAdvancedPricingSection"/>
+        <section name="AdminProductFormAdvancedInventorySection"/>
     </page>
 </pages>
