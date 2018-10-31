@@ -15,7 +15,7 @@
         <amOnPage url="{{AdminCustomerGroupPage.url}}" stepKey="navigateToCustomersGroupPage"/>
         <waitForPageLoad stepKey="waitForPageOpened"/>
         <click stepKey="clickFiltersBtn" selector="{{AdminCustomerGroupMainSection.filterBtn}}"/>
-        <fillField selector="{{AdminCustomerGroupMainSection.groupField}}" userInput="{{groupName}}" stepKey="fillFieldGroupName"/>
+        <fillField selector="{{AdminCustomerGroupMainSection.groupField}}" userInput="{{customerGroupName}}" stepKey="fillFieldGroupName"/>
         <click stepKey="clickApplyBtn" selector="{{AdminCustomerGroupMainSection.applyFiltersBtn}}"/>
         <!--Here we need to use Implicit wait.-->
         <wait stepKey="waitForFilteringFinished" time="2"/>
@@ -23,7 +23,7 @@
         <wait stepKey="waitForDropDownOpened" time="2"/>
         <click stepKey="clickDeleteBtn" selector="{{AdminCustomerGroupMainSection.deleteBtn}}"/>
         <waitForPageLoad stepKey="waitForConfirmationAlert"/>
-        <click stepKey="accept" selector="{{AdminCustomerGridMainActionsSection.ok}}"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptMessage"/>
         <see stepKey="seeSuccessMessage" userInput="You deleted the customer group."/>
         <wait stepKey="waitForClearAllBtnVisible" time="2"/>
         <click stepKey="clearAllBtn" selector="{{AdminCustomerGroupMainSection.clearAllBtn}}"/>
