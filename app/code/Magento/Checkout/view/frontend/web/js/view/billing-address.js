@@ -73,9 +73,7 @@ function (
             quote.paymentMethod.subscribe(function () {
                 checkoutDataResolver.resolveBillingAddress();
             }, this);
-            shippingRatesValidator.initFields(
-                'checkout.steps.billing-step.payment.payments-list.checkmo-form.form-fields'
-            );
+            shippingRatesValidator.initFields(this.get('name') + '.form-fields');
         },
 
         /**
