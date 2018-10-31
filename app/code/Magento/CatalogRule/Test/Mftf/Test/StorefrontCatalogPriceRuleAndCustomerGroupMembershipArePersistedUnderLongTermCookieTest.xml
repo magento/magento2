@@ -70,7 +70,7 @@
         <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="storefrontSignOut"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage3"/>
         <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="homeCheckWelcome2"/>
-        <seeElement selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="checkLinkNotYoy"/>
+        <seeElement selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="checkLinkNotYou"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createProduct.name$$)}}" userInput="45.00" stepKey="checkPriceSimpleProduct3"/>
 
         <!--Click the *Not you?* link and check the price for Simple Product-->
