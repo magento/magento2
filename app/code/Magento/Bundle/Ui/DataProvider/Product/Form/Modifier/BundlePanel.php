@@ -72,7 +72,6 @@ class BundlePanel extends AbstractModifier
     /**
      * @inheritdoc
      *
-     * Change metadata of the component.
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function modifyMeta(array $meta)
@@ -236,8 +235,6 @@ class BundlePanel extends AbstractModifier
 
     /**
      * @inheritdoc
-     *
-     * Modify UI data.
      */
     public function modifyData(array $data)
     {
