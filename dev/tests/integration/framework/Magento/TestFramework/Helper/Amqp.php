@@ -53,6 +53,28 @@ class Amqp
     }
 
     /**
+     * Check that the RabbitMQ instance has the management plugin installed and the api
+     * is available.
+     *
+     * @throws \Magento\TestFramework\MessageQueue\PreconditionFailedException
+     * @return bool
+     */
+    public function isAvailable()
+    {
+        $this->curl->get($this->host . 'overview');
+        $data = $this->curl->getBody();
+        $data = json_decode($data, true);
+
+        if (isset($data['management_version'])) {
+            return true;
+        }
+
+        throw new \Magento\TestFramework\MessageQueue\PreconditionFailedException(
+            'This test relies on RabbitMQ Management Plugin.'
+        );
+    }
+
+    /**
      * Get declared exchanges.
      *
      * @return array

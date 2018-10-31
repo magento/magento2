@@ -80,6 +80,7 @@ class PublisherConsumerController
                 "This test relies on *nix shell and should be skipped in Windows environment."
             );
         }
+        $this->amqpHelper->isAvailable();
         $connections = $this->amqpHelper->getConnections();
         foreach (array_keys($connections) as $connectionName) {
             $this->amqpHelper->deleteConnection($connectionName);

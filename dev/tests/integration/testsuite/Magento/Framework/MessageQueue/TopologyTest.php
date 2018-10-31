@@ -6,6 +6,7 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 
 /**
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfiguration
@@ -28,6 +29,11 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->helper = Bootstrap::getObjectManager()->create(\Magento\TestFramework\Helper\Amqp::class);
+        try {
+            $this->helper->isAvailable();
+        } catch (PreconditionFailedException $e) {
+            $this->fail($e->getMessage());
+        }
         $this->declaredExchanges = $this->helper->getExchanges();
     }
 
