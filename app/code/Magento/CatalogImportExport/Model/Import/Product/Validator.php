@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\Validator\AbstractValidator;
+use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 
 /**
  * Class Validator
@@ -60,6 +61,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Text validation
+     *
      * @param mixed $attrCode
      * @param string $type
      * @return bool
@@ -69,6 +72,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         $val = $this->string->cleanString($this->_rowData[$attrCode]);
         if ($type == 'text') {
             $valid = $this->string->strlen($val) < Product::DB_MAX_TEXT_LENGTH;
+        } else if ($attrCode == Product::COL_SKU) {
+            $valid = $this->string->strlen($val) <= SKU::SKU_MAX_LENGTH;
         } else {
             $valid = $this->string->strlen($val) < Product::DB_MAX_VARCHAR_LENGTH;
         }
@@ -105,6 +110,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Numeric validation
+     *
      * @param mixed $attrCode
      * @param string $type
      * @return bool
@@ -132,6 +139,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Is required attribute valid
+     *
      * @param string $attrCode
      * @param array $attributeParams
      * @param array $rowData
@@ -159,6 +168,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Is attribute valid
+     *
      * @param string $attrCode
      * @param array $attrParams
      * @param array $rowData
@@ -255,6 +266,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Set invalid attribute
+     *
      * @param string|null $attribute
      * @return void
      * @since 100.1.0
@@ -265,6 +278,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Get invalid attribute
+     *
      * @return string
      * @since 100.1.0
      */
@@ -274,6 +289,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Is valid attributes
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -300,7 +317,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {
@@ -331,6 +348,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Init
+     *
      * @param \Magento\CatalogImportExport\Model\Import\Product $context
      * @return $this
      */
