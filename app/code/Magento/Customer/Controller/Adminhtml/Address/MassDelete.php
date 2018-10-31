@@ -1,20 +1,24 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
+use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Backend\Model\View\Result\Redirect;
 
 /**
  * Class to delete selected customer addresses through massaction
  */
-class MassDelete extends \Magento\Backend\App\Action
+class MassDelete extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -59,10 +63,10 @@ class MassDelete extends \Magento\Backend\App\Action
     /**
      * Delete specified customer addresses using grid massaction
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
-    public function execute()
+    public function execute(): Redirect
     {
         /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
         $collection = $this->filter->getCollection($this->collectionFactory->create());

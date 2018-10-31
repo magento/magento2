@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,6 +8,7 @@
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
@@ -14,7 +16,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Abstract class for customer default addresses changing
  */
-abstract class AbstractDefaultAddress extends Action
+abstract class AbstractDefaultAddress extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session

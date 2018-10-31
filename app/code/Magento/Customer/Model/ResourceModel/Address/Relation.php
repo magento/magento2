@@ -46,7 +46,6 @@ class Relation implements RelationInterface
                 $changedAddresses['default_billing'] = $object->getId();
             } elseif ($customer->getDefaultBillingAddress()
                 && (int)$customer->getDefaultBillingAddress()->getId() === (int)$object->getId()
-                && !$object->getIsDefaultBilling()
             ) {
                 $changedAddresses['default_billing'] = null;
             }
@@ -55,7 +54,6 @@ class Relation implements RelationInterface
                 $changedAddresses['default_shipping'] = $object->getId();
             } elseif ($customer->getDefaultShippingAddress()
                 && (int)$customer->getDefaultShippingAddress()->getId() === (int)$object->getId()
-                && !$object->getIsDefaultShipping()
             ) {
                 $changedAddresses['default_shipping'] = null;
             }

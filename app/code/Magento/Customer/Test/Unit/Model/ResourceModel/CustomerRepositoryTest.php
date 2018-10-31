@@ -377,12 +377,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getFirstFailure',
                 'getLockExpires',
             ]);
-        $region = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\RegionInterface::class,
-            [],
-            '',
-            false
-        );
         $origCustomer = $this->customer;
 
         $customerModel = $this->createPartialMock(\Magento\Customer\Model\Customer::class, [

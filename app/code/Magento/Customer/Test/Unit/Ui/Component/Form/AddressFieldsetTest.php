@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Ui\Test\Unit\Component\Form;
+namespace Magento\Customer\Test\Unit\Ui\Component\Form;
 
 use Magento\Customer\Ui\Component\Form\AddressFieldset;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;

@@ -39,7 +39,9 @@ class FileUploaderDataResolver
     /**
      * @param FileProcessorFactory $fileProcessorFactory
      */
-    public function __construct(FileProcessorFactory $fileProcessorFactory) {
+    public function __construct(
+        FileProcessorFactory $fileProcessorFactory
+    ) {
         $this->fileProcessorFactory = $fileProcessorFactory;
     }
 

@@ -1,19 +1,21 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\DataObject;
 
 /**
  * Class for validation of customer address form on admin.
  */
-class Validate extends \Magento\Backend\App\Action implements HttpPostActionInterface, HttpGetActionInterface
+class Validate extends Action implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -50,9 +52,9 @@ class Validate extends \Magento\Backend\App\Action implements HttpPostActionInte
     /**
      * AJAX customer address validation action
      *
-     * @return \Magento\Framework\Controller\Result\Json
+     * @return Json
      */
-    public function execute()
+    public function execute(): Json
     {
         /** @var \Magento\Framework\DataObject $response */
         $response = new \Magento\Framework\DataObject();
@@ -74,10 +76,10 @@ class Validate extends \Magento\Backend\App\Action implements HttpPostActionInte
     /**
      * Customer address validation.
      *
-     * @param \Magento\Framework\DataObject $response
+     * @param DataObject $response
      * @return \Magento\Framework\DataObject
      */
-    private function validateCustomerAddress(\Magento\Framework\DataObject $response)
+    private function validateCustomerAddress(DataObject $response): DataObject
     {
         $addressForm = $this->formFactory->create('customer_address', 'adminhtml_customer_address');
         $formData = $addressForm->extractData($this->getRequest());

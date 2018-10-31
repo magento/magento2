@@ -42,11 +42,6 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
         'confirmation',
     ];
 
-    /*
-     * @var ContextInterface
-     */
-    private $context;
-
     /**
      * Allow to manage attributes, even they are hidden on storefront
      *
@@ -83,6 +78,7 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
      * @param array $meta
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $name,

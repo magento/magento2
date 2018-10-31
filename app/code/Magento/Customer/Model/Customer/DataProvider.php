@@ -29,6 +29,8 @@ use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 
 /**
+ * Data provider for customer and customer address data and meta data
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @deprecated \Magento\Customer\Model\Address\DataProvider is used instead
@@ -148,18 +150,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $allowToShowHiddenAttributes;
 
     /**
-     * @param string $name
-     * @param string $primaryFieldName
-     * @param string $requestFieldName
+     * DataProvider constructor.
+     * @param $name
+     * @param $primaryFieldName
+     * @param $requestFieldName
      * @param EavValidationRules $eavValidationRules
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
      * @param FilterPool $filterPool
-     * @param FileProcessorFactory $fileProcessorFactory
-     * @param ContextInterface $context
+     * @param FileProcessorFactory|null $fileProcessorFactory
      * @param array $meta
      * @param array $data
+     * @param ContextInterface|null $context
      * @param bool $allowToShowHiddenAttributes
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

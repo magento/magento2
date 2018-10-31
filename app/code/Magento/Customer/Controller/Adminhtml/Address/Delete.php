@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,13 +8,14 @@
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Customer\Api\AddressRepositoryInterface;
 
 /**
  * Button for deletion of customer address in admin *
  */
-class Delete extends Action
+class Delete extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session

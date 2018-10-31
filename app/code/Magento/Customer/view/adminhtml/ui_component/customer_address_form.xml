@@ -60,7 +60,7 @@
                 <dataType>text</dataType>
             </settings>
         </field>
-        <field name="default_billing" sortOrder="10" formElement="checkbox">
+        <field name="default_billing" sortOrder="6" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="default" xsi:type="number">0</item>

@@ -7,16 +7,15 @@
 namespace Magento\Customer\Test\Unit\Model\Address;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\AttributeMetadataResolver;
+use Magento\Customer\Model\FileUploaderDataResolver;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Customer\Model\ResourceModel\Address\Collection as AddressCollection;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Customer\Model\Attribute as AttributeModel;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Model\Address as AddressModel;
-use Magento\Customer\Model\FileProcessorFactory;
 
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,25 +44,10 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $eavConfig;
 
-    /**
-     * @var EavValidationRules|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $eavValidationRules;
-
     /*
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $context;
-
-    /**
-     * @var \Magento\Customer\Model\Config\Share|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $shareConfig;
-
-    /**
-     * @var FileProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $fileProcessorFactory;
 
     /**
      * @var Type|\PHPUnit_Framework_MockObject_MockObject
@@ -76,9 +60,14 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $address;
 
     /**
-     * @var AttributeModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileUploaderDataResolver|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $attribute;
+    private $fileUploaderDataResolver;
+
+    /**
+     * @var AttributeMetadataResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeMetadataResolver;
 
     /**
      * @var \Magento\Customer\Model\Address\DataProvider
@@ -88,6 +77,12 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->fileUploaderDataResolver = $this->getMockBuilder(FileUploaderDataResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->attributeMetadataResolver = $this->getMockBuilder(AttributeMetadataResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->addressCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -96,13 +91,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
-        $this->eavValidationRules = $this->createMock(EavValidationRules::class);
         $this->context = $this->getMockForAbstractClass(ContextInterface::class);
-        $this->fileProcessorFactory = $this->getMockBuilder(FileProcessorFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->shareConfig = $this->createMock(\Magento\Customer\Model\Config\Share::class);
         $this->addressCollectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->collection);
@@ -122,9 +111,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->address = $this->getMockBuilder(AddressModel::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attribute = $this->getMockBuilder(AttributeModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->model = $objectManagerHelper->getObject(
             \Magento\Customer\Model\Address\DataProvider::class,
@@ -135,10 +121,9 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'addressCollectionFactory' => $this->addressCollectionFactory,
                 'customerRepository' => $this->customerRepository,
                 'eavConfig' => $this->eavConfig,
-                'eavValidationRules' => $this->eavValidationRules,
                 'context' => $this->context,
-                'fileProcessorFactory' => $this->fileProcessorFactory,
-                'shareConfig' => $this->shareConfig,
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
+                'attributeMetadataResolver' => $this->attributeMetadataResolver,
                 [],
                 [],
                 true
@@ -146,7 +131,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetDefaultData()
+    public function testGetDefaultData(): void
     {
         $expectedData = [
             '' => [
@@ -176,7 +161,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedData, $this->model->getData());
     }
 
-    public function testGetData()
+    public function testGetData(): void
     {
         $expectedData = [
             '3' => [
@@ -221,12 +206,9 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'lastname' => 'Doe',
                 'street' => "42000 Ave W 55 Cedar City\nApt. 33"
             ]);
-        $this->address->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([$this->attribute]);
-        $this->attribute->expects($this->once())
-            ->method('getFrontendInput')
-            ->willReturn(null);
+        $this->fileUploaderDataResolver->expects($this->once())
+            ->method('overrideFileUploaderData')
+            ->willReturnSelf();
 
         $this->assertEquals($expectedData, $this->model->getData());
     }

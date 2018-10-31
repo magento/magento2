@@ -9,16 +9,23 @@ define([
     'use strict';
 
     return Button.extend({
+        defaults: {
+            entity_id: null,
+            parent_id: null
+        },
+
+        /**
+         * Initializes component.
+         *
+         * @returns {Button}
+         */
         initialize: function () {
             this._super();
             if (!this.parent_id) {
                 this.visible(this.entity_id);
             }
-        },
 
-        defaults: {
-            entity_id: null,
-            parent_id: null
+            return this;
         },
 
         /**

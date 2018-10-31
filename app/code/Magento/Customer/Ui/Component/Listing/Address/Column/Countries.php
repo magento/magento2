@@ -1,5 +1,9 @@
 <?php
-
+declare(strict_types=1);
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Customer\Ui\Component\Listing\Address\Column;
 
 use Magento\Framework\Data\OptionSourceInterface;
