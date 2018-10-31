@@ -2535,21 +2535,21 @@ if (props.get("category_names_list") == null) {
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
           <elementProp name="blocks" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">["customer_form_login"]</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">blocks</stringProp>
           </elementProp>
           <elementProp name="handles" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">["default","customer_account_login"]</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">handles</stringProp>
           </elementProp>
           <elementProp name="originalRequest" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">{"route":"customer","controller":"account","action":"login","uri":"/customer/account/login/"}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
