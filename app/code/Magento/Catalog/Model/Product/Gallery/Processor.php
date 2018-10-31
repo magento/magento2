@@ -58,24 +58,33 @@ class Processor
     protected $resourceModel;
 
     /**
+     * @var \Magento\Framework\File\Mime
+     */
+    protected $mime;
+
+    /**
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
+     * @param \Magento\Framework\File\Mime $mime
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
+        \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel,
+        \Magento\Framework\File\Mime $mime
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->fileStorageDb = $fileStorageDb;
         $this->mediaConfig = $mediaConfig;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->resourceModel = $resourceModel;
+        $this->mime = $mime;
     }
 
     /**
@@ -186,10 +195,10 @@ class Processor
         $position = 0;
 
         $absoluteFilePath = $this->mediaDirectory->getAbsolutePath($file);
-        $imageMimeType = mime_content_type($absoluteFilePath);
-        $imageContent = file_get_contents($absoluteFilePath);
+        $imageMimeType = $this->mime->getMimeType($absoluteFilePath);
+        $imageContent = $this->mediaDirectory->readFile($absoluteFilePath);
         $imageBase64 = base64_encode($imageContent);
-        $imageName = pathinfo($destinationFile, PATHINFO_FILENAME);
+        $imageName = $pathinfo['filename'];
 
         if (!is_array($mediaGalleryData)) {
             $mediaGalleryData = ['images' => []];
@@ -203,17 +212,17 @@ class Processor
 
         $position++;
         $mediaGalleryData['images'][] = [
-            'file'       => $fileName,
-            'position'   => $position,
-            'label'      => '',
-            'disabled'   => (int)$exclude,
+            'file' => $fileName,
+            'position' => $position,
+            'label' => '',
+            'disabled' => (int)$exclude,
             'media_type' => 'image',
-            'types'      => $mediaAttribute,
-            'content'    => [
+            'types' => $mediaAttribute,
+            'content' => [
                 'data' => [
-                    ImageContentInterface::NAME                => $imageName,
+                    ImageContentInterface::NAME => $imageName,
                     ImageContentInterface::BASE64_ENCODED_DATA => $imageBase64,
-                    ImageContentInterface::TYPE                => $imageMimeType,
+                    ImageContentInterface::TYPE => $imageMimeType,
                 ]
             ]
         ];
