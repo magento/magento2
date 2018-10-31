@@ -7,7 +7,6 @@
 -->
 <mapping strict="0">
     <fields>
-        <qty />
         <attribute>
             <selector>//div[@class="product-options"]//label[.="%s"]//following-sibling::*//select</selector>
             <strategy>xpath</strategy>
