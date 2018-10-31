@@ -7,9 +7,9 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerAccountEditAddressSection">
-        <element name="firstNameForAddress" type="button" selector="input[name*='address'][name*='firstname']"/>
-        <element name="lastNameForAddress" type="button" selector="input[name*='address'][name*='lastname']"/>
-        <element name="streetAddress" type="button" selector="input[name*='street']"/>
+        <element name="firstName" type="button" selector="input[name*='address'][name*='firstname']"/>
+        <element name="lastName" type="button" selector="input[name*='address'][name*='lastname']"/>
+        <element name="street" type="button" selector="input[name*='street']"/>
         <element name="city" type="input" selector="input[name*='city']"/>
         <element name="country" type="select" selector="select[name*='address'][name*='country']" timeout="10"/>
         <element name="region" type="select" selector="select[name*='address'][name*='region_id']"/>
