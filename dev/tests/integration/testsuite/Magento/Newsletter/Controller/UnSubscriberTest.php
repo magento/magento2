@@ -7,21 +7,24 @@
 namespace Magento\Newsletter\Controller;
 
 use Magento\TestFramework\TestCase\AbstractController;
+use Magento\Framework\App\Config\Value;
 
 /**
- * Test Unsubscriber controller
+ * Test Unsubscriber controller.
  *
  * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
  * @magentoAppArea     frontend
  */
 class UnSubscriberTest extends AbstractController
 {
-
     /**
      * @var Subscriber
      */
     private $model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -43,7 +46,7 @@ class UnSubscriberTest extends AbstractController
         $this->dispatch('newsletter/subscriber/unsubscribe');
 
         $this->assertSessionMessages($this->equalTo(['You unsubscribed.']));
-        $this->assertRedirect($this->anything());
+        $this->assertRedirect($this->stringStartsWith($this->getBaseUrl()));
     }
 
     /**
@@ -59,6 +62,17 @@ class UnSubscriberTest extends AbstractController
         $this->dispatch('newsletter/subscriber/unsubscribe');
 
         $this->assertSessionMessages($this->equalTo(['This is an invalid subscription confirmation code.']));
-        $this->assertRedirect($this->anything());
+        $this->assertRedirect($this->stringStartsWith($this->getBaseUrl()));
+    }
+
+    /**
+     * @return string
+     */
+    private function getBaseUrl()
+    {
+        $configValue = $this->_objectManager->create(Value::class);
+        $configValue->load('web/unsecure/base_url', 'path');
+
+        return $configValue->getValue() ?: 'http://localhost/';
     }
 }
