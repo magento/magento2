@@ -33,8 +33,8 @@ class Exceptions extends ArraySerialized
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param SecureUnserializer|null $secureUnserializer
      * @param array $data
+     * @param SecureUnserializer|null $secureUnserializer
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -44,8 +44,8 @@ class Exceptions extends ArraySerialized
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
         SecureUnserializer $secureUnserializer = null,
-        array $data = []
     ) {
         $this->_design = $design;
         $this->secureUnserializer = $secureUnserializer ?:
