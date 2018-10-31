@@ -38,7 +38,7 @@
     </section>
 
     <section name="AdminNewCatalogPriceRuleConditions">
-        <element name="newCondition" type="button" selector="span.rule-param-new-child"/>
+        <element name="newCondition" type="button" selector=".rule-param.rule-param-new-child"/>
         <element name="conditionSelect" type="select" selector="select#conditions__{{var}}__new_child" parameterized="true"/>
         <element name="targetEllipsis" type="button" selector="//li[{{var}}]//a[@class='label'][text() = '...']" parameterized="true"/>
         <element name="targetInput" type="input" selector="input#conditions__{{var1}}--{{var2}}__value" parameterized="true"/>

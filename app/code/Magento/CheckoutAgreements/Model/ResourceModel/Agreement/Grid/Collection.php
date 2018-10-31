@@ -14,7 +14,7 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
 {
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -30,6 +30,8 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
     }
 
     /**
+     * Add stores to result
+     *
      * @return void
      */
     private function addStoresToResult()
@@ -56,6 +58,8 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
     }
 
     /**
+     * Get stores for agreements
+     *
      * @return array
      */
     private function getStoresForAgreements()
@@ -64,7 +68,7 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
 
         if (!empty($agreementId)) {
             $select = $this->getConnection()->select()->from(
-                ['agreement_store' => 'checkout_agreement_store']
+                ['agreement_store' => $this->getResource()->getTable('checkout_agreement_store')]
             )->where(
                 'agreement_store.agreement_id IN (?)',
                 $agreementId
