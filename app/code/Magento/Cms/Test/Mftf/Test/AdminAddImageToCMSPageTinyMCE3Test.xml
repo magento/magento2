@@ -18,19 +18,19 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95725"/>
             <skip>
-                <issueId value="MAGETWO-95799"/>
+                <issueId value="MC-5371" />
             </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
             <!-- Choose TinyMCE3 as the default WYSIWYG editor-->
-            <actionGroup ref="SwitchToTinyMCE3" stepKey="switchToTinyMCE3"/>
+            <magentoCLI command="config:set cms/wysiwyg/editor Magento_Tinymce3/tinymce3Adapter" stepKey="enableTinyMCE3"/>
         </before>
         <after>
             <!-- Switch WYSIWYG editor to TinyMCE4-->
             <comment userInput="Reset editor as TinyMCE4" stepKey="chooseTinyMCE4AsEditor"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4"/>
+            <magentoCLI command="config:set cms/wysiwyg/editor mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter" stepKey="enableTinyMCE4"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
@@ -39,6 +39,7 @@
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2" />
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE3}}" stepKey="waitForTinyMCE3"/>
         <seeElement selector="{{TinyMCESection.TinyMCE3}}" stepKey="seeTinyMCE3" />
+        <wait time="3" stepKey="waiting"/>
         <comment userInput="Click Insert image button" stepKey="clickImageButton"/>
         <click selector="{{TinyMCESection.InsertImageBtnTinyMCE3}}" stepKey="clickInsertImage" />
         <waitForPageLoad stepKey="waitForiFrameToLoad" />

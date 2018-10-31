@@ -188,6 +188,15 @@
                                 for( j in config[i].children ) {
                                     if(config[i].children[j].id) {
                                         newNode = new Ext.tree.TreeNode(config[i].children[j]);
+
+                                        if (typeof newNode.ui.onTextChange === 'function') {
+                                            newNode.ui.onTextChange = function (_3, _4, _5) {
+                                                if (this.rendered) {
+                                                    this.textNode.innerText = _4;
+                                                }
+                                            }
+                                        }
+                                        	                                    }
                                         node.appendChild(newNode);
                                         newNode.addListener('click', editSet.unregister);
                                     }
@@ -195,13 +204,20 @@
                             }
                         }
                     }
-                }
 
-                editSet = function() {
-                    return {
-                        register : function(node) {
-                            editSet.currentNode = node;
-                        },
+
+                    editSet = function () {
+                        return {
+                            register: function (node) {
+                                editSet.currentNode = node;
+                                if (typeof node.ui.onTextChange === 'function') {
+                                    node.ui.onTextChange = function (_3, _4, _5) {
+                                        if (this.rendered) {
+                                            this.textNode.innerText = _4;
+                                        }
+                                    }
+                                }
+                            },
 
                         unregister : function() {
                             editSet.currentNode = false;
@@ -292,6 +308,14 @@
                                             allowDrop : true,
                                             allowDrag : true
                                         });
+
+                                        if (typeof newNode.ui.onTextChange === 'function') {
+                                            newNode.ui.onTextChange = function (_3, _4, _5) {
+                                                if (this.rendered) {
+                                                    this.textNode.innerText = _4;
+                                                }
+                                            }
+                                        }
 
                                         TreePanels.root.appendChild(newNode);
                                         newNode.addListener('beforemove', editSet.groupBeforeMove);
