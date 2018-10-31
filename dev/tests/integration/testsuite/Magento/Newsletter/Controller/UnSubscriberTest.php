@@ -46,7 +46,7 @@ class UnSubscriberTest extends AbstractController
         $this->dispatch('newsletter/subscriber/unsubscribe');
 
         $this->assertSessionMessages($this->equalTo(['You unsubscribed.']));
-        $this->assertRedirect($this->stringStartsWith($this->getBaseUrl()));
+        $this->assertRedirect($this->equalTo($this->getBaseUrl() . 'index.php/'));
     }
 
     /**
@@ -62,7 +62,7 @@ class UnSubscriberTest extends AbstractController
         $this->dispatch('newsletter/subscriber/unsubscribe');
 
         $this->assertSessionMessages($this->equalTo(['This is an invalid subscription confirmation code.']));
-        $this->assertRedirect($this->stringStartsWith($this->getBaseUrl()));
+        $this->assertRedirect($this->equalTo($this->getBaseUrl() . 'index.php/'));
     }
 
     /**
