@@ -141,9 +141,9 @@ class ProcessBackItemQtyPlugin
             ]);
 
             $salesEvent = $this->salesEventFactory->create([
-                'type' => "back_item_qty",
-                'objectType' => "legacy_stock_management_api",
-                'objectId' => "none"
+                'type' => 'back_item_qty',
+                'objectType' => 'legacy_stock_management_api',
+                'objectId' => 'none'
             ]);
 
             $itemToSell = $this->itemsToSellFactory->create([

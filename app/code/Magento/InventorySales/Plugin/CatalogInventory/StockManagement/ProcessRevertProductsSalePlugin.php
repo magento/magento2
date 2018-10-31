@@ -126,9 +126,9 @@ class ProcessRevertProductsSalePlugin
         ]);
 
         $salesEvent = $this->salesEventFactory->create([
-            'type' => "revert_products_sale",
-            'objectType' => "legacy_stock_management_api",
-            'objectId' => "none"
+            'type' => 'revert_products_sale',
+            'objectType' => 'legacy_stock_management_api',
+            'objectId' => 'none'
         ]);
 
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
