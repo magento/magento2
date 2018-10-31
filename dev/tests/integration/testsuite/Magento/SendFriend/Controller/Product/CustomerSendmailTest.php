@@ -119,7 +119,7 @@ class CustomerSendmailTest extends AbstractController
 
         $this->dispatch('sendfriend/product/sendmail');
         $this->assertSessionMessages(
-            $this->equalTo(['Incorrect CAPTCHA']),
+            $this->equalTo(['No CAPTCHA word provided']),
             MessageInterface::TYPE_ERROR
         );
     }
