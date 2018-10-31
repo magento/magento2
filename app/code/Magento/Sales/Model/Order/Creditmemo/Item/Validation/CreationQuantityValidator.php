@@ -30,6 +30,7 @@ class CreationQuantityValidator implements ValidatorInterface
 
     /**
      * ItemCreationQuantityValidator constructor.
+     *
      * @param OrderItemRepositoryInterface $orderItemRepository
      * @param mixed $context
      */
@@ -65,6 +66,8 @@ class CreationQuantityValidator implements ValidatorInterface
     }
 
     /**
+     * Check the quantity to refund is greater than the unrefunded quantity
+     *
      * @param Item $orderItem
      * @param int $qty
      * @return bool
@@ -75,6 +78,8 @@ class CreationQuantityValidator implements ValidatorInterface
     }
 
     /**
+     * Check to see if Item is part of the order
+     *
      * @param OrderItemInterface $orderItem
      * @return bool
      */

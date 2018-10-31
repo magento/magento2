@@ -156,17 +156,26 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $productOption = $this->getProductOptionMock();
         $orderItemMock = $this->getOrderMock($productType, $productOption);
 
+        $orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $orderMock->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn([$orderItemMock]);
+
         $orderItemMock->expects($this->once())
             ->method('load')
             ->with($orderItemId)
             ->willReturn($orderItemMock);
-        $orderItemMock->expects($this->once())
+        $orderItemMock->expects($this->exactly(2))
             ->method('getItemId')
             ->willReturn($orderItemId);
+        $orderItemMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($orderMock);
 
         $this->metadata->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($orderItemMock);
+
 
         $model = $this->getModel($orderItemMock, $productType);
         $this->assertSame($orderItemMock, $model->get($orderItemId));
@@ -213,11 +222,17 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $orderMock->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn([$orderItemMock]);
+
         $orderItemMock->expects($this->once())
             ->method('load')
             ->with($orderItemId)
             ->willReturn($orderItemMock);
-        $orderItemMock->expects($this->once())
+        $orderItemMock->expects($this->exactly(2))
             ->method('getItemId')
             ->willReturn($orderItemId);
         $orderItemMock->expects($this->once())
@@ -226,6 +241,9 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $orderItemMock->expects($this->once())
             ->method('getBuyRequest')
             ->willReturn($requestMock);
+        $orderItemMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($orderMock);
 
         $orderItemResourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
