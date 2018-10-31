@@ -43,11 +43,13 @@ define([
 
         nodes = _.map(nodes, function (node) {
         value = node.value;
+
             if (value == '') {
                 node.label = ' ';
+
                 return node;
             }
-            
+
             if (value === null || value === captionValue) {
                 if (_.isUndefined(caption)) {
                     caption = node.label;
