@@ -26,6 +26,10 @@ class SecureUnserializer
             throw new \InvalidArgumentException('Data contains serialized object and cannot be unserialized');
         }
 
-        return unserialize($string);
+        try {
+            return unserialize($string);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
