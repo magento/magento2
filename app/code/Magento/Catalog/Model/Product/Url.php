@@ -47,7 +47,7 @@ class Url extends \Magento\Framework\DataObject
     protected $urlFinder;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $scopeConfig;
 

@@ -5,29 +5,11 @@
  */
 
 use Magento\Catalog\Helper\Product;
-use Magento\Config\Model\Config\Factory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-$configData = [
-    ScopeConfigInterface::SCOPE_TYPE_DEFAULT => [
-        '' => [
-            Product::XML_PATH_PRODUCT_URL_USE_CATEGORY => '1',
-        ],
-    ],
-];
-
 $objectManager = Bootstrap::getObjectManager();
-/** @var Factory $configFactory */
-$configFactory = $objectManager->create(Factory::class);
 
-foreach ($configData as $scope => $data) {
-    foreach ($data as $scopeCode => $scopeData) {
-        foreach ($scopeData as $path => $value) {
-            $config = $configFactory->create();
-            $config->setScope($scope);
-            $config->setDataByPath($path, $value);
-            $config->save();
-        }
-    }
-}
+/** @var \Magento\Config\Model\Config $config */
+$config = $objectManager->get(\Magento\Config\Model\Config::class);
+$config->setDataByPath(Product::XML_PATH_PRODUCT_URL_USE_CATEGORY, 1);
+$config->save();
