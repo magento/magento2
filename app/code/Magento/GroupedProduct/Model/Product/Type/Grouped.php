@@ -8,6 +8,8 @@
 namespace Magento\GroupedProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\CatalogInventory\Helper\Stock as StockHelper;
 
 /**
  * Grouped product type model
@@ -87,6 +89,11 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $msrpData;
 
     /**
+     * @var \Magento\CatalogInventory\Helper\Stock|null
+     */
+    private $stockHelper;
+
+    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -102,6 +109,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Msrp\Helper\Data $msrpData
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param \Magento\CatalogInventory\Helper\Stock|null $stockHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -119,13 +127,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
         \Magento\Msrp\Helper\Data $msrpData,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        StockHelper $stockHelper = null
     ) {
         $this->productLinks = $catalogProductLink;
         $this->_storeManager = $storeManager;
         $this->_catalogProductStatus = $catalogProductStatus;
         $this->_appState = $appState;
         $this->msrpData = $msrpData;
+        $this->stockHelper = $stockHelper ?: ObjectManager::getInstance()->get(StockHelper::class);
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -217,6 +227,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 'status',
                 ['in' => $this->getStatusFilters($product)]
             );
+
+            $this->stockHelper->addIsInStockFilterToCollection($collection);
 
             foreach ($collection as $item) {
                 $associatedProducts[] = $item;
