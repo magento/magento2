@@ -45,7 +45,7 @@ class Exceptions extends ArraySerialized
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        SecureUnserializer $secureUnserializer = null,
+        SecureUnserializer $secureUnserializer = null
     ) {
         $this->_design = $design;
         $this->secureUnserializer = $secureUnserializer ?:
