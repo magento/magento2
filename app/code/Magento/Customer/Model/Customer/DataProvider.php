@@ -150,10 +150,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $allowToShowHiddenAttributes;
 
     /**
-     * DataProvider constructor.
-     * @param $name
-     * @param $primaryFieldName
-     * @param $requestFieldName
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
      * @param EavValidationRules $eavValidationRules
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
