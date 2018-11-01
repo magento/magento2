@@ -17,13 +17,20 @@ use Magento\Backend\Block\Media\Uploader;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Backend\Block\DataProviders\UploadConfig as ImageUploadConfigDataProvider;
 
 class Content extends \Magento\Backend\Block\Widget
 {
     /**
+     * @var ImageUploadConfigDataProvider
+     */
+    private $imageUploadConfigDataProvider;
+
+    /**
      * @var string
      */
-    protected $_template = 'catalog/product/helper/gallery.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/helper/gallery.phtml';
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
@@ -45,16 +52,20 @@ class Content extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param array $data
+     * @param ImageUploadConfigDataProvider $imageUploadConfigDataProvider
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        array $data = []
+        array $data = [],
+        ImageUploadConfigDataProvider $imageUploadConfigDataProvider = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_mediaConfig = $mediaConfig;
         parent::__construct($context, $data);
+        $this->imageUploadConfigDataProvider = $imageUploadConfigDataProvider
+            ?: ObjectManager::getInstance()->get(ImageUploadConfigDataProvider::class);
     }
 
     /**
@@ -62,7 +73,11 @@ class Content extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $this->addChild('uploader', \Magento\Backend\Block\Media\Uploader::class);
+        $this->addChild(
+            'uploader',
+            \Magento\Backend\Block\Media\Uploader::class,
+            ['image_upload_config_data' => $this->imageUploadConfigDataProvider]
+        );
 
         $this->getUploader()->getConfig()->setUrl(
             $this->_urlBuilder->addSessionParam()->getUrl('catalog/product_gallery/upload')
@@ -193,9 +208,11 @@ class Content extends \Magento\Backend\Block\Widget
         $imageTypes = [];
         foreach ($this->getMediaAttributes() as $attribute) {
             /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            $value = $this->getElement()->getDataObject()->getData($attribute->getAttributeCode())
+                ?: $this->getElement()->getImageValue($attribute->getAttributeCode());
             $imageTypes[$attribute->getAttributeCode()] = [
                 'code' => $attribute->getAttributeCode(),
-                'value' => $this->getElement()->getDataObject()->getData($attribute->getAttributeCode()),
+                'value' => $value,
                 'label' => $attribute->getFrontend()->getLabel(),
                 'scope' => __($this->getElement()->getScopeLabel($attribute)),
                 'name' => $this->getElement()->getAttributeFieldName($attribute),

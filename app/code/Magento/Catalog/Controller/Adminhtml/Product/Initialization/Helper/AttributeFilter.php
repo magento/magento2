@@ -25,17 +25,74 @@ class AttributeFilter
      * @param array $useDefaults
      * @return array
      */
-    public function prepareProductAttributes(Product $product, array $productData, array $useDefaults)
+    public function prepareProductAttributes(Product $product, array $productData, array $useDefaults): array
     {
-        foreach ($productData as $attribute => $value) {
-            $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === "1";
-            if ($value === '' && $considerUseDefaultsAttribute) {
-                /** @var $product Product */
-                if ((bool)$product->getData($attribute) === (bool)$value) {
-                    unset($productData[$attribute]);
-                }
+        $attributeList = $product->getAttributes();
+        foreach ($productData as $attributeCode => $attributeValue) {
+            if ($this->isAttributeShouldNotBeUpdated($product, $useDefaults, $attributeCode, $attributeValue)) {
+                unset($productData[$attributeCode]);
+            }
+
+            if (isset($useDefaults[$attributeCode]) && $useDefaults[$attributeCode] === '1') {
+                $productData = $this->prepareDefaultData($attributeList, $attributeCode, $productData);
+                $productData = $this->prepareConfigData($product, $attributeCode, $productData);
             }
         }
+
         return $productData;
+    }
+
+    /**
+     * @param Product $product
+     * @param string $attributeCode
+     * @param array $productData
+     * @return array
+     */
+    private function prepareConfigData(Product $product, $attributeCode, array $productData): array
+    {
+        // UI component sends value even if field is disabled, so 'Use Config Settings' must be reset to false
+        if ($product->hasData('use_config_' . $attributeCode)) {
+            $productData['use_config_' . $attributeCode] = false;
+        }
+
+        return $productData;
+    }
+
+    /**
+     * @param array $attributeList
+     * @param string $attributeCode
+     * @param array $productData
+     * @return array
+     */
+    private function prepareDefaultData(array $attributeList, $attributeCode, array $productData): array
+    {
+        if (isset($attributeList[$attributeCode])) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+            $attribute = $attributeList[$attributeCode];
+            $attributeType = $attribute->getBackendType();
+            // For non-numberic types set the attributeValue to 'false' to trigger their removal from the db
+            if ($attributeType === 'varchar' || $attributeType === 'text' || $attributeType === 'datetime') {
+                $attribute->setIsRequired(false);
+                $productData[$attributeCode] = false;
+            } else {
+                $productData[$attributeCode] = null;
+            }
+        }
+
+        return $productData;
+    }
+
+    /**
+     * @param Product $product
+     * @param $useDefaults
+     * @param $attribute
+     * @param $value
+     * @return bool
+     */
+    private function isAttributeShouldNotBeUpdated(Product $product, $useDefaults, $attribute, $value): bool
+    {
+        $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === '1';
+
+        return ($value === '' && $considerUseDefaultsAttribute && !$product->getData($attribute));
     }
 }

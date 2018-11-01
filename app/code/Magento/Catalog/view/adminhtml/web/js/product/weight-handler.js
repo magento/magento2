@@ -67,7 +67,7 @@ define([
         },
 
         /**
-         * Has weight swither
+         * Has weight switcher
          * @returns {*}
          */
         hasWeightSwither: function () {

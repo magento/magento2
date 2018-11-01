@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerOrderViewSection">
+        <element name="orderTitle" type="text" selector=".page-title span"/>
+        <element name="myOrdersTable" type="text" selector="#my-orders-table"/>
+        <element name="subtotal" type="text" selector=".subtotal .amount"/>
+        <element name="paymentMethod" type="text" selector=".payment-method dt"/>
+        <element name="printOrderLink" type="text" selector="a.action.print" timeout="30"/>
+        <element name="shippingAddress" type="text" selector=".box.box-order-shipping-address"/>
+        <element name="billingAddress" type="text" selector=".box.box-order-billing-address"/>
+    </section>
+</sections>

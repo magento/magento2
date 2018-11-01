@@ -19,7 +19,12 @@ define([
                     billingAddress: ko.observable(),
                     shippingAddress: ko.observable(),
                     paymentMethod: ko.observable(),
-                    totals: ko.observable({})
+                    totals: ko.observable({}),
+
+                    /** Stub */
+                    isVirtual: function () {
+                        return false;
+                    }
                 },
                 'Magento_Braintree/js/view/payment/validator-handler': jasmine.createSpyObj(
                     'validator-handler',
@@ -27,7 +32,7 @@ define([
                 ),
                 'Magento_Braintree/js/view/payment/adapter':  jasmine.createSpyObj(
                     'adapter',
-                    ['setup', 'setConfig']
+                    ['setup', 'setConfig', 'showError']
                 )
             },
             braintreeCcForm;
@@ -43,14 +48,17 @@ define([
             };
             injector.mock(mocks);
             injector.require(['Magento_Braintree/js/view/payment/method-renderer/cc-form'], function (Constr) {
-                    braintreeCcForm = new Constr({
-                        provider: 'provName',
-                        name: 'test',
-                        index: 'test'
-                    });
-
-                    done();
+                braintreeCcForm = new Constr({
+                    provider: 'provName',
+                    name: 'test',
+                    index: 'test',
+                    item: {
+                        title: 'Braintree'
+                    }
                 });
+
+                done();
+            });
         });
 
         it('Check if payment code and message container are restored after onActiveChange call.', function () {
@@ -64,6 +72,22 @@ define([
 
             expect(braintreeCcForm.getCode()).toEqual(expectedCode);
             expect(braintreeCcForm.messageContainer).toEqual(expectedMessageContainer);
+        });
+
+        it('Check if form validation fails when "Place Order" button should be active.', function () {
+            var errorMessage = 'Something went wrong.',
+
+                /**
+                 * Anonymous wrapper
+                 */
+                func = function () {
+                    braintreeCcForm.clientConfig.onError({
+                        'message': errorMessage
+                    });
+                };
+
+            expect(func).toThrow(errorMessage);
+            expect(braintreeCcForm.isPlaceOrderActionAllowed()).toBeTruthy();
         });
     });
 });

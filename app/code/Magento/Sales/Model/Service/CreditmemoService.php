@@ -177,8 +177,8 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
                 $creditmemo->getOrder(),
                 !$offlineRequested
             );
-            $this->getOrderRepository()->save($order);
             $this->creditmemoRepository->save($creditmemo);
+            $this->getOrderRepository()->save($order);
             $connection->commit();
         } catch (\Exception $e) {
             $connection->rollBack();
@@ -189,13 +189,15 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
+     * Checks if credit memo is available for refund.
+     *
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validateForRefund(\Magento\Sales\Api\Data\CreditmemoInterface $creditmemo)
     {
-        if ($creditmemo->getId()) {
+        if ($creditmemo->getId() && $creditmemo->getState() != \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot register an existing credit memo.')
             );
@@ -211,7 +213,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'The most money available to refund is %1.',
-                    $creditmemo->getOrder()->formatBasePrice($baseAvailableRefund)
+                    $creditmemo->getOrder()->formatPriceTxt($baseAvailableRefund)
                 )
             );
         }
@@ -219,8 +221,9 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * @return \Magento\Sales\Model\Order\RefundAdapterInterface
+     * Initializes RefundAdapterInterface dependency.
      *
+     * @return \Magento\Sales\Model\Order\RefundAdapterInterface
      * @deprecated 100.1.3
      */
     private function getRefundAdapter()
@@ -233,8 +236,9 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * @return \Magento\Framework\App\ResourceConnection|mixed
+     * Initializes ResourceConnection dependency.
      *
+     * @return \Magento\Framework\App\ResourceConnection|mixed
      * @deprecated 100.1.3
      */
     private function getResource()
@@ -247,8 +251,9 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * @return \Magento\Sales\Api\OrderRepositoryInterface
+     * Initializes OrderRepositoryInterface dependency.
      *
+     * @return \Magento\Sales\Api\OrderRepositoryInterface
      * @deprecated 100.1.3
      */
     private function getOrderRepository()
@@ -261,8 +266,9 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * @return \Magento\Sales\Api\InvoiceRepositoryInterface
+     * Initializes InvoiceRepositoryInterface dependency.
      *
+     * @return \Magento\Sales\Api\InvoiceRepositoryInterface
      * @deprecated 100.1.3
      */
     private function getInvoiceRepository()

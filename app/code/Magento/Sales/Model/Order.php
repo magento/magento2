@@ -7,6 +7,8 @@ namespace Magento\Sales\Model;
 
 use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
@@ -14,7 +16,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection as CreditmemoCollection;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
-use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ImportCollection;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Collection as PaymentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as ShipmentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as TrackCollection;
@@ -268,6 +270,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $timezone;
 
     /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -295,7 +302,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param ResolverInterface $localeResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -324,7 +333,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ResolverInterface $localeResolver = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -335,7 +345,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_productVisibility = $productVisibility;
         $this->invoiceManagement = $invoiceManagement;
         $this->_currencyFactory = $currencyFactory;
-        $this->_eavConfig = $eavConfig;
         $this->_orderHistoryFactory = $orderHistoryFactory;
         $this->_addressCollectionFactory = $addressCollectionFactory;
         $this->_paymentCollectionFactory = $paymentCollectionFactory;
@@ -346,6 +355,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_trackCollectionFactory = $trackCollectionFactory;
         $this->salesOrderCollectionFactory = $salesOrderCollectionFactory;
         $this->priceCurrency = $priceCurrency;
+        $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(ResolverInterface::class);
+
         parent::__construct(
             $context,
             $registry,
@@ -997,8 +1008,24 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param string $comment
      * @param bool|string $status
      * @return OrderStatusHistoryInterface
+     * @deprecated
+     * @see addCommentToStatusHistory
      */
     public function addStatusHistoryComment($comment, $status = false)
+    {
+        return $this->addCommentToStatusHistory($comment, $status, false);
+    }
+    
+    /**
+     * Add a comment to order status history
+     * Different or default status may be specified
+     *
+     * @param string $comment
+     * @param bool|string $status
+     * @param bool $isVisibleOnFront
+     * @return OrderStatusHistoryInterface
+     */
+    public function addCommentToStatusHistory($comment, $status = false, $isVisibleOnFront = false)
     {
         if (false === $status) {
             $status = $this->getStatus();
@@ -1013,6 +1040,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $comment
         )->setEntityName(
             $this->entityType
+        )->setIsVisibleOnFront(
+            $isVisibleOnFront
         );
         $this->addStatusHistory($history);
         return $history;
@@ -1243,7 +1272,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @param array $filterByTypes
      * @param bool $nonChildrenOnly
-     * @return ImportCollection
+     * @return ItemCollection
      */
     public function getItemsCollection($filterByTypes = [], $nonChildrenOnly = false)
     {
@@ -1268,7 +1297,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get random items collection without related children
      *
      * @param int $limit
-     * @return ImportCollection
+     * @return ItemCollection
      */
     public function getParentItemsRandomCollection($limit = 1)
     {
@@ -1280,7 +1309,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      *
      * @param int $limit
      * @param bool $nonChildrenOnly
-     * @return ImportCollection
+     * @return ItemCollection
      */
     protected function _getItemsRandomCollection($limit, $nonChildrenOnly = false)
     {
@@ -1758,7 +1787,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasInvoices()
     {
-        return $this->getInvoiceCollection()->count();
+        return (bool)$this->getInvoiceCollection()->count();
     }
 
     /**
@@ -1768,7 +1797,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasShipments()
     {
-        return $this->getShipmentsCollection()->count();
+        return (bool)$this->getShipmentsCollection()->count();
     }
 
     /**
@@ -1778,7 +1807,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasCreditmemos()
     {
-        return $this->getCreditmemosCollection()->count();
+        return (bool)$this->getCreditmemosCollection()->count();
     }
 
     /**
@@ -1830,7 +1859,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             new \DateTime($this->getCreatedAt()),
             $format,
             $format,
-            null,
+            $this->localeResolver->getDefaultLocale(),
             $this->timezone->getConfigTimezone('store', $this->getStore())
         );
     }

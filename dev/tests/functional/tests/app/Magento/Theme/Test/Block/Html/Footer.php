@@ -120,7 +120,7 @@ class Footer extends Block
     }
 
     /**
-     * Check if correspondent "Store" is present in "Store" swither or not.
+     * Check if correspondent "Store" is present in "Store" switcher or not.
      *
      * @param Store $store
      * @return bool

@@ -75,6 +75,9 @@ class AttributeCheckerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($isAllowed, $this->model->isAttributeAllowedOnForm($attributeCode, $formName));
     }
 
+    /**
+     * @return array
+     */
     public function attributeOnFormDataProvider()
     {
         return [

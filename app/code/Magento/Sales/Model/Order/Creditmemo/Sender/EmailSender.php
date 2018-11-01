@@ -7,9 +7,12 @@ namespace Magento\Sales\Model\Order\Creditmemo\Sender;
 
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Creditmemo\SenderInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Email notification sender for Creditmemo.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailSender extends Sender implements SenderInterface
 {
@@ -106,13 +109,17 @@ class EmailSender extends Sender implements SenderInterface
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
             ];
+            $transportObject = new DataObject($transport);
 
+            /**
+             * Event argument `transport` is @deprecated. Use `transportObject` instead.
+             */
             $this->eventManager->dispatch(
                 'email_creditmemo_set_template_vars_before',
-                ['sender' => $this, 'transport' => $transport]
+                ['sender' => $this, 'transport' => $transportObject->getData(), 'transportObject' => $transportObject]
             );
 
-            $this->templateContainer->setTemplateVars($transport);
+            $this->templateContainer->setTemplateVars($transportObject->getData());
 
             if ($this->checkAndSend($order)) {
                 $creditmemo->setEmailSent(true);

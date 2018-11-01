@@ -106,8 +106,11 @@ class Name extends AbstractWidget
         $prefixOptions = $this->options->getNamePrefixOptions();
 
         if ($this->getObject() && !empty($prefixOptions)) {
-            $oldPrefix = $this->escapeHtml(trim($this->getObject()->getPrefix()));
-            $prefixOptions[$oldPrefix] = $oldPrefix;
+            $prefixOption = $this->getObject()->getPrefix();
+            $oldPrefix = $this->escapeHtml(trim($prefixOption));
+            if ($prefixOption !== null && !isset($prefixOptions[$oldPrefix]) && !isset($prefixOptions[$prefixOption])) {
+                $prefixOptions[$oldPrefix] = $oldPrefix;
+            }
         }
         return $prefixOptions;
     }
@@ -161,8 +164,11 @@ class Name extends AbstractWidget
     {
         $suffixOptions = $this->options->getNameSuffixOptions();
         if ($this->getObject() && !empty($suffixOptions)) {
-            $oldSuffix = $this->escapeHtml(trim($this->getObject()->getSuffix()));
-            $suffixOptions[$oldSuffix] = $oldSuffix;
+            $suffixOption = $this->getObject()->getSuffix();
+            $oldSuffix = $this->escapeHtml(trim($suffixOption));
+            if ($suffixOption !== null && !isset($suffixOptions[$oldSuffix]) && !isset($suffixOptions[$suffixOption])) {
+                $suffixOptions[$oldSuffix] = $oldSuffix;
+            }
         }
         return $suffixOptions;
     }

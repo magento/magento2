@@ -11,6 +11,8 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 
 /**
  * Shopping cart item render block
@@ -92,6 +94,11 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     private $messageInterpretationStrategy;
 
     /**
+     * @var ItemResolverInterface
+     */
+    private $itemResolver;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -102,6 +109,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param InterpretationStrategyInterface $messageInterpretationStrategy
      * @param array $data
+     * @param ItemResolverInterface|null $itemResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
      */
@@ -115,7 +123,8 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Module\Manager $moduleManager,
         InterpretationStrategyInterface $messageInterpretationStrategy,
-        array $data = []
+        array $data = [],
+        ItemResolverInterface $itemResolver = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->imageBuilder = $imageBuilder;
@@ -127,6 +136,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
         $this->_isScopePrivate = true;
         $this->moduleManager = $moduleManager;
         $this->messageInterpretationStrategy = $messageInterpretationStrategy;
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
     }
 
     /**
@@ -172,7 +182,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      */
     public function getProductForThumbnail()
     {
-        return $this->getProduct();
+        return $this->itemResolver->getFinalProduct($this->getItem());
     }
 
     /**

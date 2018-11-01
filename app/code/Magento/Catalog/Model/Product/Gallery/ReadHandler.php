@@ -55,9 +55,6 @@ class ReadHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
-        $value = [];
-        $value['images'] = [];
-
         $mediaEntries = $this->resourceModel->loadProductGalleryByAttributeId(
             $entity,
             $this->getAttribute()->getAttributeId()
@@ -79,37 +76,13 @@ class ReadHandler implements ExtensionInterface
      */
     public function addMediaDataToProduct(Product $product, array $mediaEntries)
     {
-        $attrCode = $this->getAttribute()->getAttributeCode();
-        $value = [];
-        $value['images'] = [];
-        $value['values'] = [];
-
-        foreach ($mediaEntries as $mediaEntry) {
-            $mediaEntry = $this->substituteNullsWithDefaultValues($mediaEntry);
-            $value['images'][$mediaEntry['value_id']] = $mediaEntry;
-        }
-        $product->setData($attrCode, $value);
-    }
-
-    /**
-     * @param array $rawData
-     * @return array
-     */
-    private function substituteNullsWithDefaultValues(array $rawData)
-    {
-        $processedData = [];
-        foreach ($rawData as $key => $rawValue) {
-            if (null !== $rawValue) {
-                $processedValue = $rawValue;
-            } elseif (isset($rawData[$key . '_default'])) {
-                $processedValue = $rawData[$key . '_default'];
-            } else {
-                $processedValue = null;
-            }
-            $processedData[$key] = $processedValue;
-        }
-
-        return $processedData;
+        $product->setData(
+            $this->getAttribute()->getAttributeCode(),
+            [
+                'images' => array_column($mediaEntries, null, 'value_id'),
+                'values' => []
+            ]
+        );
     }
 
     /**

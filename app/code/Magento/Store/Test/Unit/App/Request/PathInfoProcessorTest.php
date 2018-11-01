@@ -47,6 +47,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'storeCode'
         )->willReturn($store);
+        $store->expects($this->once())->method('getCode')->will($this->returnValue('storeCode'));
         $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
         $this->_requestMock->expects(
             $this->once()

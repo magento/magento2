@@ -175,7 +175,6 @@ class ReportNewRelicCron
     public function report()
     {
         if ($this->config->isNewRelicEnabled()) {
-            $this->reportModules();
             $this->reportCounts();
         }
 

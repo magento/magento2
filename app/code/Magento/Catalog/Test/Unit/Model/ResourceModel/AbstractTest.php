@@ -44,11 +44,13 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
 
         $code = 'test_attr';
         $set = 10;
+        $storeId = 100;
 
         $object = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['__wakeup']);
 
         $object->setData('test_attr', 'test_attr');
         $object->setData('attribute_set_id', $set);
+        $object->setData('store_id', $storeId);
 
         $entityType = new \Magento\Framework\DataObject();
         $entityType->setEntityTypeCode('test');

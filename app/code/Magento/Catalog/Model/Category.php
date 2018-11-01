@@ -71,6 +71,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     const CACHE_TAG = 'cat_c';
 
+    /**
+     * Category Store Id
+     */
+    const STORE_ID = 'store_id';
+
     /**#@+
      * Constants
      */
@@ -111,6 +116,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
+
+    /**
+     * @var ResourceModel\Category
+     */
+    protected $_resource;
 
     /**
      * URL rewrite model
@@ -330,6 +340,16 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             $this->customAttributesCodes = array_diff($this->customAttributesCodes, $this->interfaceAttributes);
         }
         return $this->customAttributesCodes;
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Catalog\Model\ResourceModel\Category
+     * @deprecated because resource models should be used directly
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**
@@ -573,12 +593,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * If store id is underfined for category return current active store id
      *
-     * @return integer
+     * @return int
      */
     public function getStoreId()
     {
-        if ($this->hasData('store_id')) {
-            return (int)$this->_getData('store_id');
+        if ($this->hasData(self::STORE_ID)) {
+            return (int)$this->_getData(self::STORE_ID);
         }
         return (int)$this->_storeManager->getStore()->getId();
     }
@@ -594,7 +614,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if (!is_numeric($storeId)) {
             $storeId = $this->_storeManager->getStore($storeId)->getId();
         }
-        $this->setData('store_id', $storeId);
+        $this->setData(self::STORE_ID, $storeId);
         $this->getResource()->setStoreId($storeId);
         return $this;
     }
@@ -706,7 +726,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             return $parentId;
         }
         $parentIds = $this->getParentIds();
-        return intval(array_pop($parentIds));
+        return (int)array_pop($parentIds);
     }
 
     /**
@@ -943,8 +963,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getProductCount()
     {
-        $count = $this->_getResource()->getProductCount($this);
-        $this->setData(self::KEY_PRODUCT_COUNT, $count);
+        if (!$this->hasData(self::KEY_PRODUCT_COUNT)) {
+            $count = $this->_getResource()->getProductCount($this);
+            $this->setData(self::KEY_PRODUCT_COUNT, $count);
+        }
+
         return $this->getData(self::KEY_PRODUCT_COUNT);
     }
 
@@ -1132,15 +1155,25 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getIdentities()
     {
-        $identities = [
-            self::CACHE_TAG . '_' . $this->getId(),
-        ];
-        if (!$this->getId() || $this->hasDataChanges()
-            || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)
-        ) {
-            $identities[] = self::CACHE_TAG;
-            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+        $identities = [];
+        if ($this->getId()) {
+            if ($this->getAffectedCategoryIds()) {
+                foreach (array_unique($this->getAffectedCategoryIds()) as $affectedCategoryId) {
+                    $identities[] = self::CACHE_TAG . '_' . $affectedCategoryId;
+                }
+            } else {
+                $identities[] = self::CACHE_TAG . '_' . $this->getId();
+            }
+
+            if ($this->hasDataChanges() || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)) {
+                $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+            }
+            
+            if ($this->isObjectNew()) {
+                $identities[] = self::CACHE_TAG;
+            }
         }
+
         return $identities;
     }
 

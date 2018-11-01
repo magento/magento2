@@ -73,7 +73,7 @@ class CaseInfo extends Block
      *
      * @var string
      */
-    private $orderAmount = '[ng-bind*="currentCase.orderAmount"]';
+    private $orderAmount = '[ng-bind*="currentCase.orderTotalAmount"]';
 
     /**
      * Locator value for order amount currency.

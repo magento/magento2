@@ -9,6 +9,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetListWithExtensionAttributes()
     {
@@ -24,9 +25,10 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         $joinedEntity = $objectManager->create(\Magento\Eav\Model\Entity\Attribute::class);
         $joinedEntity->load($options[0]->getId());
         $joinedExtensionAttributeValue = $joinedEntity->getAttributeCode();
+        $result = $options[0]->getExtensionAttributes()->__toArray();
         $this->assertEquals(
             $joinedExtensionAttributeValue,
-            $options[0]->getExtensionAttributes()->getTestDummyAttribute(),
+            $result['test_dummy_attribute'],
             "Extension attributes were not loaded correctly"
         );
     }

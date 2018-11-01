@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Admin creates new custom website -->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateWebsiteActionGroup">
+        <arguments>
+            <argument name="newWebsiteName" type="string"/>
+            <argument name="websiteCode" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStoreWebsitePage.url}}" stepKey="navigateToNewWebsitePage"/>
+        <waitForPageLoad stepKey="waitForStoresPageLoad"/>
+        <!--Create Website-->
+        <waitForElementVisible selector="{{AdminNewWebsiteSection.name}}" stepKey="waitForWebsiteFormAppeared" />
+        <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{newWebsiteName}}" stepKey="enterWebsiteName" />
+        <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{websiteCode}}" stepKey="enterWebsiteCode" />
+        <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveWebsite" />
+        <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload"/>
+        <see userInput="You saved the website." stepKey="seeSavedMessage" />
+    </actionGroup>
+</actionGroups>

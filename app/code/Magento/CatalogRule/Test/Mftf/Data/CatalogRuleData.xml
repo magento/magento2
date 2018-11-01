@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CustomCatalogRule" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="websites">
+            <item>Main Website</item>
+        </array>
+        <array key="groups">
+            <item>General</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">10</data>
+    </entity>
+    <entity name="CatalogRule96PercentDiscount" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="groups">
+            <item>NOT LOGGED IN</item>
+        </array>
+        <array key="websites">
+            <item>Main Website</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">96</data>
+    </entity>
+</entities>

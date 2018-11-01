@@ -72,7 +72,7 @@ case $TEST_SUITE in
             --base-path="$TRAVIS_BUILD_DIR" \
             --repo='https://github.com/magento/magento2.git' \
             --branch="$TRAVIS_BRANCH"
-        cat "$changed_files_ce" | sed 's/^/  + including /'
+        sed 's/^/  + including /' "$changed_files_ce"
 
         cd ../../..
         ;;
@@ -129,6 +129,7 @@ case $TEST_SUITE in
         sed -e "s?basic?travis_acceptance?g" --in-place ./phpunit.xml
         cp ./.htaccess.sample ./.htaccess
         cd ./utils
+        php -f generate/moduleSequence.php
         php -f mtf troubleshooting:check-all
 
         cd ../../..

@@ -217,6 +217,11 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      */
     protected function _prepareForm()
     {
+        $storeId = $this->getCreateOrderModel()
+            ->getSession()
+            ->getStoreId();
+        $this->_storeManager->setCurrentStore($storeId);
+
         $fieldset = $this->_form->addFieldset('main', ['no_container' => true]);
 
         $addressForm = $this->_customerFormFactory->create('customer_address', 'adminhtml_customer_address');
@@ -293,11 +298,17 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
     /**
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $countryElement
+     * @param string|int $storeId
+     *
      * @return void
      */
-    private function processCountryOptions(\Magento\Framework\Data\Form\Element\AbstractElement $countryElement)
-    {
-        $storeId = $this->getBackendQuoteSession()->getStoreId();
+    protected function processCountryOptions(
+        \Magento\Framework\Data\Form\Element\AbstractElement $countryElement,
+        $storeId = null
+    ) {
+        if ($storeId === null) {
+            $storeId = $this->getBackendQuoteSession()->getStoreId();
+        }
         $options = $this->getCountriesCollection()
             ->loadByStore($storeId)
             ->toOptionArray();

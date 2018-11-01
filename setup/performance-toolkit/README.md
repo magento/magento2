@@ -62,7 +62,7 @@ The following parameters can be passed to the `benchmark.jmx` scenario:
 | admin_user                                    | admin               | Admin backend user.                                                                      |
 | admin_password                                | 123123q             | Admin backend password.                                                                  |
 | customer_password                             | 123123q             | Storefront customer password.                                                            |
-| customers_page_size                           | 20                  | Page size for customers grid in Magento Admin.                                           |
+| customers_page_size                           | 50                  | Page size for customers grid in Magento Admin.                                           |
 | files_folder                                  | ./files/            | Path to various files that are used in scenario (`setup/performance-toolkit/files`).     |
 | loops                                         | 1                   | Number of loops to run.                                                                  |
 | frontendPoolUsers                             | 1                   | Total number of Frontend threads.                                                        |
@@ -116,7 +116,7 @@ To get more details about available JMeter options, read [Non-GUI Mode](http://j
 For example, you can run the B2C scenario via console with 90 threads for the Frontend Pool and 10 threads for the Admin Pool:
 
     cd {JMeter path}/bin/
-    jmeter -n -t {path to peformance toolkit}/benchmark.jmx -j ./jmeter.log -l ./jmeter-results.jtl -Jhost=magento2.dev -Jbase_path=/ -Jadmin_path=admin -JfrontendPoolUsers=90 -JadminPoolUsers=10
+    jmeter -n -t {path to performance toolkit}/benchmark.jmx -j ./jmeter.log -l ./jmeter-results.jtl -Jhost=magento2.dev -Jbase_path=/ -Jadmin_path=admin -JfrontendPoolUsers=90 -JadminPoolUsers=10
 
 As a result, you will get `jmeter.log` and `jmeter-results.jtl`. The`jmeter.log` contains information about the test run and can be helpful in determining the cause of an error.  The JTL file is a text file containing the results of a test run. It can be opened in the GUI mode to perform analysis of the results (see the *Output* section below).
 

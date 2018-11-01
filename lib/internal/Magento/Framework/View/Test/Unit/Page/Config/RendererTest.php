@@ -157,14 +157,13 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             . '<meta http-equiv="X-UA-Compatible" content="x_ua_compatible_value"/>' . "\n"
             . '<meta property="og:video:secure_url" content="secure_url"/>' . "\n";
 
-        $this->stringMock->expects($this->at(0))
-            ->method('upperCaseWords')
-            ->with('charset', '_', '')
-            ->willReturn('Charset');
-
         $this->pageConfigMock->expects($this->once())
             ->method('getCharset')
             ->willReturn($metadataValueCharset);
+
+        $this->pageConfigMock->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('content_type_value');
 
         $this->pageConfigMock
             ->expects($this->once())

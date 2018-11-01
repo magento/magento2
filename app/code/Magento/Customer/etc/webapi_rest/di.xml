@@ -13,7 +13,7 @@
         <arguments>
             <argument name="userContexts" xsi:type="array">
                 <item name="customerSessionUserContext" xsi:type="array">
-                    <item name="type" xsi:type="object">Magento\Customer\Model\Authorization\CustomerSessionUserContext</item>
+                    <item name="type" xsi:type="object">Magento\Customer\Model\Authorization\CustomerSessionUserContext\Proxy</item>
                     <item name="sortOrder" xsi:type="string">20</item>
                 </item>
             </argument>

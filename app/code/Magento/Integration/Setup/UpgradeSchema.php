@@ -71,6 +71,16 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getConnection()->createTable($table);
         }
 
+        if (version_compare($context->getVersion(), '2.2.1', '<')) {
+            $connection = $setup->getConnection();
+
+            $connection->addIndex(
+                $setup->getTable('oauth_nonce'),
+                $setup->getIdxName('oauth_nonce', ['timestamp']),
+                ['timestamp']
+            );
+        }
+
         $setup->endSetup();
     }
 }

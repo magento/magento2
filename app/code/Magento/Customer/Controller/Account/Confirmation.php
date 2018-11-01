@@ -6,8 +6,10 @@
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
@@ -36,23 +38,31 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
     protected $resultPageFactory;
 
     /**
+     * @var Url
+     */
+    private $customerUrl;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
+     * @param Url $customerUrl
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         PageFactory $resultPageFactory,
         StoreManagerInterface $storeManager,
-        AccountManagementInterface $customerAccountManagement
+        AccountManagementInterface $customerAccountManagement,
+        Url $customerUrl = null
     ) {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->storeManager = $storeManager;
         $this->customerAccountManagement = $customerAccountManagement;
+        $this->customerUrl = $customerUrl ?: ObjectManager::getInstance()->get(Url::class);
         parent::__construct($context);
     }
 
@@ -98,6 +108,8 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getLayout()->getBlock('accountConfirmation')->setEmail(
             $this->getRequest()->getParam('email', $email)
+        )->setLoginUrl(
+            $this->customerUrl->getLoginUrl()
         );
         return $resultPage;
     }

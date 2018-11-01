@@ -111,7 +111,7 @@ class View extends \Magento\Framework\App\Action\Action
     /**
      * Initialize requested category object
      *
-     * @return \Magento\Catalog\Model\Category
+     * @return \Magento\Catalog\Model\Category|bool
      */
     protected function _initCategory()
     {
@@ -152,7 +152,9 @@ class View extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        if ($this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED)) {
+        if (!$this->_request->getParam('___from_store')
+            && $this->_request->getParam(self::PARAM_NAME_URL_ENCODED)
+        ) {
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
         }
         $category = $this->_initCategory();

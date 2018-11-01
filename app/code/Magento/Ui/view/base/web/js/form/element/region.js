@@ -35,6 +35,11 @@ define([
                 return;
             }
             option = options[value];
+
+            if (typeof option === 'undefined') {
+                return;
+            }
+
             defaultPostCodeResolver.setUseDefaultPostCode(!option['is_zipcode_optional']);
 
             if (this.skipValidation) {
@@ -52,6 +57,7 @@ define([
                     registry.get(this.customName, function (input) {
                         isRegionRequired = !!option['is_region_required'];
                         input.validation['required-entry'] = isRegionRequired;
+                        input.validation['validate-not-number-first'] = true;
                         input.required(isRegionRequired);
                     });
                 }

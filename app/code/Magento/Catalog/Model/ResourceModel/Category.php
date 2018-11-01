@@ -11,6 +11,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Model\Indexer\Category\Product\Processor;
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 
 /**
@@ -83,6 +85,11 @@ class Category extends AbstractResource
     protected $aggregateCount;
 
     /**
+     * @var Processor
+     */
+    private $indexerProcessor;
+
+    /**
      * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -92,6 +99,7 @@ class Category extends AbstractResource
      * @param Category\CollectionFactory $categoryCollectionFactory
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param Processor|null $indexerProcessor
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -101,7 +109,8 @@ class Category extends AbstractResource
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        Processor $indexerProcessor = null
     ) {
         parent::__construct(
             $context,
@@ -115,6 +124,8 @@ class Category extends AbstractResource
         $this->connectionName  = 'catalog';
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->indexerProcessor = $indexerProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Processor::class);
     }
 
     /**
@@ -195,6 +206,19 @@ class Category extends AbstractResource
         parent::_beforeDelete($object);
         $this->getAggregateCount()->processDelete($object);
         $this->deleteChildren($object);
+    }
+
+    /**
+     * Mark Category indexer as invalid to be picked up by cron.
+     *
+     * @param DataObject $object
+     * @return $this
+     */
+    protected function _afterDelete(DataObject $object): Category
+    {
+        $this->indexerProcessor->markIndexerAsInvalid();
+
+        return parent::_afterDelete($object);
     }
 
     /**
@@ -642,7 +666,7 @@ class Category extends AbstractResource
         $bind = ['category_id' => (int)$category->getId()];
         $counts = $this->getConnection()->fetchOne($select, $bind);
 
-        return intval($counts);
+        return (int)$counts;
     }
 
     /**
@@ -896,7 +920,7 @@ class Category extends AbstractResource
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
         $table = $this->getEntityTable();
         $connection = $this->getConnection();
-        $levelFiled = $connection->quoteIdentifier('level');
+        $levelField = $connection->quoteIdentifier('level');
         $pathField = $connection->quoteIdentifier('path');
 
         /**
@@ -936,7 +960,7 @@ class Category extends AbstractResource
                         $newPath . '/'
                     ) . ')'
                 ),
-                'level' => new \Zend_Db_Expr($levelFiled . ' + ' . $levelDisposition)
+                'level' => new \Zend_Db_Expr($levelField . ' + ' . $levelDisposition)
             ],
             [$pathField . ' LIKE ?' => $category->getPath() . '/%']
         );

@@ -179,7 +179,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetAdditionalInformationException()
     {
-        $this->info->setAdditionalInformation('object', new \StdClass());
+        $this->info->setAdditionalInformation('object', new \stdClass());
     }
 
     /**

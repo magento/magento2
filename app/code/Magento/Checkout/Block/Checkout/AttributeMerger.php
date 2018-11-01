@@ -394,9 +394,9 @@ class AttributeMerger
         ]];
         foreach ($countryOptions as $countryOption) {
             if (empty($countryOption['value']) || in_array($countryOption['value'], $this->topCountryCodes)) {
-                array_push($headOptions, $countryOption);
+                $headOptions[] = $countryOption;
             } else {
-                array_push($tailOptions, $countryOption);
+                $tailOptions[] = $countryOption;
             }
         }
         return array_merge($headOptions, $tailOptions);

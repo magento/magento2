@@ -104,11 +104,12 @@ define([
                 /**
                  * Escape key press handler,
                  * close modal window
+                 * @param {Object} event - event
                  */
-                escapeKey: function () {
+                escapeKey: function (event) {
                     if (this.options.isOpen && this.modal.find(document.activeElement).length ||
                         this.options.isOpen && this.modal[0] === document.activeElement) {
-                        this.closeModal();
+                        this.closeModal(event);
                     }
                 }
             }
@@ -336,11 +337,12 @@ define([
          * Set z-index and margin for modal and overlay.
          */
         _setActive: function () {
-            var zIndex = this.modal.zIndex();
+            var zIndex = this.modal.zIndex(),
+                baseIndex = zIndex + this._getVisibleCount();
 
+            this.overlay.zIndex(++baseIndex);
             this.prevOverlayIndex = this.overlay.zIndex();
-            this.modal.zIndex(zIndex + this._getVisibleCount());
-            this.overlay.zIndex(zIndex + (this._getVisibleCount() - 1));
+            this.modal.zIndex(this.overlay.zIndex() + 1);
 
             if (this._getVisibleSlideCount()) {
                 this.modal.css('marginLeft', this.options.modalLeftMargin * this._getVisibleSlideCount());
@@ -354,7 +356,14 @@ define([
             this.modal.removeAttr('style');
 
             if (this.overlay) {
-                this.overlay.zIndex(this.prevOverlayIndex);
+                // In cases when one modal is closed but there is another modal open (e.g. admin notifications)
+                // to avoid collisions between overlay and modal zIndexes
+                // overlay zIndex is set to be less than modal one
+                if (this._getVisibleCount() === 1) {
+                    this.overlay.zIndex(this.prevOverlayIndex - 1);
+                } else {
+                    this.overlay.zIndex(this.prevOverlayIndex);
+                }
             }
         },
 
@@ -415,8 +424,7 @@ define([
          * Creates overlay, append it to wrapper, set previous click event on overlay.
          */
         _createOverlay: function () {
-            var events,
-                outerClickHandler = this.options.outerClickHandler || this.closeModal;
+            var events;
 
             this.overlay = $('.' + this.options.overlayClass);
 
@@ -428,7 +436,6 @@ define([
             }
             events = $._data(this.overlay.get(0), 'events');
             events ? this.prevOverlayHandler = events.click[0].handler : false;
-            this.options.clickableOverlay ? this.overlay.unbind().on('click', outerClickHandler) : false;
         },
 
         /**

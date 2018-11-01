@@ -1,0 +1,31 @@
+{
+    "description": "Magento 2 (Open Source) Functional Tests",
+    "type": "project",
+    "version": "1.0.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.0.13|~7.1.0",
+        "codeception/codeception": "~2.3.4",
+        "consolidation/robo": "^1.0.0",
+        "vlucas/phpdotenv": "^2.4",
+        "doctrine/instantiator": "<=1.0.5",
+        "myclabs/deep-copy": "<=1.7.0",
+        "symfony/filesystem": "<=3.4.12",
+        "symfony/finder": "<=3.4.12",
+        "symfony/process": "<=3.4.12",
+        "symfony/yaml": "<=3.4.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\": "tests/functional/Magento"
+        },
+        "files": ["tests/_bootstrap.php"]
+    },
+    "prefer-stable": true
+}

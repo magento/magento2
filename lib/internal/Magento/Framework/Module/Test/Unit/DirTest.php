@@ -59,4 +59,17 @@ class DirTest extends \PHPUnit\Framework\TestCase
 
         $this->_model->getDir('Test_Module', 'unknown');
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Module 'Test Module' is not correctly registered.
+     */
+    public function testGetDirModuleIncorrectlyRegistered()
+    {
+        $this->moduleRegistryMock->expects($this->once())
+            ->method('getPath')
+            ->with($this->identicalTo(ComponentRegistrar::MODULE), $this->identicalTo('Test Module'))
+            ->willReturn(null);
+        $this->_model->getDir('Test Module');
+    }
 }

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateTaxConfigDefaultsTaxDestination" dataType="tax_config_state" type="create" auth="adminFormKey" url="/admin/system_config/save/section/tax/" method="POST">
+        <object key="groups" dataType="tax_config_state">
+            <object key="calculation" dataType="tax_config_state">
+              <object key="fields" dataType="tax_config_state">
+                <object key="algorithm" dataType="algorithm">
+                    <field key="value">string</field>
+                </object>
+                <object key="based_on" dataType="based_on">
+                    <field key="value">string</field>
+                </object>
+                <object key="price_includes_tax" dataType="price_includes_tax">
+                    <field key="value">string</field>
+                </object>
+                <object key="shipping_includes_tax" dataType="shipping_includes_tax">
+                    <field key="value">string</field>
+                </object>
+                <object key="apply_after_discount" dataType="apply_after_discount">
+                    <field key="value">string</field>
+                </object>
+                <object key="discount_tax" dataType="discount_tax">
+                    <field key="value">string</field>
+                </object>
+                <object key="apply_tax_on" dataType="apply_tax_on">
+                    <field key="value">string</field>
+                </object>
+                <object key="cross_border_trade_enabled" dataType="cross_border_trade_enabled">
+                    <field key="value">string</field>
+                </object>
+              </object>
+            </object>
+            <object key="defaults" dataType="tax_config_state">
+                 <object key="fields" dataType="tax_config_state">
+                    <object key="country" dataType="country">
+                    <field key="value">string</field>
+                    </object>
+                    <object key="region" dataType="region">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="postcode" dataType="postcode">
+                        <field key="value">string</field>
+                    </object>
+                 </object>
+            </object>
+            <object key="cart_display" dataType="tax_config_state">
+                <object key="fields" dataType="tax_config_state">
+                  <object key="price" dataType="priceCart">
+                      <field key="value">string</field>
+                  </object>
+                  <object key="subtotal" dataType="subtotalCart">
+                      <field key="value">string</field>
+                  </object>
+                  <object key="shipping" dataType="shippingCart">
+                      <field key="value">string</field>
+                  </object>
+                  <object key="grandtotal" dataType="grandtotalCart">
+                      <field key="value">string</field>
+                  </object>
+                    <object key="full_summary" dataType="full_summaryCart">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="zero_tax" dataType="zero_taxCart">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+            </object>
+            <object key="sales_display" dataType="tax_config_state">
+                <object key="fields" dataType="tax_config_state">
+                  <object key="price" dataType="priceSales">
+                      <field key="value">string</field>
+                  </object>
+                  <object key="subtotal" dataType="subtotalSales">
+                      <field key="value">string</field>
+                  </object>
+                  <object key="shipping" dataType="shippingSales">
+                      <field key="value">string</field>
+                  </object>
+                  <object key="grandtotal" dataType="grandtotalSales">
+                      <field key="value">string</field>
+                  </object>
+                    <object key="full_summary" dataType="full_summarySales">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="zero_tax" dataType="zero_taxSales">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+    <operation name="TaxConfigDefaultsTaxDestination" dataType="tax_config_default" type="create" auth="adminFormKey" url="/admin/system_config/save/section/tax/" method="POST">
+        <object key="groups" dataType="tax_config_default">
+            <object key="calculation" dataType="tax_config_default">
+              <object key="fields" dataType="tax_config_default">
+                <object key="algorithm" dataType="tax_config_default">
+                  <object key="inherit" dataType="taxTotalFlagZero">
+                    <field key="value">integer</field>
+                  </object>
+                </object>
+                <object key="based_on" dataType="tax_config_default">
+                  <object key="inherit" dataType="taxTotalFlagZero">
+                    <field key="value">integer</field>
+                  </object>
+                </object>
+                <object key="price_includes_tax" dataType="tax_config_default">
+                  <object key="inherit" dataType="taxTotalFlagZero">
+                    <field key="value">integer</field>
+                  </object>
+                </object>
+                <object key="shipping_includes_tax" dataType="tax_config_default">
+                  <object key="inherit" dataType="taxTotalFlagZero">
+                    <field key="value">integer</field>
+                  </object>
+                </object>
+                <object key="apply_after_discount" dataType="tax_config_default">
+                  <object key="inherit" dataType="taxTotalFlagZero">
+                    <field key="value">integer</field>
+                  </object>
+                </object>
+                <object key="discount_tax" dataType="tax_config_default">
+                  <object key="inherit" dataType="taxTotalFlagZero">
+                    <field key="value">integer</field>
+                  </object>
+                </object>
+                <object key="apply_tax_on" dataType="tax_config_default">
+                  <object key="inherit" dataType="taxTotalFlagZero">
+                    <field key="value">integer</field>
+                  </object>
+                </object>
+                <object key="cross_border_trade_enabled" dataType="taxTotalFlagZero">
+                    <field key="value">integer</field>
+                </object>
+              </object>
+            </object>
+            <object key="defaults" dataType="tax_config_default">
+                 <object key="fields" dataType="tax_config_default">
+                    <object key="country" dataType="tax_config_default">
+                      <object key="inherit" dataType="taxTotalFlagZero">
+                        <field key="value">integer</field>
+                      </object>
+                    </object>
+                    <object key="region" dataType="tax_config_default">
+                      <object key="inherit" dataType="taxTotalFlagZero">
+                        <field key="value">integer</field>
+                      </object>
+                    </object>
+                    <object key="postcode" dataType="taxPostCodeEmpty">
+                        <field key="value">string</field>
+                    </object>
+                 </object>
+            </object>
+            <object key="cart_display" dataType="tax_config_default">
+                <object key="fields" dataType="tax_config_default">
+                  <object key="price" dataType="tax_config_default">
+                    <object key="inherit" dataType="taxTotalFlagZero">
+                      <field key="value">integer</field>
+                    </object>
+                  </object>
+                  <object key="subtotal" dataType="tax_config_default">
+                    <object key="inherit" dataType="taxTotalFlagZero">
+                      <field key="value">integer</field>
+                    </object>
+                  </object>
+                  <object key="shipping" dataType="tax_config_default">
+                    <object key="inherit" dataType="taxTotalFlagZero">
+                      <field key="value">integer</field>
+                    </object>
+                  </object>
+                  <object key="grandtotal" dataType="tax_config_default">
+                    <object key="inherit" dataType="taxTotalFlagZero">
+                      <field key="value">integer</field>
+                    </object>
+                  </object>
+                    <object key="full_summary" dataType="tax_config_default">
+                      <object key="inherit" dataType="taxTotalFlagZero">
+                        <field key="value">integer</field>
+                      </object>
+                    </object>
+                    <object key="zero_tax" dataType="tax_config_default">
+                      <object key="inherit" dataType="taxTotalFlagZero">
+                        <field key="value">integer</field>
+                      </object>
+                    </object>
+                </object>
+            </object>
+            <object key="sales_display" dataType="tax_config_default">
+                <object key="fields" dataType="tax_config_default">
+                  <object key="price" dataType="tax_config_default">
+                    <object key="inherit" dataType="taxTotalFlagZero">
+                      <field key="value">integer</field>
+                    </object>
+                  </object>
+                  <object key="subtotal" dataType="tax_config_default">
+                    <object key="inherit" dataType="taxTotalFlagZero">
+                      <field key="value">integer</field>
+                    </object>
+                  </object>
+                  <object key="shipping" dataType="tax_config_default">
+                    <object key="inherit" dataType="taxTotalFlagZero">
+                      <field key="value">integer</field>
+                    </object>
+                  </object>
+                  <object key="grandtotal" dataType="tax_config_default">
+                    <object key="inherit" dataType="taxTotalFlagZero">
+                      <field key="value">integer</field>
+                    </object>
+                  </object>
+                  <object key="full_summary" dataType="tax_config_default">
+                      <object key="inherit" dataType="taxTotalFlagZero">
+                        <field key="value">integer</field>
+                      </object>
+                  </object>
+                  <object key="zero_tax" dataType="tax_config_default">
+                    <object key="inherit" dataType="taxTotalFlagZero">
+                        <field key="value">integer</field>
+                    </object>
+                  </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

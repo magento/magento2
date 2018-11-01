@@ -67,6 +67,18 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testSetDefaultMode()
+    {
+        $this->modeMock->expects($this->once())->method('enableDefaultMode');
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['mode' => 'default']);
+        $this->assertContains(
+            "default mode",
+            $tester->getDisplay()
+        );
+    }
+
     public function testSetProductionSkipCompilation()
     {
         $this->modeMock->expects($this->once())->method('enableProductionModeMinimal');

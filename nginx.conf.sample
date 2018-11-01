@@ -3,7 +3,6 @@
 #    # use tcp connection
 #    # server  127.0.0.1:9000;
 #    # or socket
-#    server   unix:/var/run/php5-fpm.sock;
 #    server   unix:/var/run/php/php7.0-fpm.sock;
 # }
 # server {
@@ -100,10 +99,10 @@ location /static/ {
 
     # Remove signature of the static files that is used to overcome the browser cache
     location ~ ^/static/version {
-        rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
+        rewrite ^/static/(version[^/]+/)?(.*)$ /static/$2 last;
     }
 
-    location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
+    location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|json)$ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
         expires +1y;

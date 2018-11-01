@@ -50,15 +50,15 @@ define([
 
         $(function () {
             $('.product-info-main .reviews-actions a').click(function (event) {
-                var acnchor;
+                var anchor;
 
                 event.preventDefault();
-                acnchor = $(this).attr('href').replace(/^.*?(#|$)/, '');
+                anchor = $(this).attr('href').replace(/^.*?(#|$)/, '');
                 $('.product.data.items [data-role="content"]').each(function (index) { //eslint-disable-line
                     if (this.id == 'reviews') { //eslint-disable-line eqeqeq
                         $('.product.data.items').tabs('activate', index);
                         $('html, body').animate({
-                            scrollTop: $('#' + acnchor).offset().top - 50
+                            scrollTop: $('#' + anchor).offset().top - 50
                         }, 300);
                     }
                 });

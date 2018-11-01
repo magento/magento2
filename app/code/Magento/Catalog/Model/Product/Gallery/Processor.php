@@ -149,7 +149,7 @@ class Processor
         }
 
         $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
-        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
+        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
         $fileName = $dispretionPath . '/' . $fileName;
 
         $fileName = $this->getNotDuplicatedFilename($fileName, $dispretionPath);
@@ -340,9 +340,9 @@ class Processor
         $mediaAttributeCodes = $this->mediaConfig->getMediaAttributeCodes();
 
         if (is_array($mediaAttribute)) {
-            foreach ($mediaAttribute as $atttribute) {
-                if (in_array($atttribute, $mediaAttributeCodes)) {
-                    $product->setData($atttribute, $value);
+            foreach ($mediaAttribute as $attribute) {
+                if (in_array($attribute, $mediaAttributeCodes)) {
+                    $product->setData($attribute, $value);
                 }
             }
         } elseif (in_array($mediaAttribute, $mediaAttributeCodes)) {

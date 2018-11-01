@@ -172,8 +172,10 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
         $rawPrices = $this->tierPricePersistence->get($ids);
         $prices = [];
 
+        $linkField = $this->tierPricePersistence->getEntityLinkField();
+        $skuByIdLookup = $this->buildSkuByIdLookup($skus);
         foreach ($rawPrices as $rawPrice) {
-            $sku = $this->retrieveSkuById($rawPrice[$this->tierPricePersistence->getEntityLinkField()], $skus);
+            $sku = $skuByIdLookup[$rawPrice[$linkField]];
             $price = $this->tierPriceFactory->create($rawPrice, $sku);
             if ($groupBySku) {
                 $prices[$sku][] = $price;
@@ -300,21 +302,21 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     }
 
     /**
-     * Retrieve SKU by product ID.
+     * Generate lookup to retrieve SKU by product ID.
      *
-     * @param int $id
      * @param array $skus
-     * @return string|null
+     * @return array
      */
-    private function retrieveSkuById($id, $skus)
+    private function buildSkuByIdLookup($skus)
     {
+        $lookup = [];
         foreach ($this->productIdLocator->retrieveProductIdsBySkus($skus) as $sku => $ids) {
-            if (isset($ids[$id])) {
-                return $sku;
+            foreach (array_keys($ids) as $id) {
+                $lookup[$id] = $sku;
             }
         }
 
-        return null;
+        return $lookup;
     }
 
     /**

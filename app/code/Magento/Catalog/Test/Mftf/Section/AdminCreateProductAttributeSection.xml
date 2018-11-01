@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AttributePropertiesSection">
+        <element name="AdvancedProperties" type="button" selector="#advanced_fieldset-wrapper"/>
+        <element name="Save" type="button" selector="#save"/>
+    </section>
+    <section name="StorefrontPropertiesSection">
+        <element name="storefrontPropertiesTab" selector="#product_attribute_tabs_front" type="button" timeout="30"/>
+        <element name="useForPromoRuleConditions" type="select" selector="#is_used_for_promo_rules"/>
+    </section>
+</sections>

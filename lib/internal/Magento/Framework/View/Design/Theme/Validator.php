@@ -118,7 +118,7 @@ class Validator
     public function getErrorMessages($dataKey = null)
     {
         if ($dataKey) {
-            return isset($this->_errorMessages[$dataKey]) ? $this->_errorMessages[$dataKey] : [];
+            return $this->_errorMessages[$dataKey] ?? [];
         }
         return $this->_errorMessages;
     }

@@ -57,7 +57,7 @@ $stores = $block->getStoresSortedBySortOrder();
         <input type="hidden" id="option-count-check" value="" />
     </div>
     <script id="row-template" type="text/x-magento-template">
-         <tr>
+        <tr <% if (data.rowClasses) { %>class="<%- data.rowClasses %>"<% } %>>
             <td class="col-draggable">
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()): ?>
                     <div data-role="draggable-handle" class="draggable-handle"
@@ -88,7 +88,9 @@ $stores = $block->getStoresSortedBySortOrder();
     $values = [];
     foreach($block->getOptionValues() as $value) {
         $value = $value->getData();
-        $values[] = is_array($value) ? array_map("htmlspecialchars_decode", $value) : $value;
+        $values[] = is_array($value) ? array_map(function($str) {
+            return htmlspecialchars_decode($str, ENT_QUOTES);
+        }, $value) : $value;
     }
     ?>
     <script type="text/x-magento-init">

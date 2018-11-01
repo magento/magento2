@@ -409,7 +409,7 @@ class Translit implements \Zend_Filter_Interface
         $convertConfig = $config->getValue('url/convert', 'default');
         if ($convertConfig) {
             foreach ($convertConfig as $configValue) {
-                $this->convertTable[strval($configValue['from'])] = strval($configValue['to']);
+                $this->convertTable[(string)$configValue['from']] = (string)$configValue['to'];
             }
         }
     }

@@ -147,6 +147,9 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function getListDataProvider()
     {
         return [
@@ -399,6 +402,9 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
         $this->service->add('product_sku', 1, $price, $qty);
     }
 
+    /**
+     * @return array
+     */
     public function addDataProvider()
     {
         return [

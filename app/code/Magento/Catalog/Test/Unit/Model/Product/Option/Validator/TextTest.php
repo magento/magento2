@@ -58,8 +58,10 @@ class TextTest extends \PHPUnit\Framework\TestCase
     {
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
         $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
-        $this->valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue('fixed'));
-        $this->valueMock->expects($this->once())->method('getPrice')->will($this->returnValue(10));
+        $this->valueMock->method('getPriceType')
+            ->willReturn('fixed');
+        $this->valueMock->method('getPrice')
+            ->willReturn(10);
         $this->valueMock->expects($this->once())->method('getMaxCharacters')->will($this->returnValue(10));
         $this->assertTrue($this->validator->isValid($this->valueMock));
         $this->assertEmpty($this->validator->getMessages());
@@ -69,8 +71,10 @@ class TextTest extends \PHPUnit\Framework\TestCase
     {
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
         $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
-        $this->valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue('fixed'));
-        $this->valueMock->expects($this->once())->method('getPrice')->will($this->returnValue(10));
+        $this->valueMock->method('getPriceType')
+            ->willReturn('fixed');
+        $this->valueMock->method('getPrice')
+            ->willReturn(10);
         $this->valueMock->expects($this->once())->method('getMaxCharacters')->will($this->returnValue(-10));
         $messages = [
             'option values' => 'Invalid option value',

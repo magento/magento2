@@ -75,6 +75,9 @@ class RedirectTest extends TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function httpRedirectResponseStatusCodes()
     {
         return [

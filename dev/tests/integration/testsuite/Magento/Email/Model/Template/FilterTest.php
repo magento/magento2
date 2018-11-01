@@ -352,9 +352,9 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                 false,
                 true,
             ],
-            'Production mode - File with compilation error results in unmodified markup' => [
+            'Production mode - File with compilation error results in structurally unmodified markup' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                '<html><p></p> </html>',
+                '<p></p>',
                 true,
             ],
             'Developer mode - File with compilation error results in error message' => [

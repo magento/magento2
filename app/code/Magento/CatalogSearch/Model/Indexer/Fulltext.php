@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Indexer\Model\ProcessManager;
 
 /**
  * Provide functionality for Fulltext Search indexing.
@@ -72,6 +73,11 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     private $indexScopeState;
 
     /**
+     * @var ProcessManager
+     */
+    private $processManager;
+
+    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param StoreManagerInterface $storeManager
@@ -81,6 +87,8 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * @param array $data
      * @param IndexSwitcherInterface $indexSwitcher
      * @param Scope\State $indexScopeState
+     * @param ProcessManager $processManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FullFactory $fullActionFactory,
@@ -91,7 +99,8 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         SearchRequestConfig $searchRequestConfig,
         array $data,
         IndexSwitcherInterface $indexSwitcher = null,
-        State $indexScopeState = null
+        State $indexScopeState = null,
+        ProcessManager $processManager = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -106,8 +115,12 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         if (null === $indexScopeState) {
             $indexScopeState = ObjectManager::getInstance()->get(State::class);
         }
+        if (null === $processManager) {
+            $processManager = ObjectManager::getInstance()->get(ProcessManager::class);
+        }
         $this->indexSwitcher = $indexSwitcher;
         $this->indexScopeState = $indexScopeState;
+        $this->processManager = $processManager;
     }
 
     /**
@@ -123,11 +136,12 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         $saveHandler = $this->indexerHandlerFactory->create([
             'data' => $this->data
         ]);
+
         foreach ($storeIds as $storeId) {
             $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
             $productIds = array_unique(array_merge($ids, $this->fulltextResource->getRelationsByChild($ids)));
             $saveHandler->deleteIndex([$dimension], new \ArrayObject($productIds));
-            $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId, $ids));
+            $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId, $productIds));
         }
     }
 
@@ -139,20 +153,16 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     public function executeFull()
     {
         $storeIds = array_keys($this->storeManager->getStores());
-        /** @var IndexerHandler $saveHandler */
-        $saveHandler = $this->indexerHandlerFactory->create([
-            'data' => $this->data
-        ]);
+
+        $userFunctions = [];
         foreach ($storeIds as $storeId) {
-            $dimensions = [$this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId])];
-            $this->indexScopeState->useTemporaryIndex();
-
-            $saveHandler->cleanIndex($dimensions);
-            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId));
-
-            $this->indexSwitcher->switchIndex($dimensions);
-            $this->indexScopeState->useRegularIndex();
+            $userFunctions[$storeId] = function () use ($storeId) {
+                return $this->executeFullByStore($storeId);
+            };
         }
+
+        $this->processManager->execute($userFunctions);
+
         $this->fulltextResource->resetSearchResults();
         $this->searchRequestConfig->reset();
     }
@@ -177,5 +187,27 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     public function executeRow($id)
     {
         $this->execute([$id]);
+    }
+
+    /**
+     * Execute full indexation by storeID
+     *
+     * @param int $storeId
+     */
+    private function executeFullByStore($storeId)
+    {
+        /** @var IndexerHandler $saveHandler */
+        $saveHandler = $this->indexerHandlerFactory->create([
+            'data' => $this->data
+        ]);
+
+        $dimensions = [$this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId])];
+        $this->indexScopeState->useTemporaryIndex();
+
+        $saveHandler->cleanIndex($dimensions);
+        $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId));
+
+        $this->indexSwitcher->switchIndex($dimensions);
+        $this->indexScopeState->useRegularIndex();
     }
 }

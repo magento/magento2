@@ -153,7 +153,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
         foreach ($collection->toOptionArray() as $variable) {
             $variables[] = [
                 'value' => '{{customVar code=' . $variable['value'] . '}}',
-                'label' => __('%1', $variable['label']),
+                'label' => __('%1', $this->_escaper->escapeHtml($variable['label'])),
             ];
         }
         if ($withGroup && $variables) {

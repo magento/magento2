@@ -24,7 +24,7 @@
         <div class="product-item-details">
             <strong class="product-item-name">
                 <!-- ko if: product_has_url -->
-                <a data-bind="attr: {href: product_url}, text: product_name"></a>
+                <a data-bind="attr: {href: product_url}, html: product_name"></a>
                 <!-- /ko -->
                 <!-- ko ifnot: product_has_url -->
                     <!-- ko text: product_name --><!-- /ko -->
