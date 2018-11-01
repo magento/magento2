@@ -67,5 +67,6 @@
         <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl1"/>
         <seeInTitle userInput="Search results for: '{{BundleProduct.name}}'" stepKey="assertQuickSearchTitle1"/>
         <see userInput="Search results for: '{{BundleProduct.name}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName1"/>
+        <see selector="{{CatalogSearchResultSection.productListBlock}}" userInput="{{BundleProduct.name}}" stepKey="verifyProductAppearedInSearchResults" />
     </test>
 </tests>

@@ -86,5 +86,6 @@
         <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl1"/>
         <seeInTitle userInput="Search results for: '{{GroupedProduct.name}}'" stepKey="assertQuickSearchTitle1"/>
         <see userInput="Search results for: '{{GroupedProduct.name}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName1"/>
+        <see selector="{{CatalogSearchResultSection.productListBlock}}" userInput="{{GroupedProduct.name}}" stepKey="verifyProductAppearedInSearchResults" />
     </test>
 </tests>
