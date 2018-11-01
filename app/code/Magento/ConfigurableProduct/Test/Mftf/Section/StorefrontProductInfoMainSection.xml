@@ -13,5 +13,6 @@
         <element name="productAttributeOptions" type="select" selector="#product-options-wrapper div[tabindex='0'] option"/>
         <element name="stockIndication" type="block" selector=".stock" />
         <element name="productAttributeOptionsSelectButton" type="select" selector="#product-options-wrapper .super-attribute-select"/>
+        <element name="optionByAttributeId" type="input" selector="#attribute{{var1}}" parameterized="true"/>
     </section>
 </sections>

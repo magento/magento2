@@ -62,4 +62,14 @@
             <requiredEntity createDataKey="createConfigChildProduct2"/>
         </createData>
     </actionGroup>
+
+    <actionGroup name="AdminCreateConfigurableProductChildQty1ActionGroup" extends="AdminCreateApiConfigurableProductActionGroup">
+        <createData entity="ApiConfigurableProductWithOutCategory" stepKey="createConfigProduct">
+            <field key="name">{{productName}}</field>
+        </createData>
+        <createData entity="ApiSimpleSingleQty" stepKey="createConfigChildProduct1">
+            <requiredEntity createDataKey="createConfigProductAttribute"/>
+            <requiredEntity createDataKey="getConfigAttributeOption1"/>
+        </createData>
+    </actionGroup>
 </actionGroups>
