@@ -38,16 +38,30 @@ class ExtractDataFromCategoryTree
     public function execute(\Iterator $iterator): array
     {
         $tree = [];
+        $referenceList = []; // A list of pointer to parents, used to know where to insert new children
+
+        // First item is laways root, create root node
+        /** @var CategoryInterface $category */
+        $category = $iterator->current();
+        $tree[$category->getId()] = $this->categoryHydrator->hydrateCategory($category);
+        $tree[$category->getId()]['model'] = $category;
+        $referenceList[$category->getId()] = &$tree[$category->getId()];
+
+        $iterator->next();
+
+        // Fill the rest of tree
         while ($iterator->valid()) {
             /** @var CategoryInterface $category */
             $category = $iterator->current();
+
+            $categoryData = $this->categoryHydrator->hydrateCategory($category);
+            $categoryData['model'] = $category;
+
+            $newItemIdAtItsParent = count($referenceList[$category->getParentId()]['children']);
+            $referenceList[$category->getParentId()]['children'][$newItemIdAtItsParent] = $categoryData;
+            $referenceList[$category->getId()] = &$referenceList[$category->getParentId()]['children'][$newItemIdAtItsParent];
+
             $iterator->next();
-            $nextCategory = $iterator->current();
-            $tree[$category->getId()] = $this->categoryHydrator->hydrateCategory($category);
-            $tree[$category->getId()]['model'] = $category;
-            if ($nextCategory && (int) $nextCategory->getLevel() !== (int) $category->getLevel()) {
-                $tree[$category->getId()]['children'] = $this->execute($iterator);
-            }
         }
 
         return $tree;
