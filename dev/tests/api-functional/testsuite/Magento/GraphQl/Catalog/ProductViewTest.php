@@ -287,7 +287,6 @@ QUERY;
      */
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
-        $this->markTestSkipped("Skipped until ticket MAGETWO-90021 is resolved.");
         $productSku = 'simple';
 
         $query = <<<QUERY
@@ -455,7 +454,9 @@ QUERY;
             }
             short_description
             sku
-            small_image
+            small_image {
+                path
+            }
             small_image_label
             special_from_date
             special_price
