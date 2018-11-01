@@ -42,7 +42,7 @@ define([
             value;
 
         nodes = _.map(nodes, function (node) {
-        value = node.value;
+            value = node.value;
 
             if (value == '') {
                 node.label = ' ';
