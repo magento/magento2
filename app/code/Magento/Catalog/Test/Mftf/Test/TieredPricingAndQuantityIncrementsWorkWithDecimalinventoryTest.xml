@@ -45,6 +45,7 @@
         <!--Step3. Open *Advanced Pricing* pop-up (Click on *Advanced Pricing* link). Click on *Add* button. Fill *0.5* in *Quantity*-->
         <scrollTo selector="{{AdminProductFormSection.productName}}" stepKey="scrollToProductName"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingLink1"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForAddButton"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="clickOnCustomerGroupPriceAddButton"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="0.5" stepKey="fillProductTierPriceQty"/>
         <!--Step4. Close *Advanced Pricing* (Click on button *Done*). Save *prod1* (Click on button *Save*)-->
