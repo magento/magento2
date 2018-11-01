@@ -44,7 +44,7 @@ define([
         nodes = _.map(nodes, function (node) {
             value = node.value;
 
-            if (value == '') {
+            if (value === '') {
                 node.label = ' ';
 
                 return node;
