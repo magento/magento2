@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ZeroSubtotalOrdersWithProcessingStatusTest">
+    <test name="AdminZeroSubtotalOrdersWithProcessingStatusTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="MAGETWO-72877: Zero Subtotal Orders have incorrect status"/>
@@ -46,7 +46,6 @@
 
         <!--Open Product Page-->
         <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.name$$)}}" stepKey="openProductPage"/>
-        <waitForPageLoad time="30" stepKey="waitForProductPageIsOpened"/>
 
         <!--Apply Cart Rule On Storefront-->
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartRule">
@@ -73,7 +72,7 @@
         <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
         <waitForPageLoad stepKey="waitForCreatedOrderPageOpened"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing"
              stepKey="seeOrderStatus"/>

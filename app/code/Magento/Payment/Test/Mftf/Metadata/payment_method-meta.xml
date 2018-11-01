@@ -8,7 +8,8 @@
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
     <operation name="ZeroSubtotalCheckoutPaymentMethodSetup" dataType="zero_subtotal_checkout_payment_method"
-               type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST">
+               type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST"
+               successRegex="/messages-message-success/">
         <object key="groups" dataType="zero_subtotal_checkout_payment_method">
             <object key="free" dataType="zero_subtotal_checkout_payment_method">
                 <object key="fields" dataType="zero_subtotal_checkout_payment_method">
