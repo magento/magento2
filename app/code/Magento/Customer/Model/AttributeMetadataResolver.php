@@ -189,16 +189,10 @@ class AttributeMetadataResolver
         if ($customerAttribute->getEntityType()->getEntityTypeCode() === 'customer') {
             return \is_array($customerAttribute->getUsedInForms()) &&
                 (
-                    (\in_array(
-                        'customer_account_create',
-                        $customerAttribute->getUsedInForms(),
-                        true
-                        ) && $isRegistration) ||
-                    (\in_array(
-                        'customer_account_edit',
-                        $customerAttribute->getUsedInForms(),
-                        true
-                        ) && !$isRegistration)
+                    (\in_array('customer_account_create', $customerAttribute->getUsedInForms(), true)
+                        && $isRegistration) ||
+                    (\in_array('customer_account_edit', $customerAttribute->getUsedInForms(), true)
+                        && !$isRegistration)
                 );
         }
         return \is_array($customerAttribute->getUsedInForms()) &&

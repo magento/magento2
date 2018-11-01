@@ -17,6 +17,9 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Model\Address as AddressModel;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
