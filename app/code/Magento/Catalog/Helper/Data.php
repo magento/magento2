@@ -413,7 +413,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve Catalog Price Scope
      *
-     * @return int/null
+     * @return int|null
      */
     public function getPriceScope(): ?int
     {
