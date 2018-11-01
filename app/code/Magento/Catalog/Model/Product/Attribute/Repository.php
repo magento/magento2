@@ -143,15 +143,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $this->validateCode($attribute->getAttributeCode());
             $this->validateFrontendInput($attribute->getFrontendInput());
 
-            $attribute->setBackendType(
-                $attribute->getBackendTypeByInput($attribute->getFrontendInput())
-            );
-            $attribute->setSourceModel(
-                $this->productHelper->getAttributeSourceModelByInputType($attribute->getFrontendInput())
-            );
-            $attribute->setBackendModel(
-                $this->productHelper->getAttributeBackendModelByInputType($attribute->getFrontendInput())
-            );
             $attribute->setIsUserDefined(1);
         }
         if (!empty($attribute->getData(AttributeInterface::OPTIONS))) {
