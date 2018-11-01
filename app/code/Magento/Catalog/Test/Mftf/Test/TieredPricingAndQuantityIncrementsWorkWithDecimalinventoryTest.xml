@@ -10,13 +10,13 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="TieredPricingAndQuantityIncrementsWorkWithDecimalinventoryTest">
         <annotations>
-            <features value="Tiered pricing and quantity increments work with decimal inventory"/>
+            <features value="Catalog"/>
             <stories value="Tiered pricing and quantity increments work with decimal inventory"/>
             <title value="Tiered pricing and quantity increments work with decimal inventory"/>
             <description value="Tiered pricing and quantity increments work with decimal inventory"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-91178"/>
-            <group value="product"/>
+            <testCaseId value="MAGETWO-93973"/>
+            <group value="Catalog"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
