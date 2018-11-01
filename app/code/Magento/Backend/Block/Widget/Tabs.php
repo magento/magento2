@@ -468,7 +468,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Mark tabs as dependant of each other
+     * Mark tabs as dependent of each other
      * Arbitrary number of tabs can be specified, but at least two
      *
      * @param string $tabOneId
