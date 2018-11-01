@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49fe82043cd4ae944939b6cceade1d1b",
+    "content-hash": "78153b5c8150c0d145b3372a534a45eb",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -88,16 +88,16 @@
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
-            "version": "1.10.5",
+            "version": "1.10.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
-                "reference": "91d949e28d939e607484a4bbf9307cff5afa689b"
+                "reference": "cc941a5f4cc017e11d3eab9061811ba9583ed6bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/91d949e28d939e607484a4bbf9307cff5afa689b",
-                "reference": "91d949e28d939e607484a4bbf9307cff5afa689b",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/cc941a5f4cc017e11d3eab9061811ba9583ed6bf",
+                "reference": "cc941a5f4cc017e11d3eab9061811ba9583ed6bf",
                 "shasum": ""
             },
             "require": {
@@ -120,7 +120,7 @@
             ],
             "description": "Zend_Cache backend using Redis with full support for tags.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
-            "time": "2018-05-15T16:02:25+00:00"
+            "time": "2018-09-24T16:02:07+00:00"
         },
         {
             "name": "colinmollenhour/credis",
