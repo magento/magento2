@@ -52,8 +52,6 @@ class Text extends AbstractData
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateValue($value)
     {
@@ -66,12 +64,12 @@ class Text extends AbstractData
             $value = $this->_value;
         }
 
-        if ($attribute->isRequired() && empty($value) && $value !== '0') {
-            $errors[] = __('"%1" is a required value.', $label);
+        if (!$attribute->isRequired() && empty($value)) {
+            return true;
         }
 
-        if (!$errors && !$attribute->isRequired() && empty($value)) {
-            return true;
+        if (empty($value) && $value !== '0') {
+            $errors[] = __('"%1" is a required value.', $label);
         }
 
         $errors = $this->validateLength($value, $attribute, $errors);
@@ -80,6 +78,7 @@ class Text extends AbstractData
         if ($result !== true) {
             $errors = array_merge($errors, $result);
         }
+
         if (count($errors) == 0) {
             return true;
         }
