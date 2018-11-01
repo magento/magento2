@@ -65,6 +65,8 @@
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
             <argument name="shippingMethod" value="Free Shipping"/>
         </actionGroup>
+        <see selector="{{CheckoutPaymentSection.notAvailablePaymentSolutions}}"
+             userInput="No Payment Information Required" stepKey="seePaymentInformation"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
