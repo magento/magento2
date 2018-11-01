@@ -145,7 +145,7 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $model->get($orderItemId);
     }
 
-    public function testGet()
+    public function testGetAsParentWithChild()
     {
         $orderItemId = 1;
         $productType = 'configurable';
@@ -154,18 +154,27 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->getProductOptionExtensionMock();
         $productOption = $this->getProductOptionMock();
-        $orderItemMock = $this->getOrderMock($productType, $productOption);
+        $orderItemMock = $this->getOrderItemMock($productType, $productOption);
+
+        $orderItemCollectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Item\Collection::class);
+        $orderItemCollectionMock->expects($this->once())
+            ->method('filterByParent')
+            ->with($orderItemId)
+            ->willReturnSelf();
+        $orderItemCollectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$orderItemMock]);
 
         $orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
         $orderMock->expects($this->once())
-            ->method('getAllItems')
-            ->willReturn([$orderItemMock]);
+            ->method('getItemsCollection')
+            ->willReturn($orderItemCollectionMock);
 
         $orderItemMock->expects($this->once())
             ->method('load')
             ->with($orderItemId)
             ->willReturn($orderItemMock);
-        $orderItemMock->expects($this->exactly(2))
+        $orderItemMock->expects($this->exactly(3))
             ->method('getItemId')
             ->willReturn($orderItemId);
         $orderItemMock->expects($this->once())
@@ -183,6 +192,45 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($orderItemMock, $model->get($orderItemId));
     }
 
+    public function testGetAsChild()
+    {
+        $orderItemId = 1;
+        $parentItemId = 66;
+        $productType = 'configurable';
+
+        $this->productOptionData = ['option1' => 'value1'];
+
+        $this->getProductOptionExtensionMock();
+        $productOption = $this->getProductOptionMock();
+        $orderItemMock = $this->getOrderItemMock($productType, $productOption);
+
+        $orderItemMock->expects($this->once())
+            ->method('load')
+            ->with($orderItemId)
+            ->willReturn($orderItemMock);
+        $orderItemMock->expects($this->once())
+            ->method('getItemId')
+            ->willReturn($orderItemId);
+        $orderItemMock->expects($this->exactly(3))
+            ->method('getParentItemId')
+            ->willReturn($parentItemId);
+
+        $this->metadata->expects($this->once())
+            ->method('getNewInstance')
+            ->willReturn($orderItemMock);
+
+        $parentItemMock = $this->createMock(\Magento\Sales\Model\Order\Item::class);
+
+        $model = $this->getModel($orderItemMock, $productType);
+        $reflectedRegistryProperty = new \ReflectionProperty($model, 'registry');
+        $reflectedRegistryProperty->setAccessible(true);
+        $reflectedRegistryProperty->setValue($model, [$parentItemId => $parentItemMock]);
+        $this->assertSame($orderItemMock, $model->get($orderItemId));
+
+        // Assert already registered
+        $this->assertSame($orderItemMock, $model->get($orderItemId));
+    }
+
     public function testGetList()
     {
         $productType = 'configurable';
@@ -192,7 +240,7 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->getProductOptionExtensionMock();
         $productOption = $this->getProductOptionMock();
-        $orderItemMock = $this->getOrderMock($productType, $productOption);
+        $orderItemMock = $this->getOrderItemMock($productType, $productOption);
 
         $searchResultMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Item\Collection::class)
             ->disableOriginalConstructor()
@@ -214,35 +262,12 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $orderItemId = 1;
         $productType = 'configurable';
 
-        $requestMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
-        $orderMock->expects($this->once())
-            ->method('getAllItems')
-            ->willReturn([$orderItemMock]);
-
         $orderItemMock->expects($this->once())
-            ->method('load')
-            ->with($orderItemId)
-            ->willReturn($orderItemMock);
-        $orderItemMock->expects($this->exactly(2))
-            ->method('getItemId')
+            ->method('getEntityId')
             ->willReturn($orderItemId);
-        $orderItemMock->expects($this->once())
-            ->method('getProductType')
-            ->willReturn($productType);
-        $orderItemMock->expects($this->once())
-            ->method('getBuyRequest')
-            ->willReturn($requestMock);
-        $orderItemMock->expects($this->once())
-            ->method('getOrder')
-            ->willReturn($orderMock);
 
         $orderItemResourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
@@ -252,15 +277,16 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($orderItemMock)
             ->willReturnSelf();
 
-        $this->metadata->expects($this->once())
-            ->method('getNewInstance')
-            ->willReturn($orderItemMock);
         $this->metadata->expects($this->exactly(1))
             ->method('getMapper')
             ->willReturn($orderItemResourceMock);
 
         $model = $this->getModel($orderItemMock, $productType);
+        $reflectedRegistryProperty = new \ReflectionProperty($model, 'registry');
+        $reflectedRegistryProperty->setAccessible(true);
+        $reflectedRegistryProperty->setValue($model, [$orderItemId => $orderItemMock]);
         $this->assertTrue($model->deleteById($orderItemId));
+        $this->assertEmpty($reflectedRegistryProperty->getValue($model));
     }
 
     /**
@@ -318,7 +344,7 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject $productOption
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getOrderMock($productType, $productOption)
+    protected function getOrderItemMock($productType, $productOption)
     {
         $requestMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
