@@ -142,7 +142,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
                 'visible' => false,
                 'required' => false,
                 'user_defined' => false,
-                'default' => '0',
+                'default' => null,
                 'searchable' => false,
                 'filterable' => false,
                 'comparable' => false,
