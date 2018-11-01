@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model\Product\Gallery;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog product Media Gallery attribute processor.
@@ -60,7 +60,7 @@ class Processor
     /**
      * @var \Magento\Framework\File\Mime
      */
-    protected $mime;
+    private $mime;
 
     /**
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
@@ -68,7 +68,7 @@ class Processor
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
-     * @param \Magento\Framework\File\Mime $mime
+     * @param \Magento\Framework\File\Mime|null $mime
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
@@ -77,14 +77,14 @@ class Processor
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel,
-        \Magento\Framework\File\Mime $mime
+        \Magento\Framework\File\Mime $mime = null
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->fileStorageDb = $fileStorageDb;
         $this->mediaConfig = $mediaConfig;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->resourceModel = $resourceModel;
-        $this->mime = $mime;
+        $this->mime = $mime ?: ObjectManager::getInstance()->get(\Magento\Framework\File\Mime::class);
     }
 
     /**
