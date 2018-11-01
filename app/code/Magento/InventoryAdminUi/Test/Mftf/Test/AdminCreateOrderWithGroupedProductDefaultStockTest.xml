@@ -95,6 +95,7 @@
         <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedProductOptionsBySimple">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad12"/>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkSimpleProductFilterResult"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedProductOptionsByVirtual">
             <argument name="product" value="$$virtualProduct$$"/>
@@ -106,6 +107,7 @@
             <argument name="productName" value="$$simpleProduct.name$$"/>
             <argument name="qty" value="2"/>
         </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad13"/>
         <actionGroup ref="fillDefaultQuantityForLinkedToGroupProductInGrid" stepKey="fillDefaultQtyForVirtualProduct">
             <argument name="productName" value="$$virtualProduct.name$$"/>
             <argument name="qty" value="2"/>
@@ -135,7 +137,7 @@
             <argument name="option" value="$$virtualProduct$$"/>
             <argument name="quantity" value="2"/>
         </actionGroup>
-
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <comment userInput="Select shipping method and check grand total and shipping cost." stepKey="selectShippingMethodComment"/>
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="$445.98" stepKey="seeOrderSubTotal"/>
