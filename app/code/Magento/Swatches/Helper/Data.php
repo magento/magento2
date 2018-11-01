@@ -488,6 +488,8 @@ class Data
                 && $swatches[$optionId]['type'] === $optionsArray[$currentStoreId]['type']
             ) {
                 $swatches[$optionId] = $optionsArray[$currentStoreId];
+            } elseif (isset($optionsArray[$currentStoreId])) {
+                $swatches[$optionId] = $optionsArray[$currentStoreId];
             } elseif (isset($optionsArray[self::DEFAULT_STORE_ID])) {
                 $swatches[$optionId] = $optionsArray[self::DEFAULT_STORE_ID];
             }
