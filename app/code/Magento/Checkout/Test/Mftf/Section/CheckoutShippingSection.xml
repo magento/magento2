@@ -32,5 +32,6 @@
         <element name="firstShippingMethod" type="radio" selector="//*[@id='checkout-shipping-method-load']//input[@class='radio']"/>
         <element name="defaultShipping" type="button" selector=".billing-address-details"/>
         <element name="stateInput" type="input" selector="input[name=region]"/>
+        <element name="regionOptions" type="select" selector="select[name=region_id] option"/>
     </section>
 </sections>
