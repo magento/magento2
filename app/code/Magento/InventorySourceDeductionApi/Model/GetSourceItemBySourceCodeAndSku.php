@@ -44,10 +44,10 @@ class GetSourceItemBySourceCodeAndSku
      *
      * @param string $sourceCode
      * @param string $sku
-     * @return SourceItemInterface|null
+     * @return SourceItemInterface
      * @throws NoSuchEntityException
      */
-    public function execute(string $sourceCode, string $sku)
+    public function execute(string $sourceCode, string $sku): SourceItemInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)
