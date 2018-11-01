@@ -478,10 +478,6 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
                 $captchaTargetFormName
             );
 
-            if (!$word) {
-                $this->logCaptchaAttempt($captchaModel);
-                throw new LocalizedException(__('No CAPTCHA word provided'));
-            }
             $isCorrectCaptcha = $captchaModel->isCorrect($word);
             $this->logCaptchaAttempt($captchaModel);
 
@@ -489,6 +485,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
                 throw new LocalizedException(__('Incorrect CAPTCHA'));
             }
         }
+
+        $this->logCaptchaAttempt($captchaModel);
 
         return $this->getSentCount() >= $this->getMaxSendsToFriend();
     }

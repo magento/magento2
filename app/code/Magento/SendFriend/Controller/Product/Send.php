@@ -5,9 +5,13 @@
  */
 namespace Magento\SendFriend\Controller\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Send extends \Magento\SendFriend\Controller\Product
+/**
+ * Class Send. Represents request flow logic for send-to-friend page
+ */
+class Send extends \Magento\SendFriend\Controller\Product implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Session
@@ -54,12 +58,6 @@ class Send extends \Magento\SendFriend\Controller\Product
             $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
             $resultForward->forward('noroute');
             return $resultForward;
-        }
-
-        if ($this->sendFriend->getMaxSendsToFriend() && $this->sendFriend->isExceedLimit()) {
-            $this->messageManager->addNotice(
-                __('You can\'t send messages more than %1 times an hour.', $this->sendFriend->getMaxSendsToFriend())
-            );
         }
 
         /** @var \Magento\Framework\View\Result\Page $resultPage */

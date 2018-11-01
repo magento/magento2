@@ -91,8 +91,15 @@ class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPos
 
         try {
             $validate = $this->sendFriend->validate();
+            if ($this->sendFriend->getMaxSendsToFriend() && $this->sendFriend->isExceedLimit()) {
+                $this->messageManager->addNoticeMessage(
+                    __('You can\'t send messages more than %1 times an hour.', $this->sendFriend->getMaxSendsToFriend())
+                );
+
+                return $resultRedirect->setRefererOrBaseUrl();
+            }
             if ($validate === true) {
-                $this->sendFriend->send();
+                //$this->sendFriend->send();
                 $this->messageManager->addSuccess(__('The link to a friend was sent.'));
                 $url = $product->getProductUrl();
                 $resultRedirect->setUrl($this->_redirect->success($url));
