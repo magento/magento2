@@ -289,7 +289,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     private function getFileUploaderData(
         Type $entityType,
-        Attribute $attribute,
+        \Magento\Eav\Model\Entity\Attribute $attribute,
         array $customerData
     ) {
         $attributeCode = $attribute->getAttributeCode();
