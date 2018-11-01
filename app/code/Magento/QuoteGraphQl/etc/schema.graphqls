@@ -16,6 +16,10 @@ type Mutation {
 
 input SetShippingAddressesOnCartInput {
     cart_id: String!
+    shipping_addresses: [ShippingAddressInput!]!
+}
+
+input ShippingAddressInput {
     customer_address_id: Int # Can be provided in one-page checkout and is required for multi-shipping checkout
     address: CartAddressInput
     cart_items: [CartItemQuantityInput!]

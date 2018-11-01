@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver\ShippingAddress;
 
-use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -22,11 +21,6 @@ use Magento\QuoteGraphQl\Model\Resolver\ShippingAddress\SetShippingAddressOnCart
  */
 class SetShippingAddressesOnCart implements ResolverInterface
 {
-    /**
-     * @var DataObjectHelper
-     */
-    private $dataObjectHelper;
-
     /**
      * @var MaskedQuoteIdToQuoteIdInterface
      */
@@ -48,20 +42,17 @@ class SetShippingAddressesOnCart implements ResolverInterface
     private $shippingAddressManagement;
 
     /**
-     * @param DataObjectHelper $dataObjectHelper
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param MultiShipping $multiShipping
      * @param SingleShipping $singleShipping
      * @param ShippingAddressManagementInterface $shippingAddressManagement
      */
     public function __construct(
-        DataObjectHelper $dataObjectHelper,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         MultiShipping $multiShipping,
         SingleShipping $singleShipping,
-        ShippingAddressManagementInterface  $shippingAddressManagement
+        ShippingAddressManagementInterface $shippingAddressManagement
     ) {
-        $this->dataObjectHelper = $dataObjectHelper;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->multiShipping = $multiShipping;
         $this->singleShipping = $singleShipping;
@@ -76,23 +67,18 @@ class SetShippingAddressesOnCart implements ResolverInterface
         if (!isset($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
+        if (!isset($args['input']['shipping_addresses'])) {
+            throw new GraphQlInputException(__('Required parameter "shipping_addresses" is missing'));
+        }
+
+        $shippingAddressesInput = $args['input']['shipping_addresses'];
         $maskedCartId = $args['input']['cart_id'];
         $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedCartId);
 
-        $customerAddressId = $args['input']['customer_address_id'] ?? null;
-        $address = $args['input']['address'] ?? null;
-        $cartItems = $args['input']['cart_items'] ?? [];
-
-        if (!$customerAddressId && !$address) {
-            throw new GraphQlInputException(__('Query should contain either address id or address input.'));
-        }
-
-        //TODO: how to determine whether is multi shipping or not
-        if (!$cartItems) {
-            //TODO: assign cart items
-            $this->singleShipping->setAddress($cartId, $customerAddressId, $address);
+        if (count($shippingAddressesInput) === 1) {
+            $this->singleShipping->setAddress($context, $cartId, current($shippingAddressesInput));
         } else {
-            $this->multiShipping->setAddress($cartId, $cartItems, $customerAddressId, $address);
+            $this->multiShipping->setAddresses($context, $cartId, $shippingAddressesInput);
         }
 
         //TODO: implement Cart object in the separate resolver
