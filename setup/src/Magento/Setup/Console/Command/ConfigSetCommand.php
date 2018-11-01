@@ -14,6 +14,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
+/**
+ * Config Set Command
+ */
 class ConfigSetCommand extends AbstractSetupCommand
 {
     /**
@@ -68,7 +71,7 @@ class ConfigSetCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -132,7 +135,7 @@ class ConfigSetCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {

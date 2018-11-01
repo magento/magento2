@@ -11,6 +11,9 @@ namespace Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Framework\Api\ArrayObjectSearch;
 
+/**
+ * Form Text metadata
+ */
 class Text extends AbstractData
 {
     /**

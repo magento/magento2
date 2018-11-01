@@ -77,6 +77,8 @@ class BackendValidator implements ValidatorInterface
     }
 
     /**
+     * Validate request
+     *
      * @param RequestInterface $request
      * @param ActionInterface $action
      *
@@ -115,6 +117,8 @@ class BackendValidator implements ValidatorInterface
     }
 
     /**
+     * Create exception
+     *
      * @param RequestInterface $request
      * @param ActionInterface $action
      *

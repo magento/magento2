@@ -51,6 +51,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
     /**
      * Validate data
+     *
      * Return true or array of errors
      *
      * @param array|string $value
