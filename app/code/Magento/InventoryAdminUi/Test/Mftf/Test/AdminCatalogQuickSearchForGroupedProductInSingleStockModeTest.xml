@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCatalogQuickSearchForGroupedProductInSingleStockModeTest">
+        <annotations>
+            <stories value="Catalog Quick Search"/>
+            <title value="Quick Catalog Search for Grouped Product on Single stock mode"/>
+            <description value="Quick Catalog Search for Grouped Product on Single stock mode"/>
+            <testCaseId value="MSI-1815"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="single_mode"/>
+        </annotations>
+        
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="VirtualProduct" stepKey="virtualProduct"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
+        </after>
+
+        <comment userInput="Create grouped product." stepKey="createGroupedProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillGroupedProductForm" stepKey="fillProductForm">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+
+        <comment userInput="Add simple and virtual products to grouped product." stepKey="assignSimpleAndVirtualToGroupedProductComment"/>
+        <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToGroupedSection"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
+        <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroupToAddSimpleProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProductsToFindSimpleProduct">
+            <argument name="sku" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+
+        <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectSimpleProduct"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addSimpleProduct"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroupToAddVirtualProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProductsToFindVirtualProduct">
+            <argument name="sku" value="$$virtualProduct.sku$$"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectVirtualProduct"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addVirtualProduct"/>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <comment userInput="Assign category to product." stepKey="assignCategoryComment"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]"  stepKey="searchAndSelectCategory"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedGroupedProduct"/>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+
+        <fillField userInput="{{GroupedProduct.name}}" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillSearchBar1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl1"/>
+        <seeInTitle userInput="Search results for: '{{GroupedProduct.name}}'" stepKey="assertQuickSearchTitle1"/>
+        <see userInput="Search results for: '{{GroupedProduct.name}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName1"/>
+        <see selector="{{CatalogSearchResultSection.productListBlock}}" userInput="{{GroupedProduct.name}}" stepKey="verifyProductAppearedInSearchResults" />
+    </test>
+</tests>
