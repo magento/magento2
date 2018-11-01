@@ -1070,6 +1070,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_two_stores.php
+     * @magentoDataFixture Magento/Catalog/_files/config_use_category_in_url.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
