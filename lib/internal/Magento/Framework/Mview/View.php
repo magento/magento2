@@ -282,7 +282,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
                     ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
                     : self::DEFAULT_BATCH_SIZE;
 
-                for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
+                for ($versionFrom = $lastVersionId; $versionFrom < $currentVersionId; $versionFrom += $versionBatchSize) {
                     // Don't go past the current version for atomicy.
                     $versionTo = min($currentVersionId, $versionFrom + $versionBatchSize);
                     $ids = array_map('intval', $this->getChangelog()->getList($versionFrom, $versionTo));
