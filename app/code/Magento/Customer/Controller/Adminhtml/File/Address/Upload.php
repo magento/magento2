@@ -11,6 +11,7 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Model\FileUploader;
 use Magento\Customer\Model\FileUploaderFactory;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
@@ -18,7 +19,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Uploads files for customer address
  */
-class Upload extends Action implements HttpGetActionInterface
+class Upload extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session

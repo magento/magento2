@@ -7,7 +7,7 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Address;
 
-use Magento\Customer\Model\Address\AddressModelInterface;
+use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface;
 
@@ -38,13 +38,14 @@ class Relation implements RelationInterface
     public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {
         /**
-         * @var $object \Magento\Customer\Model\Address
+         * @var $object Address
          */
         if (!$object->getIsCustomerSaveTransaction() && $object->getId()) {
             $customer = $this->customerFactory->create()->load($object->getCustomerId());
 
-            $changedAddresses['default_billing'] = $this->getDefaultBillingChangedAddress($object, $customer);
-            $changedAddresses['default_shipping'] = $this->getDefaultShippingChangedAddress($object, $customer);
+            $changedAddresses = [];
+            $changedAddresses = $this->getDefaultBillingChangedAddress($object, $customer, $changedAddresses);
+            $changedAddresses = $this->getDefaultShippingChangedAddress($object, $customer, $changedAddresses);
 
             if ($changedAddresses) {
                 $customer->getResource()->getConnection()->update(
@@ -59,37 +60,49 @@ class Relation implements RelationInterface
     /**
      * Get default billing changed address
      *
-     * @param AddressModelInterface $object
+     * @param Address $object
      * @param Customer $customer
-     * @return int|null
+     * @param array $changedAddresses
+     * @return array
      */
-    private function getDefaultBillingChangedAddress(AddressModelInterface $object, Customer $customer): ?int
-    {
+    private function getDefaultBillingChangedAddress(
+        Address $object,
+        Customer $customer,
+        array $changedAddresses
+    ): array {
         if ($object->getIsDefaultBilling()) {
-            return $object->getId();
+            $changedAddresses['default_billing'] = $object->getId();
         } elseif ($customer->getDefaultBillingAddress()
             && (int)$customer->getDefaultBillingAddress()->getId() === (int)$object->getId()
         ) {
-            return null;
+            $changedAddresses['default_billing'] = null;
         }
+
+        return $changedAddresses;
     }
 
     /**
      * Get default shipping changed address
      *
-     * @param AddressModelInterface $object
+     * @param Address $object
      * @param Customer $customer
-     * @return int|null
+     * @param array $changedAddresses
+     * @return array
      */
-    private function getDefaultShippingChangedAddress(AddressModelInterface $object, Customer $customer): ?int
-    {
+    private function getDefaultShippingChangedAddress(
+        Address $object,
+        Customer $customer,
+        array $changedAddresses
+    ): array {
         if ($object->getIsDefaultShipping()) {
-            return $object->getId();
+            $changedAddresses['default_shipping'] = $object->getId();
         } elseif ($customer->getDefaultShippingAddress()
             && (int)$customer->getDefaultShippingAddress()->getId() === (int)$object->getId()
         ) {
-            return null;
+            $changedAddresses['default_shipping'] = null;
         }
+
+        return $changedAddresses;
     }
 
     /**
