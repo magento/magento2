@@ -23,7 +23,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method string getFirstname()
  * @method string getMiddlename()
  * @method string getLastname()
- * @method int getCountryId()
+ * @method string getCountryId()
  * @method string getCity()
  * @method string getTelephone()
  * @method string getCompany()
@@ -425,7 +425,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getCountry()
     {
