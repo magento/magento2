@@ -15,8 +15,8 @@
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="productNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
-        <element name="enableProductAttributeLabel" type="text" selector="[data-index='status'] .admin__field-label label"/>
-        <element name="enableProductAttributeLabelWrapper" type="text" selector="[data-index='status'] .admin__field-label"/>
+        <element name="enableProductAttributeLabel" type="text" selector="//span[text()='Enable Product']/parent::label"/>
+        <element name="enableProductAttributeLabelWrapper" type="text" selector="//span[text()='Enable Product']/parent::label/parent::div"/>
         <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
         <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
@@ -33,7 +33,7 @@
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
         <element name="divByDataIndex" type="input" selector="div[data-index='{{var}}']" parameterized="true"/>
         <element name="attributeSetSearchCount" type="text" selector="div[data-index='attribute_set_id'] .admin__action-multiselect-search-count"/>
-        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//label[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
         <element name="addAttributeBtn" type="button" selector="#addAttribute"/>
     </section>
     <section name="ProductInWebsitesSection">
