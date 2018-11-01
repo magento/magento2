@@ -22,6 +22,7 @@ use Magento\Store\Model\ScopeInterface as StoreScope;
  *
  * @api
  * @since 100.1.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class System implements ConfigTypeInterface
 {
@@ -132,6 +133,32 @@ class System implements ConfigTypeInterface
     }
 
     /**
+     * Merge newly loaded config data into already loaded.
+     *
+     * @param array $newData
+     * @return void
+     */
+    private function mergeData(array $newData): void
+    {
+        if (array_key_exists(ScopeInterface::SCOPE_DEFAULT, $newData)) {
+            //Sometimes new data may contain links to arrays and we don't want that.
+            $this->data[ScopeInterface::SCOPE_DEFAULT] = (array)$newData[ScopeInterface::SCOPE_DEFAULT];
+            unset($newData[ScopeInterface::SCOPE_DEFAULT]);
+        }
+        foreach ($newData as $scopeType => $scopeTypeData) {
+            if (!array_key_exists($scopeType, $this->data)) {
+                //Sometimes new data may contain links to arrays and we don't want that.
+                $this->data[$scopeType] = (array)$scopeTypeData;
+            } else {
+                foreach ($scopeTypeData as $scopeId => $scopeData) {
+                    //Sometimes new data may contain links to arrays and we don't want that.
+                    $this->data[$scopeType][$scopeId] = (array)$scopeData;
+                }
+            }
+        }
+    }
+
+    /**
      * Proceed with parts extraction from path.
      *
      * @param string $path
@@ -143,8 +170,10 @@ class System implements ConfigTypeInterface
 
         if (count($pathParts) === 1 && $pathParts[0] !== ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$pathParts[0]])) {
+                //First filling data property with unprocessed data for post-processors to be able to use.
                 $data = $this->readData();
-                $this->data = array_replace_recursive($this->data, $this->postProcessor->process($data));
+                //Post-processing only the data we know is not yet processed.
+                $this->mergeData($this->postProcessor->process($data));
             }
 
             return $this->data[$pathParts[0]];
@@ -154,12 +183,11 @@ class System implements ConfigTypeInterface
 
         if ($scopeType === ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$scopeType])) {
-                $this->data = array_replace_recursive(
-                    $this->data,
-                    $scopeData = $this->loadDefaultScopeData($scopeType)
-                );
+                //Adding unprocessed data to the data property so it can be used in post-processing.
+                $this->mergeData($scopeData = $this->loadDefaultScopeData($scopeType));
+                //Only post-processing the data we know is raw.
                 $scopeData = $this->postProcessor->process($scopeData);
-                $this->data = array_replace_recursive($this->data, $scopeData);
+                $this->mergeData($scopeData);
             }
 
             return $this->getDataByPathParts($this->data[$scopeType], $pathParts);
@@ -169,9 +197,11 @@ class System implements ConfigTypeInterface
 
         if (!isset($this->data[$scopeType][$scopeId])) {
             $scopeData = $this->loadScopeData($scopeType, $scopeId);
-            $this->data = array_replace_recursive($this->data, $scopeData);
+            //Adding unprocessed data to the data property so it can be used in post-processing.
+            $this->mergeData($scopeData);
+            //Only post-processing the data we know is raw.
             $scopeData = $this->postProcessor->process($scopeData);
-            $this->data = array_replace_recursive($this->data, $scopeData);
+            $this->mergeData($scopeData);
         }
 
         return isset($this->data[$scopeType][$scopeId])
