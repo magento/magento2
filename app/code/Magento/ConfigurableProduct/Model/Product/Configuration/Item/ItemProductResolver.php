@@ -13,9 +13,10 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Store\Model\ScopeInterface;
 
 /**
- * {@inheritdoc}
+ * Resolves the product from a configured item.
  */
 class ItemProductResolver implements ItemResolverInterface
 {
@@ -38,7 +39,10 @@ class ItemProductResolver implements ItemResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get the final product from a configured item by product type and selection.
+     *
+     * @param ItemInterface $item
+     * @return ProductInterface
      */
     public function getFinalProduct(ItemInterface $item): ProductInterface
     {
@@ -46,20 +50,11 @@ class ItemProductResolver implements ItemResolverInterface
          * Show parent product thumbnail if it must be always shown according to the related setting in system config
          * or if child thumbnail is not available.
          */
-        $parentProduct = $item->getProduct();
-        $finalProduct = $parentProduct;
+        $finalProduct = $item->getProduct();
         $childProduct = $this->getChildProduct($item);
 
-        if ($childProduct !== $parentProduct) {
-            $configValue = $this->scopeConfig->getValue(
-                self::CONFIG_THUMBNAIL_SOURCE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-            $childThumb = $childProduct->getData('thumbnail');
-            $finalProduct =
-                ($configValue == Thumbnail::OPTION_USE_PARENT_IMAGE) || (!$childThumb || $childThumb == 'no_selection')
-                    ? $parentProduct
-                    : $childProduct;
+        if ($childProduct !== null && $this->isUseChildProduct($childProduct)) {
+            $finalProduct = $childProduct;
         }
 
         return $finalProduct;
@@ -69,17 +64,30 @@ class ItemProductResolver implements ItemResolverInterface
      * Get item configurable child product.
      *
      * @param ItemInterface $item
-     * @return Product
+     * @return Product|null
      */
-    private function getChildProduct(ItemInterface $item): Product
+    private function getChildProduct(ItemInterface $item)
     {
         $option = $item->getOptionByCode('simple_product');
-        $product = $item->getProduct();
 
-        if ($option) {
-            $product = $option->getProduct();
-        }
+        return $option ? $option->getProduct() : null;
+    }
 
-        return $product;
+    /**
+     * Is need to use child product
+     *
+     * @param Product $childProduct
+     * @return bool
+     */
+    private function isUseChildProduct(Product $childProduct): bool
+    {
+        $configValue = $this->scopeConfig->getValue(
+            self::CONFIG_THUMBNAIL_SOURCE,
+            ScopeInterface::SCOPE_STORE
+        );
+        $childThumb = $childProduct->getData('thumbnail');
+        return $configValue !== Thumbnail::OPTION_USE_PARENT_IMAGE
+            && $childThumb !== null
+            && $childThumb !== 'no_selection';
     }
 }
