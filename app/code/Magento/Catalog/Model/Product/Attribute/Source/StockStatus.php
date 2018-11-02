@@ -24,7 +24,6 @@ class StockStatus extends AbstractSource implements SourceInterface, OptionSourc
 
     const OUT_OF_STOCK = 0;
 
-
     /**
      * Retrieve option array
      *
