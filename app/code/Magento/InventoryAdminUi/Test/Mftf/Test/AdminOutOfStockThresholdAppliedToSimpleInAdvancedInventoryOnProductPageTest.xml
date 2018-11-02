@@ -117,10 +117,13 @@
         <!-- Set out of stock threshold in admin configuration. -->
         <magentoCLI command="config:set cataloginventory/item_options/min_qty 101" stepKey="setMinQtyInConfiguration"/>
         <magentoCLI command="indexer:reindex" stepKey="runIndexerReindex" />
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock"/>
 
         <!-- Go to storefront category page, assert product isn't visible. -->
+        <reloadPage stepKey="reloadPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadToNotSeeTheProduct1"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createSimpleSubCategory.name$$)}}" stepKey="navigateToCategoryPageOnStorefrontToNotSeeTheProduct"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoadToNotSeeTheProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadToNotSeeTheProduct2"/>
         <dontSee userInput="{{SimpleMsiProduct.name}}" stepKey="assertProductNotPresentOnCategoryPageOnStorefront"/>
         <dontSee userInput="{{SimpleMsiProduct.price}}" stepKey="assertProductPriceNotPresentOnCategoryPageOnStorefront"/>
     </test>

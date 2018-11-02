@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminOrderCreatedWithConfigurableProductWithDropDownAttributeViaTheAdminTest">
+    <test name="AdminOrderCreatedForGuestCustomerWithConfigurableProductWithDropDownAttributeViaTheAdminTest">
         <annotations>
             <stories value="Add Order"/>
             <title value="Create an Order with a Configurable Product with Drop Down Attributes via the Admin."/>
