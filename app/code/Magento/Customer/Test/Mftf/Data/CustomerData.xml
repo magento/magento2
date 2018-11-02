@@ -102,4 +102,17 @@
         <data key="website_id">0</data>
         <requiredEntity type="address">US_Address_CA</requiredEntity>
     </entity>
+    <entity name="Simple_GB_Customer" type="customer">
+        <data key="group_id">0</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">Jane.Doe@example.com</data>
+        <data key="firstname">Jane</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">Jane Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">UK_Not_Default_Address</requiredEntity>
+    </entity>
 </entities>

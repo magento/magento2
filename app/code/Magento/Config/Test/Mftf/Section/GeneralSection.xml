@@ -38,4 +38,9 @@
         <element name="countryOptionsOpen" type="button" selector="#general_country-head.open"/>
         <element name="topDestinations" type="select" selector="#general_country_destinations"/>
     </section>
+    <section name="StateOptionsSection">
+        <element name="stateOptions" type="button" selector="#general_region-head"/>
+        <element name="countriesWithRequiredRegions" type="select" selector="#general_region_state_required"/>
+        <element name="allowToChooseState" type="select" selector="general_region_display_all"/>
+    </section>
 </sections>
