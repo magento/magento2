@@ -72,13 +72,17 @@ class SetShippingMethodsOnCart implements ResolverInterface
      * @param ArrayManager $arrayManager
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param IsCartMutationAllowedForCurrentUser $isCartMutationAllowedForCurrentUser
+     * @param ShippingInformationManagementInterface $shippingInformationManagement
+     * @param QuoteAddressFactory $quoteAddressFactory
+     * @param QuoteAddressResource $quoteAddressResource
+     * @param ShippingInformationFactory $shippingInformationFactory
      */
     public function __construct(
         ArrayManager $arrayManager,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         IsCartMutationAllowedForCurrentUser $isCartMutationAllowedForCurrentUser,
         ShippingInformationManagementInterface $shippingInformationManagement,
-        QuoteAddressFactory $quoteAddressFacrory,
+        QuoteAddressFactory $quoteAddressFactory,
         QuoteAddressResource $quoteAddressResource,
         ShippingInformationFactory $shippingInformationFactory
     ) {
@@ -88,7 +92,7 @@ class SetShippingMethodsOnCart implements ResolverInterface
         $this->shippingInformationManagement = $shippingInformationManagement;
 
         $this->quoteAddressResource = $quoteAddressResource;
-        $this->quoteAddressFactory = $quoteAddressFacrory;
+        $this->quoteAddressFactory = $quoteAddressFactory;
         $this->shippingInformationFactory = $shippingInformationFactory;
     }
 
