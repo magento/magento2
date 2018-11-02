@@ -79,7 +79,7 @@ class ProductCategoryList
                 $unionTables,
                 Select::SQL_UNION_ALL
             );
-            
+
             $this->categoryIdList[$productId] = array_map(
                 'intval',
                 $this->productResource->getConnection()->fetchCol($unionSelect)
