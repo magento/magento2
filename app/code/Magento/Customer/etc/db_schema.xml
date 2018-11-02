@@ -120,8 +120,8 @@
         <index referenceId="CUSTOMER_ADDRESS_ENTITY_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
-        <index name="CUSTOMER_ADDRESS_ENTITY_FULLTEXT_INDEX" indexType="fulltext">
-        <column name="firstname"/>
+        <index referenceId="CUSTOMER_ADDRESS_ENTITY_FULLTEXT_INDEX" indexType="fulltext">
+            <column name="firstname"/>
             <column name="lastname"/>
             <column name="street"/>
             <column name="city"/>
