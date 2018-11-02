@@ -16,6 +16,8 @@
                 type="Magento\Customer\Model\CustomerGroupConfig" />
     <preference for="Magento\Customer\Api\GroupRepositoryInterface"
                 type="Magento\Customer\Model\ResourceModel\GroupRepository" />
+    <preference for="Magento\Customer\Api\AllGroupsRepositoryInterface"
+                type="Magento\Customer\Model\ResourceModel\GroupRepository" />
     <preference for="Magento\Customer\Api\Data\CustomerInterface" type="Magento\Customer\Model\Data\Customer" />
     <preference for="Magento\Customer\Api\Data\AddressInterface" type="Magento\Customer\Model\Data\Address" />
     <preference for="Magento\Customer\Api\Data\RegionInterface" type="Magento\Customer\Model\Data\Region" />

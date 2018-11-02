@@ -6,24 +6,29 @@
 
 namespace Magento\Customer\Model\ResourceModel;
 
+use Magento\Customer\Api\AllGroupsRepositoryInterface;
+use Magento\Customer\Api\Data\GroupExtensionInterface;
 use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\Data\GroupSearchResultsInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\ResourceModel\Group\Collection;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
-use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\Customer\Api\Data\GroupExtensionInterface;
 
 /**
  * Customer group CRUD class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
+class GroupRepository implements GroupRepositoryInterface, AllGroupsRepositoryInterface
 {
     /**
      * The default tax class id if no tax class id is specified
@@ -76,6 +81,11 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     private $collectionProcessor;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param \Magento\Customer\Model\GroupRegistry $groupRegistry
      * @param \Magento\Customer\Model\GroupFactory $groupFactory
      * @param \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory
@@ -85,6 +95,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      */
     public function __construct(
         \Magento\Customer\Model\GroupRegistry $groupRegistry,
@@ -95,7 +106,8 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor = null,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->groupRegistry = $groupRegistry;
         $this->groupFactory = $groupFactory;
@@ -106,6 +118,8 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         $this->taxClassRepository = $taxClassRepositoryInterface;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
+            ->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -215,6 +229,18 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         }
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults->setItems($groups);
+    }
+
+    /**
+     * Get All Customer Groups
+     *
+     * @return GroupSearchResultsInterface
+     */
+    public function getAllGroups()
+    {
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+
+        return $this->getList($searchCriteria);
     }
 
     /**
@@ -348,7 +374,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            $this->collectionProcessor = ObjectManager::getInstance()->get(
                 'Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessor'
             );
         }
