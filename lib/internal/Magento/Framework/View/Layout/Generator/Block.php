@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Code\Exception\ClassReaderException;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Layout;
@@ -267,12 +268,12 @@ class Block implements Layout\GeneratorInterface
         if ($block && is_string($block)) {
             try {
                 $block = $this->blockFactory->createBlock($block, $arguments);
-            } catch (\ReflectionException $e) {
+            } catch (ClassReaderException $e) {
                 $this->logger->critical($e->getMessage());
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase(
                         'Can\'t create block type: %1',
-                        [is_object($block) ? get_class($block) : (string) $block]
+                        [$e->getClassName()]
                     ),
                     $e
                 );

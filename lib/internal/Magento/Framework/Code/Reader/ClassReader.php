@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+use Magento\Framework\Code\Exception\ClassReaderException;
+
 class ClassReader implements ClassReaderInterface
 {
     /**
@@ -16,7 +18,14 @@ class ClassReader implements ClassReaderInterface
      */
     public function getConstructor($className)
     {
-        $class = new \ReflectionClass($className);
+        try {
+            $class = new \ReflectionClass($className);
+        } catch (\ReflectionException $e) {
+            $exception = new ClassReaderException(sprintf('Can\'t create %s', $className));
+            $exception->setClassName($className);
+            throw $exception;
+        }
+
         $result = null;
         $constructor = $class->getConstructor();
         if ($constructor) {
