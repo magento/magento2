@@ -5,12 +5,19 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product;
 
-use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Gallery\Processor;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Eav\Model\Entity\Attribute\SetFactory;
+use Magento\Eav\Model\EntityFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\ConfigurableProduct\Model\Product\ChildrenWeightResolver;
 
 /**
  * Variation Handler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
  * @api
  * @since 100.0.2
  */
@@ -48,48 +55,58 @@ class VariationHandler
     private $attributes;
 
     /**
+     * @var \Magento\ConfigurableProduct\Model\Product\ChildrenWeightResolver
+     */
+    private $childrenWeightResolver;
+
+    /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      * @deprecated 100.1.0
      */
     protected $stockConfiguration;
 
     /**
-     * @param Type\Configurable $configurableProduct
-     * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
-     * @param \Magento\Eav\Model\EntityFactory $entityFactory
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
-     * @param \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
+     * @param Type\Configurable           $configurableProduct
+     * @param SetFactory                  $attributeSetFactory
+     * @param EntityFactory               $entityFactory
+     * @param ProductFactory              $productFactory
+     * @param StockConfigurationInterface $stockConfiguration
+     * @param Processor                   $mediaGalleryProcessor
+     * @param ChildrenWeightResolver      $childrenWeightResolver
      */
     public function __construct(
         Type\Configurable $configurableProduct,
-        \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory,
-        \Magento\Eav\Model\EntityFactory $entityFactory,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
+        SetFactory $attributeSetFactory,
+        EntityFactory $entityFactory,
+        ProductFactory $productFactory,
+        StockConfigurationInterface $stockConfiguration,
+        Processor $mediaGalleryProcessor,
+        ChildrenWeightResolver $childrenWeightResolver
+
     ) {
-        $this->configurableProduct = $configurableProduct;
-        $this->attributeSetFactory = $attributeSetFactory;
-        $this->entityFactory = $entityFactory;
-        $this->productFactory = $productFactory;
-        $this->stockConfiguration = $stockConfiguration;
-        $this->mediaGalleryProcessor = $mediaGalleryProcessor;
+        $this->configurableProduct    = $configurableProduct;
+        $this->attributeSetFactory    = $attributeSetFactory;
+        $this->entityFactory          = $entityFactory;
+        $this->productFactory         = $productFactory;
+        $this->stockConfiguration     = $stockConfiguration;
+        $this->mediaGalleryProcessor  = $mediaGalleryProcessor;
+        $this->childrenWeightResolver = $childrenWeightResolver;
     }
 
     /**
      * Generate simple products to link with configurable
      *
      * @param \Magento\Catalog\Model\Product $parentProduct
-     * @param array $productsData
+     * @param array                          $productsData
+     *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function generateSimpleProducts($parentProduct, $productsData)
     {
         $generatedProductIds = [];
-        $this->attributes = null;
-        $productsData = $this->duplicateImagesForVariations($productsData);
+        $this->attributes    = null;
+        $productsData        = $this->duplicateImagesForVariations($productsData);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
             if (isset($simpleProductData['configurable_attribute'])) {
@@ -108,6 +125,7 @@ class VariationHandler
 
             $generatedProductIds[] = $newSimpleProduct->getId();
         }
+
         return $generatedProductIds;
     }
 
@@ -115,10 +133,12 @@ class VariationHandler
      * Prepare attribute set comprising all selected configurable attributes
      *
      * @deprecated 100.1.0
+     *
      * @param \Magento\Catalog\Model\Product $product
+     *
      * @return void
      */
-    protected function prepareAttributeSetToBeBaseForNewVariations(\Magento\Catalog\Model\Product $product)
+    protected function prepareAttributeSetToBeBaseForNewVariations(Product $product)
     {
         $this->prepareAttributeSet($product);
     }
@@ -127,17 +147,18 @@ class VariationHandler
      * Prepare attribute set comprising all selected configurable attributes
      *
      * @param \Magento\Catalog\Model\Product $product
+     *
      * @return void
      * @since 100.1.0
      */
-    public function prepareAttributeSet(\Magento\Catalog\Model\Product $product)
+    public function prepareAttributeSet(Product $product)
     {
-        $attributes = $this->configurableProduct->getUsedProductAttributes($product);
+        $attributes     = $this->configurableProduct->getUsedProductAttributes($product);
         $attributeSetId = $product->getNewVariationsAttributeSetId();
         /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */
         $attributeSet = $this->attributeSetFactory->create()->load($attributeSetId);
         $attributeSet->addSetInfo(
-            $this->entityFactory->create()->setType(\Magento\Catalog\Model\Product::ENTITY)->getTypeId(),
+            $this->entityFactory->create()->setType(Product::ENTITY)->getTypeId(),
             $attributes
         );
         foreach ($attributes as $attribute) {
@@ -157,25 +178,22 @@ class VariationHandler
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Product $parentProduct
-     * @param array $postData
+     * @param array                          $postData
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      *
      * @return void
      */
     protected function fillSimpleProductData(
-        \Magento\Catalog\Model\Product $product,
-        \Magento\Catalog\Model\Product $parentProduct,
+        Product $product,
+        Product $parentProduct,
         $postData
     ) {
-        $typeId = isset($postData['weight']) && !empty($postData['weight'])
-            ? ProductType::TYPE_SIMPLE
-            : ProductType::TYPE_VIRTUAL;
 
         $product->setStoreId(
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
         )->setTypeId(
-            $typeId
+            $this->childrenWeightResolver->processProduct($postData)
         )->setAttributeSetId(
             $parentProduct->getNewVariationsAttributeSetId()
         );
@@ -196,13 +214,13 @@ class VariationHandler
             $product->setData($attribute->getAttributeCode(), $parentProduct->getData($attribute->getAttributeCode()));
         }
 
-        $keysFilter = ['item_id', 'product_id', 'stock_id', 'type_id', 'website_id'];
+        $keysFilter             = ['item_id', 'product_id', 'stock_id', 'type_id', 'website_id'];
         $postData['stock_data'] = array_diff_key((array)$parentProduct->getStockData(), array_flip($keysFilter));
         if (!isset($postData['stock_data']['is_in_stock'])) {
-            $stockStatus = $parentProduct->getQuantityAndStockStatus();
+            $stockStatus                           = $parentProduct->getQuantityAndStockStatus();
             $postData['stock_data']['is_in_stock'] = $stockStatus['is_in_stock'];
         }
-        $postData = $this->processMediaGallery($product, $postData);
+        $postData           = $this->processMediaGallery($product, $postData);
         $postData['status'] = isset($postData['status'])
             ? $postData['status']
             : \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
@@ -242,9 +260,9 @@ class VariationHandler
         }
         foreach ($imagesForCopy as $imageId => $variationImages) {
             foreach ($variationImages as $image) {
-                $file = $image['file'];
-                $variationId = $image['variation_id'];
-                $newFile = $this->mediaGalleryProcessor->duplicateImageFromTmp($file);
+                $file                                                                    = $image['file'];
+                $variationId                                                             = $image['variation_id'];
+                $newFile                                                                 = $this->mediaGalleryProcessor->duplicateImageFromTmp($file);
                 $productsData[$variationId]['media_gallery']['images'][$imageId]['file'] = $newFile;
                 foreach ($this->mediaGalleryProcessor->getMediaAttributeCodes() as $attribute) {
                     if (isset($productsData[$variationId][$attribute])
@@ -255,12 +273,13 @@ class VariationHandler
                 }
             }
         }
+
         return $productsData;
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
-     * @param array $productData
+     * @param Product $product
+     * @param array   $productData
      *
      * @return array
      */
@@ -272,26 +291,28 @@ class VariationHandler
                 $productData['media_gallery']['images'] = [];
             }
             if (false === array_search($image, array_column($productData['media_gallery']['images'], 'file'))) {
-                $productData['small_image'] = $productData['thumbnail'] = $image;
+                $productData['small_image']               = $productData['thumbnail'] = $image;
                 $productData['media_gallery']['images'][] = [
                     'position' => 1,
-                    'file' => $image,
+                    'file'     => $image,
                     'disabled' => 0,
-                    'label' => '',
+                    'label'    => '',
                 ];
             }
         }
         if ($product->getMediaGallery('images') && !empty($productData['media_gallery']['images'])) {
-            $gallery = array_map(
+            $gallery                                = array_map(
                 function ($image) {
                     $image['removed'] = 1;
+
                     return $image;
                 },
                 $product->getMediaGallery('images')
             );
-            $gallery = array_merge($productData['media_gallery']['images'], $gallery);
+            $gallery                                = array_merge($productData['media_gallery']['images'], $gallery);
             $productData['media_gallery']['images'] = $gallery;
         }
+
         return $productData;
     }
 }
