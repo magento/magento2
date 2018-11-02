@@ -40,6 +40,7 @@ class GetGeoNameDataByAddressRequest
      */
     public function execute(AddressRequestInterface $addressRequest): array
     {
+        // TODO: Refactor this method
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('inventory_geoname');
 
@@ -51,6 +52,7 @@ class GetGeoNameDataByAddressRequest
         $row = $connection->fetchRow($qry);
         if (!$row) {
             $qry = $connection->select()->from($tableName)
+                ->where('country_code = ?', $addressRequest->getCountry())
                 ->where('city = ?', $addressRequest->getCity())
                 ->limit(1);
 
@@ -59,6 +61,7 @@ class GetGeoNameDataByAddressRequest
 
         if (!$row) {
             $qry = $connection->select()->from($tableName)
+                ->where('country_code = ?', $addressRequest->getCountry())
                 ->where('region = ?', $addressRequest->getRegion())
                 ->limit(1);
 
