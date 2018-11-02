@@ -146,10 +146,10 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param ProductList $productListHelper
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
+     * @param array $data
      * @param ToolbarMemorizer|null $toolbarMemorizer
      * @param \Magento\Framework\App\Http\Context|null $httpContext
      * @param \Magento\Framework\Data\Form\FormKey|null $formKey
-     * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
