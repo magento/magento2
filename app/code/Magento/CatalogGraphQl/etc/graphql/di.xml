@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Catalog\Model\Product\Option\Type\Date" type="Magento\CatalogGraphQl\Model\Product\Option\DateType" />
     <type name="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">

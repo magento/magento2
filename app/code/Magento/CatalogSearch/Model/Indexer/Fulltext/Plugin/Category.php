@@ -10,8 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Category as ResourceCategory;
 use Magento\Framework\Model\AbstractModel;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Catalog search indexer plugin for catalog category.
  */
 class Category extends AbstractPlugin
 {
@@ -30,6 +29,8 @@ class Category extends AbstractPlugin
     }
 
     /**
+     * Reindex catalog search.
+     *
      * @param ResourceCategory $resourceCategory
      * @param \Closure $proceed
      * @param AbstractModel $category
