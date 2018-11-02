@@ -420,7 +420,7 @@ class Translate implements \Magento\Framework\TranslateInterface
         $themes = [];
 
         $parentTheme = $this->_viewDesign->getDesignTheme()->getParentTheme();
-        while($parentTheme) {
+        while ($parentTheme) {
             $themes[] = $parentTheme;
             $parentTheme = $parentTheme->getParentTheme();
         }
