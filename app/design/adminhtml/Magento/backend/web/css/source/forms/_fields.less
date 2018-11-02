@@ -59,7 +59,11 @@
 }
 
 .abs-field-no-label {
+    /**
+     *@codingStandardsIgnoreStart
+     */
     #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
+    //@codingStandardsIgnoreEnd
     margin-left: @_length;
 }
 
@@ -288,7 +292,11 @@
     //  Till that time they'll be disabled by commenting pseudo-element content property.
     &[data-config-scope] {
         &:before {
+            /**
+             *@codingStandardsIgnoreStart
+             */
             #mix-grid .return_length(@field-label-grid__column + @field-control-grid__column, @field-grid__columns);
+            //@codingStandardsIgnoreEnd
             color: @field-scope__color;
             content: attr(data-config-scope);
             display: inline-block;
