@@ -13,5 +13,6 @@
         <element name="firstName" type="input" selector="input[name='customer[firstname]']"/>
         <element name="lastName" type="input" selector="input[name='customer[lastname]']"/>
         <element name="email" type="input" selector="input[name='customer[email]']"/>
+        <element name="group" type="select" selector="[name='customer[group_id]']"/>
     </section>
 </sections>

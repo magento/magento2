@@ -686,6 +686,7 @@ class Multishipping extends \Magento\Framework\DataObject
             $order->setIsVirtual(1);
         } else {
             $order->setShippingAddress($this->quoteAddressToOrderAddress->convert($address));
+            $order->setShippingMethod($address->getShippingMethod());
         }
 
         $order->setPayment($this->quotePaymentToOrderPayment->convert($quote->getPayment()));

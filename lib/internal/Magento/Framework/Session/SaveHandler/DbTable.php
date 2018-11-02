@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Session\SaveHandler;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Phrase;
 

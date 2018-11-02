@@ -450,6 +450,7 @@ class Application
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::VAR_DIR][DirectoryList::PATH]);
 
         $this->copyAppConfigFiles();
+        $this->copyGlobalConfigFile();
 
         $installParams = $this->getInstallCliParams();
 
@@ -485,7 +486,7 @@ class Application
         );
 
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
-        if (!$db->isDbDumpExists()) {
+        if (!$db->isDbDumpExists() || $cleanup) {
             $this->getDbInstance()->storeDbDump();
         }
     }
@@ -508,6 +509,17 @@ class Application
                 copy($file, $targetFile);
             }
         }
+    }
+    
+    /**
+     * Copies global configuration file from the tests folder (see TESTS_GLOBAL_CONFIG_FILE)
+     *
+     * @return void
+     */
+    private function copyGlobalConfigFile()
+    {
+        $targetFile = $this->_configDir . '/config.local.php';
+        copy($this->globalConfigFile, $targetFile);
     }
 
     /**

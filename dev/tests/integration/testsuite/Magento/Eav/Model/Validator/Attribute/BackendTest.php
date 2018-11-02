@@ -9,6 +9,9 @@
  */
 namespace Magento\Eav\Model\Validator\Attribute;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class BackendTest extends \PHPUnit\Framework\TestCase
 {
     /**

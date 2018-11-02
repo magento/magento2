@@ -36,7 +36,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @var int
      */
-    protected $_quality = 80;
+    protected $_quality = null;
 
     /**
      * @var bool
@@ -294,7 +294,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function getQuality()
     {
-        return $this->_quality;
+        return $this->_quality === null
+            ? $this->_scopeConfig->getValue('system/upload_configuration/jpeg_quality') : $this->_quality;
     }
 
     /**
@@ -471,7 +472,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->_processor->keepTransparency($this->_keepTransparency);
         $this->_processor->constrainOnly($this->_constrainOnly);
         $this->_processor->backgroundColor($this->_backgroundColor);
-        $this->_processor->quality($this->_quality);
+        $this->_processor->quality($this->getQuality());
         return $this->_processor;
     }
 
@@ -494,7 +495,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function rotate($angle)
     {
-        $angle = intval($angle);
+        $angle = (int)$angle;
         $this->getImageProcessor()->rotate($angle);
         return $this;
     }
@@ -854,7 +855,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             'constrain_only' => ($this->_constrainOnly ? 'do' : 'not') . 'constrainonly',
             'background' => $this->_rgbToString($this->_backgroundColor),
             'angle' => $this->_angle,
-            'quality' => $this->_quality,
+            'quality' => $this->getQuality(),
         ];
 
         // if has watermark add watermark params to hash

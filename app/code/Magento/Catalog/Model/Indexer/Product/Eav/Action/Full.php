@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Indexer\Product\Eav\Action;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 
 /**
  * Class Full reindex action
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
 {
@@ -33,12 +36,18 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
     private $activeTableSwitcher;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory $eavSourceFactory
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator $batchSizeCalculator
      * @param ActiveTableSwitcher|null $activeTableSwitcher
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory,
@@ -46,9 +55,13 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator $batchSizeCalculator = null,
-        ActiveTableSwitcher $activeTableSwitcher = null
+        ActiveTableSwitcher $activeTableSwitcher = null,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null
     ) {
-        parent::__construct($eavDecimalFactory, $eavSourceFactory);
+        $this->scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
+        );
+        parent::__construct($eavDecimalFactory, $eavSourceFactory, $scopeConfig);
         $this->metadataPool = $metadataPool ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Framework\EntityManager\MetadataPool::class
         );
@@ -73,6 +86,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
      */
     public function execute($ids = null)
     {
+        if (!$this->isEavIndexerEnabled()) {
+            return;
+        }
         try {
             foreach ($this->getIndexers() as $indexerName => $indexer) {
                 $connection = $indexer->getConnection();
@@ -128,5 +144,20 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
             $connection->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * Get EAV indexer status
+     *
+     * @return bool
+     */
+    private function isEavIndexerEnabled(): bool
+    {
+        $eavIndexerStatus = $this->scopeConfig->getValue(
+            self::ENABLE_EAV_INDEXER,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        return (bool)$eavIndexerStatus;
     }
 }

@@ -8,6 +8,7 @@ namespace Magento\Bundle\Test\Constraint;
 
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Checkout\Test\Constraint\Utils\CartPageLoadTrait;
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Constraint\AbstractAssertForm;
@@ -17,6 +18,8 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
  */
 class AssertBundleProductOnConfigureCartPage extends AbstractAssertForm
 {
+    use CartPageLoadTrait;
+
     /**
      * Check bundle product options correctly displayed on cart configuration page.
      *
@@ -28,6 +31,8 @@ class AssertBundleProductOnConfigureCartPage extends AbstractAssertForm
     public function processAssert(CheckoutCart $checkoutCart, Cart $cart, CatalogProductView $catalogProductView)
     {
         $checkoutCart->open();
+        $this->waitForCartPageLoaded($checkoutCart);
+
         $sourceProducts = $cart->getDataFieldConfig('items')['source'];
         $products = $sourceProducts->getProducts();
         foreach ($cart->getItems() as $key => $item) {
