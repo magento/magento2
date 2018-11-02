@@ -134,7 +134,7 @@ class UpdateHandler implements ExtensionInterface
     private function getPercentage(array $priceRow)
     {
         return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
-            ? (int)$priceRow['percentage_value']
+            ? (float)$priceRow['percentage_value']
             : null;
     }
 
