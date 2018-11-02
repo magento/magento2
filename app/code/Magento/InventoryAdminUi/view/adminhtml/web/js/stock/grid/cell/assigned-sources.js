@@ -4,26 +4,14 @@
  */
 define([
     'Magento_Ui/js/grid/columns/column',
-    'underscore',
-    'mage/translate'
-], function (Column, _, $t) {
+    'underscore'
+], function (Column, _) {
     'use strict';
 
     return Column.extend({
         defaults: {
             bodyTmpl: 'Magento_InventoryAdminUi/stock/grid/cell/assigned-sources-cell.html',
-            showFullListDescription: $t('Show more...'),
             itemsToDisplay: 5
-        },
-
-        /**
-         *
-         * @returns {exports}
-         */
-        initObservable: function () {
-            this._super();
-
-            return this;
         },
 
         /**
