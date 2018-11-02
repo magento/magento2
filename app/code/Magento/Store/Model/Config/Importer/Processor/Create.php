@@ -177,7 +177,10 @@ class Create implements ProcessorInterface
             );
 
             $group = $this->groupFactory->create();
-            $group->setRootCategoryId(0);
+            if (!isset($groupData['root_categry_id'])) {
+                $groupData['root_categry_id'] = 0;
+            }
+            
             $group->setData($groupData);
 
             $group->getResource()->save($group);
