@@ -23,7 +23,7 @@
         <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewAgain"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.title}}" stepKey="waitingForWarningModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreDelete"/>
-        <wait time="10" stepKey="extraWait"/>
+        <waitForPageLoad stepKey="waitForSuccessMessage"/>
         <see userInput="You deleted the store view." stepKey="seeDeleteMessage"/>
     </actionGroup>
 </actionGroups>

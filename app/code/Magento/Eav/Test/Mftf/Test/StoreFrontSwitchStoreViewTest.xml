@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontSwitchStoreViewTest">
+        <annotations>
+            <title value="Managing labels for customer attribute while creation new account"/>
+            <description value="Managing labels for customer attribute while creation new account"/>
+            <features value="Module/ Eav"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95997"/>
+            <stories value="Guest should be able to switch store view"/>
+            <group value="eav"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSwedishStoreView">
+                <argument name="customStore" value="swedishStoreGroup"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFinnishStoreView">
+                <argument name="customStore" value="finnishStoreGroup"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteSwedishStoreView">
+                <argument name="customStore" value="swedishStoreGroup"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFinnishStoreView">
+                <argument name="customStore" value="finnishStoreGroup"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{CustomerAttributesLastNamePage.url}}" stepKey="amOnPageCustomerAttributePage"/>
+        <see stepKey="seeLastNamePage" userInput="Last Name"/>
+        <click stepKey="clickOnManageLabelTab" selector="{{AdminCustomerAttributeSection.manageLabel}}"/>
+        <fillField stepKey="fillSwedishLastName" selector="{{AdminCustomerLastNameAttributeSection.secondLastNameInput}}" userInput="{{AttributeLastName.swedish}}"/>
+        <fillField stepKey="fillFinnishLastName" selector="{{AdminCustomerLastNameAttributeSection.thirdLastNameInput}}" userInput="{{AttributeLastName.finnish}}"/>
+        <click stepKey="save" selector="{{CustomerAccountSection.save}}"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="goToStoreFront"/>
+        <waitForPageLoad stepKey="waitForAccountCreationPage"/>
+        <reloadPage stepKey="refreshPage"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreView">
+            <argument name="storeView" value="swedishStoreGroup"/>
+        </actionGroup>
+        <see stepKey="seeLastNameInSwedish" selector="{{StorefrontCustomerCreateFormSection.lastnameLabel}}" userInput="{{AttributeLastName.swedish}}"/>
+    </test>
+</tests>
