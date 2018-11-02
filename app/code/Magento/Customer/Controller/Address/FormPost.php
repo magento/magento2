@@ -224,7 +224,6 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             $customer->setAddresses($addresses);
             $this->customerRepository->save($customer);
 
-            //$this->_addressRepository->save($address);
             $this->messageManager->addSuccessMessage(__('You saved the address.'));
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->success($url));
