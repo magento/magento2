@@ -506,7 +506,7 @@
         <column xsi:type="int" name="customer_id" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Customer Id"/>
         <column xsi:type="varchar" name="session_id" nullable="true" length="64" comment="Session ID"/>
-        <column xsi:type="timestamp" name="last_visit_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
+        <column xsi:type="timestamp" name="last_visit_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Last Visit Time"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="visitor_id"/>
