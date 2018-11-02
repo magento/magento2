@@ -28,6 +28,7 @@ class SourceSelectionService implements SourceSelectionServiceInterface
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $sourceSelectionMethods
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         ObjectManagerInterface $objectManager,

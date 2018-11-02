@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventorySourceSelection\Model\DistanceProvider\GoogleMap;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -37,13 +38,13 @@ class GetApiKey
      * Get distance between two points
      *
      * @return string
-     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function execute(): string
     {
-        $apiKey = trim($this->scopeConfig->getValue(self::XML_PATH_API_KEY));
+        $apiKey = trim((string) $this->scopeConfig->getValue(self::XML_PATH_API_KEY));
         if (!$apiKey) {
-            throw new NoSuchEntityException(__('Google API key is not defined'));
+            throw new LocalizedException(__('Google API key is not defined'));
         }
 
         return $apiKey;
