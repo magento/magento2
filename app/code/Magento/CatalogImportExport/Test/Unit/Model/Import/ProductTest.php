@@ -505,6 +505,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function _initImagesArrayKeys()
     {
         $this->imageTypeProcessor->expects($this->once())->method('getImageTypes')->willReturn(
@@ -597,6 +600,28 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertEquals(
             $expectedSeparator,
             $this->importProduct->getMultipleValueSeparator()
+        );
+    }
+
+    public function testGetEmptyAttributeValueConstantDefault()
+    {
+        $this->setPropertyValue($this->importProduct, '_parameters', null);
+        $this->assertEquals(
+            Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+            $this->importProduct->getEmptyAttributeValueConstant()
+        );
+    }
+
+    public function testGetEmptyAttributeValueConstantFromParameters()
+    {
+        $expectedSeparator = '__EMPTY__VALUE__TEST__';
+        $this->setPropertyValue($this->importProduct, '_parameters', [
+            \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT => $expectedSeparator,
+        ]);
+
+        $this->assertEquals(
+            $expectedSeparator,
+            $this->importProduct->getEmptyAttributeValueConstant()
         );
     }
 
@@ -808,6 +833,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertEquals($expectedResult, $actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function getStoreIdByCodeDataProvider()
     {
         return [
@@ -1252,6 +1280,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getImagesFromRowDataProvider()
     {
         return [
@@ -1278,6 +1309,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
     }
 
+    /**
+     * @return array
+     */
     public function validateRowValidateNewProductTypeAddRowErrorCallDataProvider()
     {
         return [
@@ -1312,6 +1346,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
     }
 
+    /**
+     * @return array
+     */
     public function validateRowCheckSpecifiedSkuDataProvider()
     {
         return [
@@ -1330,6 +1367,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
     }
 
+    /**
+     * @return array
+     */
     public function validateRowDataProvider()
     {
         return [

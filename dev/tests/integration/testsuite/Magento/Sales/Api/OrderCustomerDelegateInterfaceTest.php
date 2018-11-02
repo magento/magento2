@@ -162,6 +162,61 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
         //Testing that addresses from order and the order itself are assigned
         //to customer.
         $order = $this->orderRepository->get($orderId);
+        $this->assertCount(1, $createdCustomer->getAddresses());
+        $this->assertNotNull($createdCustomer->getDefaultBilling());
+        $this->assertNotNull($createdCustomer->getDefaultShipping());
+        foreach ($createdCustomer->getAddresses() as $address) {
+            $this->assertTrue(
+                $address->isDefaultBilling() || $address->isDefaultShipping()
+            );
+            if ($address->isDefaultBilling()) {
+                $this->compareAddresses($order->getBillingAddress(), $address);
+            } elseif ($address->isDefaultShipping()) {
+                $this->compareAddresses($order->getShippingAddress(), $address);
+            }
+        }
+        $this->assertEquals($order->getCustomerId(), $createdCustomer->getId());
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/order_different_addresses.php
+     * @return void
+     */
+    public function testDelegateNewDifferentAddresses(): void
+    {
+        $orderAutoincrementId = '100000001';
+        /** @var Order $orderModel */
+        $orderModel = $this->orderFactory->create();
+        $orderModel->loadByIncrementId($orderAutoincrementId);
+        $orderId = (int)$orderModel->getId();
+        unset($orderModel);
+
+        $this->delegate->delegateNew($orderId);
+
+        //Saving new customer with prepared data from order.
+        /** @var CustomerInterface $customer */
+        $customer = $this->customerFactory->create();
+        $customer->setWebsiteId(1)
+            ->setEmail('customer_order_delegate@example.com')
+            ->setGroupId(1)
+            ->setStoreId(1)
+            ->setPrefix('Mr.')
+            ->setFirstname('John')
+            ->setMiddlename('A')
+            ->setLastname('Smith')
+            ->setSuffix('Esq.')
+            ->setTaxvat('12')
+            ->setGender(0);
+        $createdCustomer = $this->accountManagement->createAccount(
+            $customer,
+            '12345abcD'
+        );
+
+        //Testing that addresses from order and the order itself are assigned
+        //to customer.
+        $order = $this->orderRepository->get($orderId);
         $this->assertCount(2, $createdCustomer->getAddresses());
         $this->assertNotNull($createdCustomer->getDefaultBilling());
         $this->assertNotNull($createdCustomer->getDefaultShipping());

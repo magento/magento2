@@ -151,15 +151,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         @uasort(
             $res,
             function (MethodInterface $a, MethodInterface $b) {
-                if ((int)$a->getConfigData('sort_order') < (int)$b->getConfigData('sort_order')) {
-                    return -1;
-                }
-
-                if ((int)$a->getConfigData('sort_order') > (int)$b->getConfigData('sort_order')) {
-                    return 1;
-                }
-
-                return 0;
+                return (int)$a->getConfigData('sort_order') <=> (int)$b->getConfigData('sort_order');
             }
         );
 

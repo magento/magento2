@@ -31,9 +31,9 @@ return [
                 ],
             ],
             'constraint' => [
-                'some_foreign_key' => [
+                'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF' => [
                     'type' => 'foreign',
-                    'name' => 'some_foreign_key',
+                    'referenceId' => 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF',
                     'column' => 'tinyint',
                     'table' => 'test_table',
                     'referenceTable' => 'reference_table',

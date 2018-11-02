@@ -225,6 +225,9 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function collectItemHasChildrenDataProvider()
     {
         $data = [

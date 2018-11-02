@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerOrderSection">
+        <element name="isMyOrdersSection" type="text" selector="//*[@class='page-title']//*[contains(text(), 'My Orders')]"/>
+        <element name="productCustomOptions" type="text" selector="//strong[contains(@class, 'product-item-name') and normalize-space(.)='{{var1}}']/following-sibling::*[contains(@class, 'item-options')]/dt[normalize-space(.)='{{var2}}']/following-sibling::dd[normalize-space(.)='{{var3}}']" parameterized="true"/>
+        <element name="productCustomOptionsFile" type="text" selector="//strong[contains(@class, 'product-item-name') and normalize-space(.)='{{var1}}']/following-sibling::*[contains(@class, 'item-options')]/dt[normalize-space(.)='{{var2}}']/following-sibling::dd[contains(.,'{{var3}}')]" parameterized="true"/>
+        <element name="productCustomOptionsLink" type="text" selector="//strong[contains(@class, 'product-item-name') and normalize-space(.)='{{var1}}']/following-sibling::*[contains(@class, 'item-options')]/dt[normalize-space(.)='{{var2}}']/following-sibling::dd//a[text() = '{{var3}}']" parameterized="true"/>
+    </section>
+</sections>

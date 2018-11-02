@@ -9,6 +9,7 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection as CommentsCollection;
 
 /**
  * Sales order shipment model
@@ -94,9 +95,14 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     protected $orderRepository;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection|null
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection
      */
-    private $tracksCollection = null;
+    private $tracksCollection;
+
+    /**
+     * @var CommentsCollection
+     */
+    private $commentsCollection;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -271,6 +277,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * Retrieves the collection used to track the shipment's items
+     *
      * @return mixed
      */
     public function getItemsCollection()
@@ -289,6 +297,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * Retrieves all non-deleted items from the shipment
+     *
      * @return array
      */
     public function getAllItems()
@@ -303,6 +313,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * Retrieves an item from the shipment using its ID
+     *
      * @param string|int $itemId
      * @return bool|\Magento\Sales\Model\Order\Shipment\Item
      */
@@ -317,6 +329,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * Adds an item to the shipment
+     *
      * @param \Magento\Sales\Model\Order\Shipment\Item $item
      * @return $this
      */
@@ -347,6 +361,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * Retrieves all available tracks in the collection that aren't deleted
+     *
      * @return array
      */
     public function getAllTracks()
@@ -361,6 +377,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * Retrieves a track using its ID
+     *
      * @param string|int $trackId
      * @return bool|\Magento\Sales\Model\Order\Shipment\Track
      */
@@ -375,6 +393,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * Addes a track to the collection and associates the shipment to the track
+     *
      * @param \Magento\Sales\Model\Order\Shipment\Track $track
      * @return $this
      */
@@ -403,8 +423,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * Adds comment to shipment with additional possibility to send it to customer via email
-     * and show it in customer account
+     * Adds comment to shipment with option to send it to customer via email and show it in customer account
      *
      * @param \Magento\Sales\Model\Order\Shipment\Comment|string $comment
      * @param bool $notify
@@ -414,43 +433,45 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     public function addComment($comment, $notify = false, $visibleOnFront = false)
     {
         if (!$comment instanceof \Magento\Sales\Model\Order\Shipment\Comment) {
-            $comment = $this->_commentFactory->create()->setComment(
-                $comment
-            )->setIsCustomerNotified(
-                $notify
-            )->setIsVisibleOnFront(
-                $visibleOnFront
-            );
+            $comment = $this->_commentFactory->create()
+                ->setComment($comment)
+                ->setIsCustomerNotified($notify)
+                ->setIsVisibleOnFront($visibleOnFront);
         }
-        $comment->setShipment($this)->setParentId($this->getId())->setStoreId($this->getStoreId());
+        $comment->setShipment($this)
+            ->setParentId($this->getId())
+            ->setStoreId($this->getStoreId());
         if (!$comment->getId()) {
             $this->getCommentsCollection()->addItem($comment);
         }
+        $comments = $this->getComments();
+        $comments[] = $comment;
+        $this->setComments($comments);
         $this->_hasDataChanges = true;
         return $this;
     }
 
     /**
-     * Retrieve comments collection.
+     * Retrieves comments collection.
      *
      * @param bool $reload
-     * @return \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection
+     * @return CommentsCollection
      */
     public function getCommentsCollection($reload = false)
     {
-        if (!$this->hasData(ShipmentInterface::COMMENTS) || $reload) {
-            $comments = $this->_commentCollectionFactory->create()
-                ->setShipmentFilter($this->getId())
-                ->setCreatedAtOrder();
-            $this->setComments($comments);
-
+        if ($this->commentsCollection === null || $reload) {
+            $this->commentsCollection = $this->_commentCollectionFactory->create();
             if ($this->getId()) {
-                foreach ($this->getComments() as $comment) {
+                $this->commentsCollection->setShipmentFilter($this->getId())
+                    ->setCreatedAtOrder();
+
+                foreach ($this->commentsCollection as $comment) {
                     $comment->setShipment($this);
                 }
             }
         }
-        return $this->getComments();
+
+        return $this->commentsCollection;
     }
 
     /**
@@ -514,7 +535,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function setPackages(array $packages = null)
@@ -566,13 +587,10 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     public function getTracks()
     {
         if ($this->getData(ShipmentInterface::TRACKS) === null) {
-            $collection =  $this->_trackCollectionFactory->create()->setShipmentFilter($this->getId());
-            if ($this->getId()) {
-                foreach ($collection as $item) {
-                    $item->setShipment($this);
-                }
-                $this->setData(ShipmentInterface::TRACKS, $collection->getItems());
+            foreach ($this->getTracksCollection() as $item) {
+                $item->setShipment($this);
             }
+            $this->setData(ShipmentInterface::TRACKS, $this->getTracksCollection()->getItems());
         }
         return $this->getData(ShipmentInterface::TRACKS);
     }
@@ -611,7 +629,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCreatedAt($createdAt)
     {
@@ -743,7 +761,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreId($id)
     {
@@ -751,7 +769,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalWeight($totalWeight)
     {
@@ -759,7 +777,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalQty($qty)
     {
@@ -767,7 +785,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setEmailSent($emailSent)
     {
@@ -775,7 +793,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderId($id)
     {
@@ -783,7 +801,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerId($id)
     {
@@ -791,7 +809,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingAddressId($id)
     {
@@ -799,7 +817,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBillingAddressId($id)
     {
@@ -807,7 +825,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShipmentStatus($shipmentStatus)
     {
@@ -815,7 +833,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIncrementId($id)
     {
@@ -823,7 +841,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setUpdatedAt($timestamp)
     {
@@ -831,7 +849,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Sales\Api\Data\ShipmentExtensionInterface|null
      */
@@ -841,7 +859,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Sales\Api\Data\ShipmentExtensionInterface $extensionAttributes
      * @return $this

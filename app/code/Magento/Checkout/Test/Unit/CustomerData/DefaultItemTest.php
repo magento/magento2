@@ -5,12 +5,14 @@
  */
 namespace Magento\Checkout\Test\Unit\CustomerData;
 
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
+
 class DefaultItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Checkout\CustomerData\DefaultItem
      */
-    protected $model;
+    private $model;
 
     /**
      * @var \Magento\Catalog\Helper\Image
@@ -21,6 +23,11 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Catalog\Helper\Product\ConfigurationPool
      */
     private $configurationPool;
+
+    /**
+     * @var ItemResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $itemResolver;
 
     protected function setUp()
     {
@@ -35,12 +42,14 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
         $checkoutHelper = $this->getMockBuilder(\Magento\Checkout\Helper\Data::class)
             ->setMethods(['formatPrice'])->disableOriginalConstructor()->getMock();
         $checkoutHelper->expects($this->any())->method('formatPrice')->willReturn(5);
+        $this->itemResolver = $this->createMock(ItemResolverInterface::class);
         $this->model = $objectManager->getObject(
             \Magento\Checkout\CustomerData\DefaultItem::class,
             [
                 'imageHelper' => $this->imageHelper,
                 'configurationPool' => $this->configurationPool,
-                'checkoutHelper' => $checkoutHelper
+                'checkoutHelper' => $checkoutHelper,
+                'itemResolver' => $this->itemResolver,
             ]
         );
     }
@@ -72,6 +81,11 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
         $this->imageHelper->expects($this->any())->method('getWidth')->willReturn(100);
         $this->imageHelper->expects($this->any())->method('getHeight')->willReturn(100);
         $this->configurationPool->expects($this->any())->method('getByProductType')->willReturn($product);
+
+        $this->itemResolver->expects($this->any())
+            ->method('getFinalProduct')
+            ->with($item)
+            ->will($this->returnValue($product));
 
         $itemData = $this->model->getItemData($item);
         $this->assertArrayHasKey('options', $itemData);

@@ -13,7 +13,11 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 
 /**
+ * MySQL search temporary storage.
+ *
  * @api
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class TemporaryStorage
 {
@@ -100,6 +104,8 @@ class TemporaryStorage
     }
 
     /**
+     * Store select results in temporary table.
+     *
      * @param Select $select
      * @return Table
      * @throws \Zend_Db_Exception
@@ -112,6 +118,8 @@ class TemporaryStorage
     }
 
     /**
+     * Get connection.
+     *
      * @return false|AdapterInterface
      */
     private function getConnection()
@@ -120,6 +128,8 @@ class TemporaryStorage
     }
 
     /**
+     * Create temporary table for search select results.
+     *
      * @return Table
      * @throws \Zend_Db_Exception
      */

@@ -85,6 +85,9 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($this->_object->getHtml());
     }
 
+    /**
+     * @return array
+     */
     public function getHtmlWhenValueIsEmptyDataProvider()
     {
         return [

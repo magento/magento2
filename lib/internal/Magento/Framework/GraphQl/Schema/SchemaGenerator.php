@@ -56,6 +56,7 @@ class SchemaGenerator implements SchemaGeneratorInterface
         $schema = $this->schemaFactory->create(
             [
                 'query' => $this->outputMapper->getOutputType('Query'),
+                'mutation' => $this->outputMapper->getOutputType('Mutation'),
                 'typeLoader' => function ($name) {
                     return $this->outputMapper->getOutputType($name);
                 },

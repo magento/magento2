@@ -257,6 +257,9 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $this->patchApllier->applyDataPatch($moduleName);
     }
 
+    /**
+     * @return array
+     */
     public function applyDataPatchDataInstalledModuleProvider()
     {
         return [

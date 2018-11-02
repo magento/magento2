@@ -7,6 +7,6 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="CmsPage" mca="cms/page" module="Magento_Cms">
-        <block name="cmsPageBlock" class="Magento\Cms\Test\Block\Page" locator=".page-main" strategy="css selector" />
+        <block name="cmsPageBlock" class="Magento\Cms\Test\Block\Page" locator="#maincontent" strategy="css selector" />
     </page>
 </config>

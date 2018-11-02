@@ -22,6 +22,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\Response;
 use Zend\Stdlib\Parameters;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -55,6 +56,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('Green str, 67', $body);
     }
 
+    /**
+     * Test sign up form displaying.
+     */
     public function testCreateAction()
     {
         $this->dispatch('customer/account/create');
@@ -94,10 +98,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $email = 'customer@example.com';
 
-        $this->getRequest()
-            ->setPostValue([
-                'email' => $email,
-            ]);
+        $this->getRequest()->setPostValue(['email' => $email]);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('customer/account/forgotPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
@@ -128,7 +130,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer->save();
 
         $this->getRequest()->setParam('token', $token);
-        $this->getRequest()->setParam('id', $customer->getId());
 
         $this->dispatch('customer/account/createPassword');
 
@@ -136,12 +137,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(302, $response->getHttpResponseCode());
         $text = $response->getBody();
         $this->assertFalse((bool)preg_match('/' . $token . '/m', $text));
-        $this->assertRedirect($this->stringContains('customer/account/createpassword'));
+        $this->assertRedirect(
+            $this->stringContains('customer/account/createpassword')
+        );
 
-        /** @var \Magento\Customer\Model\Session $customer */
-        $session = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Session::class);
+        /** @var Session $customer */
+        $session = Bootstrap::getObjectManager()->get(Session::class);
         $this->assertEquals($token, $session->getRpToken());
-        $this->assertEquals($customer->getId(), $session->getRpCustomerId());
         $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
     }
 
@@ -219,6 +221,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testNoFormKeyCreatePostAction()
     {
         $this->fillRequestWithAccountData('test1@email.com');
+        $this->getRequest()->setPostValue('form_key', null);
         $this->dispatch('customer/account/createPost');
 
         $this->assertNull($this->getCustomerByEmail('test1@email.com'));
@@ -373,10 +376,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $email = 'customer@example.com';
 
-        $this->getRequest()
-            ->setPostValue([
-                'email' => $email,
-            ]);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['email' => $email]);
 
         $this->dispatch('customer/account/forgotPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
@@ -396,6 +397,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testForgotPasswordPostWithBadEmailAction()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()
             ->setPostValue([
                 'email' => 'bad@email',
@@ -417,6 +419,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()
             ->setParam('id', 1)
             ->setParam('token', '8ed8677e6c79e68b94e61658bd756ea5')
+            ->setMethod('POST')
             ->setPostValue([
                 'password' => 'new-password',
                 'password_confirmation' => 'new-password',
@@ -439,6 +442,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()
             ->setQueryValue('id', 1)
             ->setQueryValue('token', '8ed8677e6c79e68b94e61658bd756ea5')
+            ->setMethod('POST')
             ->setPostValue([
                 'password' => 'new-Password1',
                 'password_confirmation' => 'new-Password1',
@@ -521,7 +525,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('customer/account/editPost');
 
-        $this->assertRedirect($this->stringEndsWith('customer/account/'));
+        $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
             $this->equalTo(['You saved the account information.']),
             MessageInterface::TYPE_SUCCESS
@@ -569,7 +573,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('customer/account/editPost');
 
-        $this->assertRedirect($this->stringEndsWith('customer/account/'));
+        $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
             $this->equalTo(['You saved the account information.']),
             MessageInterface::TYPE_SUCCESS
@@ -602,9 +606,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('customer/account/editPost');
 
-        $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
+        $this->assertRedirect($this->stringContains('customer/account/edit/'));
         $this->assertSessionMessages(
-            $this->equalTo(['"Email" is not a valid email address.']),
+            $this->equalTo(['&quot;Email&quot; is not a valid email address.']),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -632,10 +636,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('customer/account/editPost');
 
-        $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
+        $this->assertRedirect($this->stringContains('customer/account/edit/'));
         // Not sure if its the most secure message. Not changing the behavior for now in the new AccountManagement APIs.
         $this->assertSessionMessages(
-            $this->equalTo(["The password doesn't match this account. Verify the password and try again."]),
+            $this->equalTo(["The password doesn&#039;t match this account. Verify the password and try again."]),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -661,9 +665,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('customer/account/editPost');
 
-        $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
+        $this->assertRedirect($this->stringContains('customer/account/edit/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Password confirmation doesn\'t match entered password.']),
+            $this->equalTo(['Password confirmation doesn&#039;t match entered password.']),
             MessageInterface::TYPE_ERROR
         );
     }

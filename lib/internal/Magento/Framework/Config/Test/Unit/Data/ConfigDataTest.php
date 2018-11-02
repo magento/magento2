@@ -47,6 +47,9 @@ class ConfigDataTest extends \PHPUnit\Framework\TestCase
         $configData->set($key, 'value');
     }
 
+    /**
+     * @return array
+     */
     public function setWrongKeyDataProvider()
     {
         return [

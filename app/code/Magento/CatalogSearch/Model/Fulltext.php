@@ -21,6 +21,9 @@ use Magento\Search\Model\QueryFactory;
  * @method \Magento\CatalogSearch\Model\Fulltext setStoreId(int $value)
  * @method string getDataIndex()
  * @method \Magento\CatalogSearch\Model\Fulltext setDataIndex(string $value)
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class Fulltext extends \Magento\Framework\Model\AbstractModel
 {

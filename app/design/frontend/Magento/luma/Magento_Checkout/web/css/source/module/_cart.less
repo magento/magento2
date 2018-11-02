@@ -460,7 +460,7 @@
                     white-space: nowrap;
                     width: 33%;
 
-                    &:before {
+                    &[data-th]:before {
                         content: attr(data-th);
                         display: block;
                         font-weight: @font-weight__semibold;
@@ -627,11 +627,8 @@
                 }
 
                 &-item-details {
-                    padding-bottom: 35px;
-                }
-
-                &-item-details {
                     display: table-cell;
+                    padding-bottom: 35px;
                     vertical-align: top;
                     white-space: normal;
                     width: 99%;

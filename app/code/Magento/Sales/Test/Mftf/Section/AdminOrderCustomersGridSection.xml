@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderCustomersGridSection">
+        <element name="spinner" type="button" selector=".spinner"/>
+        <element name="apply" type="button" selector=".action-secondary[title='Search']"/>
+        <element name="resetFilter" type="button" selector=".action-tertiary[title='Reset Filter']"/>
+        <element name="emailInput" type="input" selector="#sales_order_create_customer_grid_filter_email"/>
+        <element name="firstRow" type="button" selector="tr:nth-of-type(1)[data-role='row']"/>
+    </section>
+</sections>
