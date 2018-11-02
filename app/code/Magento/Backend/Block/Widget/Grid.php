@@ -12,7 +12,7 @@ namespace Magento\Backend\Block\Widget;
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
  * @method string getRowClickCallback() getRowClickCallback()
- * @method \Magento\Backend\Block\Widget\Grid setRowClickCallback() setRowClickCallback(string $value)
+ * @method \Magento\Backend\Block\Widget\Grid setRowClickCallback(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
