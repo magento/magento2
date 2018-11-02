@@ -1,6 +1,14 @@
-# InventorySalesFrontendUi
+## Introduction
 
-**InventorySalesFrontendUi** provides frontend-related implementations for MSI in the context of Inventory Sales.
+This module is part of the MSI (Multi-Source Inventory) project. See 
+[project description](https://devdocs.magento.com/guides/v2.3/inventory/index.html) 
+for further information.
 
-See [concept documentation](https://github.com/magento-engcom/magento2/wiki/Technical-Vision.-Catalog-Inventory)
-for further information on MSI.
+## Responsibility of this module
+
+Following the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
+this module extends Magento's frontend UI with MSI functionality.
+
+## Headless Magento Installation
+
+You can remove this module if you run a headless version of Magento.
