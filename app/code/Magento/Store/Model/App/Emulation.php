@@ -21,6 +21,43 @@ use Magento\Framework\Translate\Inline\ConfigInterface;
 class Emulation extends \Magento\Framework\DataObject
 {
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @var \Magento\Framework\TranslateInterface
+     */
+    protected $_translate;
+
+    /**
+     * Core store config
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
+     * @var \Magento\Framework\App\DesignInterface
+     */
+    protected $_design;
+
+    /**
+     * @var ConfigInterface
+     */
+    protected $inlineConfig;
+
+    /**
+     * @var \Magento\Framework\Translate\Inline\StateInterface
+     */
+    protected $inlineTranslation;
+
+    /**
      * @var \Magento\Store\Model\App\EmulationInterface
      */
     private $appEmulation;
@@ -53,7 +90,15 @@ class Emulation extends \Magento\Framework\DataObject
         array $data = [],
         \Magento\Store\Model\App\EmulationInterface $appEmulation = null
     ) {
+        $this->_localeResolver = $localeResolver;
         parent::__construct($data);
+        $this->_storeManager = $storeManager;
+        $this->_viewDesign = $viewDesign;
+        $this->_design = $design;
+        $this->_translate = $translate;
+        $this->_scopeConfig = $scopeConfig;
+        $this->inlineConfig = $inlineConfig;
+        $this->inlineTranslation = $inlineTranslation;
         $this->appEmulation = $appEmulation ?? ObjectManager::getInstance()
                 ->get(\Magento\Store\Model\App\EmulationInterface::class);
     }
@@ -95,5 +140,47 @@ class Emulation extends \Magento\Framework\DataObject
     public function storeCurrentEnvironmentInfo()
     {
         $this->appEmulation->storeCurrentEnvironmentInfo();
+    }
+
+    /**
+     * Restore initial inline translation state
+     *
+     * @param bool $initialTranslate
+     * @return $this
+     */
+    protected function _restoreInitialInlineTranslation($initialTranslate)
+    {
+        $this->inlineTranslation->resume($initialTranslate);
+        return $this;
+    }
+
+    /**
+     * Restore design of the initial store
+     *
+     * @param array $initialDesign
+     * @return $this
+     */
+    protected function _restoreInitialDesign(array $initialDesign)
+    {
+        $this->_viewDesign->setDesignTheme($initialDesign['theme'], $initialDesign['area']);
+        return $this;
+    }
+
+    /**
+     * Restore locale of the initial store
+     *
+     * @param string $initialLocaleCode
+     * @param string $initialArea
+     * @return $this
+     */
+    protected function _restoreInitialLocale(
+        $initialLocaleCode,
+        $initialArea = \Magento\Framework\App\Area::AREA_ADMINHTML
+    ) {
+        $this->_localeResolver->setLocale($initialLocaleCode);
+        $this->_translate->setLocale($initialLocaleCode);
+        $this->_translate->loadData($initialArea);
+
+        return $this;
     }
 }
