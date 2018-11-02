@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver\ShippingAddress\SetShippingAddressOnCart;
+namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\Data\AddressInterface;
@@ -16,7 +16,12 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\ShippingAddressManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 
-class SingleShipping
+/**
+ * Class SetShippingAddressOnCart
+ *
+ * Set shipping address for a specified shopping cart
+ */
+class SetShippingAddressOnCart
 {
     /**
      * @var ShippingAddressManagementInterface
@@ -51,11 +56,17 @@ class SingleShipping
     /**
      * @param ContextInterface $context
      * @param int $cartId
-     * @param array $shippingAddress
+     * @param array $shippingAddresses
      * @return void
      */
-    public function setAddress(ContextInterface $context, int $cartId, array $shippingAddress): void
+    public function setAddresses(ContextInterface $context, int $cartId, array $shippingAddresses): void
     {
+        if (count($shippingAddresses) > 1) {
+            throw new GraphQlInputException(
+                __('Multiple address does not allowed here!')
+            );
+        }
+        $shippingAddress = current($shippingAddresses);
         $customerAddressId = $shippingAddress['customer_address_id'] ?? null;
         $addressInput = $shippingAddress['address'] ?? null;
 
