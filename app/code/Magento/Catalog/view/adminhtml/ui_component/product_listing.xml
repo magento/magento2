@@ -190,6 +190,14 @@
                 <label translate="true">Websites</label>
             </settings>
         </column>
+        <column name="quantity_and_stock_status" class="Magento\Catalog\Ui\Component\Listing\Columns\StockStatus" sortOrder="110">
+            <settings>
+                <addField>false</addField>
+                <options class="Magento\Catalog\Model\Product\Attribute\Source\StockStatus"/>
+                <label translate="true">Stock Status</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
         <actionsColumn name="actions" class="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions" sortOrder="200">
             <settings>
                 <indexField>entity_id</indexField>
