@@ -25,6 +25,7 @@ HTML;
 }
 
 $params = $_SERVER;
+unset($params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]);
 $params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = [
     DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
     DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],
