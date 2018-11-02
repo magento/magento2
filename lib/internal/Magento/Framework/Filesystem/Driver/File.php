@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -396,15 +397,27 @@ class File implements DriverInterface
      */
     public function deleteDirectory($path)
     {
+        $exceptionMessages = [];
         $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
         $iterator = new \FilesystemIterator($path, $flags);
         /** @var \FilesystemIterator $entity */
         foreach ($iterator as $entity) {
-            if ($entity->isDir()) {
-                $this->deleteDirectory($entity->getPathname());
-            } else {
-                $this->deleteFile($entity->getPathname());
+            try {
+                if ($entity->isDir()) {
+                    $this->deleteDirectory($entity->getPathname());
+                } else {
+                    $this->deleteFile($entity->getPathname());
+                }
+            } catch (FileSystemException $exception) {
+                $exceptionMessages[] = $exception->getMessage();
             }
+        }
+        if (!empty($exceptionMessages)) {
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase(
+                    \implode(' ', $exceptionMessages)
+                )
+            );
         }
 
         $fullPath = $this->getScheme() . $path;
