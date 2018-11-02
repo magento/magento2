@@ -48,6 +48,13 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
+            <group id="zerograndtotal_creditmemo" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Allow Zero GrandTotal</label>
+                <field id="allow_zero_grandtotal" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Allow Zero GrandTotal for Creditmemo</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
             <group id="identity" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Invoice and Packing Slip Design</label>
                 <field id="logo" translate="label comment" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">

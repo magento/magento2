@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\QuoteGraphQl\Model\Cart\AddProductsToCart;
 use Magento\QuoteGraphQl\Model\Cart\ExtractDataFromCart;
+use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 
 /**
  * Add simple products to cart GraphQl resolver
@@ -27,6 +28,11 @@ class AddSimpleProductsToCart implements ResolverInterface
     private $arrayManager;
 
     /**
+     * @var GetCartForUser
+     */
+    private $getCartForUser;
+
+    /**
      * @var AddProductsToCart
      */
     private $addProductsToCart;
@@ -38,15 +44,18 @@ class AddSimpleProductsToCart implements ResolverInterface
 
     /**
      * @param ArrayManager $arrayManager
+     * @param GetCartForUser $getCartForUser
      * @param AddProductsToCart $addProductsToCart
      * @param ExtractDataFromCart $extractDataFromCart
      */
     public function __construct(
         ArrayManager $arrayManager,
+        GetCartForUser $getCartForUser,
         AddProductsToCart $addProductsToCart,
         ExtractDataFromCart $extractDataFromCart
     ) {
         $this->arrayManager = $arrayManager;
+        $this->getCartForUser = $getCartForUser;
         $this->addProductsToCart = $addProductsToCart;
         $this->extractDataFromCart = $extractDataFromCart;
     }
@@ -67,7 +76,10 @@ class AddSimpleProductsToCart implements ResolverInterface
             throw new GraphQlInputException(__('Missing key "cartItems" in cart data'));
         }
 
-        $cart = $this->addProductsToCart->execute((string)$cartHash, $cartItems);
+        $currentUserId = $context->getUserId();
+        $cart = $this->getCartForUser->execute((string)$cartHash, $currentUserId);
+
+        $this->addProductsToCart->execute($cart, $cartItems);
         $cartData = $this->extractDataFromCart->execute($cart);
 
         return [

@@ -923,7 +923,7 @@ class Category extends AbstractResource
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
         $table = $this->getEntityTable();
         $connection = $this->getConnection();
-        $levelFiled = $connection->quoteIdentifier('level');
+        $levelField = $connection->quoteIdentifier('level');
         $pathField = $connection->quoteIdentifier('path');
 
         /**
@@ -963,7 +963,7 @@ class Category extends AbstractResource
                         $newPath . '/'
                     ) . ')'
                 ),
-                'level' => new \Zend_Db_Expr($levelFiled . ' + ' . $levelDisposition)
+                'level' => new \Zend_Db_Expr($levelField . ' + ' . $levelDisposition)
             ],
             [$pathField . ' LIKE ?' => $category->getPath() . '/%']
         );
