@@ -400,14 +400,16 @@ class Translate implements \Magento\Framework\TranslateInterface
      *
      * @param string $locale
      * @param array $config
-     * @return string
+     * @return string|null
      */
-    private function getThemeTranslationFileName(string $locale, array $config): string
+    private function getThemeTranslationFileName(string $locale, array $config): ?string
     {
-        return $this->_viewFileSystem->getLocaleFileName(
+        $fileName = $this->_viewFileSystem->getLocaleFileName(
             'i18n' . '/' . $locale . '.csv',
             $config
         );
+
+        return $fileName ? $fileName : null;
     }
 
     /**
