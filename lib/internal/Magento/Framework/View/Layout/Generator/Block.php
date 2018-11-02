@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Layout;
