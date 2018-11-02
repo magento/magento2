@@ -18,13 +18,13 @@
         <column xsi:type="timestamp" name="scheduled_at" on_update="false" nullable="true" comment="Scheduled At"/>
         <column xsi:type="timestamp" name="executed_at" on_update="false" nullable="true" comment="Executed At"/>
         <column xsi:type="timestamp" name="finished_at" on_update="false" nullable="true" comment="Finished At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="schedule_id"/>
         </constraint>
-        <index name="CRON_SCHEDULE_JOB_CODE" indexType="btree">
+        <index referenceId="CRON_SCHEDULE_JOB_CODE" indexType="btree">
             <column name="job_code"/>
         </index>
-        <index name="CRON_SCHEDULE_SCHEDULED_AT_STATUS" indexType="btree">
+        <index referenceId="CRON_SCHEDULE_SCHEDULED_AT_STATUS" indexType="btree">
             <column name="scheduled_at"/>
             <column name="status"/>
         </index>
