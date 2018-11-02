@@ -12,18 +12,16 @@ use Magento\Checkout\Model\ShippingInformation;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
-use Magento\QuoteGraphQl\Model\Authorization\IsCartMutationAllowedForCurrentUser;
 use Magento\Quote\Model\Quote\AddressFactory as QuoteAddressFactory;
 use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
 use Magento\Checkout\Model\ShippingInformationFactory;
+use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 
 /**
  * Class SetShippingMethodsOnCart
@@ -48,19 +46,14 @@ class SetShippingMethodsOnCart implements ResolverInterface
     private $quoteAddressResource;
 
     /**
-     * @var MaskedQuoteIdToQuoteIdInterface
-     */
-    private $maskedQuoteIdToQuoteId;
-
-    /**
      * @var ArrayManager
      */
     private $arrayManager;
 
     /**
-     * @var IsCartMutationAllowedForCurrentUser
+     * @var GetCartForUser
      */
-    private $isCartMutationAllowedForCurrentUser;
+    private $getCartForUser;
 
     /**
      * @var ShippingInformationManagementInterface
@@ -70,8 +63,7 @@ class SetShippingMethodsOnCart implements ResolverInterface
     /**
      * SetShippingMethodsOnCart constructor.
      * @param ArrayManager $arrayManager
-     * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
-     * @param IsCartMutationAllowedForCurrentUser $isCartMutationAllowedForCurrentUser
+     * @param GetCartForUser $getCartForUser
      * @param ShippingInformationManagementInterface $shippingInformationManagement
      * @param QuoteAddressFactory $quoteAddressFactory
      * @param QuoteAddressResource $quoteAddressResource
@@ -79,18 +71,15 @@ class SetShippingMethodsOnCart implements ResolverInterface
      */
     public function __construct(
         ArrayManager $arrayManager,
-        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        IsCartMutationAllowedForCurrentUser $isCartMutationAllowedForCurrentUser,
+        GetCartForUser $getCartForUser,
         ShippingInformationManagementInterface $shippingInformationManagement,
         QuoteAddressFactory $quoteAddressFactory,
         QuoteAddressResource $quoteAddressResource,
         ShippingInformationFactory $shippingInformationFactory
     ) {
         $this->arrayManager = $arrayManager;
-        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
-        $this->isCartMutationAllowedForCurrentUser = $isCartMutationAllowedForCurrentUser;
+        $this->getCartForUser = $getCartForUser;
         $this->shippingInformationManagement = $shippingInformationManagement;
-
         $this->quoteAddressResource = $quoteAddressResource;
         $this->quoteAddressFactory = $quoteAddressFactory;
         $this->shippingInformationFactory = $shippingInformationFactory;
@@ -111,34 +100,20 @@ class SetShippingMethodsOnCart implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "shipping_methods" is missing'));
         }
 
-        $shippingMethod = reset($shippingMethods); // TODO: provide implementation for multishipping
+        $shippingMethod = reset($shippingMethods);
 
         if (!$shippingMethod['cart_address_id']) {
             throw new GraphQlInputException(__('Required parameter "cart_address_id" is missing'));
         }
-        if (!$shippingMethod['shipping_carrier_code']) { // FIXME: check the E_WARNING here
+        if (!$shippingMethod['shipping_carrier_code']) {
             throw new GraphQlInputException(__('Required parameter "shipping_carrier_code" is missing'));
         }
-        if (!$shippingMethod['shipping_method_code']) { // FIXME: check the E_WARNING here
+        if (!$shippingMethod['shipping_method_code']) {
             throw new GraphQlInputException(__('Required parameter "shipping_method_code" is missing'));
         }
 
-        try {
-            $cartId = $this->maskedQuoteIdToQuoteId->execute((string) $maskedCartId);
-        } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(
-                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $maskedCartId])
-            );
-        }
-
-        if (false === $this->isCartMutationAllowedForCurrentUser->execute($cartId)) {
-            throw new GraphQlAuthorizationException(
-                __(
-                    'The current user cannot perform operations on cart "%masked_cart_id"',
-                    ['masked_cart_id' => $maskedCartId]
-                )
-            );
-        }
+        $userId = $context->getUserId();
+        $cart = $this->getCartForUser->execute((string) $maskedCartId, $userId);
 
         $quoteAddress = $this->quoteAddressFactory->create();
         $this->quoteAddressResource->load($quoteAddress, $shippingMethod['cart_address_id']);
@@ -153,7 +128,7 @@ class SetShippingMethodsOnCart implements ResolverInterface
         $shippingInformation->setShippingMethodCode($shippingMethod['shipping_method_code']);
 
         try {
-            $this->shippingInformationManagement->saveAddressInformation($cartId, $shippingInformation);
+            $this->shippingInformationManagement->saveAddressInformation($cart->getId(), $shippingInformation);
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
         } catch (StateException $exception) {
@@ -164,7 +139,8 @@ class SetShippingMethodsOnCart implements ResolverInterface
 
         return [
             'cart' => [
-                'cart_id' => $maskedCartId
+                'cart_id' => $maskedCartId,
+                'model' => $cart
             ]
         ];
     }
