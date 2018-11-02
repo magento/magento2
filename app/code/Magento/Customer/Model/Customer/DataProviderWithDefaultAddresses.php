@@ -24,7 +24,7 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
     /**
      * @var array
      */
-    private $loadedData;
+    private $loadedData = [];
 
     /**
      * @var SessionManagerInterface
@@ -114,7 +114,7 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
      */
     public function getData(): array
     {
-        if (null !== $this->loadedData) {
+        if (!empty($this->loadedData)) {
             return $this->loadedData;
         }
         $items = $this->collection->getItems();
