@@ -162,6 +162,11 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Customer\Model\Address\Mapper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerAddressMapper;
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerRepository;
+    private $customer;
 
     /**
      * {@inheritDoc}
@@ -210,6 +215,14 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->customerRepository = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new FormPost(
             $this->context,
             $this->session,
@@ -223,7 +236,8 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             $this->resultForwardFactory,
             $this->resultPageFactory,
             $this->regionFactory,
-            $this->helperData
+            $this->helperData,
+            $this->customerRepository
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -494,10 +508,6 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->method('getById')
             ->with($addressId)
             ->willReturn($this->addressData);
-        $this->addressRepository->expects($this->once())
-            ->method('save')
-            ->with($this->addressData)
-            ->willReturnSelf();
 
         $this->customerAddressMapper->expects($this->once())
             ->method('toFlatArray')
@@ -571,6 +581,23 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->method('setIsDefaultShipping')
             ->with()
             ->willReturnSelf();
+
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($this->customer);
+
+        $this->customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([]);
+
+        $this->customer->expects($this->once())
+            ->method('setAddresses')
+            ->with([$this->addressData]);
+
+        $this->customerRepository->expects($this->once())
+            ->method('save')
+            ->with($this->customer);
 
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage')
