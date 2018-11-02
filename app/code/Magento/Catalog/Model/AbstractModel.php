@@ -179,7 +179,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param string|array $key
      * @param mixed $value
-     * @return \Magento\Framework\DataObject
+     * @return $this
      */
     public function setData($key, $value = null)
     {
