@@ -24,6 +24,7 @@ use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -46,6 +47,11 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
     private $customerAddressMapper;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param FormKeyValidator $formKeyValidator
@@ -59,6 +65,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @param PageFactory $resultPageFactory
      * @param RegionFactory $regionFactory
      * @param HelperData $helperData
+     * @param CustomerRepositoryInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -74,10 +81,12 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory,
         RegionFactory $regionFactory,
-        HelperData $helperData
+        HelperData $helperData,
+        CustomerRepositoryInterface $customerRepository
     ) {
         $this->regionFactory = $regionFactory;
         $this->helperData = $helperData;
+        $this->customerRepository = $customerRepository;
         parent::__construct(
             $context,
             $customerSession,
@@ -197,8 +206,25 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         }
 
         try {
+            $addressId = $this->getRequest()->getParam('id');
+            $customerId = $this->_getSession()->getCustomerId();
+
+            $customer = $this->customerRepository->getById($customerId);
+
             $address = $this->_extractAddress();
-            $this->_addressRepository->save($address);
+
+            $addresses = [];
+            foreach ($customer->getAddresses() as $customerAddress) {
+                if ($customerAddress->getId() !== $addressId) {
+                    $addresses[] = $customerAddress;
+                }
+            }
+
+            $addresses[] = $address;
+            $customer->setAddresses($addresses);
+            $this->customerRepository->save($customer);
+
+            //$this->_addressRepository->save($address);
             $this->messageManager->addSuccessMessage(__('You saved the address.'));
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->success($url));
