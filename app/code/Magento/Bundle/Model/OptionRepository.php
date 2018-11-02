@@ -160,10 +160,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      */
     public function deleteById($sku, $optionId)
     {
-        $product = $this->getProduct($sku);
-        $optionCollection = $this->type->getOptionsCollection($product);
-        $optionCollection->setIdFilter($optionId);
-        $hasBeenDeleted = $this->delete($optionCollection->getFirstItem());
+        /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
+        $option = $this->get($sku, $optionId);
+        $hasBeenDeleted = $this->delete($option);
 
         return $hasBeenDeleted;
     }
