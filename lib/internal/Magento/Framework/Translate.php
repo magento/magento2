@@ -454,7 +454,6 @@ class Translate implements \Magento\Framework\TranslateInterface
         return $translationFiles;
     }
 
-
     /**
      * Retrieve translation file for theme
      *
