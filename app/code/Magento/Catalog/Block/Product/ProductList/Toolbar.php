@@ -161,10 +161,10 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         ProductList $productListHelper,
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
+        array $data = [],
         ToolbarMemorizer $toolbarMemorizer = null,
         \Magento\Framework\App\Http\Context $httpContext = null,
-        \Magento\Framework\Data\Form\FormKey $formKey = null,
-        array $data = []
+        \Magento\Framework\Data\Form\FormKey $formKey = null
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogConfig = $catalogConfig;
