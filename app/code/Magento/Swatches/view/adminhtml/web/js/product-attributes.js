@@ -439,6 +439,9 @@ define([
 
                 activePanel.find('table input')
                     .each(function () {
+                        if ($(this).is(':radio') && !$(this).prop("checked")) {
+                            return;
+                        }
                         swatchValues.push(this.name + '=' + $(this).val());
                     });
 
