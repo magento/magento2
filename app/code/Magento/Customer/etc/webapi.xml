@@ -47,7 +47,7 @@
     <route url="/V1/customerGroups" method="GET">
         <service class="Magento\Customer\Api\AllGroupsRepositoryInterface" method="getAllGroups"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Customer::group"/>
         </resources>
     </route>
     <route url="/V1/customerGroups" method="POST">
