@@ -132,28 +132,34 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $storeIds = $this->storeManager->getWebsite($customer->getWebsiteId())->getStoreIds();
 
-        $select = $this->connection
-            ->select()
-            ->from($this->getMainTable())
-            ->where('customer_id = ?', $customer->getId())
-            ->where('store_id IN (?)', $storeIds);
+        if ($customer->getId()) {
+            $select = $this->connection
+                ->select()
+                ->from($this->getMainTable())
+                ->where('customer_id = ?', $customer->getId())
+                ->where('store_id IN (?)', $storeIds)
+                ->limit(1);
 
-        $result = $this->connection->fetchRow($select);
+            $result = $this->connection->fetchRow($select);
 
-        if ($result) {
-            return $result;
+            if ($result) {
+                return $result;
+            }
         }
 
-        $select = $this->connection
-            ->select()
-            ->from($this->getMainTable())
-            ->where('subscriber_email = ?', $customer->getEmail())
-            ->where('store_id IN (?)', $storeIds);
+        if ($customer->getEmail()) {
+            $select = $this->connection
+                ->select()
+                ->from($this->getMainTable())
+                ->where('subscriber_email = ?', $customer->getEmail())
+                ->where('store_id IN (?)', $storeIds)
+                ->limit(1);
 
-        $result = $this->connection->fetchRow($select);
+            $result = $this->connection->fetchRow($select);
 
-        if ($result) {
-            return $result;
+            if ($result) {
+                return $result;
+            }
         }
 
         return [];
