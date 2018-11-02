@@ -269,6 +269,13 @@ class Block implements Layout\GeneratorInterface
                 $block = $this->blockFactory->createBlock($block, $arguments);
             } catch (\ReflectionException $e) {
                 $this->logger->critical($e->getMessage());
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(
+                        'Can\'t create block type: %1',
+                        [is_object($block) ? get_class($block) : (string) $block]
+                    ),
+                    $e
+                );
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
