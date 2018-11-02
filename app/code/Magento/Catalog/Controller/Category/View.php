@@ -208,7 +208,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
             if ($layoutUpdates && is_array($layoutUpdates)) {
                 foreach ($layoutUpdates as $layoutUpdate) {
                     $page->addUpdate($layoutUpdate);
-                    $page->addPageLayoutHandles(['layout_update' => md5($layoutUpdate)], null, false);
+                    $page->addPageLayoutHandles(['layout_update' => sha1($layoutUpdate)], null, false);
                 }
             }
 
