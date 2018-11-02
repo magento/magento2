@@ -91,7 +91,7 @@ class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPos
 
         try {
             $validate = $this->sendFriend->validate();
-            if ($this->sendFriend->getMaxSendsToFriend() && $this->sendFriend->isExceedLimit()) {
+            if ($this->sendFriend->getMaxSendsToFriend()) {
                 $this->messageManager->addNoticeMessage(
                     __('You can\'t send messages more than %1 times an hour.', $this->sendFriend->getMaxSendsToFriend())
                 );
