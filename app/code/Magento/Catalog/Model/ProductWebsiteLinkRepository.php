@@ -41,9 +41,10 @@ class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsit
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
                 __(
-                    'Could not assign product "%1" to websites "%2"',
+                    'Could not assign product "%1" to websites "%2"! Origin exception message: %3',
                     $product->getId(),
-                    $productWebsiteLink->getWebsiteId()
+                    $productWebsiteLink->getWebsiteId(),
+                    $e->getMessage()
                 ),
                 $e
             );
