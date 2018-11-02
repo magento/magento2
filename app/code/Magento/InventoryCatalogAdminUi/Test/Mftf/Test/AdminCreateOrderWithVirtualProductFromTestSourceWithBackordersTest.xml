@@ -51,6 +51,7 @@
             <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{VirtualMsiProduct.sku}}" stepKey="fillProductSku"/>
             <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{VirtualMsiProduct.price}}" stepKey="fillProductPrice"/>
             <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="searchAndSelectCategory"/>
+            <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
             <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToProduct">
                 <argument name="sourceCode" value="$$customSource.source[name]$$"/>
             </actionGroup>
