@@ -17,6 +17,8 @@ use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
 
 /**
  * Get latitude and longitude from address
+ *
+ * TODO: Need to refactor with a virtual type to avoid code duplication with other providers
  */
 class GetLatLngRequestFromAddress
 {

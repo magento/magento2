@@ -1,0 +1,14 @@
+{
+    "inventory_geoname": {
+        "column": {
+            "country_code": true,
+            "zip_code": true,
+            "city": true,
+            "region": true,
+            "province": true,
+            "latitude": true,
+            "longitude": true,
+            "postcode": true
+        }
+    }
+}

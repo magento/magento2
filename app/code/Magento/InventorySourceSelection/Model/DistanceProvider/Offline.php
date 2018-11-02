@@ -7,23 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelection\Model\DistanceProvider;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventorySourceSelection\Model\DistanceProvider\GoogleMap\GetDistance;
-use Magento\InventorySourceSelection\Model\DistanceProvider\GoogleMap\GetLatLngRequestFromAddress;
-use Magento\InventorySourceSelection\Model\DistanceProvider\GoogleMap\GetLatLngRequestFromSource;
+use Magento\InventorySourceSelection\Model\DistanceProvider\Offline\GetDistance;
+use Magento\InventorySourceSelection\Model\DistanceProvider\Offline\GetLatLngRequestFromAddress;
+use Magento\InventorySourceSelection\Model\DistanceProvider\Offline\GetLatLngRequestFromSource;
 use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
 use Magento\InventorySourceSelectionApi\Model\DistanceProviderInterface;
 
 /**
  * @inheritdoc
  */
-class GoogleMap implements DistanceProviderInterface
+class Offline implements DistanceProviderInterface
 {
     /**
-     * @var GetDistance
+     * @var GetLatLngRequestFromSource
      */
-    private $getDistance;
+    private $getLatLngRequestFromSource;
 
     /**
      * @var GetLatLngRequestFromAddress
@@ -31,12 +30,12 @@ class GoogleMap implements DistanceProviderInterface
     private $getLatLngRequestFromAddress;
 
     /**
-     * @var GetLatLngRequestFromSource
+     * @var GetDistance
      */
-    private $getLatLngRequestFromSource;
+    private $getDistance;
 
     /**
-     * GoogleMap constructor.
+     * Offline constructor.
      *
      * @param GetLatLngRequestFromSource $getLatLngRequestFromSource
      * @param GetLatLngRequestFromAddress $getLatLngRequestFromAddress
@@ -48,14 +47,15 @@ class GoogleMap implements DistanceProviderInterface
         GetLatLngRequestFromAddress $getLatLngRequestFromAddress,
         GetDistance $getDistance
     ) {
-        $this->getDistance = $getDistance;
+
         $this->getLatLngRequestFromSource = $getLatLngRequestFromSource;
         $this->getLatLngRequestFromAddress = $getLatLngRequestFromAddress;
+        $this->getDistance = $getDistance;
     }
 
     /**
      * @inheritdoc
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(SourceInterface $source, AddressRequestInterface $destination): float
     {

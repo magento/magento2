@@ -41,6 +41,8 @@
             <argument name="providers" xsi:type="array">
                 <item name="google"
                       xsi:type="object">Magento\InventorySourceSelection\Model\DistanceProvider\GoogleMap</item>
+                <item name="offline"
+                      xsi:type="object">Magento\InventorySourceSelection\Model\DistanceProvider\Offline</item>
             </argument>
         </arguments>
     </type>
@@ -48,6 +50,7 @@
         <arguments>
             <argument name="distanceProviderDescriptions" xsi:type="array">
                 <item name="google" xsi:type="string">Google MAP distance</item>
+                <item name="offline" xsi:type="string">Offline distance calculation</item>
             </argument>
         </arguments>
     </type>
@@ -62,4 +65,14 @@
             </argument>
         </arguments>
     </type>
+
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="importGeoNames" xsi:type="object">Magento\InventorySourceSelection\Console\Command\ImportGeoNamesCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>
