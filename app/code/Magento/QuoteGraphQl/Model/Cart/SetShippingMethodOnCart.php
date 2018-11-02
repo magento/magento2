@@ -5,30 +5,26 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver\ShippingMethod;
+namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Checkout\Api\ShippingInformationManagementInterface;
-use Magento\Checkout\Model\ShippingInformation;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\AddressFactory as QuoteAddressFactory;
 use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
 use Magento\Checkout\Model\ShippingInformationFactory;
-use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\Checkout\Api\ShippingInformationManagementInterface;
+use Magento\Checkout\Model\ShippingInformation;
 
 /**
  * Class SetShippingMethodsOnCart
  *
- * Mutation resolver for setting shipping methods for shopping cart
+ * Set shipping method for a specified shopping cart address
  */
-class SetShippingMethodsOnCart implements ResolverInterface
+class SetShippingMethodOnCart
 {
     /**
      * @var ShippingInformationFactory
@@ -46,39 +42,22 @@ class SetShippingMethodsOnCart implements ResolverInterface
     private $quoteAddressResource;
 
     /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
-    /**
-     * @var GetCartForUser
-     */
-    private $getCartForUser;
-
-    /**
      * @var ShippingInformationManagementInterface
      */
     private $shippingInformationManagement;
 
     /**
-     * SetShippingMethodsOnCart constructor.
-     * @param ArrayManager $arrayManager
-     * @param GetCartForUser $getCartForUser
      * @param ShippingInformationManagementInterface $shippingInformationManagement
      * @param QuoteAddressFactory $quoteAddressFactory
      * @param QuoteAddressResource $quoteAddressResource
      * @param ShippingInformationFactory $shippingInformationFactory
      */
     public function __construct(
-        ArrayManager $arrayManager,
-        GetCartForUser $getCartForUser,
         ShippingInformationManagementInterface $shippingInformationManagement,
         QuoteAddressFactory $quoteAddressFactory,
         QuoteAddressResource $quoteAddressResource,
         ShippingInformationFactory $shippingInformationFactory
     ) {
-        $this->arrayManager = $arrayManager;
-        $this->getCartForUser = $getCartForUser;
         $this->shippingInformationManagement = $shippingInformationManagement;
         $this->quoteAddressResource = $quoteAddressResource;
         $this->quoteAddressFactory = $quoteAddressFactory;
@@ -86,37 +65,19 @@ class SetShippingMethodsOnCart implements ResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * Sets shipping method for a specified shopping cart address
+     *
+     * @param Quote $cart
+     * @param int $cartAddressId
+     * @param string $carrierCode
+     * @param string $methodCode
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function execute(Quote $cart, int $cartAddressId, string $carrierCode, string $methodCode): void
     {
-        $shippingMethods = $this->arrayManager->get('input/shipping_methods', $args);
-        $maskedCartId = $this->arrayManager->get('input/cart_id', $args);
-
-        if (!$maskedCartId) {
-            throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
-        }
-        if (!$shippingMethods) {
-            throw new GraphQlInputException(__('Required parameter "shipping_methods" is missing'));
-        }
-
-        $shippingMethod = reset($shippingMethods);
-
-        if (!$shippingMethod['cart_address_id']) {
-            throw new GraphQlInputException(__('Required parameter "cart_address_id" is missing'));
-        }
-        if (!$shippingMethod['shipping_carrier_code']) {
-            throw new GraphQlInputException(__('Required parameter "shipping_carrier_code" is missing'));
-        }
-        if (!$shippingMethod['shipping_method_code']) {
-            throw new GraphQlInputException(__('Required parameter "shipping_method_code" is missing'));
-        }
-
-        $userId = $context->getUserId();
-        $cart = $this->getCartForUser->execute((string) $maskedCartId, $userId);
-
         $quoteAddress = $this->quoteAddressFactory->create();
-        $this->quoteAddressResource->load($quoteAddress, $shippingMethod['cart_address_id']);
+        $this->quoteAddressResource->load($quoteAddress, $cartAddressId);
 
         /** @var ShippingInformation $shippingInformation */
         $shippingInformation = $this->shippingInformationFactory->create();
@@ -124,8 +85,8 @@ class SetShippingMethodsOnCart implements ResolverInterface
         /* If the address is not a shipping address (but billing) the system will find the proper shipping address for
            the selected cart and set the information there (actual for single shipping address) */
         $shippingInformation->setShippingAddress($quoteAddress);
-        $shippingInformation->setShippingCarrierCode($shippingMethod['shipping_carrier_code']);
-        $shippingInformation->setShippingMethodCode($shippingMethod['shipping_method_code']);
+        $shippingInformation->setShippingCarrierCode($carrierCode);
+        $shippingInformation->setShippingMethodCode($methodCode);
 
         try {
             $this->shippingInformationManagement->saveAddressInformation($cart->getId(), $shippingInformation);
@@ -136,12 +97,5 @@ class SetShippingMethodsOnCart implements ResolverInterface
         } catch (InputException $exception) {
             throw new GraphQlInputException(__($exception->getMessage()));
         }
-
-        return [
-            'cart' => [
-                'cart_id' => $maskedCartId,
-                'model' => $cart
-            ]
-        ];
     }
 }
