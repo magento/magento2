@@ -14,7 +14,7 @@ class ShippingItemsMapper
 {
 
     /**
-     *  Converts shipping address input array into shipping items information array
+     * Converts shipping address input array into shipping items information array
      * Array structure:
      * array(
      *      $cartItemId => array(
