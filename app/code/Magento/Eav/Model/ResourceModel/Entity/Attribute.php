@@ -182,7 +182,8 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
          */
         if (!$object->getId()) {
             if ($object->getFrontendInput() == 'select') {
-                $object->setSourceModel(\Magento\Eav\Model\Entity\Attribute\Source\Table::class);
+                $object->setSourceModel($object->getSourceModel() ?:
+                    \Magento\Eav\Model\Entity\Attribute\Source\Table::class);
             }
         }
 
