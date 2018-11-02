@@ -16,6 +16,8 @@ use Magento\Swatches\Model\Swatch;
 class Save
 {
     /**
+     * Performs the conversion of the frontend input value.
+     *
      * @param Attribute\Save $subject
      * @param RequestInterface $request
      * @return array
@@ -26,15 +28,6 @@ class Save
         $data = $request->getPostValue();
 
         if (isset($data['frontend_input'])) {
-            //Data is serialized to overcome issues caused by max_input_vars value if it's modification is unavailable.
-            //See subject controller code and comments for more info.
-            if (isset($data['serialized_swatch_values'])
-                && in_array($data['frontend_input'], ['swatch_visual', 'swatch_text'])
-            ) {
-                $data['serialized_options'] = $data['serialized_swatch_values'];
-                unset($data['serialized_swatch_values']);
-            }
-
             switch ($data['frontend_input']) {
                 case 'swatch_visual':
                     $data[Swatch::SWATCH_INPUT_TYPE_KEY] = Swatch::SWATCH_INPUT_TYPE_VISUAL;

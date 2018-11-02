@@ -804,20 +804,6 @@
 }
 
 //
-//  Checkout order review price
-//  ---------------------------------------------
-
-.abs-checkout-cart-price {
-}
-
-//
-//  Checkout order product name
-//  ---------------------------------------------
-
-.abs-checkout-product-name {
-}
-
-//
 //  Checkout order review
 //  ---------------------------------------------
 
@@ -846,7 +832,7 @@
                     white-space: nowrap;
                     width: 33%;
 
-                    &:before {
+                    &[data-th]:before {
                         content: attr(data-th) ':';
                         display: block;
                         font-weight: @font-weight__bold;

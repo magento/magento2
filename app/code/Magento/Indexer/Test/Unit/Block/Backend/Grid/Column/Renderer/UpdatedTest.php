@@ -27,6 +27,9 @@ class UpdatedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $assert);
     }
 
+    /**
+     * @return array
+     */
     public function renderProvider()
     {
         return [

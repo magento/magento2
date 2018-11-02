@@ -347,6 +347,9 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->object->hasSpecialPrice());
     }
 
+    /**
+     * @return array
+     */
     public function hasSpecialPriceProvider()
     {
         return [

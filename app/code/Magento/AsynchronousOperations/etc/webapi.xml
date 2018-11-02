@@ -29,4 +29,11 @@
         </resources>
     </route>
 
+    <route url="/V1/bulk" method="GET">
+        <service class="Magento\AsynchronousOperations\Api\OperationRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Logging::system_magento_logging_bulk_operations" />
+        </resources>
+    </route>
+
 </routes>

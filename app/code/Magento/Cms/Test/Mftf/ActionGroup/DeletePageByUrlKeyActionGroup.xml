@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeletePageByUrlKeyActionGroup">
+        <arguments>
+            <argument name="UrlKey" type="string"/>
+        </arguments>
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCMSNewPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{CmsPagesPageActionsSection.select(UrlKey)}}" stepKey="clickSelect"/>
+        <click selector="{{CmsPagesPageActionsSection.delete(UrlKey)}}" stepKey="clickDelete"/>
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="waitForOkButtonToBeVisible"/>
+        <click selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="clickOkButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <see userInput="The page has been deleted." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

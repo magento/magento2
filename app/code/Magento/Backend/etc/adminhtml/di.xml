@@ -167,4 +167,5 @@
             <argument name="defaultClass" xsi:type="string">Magento\Backend\Block\Template</argument>
         </arguments>
     </type>
+    <preference for="CsrfRequestValidator" type="Magento\Backend\App\Request\BackendValidator" />
 </config>

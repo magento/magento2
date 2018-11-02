@@ -92,6 +92,9 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         return [

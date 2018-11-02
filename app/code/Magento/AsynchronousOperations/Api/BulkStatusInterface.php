@@ -9,7 +9,8 @@ declare(strict_types=1);
 namespace Magento\AsynchronousOperations\Api;
 
 /**
- * Interface BulkStatusInterface
+ * Interface BulkStatusInterface.
+ *
  * Bulk summary data with list of operations items short data.
  *
  * @api

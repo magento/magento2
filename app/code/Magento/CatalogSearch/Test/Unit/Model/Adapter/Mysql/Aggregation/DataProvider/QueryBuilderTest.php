@@ -17,7 +17,11 @@ use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
 /**
- *  Test for Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\QueryBuilder.
+ * Test for Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\QueryBuilder.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class QueryBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -57,10 +61,25 @@ class QueryBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('getConnection')
             ->willReturn($this->adapterMock);
 
+        $this->indexScopeResolverMock = $this->createMock(
+            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+        );
+        $this->dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
+        $this->dimensionFactoryMock = $this->createMock(\Magento\Framework\Indexer\DimensionFactory::class);
+        $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock->method('getId')->willReturn(1);
+        $storeMock->method('getWebsiteId')->willReturn(1);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
+        $this->indexScopeResolverMock->method('resolve')->willReturn('catalog_product_index_price');
+
         $this->model = new QueryBuilder(
             $this->resourceConnectionMock,
             $this->scopeResolverMock,
-            $this->inventoryConfigMock
+            $this->inventoryConfigMock,
+            $this->indexScopeResolverMock,
+            $this->dimensionFactoryMock
         );
     }
 
@@ -81,8 +100,6 @@ class QueryBuilderTest extends \PHPUnit\Framework\TestCase
         $this->scopeResolverMock->expects($this->once())->method('getScope')
             ->with($scope)->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn(1);
-        $this->resourceConnectionMock->expects($this->once())->method('getTableName')
-            ->with('catalog_product_index_price')->willReturn('catalog_product_index_price');
         $selectMock->expects($this->once())->method('from')
             ->with(['main_table' => 'catalog_product_index_price'], null)
             ->willReturn($selectMock);

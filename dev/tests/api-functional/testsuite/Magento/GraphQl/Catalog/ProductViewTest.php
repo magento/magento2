@@ -205,7 +205,9 @@ class ProductViewTest extends GraphQlAbstract
             }
             short_description
             sku
-            small_image
+            small_image {
+                path
+            }
             small_image_label
             special_from_date
             special_price
@@ -285,7 +287,6 @@ QUERY;
      */
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
-        $this->markTestSkipped("Skipped until ticket MAGETWO-90021 is resolved.");
         $productSku = 'simple';
 
         $query = <<<QUERY
@@ -453,7 +454,9 @@ QUERY;
             }
             short_description
             sku
-            small_image
+            small_image {
+                path
+            }
             small_image_label
             special_from_date
             special_price
@@ -484,7 +487,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        
+
         /**
          * @var ProductRepositoryInterface $productRepository
          */
@@ -956,30 +959,5 @@ QUERY;
                 break;
         }
         return $eavAttributeCode;
-    }
-
-    /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields($actualResponse, $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            self::assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            self::assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
-            );
-        }
     }
 }

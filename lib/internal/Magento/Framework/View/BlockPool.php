@@ -72,6 +72,6 @@ class BlockPool
             return $this->blocks;
         }
 
-        return isset($this->blocks[$name]) ? $this->blocks[$name] : null;
+        return $this->blocks[$name] ?? null;
     }
 }

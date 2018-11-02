@@ -83,18 +83,14 @@
                     <backend_model>Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="default_sort_by" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="default_sort_by" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Product Listing Sort by</label>
+                    <comment>Applies to category pages</comment>
                     <source_model>Magento\Catalog\Model\Config\Source\ListSort</source_model>
                 </field>
                 <field id="list_allow_all" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow All Products per Page</label>
                     <comment>Whether to show "All" option in the "Show X Per Page" dropdown</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="parse_url_directives" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Allow Dynamic Media URLs</label>
-                    <comment>E.g. {{media url="path/to/image.jpg"}} {{skin url="path/to/picture.gif"}}. Dynamic directives parsing impacts catalog performance.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
@@ -103,7 +99,6 @@
                 <clone_fields>1</clone_fields>
                 <clone_model>Magento\Catalog\Model\Config\CatalogClone\Media\Image</clone_model>
                 <field id="placeholder" type="image" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label></label>
                     <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
                     <upload_dir config="system/filesystem/media" scope_info="1">catalog/product/placeholder</upload_dir>
                     <base_url type="media" scope_info="1">catalog/product/placeholder</base_url>

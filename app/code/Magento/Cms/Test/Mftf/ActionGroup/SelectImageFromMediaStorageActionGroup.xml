@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="clickBrowseBtnOnUploadPopup">
+        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse" />
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+    </actionGroup>
+    <actionGroup name="VerifyMediaGalleryStorageActions">
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading1" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
+        <see selector="{{MediaGallerySection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn" />
+        <see selector="{{MediaGallerySection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn" />
+    </actionGroup>
+    <actionGroup name="CreateImageFolder">
+        <arguments>
+            <argument name="ImageFolder" defaultValue="ImageFolder"/>
+        </arguments>
+        <click selector="{{MediaGallerySection.CreateFolder}}" stepKey="createFolder"/>
+        <waitForElementVisible selector="{{MediaGallerySection.FolderName}}" stepKey="waitForPopUp" />
+        <fillField selector="{{MediaGallerySection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName" />
+        <click selector="{{MediaGallerySection.AcceptFolderName}}" stepKey="acceptFolderName" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
+        <waitForPageLoad stepKey="waitForLoadingArrowToExpand" time="15" />
+        <conditionalClick selector="{{MediaGallerySection.StorageRootArrow}}" dependentSelector="{{MediaGallerySection.checkIfArrowExpand}}" stepKey="clickArrowIfClosed" visible="true"/>
+        <conditionalClick selector="{{MediaGallerySection.WysiwygArrow}}" dependentSelector="{{MediaGallerySection.checkIfWysiwygArrowExpand}}" stepKey="clickWysiwygArrowIfClosed" visible="true"/>
+        <waitForText userInput="{{ImageFolder.name}}" stepKey="waitForNewFolder" />
+        <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading5" />
+    </actionGroup>
+    <actionGroup name="attachImage">
+        <arguments>
+            <argument name="Image"/>
+        </arguments>
+        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{Image.value}}" stepKey="uploadImage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForElementVisible  selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="waitForUploadImage"/>
+    </actionGroup>
+    <actionGroup name="deleteImage">
+        <see selector="{{MediaGallerySection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn"/>
+        <click selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected" />
+        <waitForText userInput="OK" stepKey="waitForConfirm" />
+        <click selector="{{MediaGallerySection.confirmDelete}}" stepKey="confirmDelete" />
+        <waitForElementNotVisible selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="waitForImageDeleted" />
+        <dontSeeElement selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="dontSeeImage" />
+    </actionGroup>
+    <actionGroup name="saveImage">
+        <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickInsertBtn"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+    </actionGroup>
+    <actionGroup name="fillOutUploadImagePopup">
+        <waitForElementVisible selector="{{MediaGallerySection.OkBtn}}" stepKey="waitForOkBtn" />
+        <fillField selector="{{MediaGallerySection.ImageDescription}}" userInput="{{ImageUpload.content}}" stepKey="fillImageDescription" />
+        <fillField selector="{{MediaGallerySection.Height}}" userInput="{{ImageUpload.height}}" stepKey="fillImageHeight" />
+        <click selector="{{MediaGallerySection.OkBtn}}" stepKey="clickOkBtn" />
+        <waitForPageLoad stepKey="wait3"/>
+    </actionGroup>
+    <actionGroup name="verifyOversizeValidationMsg">
+        <see userInput="this is oversize" stepKey="seeValidationMsg"/>
+        <click selector="#OK" stepKey="clickOKBtn"/>
+    </actionGroup>
+    <actionGroup name="verifyWrongExtensionValidationMsg">
+        <see userInput="this is wrong extension" stepKey="seeValidationMsg"/>
+        <click selector="#OK" stepKey="clickOKBtn"/>
+    </actionGroup>
+</actionGroups>

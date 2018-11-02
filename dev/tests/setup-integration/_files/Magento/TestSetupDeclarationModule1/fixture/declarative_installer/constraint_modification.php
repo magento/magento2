@@ -7,7 +7,7 @@ return [
     'auto_increment_test' => 'CREATE TABLE `auto_increment_test` (
   `int_auto_increment_with_nullable` int(12) unsigned NOT NULL AUTO_INCREMENT,
   `int_disabled_auto_increment` smallint(12) unsigned DEFAULT \'0\',
-  UNIQUE KEY `unique_null_key` (`int_auto_increment_with_nullable`)
+  UNIQUE KEY `AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE` (`int_auto_increment_with_nullable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8',
     'reference_table' => 'CREATE TABLE `reference_table` (
   `tinyint_ref` tinyint(7) NOT NULL AUTO_INCREMENT,
@@ -23,7 +23,7 @@ return [
   `bigint_not_default_not_nullable` bigint(2) unsigned NOT NULL,
   `smallint_ref` smallint(254) NOT NULL DEFAULT \'0\',
   PRIMARY KEY (`tinyint_ref`,`smallint_ref`),
-  UNIQUE KEY `smallint_unique` (`smallint_ref`)
+  UNIQUE KEY `REFERENCE_TABLE_SMALLINT_REF` (`smallint_ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8',
     'test_table' => 'CREATE TABLE `test_table` (
   `smallint` smallint(3) DEFAULT NULL,
@@ -43,16 +43,16 @@ return [
   `boolean` tinyint(1) DEFAULT NULL,
   `integer_main` int(12) unsigned DEFAULT NULL,
   `smallint_main` smallint(254) NOT NULL DEFAULT \'0\',
-  UNIQUE KEY `some_unique_key` (`smallint`,`float`),
-  UNIQUE KEY `some_unique_key_2` (`double`),
-  KEY `some_foreign_key_new` (`smallint_main`),
-  KEY `some_foreign_key_without_action` (`integer_main`),
-  KEY `speedup_index_renamed` (`tinyint`,`bigint`),
-  CONSTRAINT `some_foreign_key` FOREIGN KEY (`tinyint`) REFERENCES `reference_table` (`tinyint_ref`) 
-ON DELETE SET NULL,
-  CONSTRAINT `some_foreign_key_new` FOREIGN KEY (`smallint_main`) REFERENCES `reference_table` (`smallint_ref`) 
-ON DELETE CASCADE,
-  CONSTRAINT `some_foreign_key_without_action` FOREIGN KEY (`integer_main`) REFERENCES `auto_increment_test` 
-(`int_auto_increment_with_nullable`) ON DELETE CASCADE
+  UNIQUE KEY `TEST_TABLE_SMALLINT_FLOAT` (`smallint`,`float`),
+  UNIQUE KEY `TEST_TABLE_DOUBLE` (`double`),
+  KEY `TEST_TABLE_TINYINT_BIGINT` (`tinyint`,`bigint`),
+  KEY `TEST_TABLE_SMALLINT_MAIN_REFERENCE_TABLE_SMALLINT_REF` (`smallint_main`),
+  KEY `FK_FB77604C299EB8612D01E4AF8D9931F2` (`integer_main`),
+  CONSTRAINT `FK_FB77604C299EB8612D01E4AF8D9931F2` FOREIGN KEY (`integer_main`) 
+REFERENCES `auto_increment_test` (`int_auto_increment_with_nullable`) ON DELETE CASCADE,
+  CONSTRAINT `TEST_TABLE_SMALLINT_MAIN_REFERENCE_TABLE_SMALLINT_REF` FOREIGN KEY (`smallint_main`) 
+REFERENCES `reference_table` (`smallint_ref`) ON DELETE CASCADE,
+  CONSTRAINT `TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF` FOREIGN KEY (`tinyint`) 
+REFERENCES `reference_table` (`tinyint_ref`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8',
 ];

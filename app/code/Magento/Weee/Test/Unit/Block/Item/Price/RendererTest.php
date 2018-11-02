@@ -122,6 +122,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $this->renderer->displayPriceWithWeeeDetails());
     }
 
+    /**
+     * @return array
+     */
     public function displayPriceWithWeeeDetailsDataProvider()
     {
         $data = [
@@ -472,6 +475,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $this->renderer->getBaseRowDisplayPriceInclTax());
     }
 
+    /**
+     * @return array
+     */
     public function getDisplayPriceDataProvider()
     {
         $data = [
@@ -739,6 +745,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $this->renderer->getBaseFinalRowDisplayPriceInclTax());
     }
 
+    /**
+     * @return array
+     */
     public function getFinalDisplayPriceDataProvider()
     {
         $data = [

@@ -37,6 +37,7 @@
     <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\TranslatedLists" />
     <preference for="Magento\Framework\Locale\AvailableLocalesInterface" type="Magento\Framework\Locale\Deployed\Codes" />
     <preference for="Magento\Framework\Locale\OptionInterface" type="Magento\Framework\Locale\Deployed\Options" />
+    <preference for="Magento\Framework\Lock\LockManagerInterface" type="Magento\Framework\Lock\Backend\Database" />
     <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver" />
     <preference for="Magento\Framework\Api\Search\SearchResultInterface" type="Magento\Framework\Api\Search\SearchResult" />
     <preference for="Magento\Framework\Api\Search\SearchCriteriaInterface" type="Magento\Framework\Api\Search\SearchCriteria"/>
@@ -87,6 +88,7 @@
     <preference for="Magento\Framework\View\Design\Theme\CustomizationInterface" type="Magento\Framework\View\Design\Theme\Customization" />
     <preference for="Magento\Framework\View\Asset\ConfigInterface" type="Magento\Framework\View\Asset\Config" />
     <preference for="Magento\Framework\Image\Adapter\ConfigInterface" type="Magento\Framework\Image\Adapter\Config" />
+    <preference for="Magento\Framework\Image\Adapter\UploadConfigInterface" type="Magento\Framework\Image\Adapter\Config" />
     <preference for="Magento\Framework\View\Design\Theme\Image\PathInterface" type="Magento\Theme\Model\Theme\Image\Path" />
     <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Framework\Session\Config" />
     <preference for="Magento\Framework\Session\SidResolverInterface" type="Magento\Framework\Session\SidResolver\Proxy" />
@@ -204,6 +206,7 @@
     <preference for="Magento\Framework\MessageQueue\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\Bulk\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory" />
+    <preference for="Magento\Framework\Search\Request\IndexScopeResolverInterface" type="Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver"/>
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -249,7 +252,13 @@
             <argument name="handlers"  xsi:type="array">
                 <item name="system" xsi:type="object">Magento\Framework\Logger\Handler\System</item>
                 <item name="debug" xsi:type="object">Magento\Framework\Logger\Handler\Debug</item>
+                <item name="syslog" xsi:type="object">Magento\Framework\Logger\Handler\Syslog</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Logger\Handler\Syslog">
+        <arguments>
+            <argument name="ident" xsi:type="string">Magento</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Model\Context">
@@ -271,6 +280,11 @@
     <type name="Magento\Framework\App\Request\Http">
         <arguments>
             <argument name="pathInfoProcessor" xsi:type="object">Magento\Backend\App\Request\PathInfoProcessor\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Response\Http">
+        <arguments>
+            <argument name="sessionConfig" xsi:type="object">Magento\Framework\Session\Config\ConfigInterface\Proxy</argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\Session\SaveHandlerInterface" type="Magento\Framework\Session\SaveHandler" />
@@ -1470,6 +1484,27 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Framework\Setup\Declaration\Schema\Config\SchemaLocator" type="Magento\Framework\Config\SchemaLocator">
+        <arguments>
+            <argument name="realPath" xsi:type="string">urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\Setup\Declaration\Schema\FileSystem\XmlReader" type="Magento\Framework\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolverByModule</argument>
+            <argument name="converter" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Config\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">db_schema.xml</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/schema/table" xsi:type="string">name</item>
+                <item name="/schema/table/column" xsi:type="string">name</item>
+                <item name="/schema/table/constraint" xsi:type="string">referenceId</item>
+                <item name="/schema/table/index" xsi:type="string">referenceId</item>
+                <item name="/schema/table/index/column" xsi:type="string">name</item>
+                <item name="/schema/table/constraint/column" xsi:type="string">name</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Framework\Setup\Declaration\Schema\OperationsExecutor">
         <arguments>
             <argument name="operations" xsi:type="array">
@@ -1677,6 +1712,34 @@
     <type name="Magento\Framework\Session\Config">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
+        </arguments>
+    </type>
+    <virtualType name="CsrfRequestValidator" type="Magento\Framework\App\Request\CsrfValidator" />
+    <virtualType name="RequestValidator" type="Magento\Framework\App\Request\CompositeValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="csrf_validator" xsi:type="object">CsrfRequestValidator</item>
+                <item name="http_method_validator" xsi:type="object">
+                    Magento\Framework\App\Request\HttpMethodValidator
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <preference for="Magento\Framework\App\Request\ValidatorInterface" type="RequestValidator" />
+    <type name="Magento\Framework\App\Request\HttpMethodMap">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="OPTIONS" xsi:type="string">\Magento\Framework\App\Action\HttpOptionsActionInterface</item>
+                <item name="GET" xsi:type="string">\Magento\Framework\App\Action\HttpGetActionInterface</item>
+                <item name="HEAD" xsi:type="string">\Magento\Framework\App\Action\HttpHeadActionInterface</item>
+                <item name="POST" xsi:type="string">\Magento\Framework\App\Action\HttpPostActionInterface</item>
+                <item name="PUT" xsi:type="string">\Magento\Framework\App\Action\HttpPutActionInterface</item>
+                <item name="PATCH" xsi:type="string">\Magento\Framework\App\Action\HttpPatchActionInterface</item>
+                <item name="DELETE" xsi:type="string">\Magento\Framework\App\Action\HttpDeleteActionInterface</item>
+                <item name="CONNECT" xsi:type="string">\Magento\Framework\App\Action\HttpConnectActionInterface</item>
+                <item name="PROPFIND" xsi:type="string">\Magento\Framework\App\Action\HttpPropfindActionInterface</item>
+                <item name="TRACE" xsi:type="string">\Magento\Framework\App\Action\HttpTraceActionInterface</item>
+            </argument>
         </arguments>
     </type>
 </config>
