@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
@@ -17,7 +19,7 @@ use Magento\Framework\Data\OptionSourceInterface;
  */
 class StockStatus extends AbstractSource implements SourceInterface, OptionSourceInterface
 {
-    /**#@+
+    /**
      * Product stock status values
      */
     const IN_STOCK = 1;
@@ -29,7 +31,7 @@ class StockStatus extends AbstractSource implements SourceInterface, OptionSourc
      *
      * @return string[]
      */
-    public static function getOptionArray()
+    public static function getOptionArray() : array
     {
         return [self::IN_STOCK=> __('In Stock'), self::OUT_OF_STOCK => __('Out of Stock')];
     }
@@ -39,7 +41,7 @@ class StockStatus extends AbstractSource implements SourceInterface, OptionSourc
      *
      * @return string[]
      */
-    public function getAllOptions()
+    public function getAllOptions() : array
     {
         $result = [];
 
@@ -53,10 +55,10 @@ class StockStatus extends AbstractSource implements SourceInterface, OptionSourc
     /**
      * Retrieve option text by option value
      *
-     * @param string $optionId
+     * @param int $optionId
      * @return string
      */
-    public function getOptionText($optionId)
+    public function getOptionText(int $optionId) : string
     {
         $options = self::getOptionArray();
 
