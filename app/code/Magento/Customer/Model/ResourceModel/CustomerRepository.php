@@ -355,7 +355,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             ->joinAttribute('billing_telephone', 'customer_address/telephone', 'default_billing', null, 'left')
             ->joinAttribute('billing_region', 'customer_address/region', 'default_billing', null, 'left')
             ->joinAttribute('billing_country_id', 'customer_address/country_id', 'default_billing', null, 'left')
-            ->joinAttribute('company', 'customer_address/company', 'default_billing', null, 'left');
+            ->joinAttribute('billing_company', 'customer_address/company', 'default_billing', null, 'left');
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
