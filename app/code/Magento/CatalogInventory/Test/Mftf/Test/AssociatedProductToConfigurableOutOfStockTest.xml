@@ -11,8 +11,8 @@
     <test name="AssociatedProductToConfigurableOutOfStockTest">
         <annotations>
             <features value="CatalogInventory"/>
-            <stories value="Add/remove images and videos for all product types and category"/>
-            <title value="Out of stock associated products to configurable are not full page cache cleaned "/>
+            <stories value="MAGETWO-73528: Out of stock associated products to configurable are not full page cache cleaned"/>
+            <title value="Checking out of stock associated products to configurable after checkout - full page cache cleaned"/>
             <description value="After last configurable product was ordered it becomes out of stock"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-96031"/>
@@ -67,7 +67,7 @@
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectShippingMehod"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
-        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeorder">
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
