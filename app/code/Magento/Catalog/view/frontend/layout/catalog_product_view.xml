@@ -136,7 +136,7 @@
                     </arguments>
                 </block>
             </container>
-            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.details" template="Magento_Catalog::product/view/details.phtml" after="product.info.media">
+            <block class="Magento\Catalog\Block\Product\View\Details" name="product.info.details" template="Magento_Catalog::product/view/details.phtml" after="product.info.media">
                 <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description" as="description" template="Magento_Catalog::product/view/attribute.phtml" group="detailed_info">
                     <arguments>
                         <argument name="at_call" xsi:type="string">getDescription</argument>
@@ -144,11 +144,13 @@
                         <argument name="css_class" xsi:type="string">description</argument>
                         <argument name="at_label" xsi:type="string">none</argument>
                         <argument name="title" translate="true" xsi:type="string">Details</argument>
+                        <argument name="sort_order" xsi:type="string">10</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Catalog\Block\Product\View\Attributes" name="product.attributes" as="additional" template="Magento_Catalog::product/view/attributes.phtml" group="detailed_info">
                     <arguments>
                         <argument translate="true" name="title" xsi:type="string">More Information</argument>
+                        <argument name="sort_order" xsi:type="string">20</argument>
                     </arguments>
                 </block>
             </block>
