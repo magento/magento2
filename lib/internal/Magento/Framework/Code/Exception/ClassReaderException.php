@@ -1,11 +1,10 @@
 <?php
 /**
- * Pavel Usachev <webcodekeeper@hotmail.com>
- * @copyright Copyright (c) 2018, Pavel Usachev
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Code\Exception;
-
 
 class ClassReaderException extends \ReflectionException
 {
