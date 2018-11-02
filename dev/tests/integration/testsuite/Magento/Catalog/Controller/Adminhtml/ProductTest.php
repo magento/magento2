@@ -252,7 +252,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     {
         $postData['product'] = $this->getProductData($tierPrice);
         $this->getRequest()->setPostValue($postData);
-        $this->dispatch('backend/catalog/product/save/id/');
+        $this->dispatch('backend/catalog/product/save/id/' . $postData['id']);
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
             MessageInterface::TYPE_SUCCESS
