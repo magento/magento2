@@ -12,9 +12,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
-use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
+use Magento\InventoryShippingAdminUi\Model\GetInventoryRequestBuilder;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
@@ -28,21 +26,6 @@ class ProcessAlgorithm extends Action
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_InventoryApi::source';
-
-    /**
-     * @var StockByWebsiteIdResolverInterface
-     */
-    private $stockByWebsiteIdResolver;
-
-    /**
-     * @var ItemRequestInterfaceFactory
-     */
-    private $itemRequestFactory;
-
-    /**
-     * @var InventoryRequestInterfaceFactory
-     */
-    private $inventoryRequestFactory;
 
     /**
      * @var SourceSelectionServiceInterface
@@ -60,39 +43,39 @@ class ProcessAlgorithm extends Action
     private $sourceRepository;
 
     /**
+     * @var GetInventoryRequestBuilder
+     */
+    private $getInventoryRequestBuilder;
+
+    /**
      * @var array
      */
     private $sources = [];
 
     /**
      * @param Context $context
-     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
-     * @param ItemRequestInterfaceFactory $itemRequestFactory
-     * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceRepositoryInterface $sourceRepository
+     * @param GetInventoryRequestBuilder $getInventoryRequestBuilder
      */
     public function __construct(
         Context $context,
-        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
-        ItemRequestInterfaceFactory $itemRequestFactory,
-        InventoryRequestInterfaceFactory $inventoryRequestFactory,
         SourceSelectionServiceInterface $sourceSelectionService,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
-        SourceRepositoryInterface $sourceRepository
+        SourceRepositoryInterface $sourceRepository,
+        GetInventoryRequestBuilder $getInventoryRequestBuilder
     ) {
         parent::__construct($context);
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
-        $this->itemRequestFactory = $itemRequestFactory;
-        $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
         $this->sourceRepository = $sourceRepository;
+        $this->getInventoryRequestBuilder = $getInventoryRequestBuilder;
     }
 
     /**
      * @inheritdoc
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(): ResultInterface
     {
@@ -106,21 +89,8 @@ class ProcessAlgorithm extends Action
             $defaultCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
             $algorithmCode = !empty($postRequest['algorithmCode']) ? $postRequest['algorithmCode'] : $defaultCode;
 
-            //TODO: maybe need to add exception when websiteId empty
-            $websiteId = $postRequest['websiteId'] ?? 1;
-            $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
-
-            $result = $requestItems = [];
-            foreach ($requestData as $data) {
-                $requestItems[] = $this->itemRequestFactory->create([
-                    'sku' => $data['sku'],
-                    'qty' => $data['qty']
-                ]);
-            }
-            $inventoryRequest = $this->inventoryRequestFactory->create([
-                'stockId' => $stockId,
-                'items'   => $requestItems
-            ]);
+            $inventoryRequestBuilder = $this->getInventoryRequestBuilder->execute($algorithmCode);
+            $inventoryRequest = $inventoryRequestBuilder->execute($request);
 
             $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest, $algorithmCode);
 
