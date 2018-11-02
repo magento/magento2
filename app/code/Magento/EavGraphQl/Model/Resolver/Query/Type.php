@@ -71,12 +71,7 @@ class Type
             try {
                 $type = $this->typeProcessor->translateTypeName($type);
             } catch (\InvalidArgumentException $exception) {
-                throw new GraphQlInputException(
-                    __('Type %1 has no internal representation declared.', [$type]),
-                    null,
-                    0,
-                    false
-                );
+                throw new \LogicException('Cannot resolve EAV type');
             }
         } else {
             $type = $type === 'double' ? 'float' : $type;

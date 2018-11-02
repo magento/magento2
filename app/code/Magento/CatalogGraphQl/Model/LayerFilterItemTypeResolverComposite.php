@@ -43,9 +43,7 @@ class LayerFilterItemTypeResolverComposite implements TypeResolverInterface
             }
         }
         if (empty($resolvedType)) {
-            throw new GraphQlInputException(
-                __('Concrete type for %1 not implemented', ['ProductLinksInterface'])
-            );
+            throw new \LogicException('Cannot resolve layered filter type');
         }
     }
 }
