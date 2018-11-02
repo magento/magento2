@@ -12,18 +12,14 @@ define([
     return Component.extend({
         /** @inheritdoc */
         initialize: function () {
-            var isShowAddToCart = false,
-                item;
+            var isShowAddToCart;
 
             this._super();
             this.lastOrderedItems = customerData.get('last-ordered-items');
 
-            for (item in this.lastOrderedItems.items) {
-                if (item['is_saleable']) {
-                    isShowAddToCart = true;
-                    break;
-                }
-            }
+            isShowAddToCart = _.some(this.lastOrderedItems().items, {
+                'is_saleable': true
+            });
 
             this.lastOrderedItems.isShowAddToCart = isShowAddToCart;
         }
