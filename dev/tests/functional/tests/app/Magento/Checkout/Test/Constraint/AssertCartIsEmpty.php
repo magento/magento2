@@ -6,7 +6,6 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
-use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -42,10 +41,12 @@ class AssertCartIsEmpty extends AbstractConstraint
         );
 
         $cartEmptyBlock->clickLinkToMainPage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        $this->assertUrlEqual(
             $_ENV['app_frontend_url'],
             $browser->getUrl(),
-            'Wrong link to main page on empty cart page.'
+            true,
+            'Wrong link to main page on empty cart page: expected - ' . $_ENV['app_frontend_url']
+            . ', actural - ' . $browser->getUrl()
         );
     }
 
@@ -57,5 +58,28 @@ class AssertCartIsEmpty extends AbstractConstraint
     public function toString()
     {
         return 'Shopping Cart is empty.';
+    }
+
+    /**
+     * Asserts that two urls are equal
+     *
+     * @param string $url1
+     * @param string $url2
+     * @param bool $ignoreScheme
+     * @param string $message
+     * @return void
+     */
+    private function assertUrlEqual($expectedUrl, $actualUrl, $ignoreScheme = false, $message = '')
+    {
+        $urlArray1 = parse_url($expectedUrl);
+        $urlArray2 = parse_url($actualUrl);
+        if ($ignoreScheme) {
+            unset($urlArray1['scheme']);
+            unset($urlArray2['scheme']);
+        }
+        \PHPUnit\Framework\Assert::assertTrue(
+            $urlArray1 === $urlArray2,
+            $message
+        );
     }
 }
