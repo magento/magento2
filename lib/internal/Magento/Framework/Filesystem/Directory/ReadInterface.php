@@ -7,7 +7,7 @@ namespace Magento\Framework\Filesystem\Directory;
 
 /**
  * Interface \Magento\Framework\Filesystem\Directory\ReadInterface
- *
+ * @api
  */
 interface ReadInterface
 {
