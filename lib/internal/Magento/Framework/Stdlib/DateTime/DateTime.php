@@ -141,6 +141,9 @@ class DateTime
                 $result = $input->getTimestamp();
                 break;
             default:
+				if (strpos($input, '/') !== false) {
+                    $input = str_replace('/', '-', $input);
+                }
                 $result = strtotime($input);
         }
 
