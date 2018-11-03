@@ -16,7 +16,7 @@ define([
 
         /**
          *
-         * @param record
+         * @param {Array} record
          * @returns {Array}
          */
         getTooltipData: function (record) {
@@ -24,7 +24,7 @@ define([
                 return {
                     sourceCode: source.sourceCode,
                     name: source.name
-                }
+                };
             });
         },
 
@@ -33,7 +33,7 @@ define([
          * @returns {Array} Result array
          */
         getSourcesAssignedToStockOrderedByPriority: function (record) {
-            return this.getTooltipData(record).slice(0, this.itemsToDisplay)
+            return this.getTooltipData(record).slice(0, this.itemsToDisplay);
         }
     });
 });
