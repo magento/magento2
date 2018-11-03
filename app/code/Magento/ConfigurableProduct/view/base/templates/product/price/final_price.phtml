@@ -41,7 +41,8 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
             'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
             'price_type'        => 'oldPrice',
             'include_container' => true,
-            'skip_adjustments'  => true
+            'skip_adjustments'  => true,
+            'is_product_list'   => $block->isProductList()
         ]); ?>
     </span>
 <?php endif; ?>
