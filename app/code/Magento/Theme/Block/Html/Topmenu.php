@@ -5,11 +5,13 @@
  */
 namespace Magento\Theme\Block\Html;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\Data\Tree\NodeFactory;
 use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Theme\Model\Menu\TopMenuAdapter;
 
 /**
  * Html page top menu block
@@ -44,20 +46,28 @@ class Topmenu extends Template implements IdentityInterface
     private $treeFactory;
 
     /**
+     * @var TopMenuAdapter
+     */
+    private $menuAdapter;
+
+    /**
      * @param Template\Context $context
      * @param NodeFactory $nodeFactory
      * @param TreeFactory $treeFactory
      * @param array $data
+     * @param TopMenuAdapter $menuAdapter
      */
     public function __construct(
         Template\Context $context,
         NodeFactory $nodeFactory,
         TreeFactory $treeFactory,
-        array $data = []
+        array $data = [],
+        TopMenuAdapter $menuAdapter = null
     ) {
         parent::__construct($context, $data);
         $this->nodeFactory = $nodeFactory;
         $this->treeFactory = $treeFactory;
+        $this->menuAdapter = $menuAdapter ?: ObjectManager::getInstance()->get(TopMenuAdapter::class);
     }
 
     /**
@@ -81,6 +91,8 @@ class Topmenu extends Template implements IdentityInterface
      */
     public function getHtml($outermostClass = '', $childrenWrapClass = '', $limit = 0)
     {
+        $this->menuAdapter->exportToMenuTreeNode($this->getMenu());
+
         $this->_eventManager->dispatch(
             'page_block_html_topmenu_gethtml_before',
             ['menu' => $this->getMenu(), 'block' => $this, 'request' => $this->getRequest()]
@@ -397,13 +409,14 @@ class Topmenu extends Template implements IdentityInterface
     public function getMenu()
     {
         if (!$this->_menu) {
-            $this->_menu = $this->nodeFactory->create(
+            $menu = $this->nodeFactory->create(
                 [
                     'data' => [],
                     'idField' => 'root',
                     'tree' => $this->treeFactory->create()
                 ]
             );
+            $this->_menu = $menu;
         }
         return $this->_menu;
     }

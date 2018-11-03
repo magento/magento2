@@ -18,6 +18,30 @@
     <preference for="Magento\Theme\Api\DesignConfigRepositoryInterface" type="Magento\Theme\Model\DesignConfigRepository"/>
     <preference for="Magento\Framework\View\Model\PageLayout\Config\BuilderInterface" type="Magento\Theme\Model\PageLayout\Config\Builder"/>
     <preference for="Magento\Theme\Model\Design\Config\MetadataProviderInterface" type="Magento\Theme\Model\Design\Config\MetadataProvider"/>
+    <preference for="Magento\Theme\Api\Data\MenuNodeInterface" type="Magento\Theme\Model\Menu\MenuNode"/>
+    <preference for="Magento\Theme\Api\GetMenuInterface" type="Magento\Theme\Model\Menu\GetCompoundMenu"/>
+    <preference for="Magento\Theme\Model\Menu\TopMenuNodeDataBuilderInterface" type="Magento\Theme\Model\Menu\StandardTopMenuNodeDataBuilder"/>
+    <virtualType name="Magento\Theme\Model\Menu\MenuNode\Contact" type="Magento\Theme\Model\Menu\MenuNode">
+        <arguments>
+            <argument name="id" xsi:type="string">top-menu-additional-link</argument>
+            <argument name="name" xsi:type="string">Additional Link</argument>
+            <argument name="url" xsi:type="string">/top-menu-additional-link</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Theme\Model\Menu\GetAdditionalMenu" type="Magento\Theme\Model\Menu\GetPredefinedMenu">
+        <arguments>
+            <argument name="menuNodes" xsi:type="array">
+                <item name="contact" xsi:type="object">Magento\Theme\Model\Menu\MenuNode\Contact</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Theme\Model\Menu\GetCompoundMenu">
+        <arguments>
+            <argument name="menuProviders" xsi:type="array">
+                <item name="additional" xsi:type="object">Magento\Theme\Model\Menu\GetAdditionalMenu</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Theme\Model\Config">
         <arguments>
             <argument name="configCache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
