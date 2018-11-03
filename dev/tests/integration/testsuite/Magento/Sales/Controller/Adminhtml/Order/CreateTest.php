@@ -6,12 +6,26 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Backend\Model\Session\Quote;
+use Magento\Backend\Model\Session\Quote as SessionQuote;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Quote\Model\Quote;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -57,6 +71,66 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     }
 
     /**
+     * Tests that shipping method 'Table rates' shows rates according to selected website.
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Quote/Fixtures/quote_sec_website.php
+     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_second_website.php
+     * @magentoDbIsolation disabled
+     */
+    public function testLoadBlockShippingMethod()
+    {
+        $store = $this->getStore('fixture_second_store');
+
+        /** @var MutableScopeConfigInterface $mutableScopeConfig */
+        $mutableScopeConfig = $this->_objectManager->get(MutableScopeConfigInterface::class);
+        $mutableScopeConfig->setValue(
+            'carriers/tablerate/active',
+            1,
+            ScopeInterface::SCOPE_STORE,
+            $store->getCode()
+        );
+        $mutableScopeConfig->setValue(
+            'carriers/tablerate/condition_name',
+            'package_qty',
+            ScopeInterface::SCOPE_STORE,
+            $store->getCode()
+        );
+        $website = $this->getWebsite('test');
+        $customer = $this->getCustomer('customer.web@example.com', (int)$website->getId());
+        $quote = $this->getQuoteById('0000032134');
+        $session = $this->_objectManager->get(SessionQuote::class);
+        $session->setQuoteId($quote->getId());
+
+        $data = [
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'street' => ['Soborna 23'],
+            'city' => 'Testcity',
+            'country_id' => 'US',
+            'region' => 'Alabama',
+            'region_id' => 1
+        ];
+        $this->getRequest()->setPostValue(
+            [
+                'order' => ['billing_address' => $data],
+                'reset_shipping' => 1,
+                'collect_shipping_rates' => 1,
+                'customer_id' => $customer->getId(),
+                'store_id' => $store->getId(),
+                'json' => true
+            ]
+        );
+        $this->dispatch('backend/sales/order_create/loadBlock/block/shipping_method');
+        $body = $this->getResponse()->getBody();
+        $expectedTableRatePrice = '<span class=\"price\">$20.00<\/span>';
+
+        $this->assertContains($expectedTableRatePrice, $body, '');
+    }
+
+    /**
+     * Tests LoadBlock actions.
+     *
      * @dataProvider loadBlockActionsDataProvider
      */
     public function testLoadBlockActions($block, $expected)
@@ -80,6 +154,8 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     }
 
     /**
+     * Tests action items.
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testLoadBlockActionItems()
@@ -153,6 +229,8 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     }
 
     /**
+     * Tests ACL.
+     *
      * @param string $actionName
      * @param boolean $reordered
      * @param string $expectedResult
@@ -162,7 +240,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      */
     public function testGetAclResource($actionName, $reordered, $expectedResult)
     {
-        $this->_objectManager->get(Quote::class)->setReordered($reordered);
+        $this->_objectManager->get(SessionQuote::class)->setReordered($reordered);
         $orderController = $this->_objectManager->get(
             \Magento\Sales\Controller\Adminhtml\Order\Stub\OrderCreateStub::class
         );
@@ -251,7 +329,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
         $quote = $quoteRepository->getActiveForCustomer($customer->getId());
 
-        $session = $this->_objectManager->get(Quote::class);
+        $session = $this->_objectManager->get(SessionQuote::class);
         $session->setQuoteId($quote->getId());
 
         $data = [
@@ -285,5 +363,70 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $shippingAddress = $updatedQuote->getShippingAddress();
         self::assertEquals($data['city'], $shippingAddress->getCity());
         self::assertEquals($data['street'], $shippingAddress->getStreet());
+    }
+
+    /**
+     * Gets quote entity by reserved order id.
+     *
+     * @param string $reservedOrderId
+     * @return Quote
+     */
+    private function getQuoteById(string $reservedOrderId): Quote
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->_objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)
+            ->create();
+
+        /** @var CartRepositoryInterface $repository */
+        $repository = $this->_objectManager->get(CartRepositoryInterface::class);
+        $items = $repository->getList($searchCriteria)
+            ->getItems();
+
+        return array_pop($items);
+    }
+
+    /**
+     * Gets website entity.
+     *
+     * @param string $code
+     * @return WebsiteInterface
+     * @throws NoSuchEntityException
+     */
+    private function getWebsite(string $code): WebsiteInterface
+    {
+        /** @var WebsiteRepositoryInterface $repository */
+        $repository = $this->_objectManager->get(WebsiteRepositoryInterface::class);
+        return $repository->get($code);
+    }
+
+    /**
+     * Gets customer entity.
+     *
+     * @param string $email
+     * @param int $websiteId
+     * @return CustomerInterface
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getCustomer(string $email, int $websiteId): CustomerInterface
+    {
+        /** @var CustomerRepositoryInterface $repository */
+        $repository = $this->_objectManager->get(CustomerRepositoryInterface::class);
+        return $repository->get($email, $websiteId);
+    }
+
+    /**
+     * Gets store by code.
+     *
+     * @param string $code
+     * @return StoreInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getStore(string $code): StoreInterface
+    {
+        /** @var StoreRepositoryInterface $repository */
+        $repository = $this->_objectManager->get(StoreRepositoryInterface::class);
+        return $repository->get($code);
     }
 }
