@@ -409,8 +409,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     private function getBodyItems(array $line, array $sectionColumns, array $rowMap)
     {
         $bodyItem = [];
-        $lineCount = count($line);
-        for ($i = 1, $count = $lineCount; $i < $count; $i++) {
+        for ($i = 1, $count = count($line); $i < $count; $i++) {
             if (isset($rowMap[$sectionColumns[$i]])) {
                 if (in_array($rowMap[$sectionColumns[$i]], $this->dateTimeColumns)) {
                     $line[$i] = $this->formatDateTimeColumns($line[$i]);

@@ -56,8 +56,7 @@ class Ftp
         $dir = explode("/", $path);
         $path = "";
         $ret = true;
-        $dirCount = count($dir);
-        for ($i = 0; $i < $dirCount; $i++) {
+        for ($i = 0, $count = count($dir); $i < $count; $i++) {
             $path .= "/" . $dir[$i];
             if (!@ftp_chdir($this->_conn, $path)) {
                 @ftp_chdir($this->_conn, "/");

@@ -96,15 +96,14 @@ class Archive
     {
         $archivers = $this->_getArchivers($destination);
         $interimSource = '';
-        $archiversCount = count($archivers);
-        for ($i = 0; $i < $archiversCount; $i++) {
-            if ($i == $archiversCount - 1) {
+        for ($i = 0, $count = count($archivers); $i < $count; $i++) {
+            if ($i == $count - 1) {
                 $packed = $destination;
             } else {
                 $packed = dirname($destination) . '/~tmp-' . microtime(true) . $archivers[$i] . '.' . $archivers[$i];
             }
             $source = $this->_getArchiver($archivers[$i])->pack($source, $packed, $skipRoot);
-            if ($interimSource && $i < $archiversCount) {
+            if ($interimSource && $i < $count) {
                 unlink($interimSource);
             }
             $interimSource = $source;

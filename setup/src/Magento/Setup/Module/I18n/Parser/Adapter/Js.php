@@ -22,8 +22,7 @@ class Js extends AbstractAdapter
             $fileRow = fgets($fileHandle, 4096);
             $results = [];
             preg_match_all('/mage\.__\(\s*([\'"])(.*?[^\\\])\1.*?[),]/', $fileRow, $results, PREG_SET_ORDER);
-            $resultsCount = count($results);
-            for ($i = 0; $i < $resultsCount; $i++) {
+            for ($i = 0, $count = count($results); $i < $count; $i++) {
                 if (isset($results[$i][2])) {
                     $quote = $results[$i][1];
                     $this->_addPhrase($quote . $results[$i][2] . $quote, $lineNumber);
@@ -31,8 +30,7 @@ class Js extends AbstractAdapter
             }
 
             preg_match_all('/\\$t\(\s*([\'"])(.*?[^\\\])\1.*?[),]/', $fileRow, $results, PREG_SET_ORDER);
-            $resultsCount = count($results);
-            for ($i = 0; $i < $resultsCount; $i++) {
+            for ($i = 0, $count = count($results); $i < $count; $i++) {
                 if (isset($results[$i][2])) {
                     $quote = $results[$i][1];
                     $this->_addPhrase($quote . $results[$i][2] . $quote, $lineNumber);
