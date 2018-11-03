@@ -28,7 +28,7 @@ define([
          * @returns {Array} Result array
          */
         getSourceItemsDataCut: function (record) {
-            return this.getSourceItemsData(record).slice(0, this.itemsToDisplay)
+            return this.getSourceItemsData(record).slice(0, this.itemsToDisplay);
         }
     });
 });
