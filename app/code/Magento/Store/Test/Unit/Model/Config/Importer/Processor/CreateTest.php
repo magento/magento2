@@ -292,9 +292,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
         $this->groupMock->expects($this->once())
-            ->method('setRootCategoryId')
-            ->with(0);
-        $this->groupMock->expects($this->once())
             ->method('getDefaultStoreId')
             ->willReturn($defaultStoreId);
         $this->groupMock->expects($this->once())
