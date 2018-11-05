@@ -77,6 +77,8 @@ class BackendValidator implements ValidatorInterface
     }
 
     /**
+     * Validate request
+     *
      * @param RequestInterface $request
      * @param ActionInterface $action
      *
@@ -115,6 +117,8 @@ class BackendValidator implements ValidatorInterface
     }
 
     /**
+     * Create exception
+     *
      * @param RequestInterface $request
      * @param ActionInterface $action
      *
@@ -166,7 +170,7 @@ class BackendValidator implements ValidatorInterface
         ActionInterface $action
     ): void {
         if ($action instanceof AbstractAction) {
-            //Abstract Action has build-in validation.
+            //Abstract Action has built-in validation.
             if (!$action->_processUrlKeys()) {
                 throw new InvalidRequestException($action->getResponse());
             }
