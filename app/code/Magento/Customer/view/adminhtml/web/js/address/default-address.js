@@ -10,8 +10,8 @@ define([
 
     return Button.extend({
         defaults: {
-            entity_id: null,
-            parent_id: null
+            entityId: null,
+            parentId: null
         },
 
         /**
@@ -21,8 +21,8 @@ define([
          */
         initialize: function () {
             this._super();
-            if (!this.parent_id) {
-                this.visible(this.entity_id);
+            if (!this.parentId) {
+                this.visible(this.entityId);
             }
 
             return this;
@@ -36,12 +36,12 @@ define([
          */
         applyAction: function (action) {
             if (action.params && action.params[0]) {
-                action.params[0].entity_id = this.entity_id;
-                action.params[0].parent_id = this.parent_id;
+                action.params[0].entityId = this.entityId;
+                action.params[0].parentId = this.parentId;
             } else {
                 action.params = [{
-                    entity_id: this.entity_id,
-                    parent_id: this.parent_id
+                    entityId: this.entityId,
+                    parentId: this.parentId
                 }];
             }
 
