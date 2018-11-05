@@ -105,11 +105,26 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
     /**
      * Extract address from request
      *
+     * @param null $customer
      * @return \Magento\Customer\Api\Data\AddressInterface
+     * @throws \Exception
      */
-    protected function _extractAddress()
+    protected function _extractAddress($customer = null)
     {
-        $existingAddressData = $this->getExistingAddressData();
+        $existingAddressData = [];
+        $addressId = $this->getRequest()->getParam('id');
+
+        if ($customer === null) {
+            $$customer = $this->customerRepository->getById($this->_getSession()->getCustomerId());
+        }
+
+        foreach ($customer->getAddresses() as $customerAddress) {
+            $existingAddressData = $customerAddress->getId() === $addressId ? $this->getCustomerAddressMapper()->toFlatArray($customerAddress) : [];
+        }
+
+        if (empty($existingAddressData) && $addressId) {
+            throw new \Exception();
+        }
 
         /** @var \Magento\Customer\Model\Metadata\Form $addressForm */
         $addressForm = $this->_formFactory->create(
@@ -133,25 +148,6 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
 
         return $addressDataObject;
-    }
-
-    /**
-     * Retrieve existing address data
-     *
-     * @return array
-     * @throws \Exception
-     */
-    protected function getExistingAddressData()
-    {
-        $existingAddressData = [];
-        if ($addressId = $this->getRequest()->getParam('id')) {
-            $existingAddress = $this->_addressRepository->getById($addressId);
-            if ($existingAddress->getCustomerId() !== $this->_getSession()->getCustomerId()) {
-                throw new \Exception();
-            }
-            $existingAddressData = $this->getCustomerAddressMapper()->toFlatArray($existingAddress);
-        }
-        return $existingAddressData;
     }
 
     /**
@@ -211,13 +207,11 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
 
             $customer = $this->customerRepository->getById($customerId);
 
-            $address = $this->_extractAddress();
-
             $addresses = array_filter($customer->getAddresses(), function ($customerAddress) use ($addressId) {
                 return $customerAddress->getId() !== $addressId;
             });
 
-            $addresses[] = $address;
+            $addresses[] = $this->_extractAddress($customer);
             $customer->setAddresses($addresses);
             $this->customerRepository->save($customer);
 
