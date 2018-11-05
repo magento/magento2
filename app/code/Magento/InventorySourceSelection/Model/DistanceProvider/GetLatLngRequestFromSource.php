@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceSelection\Model\DistanceProvider\Offline;
+namespace Magento\InventorySourceSelection\Model\DistanceProvider;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\Data\SourceInterface;

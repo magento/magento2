@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceSelection\Model;
+namespace Magento\InventorySourceSelection\Model\DistanceProvider;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\InventorySourceSelectionApi\Api\GetDistanceProviderCodeInterface;

@@ -43,10 +43,10 @@ class DistanceProvider implements ArrayInterface
      */
     public function toOptionArray()
     {
-        $distanceProviders = $this->distanceProviderPool->getList();
+        $distanceProviderCodes = array_keys($this->distanceProviderPool->getList());
 
         $res = [];
-        foreach ($distanceProviders as $distanceProviderCode => $distanceProvider) {
+        foreach ($distanceProviderCodes as $distanceProviderCode) {
             $res [] = [
                 'value' => $distanceProviderCode,
                 'label' => $this->distanceProviderDescriptions[$distanceProviderCode] ?? $distanceProviderCode

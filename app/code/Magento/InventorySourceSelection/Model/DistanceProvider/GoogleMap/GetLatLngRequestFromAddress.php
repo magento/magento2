@@ -11,16 +11,15 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\InventorySourceSelection\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
 use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
 use Magento\InventorySourceSelection\Model\Request\LatLngRequestFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
 
 /**
- * Get latitude and longitude from address
- *
- * TODO: Need to refactor with a virtual type to avoid code duplication with other providers
+ * @inheritdoc
  */
-class GetLatLngRequestFromAddress
+class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterface
 {
     const GOOGLE_ENDPOINT = 'https://maps.google.com/maps/api/geocode/json';
 
@@ -75,17 +74,13 @@ class GetLatLngRequestFromAddress
     }
 
     /**
-     * Get latitude and longitude from address
-     *
-     * @param AddressRequestInterface $addressRequest
-     * @return LatLngRequest
+     * @inheritdoc
      * @throws LocalizedException
      */
     public function execute(AddressRequestInterface $addressRequest): LatLngRequest
     {
         $cacheKey = $addressRequest->getAsString();
         if (!isset($this->latLngCache[$cacheKey])) {
-
             $queryString = http_build_query([
                 'key' => $this->getApiKey->execute(),
                 'address' => $addressRequest->getAsString(),

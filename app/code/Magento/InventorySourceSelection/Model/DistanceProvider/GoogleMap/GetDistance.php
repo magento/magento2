@@ -12,12 +12,13 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventorySourceSelection\Model\Config\Source\GoogleDistanceProvider\Value;
+use Magento\InventorySourceSelection\Model\DistanceProvider\GetDistanceInterface;
 use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
 
 /**
- * Get distance between two points identified by a latlng object
+ * @inheritdoc
  */
-class GetDistance
+class GetDistance implements GetDistanceInterface
 {
     const GOOGLE_ENDPOINT = 'https://maps.googleapis.com/maps/api/distancematrix/json';
     const XML_PATH_MODE = 'cataloginventory/source_selection_distance_based_google/mode';
@@ -66,11 +67,7 @@ class GetDistance
     }
 
     /**
-     * Get distance between two points
-     *
-     * @param LatLngRequest $source
-     * @param LatLngRequest $destination
-     * @return float
+     * @inheritdoc
      * @throws LocalizedException
      */
     public function execute(LatLngRequest $source, LatLngRequest $destination): float

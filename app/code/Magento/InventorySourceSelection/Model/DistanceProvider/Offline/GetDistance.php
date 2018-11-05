@@ -7,9 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelection\Model\DistanceProvider\Offline;
 
+use Magento\InventorySourceSelection\Model\DistanceProvider\GetDistanceInterface;
 use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
 
-class GetDistance
+/**
+ * @inheritdoc
+ */
+class GetDistance implements GetDistanceInterface
 {
     const EARTH_RADIUS = 6371000.0;
 

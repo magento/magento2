@@ -5,30 +5,34 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceSelection\Model\DistanceProvider\GoogleMap;
+namespace Magento\InventorySourceSelection\Model\DistanceProvider;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
 use Magento\InventorySourceSelection\Model\Request\LatLngRequestFactory;
+use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterfaceFactory;
+use Magento\InventorySourceSelectionApi\Model\DistanceProviderInterface;
 
 /**
- * Get latitude and longitude from source
- *
- * TODO: Need to refactor with a virtual type to avoid code duplication with other providers
+ * @inheritdoc
  */
-class GetLatLngRequestFromSource
+class DistanceProvider implements DistanceProviderInterface
 {
+    /**
+     * @var GetLatLngRequestFromAddressInterface
+     */
+    private $getLatLngRequestFromAddress;
+
+    /**
+     * @var GetDistanceInterface
+     */
+    private $getDistance;
+
     /**
      * @var LatLngRequestFactory
      */
     private $latLngRequestFactory;
-
-    /**
-     * @var GetLatLngRequestFromAddress
-     */
-    private $getLatLngRequestFromAddress;
 
     /**
      * @var AddressRequestInterfaceFactory
@@ -36,19 +40,24 @@ class GetLatLngRequestFromSource
     private $addressRequestInterfaceFactory;
 
     /**
-     * GetLatLngRequestFromAddress constructor.
+     * Offline constructor.
      *
-     * @param GetLatLngRequestFromAddress $getLatLngRequestFromAddress
      * @param LatLngRequestFactory $latLngRequestFactory
      * @param AddressRequestInterfaceFactory $addressRequestInterfaceFactory
+     * @param GetLatLngRequestFromAddressInterface $getLatLngRequestFromAddress
+     * @param GetDistanceInterface $getDistance
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        GetLatLngRequestFromAddress $getLatLngRequestFromAddress,
         LatLngRequestFactory $latLngRequestFactory,
-        AddressRequestInterfaceFactory $addressRequestInterfaceFactory
+        AddressRequestInterfaceFactory $addressRequestInterfaceFactory,
+        GetLatLngRequestFromAddressInterface $getLatLngRequestFromAddress,
+        GetDistanceInterface $getDistance
     ) {
-        $this->latLngRequestFactory = $latLngRequestFactory;
+
         $this->getLatLngRequestFromAddress = $getLatLngRequestFromAddress;
+        $this->getDistance = $getDistance;
+        $this->latLngRequestFactory = $latLngRequestFactory;
         $this->addressRequestInterfaceFactory = $addressRequestInterfaceFactory;
     }
 
@@ -57,9 +66,8 @@ class GetLatLngRequestFromSource
      *
      * @param SourceInterface $source
      * @return LatLngRequest
-     * @throws LocalizedException
      */
-    public function execute(SourceInterface $source): LatLngRequest
+    private function getSourceLatLng(SourceInterface $source): LatLngRequest
     {
         if (!$source->getLatitude() || !$source->getLongitude()) {
             $sourceAddress = $this->addressRequestInterfaceFactory->create([
@@ -71,11 +79,22 @@ class GetLatLngRequestFromSource
             ]);
 
             return $this->getLatLngRequestFromAddress->execute($sourceAddress);
-        } else {
-            return $this->latLngRequestFactory->create([
-                'lat' => (float)$source->getLatitude(),
-                'lng' => (float)$source->getLongitude()
-            ]);
         }
+
+        return $this->latLngRequestFactory->create([
+            'lat' => (float) $source->getLatitude(),
+            'lng' => (float) $source->getLongitude()
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function execute(SourceInterface $source, AddressRequestInterface $destination): float
+    {
+        $sourceLatLng = $this->getSourceLatLng($source);
+        $destinationLatLng = $this->getLatLngRequestFromAddress->execute($destination);
+
+        return $this->getDistance->execute($sourceLatLng, $destinationLatLng);
     }
 }
