@@ -1,6 +1,6 @@
 # InventoryBundleProduct module
 
-The `InventoryBundleProduct` module integrated inventory management business logic into Magento's bundle product logic.
+The `InventoryBundleProduct` module integrates inventory management business logic into Magento's bundle product logic.
 
 This module is part of the MSI (Multi-Source Inventory) project. The 
 [Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html
