@@ -109,6 +109,7 @@ class Categories implements ResolverInterface
                 if (in_array($item->getId(), $categoryIds)) {
                     // Try to extract all requested fields from the loaded collection data
                     $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item, true);
+                    $categories[$item->getId()]['model'] = $item;
                     $requestedFields = $that->attributesJoiner->getQueryFields($info->fieldNodes[0]);
                     $extractedFields = array_keys($categories[$item->getId()]);
                     $foundFields = array_intersect($requestedFields, $extractedFields);

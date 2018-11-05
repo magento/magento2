@@ -9,15 +9,15 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="customer_entity" resource="default" engine="innodb" comment="Customer Entity">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Website Id"/>
+                comment="Website ID"/>
         <column xsi:type="varchar" name="email" nullable="true" length="255" comment="Email"/>
         <column xsi:type="smallint" name="group_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Group Id"/>
+                default="0" comment="Group ID"/>
         <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment Id"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
@@ -77,10 +77,10 @@
     </table>
     <table name="customer_address_entity" resource="default" engine="innodb" comment="Customer Address Entity">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment Id"/>
         <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Parent Id"/>
+                comment="Parent ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
@@ -128,7 +128,7 @@
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute Id"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="datetime" name="value" on_update="false" nullable="true" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
@@ -159,7 +159,7 @@
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute Id"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="decimal" name="value" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -186,11 +186,11 @@
     </table>
     <table name="customer_address_entity_int" resource="default" engine="innodb" comment="Customer Address Entity Int">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="int" name="value" padding="11" unsigned="false" nullable="false" identity="false" default="0"
                 comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -218,11 +218,11 @@
     <table name="customer_address_entity_text" resource="default" engine="innodb"
            comment="Customer Address Entity Text">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="text" name="value" nullable="false" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
@@ -244,11 +244,11 @@
     <table name="customer_address_entity_varchar" resource="default" engine="innodb"
            comment="Customer Address Entity Varchar">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
@@ -274,11 +274,11 @@
     </table>
     <table name="customer_entity_datetime" resource="default" engine="innodb" comment="Customer Entity Datetime">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="datetime" name="value" on_update="false" nullable="true" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
@@ -304,11 +304,11 @@
     </table>
     <table name="customer_entity_decimal" resource="default" engine="innodb" comment="Customer Entity Decimal">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="decimal" name="value" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -335,11 +335,11 @@
     </table>
     <table name="customer_entity_int" resource="default" engine="innodb" comment="Customer Entity Int">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="int" name="value" padding="11" unsigned="false" nullable="false" identity="false" default="0"
                 comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -366,11 +366,11 @@
     </table>
     <table name="customer_entity_text" resource="default" engine="innodb" comment="Customer Entity Text">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="text" name="value" nullable="false" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
@@ -391,11 +391,11 @@
     </table>
     <table name="customer_entity_varchar" resource="default" engine="innodb" comment="Customer Entity Varchar">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>

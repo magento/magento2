@@ -248,8 +248,8 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     id: Int @doc(description: "The ID number assigned to the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
     name: String @doc(description: "The product name. Customers use this name to identify the product.")
     sku: String @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer")
-    description: String @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
-    short_description: String @doc(description: "A short description of the product. Its use depends on the theme.")
+    description: String @doc(description: "Detailed information about the product. The value can include simple HTML tags.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductHtmlAttribute")
+    short_description: String @doc(description: "A short description of the product. Its use depends on the theme.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductHtmlAttribute")
     special_price: Float @doc(description: "The discounted price of the product")
     special_from_date: String @doc(description: "The beginning date that a product has a special price")
     special_to_date: String @doc(description: "The end date that a product has a special price")
@@ -258,7 +258,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     meta_keyword: String @doc(description: "A comma-separated list of keywords that are visible only to search engines")
     meta_description: String @doc(description: "A brief overview of the product for search results listings, maximum 255 characters")
     image: String @doc(description: "The relative path to the main image on the product page")
-    small_image: String @doc(description: "The relative path to the small image, which is used on catalog pages")
+    small_image: ProductImage @doc(description: "The relative path to the small image, which is used on catalog pages") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Image")
     thumbnail: String @doc(description: "The relative path to the product's thumbnail image")
     new_from_date: String @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     new_to_date: String @doc(description: "The end date for new product listings") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
@@ -352,6 +352,11 @@ type CustomizableFileValue @doc(description: "CustomizableFileValue defines the 
     image_size_y: Int @doc(description: "The maximum height of an image")
 }
 
+type ProductImage @doc(description: "Product image information. Contains image relative path and URL") {
+    url: String
+    path: String
+}
+
 interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CustomizableOptionTypeResolver") @doc(description: "The CustomizableOptionInterface contains basic information about a customizable option. It can be implemented by several types of configurable options.") {
     title: String @doc(description: "The display name for this option")
     required: Boolean @doc(description: "Indicates whether the option is required")
@@ -364,7 +369,7 @@ interface CustomizableProductInterface @typeResolver(class: "Magento\\CatalogGra
 
 interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") @doc(description: "CategoryInterface contains the full set of attributes that can be returned in a category search") {
     id: Int @doc(description: "An ID that uniquely identifies the category")
-    description: String @doc(description: "An optional description of the category")
+    description: String @doc(description: "An optional description of the category") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryHtmlAttribute")
     name: String @doc(description: "The display name of the category")
     path: String @doc(description: "Category Path")
     path_in_store: String @doc(description: "Category path in store")
@@ -548,6 +553,6 @@ type SortField {
 }
 
 type SortFields @doc(description: "SortFields contains a default value for sort fields and all available sort fields") {
-    default: String @doc(description: "Default value of sort fields") 
+    default: String @doc(description: "Default value of sort fields")
     options: [SortField] @doc(description: "Available sort fields")
 }

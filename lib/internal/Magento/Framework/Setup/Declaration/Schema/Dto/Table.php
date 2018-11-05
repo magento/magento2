@@ -134,14 +134,14 @@ class Table extends GenericElement implements
     }
 
     /**
-     * Provides constraint by name.
+     * Get constraint by name.
      *
      * @param string $name
      * @return Constraint | bool
      */
     public function getConstraintByName($name)
     {
-        return isset($this->constraints[$name]) ? $this->constraints[$name] : false;
+        return $this->constraints[$name] ?? false;
     }
 
     /**
@@ -163,6 +163,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Returns primary constraint
+     *
      * As primary constraint always have one name
      * and can be only one for table
      * it name is allocated into it constraint
@@ -171,9 +173,7 @@ class Table extends GenericElement implements
      */
     public function getPrimaryConstraint()
     {
-        return isset($this->constraints[Internal::PRIMARY_NAME]) ?
-            $this->constraints[Internal::PRIMARY_NAME] :
-            false;
+        return $this->constraints[Internal::PRIMARY_NAME] ?? false;
     }
 
     /**
@@ -194,14 +194,14 @@ class Table extends GenericElement implements
     }
 
     /**
-     * Provides index by name.
+     * Get index by name
      *
      * @param string $name
      * @return Index | bool
      */
     public function getIndexByName($name)
     {
-        return isset($this->indexes[$name]) ? $this->indexes[$name] : false;
+        return $this->indexes[$name] ?? false;
     }
 
     /**
@@ -237,6 +237,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Add constraints
+     *
      * This is workaround, as any DTO object couldnt be changed after instantiation.
      * However there is case, when we have 2 tables with constraints in different tables,
      * that depends to each other table. So we need to setup DTO first and only then pass
@@ -302,8 +304,9 @@ class Table extends GenericElement implements
     }
 
     /**
-     * This is workaround, as any DTO object couldnt be changed after instantiation.
+     * Add indexes
      *
+     * This is workaround, as any DTO object couldnt be changed after instantiation.
      * However there is case, when we depends on column definition we need modify our indexes
      *
      * @param array $indexes
@@ -322,7 +325,7 @@ class Table extends GenericElement implements
     }
 
     /**
-     * Retrieve engine name.
+     * Get engine name
      *
      * @return string
      */
@@ -366,7 +369,7 @@ class Table extends GenericElement implements
     }
 
     /**
-     * Retrieve the table name which is calculated without table prefix.
+     * Get name without prefix
      *
      * @return string
      */
@@ -376,7 +379,7 @@ class Table extends GenericElement implements
     }
 
     /**
-     * Retrieve table comment.
+     * Get comment
      *
      * @return null|string
      */

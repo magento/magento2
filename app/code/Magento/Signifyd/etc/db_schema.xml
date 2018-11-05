@@ -37,6 +37,7 @@
         </constraint>
     </table>
     <table name="sales_order_grid" resource="sales" comment="Sales Flat Order Grid">
-        <column xsi:type="varchar" name="signifyd_guarantee_status" nullable="true" length="32"/>
+        <column xsi:type="varchar" name="signifyd_guarantee_status" nullable="true" length="32"
+                comment="Signifyd Guarantee Disposition Status"/>
     </table>
 </schema>
