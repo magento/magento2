@@ -653,8 +653,9 @@ class DataProvider
             }
         }
         foreach ($attributeValueIds as $attrValueId) {
-            if (isset($this->attributeOptions[$optionKey][$attrValueId]))
+            if (isset($this->attributeOptions[$optionKey][$attrValueId])) {
                 $attributeOptionValue .= $this->attributeOptions[$optionKey][$attrValueId] . ' ';
+            }
         }
         return empty($attributeOptionValue) ? null : trim($attributeOptionValue);
     }
