@@ -68,10 +68,9 @@ class MenuNode implements MenuNodeInterface
     /**
      * @inheritDoc
      */
-    public function setId(string $id): MenuNodeInterface
+    public function setId(string $id): void
     {
         $this->id = $id;
-        return $this;
     }
 
     /**
@@ -85,10 +84,9 @@ class MenuNode implements MenuNodeInterface
     /**
      * @inheritDoc
      */
-    public function setName(string $name): MenuNodeInterface
+    public function setName(string $name): void
     {
         $this->name = $name;
-        return $this;
     }
 
     /**
@@ -102,10 +100,9 @@ class MenuNode implements MenuNodeInterface
     /**
      * @inheritDoc
      */
-    public function setUrl(string $url): MenuNodeInterface
+    public function setUrl(string $url): void
     {
         $this->url = $url;
-        return $this;
     }
 
     /**
@@ -119,7 +116,7 @@ class MenuNode implements MenuNodeInterface
     /**
      * @inheritDoc
      */
-    public function setChildren(array $children): MenuNodeInterface
+    public function setChildren(array $children): void
     {
         $this->children = array_map(
             function (MenuNodeInterface $node) { // ensure each child is node instance
@@ -127,6 +124,5 @@ class MenuNode implements MenuNodeInterface
             },
             $children
         );
-        return $this;
     }
 }

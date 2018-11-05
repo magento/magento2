@@ -29,9 +29,9 @@ interface MenuNodeInterface
      * Set menu node identifier.
      *
      * @param string $id
-     * @return $this
+     * @return void
      */
-    public function setId(string $id): MenuNodeInterface;
+    public function setId(string $id): void;
 
     /**
      * Get menu node name.
@@ -46,9 +46,9 @@ interface MenuNodeInterface
      * Set menu node name.
      *
      * @param string $name
-     * @return $this
+     * @return void
      */
-    public function setName(string $name): MenuNodeInterface;
+    public function setName(string $name): void;
 
     /**
      * Get menu node URL.
@@ -65,7 +65,7 @@ interface MenuNodeInterface
      * @param string $url
      * @return MenuNodeInterface
      */
-    public function setUrl(string $url): MenuNodeInterface;
+    public function setUrl(string $url): void;
 
     /**
      * Get nested menu nodes.
@@ -83,5 +83,5 @@ interface MenuNodeInterface
      * @param array $children
      * @return MenuNodeInterface
      */
-    public function setChildren(array $children): MenuNodeInterface;
+    public function setChildren(array $children): void;
 }
