@@ -96,6 +96,11 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     protected $attributeFilterMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFilterMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -170,6 +175,11 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $resolverProperty = $helperReflection->getProperty('linkResolver');
         $resolverProperty->setAccessible(true);
         $resolverProperty->setValue($this->helper, $this->linkResolverMock);
+
+        $this->dateTimeFilterMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
+        $dateTimeFilterProperty = $helperReflection->getProperty('dateTimeFilter');
+        $dateTimeFilterProperty->setAccessible(true);
+        $dateTimeFilterProperty->setValue($this->helper, $this->dateTimeFilterMock);
     }
 
     /**
@@ -211,6 +221,12 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         if (!empty($tierPrice)) {
             $productData = array_merge($productData, ['tier_price' => $tierPrice]);
         }
+
+        $this->dateTimeFilterMock->expects($this->once())
+            ->method('filter')
+            ->with($specialFromDate)
+            ->willReturn($specialFromDate);
+
         $attributeNonDate = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
