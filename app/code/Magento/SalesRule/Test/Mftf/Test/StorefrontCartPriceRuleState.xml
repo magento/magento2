@@ -72,11 +72,12 @@
         <!-- Should not see the discount yet because we have not filled in postcode -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
         <waitForPageLoad stepKey="waitForCartPage"/>
+        <click selector="{{CheckoutCartSummarySection.shippingHeading}}" stepKey="expandShipping"/>
+        <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectFlatRateShipping"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$123.00" stepKey="seeSubtotal"/>
         <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount"/>
 
         <!-- See discount if we use valid postcode -->
-        <click selector="{{CheckoutCartSummarySection.shippingHeading}}" stepKey="expandShipping"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Indiana" stepKey="fillState"/>
         <waitForPageLoad stepKey="waitForPostcode1"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
