@@ -4,7 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GroupedProduce\Api;
+namespace Magento\GroupedProduct\Api;
 
 use Magento\Catalog\Model\CustomOptions\CustomOptionProcessor;
 use Magento\Framework\Webapi\Rest\Request;
