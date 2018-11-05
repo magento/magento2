@@ -298,6 +298,8 @@ class History extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Load the last inserted item
+     *
      * @return $this
      */
     public function loadLastInsertItem()
