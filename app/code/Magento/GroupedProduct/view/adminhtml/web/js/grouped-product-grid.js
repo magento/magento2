@@ -35,17 +35,19 @@ define([
         /**
          * Shift positions for next page elements
          *
-         * @param position
+         * @param {Number} position
          */
         shiftNextPagesPositions: function (position) {
 
             var recordData = this.recordData(),
                 startIndex = ~~this.currentPage() * this.pageSize,
-                offset = position - startIndex + 1;
+                offset = position - startIndex + 1,
+                index = startIndex;
+
             if (~~this.currentPage() === this.pages()) {
                 return false;
             }
-            for (var index = startIndex; index < recordData.length; index++) {
+            for (index; index < recordData.length; index++) {
                 recordData[index].position = index + offset;
             }
             this.recordData(recordData);
