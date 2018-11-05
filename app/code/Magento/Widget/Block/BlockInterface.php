@@ -19,6 +19,7 @@ interface BlockInterface
 {
     /**
      * Add data to the widget.
+     *
      * Retains previous data in the widget.
      *
      * @param array $arr
