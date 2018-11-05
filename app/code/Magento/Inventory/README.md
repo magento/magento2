@@ -1,18 +1,17 @@
-## Introduction
+# Inventory module
 
-This module is part of the MSI (Multi-Source Inventory) project. See 
-[project description](https://devdocs.magento.com/guides/v2.3/inventory/index.html) 
-for further information.
+The `Inventory` module module is part of the MSI (Multi-Source Inventory) project,
+which replaces the legacy `CatalogInventory` module with new and expanded features and APIs for Inventory Management.  
+The `Inventory` module implements entities for MSI. See 
+[Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html
+describes the MSI project in more detail.
 
-## Responsibility of this module
-
-Following the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
-this module implements entities for MSI.
+All Inventory Management modules follow the 
+[Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle).
+[Inventory management architecture](https://devdocs.magento.com/guides/v2.3/inventory/architecture.html) 
+provides additional insight about the overall structure of these modules.
 
 ## Extension points and service contracts
 
-All public interfaces regarding this module are located in `InventoryApi` module. See 
-[architecture documentation](https://devdocs.magento.com/guides/v2.3/inventory/architecture.html) 
-for further information. 
-
-Please use only `InventoryApi` interfaces in order to extend this module.
+All public interfaces regarding this module are located in the `InventoryApi` module. 
+Use the interfaces defined in `InventoryApi` to extend this module.
