@@ -6,6 +6,15 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCartInterface"
+                type="Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCart" />
+    <type name="Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCartInterface">
+        <arguments>
+            <argument name="shippingAddressProcessors" xsi:type="array">
+                <item name="singleShippingAddress" xsi:type="object">Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCart\SingleShippingAddressProcessor</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="multishippingPaymentSpecification" type="Magento\Payment\Model\Method\Specification\Composite">
         <arguments>
             <argument name="specifications" xsi:type="array">

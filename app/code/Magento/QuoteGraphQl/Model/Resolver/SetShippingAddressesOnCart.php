@@ -15,7 +15,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\ShippingAddressManagementInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
-use Magento\QuoteGraphQl\Model\Cart\SetShippingAddressOnCart;
+use Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCartInterface;
 
 /**
  * Class SetShippingAddressesOnCart
@@ -28,11 +28,6 @@ class SetShippingAddressesOnCart implements ResolverInterface
      * @var MaskedQuoteIdToQuoteIdInterface
      */
     private $maskedQuoteIdToQuoteId;
-
-    /**
-     * @var SetShippingAddressOnCart
-     */
-    private $setShippingAddressOnCart;
 
     /**
      * @var ShippingAddressManagementInterface
@@ -50,24 +45,29 @@ class SetShippingAddressesOnCart implements ResolverInterface
     private $arrayManager;
 
     /**
+     * @var SetShippingAddressesOnCartInterface
+     */
+    private $setShippingAddressesOnCart;
+
+    /**
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
-     * @param SetShippingAddressOnCart $setShippingAddressOnCart
      * @param ShippingAddressManagementInterface $shippingAddressManagement
      * @param GetCartForUser $getCartForUser
      * @param ArrayManager $arrayManager
+     * @param SetShippingAddressesOnCartInterface $setShippingAddressesOnCart
      */
     public function __construct(
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        SetShippingAddressOnCart $setShippingAddressOnCart,
         ShippingAddressManagementInterface $shippingAddressManagement,
         GetCartForUser $getCartForUser,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        SetShippingAddressesOnCartInterface $setShippingAddressesOnCart
     ) {
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
-        $this->setShippingAddressOnCart = $setShippingAddressOnCart;
         $this->shippingAddressManagement = $shippingAddressManagement;
         $this->getCartForUser = $getCartForUser;
         $this->arrayManager = $arrayManager;
+        $this->setShippingAddressesOnCart = $setShippingAddressesOnCart;
     }
 
     /**
@@ -89,7 +89,7 @@ class SetShippingAddressesOnCart implements ResolverInterface
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
         $cartId = (int)$cart->getEntityId();
 
-        $this->setShippingAddressOnCart->setAddresses($context, $cartId, $shippingAddresses);
+        $this->setShippingAddressesOnCart->execute($context, $cartId, $shippingAddresses);
 
         return [
             'cart' => [
