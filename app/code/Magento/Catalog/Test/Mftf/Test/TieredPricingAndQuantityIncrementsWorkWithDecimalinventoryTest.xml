@@ -63,7 +63,9 @@
         <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrementsUseConfigSettings}}" stepKey="clickOnEnableQtyIncrementsUseConfigSettingsCheckbox"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" stepKey="clickOnEnableQtyIncrements"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrementsOptions(('1'))}}" stepKey="chooseYesOnEnableQtyIncrements"/>
+        <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyIncrementsUseConfigSettings}}" stepKey="scrollToQtyIncrementsUseConfigSettings"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.qtyIncrementsUseConfigSettings}}" stepKey="clickOnQtyIncrementsUseConfigSettings"/>
+        <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyIncrements}}" stepKey="scrollToQtyIncrements"/>
         <fillField selector="{{AdminProductFormAdvancedInventorySection.qtyIncrements}}" userInput=".5" stepKey="fillQtyIncrements"/>
         <!--Step6. Close *Advanced Inventory* (Click on button *Done*). Save *prod1* (Click on button *Save*) -->
         <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickOnDoneButton3"/>
