@@ -12,6 +12,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Authorization\Model\Role as RoleModel;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -149,7 +150,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @param string $paramName
      * @return array
      */
-    private function parseRequestVariable($paramName): array
+    private function parseRequestVariable(string $paramName): array
     {
         $value = $this->getRequest()->getParam($paramName, null);
         parse_str($value, $value);
@@ -158,12 +159,12 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     }
 
     /**
-     * @param \Magento\Authorization\Model\Role $role
+     * @param RoleModel $role
      * @param array $oldRoleUsers
      * @return $this
      * @throws \Exception
      */
-    protected function processPreviousUsers(\Magento\Authorization\Model\Role $role, array $oldRoleUsers): self
+    protected function processPreviousUsers(RoleModel $role, array $oldRoleUsers): self
     {
         foreach ($oldRoleUsers as $oUid) {
             $this->_deleteUserFromRole($oUid, $role->getId());
@@ -175,11 +176,11 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     /**
      * Processes users to be assigned to roles
      *
-     * @param \Magento\Authorization\Model\Role $role
+     * @param RoleModel $role
      * @param array $roleUsers
      * @return $this
      */
-    private function processCurrentUsers(\Magento\Authorization\Model\Role $role, array $roleUsers): self
+    private function processCurrentUsers(RoleModel $role, array $roleUsers): self
     {
         foreach ($roleUsers as $nRuid) {
             try {
@@ -232,7 +233,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     }
 
     /**
-     * @param \Magento\Authorization\Model\Role $role
+     * @param RoleModel $role
      * @param array $data
      * @param \Magento\Backend\Model\View\Result\Redirect $resultRedirect
      * @return \Magento\Backend\Model\View\Result\Redirect
