@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    sendEmailToFriend (input: SendEmailToFriendSenderInput): SendEmailToFriendOutput @resolver(class: "\\Magento\\SendFriendGraphQl\\Model\\Resolver\\SendEmailToFriend") @doc(description:"@todo")
+    sendEmailToFriend (input: SendEmailToFriendSenderInput): SendEmailToFriendOutput @resolver(class: "\\Magento\\SendFriendGraphQl\\Model\\Resolver\\SendEmailToFriend") @doc(description:"Recommends Product by Sending Single/Multiple Email")
 }
 
 input SendEmailToFriendSenderInput {
@@ -16,9 +16,9 @@ type Sender {
     email: String!
     message: String!
 }
-#@todo Prams can be removed if dispatching of event in app/code/Magento/SendFriendGraphQl/Model/Resolver/SendEmailToFriend.php not needed
 type Params {
     product_id: Int!
+    category_id: Int!
 }
 
 type Recipient {
