@@ -7,7 +7,8 @@
         "magento/framework": "*",
         "magento/module-quote": "*",
         "magento/module-catalog": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-checkout": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*"
