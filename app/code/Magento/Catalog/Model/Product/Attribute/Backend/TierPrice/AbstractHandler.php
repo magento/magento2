@@ -88,10 +88,10 @@ abstract class AbstractHandler implements ExtensionInterface
      * Parse quantity value into float.
      *
      * @param mixed $value
-     * @return float
+     * @return float|int
      */
-    protected function parseQty($value): float
+    protected function parseQty($value)
     {
-        return floatval($value);
+        return $value * 1;
     }
 }
