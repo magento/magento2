@@ -75,6 +75,7 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that duplicated tier price values issues exception during validation.
      *
+     * @dataProvider testValidateDuplicateDataProvider
      * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDuplicate(array $tierPricesData)
@@ -86,6 +87,8 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * testValidateDuplicate data provider.
+     *
      * @return array
      */
     public function testValidateDuplicateDataProvider(): array
