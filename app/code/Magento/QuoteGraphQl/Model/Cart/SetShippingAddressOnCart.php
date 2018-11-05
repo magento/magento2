@@ -84,19 +84,12 @@ class SetShippingAddressOnCart
             if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
                 throw new GraphQlAuthorizationException(
                     __(
-                        'Address management allowed only for authorized customers'
+                        'Address management allowed only for authorized customers.'
                     )
                 );
             }
             /** @var AddressInterface $customerAddress */
             $customerAddress = $this->addressRepository->getById($customerAddressId);
-            if ($context->getUserId() !== (int)$customerAddress->getCustomerId()) {
-                throw new GraphQlInputException(
-                    __(
-                        'Address is not applicable for current customer'
-                    )
-                );
-            }
             $shippingAddress = $this->addressModel->importCustomerAddressData($customerAddress);
         } else {
             $shippingAddress = $this->addressModel->addData($addressInput);
