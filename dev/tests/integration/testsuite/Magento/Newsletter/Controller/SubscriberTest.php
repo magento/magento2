@@ -53,7 +53,7 @@ class SubscriberTest extends AbstractController
         $this->getRequest()->setPostValue([
             'email' => 'customer@example.com',
         ]);
-
+        $this->login(1);
         $this->dispatch('newsletter/subscriber/new');
 
         $this->assertSessionMessages($this->equalTo([
