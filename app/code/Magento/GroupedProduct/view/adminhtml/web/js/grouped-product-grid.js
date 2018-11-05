@@ -23,6 +23,7 @@ define([
             if (position || position === 0) {
                 this.checkMaxPosition(position);
                 this.sort(position, elem);
+
                 if (~~position === this.maxPosition && ~~position > this.getDefaultPageBoundary() + 1) {
                     this.shiftNextPagesPositions(position);
                 }
@@ -37,17 +38,17 @@ define([
          * @param position
          */
         shiftNextPagesPositions: function (position) {
-            var recordData = this.recordData();
+
+            var recordData = this.recordData(),
+                startIndex = ~~this.currentPage() * this.pageSize,
+                offset = position - startIndex + 1;
             if (~~this.currentPage() === this.pages()) {
                 return false;
-            } else {
-                var startIndex = ~~this.currentPage() * this.pageSize,
-                    offset = position - startIndex + 1;
-                for (var index = startIndex; index < recordData.length; index++) {
-                    recordData[index].position = index + offset;
-                }
-                this.recordData(recordData);
             }
+            for (var index = startIndex; index < recordData.length; index++) {
+                recordData[index].position = index + offset;
+            }
+            this.recordData(recordData);
         },
 
 
@@ -58,14 +59,14 @@ define([
          * @param event
          */
         updateGridPosition: function (data, event) {
-            var inputValue = parseInt(event.target.value),
+            var inputValue = parseInt(event.target.value, 10),
                 recordData = this.recordData(),
                 record,
                 previousValue,
                 updatedRecord;
 
             record = this.elems().find(function (obj) {
-                return obj.dataScope === data.parentScope
+                return obj.dataScope === data.parentScope;
             });
 
             previousValue = this.getCalculatedPosition(record);
@@ -105,7 +106,7 @@ define([
          */
         getUpdatedRecordIndex: function (recordData, recordId) {
             return recordData.map(function (o) {
-                return ~~o.id
+                return ~~o.id;
             }).indexOf(~~recordId);
         },
 
@@ -163,7 +164,7 @@ define([
                 this.elems([]);
                 updatedRecord = this.getUpdatedRecordIndex(recordData, objectToUpdate.data().id);
                 recordData.forEach(function (value, index) {
-                    recordData[index].position = (index === updatedRecord) ? 0 : value.position + 1;
+                    recordData[index].position = index === updatedRecord ? 0 : value.position + 1;
                 });
                 this.reloadGridData(recordData);
             }
@@ -198,7 +199,7 @@ define([
          * @return {number}
          */
         getDefaultPageBoundary: function () {
-            return (~~this.currentPage() * this.pageSize) - 1;
+            return ~~this.currentPage() * this.pageSize - 1;
         },
 
         /**
@@ -208,7 +209,7 @@ define([
          */
         getGlobalMaxPosition: function () {
             return _.max(this.recordData().map(function (r) {
-                return ~~r.position
+                return ~~r.position;
             }));
         }
     });
