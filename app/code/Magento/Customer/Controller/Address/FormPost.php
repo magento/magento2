@@ -65,7 +65,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @param PageFactory $resultPageFactory
      * @param RegionFactory $regionFactory
      * @param HelperData $helperData
-     * @param CustomerRepositoryInterface
+     * @param CustomerRepositoryInterface $customerRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -213,12 +213,9 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
 
             $address = $this->_extractAddress();
 
-            $addresses = [];
-            foreach ($customer->getAddresses() as $customerAddress) {
-                if ($customerAddress->getId() !== $addressId) {
-                    $addresses[] = $customerAddress;
-                }
-            }
+            $addresses = array_filter($customer->getAddresses(), function ($customerAddress) use ($addressId) {
+                return $customerAddress !== $addressId;
+            });
 
             $addresses[] = $address;
             $customer->setAddresses($addresses);
