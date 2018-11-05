@@ -362,19 +362,6 @@ class Topmenu extends Template implements IdentityInterface
     }
 
     /**
-     * Get cache key informative items
-     *
-     * @return array
-     * @since 100.1.0
-     */
-    public function getCacheKeyInfo()
-    {
-        $keyInfo = parent::getCacheKeyInfo();
-        $keyInfo[] = $this->getUrl('*/*/*', ['_current' => true, '_query' => '']);
-        return $keyInfo;
-    }
-
-    /**
      * Get tags array for saving cache
      *
      * @return array
