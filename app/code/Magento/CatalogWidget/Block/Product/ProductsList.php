@@ -435,7 +435,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         return parent::getAddToCartUrl($product, $additional);
     }
 
-    /*
+    /**
      * Get widget block name
      *
      * @return string
