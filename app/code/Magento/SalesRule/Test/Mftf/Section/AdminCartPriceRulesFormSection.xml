@@ -39,6 +39,7 @@
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
+        <element name="addRewardPoints" type="input" selector="input[name='extension_attributes[reward_points_delta]']"/>
         <element name="freeShipping" type="select" selector="//select[@name='simple_free_shipping']"/>
 
         <!-- Manage Coupon Codes sub-form -->
