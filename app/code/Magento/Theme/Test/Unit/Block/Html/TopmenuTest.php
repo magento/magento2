@@ -6,11 +6,13 @@
 
 namespace Magento\Theme\Test\Unit\Block\Html;
 
+use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\Data\Tree\NodeFactory;
 use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Theme\Block\Html\Topmenu;
+use Magento\Theme\Model\Menu\TopMenuAdapter;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -62,6 +64,11 @@ class TopmenuTest extends \PHPUnit\Framework\TestCase
      */
     private $requestMock;
 
+    /**
+     * @var TopMenuAdapter
+     */
+    private $topMenuAdapter;
+
     // @codingStandardsIgnoreStart
 
     /** @var string  */
@@ -96,6 +103,14 @@ HTML;
         $this->treeFactory = $this->getMockBuilder(\Magento\Framework\Data\TreeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->topMenuAdapter = $this->getMockBuilder(TopMenuAdapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->topMenuAdapter->method('exportToMenuTreeNode')->willReturnCallback(
+            function (Node $node) {
+                return $node;
+            }
+        );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->context = $objectManager->getObject(
@@ -114,7 +129,15 @@ HTML;
      */
     protected function getTopmenu()
     {
-        return new Topmenu($this->context, $this->nodeFactory, $this->treeFactory);
+
+
+        return new Topmenu(
+            $this->context,
+            $this->nodeFactory,
+            $this->treeFactory,
+            [],
+            $this->topMenuAdapter
+        );
     }
 
     public function testGetHtmlWithoutSelectedCategory()
@@ -188,7 +211,7 @@ HTML;
         $nodeFactory = $this->createMock(\Magento\Framework\Data\Tree\NodeFactory::class);
         $treeFactory = $this->createMock(\Magento\Framework\Data\TreeFactory::class);
 
-        $topmenu =  new Topmenu($this->context, $nodeFactory, $treeFactory);
+        $topmenu =  new Topmenu($this->context, $nodeFactory, $treeFactory, [], $this->topMenuAdapter);
         $this->urlBuilder->expects($this->once())->method('getUrl')->with('*/*/*')->willReturn('123');
         $this->urlBuilder->expects($this->once())->method('getBaseUrl')->willReturn('baseUrl');
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
