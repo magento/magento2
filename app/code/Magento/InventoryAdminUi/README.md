@@ -16,8 +16,8 @@ The `InventoryAdminUi` module contains several extension points.
 
 ## Layouts
 
-You can extend and override layouts defined in the `Magento\InventoryAdminUi\view\adminhtml\layout`  directory.
+You can extend and override layouts defined in the `view/adminhtml/layout`  directory.
 
 ## UI Components
 
-The `Magento\InventoryAdminUi\view\adminhtml\ui_component` directory contains extensible UI components.
+The `view\adminhtml\ui_component` directory contains extensible UI components.
