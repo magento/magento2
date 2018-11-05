@@ -266,7 +266,6 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
             if (!isset($additional['_escape'])) {
                 $additional['_escape'] = true;
             }
-            $additional['useUencPlaceholder'] = true;
             return $product->getUrlModel()->getUrl($product, $additional);
         }
 
