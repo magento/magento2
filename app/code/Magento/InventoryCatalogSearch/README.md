@@ -1,13 +1,14 @@
-## Introduction
+# InventoryCatalogSearch
 
-This module is part of the MSI (Multi-Source Inventory) project. See 
-[project description](https://devdocs.magento.com/guides/v2.3/inventory/index.html) 
-for further information.
+The `InventoryCatalogSearch` module integrates inventory management business logic into Magento's search logic.
 
-## Responsibility of this module
+This module is part of the MSI (Multi-Source Inventory) project. The 
+[Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html
+describes the MSI project in more detail.
 
-Following the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
-this module integrates MSI business logic into Magento's search logic.
+## Installation details
+
+This module is installed as part of Magento Open Source. It cannot be disabled.
 
 ## Extension points and service contracts
 
