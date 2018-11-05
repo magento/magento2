@@ -16,6 +16,9 @@ use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Event\ManagerInterface;
 
+/**
+ * @inheritdoc
+ */
 class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServiceInterface
 {
     /**
@@ -79,7 +82,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createCustomerAccessToken($username, $password)
     {
