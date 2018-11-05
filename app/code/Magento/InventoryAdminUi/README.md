@@ -20,4 +20,4 @@ You can extend and override layouts defined in the `view/adminhtml/layout`  dire
 
 ## UI Components
 
-The `view\adminhtml\ui_component` directory contains extensible UI components.
+The `view/adminhtml/ui_component` directory contains extensible UI components.
