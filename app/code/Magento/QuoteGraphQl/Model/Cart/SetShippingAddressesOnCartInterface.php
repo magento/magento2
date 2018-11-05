@@ -9,6 +9,7 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Extension point for setting shipping addresses for a specified shopping cart
@@ -22,10 +23,10 @@ interface SetShippingAddressesOnCartInterface
      * Set shipping addresses for a specified shopping cart
      *
      * @param ContextInterface $context
-     * @param int $cartId
+     * @param CartInterface $cart
      * @param array $shippingAddresses
      * @return void
      * @throws GraphQlInputException
      */
-    public function execute(ContextInterface $context, int $cartId, array $shippingAddresses): void;
+    public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddresses): void;
 }

@@ -9,6 +9,7 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use InvalidArgumentException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Set shipping addresses for shopping cart processors chain
@@ -32,7 +33,7 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
     /**
      * @inheritdoc
      */
-    public function execute(ContextInterface $context, int $cartId, array $shippingAddresses): void
+    public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddresses): void
     {
         foreach ($this->shippingAddressProcessors as $shippingAddressProcessor) {
             if (!$shippingAddressProcessor instanceof SetShippingAddressesOnCartInterface) {
@@ -42,7 +43,7 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
                 );
             }
 
-            $shippingAddressProcessor->execute($context, $cartId, $shippingAddresses);
+            $shippingAddressProcessor->execute($context, $cart, $shippingAddresses);
         }
     }
 }

@@ -12,6 +12,7 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\ShippingAddressManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -55,7 +56,7 @@ class SingleShippingAddressProcessor implements SetShippingAddressesOnCartInterf
     /**
      * @inheritdoc
      */
-    public function execute(ContextInterface $context, int $cartId, array $shippingAddresses): void
+    public function execute(ContextInterface $context, CartInterface $cart, array $shippingAddresses): void
     {
         if (count($shippingAddresses) > 1) {
             return;
@@ -89,6 +90,6 @@ class SingleShippingAddressProcessor implements SetShippingAddressesOnCartInterf
             $shippingAddress = $this->addressModel->addData($addressInput);
         }
 
-        $this->shippingAddressManagement->assign($cartId, $shippingAddress);
+        $this->shippingAddressManagement->assign($cart->getId(), $shippingAddress);
     }
 }
