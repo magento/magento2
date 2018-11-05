@@ -13,6 +13,9 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Model\StoresConfig;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class that provides functionality of cleaning expired quotes by cron
+ */
 class CleanExpiredOrders
 {
     /**
