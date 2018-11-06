@@ -1,4 +1,4 @@
-# InventoryCatalogSearch
+# InventoryCatalogSearch module
 
 The `InventoryCatalogSearch` module integrates inventory management business logic into Magento's search logic.
 
