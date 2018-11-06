@@ -8,7 +8,7 @@ describes the MSI project in more detail.
 
 ## Installation details
 
-This module is installed as part of Magento Open Source. You can remove it if you run a headless version of Magento.
+This module is installed as part of Magento Open Source. It cannot be disabled.
 
 ## Extension points and service contracts
 
