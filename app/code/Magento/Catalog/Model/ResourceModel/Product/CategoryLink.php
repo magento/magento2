@@ -115,10 +115,14 @@ class CategoryLink
     {
         $result = ['changed' => [], 'updated' => []];
         foreach ($newCategoryPositions as $newCategoryPosition) {
-            $key = array_search(
-                $newCategoryPosition['category_id'],
-                array_column($oldCategoryPositions, 'category_id')
-            );
+            $key = false;
+
+            foreach ($oldCategoryPositions as $oldKey => $oldCategoryPosition) {
+                if ((int)$oldCategoryPosition['category_id'] === (int)$newCategoryPosition['category_id']) {
+                    $key = $oldKey;
+                    break;
+                }
+            }
 
             if ($key === false) {
                 $result['changed'][] = $newCategoryPosition;
