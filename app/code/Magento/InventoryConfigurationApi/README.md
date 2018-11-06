@@ -1,4 +1,4 @@
-# InventoryConfigurationApi
+# InventoryConfigurationApi module
 
 The `InventoryConfigurationApi` module provides service contracts for inventory management configuration.
 
