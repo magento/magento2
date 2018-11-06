@@ -3,7 +3,7 @@
 The `InventorySourceSelection` module provides source selection logic for Inventory Management.
 
 This module is part of the MSI (Multi-Source Inventory) project. The 
-[Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html
+[Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html)
 describes the MSI project in more detail.
 
 ## Installation details
