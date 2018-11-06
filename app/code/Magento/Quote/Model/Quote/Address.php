@@ -28,8 +28,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method Address setAddressType(string $value)
  * @method int getFreeShipping()
  * @method Address setFreeShipping(int $value)
- * @method int getCollectShippingRates()
- * @method Address setCollectShippingRates(int $value)
+ * @method bool getCollectShippingRates()
+ * @method Address setCollectShippingRates(bool $value)
  * @method Address setShippingMethod(string $value)
  * @method string getShippingDescription()
  * @method Address setShippingDescription(string $value)
@@ -1689,6 +1689,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
     /**
      * @inheritdoc
+     *
+     * @return \Magento\Quote\Api\Data\AddressExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -1697,6 +1699,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
     /**
      * @inheritdoc
+     *
+     * @param \Magento\Quote\Api\Data\AddressExtensionInterface $extensionAttributes
+     * @return $this
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\AddressExtensionInterface $extensionAttributes)
     {
