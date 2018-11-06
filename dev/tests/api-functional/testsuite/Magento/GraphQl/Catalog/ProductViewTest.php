@@ -299,8 +299,7 @@ QUERY;
             description
             gift_message_available
             id
-            image
-            image_label
+            image {url, label}
             meta_description
             meta_keyword
             meta_title
