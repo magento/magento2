@@ -39,6 +39,9 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
      */
     private $quoteIdToMaskedId;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -51,26 +54,139 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
-    public function testSetShippingOnCart()
+    public function testSetShippingMethodOnCart()
     {
+        $shippingCarrierCode = 'flatrate';
+        $shippingMethodCode = 'flatrate';
         $this->quoteResource->load(
             $this->quote,
             'test_order_1',
             'reserved_order_id'
         );
-
         $shippingAddress = $this->quote->getShippingAddress();
         $shippingAddressId = $shippingAddress->getId();
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-        $query = <<<QUERY
+
+        $query = $this->prepareMutationQuery(
+            $maskedQuoteId,
+            $shippingMethodCode,
+            $shippingCarrierCode,
+            $shippingAddressId
+        );
+
+        $response = $this->sendRequestWithToken($query);
+
+        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
+        self::assertEquals($maskedQuoteId, $response['setShippingMethodsOnCart']['cart']['cart_id']);
+        $addressesInformation = $response['setShippingMethodsOnCart']['cart']['addresses'];
+        self::assertCount(2, $addressesInformation);
+        self::assertEquals(
+            $addressesInformation[0]['selected_shipping_method']['code'],
+            $shippingCarrierCode . '_' . $shippingMethodCode
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testSetShippingMethodWithWrongCartId()
+    {
+        $shippingCarrierCode = 'flatrate';
+        $shippingMethodCode = 'flatrate';
+        $shippingAddressId = '1';
+        $maskedQuoteId = 'invalid';
+
+        $query = $this->prepareMutationQuery(
+            $maskedQuoteId,
+            $shippingMethodCode,
+            $shippingCarrierCode,
+            $shippingAddressId
+        );
+
+        self::expectExceptionMessage("Could not find a cart with ID \"$maskedQuoteId\"");
+        $this->sendRequestWithToken($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testSetNonExistingShippingMethod()
+    {
+        $shippingCarrierCode = 'non';
+        $shippingMethodCode = 'existing';
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_1',
+            'reserved_order_id'
+        );
+        $shippingAddress = $this->quote->getShippingAddress();
+        $shippingAddressId = $shippingAddress->getId();
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+
+        $query = $this->prepareMutationQuery(
+            $maskedQuoteId,
+            $shippingMethodCode,
+            $shippingCarrierCode,
+            $shippingAddressId
+        );
+
+        self::expectExceptionMessage("Carrier with such method not found: $shippingCarrierCode, $shippingMethodCode");
+        $this->sendRequestWithToken($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testSetShippingMethodWithNonExistingAddress()
+    {
+        $shippingCarrierCode = 'flatrate';
+        $shippingMethodCode = 'flatrate';
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_1',
+            'reserved_order_id'
+        );
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $shippingAddressId = '-20';
+
+        $query = $this->prepareMutationQuery(
+            $maskedQuoteId,
+            $shippingMethodCode,
+            $shippingCarrierCode,
+            $shippingAddressId
+        );
+
+        self::expectExceptionMessage('The shipping address is missing. Set the address and try again.');
+        $this->sendRequestWithToken($query);
+    }
+
+    // TODO: TBD - add check for guest with attempt to set shipping method to the customer's shopping cart
+
+    /**
+     * Generates query for setting the specified shipping method on cart
+     *
+     * @param string $maskedQuoteId
+     * @param string $shippingMethodCode
+     * @param string $shippingCarrierCode
+     * @param string $shippingAddressId
+     * @return string
+     */
+    private function prepareMutationQuery(
+        string $maskedQuoteId,
+        string $shippingMethodCode,
+        string $shippingCarrierCode,
+        string $shippingAddressId
+    ) : string {
+        return <<<QUERY
 mutation {
   setShippingMethodsOnCart(input: 
     {
       cart_id: "$maskedQuoteId", 
       shipping_methods: [
         {
-          shipping_method_code: "flatrate"
-          shipping_carrier_code: "flatrate"
+          shipping_method_code: "$shippingMethodCode"
+          shipping_carrier_code: "$shippingCarrierCode"
           cart_address_id: $shippingAddressId
         }
       ]}) {
@@ -78,22 +194,6 @@ mutation {
     cart {
       cart_id,
       addresses {
-        firstname
-        lastname
-        company
-        address_type
-        city
-        street
-        region {
-          code
-          label
-        }
-        postcode
-        country {
-          code
-          label
-        }
-        
         selected_shipping_method {
           code
           label
@@ -104,17 +204,21 @@ mutation {
 }
 
 QUERY;
+    }
+
+    /**
+     * Sends a GraphQL request with using a bearer token
+     *
+     * @param string $query
+     * @return array
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    private function sendRequestWithToken(string $query): array
+    {
 
         $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
 
-        self::assertArrayHasKey('setShippingMethodsOnCart', $response);
-        self::assertArrayHasKey('cart', $response['setShippingMethodsOnCart']);
-        self::assertEquals($maskedQuoteId, $response['setShippingMethodsOnCart']['cart']['cart_id']);
-
-        // TODO: check shipping method code and description
+        return $this->graphQlQuery($query, [], '', $headerMap);
     }
-
-    // TODO: cover all other cases
 }
