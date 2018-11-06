@@ -12,7 +12,6 @@ use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class Http
- *
  */
 class Http extends File
 {
