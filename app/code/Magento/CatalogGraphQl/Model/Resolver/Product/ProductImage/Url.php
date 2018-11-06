@@ -60,6 +60,8 @@ class Url implements ResolverInterface
     }
 
     /**
+     * Get image url
+     *
      * @param string $imageType
      * @param string|null $imagePath Null if image is not set
      * @return string

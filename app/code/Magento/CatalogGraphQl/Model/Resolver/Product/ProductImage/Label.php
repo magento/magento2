@@ -80,6 +80,8 @@ class Label implements ResolverInterface
     }
 
     /**
+     * Get attribute value
+     *
      * @param int $productId
      * @param string $attributeCode
      * @return null|string Null if attribute value is not exists
