@@ -49,21 +49,17 @@
             </settings>
         </filterSearch>
         <filters name="listing_filters">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.listing_filters</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
             <settings>
                 <storageConfig>
                     <param name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.bookmarks</param>
                     <param name="namespace" xsi:type="string">current.filters</param>
                 </storageConfig>
+                <childDefaults>
+                    <param name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.listing_filters</param>
+                    <param name="imports" xsi:type="array">
+                        <item name="visible" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
+                    </param>
+                </childDefaults>
             </settings>
         </filters>
         <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
