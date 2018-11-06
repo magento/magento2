@@ -57,8 +57,8 @@ define([
         /**
          * Update position for element after position from another page is entered
          *
-         * @param data
-         * @param event
+         * @param {Object} data
+         * @param {Object} event
          */
         updateGridPosition: function (data, event) {
             var inputValue = parseInt(event.target.value, 10),
@@ -102,8 +102,8 @@ define([
         /**
          * Get updated record index
          *
-         * @param recordData
-         * @param recordId
+         * @param  {Array} recordData
+         * @param {Number} recordId
          * @return {number}
          */
         getUpdatedRecordIndex: function (recordData, recordId) {
@@ -114,7 +114,7 @@ define([
 
         /**
          *
-         * @param recordData to reprocess
+         * @param {Array} recordData to reprocess
          */
         reloadGridData: function (recordData) {
             this.recordData(recordData.sort(function (a, b) {
@@ -127,7 +127,7 @@ define([
         /**
          * Event handler for "Send to bottom" button
          *
-         * @param positionObj
+         * @param {Object} positionObj
          * @return {boolean}
          */
         sendToBottom: function (positionObj) {
@@ -151,7 +151,7 @@ define([
         /**
          * Event handler for "Send to top" button
          *
-         * @param positionObj
+         * @param {Object} positionObj
          * @returns {boolean}
          */
         sendToTop: function (positionObj) {
@@ -176,7 +176,7 @@ define([
         /**
          * Get element from grid for update
          *
-         * @param object
+         * @param {Object} object
          * @return {*}
          */
         getObjectToUpdate: function (object) {
@@ -188,7 +188,7 @@ define([
         /**
          * Value function for position input
          *
-         * @param data
+         * @param {Object} data
          * @return {number}
          */
         getCalculatedPosition: function (data) {
