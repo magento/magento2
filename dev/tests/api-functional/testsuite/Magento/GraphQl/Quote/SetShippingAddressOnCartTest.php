@@ -145,6 +145,52 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoConfigFixture default_store multishipping/options/checkout_multiple 0
+     */
+    public function testSetMultipleShippingAddressesOnCartByGuest()
+    {
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_with_simple_product_without_address',
+            'reserved_order_id'
+        );
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          customer_address_id: 1
+        },
+        {
+          customer_address_id: 1
+        }
+      ]
+    }
+  ) {
+    cart {
+      addresses {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+      }
+    }
+  }
+}
+QUERY;
+        self::expectExceptionMessage('Multiple addresses do not allowed here!');
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
     public function testSetSavedAndNewShippingAddressOnCartAtTheSameTime()
     {
