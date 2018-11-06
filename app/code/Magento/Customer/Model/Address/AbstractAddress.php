@@ -23,7 +23,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method string getFirstname()
  * @method string getMiddlename()
  * @method string getLastname()
- * @method int getCountryId()
+ * @method string getCountryId()
  * @method string getCity()
  * @method string getTelephone()
  * @method string getCompany()
@@ -271,8 +271,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Enforce format of the street field or other multiline custom attributes
      *
      * @param array|string $key
-     * @param null $value
-     * @return \Magento\Framework\DataObject
+     * @param mixed $value
+     * @return $this
      */
     public function setData($key, $value = null)
     {
@@ -286,6 +286,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * Check that address can have multiline attribute by this code (as street or some custom attribute)
+     *
      * @param string $code
      * @return bool
      */
@@ -403,6 +404,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Get region id
+     *
      * @return int
      */
     public function getRegionId()
@@ -425,7 +428,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * @return int
+     * Get country
+     *
+     * @return string
      */
     public function getCountry()
     {
@@ -502,6 +507,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Before save handler
+     *
      * @return $this
      */
     public function beforeSave()
@@ -591,6 +598,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Create region instance
+     *
      * @return \Magento\Directory\Model\Region
      */
     protected function _createRegionInstance()
@@ -599,6 +608,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Create country instance
+     *
      * @return \Magento\Directory\Model\Country
      */
     protected function _createCountryInstance()
@@ -608,6 +619,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * Unset Region from address
+     *
      * @return $this
      * @since 100.2.0
      */
@@ -617,6 +629,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Is company required
+     *
      * @return bool
      * @since 100.2.0
      */
@@ -626,6 +640,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Is telephone required
+     *
      * @return bool
      * @since 100.2.0
      */
@@ -635,6 +651,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Is fax required
+     *
      * @return bool
      * @since 100.2.0
      */
