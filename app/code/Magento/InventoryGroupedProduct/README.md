@@ -1,13 +1,10 @@
-## Introduction
+# InventoryGroupedProduct module
 
-This module is part of the MSI (Multi-Source Inventory) project. See 
-[project description](https://devdocs.magento.com/guides/v2.3/inventory/index.html) 
-for further information.
+The `InventoryGroupedProduct` module integrates inventory management business logic into Magento's grouped product logic.
 
-## Responsibility of this module
-
-Following the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
-this module integrates MSI business logic into Magento's grouped product logic.
+This module is part of the MSI (Multi-Source Inventory) project. The 
+[Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html
+describes the MSI project in more detail.
 
 ## Extension points and service contracts
 
