@@ -1,18 +1,12 @@
-## Introduction
+# InventorySales module
 
-This module is part of the MSI (Multi-Source Inventory) project. See 
-[project description](https://devdocs.magento.com/guides/v2.3/inventory/index.html) 
-for further information.
+The `InventorySales` module integrates Inventory Management business logic into Magento's sales logic.
 
-## Responsibility of this module
-
-Following the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
-this module integrates MSI business logic into Magento's sales logic.
+## Installation details
+ 
+This module is installed as part of Magento Open Source. It cannot be disabled.
 
 ## Extension points and service contracts
 
-All public interfaces regarding this module are located in `InventorySalesApi` module. See 
-[architecture documentation](https://devdocs.magento.com/guides/v2.3/inventory/architecture.html) 
-for further information. 
-
-Please use only `InventorySalesApi` interfaces in order to extend this module.
+All public interfaces related to this module are located in the `InventorySalesApi` module. 
+Use the interfaces defined in `InventorySalesApi` to extend this module.
