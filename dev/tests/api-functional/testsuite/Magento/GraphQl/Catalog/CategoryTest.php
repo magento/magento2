@@ -141,8 +141,7 @@ QUERY;
           available_sort_by
           level
         }
-        image { url, path, label }
-        image_label
+        image { url, label }
         meta_description
         meta_keyword
         meta_title
@@ -225,8 +224,8 @@ QUERY;
         }
         short_description
         sku
-        small_image { url, path, label }
-        thumbnail { url, path, label }
+        small_image { url, label }
+        thumbnail { url, label }
         special_from_date
         special_price
         special_to_date

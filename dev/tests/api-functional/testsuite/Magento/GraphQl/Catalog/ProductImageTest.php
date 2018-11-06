@@ -81,7 +81,6 @@ QUERY;
     items {
         small_image {
             url
-            path
             label
         }
     }
@@ -107,7 +106,6 @@ QUERY;
     items {
         thumbnail {
             url
-            path
             label
         }
     }
