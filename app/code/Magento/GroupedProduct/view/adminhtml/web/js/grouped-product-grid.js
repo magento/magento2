@@ -104,7 +104,7 @@ define([
          *
          * @param  {Array} recordData
          * @param {Number} recordId
-         * @return {number}
+         * @return {Number}
          */
         getUpdatedRecordIndex: function (recordData, recordId) {
             return recordData.map(function (o) {
