@@ -294,8 +294,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $customerId = 1;
         $customer = $this->customerRepository->getById($customerId);
         $customerDetails = $customer->__toArray();
-        $defaultBilling = $customerDetails['default_billing'];
-        $defaultShipping = $customerDetails['default_shipping'];
         $newCustomerEntity = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $newCustomerEntity,
@@ -307,19 +305,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->customerRepository->save($newCustomerEntity);
 
         $newCustomerDetails = $this->customerRepository->getById($customerId);
-        $newCustomerArray = $newCustomerDetails->__toArray();
         //Verify that old addresses are still present
         $this->assertEquals(2, count($newCustomerDetails->getAddresses()));
-        $this->assertEquals(
-            $defaultBilling,
-            $newCustomerArray['default_billing'],
-            "Default billing invalid value"
-        );
-        $this->assertEquals(
-            $defaultShipping,
-            $newCustomerArray['default_shipping'],
-            "Default shipping invalid value"
-        );
     }
 
     /**
@@ -345,19 +332,51 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->customerRepository->save($newCustomerEntity);
 
         $newCustomerDetails = $this->customerRepository->getById($customerId);
-        $newCustomerArray = $newCustomerDetails->__toArray();
         //Verify that old addresses are removed
         $this->assertEquals(0, count($newCustomerDetails->getAddresses()));
-        $this->assertEquals(
-            $newCustomerArray['default_billing'],
-            null,
-            "Default billing invalid value"
+    }
+
+    /**
+     * Test customer update with new address
+     *
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     */
+    public function testUpdateCustomerWithNewAddress()
+    {
+        $customerId = 1;
+        $customer = $this->customerRepository->getById($customerId);
+        $customerDetails = $customer->__toArray();
+        unset($customerDetails['default_billing']);
+        unset($customerDetails['default_shipping']);
+
+        $beforeSaveCustomer = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $beforeSaveCustomer,
+            $customerDetails,
+            CustomerInterface::class
         );
-        $this->assertEquals(
-            $newCustomerArray['default_shipping'],
-            null,
-            "Default shipping invalid value"
+
+        $addresses = $customer->getAddresses();
+        $beforeSaveAddress = $addresses[0]->__toArray();
+        unset($beforeSaveAddress['id']);
+        $newAddressDataObject = $this->addressFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $newAddressDataObject,
+            $beforeSaveAddress,
+            AddressInterface::class
         );
+
+        $beforeSaveCustomer->setAddresses([$newAddressDataObject]);
+        $this->customerRepository->save($beforeSaveCustomer);
+
+        $newCustomer = $this->customerRepository->getById($customerId);
+        $newCustomerAddresses = $newCustomer->getAddresses();
+        $addressId = $newCustomerAddresses[0]->getId();
+
+        $this->assertEquals($newCustomer->getDefaultBilling(), $addressId, "Default billing invalid value");
+        $this->assertEquals($newCustomer->getDefaultShipping(), $addressId, "Default shipping invalid value");
     }
 
     /**
