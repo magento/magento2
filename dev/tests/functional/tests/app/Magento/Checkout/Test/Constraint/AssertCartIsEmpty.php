@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Constraint;
 
@@ -29,8 +30,10 @@ class AssertCartIsEmpty extends AbstractConstraint
      * @param BrowserInterface $browser
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart, BrowserInterface $browser)
-    {
+    public function processAssert(
+        CheckoutCart $checkoutCart,
+        BrowserInterface $browser
+    ): void {
         $checkoutCart->open();
         $cartEmptyBlock = $checkoutCart->getCartEmptyBlock();
 
@@ -46,7 +49,7 @@ class AssertCartIsEmpty extends AbstractConstraint
             $browser->getUrl(),
             true,
             'Wrong link to main page on empty cart page: expected - ' . $_ENV['app_frontend_url']
-            . ', actural - ' . $browser->getUrl()
+            . ', actual - ' . $browser->getUrl()
         );
     }
 
@@ -63,14 +66,18 @@ class AssertCartIsEmpty extends AbstractConstraint
     /**
      * Asserts that two urls are equal
      *
-     * @param string $url1
-     * @param string $url2
+     * @param string $expectedUrl
+     * @param string $actualUrl
      * @param bool $ignoreScheme
      * @param string $message
      * @return void
      */
-    private function assertUrlEqual($expectedUrl, $actualUrl, $ignoreScheme = false, $message = '')
-    {
+    private function assertUrlEqual(
+        string $expectedUrl,
+        string $actualUrl,
+        bool $ignoreScheme = false,
+        string $message = ''
+    ): void {
         $urlArray1 = parse_url($expectedUrl);
         $urlArray2 = parse_url($actualUrl);
         if ($ignoreScheme) {
