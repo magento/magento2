@@ -1,18 +1,20 @@
-## Introduction
+# InventoryShipping module
 
-This module is part of the MSI (Multi-Source Inventory) project. See 
-[project description](https://devdocs.magento.com/guides/v2.3/inventory/index.html) 
-for further information.
+The `InventoryShipping` module integrates MSI business logic into Magento's shipping logic.
 
-## Responsibility of this module
-
-Following the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
-this module integrates MSI business logic into Magento's shipping logic.
+## Installation details
+ 
+This module is installed as part of Magento Open Source. It cannot be disabled.
 
 ## Extension points and service contracts
 
-All public interfaces regarding this module are located in 
-`InventorySourceDeductionApi` and `InventorySourceSelectionApi` module. 
-See  [architecture documentation](https://devdocs.magento.com/guides/v2.3/inventory/architecture.html) 
-for further information. 
+All public interfaces related to this module are located in the `InventorySourceDeductionApi` and 
+`InventorySourceSelectionApi` modules. 
+Use the interfaces defined in those modules to extend this module.
 
+## Additional information
+
+The `InventoryShipping` module defines the following events:
+
+* `sales_order_shipment_save_after`
+* `sales_order_invoice_save_after`
