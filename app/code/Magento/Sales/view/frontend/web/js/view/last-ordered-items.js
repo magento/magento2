@@ -5,8 +5,9 @@
 
 define([
     'uiComponent',
-    'Magento_Customer/js/customer-data'
-], function (Component, customerData) {
+    'Magento_Customer/js/customer-data',
+    'underscore'
+], function (Component, customerData, _) {
     'use strict';
 
     return Component.extend({
