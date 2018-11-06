@@ -22,6 +22,7 @@ use Magento\Store\Model\ScopeInterface as StoreScope;
  *
  * @api
  * @since 100.1.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class System implements ConfigTypeInterface
 {
@@ -101,6 +102,8 @@ class System implements ConfigTypeInterface
     }
 
     /**
+     * Get config value by path.
+     *
      * System configuration is separated by scopes (default, websites, stores). Configuration of a scope is inherited
      * from its parent scope (store inherits website).
      *
@@ -121,12 +124,38 @@ class System implements ConfigTypeInterface
     public function get($path = '')
     {
         if ($path === '') {
-            $this->data = array_replace_recursive($this->loadAllData(), $this->data);
+            $this->data = array_replace_recursive($this->data, $this->loadAllData());
 
             return $this->data;
         }
 
         return $this->getWithParts($path);
+    }
+
+    /**
+     * Merge newly loaded config data into already loaded.
+     *
+     * @param array $newData
+     * @return void
+     */
+    private function mergeData(array $newData): void
+    {
+        if (array_key_exists(ScopeInterface::SCOPE_DEFAULT, $newData)) {
+            //Sometimes new data may contain links to arrays and we don't want that.
+            $this->data[ScopeInterface::SCOPE_DEFAULT] = (array)$newData[ScopeInterface::SCOPE_DEFAULT];
+            unset($newData[ScopeInterface::SCOPE_DEFAULT]);
+        }
+        foreach ($newData as $scopeType => $scopeTypeData) {
+            if (!array_key_exists($scopeType, $this->data)) {
+                //Sometimes new data may contain links to arrays and we don't want that.
+                $this->data[$scopeType] = (array)$scopeTypeData;
+            } else {
+                foreach ($scopeTypeData as $scopeId => $scopeData) {
+                    //Sometimes new data may contain links to arrays and we don't want that.
+                    $this->data[$scopeType][$scopeId] = (array)$scopeData;
+                }
+            }
+        }
     }
 
     /**
@@ -141,8 +170,10 @@ class System implements ConfigTypeInterface
 
         if (count($pathParts) === 1 && $pathParts[0] !== ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$pathParts[0]])) {
+                //First filling data property with unprocessed data for post-processors to be able to use.
                 $data = $this->readData();
-                $this->data = array_replace_recursive($data, $this->data);
+                //Post-processing only the data we know is not yet processed.
+                $this->mergeData($this->postProcessor->process($data));
             }
 
             return $this->data[$pathParts[0]];
@@ -152,7 +183,11 @@ class System implements ConfigTypeInterface
 
         if ($scopeType === ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$scopeType])) {
-                $this->data = array_replace_recursive($this->loadDefaultScopeData($scopeType), $this->data);
+                //Adding unprocessed data to the data property so it can be used in post-processing.
+                $this->mergeData($scopeData = $this->loadDefaultScopeData($scopeType));
+                //Only post-processing the data we know is raw.
+                $scopeData = $this->postProcessor->process($scopeData);
+                $this->mergeData($scopeData);
             }
 
             return $this->getDataByPathParts($this->data[$scopeType], $pathParts);
@@ -162,10 +197,11 @@ class System implements ConfigTypeInterface
 
         if (!isset($this->data[$scopeType][$scopeId])) {
             $scopeData = $this->loadScopeData($scopeType, $scopeId);
-
-            if (!isset($this->data[$scopeType][$scopeId])) {
-                $this->data = array_replace_recursive($scopeData, $this->data);
-            }
+            //Adding unprocessed data to the data property so it can be used in post-processing.
+            $this->mergeData($scopeData);
+            //Only post-processing the data we know is raw.
+            $scopeData = $this->postProcessor->process($scopeData);
+            $this->mergeData($scopeData);
         }
 
         return isset($this->data[$scopeType][$scopeId])
@@ -186,9 +222,10 @@ class System implements ConfigTypeInterface
             $data = $this->readData();
         } else {
             $data = $this->serializer->unserialize($cachedData);
+            $this->data = $data;
         }
 
-        return $data;
+        return $this->postProcessor->process($data);
     }
 
     /**
@@ -243,6 +280,7 @@ class System implements ConfigTypeInterface
 
     /**
      * Cache configuration data.
+     *
      * Caches data per scope to avoid reading data for all scopes on every request
      *
      * @param array $data
@@ -308,9 +346,6 @@ class System implements ConfigTypeInterface
     private function readData(): array
     {
         $this->data = $this->reader->read();
-        $this->data = $this->postProcessor->process(
-            $this->data
-        );
 
         return $this->data;
     }
