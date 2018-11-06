@@ -225,7 +225,7 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
                     'insert' => [],
                     'delete' => [],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -233,7 +233,7 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
      * @param $type
      * @param $ids
      */
-    private function setupExpectationsForConnection($type, $ids): void
+    private function setupExpectationsForConnection($type, $ids)
     {
         switch ($type) {
             case 'insert':
