@@ -42,7 +42,9 @@ define([
          * @param {jQuery} element - Comment holder
          */
         (function lookup(element) {
-            var iframeHostName;
+            var iframeHostName,
+                contents,
+                elementContents;
 
             // prevent cross origin iframe content reading
             if ($(element).prop('tagName') === 'IFRAME') {
@@ -54,11 +56,17 @@ define([
                 }
             }
 
-            // rewrite jQuery contents()
-             var contents = function (element) {
-                return $.map(element, function (elem) {
+            /**
+             * Rewrite jQuery contents method
+             *
+             * @param {Object} el
+             * @returns {Object}
+             * @private
+             */
+            contents = function (el) {
+                return $.map(el, function (elem) {
                     try {
-                        return $.nodeName(elem, "iframe") ?
+                        return $.nodeName(elem, 'iframe') ?
                                elem.contentDocument || (elem.contentWindow ? elem.contentWindow.document : []) :
                                $.merge([], elem.childNodes);
                     } catch (e) {
@@ -68,7 +76,7 @@ define([
                 });
             };
 
-            var elementContents = contents($(element));
+            elementContents = contents($(element));
 
             $.each(elementContents, function (index, el) {
                 switch (el.nodeType) {
