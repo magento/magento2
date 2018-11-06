@@ -54,7 +54,6 @@ define([
             this.recordData(recordData);
         },
 
-
         /**
          * Update position for element after position from another page is entered
          *
