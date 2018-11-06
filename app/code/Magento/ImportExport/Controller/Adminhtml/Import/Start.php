@@ -8,7 +8,11 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\ImportExport\Model\Import;
 
+/**
+ * Controller responsible for initiating the import process
+ */
 class Start extends ImportResultController implements HttpPostActionInterface
 {
     /**
@@ -63,6 +67,11 @@ class Start extends ImportResultController implements HttpPostActionInterface
 
             $this->importModel->setData($data);
             $errorAggregator = $this->importModel->getErrorAggregator();
+            $errorAggregator->initValidationStrategy(
+                $this->importModel->getData(Import::FIELD_NAME_VALIDATION_STRATEGY),
+                $this->importModel->getData(Import::FIELD_NAME_ALLOWED_ERROR_COUNT)
+            );
+
             try {
                 $this->importModel->importSource();
             } catch (\Exception $e) {

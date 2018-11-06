@@ -1484,6 +1484,27 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Framework\Setup\Declaration\Schema\Config\SchemaLocator" type="Magento\Framework\Config\SchemaLocator">
+        <arguments>
+            <argument name="realPath" xsi:type="string">urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\Setup\Declaration\Schema\FileSystem\XmlReader" type="Magento\Framework\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolverByModule</argument>
+            <argument name="converter" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Config\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">db_schema.xml</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/schema/table" xsi:type="string">name</item>
+                <item name="/schema/table/column" xsi:type="string">name</item>
+                <item name="/schema/table/constraint" xsi:type="string">referenceId</item>
+                <item name="/schema/table/index" xsi:type="string">referenceId</item>
+                <item name="/schema/table/index/column" xsi:type="string">name</item>
+                <item name="/schema/table/constraint/column" xsi:type="string">name</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Framework\Setup\Declaration\Schema\OperationsExecutor">
         <arguments>
             <argument name="operations" xsi:type="array">

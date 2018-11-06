@@ -9,20 +9,16 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ApplyCartRuleOnStorefrontActionGroup">
         <arguments>
-            <argument name="Product" defaultValue="_defaultProduct"/>
-            <argument name="Coupon" defaultValue="SimpleSalesRuleCoupon"/>
+            <argument name="product"/>
+            <argument name="couponCode" type="string"/>
         </arguments>
-        <amOnPage url="{{Product.name}}.html" stepKey="navigateToProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart" />
-        <waitForText userInput="You added {{Product.name}} to your shopping cart." stepKey="waitForAddedBtn"/>
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <click selector="{{DiscountSection.DiscountTab}}" stepKey="scrollToDiscountTab" />
-        <fillField selector="{{DiscountSection.CouponInput}}" userInput="{{Coupon.code}}" stepKey="fillCouponCode" />
+        <waitForText userInput="You added {{product.name}} to your shopping cart." stepKey="waitForText"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{DiscountSection.DiscountTab}}" stepKey="clickToDiscountTab" />
+        <fillField selector="{{DiscountSection.CouponInput}}" userInput="{{couponCode}}" stepKey="fillCouponCode"/>
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
-        <waitForText userInput="You used coupon code" stepKey="waitForText"/>
-        <see userInput="You used coupon code" stepKey="assertText"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
     </actionGroup>
 </actionGroups>

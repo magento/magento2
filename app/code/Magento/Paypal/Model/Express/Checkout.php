@@ -1056,10 +1056,7 @@ class Checkout
      */
     protected static function cmpShippingOptions(DataObject $option1, DataObject $option2)
     {
-        if ($option1->getAmount() == $option2->getAmount()) {
-            return 0;
-        }
-        return ($option1->getAmount() < $option2->getAmount()) ? -1 : 1;
+        return $option1->getAmount() <=> $option2->getAmount();
     }
 
     /**
