@@ -7,39 +7,34 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use Magento\Catalog\Model\Product;
-use Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextAttribute\FormatList;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Catalog\Helper\Output as OutputHelper;
 
 /**
  * Resolve rendered content for attributes where HTML content is allowed
  */
-class ProductTextAttribute implements ResolverInterface
+class ProductComplexTextAttribute implements ResolverInterface
 {
     /**
-     * @var FormatList
+     * @var OutputHelper
      */
-    private $formatList;
+    private $outputHelper;
 
     /**
-     * @var string
-     */
-    private $defaultFormat = 'html';
-
-    /**
-     * @param FormatList $formatList
+     * @param OutputHelper $outputHelper
      */
     public function __construct(
-        FormatList $formatList
+        OutputHelper $outputHelper
     ) {
-        $this->formatList = $formatList;
+        $this->outputHelper = $outputHelper;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -47,7 +42,7 @@ class ProductTextAttribute implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) {
+    ): array {
         if (!isset($value['model'])) {
             throw new GraphQlInputException(__('"model" value should be specified'));
         }
@@ -55,10 +50,8 @@ class ProductTextAttribute implements ResolverInterface
         /* @var $product Product */
         $product = $value['model'];
         $fieldName = $field->getName();
-        $formatIdentifier = $args['format'] ?? $this->defaultFormat;
-        $format = $this->formatList->create($formatIdentifier);
-        $result = ['content' => $format->getContent($product, $fieldName)];
+        $renderedValue = $this->outputHelper->productAttribute($product, $product->getData($fieldName), $fieldName);
 
-        return $result;
+        return ['html' => $renderedValue];
     }
 }
