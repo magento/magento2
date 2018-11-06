@@ -52,6 +52,6 @@ class ProductComplexTextAttribute implements ResolverInterface
         $fieldName = $field->getName();
         $renderedValue = $this->outputHelper->productAttribute($product, $product->getData($fieldName), $fieldName);
 
-        return ['html' => $renderedValue];
+        return ['html' => $renderedValue ?? ''];
     }
 }
