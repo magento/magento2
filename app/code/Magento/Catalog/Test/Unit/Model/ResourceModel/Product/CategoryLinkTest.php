@@ -134,53 +134,8 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
 
         foreach ($affectedIds as $type => $ids) {
             $expectedResult = array_merge($expectedResult, $ids);
-
             // Verify if the correct insert, update and/or delete actions are performed:
-            switch ($type) {
-                case 'insert':
-                    $this->connectionMock
-                        ->expects($this->exactly(empty($ids) ? 0 : 1))
-                        ->method('insertArray')
-                        ->with(
-                            $this->anything(),
-                            $this->anything(),
-                            $this->callback(function ($data) use ($ids) {
-                                $foundIds = [];
-                                foreach ($data as $row) {
-                                    $foundIds[] = $row['category_id'];
-                                }
-                                return $ids === $foundIds;
-                            })
-                        );
-                    break;
-                case 'update':
-                    $this->connectionMock
-                        ->expects($this->exactly(empty($ids) ? 0 : 1))
-                        ->method('insertOnDuplicate')
-                        ->with(
-                            $this->anything(),
-                            $this->callback(function ($data) use ($ids) {
-                                $foundIds = [];
-                                foreach ($data as $row) {
-                                    $foundIds[] = $row['category_id'];
-                                }
-                                return $ids === $foundIds;
-                            })
-                        );
-                    break;
-                case 'delete':
-                    $this->connectionMock
-                        ->expects($this->exactly(empty($ids) ? 0 : 1))
-                        ->method('delete')
-                        // Verify that the correct category ID's are touched:
-                        ->with(
-                            $this->anything(),
-                            $this->callback(function ($data) use ($ids) {
-                                return array_values($data)[1] === $ids;
-                            })
-                        );
-                    break;
-            }
+            $this->setupExpectationsForConnection($type, $ids);
         }
 
         $actualResult = $this->model->saveCategoryLinks($product, $newCategoryLinks);
@@ -272,5 +227,58 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
                 ],
             ]
         ];
+    }
+
+    /**
+     * @param $type
+     * @param $ids
+     */
+    private function setupExpectationsForConnection($type, $ids): void
+    {
+        switch ($type) {
+            case 'insert':
+                $this->connectionMock
+                    ->expects($this->exactly(empty($ids) ? 0 : 1))
+                    ->method('insertArray')
+                    ->with(
+                        $this->anything(),
+                        $this->anything(),
+                        $this->callback(function ($data) use ($ids) {
+                            $foundIds = [];
+                            foreach ($data as $row) {
+                                $foundIds[] = $row['category_id'];
+                            }
+                            return $ids === $foundIds;
+                        })
+                    );
+                break;
+            case 'update':
+                $this->connectionMock
+                    ->expects($this->exactly(empty($ids) ? 0 : 1))
+                    ->method('insertOnDuplicate')
+                    ->with(
+                        $this->anything(),
+                        $this->callback(function ($data) use ($ids) {
+                            $foundIds = [];
+                            foreach ($data as $row) {
+                                $foundIds[] = $row['category_id'];
+                            }
+                            return $ids === $foundIds;
+                        })
+                    );
+                break;
+            case 'delete':
+                $this->connectionMock
+                    ->expects($this->exactly(empty($ids) ? 0 : 1))
+                    ->method('delete')
+                    // Verify that the correct category ID's are touched:
+                    ->with(
+                        $this->anything(),
+                        $this->callback(function ($data) use ($ids) {
+                            return array_values($data)[1] === $ids;
+                        })
+                    );
+                break;
+        }
     }
 }
