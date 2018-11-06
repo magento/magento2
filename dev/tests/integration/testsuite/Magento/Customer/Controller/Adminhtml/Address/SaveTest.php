@@ -86,9 +86,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->objectManager->get(\Magento\Backend\Model\Session::class)->setCustomerFormData($post);
 
         $this->customerAddress->execute();
-        /**
-         * Check that errors was generated and set to session
-         */
+
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         /**
@@ -219,5 +217,37 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertEquals('test firstname', $customer->getFirstname());
         $addresses = $customer->getAddresses();
         $this->assertCount(4, $addresses);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     */
+    public function testValidateCustomerWithAddressFailure()
+    {
+        $customer = $this->customerRepository->get('customer@example.com');
+        $customerId = $customer->getId();
+        $post = [
+            'parent_id' => $customerId,
+            'firstname' => '',
+            'lastname' => '',
+            'street' => ['update street'],
+            'city' => 'update city',
+            'postcode' => '01001',
+            'telephone' => '',
+        ];
+        $this->getRequest()->setPostValue($post)->setMethod(HttpRequest::METHOD_POST);
+
+        $this->objectManager->get(\Magento\Backend\Model\Session::class)->setCustomerFormData($post);
+
+        $this->customerAddress->execute();
+
+        /**
+         * Check that errors was generated and set to session
+         */
+        $this->assertSessionMessages(
+            $this->equalTo(['One or more input exceptions have occurred.']),
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+        );
     }
 }

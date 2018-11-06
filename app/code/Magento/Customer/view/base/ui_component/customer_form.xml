@@ -328,10 +328,9 @@
             </settings>
         </component>
 
-        <button name="edit_billing_address">
+        <button name="edit_billing_address" component="Magento_Customer/js/address/default-address">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Customer/js/address/default-address</item>
                     <item name="buttonClasses" xsi:type="string">edit-default-billing-address-button</item>
                     <item name="actions" xsi:type="array">
                         <item name="0" xsi:type="array">
@@ -375,10 +374,9 @@
             </settings>
         </component>
 
-        <button name="edit_shipping_address">
+        <button name="edit_shipping_address" component="Magento_Customer/js/address/default-address">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Customer/js/address/default-address</item>
                     <item name="buttonClasses" xsi:type="string">edit-default-shipping-address-button</item>
                     <item name="actions" xsi:type="array">
                         <item name="0" xsi:type="array">
@@ -405,11 +403,10 @@
                 </imports>
             </settings>
         </button>
-        <button name="add_address">
+        <button name="add_address" component="Magento_Customer/js/address/default-address">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="formElement" xsi:type="string">container</item>
-                    <item name="component" xsi:type="string">Magento_Customer/js/address/default-address</item>
                     <item name="buttonClasses" xsi:type="string">add-new-address-button</item>
                     <item name="actions" xsi:type="array">
                         <item name="0" xsi:type="array">

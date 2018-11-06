@@ -39,25 +39,18 @@
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
         <!-- Filter Search -->
-        <filterSearch name="fulltext">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="provider" xsi:type="string">customer_address_listing.customer_address_listing_data_source</item>
-                    <item name="chipsProvider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.listing_filters_chips</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.search</item>
-                    </item>
-                </item>
-            </argument>
+        <filterSearch name="fulltext" provider="customer_address_listing.customer_address_listing_data_source">
+            <settings>
+                <chipsProvider>customer_address_listing.customer_address_listing.listing_top.listing_filters_chips</chipsProvider>
+                <storageConfig>
+                    <param name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.bookmarks</param>
+                    <param name="namespace" xsi:type="string">current.search</param>
+                </storageConfig>
+            </settings>
         </filterSearch>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.filters</item>
-                    </item>
                     <item name="childDefaults" xsi:type="array">
                         <item name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.listing_filters</item>
                         <item name="imports" xsi:type="array">
@@ -66,6 +59,12 @@
                     </item>
                 </item>
             </argument>
+            <settings>
+                <storageConfig>
+                    <param name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.bookmarks</param>
+                    <param name="namespace" xsi:type="string">current.filters</param>
+                </storageConfig>
+            </settings>
         </filters>
         <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
             <action name="delete">

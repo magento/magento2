@@ -170,18 +170,22 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         /** @var NewOperation|null $delegatedNewOperation */
         $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
         $prevCustomerData = null;
+        $prevCustomerDataArr = null;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
+            $prevCustomerDataArr = $prevCustomerData->__toArray();
         }
-
+        /** @var $customer \Magento\Customer\Model\Data\Customer */
+        $customerArr = $customer->__toArray();
         $customer = $this->imageProcessor->save(
             $customer,
             CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
             $prevCustomerData
         );
-
-        /** @var array $customerData */
+        $origAddresses = $customer->getAddresses();
+        $customer->setAddresses([]);
         $customerData = $this->extensibleDataObjectConverter->toNestedArray($customer, [], CustomerInterface::class);
+        $customer->setAddresses($origAddresses);
         /** @var Customer $customerModel */
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
         //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
@@ -190,16 +194,61 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         if ($storeId === null) {
             $customerModel->setStoreId($this->storeManager->getStore()->getId());
         }
+        // Need to use attribute set or future updates can cause data loss
+        if (!$customerModel->getAttributeSetId()) {
+            $customerModel->setAttributeSetId(CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER);
+        }
         $this->populateCustomerWithSecureData($customerModel, $passwordHash);
         // If customer email was changed, reset RpToken info
         if ($prevCustomerData && $prevCustomerData->getEmail() !== $customerModel->getEmail()) {
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
+        if (!array_key_exists('default_billing', $customerArr)
+            && null !== $prevCustomerDataArr
+            && array_key_exists('default_billing', $prevCustomerDataArr)
+        ) {
+            $customerModel->setDefaultBilling($prevCustomerDataArr['default_billing']);
+        }
+        if (!array_key_exists('default_shipping', $customerArr)
+            && null !== $prevCustomerDataArr
+            && array_key_exists('default_shipping', $prevCustomerDataArr)
+        ) {
+            $customerModel->setDefaultShipping($prevCustomerDataArr['default_shipping']);
+        }
         $customerModel->save();
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
-
+        if (!$customer->getAddresses()
+            && $delegatedNewOperation
+            && $delegatedNewOperation->getCustomer()->getAddresses()
+        ) {
+            $customer->setAddresses($delegatedNewOperation->getCustomer()->getAddresses());
+        }
+        if ($customer->getAddresses() !== null) {
+            if ($customer->getId()) {
+                $existingAddresses = $this->getById($customer->getId())->getAddresses();
+                $getIdFunc = function ($address) {
+                    return $address->getId();
+                };
+                $existingAddressIds = array_map($getIdFunc, $existingAddresses);
+            } else {
+                $existingAddressIds = [];
+            }
+            $savedAddressIds = [];
+            foreach ($customer->getAddresses() as $address) {
+                $address->setCustomerId($customerId)
+                    ->setRegion($address->getRegion());
+                $this->addressRepository->save($address);
+                if ($address->getId()) {
+                    $savedAddressIds[] = $address->getId();
+                }
+            }
+            $addressIdsToDelete = array_diff($existingAddressIds, $savedAddressIds);
+            foreach ($addressIdsToDelete as $addressId) {
+                $this->addressRepository->deleteById($addressId);
+            }
+        }
         $this->customerRegistry->remove($customerId);
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
         $this->eventManager->dispatch(
