@@ -50,6 +50,27 @@ class Date extends Column
     /**
      * @inheritdoc
      */
+    public function prepare()
+    {
+        $config = $this->getData('config');
+        $config['filter'] = [
+            'filterType' => 'dateRange',
+            'templates' => [
+                'date' => [
+                    'options' => [
+                        'dateFormat' => $this->timezone->getDateFormatWithLongYear()
+                    ]
+                ]
+            ]
+        ];
+        $this->setData('config', $config);
+
+        parent::prepare();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
