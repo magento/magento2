@@ -63,7 +63,7 @@ interface MenuNodeInterface
      * Set menu node URL.
      *
      * @param string $url
-     * @return MenuNodeInterface
+     * @return void
      */
     public function setUrl(string $url): void;
 
@@ -81,7 +81,7 @@ interface MenuNodeInterface
      * Set nested menu nodes.
      *
      * @param array $children
-     * @return MenuNodeInterface
+     * @return void
      */
     public function setChildren(array $children): void;
 }
