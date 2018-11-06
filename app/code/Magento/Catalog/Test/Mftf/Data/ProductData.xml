@@ -85,6 +85,7 @@
         <data key="attribute_set_id">4</data>
         <data key="name" unique="suffix">SimpleProduct2</data>
         <data key="price">300.00</data>
+        <data key="quantity">200</data>
         <data key="visibility">4</data>
         <data key="status">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
