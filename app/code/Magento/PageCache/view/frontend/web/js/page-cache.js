@@ -71,6 +71,7 @@ define([
                                $.merge([], elem.childNodes);
                     } catch (e) {
                         consoleLogger.error(e);
+
                         return [];
                     }
                 });
