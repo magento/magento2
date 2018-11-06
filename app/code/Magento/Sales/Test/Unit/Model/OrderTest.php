@@ -52,6 +52,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var HistoryCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var HistoryCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $historyCollectionFactoryMock;
 
@@ -330,6 +331,20 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->order->setTotalPaid($totalPaid);
         $this->priceCurrency->expects($this->once())->method('round')->with($totalPaid)->willReturnArgument(0);
         $this->assertTrue($this->order->canCreditmemo());
+    }
+
+    /**
+     * Test canCreditMemo method when grand total and paid total are zero.
+     *
+     * @return void
+     */
+    public function testCanCreditMemoForZeroTotal()
+    {
+        $grandTotal = 0;
+        $totalPaid = 0;
+        $this->order->setGrandTotal($grandTotal);
+        $this->order->setTotalPaid($totalPaid);
+        $this->assertFalse($this->order->canCreditmemo());
     }
 
     public function testCanNotCreditMemoWithTotalNull()

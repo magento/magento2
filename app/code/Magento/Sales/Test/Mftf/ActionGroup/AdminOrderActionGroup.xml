@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Cancel order that is in pending status-->
     <actionGroup name="cancelPendingOrder">
         <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder"/>
@@ -163,6 +163,15 @@
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" after="seeSuccessMessage" stepKey="seeOrderPendingStatus"/>
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="getOrderId"/>
         <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty"/>
+    </actionGroup>
+
+    <!--Select free shipping method-->
+    <actionGroup name="orderSelectFreeShipping">
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
+        <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="waitForShippingOptions"/>
+        <selectOption selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" userInput="freeshipping_freeshipping" stepKey="checkFreeShipping"/>
     </actionGroup>
 
     <!--Check that customer information is correct in order-->
