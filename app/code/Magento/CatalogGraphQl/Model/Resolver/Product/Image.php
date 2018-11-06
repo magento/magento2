@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\ImageFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -45,7 +46,7 @@ class Image implements ResolverInterface
         array $args = null
     ): array {
         if (!isset($value['model'])) {
-            throw new \LogicException(__('"model" value should be specified'));
+            throw new LocalizedException(__('"model" value should be specified'));
         }
         /** @var Product $product */
         $product = $value['model'];

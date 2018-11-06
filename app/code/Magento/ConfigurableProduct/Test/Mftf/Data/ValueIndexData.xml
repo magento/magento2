@@ -14,4 +14,7 @@
     <entity name="ValueIndex2" type="ValueIndex">
         <var key="value_index" entityKey="value" entityType="ProductAttributeOption"/>
     </entity>
+    <entity name="ValueIndex3" type="ValueIndex">
+        <var key="value_index" entityKey="value" entityType="ProductAttributeOption"/>
+    </entity>
 </entities>
