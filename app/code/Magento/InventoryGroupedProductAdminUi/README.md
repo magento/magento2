@@ -1,14 +1,15 @@
-## Introduction
+# InventoryGroupedProductAdminUi module
 
-This module is part of the MSI (Multi-Source Inventory) project. See 
-[project description](https://devdocs.magento.com/guides/v2.3/inventory/index.html) 
-for further information.
+The `InventoryGroupedProductAdminUi` module extends Magento's admin UI with inventory management functionality.
 
-## Responsibility of this module
+This module is part of the MSI (Multi-Source Inventory) project. The 
+[Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html
+describes the MSI project in more detail.
 
-Following the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
-this module extends Magento's admin UI with MSI functionality.
+## Installation details
 
-## Headless Magento Installation
+This module is installed as part of Magento Open Source. You can remove it if you run a headless version of Magento.
 
-You can remove this module if you run a headless version of Magento.
+## Extension points and service contracts
+
+There are no extension points or service contracts for this module.
