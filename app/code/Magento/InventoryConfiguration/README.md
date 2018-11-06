@@ -1,4 +1,4 @@
-# InventoryConfiguration
+# InventoryConfiguration module
 
 The `InventoryConfiguration` module implements logic for inventory management configuration.
 
