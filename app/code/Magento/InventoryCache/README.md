@@ -1,4 +1,4 @@
-# InventoryCache
+# InventoryCache module
 
 The `InventoryCache` module integrates inventory management business logic into Magento's cache logic.
 
