@@ -26,7 +26,10 @@ class Success extends \Magento\Checkout\Controller\Onepage implements HttpGetAct
         $resultPage = $this->resultPageFactory->create();
         $this->_eventManager->dispatch(
             'checkout_onepage_controller_success_action',
-            ['order_ids' => [$session->getLastOrderId()]]
+            [
+                'order_ids' => [$session->getLastOrderId()],
+                'order' => $session->getLastRealOrder()
+            ]
         );
         return $resultPage;
     }
