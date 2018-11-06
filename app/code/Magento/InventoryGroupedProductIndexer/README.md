@@ -2,6 +2,10 @@
 
 The `InventoryGroupedProductIndexer` module integrates inventory management business logic into Magento's indexation logic for grouped products.
 
+This module is part of the MSI (Multi-Source Inventory) project. The 
+[Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html
+describes the MSI project in more detail.
+
 ## Installation details
 
 This module is installed as part of Magento Open Source. It cannot be disabled.
