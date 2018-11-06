@@ -11,6 +11,8 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
+ * Date format column
+ *
  * @api
  * @since 100.0.2
  */
