@@ -351,7 +351,6 @@ type CustomizableFileValue @doc(description: "CustomizableFileValue defines the 
 
 type ProductImage @doc(description: "Product image information. Contains image relative path, URL and label") {
     url: String @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage\\Url")
-    path: String @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage\\Path")
     label: String @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage\\Label")
 }
 
