@@ -1,4 +1,4 @@
-# InventoryAdminUi
+# InventoryAdminUi module
 
 The `InventoryAdminUi` module extends the Magento Admin UI to add MSI functionality.
 
@@ -14,10 +14,10 @@ This module is installed as part of Magento Open Source. You can remove it if yo
 
 The `InventoryAdminUi` module contains several extension points.
 
-## Layouts
+### Layouts
 
 You can extend and override layouts defined in the `view/adminhtml/layout`  directory.
 
-## UI Components
+### UI Components
 
 The `view/adminhtml/ui_component` directory contains extensible UI components.
