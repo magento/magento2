@@ -1,10 +1,11 @@
-## Introduction
+# InventoryImportExport module
 
-This module is part of the MSI (Multi-Source Inventory) project. See 
-[project description](https://devdocs.magento.com/guides/v2.3/inventory/index.html) 
-for further information.
+The `InventoryImportExport` module provides compatibility between Magento's flat file import/export logic and Inventory Management.
+ 
+## Installation details
 
-## Responsibility of this module
+This module is installed as part of Magento Open Source. It cannot be disabled.
 
-Following the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
-this module compatibility between Magento's flat file import/export logic and MSI.
+## Extension points and service contracts
+
+There are no extension points or service contracts for this module.
