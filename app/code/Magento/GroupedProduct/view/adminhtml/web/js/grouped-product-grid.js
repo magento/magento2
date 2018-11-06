@@ -47,6 +47,7 @@ define([
             if (~~this.currentPage() === this.pages()) {
                 return false;
             }
+
             for (index; index < recordData.length; index++) {
                 recordData[index].position = index + offset;
             }
