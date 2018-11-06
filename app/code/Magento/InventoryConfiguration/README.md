@@ -1,18 +1,12 @@
-## Introduction
+# InventoryConfiguration
 
-This module is part of the MSI (Multi-Source Inventory) project. See 
-[project description](https://devdocs.magento.com/guides/v2.3/inventory/index.html) 
-for further information.
+The `InventoryConfiguration` module implements logic for inventory management configuration.
 
-## Responsibility of this module
-
-Following the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
-this module implements logic for inventory management configuration.
+This module is part of the MSI (Multi-Source Inventory) project. The 
+[Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html
+describes the MSI project in more detail.
 
 ## Extension points and service contracts
 
-All public interfaces regarding this module are located in `InventoryConfigurationApi` module. See 
-[architecture documentation](https://devdocs.magento.com/guides/v2.3/inventory/architecture.html) 
-for further information. 
-
-Please use only `InventoryConfigurationApi` interfaces in order to extend this module.
+All public interfaces related to this module are located in the `InventoryConfigurationApi` module. 
+Use the interfaces defined in `InventoryConfigurationApi` to extend this module.
