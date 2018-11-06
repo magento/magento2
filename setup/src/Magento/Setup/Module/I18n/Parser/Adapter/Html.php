@@ -20,7 +20,7 @@ class Html extends AbstractAdapter
     const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/i";
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _parse()
     {

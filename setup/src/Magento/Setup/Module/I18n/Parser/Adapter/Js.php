@@ -11,7 +11,7 @@ namespace Magento\Setup\Module\I18n\Parser\Adapter;
 class Js extends AbstractAdapter
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _parse()
     {

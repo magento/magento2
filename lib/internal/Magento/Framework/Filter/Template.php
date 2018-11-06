@@ -10,6 +10,8 @@
 namespace Magento\Framework\Filter;
 
 /**
+ * Template filter
+ *
  * @api
  */
 class Template implements \Zend_Filter_Interface
@@ -228,8 +230,9 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Adds a callback to run after main filtering has happened. Callback must accept a single argument and return
-     * a string of the processed value.
+     * Adds a callback to run after main filtering has happened.
+     *
+     * Callback must accept a single argument and return a string of the processed value.
      *
      * @param callable $afterFilterCallback
      * @return $this
@@ -257,6 +260,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Get var directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -302,6 +307,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Get depend directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -320,6 +327,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * If directive
+     *
      * @param string[] $construction
      * @return string
      */

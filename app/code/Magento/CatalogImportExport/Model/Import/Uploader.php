@@ -101,7 +101,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Filesystem\File\ReadFactory $readFactory
-     * @param null $filePath
+     * @param null|string $filePath
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -353,7 +353,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function chmod($file)
     {

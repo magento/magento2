@@ -57,7 +57,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -102,7 +102,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -163,7 +163,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGridUrl()
     {
