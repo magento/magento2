@@ -71,7 +71,7 @@ class Escaper
                         throw new \Exception($errorString, $errorNumber);
                     }
                 );
-                $string = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
+                $string = mb_convert_encoding((string)$data, 'HTML-ENTITIES', 'UTF-8');
                 try {
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
