@@ -30,6 +30,8 @@ use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 
 /**
+ * Supplies the data for the customer UI component
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
@@ -156,10 +158,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Config $eavConfig
      * @param FilterPool $filterPool
      * @param FileProcessorFactory $fileProcessorFactory
-     * @param ContextInterface $context
      * @param array $meta
      * @param array $data
+     * @param ContextInterface $context
      * @param bool $allowToShowHiddenAttributes
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
