@@ -478,6 +478,9 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
                 $captchaTargetFormName
             );
 
+            if (!$word) {
+                return false;
+            }
             $isCorrectCaptcha = $captchaModel->isCorrect($word);
 
             if (!$isCorrectCaptcha) {
