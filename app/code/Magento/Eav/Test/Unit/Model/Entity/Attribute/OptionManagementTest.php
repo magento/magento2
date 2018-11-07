@@ -59,17 +59,19 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionLabelInterface::class);
         $option =
             ['value' => [
-                'id_new_option' => [
+                'value_new_option' => [
                     0 => 'optionLabel',
                     42 => 'labelLabel',
                 ],
             ],
             'order' => [
-                'id_new_option' => 'optionSortOrder',
+                'value_new_option' => 'optionSortOrder',
             ],
             ];
 
-        $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
+        $this->attributeRepositoryMock->expects($this->at(0))->method('get')->with($entityType, $attributeCode)
+            ->willReturn($attributeMock);
+        $this->attributeRepositoryMock->expects($this->at(1))->method('get')->with('catalog_product', null)
             ->willReturn($attributeMock);
         $attributeMock->expects($this->once())->method('usesSource')->willReturn(true);
         $optionMock->expects($this->once())->method('getLabel')->willReturn('optionLabel');
@@ -78,10 +80,10 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $labelMock->expects($this->once())->method('getStoreId')->willReturn(42);
         $labelMock->expects($this->once())->method('getLabel')->willReturn('labelLabel');
         $optionMock->expects($this->once())->method('getIsDefault')->willReturn(true);
-        $attributeMock->expects($this->once())->method('setDefault')->with(['id_new_option']);
+        $attributeMock->expects($this->once())->method('setDefault')->with(['value_new_option']);
         $attributeMock->expects($this->once())->method('setOption')->with($option);
         $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock);
-        $this->assertEquals('id_new_option', $this->model->add($entityType, $attributeCode, $optionMock));
+        $this->assertEquals(null, $this->model->add($entityType, $attributeCode, $optionMock));
     }
 
     /**
@@ -167,13 +169,13 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionLabelInterface::class);
         $option =
             ['value' => [
-                'id_new_option' => [
+                'value_new_option' => [
                     0 => 'optionLabel',
                     42 => 'labelLabel',
                 ],
             ],
                 'order' => [
-                    'id_new_option' => 'optionSortOrder',
+                    'value_new_option' => 'optionSortOrder',
                 ],
             ];
 
@@ -186,7 +188,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $labelMock->expects($this->once())->method('getStoreId')->willReturn(42);
         $labelMock->expects($this->once())->method('getLabel')->willReturn('labelLabel');
         $optionMock->expects($this->once())->method('getIsDefault')->willReturn(true);
-        $attributeMock->expects($this->once())->method('setDefault')->with(['id_new_option']);
+        $attributeMock->expects($this->once())->method('setDefault')->with(['value_new_option']);
         $attributeMock->expects($this->once())->method('setOption')->with($option);
         $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock)
             ->willThrowException(new \Exception());

@@ -53,19 +53,19 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         }
 
         $optionLabel = $option->getLabel();
-        $optionId = $this->getOptionId($option);
+        $optionValue = $this->getOptionValue($option);
         $options = [];
-        $options['value'][$optionId][0] = $optionLabel;
-        $options['order'][$optionId] = $option->getSortOrder();
+        $options['value'][$optionValue][0] = $optionLabel;
+        $options['order'][$optionValue] = $option->getSortOrder();
 
         if (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
-                $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();
+                $options['value'][$optionValue][$label->getStoreId()] = $label->getLabel();
             }
         }
 
         if ($option->getIsDefault()) {
-            $attribute->setDefault([$optionId]);
+            $attribute->setDefault([$optionValue]);
         }
 
         $attribute->setOption($options);
@@ -78,7 +78,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             throw new StateException(__('The "%1" attribute can\'t be saved.', $attributeCode));
         }
 
-        return $this->getOptionId($option);
+        return $this->getOptionId($option, $attribute);
     }
 
     /**
@@ -153,14 +153,37 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     }
 
     /**
-     * Returns option id
+     * Returns option value
      *
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
      * @return string
      */
-    private function getOptionId(\Magento\Eav\Api\Data\AttributeOptionInterface $option) : string
+    private function getOptionValue(\Magento\Eav\Api\Data\AttributeOptionInterface $option) : string
     {
-        return 'id_' . ($option->getValue() ?: 'new_option');
+        return 'value_' . ($option->getValue() ?: 'new_option');
+    }
+
+    /**
+     * Returns option id
+     *
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
+     * @return null|int
+     * @throws NoSuchEntityException
+     */
+    private function getOptionId(\Magento\Eav\Api\Data\AttributeOptionInterface $option, $attribute)
+    {
+        $optionId = null;
+
+        $attribute = $this->attributeRepository->get('catalog_product', $attribute->getAttributeCode());
+        if ($attribute->getOptions()) {
+            foreach ($attribute->getOptions() as $optionLabel) {
+                if ($option->getLabel() == $optionLabel->getLabel()) {
+                    $optionId = $attribute->getSource()->getOptionId($optionLabel->getLabel());
+                }
+            }
+        }
+            return $optionId;
     }
 
     /**
