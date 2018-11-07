@@ -242,7 +242,7 @@ class UpgradeData implements UpgradeDataInterface
 
         $quoteAddresses = $quoteConnection->fetchAssoc($query);
 
-        $sql = "update `{$setup->getTable('sales_order_address')}` set `quote_address_id` = :quoteAddressId where `entity_id` = :orderAddressId";
+        $sql = "update `{$setup->getTable('sales_order_address', 'sales')}` set `quote_address_id` = :quoteAddressId where `entity_id` = :orderAddressId";
         $stmt = $salesConnection->prepare($sql);
 
         foreach ($orderAddresses as $orderAddress) {
