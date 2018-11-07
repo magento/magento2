@@ -179,7 +179,7 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function fillQuoteAddressIdInSalesOrderAddress(ModuleDataSetupInterface $setup)
     {
-        $this->fillQuoteAddressIdInSalesOrderAddressByType($setup,Address::TYPE_SHIPPING);
+        $this->fillQuoteAddressIdInSalesOrderAddressByType($setup, Address::TYPE_SHIPPING);
         $this->fillQuoteAddressIdInSalesOrderAddressByType($setup,Address::TYPE_BILLING);
     }
 
