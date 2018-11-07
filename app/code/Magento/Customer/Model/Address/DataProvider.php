@@ -126,21 +126,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (null !== $this->loadedData) {
             return $this->loadedData;
         }
-        $items = $this->collection->getItems();
-        /** @var Address $item */
-        foreach ($items as $item) {
-            $addressId = $item->getEntityId();
-            $item->load($addressId);
-            $this->loadedData[$addressId] = $item->getData();
-            $customerId = $this->loadedData[$addressId]['parent_id'];
-            /** @var \Magento\Customer\Model\Customer $customer */
-            $customer = $this->customerRepository->getById($customerId);
-            $defaultBilling = $customer->getDefaultBilling();
-            $defaultShipping = $customer->getDefaultShipping();
-            $this->prepareAddressData($addressId, $this->loadedData, $defaultBilling, $defaultShipping);
-
-            $this->fileUploaderDataResolver->overrideFileUploaderData($item, $this->loadedData[$addressId]);
-        }
+        /** @var Address $address */
+        $address = $this->collection->getFirstItem();
+        $addressId = $address->getEntityId();
+        $address->load($addressId);
+        $this->loadedData[$addressId] = $address->getData();
+        $customerId = $this->loadedData[$addressId]['parent_id'];
+        /** @var \Magento\Customer\Model\Customer $customer */
+        $customer = $this->customerRepository->getById($customerId);
+        $defaultBilling = $customer->getDefaultBilling();
+        $defaultShipping = $customer->getDefaultShipping();
+        $this->prepareAddressData($addressId, $this->loadedData, $defaultBilling, $defaultShipping);
+        $this->fileUploaderDataResolver->overrideFileUploaderData($address, $this->loadedData[$addressId]);
 
         if (null === $this->loadedData) {
             $this->loadedData[''] = $this->getDefaultData();

@@ -8,7 +8,10 @@ namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -54,6 +57,11 @@ class Save extends Action implements HttpPostActionInterface
     private $logger;
 
     /**
+     * @var JsonFactory
+     */
+    private $resultJsonFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
@@ -61,6 +69,7 @@ class Save extends Action implements HttpPostActionInterface
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory
      * @param LoggerInterface $logger
+     * @param JsonFactory $resultJsonFactory
      */
     public function __construct(
         Action\Context $context,
@@ -69,7 +78,8 @@ class Save extends Action implements HttpPostActionInterface
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
         $this->addressRepository = $addressRepository;
@@ -78,23 +88,24 @@ class Save extends Action implements HttpPostActionInterface
         $this->dataObjectHelper = $dataObjectHelper;
         $this->addressDataFactory = $addressDataFactory;
         $this->logger = $logger;
+        $this->resultJsonFactory = $resultJsonFactory;
     }
 
     /**
      * Save customer address action
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return ResultInterface
      */
-    public function execute(): Redirect
+    public function execute(): ResultInterface
     {
         $customerId = $this->getRequest()->getParam('parent_id', false);
         $addressId = $this->getRequest()->getParam('entity_id', false);
-        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
-        $customer = $this->customerRepository->getById($customerId);
 
+        $error = false;
         try {
+            /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+            $customer = $this->customerRepository->getById($customerId);
+
             $addressForm = $this->formFactory->create(
                 'customer_address',
                 'adminhtml_customer_address',
@@ -124,29 +135,39 @@ class Save extends Action implements HttpPostActionInterface
             );
             if ($addressId) {
                 $addressToSave->setId($addressId);
-                $saveMessage = __('Customer address has been updated.');
+                $message = __('Customer address has been updated.');
             } else {
                 $addressToSave->setId(null);
-                $saveMessage = __('New customer address has been added.');
+                $message = __('New customer address has been added.');
             }
-
-            $this->addressRepository->save($addressToSave);
-            $this->messageManager->addSuccessMessage($saveMessage);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $savedAddress = $this->addressRepository->save($addressToSave);
+            $addressId = $savedAddress->getId();
+        } catch (NoSuchEntityException $e) {
+            $this->logger->critical($e);
+            $error = true;
+            $message = __('There is no customer with such id.');
+        } catch (LocalizedException $e) {
+            $error = true;
+            $message = __($e->getMessage());
             $this->logger->critical($e);
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage(
-                $e,
-                __('We can\'t change customer address right now.')
-            );
+            $error = true;
+            $message = __('We can\'t change customer address right now.');
+            $this->logger->critical($e);
         }
 
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath(
-            'customer/index/edit',
-            ['id' => $customerId, '_current' => true]
+        $addressId = empty($addressId) ? null : $addressId;
+        $resultJson = $this->resultJsonFactory->create();
+        $resultJson->setData(
+            [
+                'message' => $message,
+                'error' => $error,
+                'data' => [
+                    'addressId' => $addressId
+                ]
+            ]
         );
-        return $resultRedirect;
+
+        return $resultJson;
     }
 }
