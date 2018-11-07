@@ -278,6 +278,7 @@ class Translate implements \Magento\Framework\TranslateInterface
 
     /**
      * Retrieve name of the current module
+     *
      * @return mixed
      */
     protected function getControllerModuleName()
