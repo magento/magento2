@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
+use Magento\Customer\Api\Data\GroupInterface;
+
 /**
  * Products mass update inventory tab
  *
@@ -30,6 +32,11 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     protected $disabledFields = [];
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
@@ -39,10 +46,13 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
         \Magento\Backend\Block\Template\Context $context,
         \Magento\CatalogInventory\Model\Source\Backorders $backorders,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->_backorders = $backorders;
         $this->stockConfiguration = $stockConfiguration;
+        $this->serializer = $serializer ?? \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         parent::__construct($context, $data);
     }
 
@@ -86,6 +96,21 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     public function getDefaultConfigValue($field)
     {
         return $this->stockConfiguration->getDefaultConfigValue($field);
+    }
+
+    /**
+     * Returns min_sale_qty configuration for the ALL Customer Group
+     * @return int
+     */
+    public function getDefaultMinSaleQty()
+    {
+        $default = $this->stockConfiguration->getDefaultConfigValue('min_sale_qty');
+        if (!is_numeric($default)) {
+            $default = $this->serializer->unserialize($default);
+            $default = isset($default[GroupInterface::CUST_GROUP_ALL]) ? $default[GroupInterface::CUST_GROUP_ALL] : 1;
+        }
+
+        return (int) $default;
     }
 
     /**
