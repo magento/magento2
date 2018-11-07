@@ -190,14 +190,14 @@ class UpgradeData implements UpgradeDataInterface
     public function fillQuoteAddressIdInSalesOrderAddressByType(ModuleDataSetupInterface $setup, $address_type)
     {
         $salesConnection = $setup->getConnection('sales');
-        $salesOrderTable = $setup->getTable('sales_order', 'sales');
-        $salesOrderAddressTable = $setup->getTable('sales_order_address', 'sales');
+        $orderTable = $setup->getTable('sales_order', 'sales');
+        $orderAddressTable = $setup->getTable('sales_order_address', 'sales');
 
         $query = $salesConnection
             ->select()
-            ->from($salesOrderAddressTable, ['entity_id', 'address_type'])
+            ->from($orderAddressTable, ['entity_id', 'address_type'])
             ->joinInner(
-                ['sales_order' => $salesOrderTable],
+                ['sales_order' => $orderTable],
                 'sales_order_address.parent_id = sales_order.entity_id',
                 ['quote_id' => 'sales_order.quote_id']
             )
