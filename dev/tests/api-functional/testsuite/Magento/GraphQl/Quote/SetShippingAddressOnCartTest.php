@@ -139,13 +139,12 @@ mutation {
   }
 }
 QUERY;
-        self::expectExceptionMessage('Address management allowed only for authorized customers.');
+        self::expectExceptionMessage('Guest users cannot manage addresses.');
         $this->graphQlQuery($query);
     }
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoConfigFixture default_store multishipping/options/checkout_multiple 0
      */
     public function testSetMultipleShippingAddressesOnCartByGuest()
     {
@@ -185,7 +184,7 @@ mutation {
   }
 }
 QUERY;
-        self::expectExceptionMessage('Multiple addresses do not allowed here!');
+        self::expectExceptionMessage('You cannot specify multiple shipping addresses.');
         $this->graphQlQuery($query);
     }
 
@@ -240,7 +239,7 @@ mutation {
 }
 QUERY;
         self::expectExceptionMessage(
-            'Shipping address can\'t contain "customer_address_id" and "address" input at the same time.'
+            'The shipping address cannot contain "customer_address_id" and "address" at the same time.'
         );
         $this->graphQlQuery($query);
     }
@@ -282,7 +281,7 @@ mutation {
 }
 QUERY;
         self::expectExceptionMessage(
-            'Shipping address should contain either "customer_address_id" or "address" input.'
+            'The shipping address must contain either "customer_address_id" or "address".'
         );
         $this->graphQlQuery($query);
     }

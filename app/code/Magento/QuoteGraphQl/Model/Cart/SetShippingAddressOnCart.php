@@ -59,7 +59,7 @@ class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
     {
         if (count($shippingAddresses) > 1) {
             throw new GraphQlInputException(
-                __('Multiple addresses do not allowed here!')
+                __('You cannot specify multiple shipping addresses.')
             );
         }
         $shippingAddress = current($shippingAddresses);
@@ -68,19 +68,19 @@ class SetShippingAddressOnCart implements SetShippingAddressesOnCartInterface
 
         if (!$customerAddressId && !$addressInput) {
             throw new GraphQlInputException(
-                __('Shipping address should contain either "customer_address_id" or "address" input.')
+                __('The shipping address must contain either "customer_address_id" or "address".')
             );
         }
         if ($customerAddressId && $addressInput) {
             throw new GraphQlInputException(
-                __('Shipping address can\'t contain "customer_address_id" and "address" input at the same time.')
+                __('The shipping address cannot contain "customer_address_id" and "address" at the same time.')
             );
         }
         if ($customerAddressId) {
             if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
                 throw new GraphQlAuthorizationException(
                     __(
-                        'Address management allowed only for authorized customers.'
+                        'Guest users cannot manage addresses.'
                     )
                 );
             }
