@@ -1562,7 +1562,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function addStatusHistory(\Magento\Sales\Model\Order\Status\History $history)
     {
         $history->setOrder($this);
-        $this->setStatus($history->getStatus());
+        $status = $history->getStatus();
+        if (null !== $status) {
+            $this->setStatus($status);
+        }
         if (!$history->getId()) {
             $this->setStatusHistories(array_merge($this->getStatusHistories(), [$history]));
             $this->setDataChanges(true);
