@@ -7,8 +7,6 @@
 namespace Magento\Customer\Controller\Ajax;
 
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Framework\Exception\EmailNotConfirmedException;
-use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -69,6 +67,11 @@ class Login extends \Magento\Framework\App\Action\Action
      * @var CookieMetadataFactory
      */
     private $cookieMetadataFactory;
+
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
+    private $customerSession;
 
     /**
      * Initialize Login controller
