@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -14,6 +13,9 @@ use Magento\Paypal\Controller\Payflow;
 use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
 
+/**
+ * Paypal Payflow ReturnUrl controller class
+ */
 class ReturnUrl extends Payflow implements CsrfAwareActionInterface, HttpGetActionInterface
 {
     /**
