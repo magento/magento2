@@ -11,7 +11,7 @@
     <actionGroup name="AdminCreateConfigurableProductActionGroup">
         <arguments>
             <argument name="product"/>
-            <argument name="category"/>
+            <argument name="category" type="string"/>
             <argument name="attributeSet"/>
             <argument name="configurableAttributeCode" defaultValue="color" type="string"/>
             <argument name="configurationsPrice" defaultValue="0" type="string"/>
@@ -30,9 +30,9 @@
 
         <!--Apply Attribute Set for product-->
         <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{attributeSet}}" stepKey="searchForAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{attributeSet.label}}" stepKey="searchForAttrSet"/>
         <waitForAjaxLoad stepKey="waitForLoad"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet)}}" stepKey="selectAttrSetProd"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(attributeSet.label)}}" stepKey="selectAttrSetProd"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedProductForProduct"/>
 
         <!--Click "Create Configurations" button in configurations field-->

@@ -150,7 +150,7 @@
         <actionGroup ref="AdminCreateConfigurableProductExcludeOptionActionGroup" stepKey="createConfigurableProduct1">
             <argument name="product" value="_defaultProduct"/>
             <argument name="category" value="$$createCategory.name$$"/>
-            <argument name="attributeSet" value="ProductAttributeFrontendLabel.label"/>
+            <argument name="attributeSet" value="ProductAttributeFrontendLabel"/>
             <argument name="customAttributeOptionNameFrom" value="cotton"/>
             <argument name="customAttributeOptionNameTill" value="synthetic"/>
             <argument name="excludedOption" value="ColorProductAttribute5"/>
@@ -163,7 +163,7 @@
         <actionGroup ref="AdminCreateConfigurableProductExcludeOptionActionGroup" stepKey="createConfigurableProduct2">
             <argument name="product" value="SimpleProduct2"/>
             <argument name="category" value="$$createCategory.name$$"/>
-            <argument name="attributeSet" value="ProductAttributeFrontendLabel.label"/>
+            <argument name="attributeSet" value="ProductAttributeFrontendLabel"/>
             <argument name="customAttributeOptionNameFrom" value="cotton"/>
             <argument name="customAttributeOptionNameTill" value="jeans"/>
             <argument name="excludedOption" value="ColorProductAttribute5"/>
@@ -176,7 +176,7 @@
         <actionGroup ref="AdminCreateConfigurableProductExcludeOptionActionGroup" stepKey="createConfigurableProduct3">
             <argument name="product" value="SimpleProduct3"/>
             <argument name="category" value="$$createCategory.name$$"/>
-            <argument name="attributeSet" value="ProductAttributeFrontendLabel.label"/>
+            <argument name="attributeSet" value="ProductAttributeFrontendLabel"/>
             <argument name="customAttributeOptionNameFrom" value="fabric"/>
             <argument name="customAttributeOptionNameTill" value="synthetic"/>
             <argument name="excludedOption" value="ColorProductAttribute5"/>
