@@ -31,11 +31,11 @@ class StockStatusTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getOptionTextDataProvider
      * @param string $text
-     * @param string $id
+     * @param string $optionId
      */
-    public function testGetOptionText($text, $id)
+    public function testGetOptionText($text, $optionId)
     {
-        $this->assertEquals($text, $this->stockStatus->getOptionText($id));
+        $this->assertEquals($text, $this->stockStatus->getOptionText($optionId));
     }
 
     /**

@@ -10,10 +10,6 @@ namespace Magento\Catalog\Ui\Component\Listing\Columns;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
-/**
- * @api
- * @since 100.0.2
- */
 class StockStatus extends \Magento\Ui\Component\Listing\Columns\Column
 {
     const NAME = 'quantity_and_stock_status';

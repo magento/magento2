@@ -14,17 +14,15 @@ use Magento\Framework\Data\OptionSourceInterface;
 /**
  * Product stock status functionality model
  *
- * @api
- * @since 100.0.2
  */
 class StockStatus extends AbstractSource implements SourceInterface, OptionSourceInterface
 {
-    /**
+    /**#@+
      * Product stock status values
      */
     const IN_STOCK = 1;
-
     const OUT_OF_STOCK = 0;
+    /**#@-*/
 
     /**
      * Retrieve option array
@@ -55,10 +53,10 @@ class StockStatus extends AbstractSource implements SourceInterface, OptionSourc
     /**
      * Retrieve option text by option value
      *
-     * @param int $optionId
-     * @return string
+     * @param int|string $optionId
+     * @return string|bool
      */
-    public function getOptionText(int $optionId) : string
+    public function getOptionText(int $optionId) : mixed
     {
         $options = self::getOptionArray();
 
