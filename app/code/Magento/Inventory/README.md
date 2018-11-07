@@ -1,6 +1,6 @@
 # Inventory module
 
-The `Inventory` module is part of the MSI (Multi-Source Inventory) project,
+The `Inventory` module is part of the new inventory infrastructure,
 which replaces the legacy `CatalogInventory` module with new and expanded features and APIs for Inventory Management.  
  
 The [Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html)
@@ -13,9 +13,11 @@ provides additional insight about the overall structure of these modules.
 
 ## Installation details
 
-This module is installed as part of Magento Open Source. It cannot be deleted or disabled.
+This module is installed as part of Magento Open Source. Once the advanced Inventory Management features are enabled, 
+the module cannot be deleted or disabled.
 
 ## Extension points and service contracts
 
-All public interfaces related to this module are located in the `InventoryApi` module. 
-Use the interfaces defined in `InventoryApi` to extend this module.
+Magento does not recommend using or referring to classes and other entities in the `Inventory` module. All public 
+interfaces and extension points related to this module are located in the `InventoryApi` module. 
+Use the interfaces and extension points defined in `InventoryApi` to extend this module.
