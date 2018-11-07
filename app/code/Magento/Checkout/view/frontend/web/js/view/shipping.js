@@ -266,9 +266,8 @@ define([
                 loginFormSelector = 'form[data-role=email-with-possible-login]',
                 emailValidationResult = customer.isLoggedIn(),
                 field,
-                countryIndexedOptions = registry.get(
-                    this.parentName + '.shippingAddress.shipping-address-fieldset.country_id'
-                ).indexedOptions,
+                country = registry.get(this.parentName + '.shippingAddress.shipping-address-fieldset.country_id'),
+                countryIndexedOptions = country.indexedOptions,
                 option = countryIndexedOptions[quote.shippingAddress().countryId],
                 messageContainer = registry.get('checkout.errors').messageContainer;
 
@@ -323,12 +322,14 @@ define([
                     shippingAddress['save_in_address_book'] = 1;
                 }
                 selectShippingAddress(shippingAddress);
-            } else if (customer.isLoggedIn()
-                && option
-                && option['is_region_required']
-                && !quote.shippingAddress().region
+            } else if (customer.isLoggedIn() &&
+                option &&
+                option['is_region_required'] &&
+                !quote.shippingAddress().region
             ) {
-                messageContainer.addErrorMessage({message: $t('Please specify a regionId in shipping address.')});
+                messageContainer.addErrorMessage({
+                    message: $t('Please specify a regionId in shipping address.')
+                });
 
                 return false;
             }
