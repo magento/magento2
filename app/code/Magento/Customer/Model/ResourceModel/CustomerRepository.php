@@ -161,7 +161,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -193,10 +193,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
             $customerModel->setStoreId($this->storeManager->getStore()->getId());
-        }
-        // Need to use attribute set or future updates can cause data loss
-        if (!$customerModel->getAttributeSetId()) {
-            $customerModel->setAttributeSetId(CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER);
         }
         $this->populateCustomerWithSecureData($customerModel, $passwordHash);
         // If customer email was changed, reset RpToken info
@@ -293,7 +289,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($email, $websiteId = null)
     {
@@ -302,7 +298,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getById($customerId)
     {
@@ -311,7 +307,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -351,7 +347,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(CustomerInterface $customer)
     {
@@ -359,7 +355,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($customerId)
     {

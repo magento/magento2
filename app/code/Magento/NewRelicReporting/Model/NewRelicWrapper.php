@@ -31,7 +31,7 @@ class NewRelicWrapper
     /**
      * Wrapper for 'newrelic_notice_error' function
      *
-     * @param  Exception $exception
+     * @param  \Exception $exception
      * @return void
      */
     public function reportError($exception)
