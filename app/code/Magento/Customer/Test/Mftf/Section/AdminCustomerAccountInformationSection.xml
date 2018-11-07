@@ -12,6 +12,7 @@
         <element name="statusInactive" type="button" selector=".admin__actions-switch-label"/>
         <element name="accountInformationTitle" type="text" selector=".admin__page-nav-title"/>
         <element name="accountInformationButton" type="text" selector="//a/span[text()='Account Information']"/>
+        <element name="addressesButton" type="text" selector="//a/span[text()='Addresses']"/>
         <element name="firstName" type="input" selector="input[name='customer[firstname]']"/>
         <element name="lastName" type="input" selector="input[name='customer[lastname]']"/>
         <element name="email" type="input" selector="input[name='customer[email]']"/>
