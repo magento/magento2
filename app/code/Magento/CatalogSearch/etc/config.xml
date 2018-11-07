@@ -12,6 +12,7 @@
                 <search_terms>1</search_terms>
             </seo>
             <search>
+                <show_advanced_search_link>1</show_advanced_search_link>
                 <engine>mysql</engine>
                 <min_query_length>1</min_query_length>
                 <max_query_length>128</max_query_length>

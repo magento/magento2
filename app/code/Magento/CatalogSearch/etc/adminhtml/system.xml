@@ -19,6 +19,10 @@
                 <field id="engine" canRestore="1">
                     <backend_model>Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend\Engine</backend_model>
                 </field>
+                <field id="show_advanced_search_link" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Advanced Search Link</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="min_query_length" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minimal Query Length</label>
                     <validate>validate-digits</validate>
