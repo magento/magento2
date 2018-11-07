@@ -132,6 +132,8 @@ class Data
     }
 
     /**
+     * Assemble Additional Data for Eav Attribute
+     *
      * @param Attribute $attribute
      * @return $this
      */
@@ -181,6 +183,8 @@ class Data
     }
 
     /**
+     * Load first variation
+     *
      * @param string $attributeCode swatch_image|image
      * @param ModelProduct $configurableProduct
      * @param array $requiredAttributes
@@ -204,6 +208,8 @@ class Data
     }
 
     /**
+     * Load first variation with swatch image
+     *
      * @param Product $configurableProduct
      * @param array $requiredAttributes
      * @return bool|Product
@@ -214,6 +220,8 @@ class Data
     }
 
     /**
+     * Load first variation with image
+     *
      * @param Product $configurableProduct
      * @param array $requiredAttributes
      * @return bool|Product
@@ -269,6 +277,8 @@ class Data
     }
 
     /**
+     * Add filter by attribute
+     *
      * @param ProductCollection $productCollection
      * @param array $attributes
      * @return void
@@ -281,6 +291,8 @@ class Data
     }
 
     /**
+     * Add filter by parent
+     *
      * @param ProductCollection $productCollection
      * @param integer $parentId
      * @return void
@@ -299,6 +311,7 @@ class Data
 
     /**
      * Method getting full media gallery for current Product
+     *
      * Array structure: [
      *  ['image'] => 'http://url/pub/media/catalog/product/2/0/blabla.jpg',
      *  ['mediaGallery'] => [
@@ -307,7 +320,9 @@ class Data
      *      ...,
      *      ]
      * ]
+     *
      * @param ModelProduct $product
+     *
      * @return array
      */
     public function getProductMediaGallery(ModelProduct $product)
@@ -339,6 +354,8 @@ class Data
     }
 
     /**
+     * Get all size images
+     *
      * @param string $imageFile
      * @return array
      */
@@ -476,6 +493,8 @@ class Data
     }
 
     /**
+     * Add fallback options
+     *
      * @param array $fallbackValues
      * @param array $swatches
      * @return array
@@ -487,6 +506,8 @@ class Data
             if (isset($optionsArray[$currentStoreId]['type'], $swatches[$optionId]['type'])
                 && $swatches[$optionId]['type'] === $optionsArray[$currentStoreId]['type']
             ) {
+                $swatches[$optionId] = $optionsArray[$currentStoreId];
+            } elseif (isset($optionsArray[$currentStoreId])) {
                 $swatches[$optionId] = $optionsArray[$currentStoreId];
             } elseif (isset($optionsArray[self::DEFAULT_STORE_ID])) {
                 $swatches[$optionId] = $optionsArray[self::DEFAULT_STORE_ID];
