@@ -12,6 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
 class GetSkuFromOrderItem implements GetSkuFromOrderItemInterface
 {
@@ -21,12 +22,20 @@ class GetSkuFromOrderItem implements GetSkuFromOrderItemInterface
     private $getSkusByProductIds;
 
     /**
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemManagementAllowedForProductType;
+
+    /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      */
     public function __construct(
-        GetSkusByProductIdsInterface $getSkusByProductIds
+        GetSkusByProductIdsInterface $getSkusByProductIds,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
     }
 
     /**
@@ -35,9 +44,13 @@ class GetSkuFromOrderItem implements GetSkuFromOrderItemInterface
     public function execute(OrderItemInterface $orderItem): string
     {
         try {
-            $itemSku = $this->getSkusByProductIds->execute(
-                [$orderItem->getProductId()]
-            )[$orderItem->getProductId()];
+            $itemSku = $orderItem->getSku();
+
+            if ($this->isSourceItemManagementAllowedForProductType->execute($orderItem->getProductType())) {
+                $itemSku = $this->getSkusByProductIds->execute(
+                    [$orderItem->getProductId()]
+                )[$orderItem->getProductId()];
+            }
         } catch (NoSuchEntityException $e) {
             $itemSku = $orderItem->getSku();
         }

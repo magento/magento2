@@ -22,17 +22,6 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
-            <comment userInput="Need to delete all stocks previously created to run this test" stepKey="deleteAllStocksComment"/>
-            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnStockGridPageToDeleteAllNeedlesslyStocks"/>
-            <waitForPageLoad time="30" stepKey="waitForStockGridLoadToDeleteAllNeedlesslyStocks"/>
-            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAllFilters"/>
-            <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdownToDeleteAllNeedlesslyStocks"/>
-            <click selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGridToDeleteAllNeedlesslyStocks"/>
-            <click selector="{{AdminGridSelectRows.bulkActionDropdown}}" stepKey="clickActionDropdownToDeleteAllNeedlesslyStocks"/>
-            <click selector="{{AdminGridSelectRows.bulkActionOption('Delete')}}" stepKey="clickDeleteActionToDeleteAllNeedlesslyStocks"/>
-            <waitForElementVisible selector="{{AdminGridConfirmActionSection.title}}" stepKey="waitForConfirmModalToDeleteAllNeedlesslyStocks"/>
-            <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="confirmStocksDeleteToDeleteAllNeedlesslyStocks"/>
-
             <createData entity="BasicMsiStock1" stepKey="createCustomStock1"/>
             <createData entity="BasicMsiStock2" stepKey="createCustomStock2"/>
             <createData entity="BasicMsiStock3" stepKey="createCustomStock3"/>
@@ -40,6 +29,11 @@
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+
+            <deleteData createDataKey="createCustomStock1" stepKey="deleteStock1"/>
+            <deleteData createDataKey="createCustomStock2" stepKey="deleteStock2"/>
+            <deleteData createDataKey="createCustomStock3" stepKey="deleteStock3"/>
+            <deleteData createDataKey="createCustomStock4" stepKey="deleteStock4"/>
         </after>
 
         <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPage"/>

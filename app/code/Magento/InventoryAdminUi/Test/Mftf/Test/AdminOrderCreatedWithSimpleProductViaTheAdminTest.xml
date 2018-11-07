@@ -63,10 +63,6 @@
             <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
         </actionGroup>
 
-        <conditionalClick selector="//*[contains(@class,'admin__collapsible-title')]//span[contains(text(), 'Content')]" dependentSelector="//span[contains(@data-bind, 'label')][contains(text(),'Content')]/../../..//div[contains(@class, '_show')]" visible="false" stepKey="clickOnTheContentHeaderIfClosed1"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <fillField selector="#product_form_description" userInput="Best Product" stepKey="fillDescriptionField1"/>
-
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultQuantityField1"/>
         <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillDefaultQuantityField2"/>
 
@@ -156,8 +152,7 @@
             <argument name="value" value="$$simpleProduct1.product[sku]$$"/>
         </actionGroup>
 
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[sku]$$" stepKey="seeUpdatedQuantity1"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[name]$$" stepKey="seeUpdatedQuantity2"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="95" stepKey="seeUpdatedQuantity3"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[name]$$" stepKey="seeStockName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="95" stepKey="seeUpdatedQuantity1"/>
     </test>
 </tests>

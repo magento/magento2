@@ -28,7 +28,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <!-- Disable source as it can broke single source mode tests. -->            
+            <!-- Disable source as it can broke single source mode tests. -->
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSourceToDisableCustomSource1"/>
             <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSourcesToDisableCustomSource1">
                 <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
@@ -38,7 +38,7 @@
             <waitForPageLoad time="30" stepKey="waitForSourceEditPageLoadToDisableCustomSource1"/>
             <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisableCustomSource1"/>
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSourceToDisableCustomSource1"/>
-            
+
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSourceToDisableCustomSource2"/>
             <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSourcesToDisableCustomSource2">
                 <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
