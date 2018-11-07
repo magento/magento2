@@ -1,6 +1,6 @@
 # Inventory module
 
-The `Inventory` module module is part of the MSI (Multi-Source Inventory) project,
+The `Inventory` module is part of the MSI (Multi-Source Inventory) project,
 which replaces the legacy `CatalogInventory` module with new and expanded features and APIs for Inventory Management.  
  
 The [Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html)
