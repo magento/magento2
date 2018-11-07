@@ -60,11 +60,11 @@ class AddPaymentWeeeItemTest extends TestCase
      * Test execute
      *
      * @dataProvider dataProvider
-     * @param $isEnabled
-     * @param $includeInSubtotal
+     * @param bool $isEnabled
+     * @param bool $includeInSubtotal
      * @return void
      */
-    public function testExecute($isEnabled, $includeInSubtotal): void
+    public function testExecute(bool $isEnabled, bool $includeInSubtotal): void
     {
         /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createMock(Observer::class);
@@ -122,8 +122,8 @@ class AddPaymentWeeeItemTest extends TestCase
     /**
      * Prepare if FPT should be added to payment cart as custom item or not.
      *
-     * @param $isEnabled
-     * @param $includeInSubtotal
+     * @param bool $isEnabled
+     * @param bool $includeInSubtotal
      * @return bool
      */
     private function prepareShouldBeAddedAsCustomItem(bool $isEnabled, bool $includeInSubtotal): bool
