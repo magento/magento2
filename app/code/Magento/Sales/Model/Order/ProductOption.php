@@ -54,8 +54,9 @@ class ProductOption
      * Adds product option to the order item.
      *
      * @param OrderItemInterface $orderItem
+     * @return void
      */
-    public function add(OrderItemInterface $orderItem): void
+    public function add(OrderItemInterface $orderItem)
     {
         /** @var DataObject $request */
         $request = $orderItem->getBuyRequest();
@@ -83,8 +84,9 @@ class ProductOption
      *
      * @param OrderItemInterface $orderItem
      * @param array $data
+     * @return void
      */
-    private function setProductOption(OrderItemInterface $orderItem, array $data): void
+    private function setProductOption(OrderItemInterface $orderItem, array $data)
     {
         $productOption = $orderItem->getProductOption();
         if (!$productOption) {
