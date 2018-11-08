@@ -65,7 +65,7 @@ class Products implements ResolverInterface
                 'eq' => $value['id']
             ]
         ];
-            $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
+        $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
         $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
