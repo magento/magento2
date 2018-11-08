@@ -25,9 +25,9 @@ abstract class Address extends \Magento\Framework\App\Action\Action
     protected $_formKeyValidator;
 
     /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_addressRepository;
+    protected $_customerRepository;
 
     /**
      * @var \Magento\Customer\Model\Metadata\FormFactory
@@ -69,7 +69,7 @@ abstract class Address extends \Magento\Framework\App\Action\Action
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
-     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory
      * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
@@ -83,7 +83,7 @@ abstract class Address extends \Magento\Framework\App\Action\Action
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
@@ -94,7 +94,7 @@ abstract class Address extends \Magento\Framework\App\Action\Action
         $this->_customerSession = $customerSession;
         $this->_formKeyValidator = $formKeyValidator;
         $this->_formFactory = $formFactory;
-        $this->_addressRepository = $addressRepository;
+        $this->_customerRepository= $customerRepository;
         $this->addressDataFactory = $addressDataFactory;
         $this->regionDataFactory = $regionDataFactory;
         $this->_dataProcessor = $dataProcessor;

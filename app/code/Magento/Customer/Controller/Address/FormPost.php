@@ -47,11 +47,6 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
     private $customerAddressMapper;
 
     /**
-     * @var CustomerRepositoryInterface
-     */
-    protected $customerRepository;
-
-    /**
      * @param Context $context
      * @param Session $customerSession
      * @param FormKeyValidator $formKeyValidator
@@ -86,13 +81,12 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
     ) {
         $this->regionFactory = $regionFactory;
         $this->helperData = $helperData;
-        $this->customerRepository = $customerRepository;
         parent::__construct(
             $context,
             $customerSession,
             $formKeyValidator,
             $formFactory,
-            $addressRepository,
+            $customerRepository,
             $addressDataFactory,
             $regionDataFactory,
             $dataProcessor,
@@ -119,7 +113,9 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         }
 
         foreach ($customer->getAddresses() as $customerAddress) {
-            $existingAddressData = $customerAddress->getId() === $addressId ? $this->getCustomerAddressMapper()->toFlatArray($customerAddress) : [];
+            if ($customerAddress->getId() === $addressId) {
+                $existingAddressData = $this->getCustomerAddressMapper()->toFlatArray($customerAddress);
+            }
         }
 
         if (empty($existingAddressData) && $addressId) {
@@ -205,7 +201,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             $addressId = $this->getRequest()->getParam('id');
             $customerId = $this->_getSession()->getCustomerId();
 
-            $customer = $this->customerRepository->getById($customerId);
+            $customer = $this->_customerRepository->getById($customerId);
 
             $addresses = array_filter($customer->getAddresses(), function ($customerAddress) use ($addressId) {
                 return $customerAddress->getId() !== $addressId;
@@ -213,7 +209,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
 
             $addresses[] = $this->_extractAddress($customer);
             $customer->setAddresses($addresses);
-            $this->customerRepository->save($customer);
+            $this->_customerRepository->save($customer);
 
             $this->messageManager->addSuccessMessage(__('You saved the address.'));
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);

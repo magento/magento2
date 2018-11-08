@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Controller\Address;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Controller\Address\Delete;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -25,8 +26,8 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject */
     protected $validatorMock;
 
-    /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $addressRepositoryMock;
+    /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $customerRepositoryMock;
 
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
@@ -43,6 +44,9 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultRedirect;
 
+    /** @var  \Magento\Customer\Model\Customer */
+    protected $customer;
+
     protected function setUp()
     {
         $this->sessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
@@ -54,7 +58,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $formFactoryMock = $this->getMockBuilder(\Magento\Customer\Model\Metadata\FormFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->addressRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\AddressRepositoryInterface::class)
+        $this->customerRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMockForAbstractClass();
         $addressInterfaceFactoryMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -90,6 +94,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->customer = $this->prophesize(CustomerInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->context = $objectManager->getObject(
@@ -106,7 +111,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             $this->sessionMock,
             $this->validatorMock,
             $formFactoryMock,
-            $this->addressRepositoryMock,
+            $this->customerRepositoryMock,
             $addressInterfaceFactoryMock,
             $regionInterfaceFactoryMock,
             $dataObjectProcessorMock,
@@ -132,19 +137,27 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->method('validate')
             ->with($this->request)
             ->willReturn(true);
-        $this->addressRepositoryMock->expects($this->once())
-            ->method('getById')
-            ->with($addressId)
-            ->willReturn($this->address);
         $this->sessionMock->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($this->customer->reveal());
+        $this->customer->getAddresses()
+            ->shouldBeCalled()
+            ->willReturn([$this->address]);
         $this->address->expects($this->once())
-            ->method('getCustomerId')
-            ->willReturn($customerId);
-        $this->addressRepositoryMock->expects($this->once())
-            ->method('deleteById')
-            ->with($addressId);
+            ->method('getId')
+            ->willReturn($addressId);
+        $this->customer->setAddresses()
+            ->withArguments([[]])
+            ->shouldBeCalled()
+            ->willReturn($this->customer->reveal());
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->customer->reveal())
+            ->willReturn($this->customer->reveal());
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->with(__('You deleted the address.'));
@@ -171,24 +184,22 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->method('validate')
             ->with($this->request)
             ->willReturn(true);
-        $this->addressRepositoryMock->expects($this->once())
-            ->method('getById')
-            ->with($addressId)
-            ->willReturn($this->address);
         $this->sessionMock->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($this->customer->reveal());
+        $this->customer->getAddresses()
+            ->shouldBeCalled()
+            ->willReturn([$this->address]);
         $this->address->expects($this->once())
-            ->method('getCustomerId')
-            ->willReturn(34);
-        $exception = new \Exception('Exception');
+            ->method('getId')
+            ->willReturn(3);
         $this->messageManager->expects($this->once())
             ->method('addError')
-            ->with(__('We can\'t delete the address right now.'))
-            ->willThrowException($exception);
-        $this->messageManager->expects($this->once())
-            ->method('addException')
-            ->with($exception, __('We can\'t delete the address right now.'));
+            ->with(__('We can\'t delete the address right now.'));
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
             ->with('*/*/index')
