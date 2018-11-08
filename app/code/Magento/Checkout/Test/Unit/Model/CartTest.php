@@ -318,6 +318,12 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->productRepository->expects($this->any())
             ->method('getById')
             ->will($this->returnValue($product));
+
+        $this->eventManagerMock->expects($this->at(0))->method('dispatch')->with(
+            'checkout_cart_product_add_before',
+            ['info' => $requestInfo, 'product' => $product]
+        );
+
         $this->quoteMock->expects($this->once())
         ->method('addProduct')
         ->will($this->returnValue(1));
@@ -325,7 +331,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->method('getQuote')
             ->will($this->returnValue($this->quoteMock));
 
-        $this->eventManagerMock->expects($this->at(0))->method('dispatch')->with(
+        $this->eventManagerMock->expects($this->at(1))->method('dispatch')->with(
             'checkout_cart_product_add_after',
             ['quote_item' => 1, 'product' => $product]
         );
@@ -363,6 +369,12 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->productRepository->expects($this->any())
             ->method('getById')
             ->will($this->returnValue($product));
+
+        $this->eventManagerMock->expects($this->once())->method('dispatch')->with(
+            'checkout_cart_product_add_before',
+            ['info' => 4, 'product' => $product]
+        );
+
         $this->quoteMock->expects($this->once())
             ->method('addProduct')
             ->will($this->returnValue('error'));
@@ -370,10 +382,6 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->method('getQuote')
             ->will($this->returnValue($this->quoteMock));
 
-        $this->eventManagerMock->expects($this->never())->method('dispatch')->with(
-            'checkout_cart_product_add_after',
-            ['quote_item' => 1, 'product' => $product]
-        );
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->cart->addProduct(4, 4);
     }
@@ -398,6 +406,11 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->productRepository->expects($this->any())
             ->method('getById')
             ->will($this->returnValue($product));
+
+        $this->eventManagerMock->expects($this->never())->method('dispatch')->with(
+            'checkout_cart_product_add_before',
+            ['info' => 'bad', 'product' => $product]
+        );
 
         $this->eventManagerMock->expects($this->never())->method('dispatch')->with(
             'checkout_cart_product_add_after',

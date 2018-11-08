@@ -15,16 +15,16 @@
                 comment="category_id"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="product_id"/>
-        <constraint xsi:type="foreign" name="CAT_URL_REWRITE_PRD_CTGR_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
+        <constraint xsi:type="foreign" referenceId="CAT_URL_REWRITE_PRD_CTGR_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
                     table="catalog_url_rewrite_product_category" column="product_id"
                     referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="FK_BB79E64705D7F17FE181F23144528FC8"
+        <constraint xsi:type="foreign" referenceId="FK_BB79E64705D7F17FE181F23144528FC8"
                     table="catalog_url_rewrite_product_category" column="url_rewrite_id" referenceTable="url_rewrite"
                     referenceColumn="url_rewrite_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CAT_URL_REWRITE_PRD_CTGR_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID"
+        <constraint xsi:type="foreign" referenceId="CAT_URL_REWRITE_PRD_CTGR_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID"
                     table="catalog_url_rewrite_product_category" column="category_id"
                     referenceTable="catalog_category_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="CATALOG_URL_REWRITE_PRODUCT_CATEGORY_CATEGORY_ID_PRODUCT_ID" indexType="btree">
+        <index referenceId="CATALOG_URL_REWRITE_PRODUCT_CATEGORY_CATEGORY_ID_PRODUCT_ID" indexType="btree">
             <column name="category_id"/>
             <column name="product_id"/>
         </index>
