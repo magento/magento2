@@ -11,6 +11,7 @@
         <sequence>
             <module name="Magento_Catalog"/>
             <module name="Magento_Captcha"/>
+            <module name="Magento_Authorization"/>
         </sequence>
     </module>
 </config>
