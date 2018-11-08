@@ -128,7 +128,7 @@ define([
          * Event handler for "Send to bottom" button
          *
          * @param {Object} positionObj
-         * @return {boolean}
+         * @return {Boolean}
          */
         sendToBottom: function (positionObj) {
 
@@ -152,7 +152,7 @@ define([
          * Event handler for "Send to top" button
          *
          * @param {Object} positionObj
-         * @returns {boolean}
+         * @return {Boolean}
          */
         sendToTop: function (positionObj) {
             var objectToUpdate = this.getObjectToUpdate(positionObj),
@@ -189,7 +189,7 @@ define([
          * Value function for position input
          *
          * @param {Object} data
-         * @return {number}
+         * @return {Number}
          */
         getCalculatedPosition: function (data) {
             return (~~this.currentPage() - 1) * this.pageSize + this.elems().pluck("name").indexOf(data.name);
@@ -198,7 +198,7 @@ define([
         /**
          * Return Page Boundary
          *
-         * @return {number}
+         * @return {Number}
          */
         getDefaultPageBoundary: function () {
             return ~~this.currentPage() * this.pageSize - 1;
@@ -207,7 +207,7 @@ define([
         /**
          * Returns position for last element to be moved after
          *
-         * @return {number}
+         * @return {Number}
          */
         getGlobalMaxPosition: function () {
             return _.max(this.recordData().map(function (r) {
