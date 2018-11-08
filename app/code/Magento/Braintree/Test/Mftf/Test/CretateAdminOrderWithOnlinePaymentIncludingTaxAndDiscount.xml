@@ -92,7 +92,7 @@
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
 
         <!--Select Braintree online Payment method -->
-        <actionGroup ref="AdminOrderBraintreeFill" stepKey="selectCreditCardPayment"/>
+        <actionGroup ref="AdminOrderBraintreeFillActionGroup" stepKey="selectCreditCardPayment"/>
 
         <!--Submit Order-->
         <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
