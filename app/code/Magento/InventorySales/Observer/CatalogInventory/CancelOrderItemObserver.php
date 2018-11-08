@@ -84,9 +84,9 @@ class CancelOrderItemObserver implements ObserverInterface
         /** @var OrderItem $item */
         $orderItem = $observer->getEvent()->getItem();
 
-        $itemsToSell = $this->getItemsToCancelFromOrderItem->execute($orderItem);
+        $itemsToCancel = $this->getItemsToCancelFromOrderItem->execute($orderItem);
 
-        if (empty($itemsToSell)) {
+        if (empty($itemsToCancel)) {
             return;
         }
 
@@ -105,7 +105,7 @@ class CancelOrderItemObserver implements ObserverInterface
             'objectId' => (string)$orderItem->getOrderId()
         ]);
 
-        $this->placeReservationsForSalesEvent->execute($itemsToSell, $salesChannel, $salesEvent);
+        $this->placeReservationsForSalesEvent->execute($itemsToCancel, $salesChannel, $salesEvent);
 
         $this->priceIndexer->reindexRow($orderItem->getProductId());
     }
