@@ -1,7 +1,5 @@
 <?php
 /**
- * Interception config. Responsible for providing list of plugins configured for instance
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,6 +7,11 @@ namespace Magento\Framework\Interception\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Interception config.
+ *
+ * Responsible for providing list of plugins configured for instance
+ */
 class Config implements \Magento\Framework\Interception\ConfigInterface
 {
     /**
@@ -110,7 +113,8 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         $this->_cacheId = $cacheId;
         $this->_reader = $reader;
         $this->_scopeList = $scopeList;
-        $this->cacheManager = $cacheManager ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CacheManager::class);
+        $this->cacheManager = 
+            $cacheManager ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CacheManager::class);
         $intercepted = $this->cacheManager->load($cacheId);
         if ($intercepted !== null) {
             $this->_intercepted = $intercepted;
@@ -166,7 +170,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function hasPlugins($type)
     {
@@ -193,7 +197,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     /**
      * Generate intercepted array to store in compiled metadata or frontend cache
      *
-     * @param $classDefinitions
+     * @param array $classDefinitions
      */
     private function generateIntercepted($classDefinitions)
     {
