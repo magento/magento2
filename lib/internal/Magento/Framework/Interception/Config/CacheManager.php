@@ -9,8 +9,9 @@ declare(strict_types=1);
 namespace Magento\Framework\Interception\Config;
 
 /**
- * Interception cache manager responsible for handling interaction with compiled and
- * uncompiled interception data
+ * Interception cache manager.
+ *
+ * Responsible for handling interaction with compiled and uncompiled interception data
  */
 class CacheManager
 {
