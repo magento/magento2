@@ -2,9 +2,9 @@
 
 The `InventoryReservationsApi` module provides service contracts for Inventory Management reservations.
 
-This module is part of the MSI (Multi-Source Inventory) project. The 
-for further information.	[Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html)
-describes the MSI project in more detail.
+This module is part of the new inventory infrastructure. The
+[Inventory Management overview](https://devdocs.magento.com/guides/v2.3/inventory/index.html)
+describes the MSI (Multi-Source Inventory) project in more detail.
 
 ## Installation details
 
@@ -12,7 +12,8 @@ This module is installed as part of Magento Open Source. It cannot be deleted or
 
 ## Extensibility
 
-The `InventoryReservationsApi` module contains several extension points.
+The `InventoryReservationsApi` module contains extension points and APIs that 3rd-party developers
+can use to provide custom inventory reservation functionality.
 
 ### Public APIs
 
