@@ -8,8 +8,8 @@ namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
@@ -94,9 +94,9 @@ class Save extends Action implements HttpPostActionInterface
     /**
      * Save customer address action
      *
-     * @return ResultInterface
+     * @return Json
      */
-    public function execute(): ResultInterface
+    public function execute(): Json
     {
         $customerId = $this->getRequest()->getParam('parent_id', false);
         $addressId = $this->getRequest()->getParam('entity_id', false);

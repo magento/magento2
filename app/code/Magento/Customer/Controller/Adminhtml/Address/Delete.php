@@ -8,14 +8,16 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\App\Action\HttpDeleteActionInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Button for deletion of customer address in admin *
  */
-class Delete extends Action implements HttpPostActionInterface
+class Delete extends Action implements HttpDeleteActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -30,38 +32,64 @@ class Delete extends Action implements HttpPostActionInterface
     private $addressRepository;
 
     /**
+     * @var JsonFactory
+     */
+    private $resultJsonFactory;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param JsonFactory $resultJsonFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
-        AddressRepositoryInterface $addressRepository
+        AddressRepositoryInterface $addressRepository,
+        JsonFactory $resultJsonFactory,
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->addressRepository = $addressRepository;
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->logger = $logger;
     }
 
     /**
      * Delete customer address action
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Json
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(): Redirect
+    public function execute(): Json
     {
         $customerId = $this->getRequest()->getParam('parent_id', false);
         $addressId = $this->getRequest()->getParam('id', false);
+        $error = false;
+        $message = '';
         if ($addressId && $this->addressRepository->getById($addressId)->getCustomerId() === $customerId) {
             try {
                 $this->addressRepository->deleteById($addressId);
-                $this->messageManager->addSuccessMessage(__('You deleted the address.'));
-            } catch (\Exception $other) {
-                $this->messageManager->addExceptionMessage($other, __('We can\'t delete the address right now.'));
+                $message = __('You deleted the address.');
+            } catch (\Exception $e) {
+                $error = true;
+                $message = __('We can\'t delete the address right now.');
+                $this->logger->critical($e);
             }
         }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
 
-        return $resultRedirect->setPath('customer/index/edit/id', ['id' => $customerId]);
+        $resultJson = $this->resultJsonFactory->create();
+        $resultJson->setData(
+            [
+                'message' => $message,
+                'error' => $error,
+            ]
+        );
+
+        return $resultJson;
     }
 }

@@ -8,12 +8,15 @@ namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Backend\Model\View\Result\Redirect;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class to delete selected customer addresses through massaction
@@ -38,52 +41,85 @@ class MassDelete extends Action implements HttpPostActionInterface
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @var AddressRepositoryInterface
      */
     private $addressRepository;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var JsonFactory
+     */
+    private $resultJsonFactory;
 
     /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      * @param AddressRepositoryInterface $addressRepository
+     * @param LoggerInterface $logger
+     * @param JsonFactory $resultJsonFactory
      */
     public function __construct(
         Context $context,
         Filter $filter,
         CollectionFactory $collectionFactory,
-        AddressRepositoryInterface $addressRepository
+        AddressRepositoryInterface $addressRepository,
+        LoggerInterface $logger,
+        JsonFactory $resultJsonFactory
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
         $this->addressRepository = $addressRepository;
+        $this->logger = $logger;
+        $this->resultJsonFactory = $resultJsonFactory;
         parent::__construct($context);
     }
 
     /**
      * Delete specified customer addresses using grid massaction
      *
-     * @return Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     * @return Json
+     * @throws LocalizedException
      */
-    public function execute(): Redirect
+    public function execute(): Json
     {
         /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $collectionSize = $collection->getSize();
+        $error = false;
 
-        // Get id of the first item from addresses collection for the ResultRedirect and build a correct redirect URL
-        $customerId = $collection->getFirstItem()->getParentId();
-
-        /** @var \Magento\Customer\Model\Address $address */
-        foreach ($collection as $address) {
-            $this->addressRepository->deleteById($address->getId());
+        try {
+            /** @var \Magento\Customer\Model\Address $address */
+            foreach ($collection as $address) {
+                $this->addressRepository->deleteById($address->getId());
+            }
+            $message = __('A total of %1 record(s) have been deleted.', $collectionSize);
+        } catch (NoSuchEntityException $e) {
+            $message = __('There is no such address entity to delete.');
+            $error = true;
+            $this->logger->critical($e);
+        } catch (LocalizedException $e) {
+            $message = __($e->getMessage());
+            $error = true;
+            $this->logger->critical($e);
+        } catch (\Exception $e) {
+            $message = __('We can\'t mass delete the addresses right now.');
+            $error = true;
+            $this->logger->critical($e);
         }
-        $this->messageManager->addSuccessMessage(__('A total of %1 record(s) have been deleted.', $collectionSize));
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultJson = $this->resultJsonFactory->create();
+        $resultJson->setData(
+            [
+                'message' => $message,
+                'error' => $error,
+            ]
+        );
 
-        return $resultRedirect->setPath('customer/index/edit/id', ['id' => $customerId]);
+        return $resultJson;
     }
 }
