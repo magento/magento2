@@ -134,48 +134,4 @@ class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPos
         $resultRedirect->setUrl($this->_redirect->error($url));
         return $resultRedirect;
     }
-//
-//    /**
-//     * Method validates captcha, if it's enabled for target form
-//     *
-//     * @throws LocalizedException
-//     */
-//    private function validateCaptcha() : void
-//    {
-//        $captchaTargetFormName = 'product_sendtofriend_form';
-//        /** @var DefaultModel $captchaModel */
-//        $captchaModel = $this->captchaHelper->getCaptcha($captchaTargetFormName);
-//
-//        if ($captchaModel->isRequired()) {
-//            $word = $this->captchaStringResolver->resolve(
-//                $this->getRequest(),
-//                $captchaTargetFormName
-//            );
-//
-//            $isCorrectCaptcha = $captchaModel->isCorrect($word);
-//
-//            if (!$isCorrectCaptcha) {
-//                $this->logCaptchaAttempt($captchaModel);
-//                throw new LocalizedException(__('Incorrect CAPTCHA'));
-//            }
-//        }
-//
-//        $this->logCaptchaAttempt($captchaModel);
-//    }
-//
-//    /**
-//     * Log captcha attempts
-//     *
-//     * @param DefaultModel $captchaModel
-//     */
-//    private function logCaptchaAttempt(DefaultModel $captchaModel) : void
-//    {
-//        $email = '';
-//
-//        if ($this->currentUser->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER) {
-//            $email = $this->customerRepository->getById($this->currentUser->getUserId())->getEmail();
-//        }
-//
-//        $captchaModel->logAttempt($email);
-//    }
 }
