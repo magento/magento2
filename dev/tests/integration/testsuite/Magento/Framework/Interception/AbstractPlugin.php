@@ -7,25 +7,35 @@ namespace Magento\Framework\Interception;
 
 /**
  * Class GeneralTest
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
 {
     /**
+     * Config reader
+     *
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_configReader;
 
     /**
+     * Object Manager
+     *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
+     * Applicartion Object Manager
+     *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $applicationObjectManager;
 
+    /**
+     * Set up
+     */
     public function setUp()
     {
         if (!$this->_objectManager) {
@@ -36,11 +46,17 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
         \Magento\Framework\App\ObjectManager::setInstance($this->_objectManager);
     }
 
+    /**
+     * Tear down
+     */
     public function tearDown()
     {
         \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
     }
 
+    /**
+     * Set up Interception Config
+     */
     public function setUpInterceptionConfig($pluginConfig)
     {
         $config = new \Magento\Framework\Interception\ObjectManager\Config\Developer();
