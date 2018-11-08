@@ -140,7 +140,7 @@ class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPos
             $this->validateCaptcha();
 
             if ($validate === true) {
-                //$this->sendFriend->send();
+                $this->sendFriend->send();
                 $this->messageManager->addSuccess(__('The link to a friend was sent.'));
                 $url = $product->getProductUrl();
                 $resultRedirect->setUrl($this->_redirect->success($url));
