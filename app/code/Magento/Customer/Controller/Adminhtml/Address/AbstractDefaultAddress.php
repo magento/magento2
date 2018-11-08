@@ -8,15 +8,17 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\Controller\Result\Redirect;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 
 /**
  * Abstract class for customer default addresses changing
  */
-abstract class AbstractDefaultAddress extends Action implements HttpPostActionInterface
+abstract class AbstractDefaultAddress extends Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -26,7 +28,7 @@ abstract class AbstractDefaultAddress extends Action implements HttpPostActionIn
     public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @var AddressRepositoryInterface
      */
     private $addressRepository;
 
@@ -36,45 +38,62 @@ abstract class AbstractDefaultAddress extends Action implements HttpPostActionIn
     private $logger;
 
     /**
+     * @var JsonFactory
+     */
+    private $resultJsonFactory;
+
+    /**
      * @param Action\Context $context
-     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param AddressRepositoryInterface $addressRepository
      * @param LoggerInterface $logger
+     * @param JsonFactory $resultJsonFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        LoggerInterface $logger
+        AddressRepositoryInterface $addressRepository,
+        LoggerInterface $logger,
+        JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
         $this->addressRepository = $addressRepository;
         $this->logger = $logger;
+        $this->resultJsonFactory = $resultJsonFactory;
     }
 
     /**
      * Execute action to set customer default billing or shipping address
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Json
      */
-    public function execute(): Redirect
+    public function execute(): Json
     {
         $customerId = $this->getRequest()->getParam('parent_id', false);
         $addressId = $this->getRequest()->getParam('id', false);
+        $error = false;
+        $message = '';
+
         if ($addressId) {
             try {
                 $address = $this->addressRepository->getById($addressId)->setCustomerId($customerId);
                 $this->setAddressAsDefault($address);
                 $this->addressRepository->save($address);
-
-                $this->messageManager->addSuccessMessage($this->getSuccessMessage());
-            } catch (\Exception $other) {
-                $this->logger->critical($other);
-                $this->messageManager->addExceptionMessage($other, $this->getExceptionMessage());
+                $message = $this->getSuccessMessage();
+            } catch (\Exception $e) {
+                $error = true;
+                $message = $this->getExceptionMessage();
+                $this->logger->critical($e);
             }
         }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
 
-        return $resultRedirect->setPath('customer/index/edit/id', ['id' => $customerId]);
+        $resultJson = $this->resultJsonFactory->create();
+        $resultJson->setData(
+            [
+                'message' => $message,
+                'error' => $error,
+            ]
+        );
+
+        return $resultJson;
     }
 
     /**
