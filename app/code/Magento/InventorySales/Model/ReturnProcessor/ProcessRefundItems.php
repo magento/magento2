@@ -102,7 +102,8 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(
         OrderInterface $order,
