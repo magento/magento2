@@ -238,7 +238,7 @@ class Config extends \Magento\Framework\DataObject
      * Get field path
      *
      * @param Field $field
-     * @param string $fieldId
+     * @param string $fieldId Need for support of clone_field feature
      * @param array &$oldConfig Need for compatibility with _processGroup()
      * @param array &$extraOldGroups Need for compatibility with _processGroup()
      * @return string
