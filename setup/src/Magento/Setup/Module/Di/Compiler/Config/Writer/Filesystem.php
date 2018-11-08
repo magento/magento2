@@ -11,6 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
 
 /**
+ * Class for writing DI Compiler Configuration
+ *
  * @deprecated Moved to Framework to allow broader reuse
  * @see \Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem
  */
