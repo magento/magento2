@@ -72,6 +72,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     const STORE_ID = 'store_id';
 
     /**
+     * Product Url path.
+     */
+    const URL_PATH = 'url_path';
+
+    /**
      * @var string
      */
     protected $_cacheTag = self::CACHE_TAG;
@@ -531,9 +536,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getStoreId()
     {
         if ($this->hasData(self::STORE_ID)) {
-            return $this->getData(self::STORE_ID);
+            return (int)$this->getData(self::STORE_ID);
         }
-        return $this->_storeManager->getStore()->getId();
+        return (int)$this->_storeManager->getStore()->getId();
     }
 
     /**
@@ -817,6 +822,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasStoreIds()) {
             $storeIds = [];
             if ($websiteIds = $this->getWebsiteIds()) {
+                if ($this->_storeManager->isSingleStoreMode()) {
+                    $websiteIds = array_keys($websiteIds);
+                }
                 foreach ($websiteIds as $websiteId) {
                     $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
                     $storeIds = array_merge($storeIds, $websiteStores);
@@ -927,8 +935,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * If value specified, it will be set.
      *
-     * @param   bool $value
-     * @return  bool
+     * @param bool $value
+     * @return bool
      */
     public function canAffectOptions($value = null)
     {
@@ -985,7 +993,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getQty()
     {
-        return $this->getData('qty');
+        return (float)$this->getData('qty');
     }
 
     /**
@@ -1557,9 +1565,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Add image to media gallery
      *
      * @param string $file file path of image in file system
-     * @param string|array $mediaAttribute code of type 'media_image', leave blank if image should be only in gallery
-     * @param boolean $move if true, it will move source file
-     * @param boolean $exclude mark image as disabled in product page view
+     * @param string|array $mediaAttribute code of attribute with type 'media_image',
+     * leave blank if image should be only in gallery
+     * @param bool $move if true, it will move source file
+     * @param bool $exclude mark image as disabled in product page view
      * @return \Magento\Catalog\Model\Product
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -2004,7 +2013,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Set options for product
+     * Set product options
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
      * @return $this
@@ -2031,7 +2040,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $code Option code
      * @param mixed $value Value of the option
-     * @param int|Product $product Product ID
+     * @param int|Product|null $product Product ID
      * @return $this
      */
     public function addCustomOption($code, $value, $product = null)
@@ -2561,7 +2570,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
+     * @inheritdoc
      *
      * @return \Magento\Framework\Api\ExtensionAttributesInterface
      */
@@ -2571,7 +2580,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Set an extension attributes object.
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes
      * @return $this
@@ -2584,7 +2593,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     //@codeCoverageIgnoreEnd
 
     /**
-     * Convert to media gallery interface
+     * Convert Image to ProductAttributeMediaGalleryEntryInterface
      *
      * @param array $mediaGallery
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]
