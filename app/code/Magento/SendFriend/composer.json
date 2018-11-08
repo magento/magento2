@@ -10,7 +10,8 @@
         "magento/module-catalog": "*",
         "magento/module-customer": "*",
         "magento/module-store": "*",
-        "magento/module-captcha": "*"
+        "magento/module-captcha": "*",
+        "magento/module-authorization": "*"
     },
     "type": "magento2-module",
     "license": [
