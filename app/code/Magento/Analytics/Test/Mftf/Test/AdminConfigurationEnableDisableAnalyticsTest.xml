@@ -16,9 +16,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-66465"/>
             <group value="analytics"/>
-            <skip>
-                <issueId value="MAGETWO-90659"/>
-            </skip>
         </annotations>
         <after>
             <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>

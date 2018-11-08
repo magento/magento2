@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminTaxReportsSection">
+        <element name="refreshStatistics" type="button" selector="//a[contains(text(),'here')]"/>
+        <element name="fromDate" type="input" selector="#sales_report_from"/>
+        <element name="toDate" type="input" selector="//*[@id='sales_report_to']/following-sibling::button"/>
+        <element name="goTodayButton" type="input" selector="//button[contains(text(),'Go Today')]"/>
+        <element name="showReportButton" type="button" selector="#filter_form_submit"/>
+        <element name="taxRuleAmount" type="textarea" selector="//*[contains(text(),'{{var1}}')]/following-sibling::td[contains(@class, 'col-tax-amount')]" parameterized="true"/>
+    </section>
+</sections>
