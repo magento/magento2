@@ -62,18 +62,23 @@
                 </childDefaults>
             </settings>
         </filters>
-        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
-            <action name="delete">
-                <settings>
-                    <confirm>
-                        <message translate="true">Are you sure to delete selected address?</message>
-                        <title translate="true">Delete items</title>
-                    </confirm>
-                    <url path="customer/address/massDelete"/>
-                    <type>delete</type>
-                    <label translate="true">Delete</label>
-                </settings>
-            </action>
+        <massaction name="listing_massaction" component="Magento_Customer/js/grid/massactions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="actions" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="isAjax" xsi:type="boolean">true</item>
+                            <item name="confirm" xsi:type="array">
+                                <item name="message" xsi:type="string" translate="true">Are you sure to delete selected address?</item>
+                                <item name="title" xsi:type="string" translate="true">Delete items</item>
+                            </item>
+                            <item name="url" xsi:type="url" path="customer/address/massDelete"/>
+                            <item name="type" xsi:type="string">delete</item>
+                            <item name="label" xsi:type="string" translate="true">Delete</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
         </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
@@ -157,7 +162,7 @@
                 <label translate="true">Phone</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Customer\Ui\Component\Listing\Address\Column\Actions">
+        <actionsColumn name="actions" class="Magento\Customer\Ui\Component\Listing\Address\Column\Actions" component="Magento_Customer/js/grid/columns/actions">
             <settings>
                 <indexField>entity_id</indexField>
             </settings>

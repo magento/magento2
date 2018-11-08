@@ -81,24 +81,26 @@ class Actions extends Column
                         'hidden' => false,
                     ];
 
-                    $item[$name]['set_default_billing'] = [
+                    $item[$name]['setDefaultBilling'] = [
                         'href' => $this->urlBuilder->getUrl(
                             self::CUSTOMER_ADDRESS_PATH_DEFAULT_BILLING,
                             ['parent_id' => $item['parent_id'], 'id' => $item['entity_id']]
                         ),
                         'label' => __('Set as default billing'),
+                        'isAjax' => true,
                         'confirm' => [
                             'title' => __('Set address as default billing'),
                             'message' => __('Are you sure you want to set the address as default billing address?')
                         ]
                     ];
 
-                    $item[$name]['set_default_shipping'] = [
+                    $item[$name]['setDefaultShipping'] = [
                         'href' => $this->urlBuilder->getUrl(
                             self::CUSTOMER_ADDRESS_PATH_DEFAULT_SHIPPING,
                             ['parent_id' => $item['parent_id'], 'id' => $item['entity_id']]
                         ),
                         'label' => __('Set as default shipping'),
+                        'isAjax' => true,
                         'confirm' => [
                             'title' => __('Set address as default shipping'),
                             'message' => __('Are you sure you want to set the address as default shipping address?')
@@ -111,6 +113,7 @@ class Actions extends Column
                             ['parent_id' => $item['parent_id'], 'id' => $item['entity_id']]
                         ),
                         'label' => __('Delete'),
+                        'isAjax' => true,
                         'confirm' => [
                             'title' => __('Delete address'),
                             'message' => __('Are you sure you want to delete the address?')

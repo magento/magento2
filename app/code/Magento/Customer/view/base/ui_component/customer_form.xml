@@ -319,6 +319,9 @@
                     <item name="title" translate="true" xsi:type="string">Default Billing Address</item>
                     <item name="contentClass" xsi:type="string">customer-default-billing-address-content</item>
                     <item name="notExistsMessage" xsi:type="string" translate="true">The customer does not have default billing address</item>
+                    <item name="tracks" xsi:type="array">
+                        <item name="address" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
             <settings>
@@ -353,7 +356,8 @@
                 <title translate="true">Edit</title>
                 <displayAsLink>true</displayAsLink>
                 <imports>
-                    <link name="entity_id">${ $.provider}:data.default_billing_address.entity_id</link>
+                    <link name="entityId">${ $.provider}:data.default_billing_address.entity_id</link>
+                    <link name="entity">${ $.provider}:data.default_billing_address</link>
                 </imports>
             </settings>
         </button>
@@ -365,6 +369,9 @@
                     <item name="title" xsi:type="string" translate="true">Default Shipping Address</item>
                     <item name="contentClass" xsi:type="string">customer-default-shipping-address-content</item>
                     <item name="notExistsMessage" xsi:type="string" translate="true">The customer does not have default shipping address</item>
+                    <item name="tracks" xsi:type="array">
+                        <item name="address" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
             <settings>
@@ -399,7 +406,8 @@
                 <title translate="true">Edit</title>
                 <displayAsLink>true</displayAsLink>
                 <imports>
-                    <link name="entity_id">${ $.provider}:data.default_shipping_address.entity_id</link>
+                    <link name="entityId">${ $.provider}:data.default_shipping_address.entity_id</link>
+                    <link name="entity">${ $.provider}:data.default_shipping_address</link>
                 </imports>
             </settings>
         </button>
@@ -427,7 +435,7 @@
             <settings>
                 <title translate="true">Add New Address</title>
                 <imports>
-                    <link name="parent_id">${ $.provider}:data.customer_id</link>
+                    <link name="parentId">${ $.provider}:data.customer_id</link>
                 </imports>
             </settings>
         </button>
@@ -437,8 +445,15 @@
                     <option name="title" xsi:type="string">Add/Update Address</option>
                 </options>
             </settings>
-            <insertForm name="update_customer_address_form_loader">
+            <insertForm name="update_customer_address_form_loader" component="Magento_Customer/js/form/components/insert-form">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="addressListingProvider" xsi:type="string">ns = customer_address_listing, index = customer_address_listing</item>
+                        <item name="addressModalProvider" xsi:type="string">${ $.parentName }</item>
+                    </item>
+                </argument>
                 <settings>
+                    <formSubmitType>ajax</formSubmitType>
                     <renderUrl path="mui/index/render_handle">
                         <param name="handle">customer_address_edit</param>
                         <param name="buttons">1</param>
@@ -447,10 +462,16 @@
                     <toolbarContainer>${ $.parentName }</toolbarContainer>
                     <externalProvider>${ $.ns }.customer_address_form_data_source</externalProvider>
                     <ns>customer_address_form</ns>
+                    <exports>
+                        <link name="parentId">${ $.externalProvider }:data.parent_id</link>
+                    </exports>
+                    <imports>
+                        <link name="parentId">${ $.provider}:data.customer_id</link>
+                    </imports>
                 </settings>
             </insertForm>
         </modal>
-        <insertListing name="customer_address_listing">
+        <insertListing name="customer_address_listing" component="Magento_Customer/js/form/components/insert-listing">
             <settings>
                 <dataLinks>
                     <exports>false</exports>
@@ -466,6 +487,8 @@
                 </exports>
                 <imports>
                     <link name="parent_id">${ $.provider }:data.customer.entity_id</link>
+                    <link name="onAction">ns = ${ $.ns }, index = actions:action</link>
+                    <link name="onMassAction">ns = ${ $.ns }, index = listing_massaction:massaction</link>
                 </imports>
             </settings>
         </insertListing>

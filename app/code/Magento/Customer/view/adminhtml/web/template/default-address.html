@@ -4,7 +4,7 @@
             <div class="address_caption">
                 <text args="title"/>
             </div>
-            <div class="address_details" if="address.firstname">
+            <div class="address_details" ifnot="_.isEmpty($data.address)">
                 <text args="address.prefix" if="address.prefix"/>
                 <text args="address.firstname"/>
                 <text args="address.middlename" if="address.middlename"/>
@@ -16,7 +16,8 @@
                     <br/>
                 </if>
                 <if args="address.street">
-                    <text args="address.street"/>
+                    <text args="address.street" ifnot="_.isArray(address.street)"/>
+                    <text args="_.values(address.street).join(', ')" if="_.isArray(address.street)"/>
                     <br/>
                 </if>
                 <text args="address.city + ', '" if="address.city"/>
@@ -36,7 +37,7 @@
                     <br/>VAT: <text args="address.vat_id"/>
                 </if>
             </div>
-            <translate args="notExistsMessage" ifnot="address.firstname"/>
+            <translate args="notExistsMessage" if="_.isEmpty($data.address)"/>
         </address>
     </div>
 </div>
