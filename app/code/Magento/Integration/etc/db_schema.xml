@@ -136,7 +136,7 @@
                 comment="User type (admin or customer)"/>
         <column xsi:type="smallint" name="failures_count" padding="5" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Number of failed authentication attempts in a row"/>
-        <column xsi:type="timestamp" name="lock_expires_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
+        <column xsi:type="timestamp" name="lock_expires_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Lock expiration time"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="log_id"/>
