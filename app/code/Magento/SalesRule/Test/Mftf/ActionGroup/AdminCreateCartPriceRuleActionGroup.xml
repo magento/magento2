@@ -23,4 +23,35 @@
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
     </actionGroup>
+
+    <!--Create Cart price Rule for Retailer customer-->
+    <actionGroup name="AdminCreateCartPriceRuleForRetailerActionGroup">
+        <click selector="{{AdminMenuSection.marketing}}" stepKey="clickOnMarketing" />
+        <waitForPageLoad stepKey="waitForMarketing" time="3"/>
+        <click selector="{{CartPriceRulesSubmenuSection.cartPriceRules}}" stepKey="clickOnCartPriceRules"/>
+        <waitForPageLoad stepKey="waitForCartPriceRules" time="5"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="Retailer" stepKey="selectCustomerGroup"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Percent of product price discount" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="10" stepKey="fillDiscountAmount"/>
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForCartRuleLoad" time="5"/>
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <!--Delete Cart price Rule for Retailer customer-->
+    <actionGroup name="AdminDeleteCartPriceRuleForRetailerActionGroup">
+        <click selector="{{AdminMenuSection.marketing}}" stepKey="clickOnMarketing" />
+        <waitForPageLoad stepKey="waitForMarketing" time="3"/>
+        <click selector="{{CartPriceRulesSubmenuSection.cartPriceRules}}" stepKey="clickOnCartPriceRules"/>
+        <waitForPageLoad stepKey="waitForCartPriceRules" time="5"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{SimpleSalesRule.name}}" stepKey="filterByName"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
+        <click selector="{{AdminCartPriceRulesSection.rowByIndex('1')}}" stepKey="goToEditRulePage"/>
+        <click selector="{{AdminCartPriceRulesFormSection.delete}}" stepKey="clickDeleteButton"/>
+        <click selector="{{AdminCartPriceRulesFormSection.modalAcceptButton}}" stepKey="confirmDelete"/>
+    </actionGroup>
 </actionGroups>

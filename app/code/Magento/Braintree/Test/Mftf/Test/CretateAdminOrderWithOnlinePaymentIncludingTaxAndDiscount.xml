@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateAdminOrderPayedWithOnlinePaymentIncludingTaxAndDiscount">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Get access to a New Credit Memo Page from Invocie for Order payed with online payment via Admin"/>
+            <title value="Admin should be able to open a New Credit Memo Page from Invoice Page for Order with tax and discount and payed using online payment method"/>
+            <description value="Admin should be able to open a New Credit Memo Page from Invoice Page for Order with tax and discount and payed using online payment method"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-94472"/>
+            <group value="sales"/>
+        </annotations>
+
+        <before>
+            <!--Create Default Category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <!--Create Simple product with Special Price-->
+            <createData entity="_defaultProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!--Create Tax Rule is based on default tax rates (Stores>Tax Rule) US-CA-*-Rate 1 = 8.2500 US-NY-*-Rate 1 = 8.3750 -->
+            <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
+
+            <!--Configure Braintree Payment method-->
+            <createData entity="BraintreeConfig" stepKey="BraintreeConfigurationData"/>
+            <createData entity="CustomBraintreeConfigurationData" stepKey="enableBraintree"/>
+
+            <!--Create Retailer Customer with US_CA address-->
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer">
+                <field key="group_id">3</field>
+            </createData>
+
+            <!--Login as Admin User-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!--Delete Cart Price Rule-->
+            <actionGroup ref="AdminDeleteCartPriceRuleForRetailerActionGroup" stepKey="deleteSalesRule"/>
+
+            <!--Delete Simple Sub Category-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!--Delete Simple Product-->
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Delete Tax Rule -->
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+
+            <!-- Rollback Braintree to Default -->
+            <createData entity="DefaultBraintreeConfig" stepKey="DefaultBraintreeConfig"/>
+
+            <!--Delete Customer-->
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+
+            <!--Log Out-->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create a cart price rule for Fixed amount discount for whole cart -->
+        <actionGroup ref="AdminCreateCartPriceRuleForRetailerActionGroup" stepKey="createCartPriceRule"/>
+
+        <!--Set Taxable Goods for Shipping Tax Class-->
+        <actionGroup ref="changeShippingTaxClass" stepKey="changeShippingTaxClass"/>
+
+        <!--Adding Special price to product-->
+        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openAdminProductEditPage"/>
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+
+        <!--Create New Order-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <!--Add a product to order-->
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addProductToOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
+
+        <!--Select Braintree online Payment method -->
+        <actionGroup ref="AdminOrderBraintreeFill" stepKey="selectCreditCardPayment"/>
+
+        <!--Submit Order-->
+        <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
+        <waitForPageLoad stepKey="waitForSaveConfig" time="10"/>
+        <waitForElementVisible selector="{{NewOrderSection.successMessage}}" stepKey="waitForSuccessMessage" time="5"/>
+
+        <!-- Create New invoice-->
+        <actionGroup ref="adminFastCreateInvoice" stepKey="createInvoice"/>
+
+        <!--Get access to Credit Memo page from Invocie page-->
+        <click selector="{{AdminInvoiceMainActionsSection.openNewCreditMemoFromInvoice}}" stepKey="clickCreateNewCreditMemo"/>
+        <waitForPageLoad stepKey="waitForLoadNewCreditMemoPage" time="5"/>
+        <waitForElementVisible selector="{{AdminCreditMemoOrderInformationSection.orderId}}" stepKey="waitForOrderIdOnCreditMemoPage"/>
+    </test>
+</tests>

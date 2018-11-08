@@ -26,6 +26,7 @@
         <element name="priority" type="input" selector="//*[@name='sort_order']"/>
 
         <!-- Actions sub-form -->
+        <element name="actionsTab" type="text" selector="//div[@data-index='actions']//span[contains(.,'Actions')][1]"/>
         <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
         <element name="apply" type="select" selector="select[name='simple_action']"/>
         <element name="conditions" type="button" selector=".rule-param.rule-param-new-child > a"/>
