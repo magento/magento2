@@ -53,7 +53,7 @@ class ExtractDataFromCategoryTree
             $pathElements = explode("/", $category->getPath());
             $this->iteratingCategory = $category;
 
-            $currentLevelTree = $this->generateLevelTree($pathElements, self::START_CATEGORY_FETCH_LEVEL);
+            $currentLevelTree = $this->explodePathToArray($pathElements, self::START_CATEGORY_FETCH_LEVEL);
             if (empty($tree)) {
                 $tree = $currentLevelTree;
             }
@@ -64,7 +64,7 @@ class ExtractDataFromCategoryTree
     }
 
     /**
-     * Merge together complex categories tree
+     * Merge together complex categories trees
      *
      * @param array $tree1
      * @param array $tree2
@@ -86,23 +86,23 @@ class ExtractDataFromCategoryTree
     /**
      * Recursive method to generate tree for one category path
      *
-     * @param $elements
+     * @param $pathElements
      * @param $index
      * @return array
      */
-    private function generateLevelTree($elements, $index): array
+    private function explodePathToArray($pathElements, $index): array
     {
 
         $tree = [];
-        $tree[$elements[$index]]['id'] = $elements[$index];
-        if ($index === count($elements) - 1) {
-            $tree[$elements[$index]] = $this->categoryHydrator->hydrateCategory($this->iteratingCategory);
-            $tree[$elements[$index]]['model'] = $this->iteratingCategory;
+        $tree[$pathElements[$index]]['id'] = $pathElements[$index];
+        if ($index === count($pathElements) - 1) {
+            $tree[$pathElements[$index]] = $this->categoryHydrator->hydrateCategory($this->iteratingCategory);
+            $tree[$pathElements[$index]]['model'] = $this->iteratingCategory;
         }
         $currentIndex = $index;
         $index++;
-        if (isset($elements[$index])) {
-            $tree[$elements[$currentIndex]]['children'] = $this->generateLevelTree($elements, $index);
+        if (isset($pathElements[$index])) {
+            $tree[$pathElements[$currentIndex]]['children'] = $this->explodePathToArray($pathElements, $index);
         }
         return $tree;
     }
