@@ -136,6 +136,7 @@
         <seeInCurrentUrl url="{{AdminTaxConfigurationPage.url}}" stepKey="adminTaxConfiguration"/>
         <seeElement selector="{{AdminConfigureTaxSection.taxClasses}}" stepKey="taxClassSectionC"/>
         <click selector="{{AdminConfigureTaxSection.taxClasses}}" stepKey="openTaxClassSection"/>
+        <click selector="{{AdminConfigureTaxSection.taxShippingClassSystem}}" stepKey="uncheckSystemValue"/>
         <selectOption selector="{{AdminConfigureTaxSection.taxClassShipping}}" userInput="Taxable Goods" stepKey="setTaxClassForShipping"/>
         <!-- Save the settings -->
         <scrollToTopOfPage stepKey="scrollToTop"/>
