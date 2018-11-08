@@ -10,6 +10,7 @@ namespace Magento\Quote\Plugin;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Magento\Customer\Model\Customer;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Recollect quote totals after change customer group
@@ -35,13 +36,14 @@ class RecollectOnGroupChange
      *
      * @param CustomerResource $subject
      * @param CustomerResource $result
-     * @param Customer $customer
+     * @param AbstractModel $customer
      * @return CustomerResource
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(CustomerResource $subject, CustomerResource $result, Customer $customer)
+    public function afterSave(CustomerResource $subject, CustomerResource $result, AbstractModel $customer)
     {
+        /** @var Customer $customer */
         if ($customer->getOrigData('group_id') !== null
             && $customer->getOrigData('group_id') != $customer->getGroupId()
         ) {
