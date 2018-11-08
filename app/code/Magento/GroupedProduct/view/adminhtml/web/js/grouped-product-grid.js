@@ -114,7 +114,7 @@ define([
 
         /**
          *
-         * @param {Array} recordData to reprocess
+         * @param {Array} - recordData to reprocess
          */
         reloadGridData: function (recordData) {
             this.recordData(recordData.sort(function (a, b) {
