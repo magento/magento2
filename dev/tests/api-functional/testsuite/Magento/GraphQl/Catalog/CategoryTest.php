@@ -83,8 +83,8 @@ QUERY;
         $responseDataObject = new DataObject($response);
         //Some sort of smoke testing
         self::assertEquals(
-            'Ololo',
-            $responseDataObject->getData('category/children/7/children/1/description')
+            'Its a description of Test Category 1.2',
+            $responseDataObject->getData('category/children/0/children/1/description')
         );
         self::assertEquals(
             'default-category',
@@ -99,16 +99,16 @@ QUERY;
             $responseDataObject->getData('category/children/0/default_sort_by')
         );
         self::assertCount(
-            8,
+            7,
             $responseDataObject->getData('category/children')
         );
         self::assertCount(
             2,
-            $responseDataObject->getData('category/children/7/children')
+            $responseDataObject->getData('category/children/0/children')
         );
         self::assertEquals(
-            5,
-            $responseDataObject->getData('category/children/7/children/1/children/0/id')
+            13,
+            $responseDataObject->getData('category/children/0/children/1/id')
         );
     }
 
