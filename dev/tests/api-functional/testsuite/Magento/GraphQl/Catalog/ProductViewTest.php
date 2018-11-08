@@ -53,8 +53,7 @@ class ProductViewTest extends GraphQlAbstract
                available_sort_by
                level
             }
-            image
-            image_label
+            image { url, label }
             meta_description
             meta_keyword
             meta_title
@@ -205,16 +204,12 @@ class ProductViewTest extends GraphQlAbstract
             }
             short_description
             sku
-            small_image {
-                path
-            }
-            small_image_label
+            small_image{ url, label }
+            thumbnail { url, label }
             special_from_date
             special_price
             special_to_date
-            swatch_image
-            thumbnail
-            thumbnail_label
+            swatch_image            
             tier_price
             tier_prices
             {
@@ -304,8 +299,7 @@ QUERY;
             description
             gift_message_available
             id
-            image
-            image_label
+            image {url, label}
             meta_description
             meta_keyword
             meta_title
@@ -454,16 +448,12 @@ QUERY;
             }
             short_description
             sku
-            small_image {
-                path
-            }
-            small_image_label
+            small_image { url, label }
             special_from_date
             special_price
             special_to_date
             swatch_image
-            thumbnail
-            thumbnail_label
+            thumbnail { url, label }
             tier_price
             tier_prices
             {
