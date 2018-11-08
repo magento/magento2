@@ -7,11 +7,20 @@
 namespace Magento\SendFriend\Controller\Product;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Captcha\Helper\Data;
+use Magento\Captcha\Model\DefaultModel;
+use Magento\Captcha\Observer\CaptchaStringResolver;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Class Sendmail. Represents request flow logic of 'sendmail' feature
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPostActionInterface
 {
@@ -26,6 +35,26 @@ class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPos
     protected $catalogSession;
 
     /**
+     * @var Data
+     */
+    private $captchaHelper;
+
+    /**
+     * @var CaptchaStringResolver
+     */
+    private $captchaStringResolver;
+
+    /**
+     * @var UserContextInterface
+     */
+    private $currentUser;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
      * Sendmail class construct
      *
      * @param \Magento\Framework\App\Action\Context $context
@@ -35,6 +64,12 @@ class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPos
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Model\Session $catalogSession
+     * @param Data|null $captchaHelper
+     * @param CaptchaStringResolver|null $captchaStringResolver
+     * @param UserContextInterface|null $currentUser
+     * @param CustomerRepositoryInterface|null $customerRepository
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -43,11 +78,21 @@ class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPos
         \Magento\SendFriend\Model\SendFriend $sendFriend,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Catalog\Model\Session $catalogSession
+        \Magento\Catalog\Model\Session $catalogSession,
+        ?Data $captchaHelper = null,
+        ?CaptchaStringResolver $captchaStringResolver = null,
+        ?UserContextInterface $currentUser = null,
+        ?CustomerRepositoryInterface $customerRepository = null
     ) {
         parent::__construct($context, $coreRegistry, $formKeyValidator, $sendFriend, $productRepository);
         $this->categoryRepository = $categoryRepository;
         $this->catalogSession = $catalogSession;
+        $this->captchaHelper = $captchaHelper ?: ObjectManager::getInstance()->create(Data::class);
+        $this->captchaStringResolver = $captchaStringResolver ?:
+            ObjectManager::getInstance()->create(CaptchaStringResolver::class);
+        $this->currentUser = $currentUser ?: ObjectManager::getInstance()->get(UserContextInterface::class);
+        $this->customerRepository = $customerRepository ?:
+            ObjectManager::getInstance()->create(CustomerRepositoryInterface::class);
     }
 
     /**
@@ -92,8 +137,10 @@ class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPos
         try {
             $validate = $this->sendFriend->validate();
 
+            $this->validateCaptcha();
+
             if ($validate === true) {
-                $this->sendFriend->send();
+                //$this->sendFriend->send();
                 $this->messageManager->addSuccess(__('The link to a friend was sent.'));
                 $url = $product->getProductUrl();
                 $resultRedirect->setUrl($this->_redirect->success($url));
@@ -119,5 +166,49 @@ class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPos
         $url = $this->_url->getUrl('sendfriend/product/send', ['_current' => true]);
         $resultRedirect->setUrl($this->_redirect->error($url));
         return $resultRedirect;
+    }
+
+    /**
+     * Method validates captcha, if it's enabled for target form
+     *
+     * @throws LocalizedException
+     */
+    private function validateCaptcha() : void
+    {
+        $captchaTargetFormName = 'product_sendtofriend_form';
+        /** @var DefaultModel $captchaModel */
+        $captchaModel = $this->captchaHelper->getCaptcha($captchaTargetFormName);
+
+        if ($captchaModel->isRequired()) {
+            $word = $this->captchaStringResolver->resolve(
+                $this->getRequest(),
+                $captchaTargetFormName
+            );
+
+            $isCorrectCaptcha = $captchaModel->isCorrect($word);
+
+            if (!$isCorrectCaptcha) {
+                $this->logCaptchaAttempt($captchaModel);
+                throw new LocalizedException(__('Incorrect CAPTCHA'));
+            }
+        }
+
+        $this->logCaptchaAttempt($captchaModel);
+    }
+
+    /**
+     * Log captcha attempts
+     *
+     * @param DefaultModel $captchaModel
+     */
+    private function logCaptchaAttempt(DefaultModel $captchaModel) : void
+    {
+        $email = '';
+
+        if ($this->currentUser->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER) {
+            $email = $this->customerRepository->getById($this->currentUser->getUserId())->getEmail();
+        }
+
+        $captchaModel->logAttempt($email);
     }
 }

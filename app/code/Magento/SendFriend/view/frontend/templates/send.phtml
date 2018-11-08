@@ -112,7 +112,7 @@
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit"
-                    class="action submit primary">
+                    class="action submit primary"<?php if (!$block->canSend()): ?> disabled="disabled"<?php endif ?>>
                 <span><?= $block->escapeHtml(__('Send Email')) ?></span></button>
         </div>
         <div class="secondary">
