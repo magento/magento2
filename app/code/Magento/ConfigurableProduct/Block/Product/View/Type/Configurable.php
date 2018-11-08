@@ -314,6 +314,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                         ),
                     ],
                     'tierPrices' => $tierPrices,
+                    'msrpPrice' => [
+                        'amount' => $this->localeFormat->getNumber(
+                            $product->getMsrp()
+                        ),
+                    ],
                  ];
         }
         return $prices;

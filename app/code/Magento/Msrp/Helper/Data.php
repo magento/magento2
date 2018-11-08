@@ -155,7 +155,9 @@ class Data extends AbstractHelper
         $msrp = $product->getMsrp();
         $price = $product->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE);
         if ($msrp === null) {
-            if ($product->getTypeId() !== \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
+            if ($product->getTypeId() !== \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
+                && $product->getTypeId() !== \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
+            {
                 return false;
             } else {
                 $msrp = $product->getTypeInstance()->getChildrenMsrp($product);

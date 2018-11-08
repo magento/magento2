@@ -4,11 +4,12 @@
  */
 define([
     'jquery',
+    'Magento_Catalog/js/price-utils',
     'underscore',
     'jquery/ui',
     'mage/dropdown',
     'mage/template'
-], function ($) {
+], function ($, priceUtils) {
     'use strict';
 
     $.widget('mage.addToCart', {
@@ -24,7 +25,10 @@ define([
             // Selectors
             cartForm: '.form.map.checkout',
             msrpLabelId: '#map-popup-msrp',
+            msrpPriceElement: '#map-popup-msrp .price-wrapper',
             priceLabelId: '#map-popup-price',
+            priceElement: '#map-popup-price .price',
+            oldPriceElement: '.old-price.map-old-price .price-wrapper',
             popUpAttr: '[data-role=msrp-popup-template]',
             popupCartButtonId: '#map-popup-button',
             paypalCheckoutButons: '[data-action=checkout-form-submit]',
@@ -59,6 +63,7 @@ define([
             shadowHinter: 'popup popup-pointer'
         },
         popupOpened: false,
+        wasOpened: false,
 
         /**
          * Creates widget instance
@@ -73,6 +78,7 @@ define([
                 this.initTierPopup();
             }
             $(this.options.cartButtonId).on('click', this._addToCartSubmit.bind(this));
+            $(document).on('updateMsrpPriceBlock', this.onUpdateMsrpPrice.bind(this));
         },
 
         /**
@@ -89,7 +95,7 @@ define([
 
             $msrpPopup.find('button')
                 .on('click',
-                this.handleMsrpAddToCart.bind(this))
+                    this.handleMsrpAddToCart.bind(this))
                 .filter(this.options.popupCartButtonId)
                 .text($(this.options.addToCartButton).text());
 
@@ -212,8 +218,11 @@ define([
             var options = this.tierOptions || this.options;
 
             this.popUpOptions.position.of = $(event.target);
-            this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
-            this.$popup.find(this.options.priceLabelId).html(options.realPrice);
+            if (!this.wasOpened) {
+                this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
+                this.$popup.find(this.options.priceLabelId).html(options.realPrice);
+                this.wasOpened = true;
+            }
             this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
             this._toggle(this.$popup);
 
@@ -268,7 +277,46 @@ define([
             }
             $(this.options.cartForm).submit();
 
+        },
+
+        /**
+         * Call on event updatePrice. Proxy to updateMsrpPrice method.
+         *
+         * @param {Event} event
+         * @param {mixed} optionId
+         * @param {Object} prices
+         */
+        onUpdateMsrpPrice: function onUpdateMsrpPrice(event, optionId, prices) {
+            let useDefaultPrice = optionId === undefined;
+            let priceIndex = useDefaultPrice ? Object.keys(prices)[0] : optionId;
+            return this.updateMsrpPrice(
+                priceUtils.formatPrice(prices[priceIndex].finalPrice.amount),
+                priceUtils.formatPrice(prices[priceIndex].msrpPrice.amount),
+                useDefaultPrice
+            );
+        },
+
+        /**
+         * Update prices for configurable product with MSRP enabled
+         *
+         * @param {string} finalPrice
+         * @param {string} msrpPrice
+         * @param {boolean} useDefaultPrice
+         */
+        updateMsrpPrice: function (finalPrice, msrpPrice, useDefaultPrice) {
+            if (!this.wasOpened || useDefaultPrice) {
+                let options = this.tierOptions || this.options;
+                this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
+                this.$popup.find(this.options.priceLabelId).html(options.realPrice);
+                this.wasOpened = true;
+            }
+            if (!useDefaultPrice) {
+                this.$popup.find(this.options.msrpPriceElement).html(msrpPrice);
+                this.$popup.find(this.options.priceElement).html(finalPrice);
+            }
+            $(this.options.oldPriceElement).html(msrpPrice);
         }
+
     });
 
     return $.mage.addToCart;
