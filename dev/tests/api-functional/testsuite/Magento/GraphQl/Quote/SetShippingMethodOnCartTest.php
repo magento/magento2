@@ -161,7 +161,35 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
         $this->sendRequestWithToken($query);
     }
 
-    // TODO: TBD - add check for guest with attempt to set shipping method to the customer's shopping cart
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testSetShippingMethodByGuestToCustomerCart()
+    {
+        $shippingCarrierCode = 'flatrate';
+        $shippingMethodCode = 'flatrate';
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_1',
+            'reserved_order_id'
+        );
+        $shippingAddress = $this->quote->getShippingAddress();
+        $shippingAddressId = $shippingAddress->getId();
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+
+        $query = $this->prepareMutationQuery(
+            $maskedQuoteId,
+            $shippingMethodCode,
+            $shippingCarrierCode,
+            $shippingAddressId
+        );
+
+        self::expectExceptionMessage(
+            "The current user cannot perform operations on cart \"$maskedQuoteId\""
+        );
+
+        $this->graphQlQuery($query);
+    }
 
     /**
      * Generates query for setting the specified shipping method on cart
