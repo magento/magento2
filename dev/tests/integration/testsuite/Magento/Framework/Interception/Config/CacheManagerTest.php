@@ -40,7 +40,8 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->serializer = $this->objectManager->get(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->cache = $this->objectManager->get(\Magento\Framework\App\CacheInterface::class);
-        $this->configWriter = $this->objectManager->get(\Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem::class);
+        $this->configWriter = 
+            $this->objectManager->get(\Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem::class);
 
         $this->initializeMetadataDirectory();
     }
@@ -125,7 +126,9 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Interception\Config\CacheManager::class,
             [
                 'cacheId' => self::CACHE_ID,
-                'compiledLoader' => $this->objectManager->create(\Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class),
+                'compiledLoader' => $this->objectManager->create(
+                    \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class
+                ),
             ]
         );
     }
