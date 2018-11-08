@@ -10,6 +10,9 @@ use Magento\Framework\App;
 use Magento\Setup\Module\Di\Compiler\Config;
 use Magento\Setup\Module\Di\Definition\Collection as DefinitionsCollection;
 
+/**
+ * Area configuration aggregation
+ */
 class Area implements OperationInterface
 {
     /**
@@ -67,7 +70,7 @@ class Area implements OperationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function doOperation()
     {
