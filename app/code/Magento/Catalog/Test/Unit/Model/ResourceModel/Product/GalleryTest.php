@@ -452,7 +452,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     public function testRemoveImagesPositionExcludeDefaultStore()
     {
         $storeId = 0;
-        $entityId = "1";
+        $entityId = 1;
 
         $this->connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $this->connection->expects($this->once())->method('update')->with(
