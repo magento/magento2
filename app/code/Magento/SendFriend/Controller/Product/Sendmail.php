@@ -13,7 +13,9 @@ use Magento\SendFriend\Model\CaptchaValidator;
 
 /**
  * Controller class Sendmail. Represents send-mail action request flow
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class Sendmail extends \Magento\SendFriend\Controller\Product
 {
