@@ -201,7 +201,7 @@ class CreateHandler implements ExtensionInterface
         $this->processNewAndExistingImages($product, $value['images']);
 
         if (!$product->getStoreId()) {
-            $this->processSetImagesPositionToDefault($product->getEntityId(), $product->getStoreId());
+            $this->processSetImagesPositionToDefault((int) $product->getEntityId(), (int) $product->getStoreId());
         }
 
         $product->setData($attrCode, $value);
@@ -526,13 +526,14 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Remove image positions for stores after save on 'All store views' level
+     *
      * @param int $entityId
      * @param int $storeId
-     * @return $this
+     * @return void
      */
-    private function processSetImagesPositionToDefault(int $entityId, int $storeId) : CreateHandler
+    private function processSetImagesPositionToDefault(int $entityId, int $storeId) : void
     {
         $this->resourceModel->removeImagesPositionExcludeDefaultStore($entityId, $storeId);
-        return $this;
     }
 }
