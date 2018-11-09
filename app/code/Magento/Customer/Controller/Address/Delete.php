@@ -18,19 +18,15 @@ class Delete extends \Magento\Customer\Controller\Address implements HttpGetActi
         $addressId = $this->getRequest()->getParam('id', false);
 
         if ($addressId && $this->_formKeyValidator->validate($this->getRequest())) {
-            $address = null;
             $customer = $this->_customerRepository->getById($this->_getSession()->getCustomerId());
             $addresses = $customer->getAddresses();
 
             try {
-                foreach ($addresses as $key => $customerAddress) {
-                    if ($customerAddress->getId() === $addressId) {
-                        $address = $customerAddress;
-                        unset($addresses[$key]);
-                    }
-                }
-                if ($address !== null) {
-                    $customer->setAddresses($addresses);
+                $addressesFiltered = array_filter($addresses, function ($customerAddress) use ($addressId){
+                    return $customerAddress->getId() !== $addressId;
+                });
+                if (count($addresses) !== count($addressesFiltered)) {
+                    $customer->setAddresses($addressesFiltered);
                     $this->_customerRepository->save($customer);
                     $this->messageManager->addSuccess(__('You deleted the address.'));
                 } else {
@@ -40,7 +36,6 @@ class Delete extends \Magento\Customer\Controller\Address implements HttpGetActi
                 $this->messageManager->addException($other, __('We can\'t delete the address right now.'));
             }
         }
-
         return $this->resultRedirectFactory->create()->setPath('*/*/index');
     }
 }

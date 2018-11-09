@@ -166,6 +166,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerRepository;
+    /** @var  @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject */
     private $customer;
 
     /**
@@ -228,7 +229,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             $this->session,
             $this->formKeyValidator,
             $this->formFactory,
-            $this->addressRepository,
+            $this->customerRepository,
             $this->addressDataFactory,
             $this->regionDataFactory,
             $this->dataProcessor,
@@ -236,8 +237,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             $this->resultForwardFactory,
             $this->resultPageFactory,
             $this->regionFactory,
-            $this->helperData,
-            $this->customerRepository
+            $this->helperData
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -496,7 +496,8 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('isPost')
             ->willReturn(true);
-        $this->request->expects($this->exactly(3))
+
+        $this->request->expects($this->any())
             ->method('getParam')
             ->willReturnMap([
                 ['id', null, $addressId],
@@ -504,10 +505,21 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
                 ['default_shipping', false, $addressId],
             ]);
 
-        $this->addressRepository->expects($this->once())
+        $this->session->expects($this->any())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+
+        $this->customerRepository->expects($this->once())
             ->method('getById')
-            ->with($addressId)
-            ->willReturn($this->addressData);
+            ->willReturn($this->customer);
+
+        $this->customer->expects($this->atLeastOnce())
+            ->method('getAddresses')
+            ->willReturn([$this->addressData]);
+
+        $this->addressData->expects($this->any())
+            ->method('getId')
+            ->willReturn($addressId);
 
         $this->customerAddressMapper->expects($this->once())
             ->method('toFlatArray')
@@ -562,9 +574,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
                 ],
             ]);
 
-        $this->session->expects($this->atLeastOnce())
-            ->method('getCustomerId')
-            ->willReturn($customerId);
+
         $this->addressData->expects($this->any())
             ->method('getCustomerId')
             ->willReturn($customerId);
@@ -581,15 +591,6 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->method('setIsDefaultShipping')
             ->with()
             ->willReturnSelf();
-
-        $this->customerRepository->expects($this->once())
-            ->method('getById')
-            ->with($customerId)
-            ->willReturn($this->customer);
-
-        $this->customer->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn([]);
 
         $this->customer->expects($this->once())
             ->method('setAddresses')
@@ -680,7 +681,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('isPost')
             ->willReturn(true);
-        $this->request->expects($this->exactly(2))
+        $this->request->expects($this->any())
             ->method('getParam')
             ->with('id')
             ->willReturn($addressId);
@@ -688,9 +689,13 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->method('getPostValue')
             ->willReturn($postValue);
 
-        $this->addressRepository->expects($this->once())
+        $this->session->expects($this->any())
+            ->method('getCustomerId')
+            ->willReturn(1);
+
+        $this->customerRepository->expects($this->once())
             ->method('getById')
-            ->with($addressId)
+            ->with(1)
             ->willThrowException(new InputException(__('InputException')));
 
         $this->messageManager->expects($this->once())
@@ -753,10 +758,15 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->method('getPostValue')
             ->willReturn($postValue);
 
+        $this->session->expects($this->any())
+            ->method('getCustomerId')
+            ->willReturn(1);
+
         $exception = new \Exception(__('Exception'));
-        $this->addressRepository->expects($this->once())
+
+        $this->customerRepository->expects($this->once())
             ->method('getById')
-            ->with($addressId)
+            ->with(1)
             ->willThrowException($exception);
 
         $this->messageManager->expects($this->once())

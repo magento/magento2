@@ -7,7 +7,6 @@
 namespace Magento\Customer\Controller\Address;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
@@ -51,7 +50,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @param Session $customerSession
      * @param FormKeyValidator $formKeyValidator
      * @param FormFactory $formFactory
-     * @param AddressRepositoryInterface $addressRepository
+     * @param CustomerRepositoryInterface $customerRepository
      * @param AddressInterfaceFactory $addressDataFactory
      * @param RegionInterfaceFactory $regionDataFactory
      * @param DataObjectProcessor $dataProcessor
@@ -60,7 +59,6 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @param PageFactory $resultPageFactory
      * @param RegionFactory $regionFactory
      * @param HelperData $helperData
-     * @param CustomerRepositoryInterface $customerRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -68,7 +66,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         Session $customerSession,
         FormKeyValidator $formKeyValidator,
         FormFactory $formFactory,
-        AddressRepositoryInterface $addressRepository,
+        CustomerRepositoryInterface $customerRepository,
         AddressInterfaceFactory $addressDataFactory,
         RegionInterfaceFactory $regionDataFactory,
         DataObjectProcessor $dataProcessor,
@@ -76,8 +74,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory,
         RegionFactory $regionFactory,
-        HelperData $helperData,
-        CustomerRepositoryInterface $customerRepository
+        HelperData $helperData
     ) {
         $this->regionFactory = $regionFactory;
         $this->helperData = $helperData;
@@ -109,7 +106,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         $addressId = $this->getRequest()->getParam('id');
 
         if ($customer === null) {
-            $$customer = $this->customerRepository->getById($this->_getSession()->getCustomerId());
+            $customer = $this->_customerRepository->getById($this->_getSession()->getCustomerId());
         }
 
         foreach ($customer->getAddresses() as $customerAddress) {
@@ -139,9 +136,9 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             array_merge($existingAddressData, $attributeValues),
             \Magento\Customer\Api\Data\AddressInterface::class
         );
-        $addressDataObject->setCustomerId($this->_getSession()->getCustomerId())
-            ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
-            ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
+        $addressDataObject->setCustomerId($this->_getSession()->getCustomerId());
+        $addressDataObject->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false));
+        $addressDataObject->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
 
         return $addressDataObject;
     }
