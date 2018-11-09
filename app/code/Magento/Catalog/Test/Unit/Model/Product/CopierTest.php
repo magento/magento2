@@ -7,6 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use \Magento\Catalog\Model\Product\Copier;
+use Magento\Catalog\Model\Product;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -54,7 +55,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product\Option\Repository::class
         );
         $this->optionRepositoryMock;
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->productMock = $this->createMock(Product::class);
         $this->productMock->expects($this->any())->method('getEntityId')->willReturn(1);
 
         $this->metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
@@ -106,7 +107,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())->method('getResource')->will($this->returnValue($resourceMock));
 
         $duplicateMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             [
                 '__wakeup',
                 'setData',
@@ -147,10 +148,10 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
         );
-        $duplicateMock->expects($this->once())->method('setData')->with($productData);
+        $duplicateMock->expects($this->atLeastOnce())->method('setData')->willReturn($duplicateMock);
         $this->copyConstructorMock->expects($this->once())->method('build')->with($this->productMock, $duplicateMock);
         $duplicateMock->expects($this->once())->method('getUrlKey')->willReturn('urk-key-1');
-        $duplicateMock->expects($this->once())->method('setUrlKey')->with('urk-key-2');
+        $duplicateMock->expects($this->once())->method('setUrlKey')->with('urk-key-2')->willReturn($duplicateMock);
         $duplicateMock->expects($this->once())->method('save');
 
         $this->metadata->expects($this->any())->method('getLinkField')->willReturn('linkField');

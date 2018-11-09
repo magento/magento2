@@ -1029,12 +1029,14 @@ define([
                 mediaCallData.isAjax = true;
                 $widget._XhrKiller();
                 $widget._EnableProductMediaLoader($this);
-                $widget.xhr = $.get(
-                    $widget.options.mediaCallback,
-                    mediaCallData,
-                    mediaSuccessCallback,
-                    'json'
-                ).done(function () {
+                $widget.xhr = $.ajax({
+                    url: $widget.options.mediaCallback,
+                    cache: true,
+                    type: 'GET',
+                    dataType: 'json',
+                    data: mediaCallData,
+                    success: mediaSuccessCallback
+                }).done(function () {
                     $widget._XhrKiller();
                 });
             }
