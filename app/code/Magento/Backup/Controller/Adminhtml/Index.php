@@ -19,7 +19,7 @@ abstract class Index extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::backup';
+    const ADMIN_RESOURCE = 'Magento_Backup::backup';
 
     /**
      * Core registry
