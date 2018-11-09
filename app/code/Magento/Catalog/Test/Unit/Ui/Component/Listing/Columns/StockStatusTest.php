@@ -15,7 +15,15 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
  */
 class StockStatusTest extends AbstractColumnTest
 {
+
+    /**
+     * Value of  attribute 'quantity_and_stock_status' when product 'In stock'
+     */
     const STOCK_STATUS_ID = 1;
+
+    /**
+     * Text for product with stock status attribute code equals 1
+     */
     const STOCK_STATUS_TEXT = 'In Stock';
 
     /**
@@ -34,6 +42,8 @@ class StockStatusTest extends AbstractColumnTest
     }
 
     /**
+     * Prepare StockStatus ui component object
+     *
      * @return StockStatus
      */
     protected function getModel()
@@ -47,6 +57,9 @@ class StockStatusTest extends AbstractColumnTest
         ]);
     }
 
+    /**
+     * Check column value in product grid
+     */
     public function testPrepareDataSource()
     {
         $dataSource = [

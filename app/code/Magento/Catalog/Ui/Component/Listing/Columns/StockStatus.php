@@ -12,6 +12,9 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 class StockStatus extends \Magento\Ui\Component\Listing\Columns\Column
 {
+    /**
+     * Product stock status attribute code
+     */
     const NAME = 'quantity_and_stock_status';
 
     /**
@@ -46,7 +49,7 @@ class StockStatus extends \Magento\Ui\Component\Listing\Columns\Column
     }
 
     /**
-     * Prepare Data Source
+     * Prepare Data Source for column in product grid
      *
      * @param array $dataSource
      * @return array

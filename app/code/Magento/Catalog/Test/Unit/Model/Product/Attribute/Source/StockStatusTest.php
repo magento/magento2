@@ -23,12 +23,17 @@ class StockStatusTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Check option data
+     */
     public function testGetOptionArray()
     {
         $this->assertEquals([1 => 'In Stock', 0 => 'Out of Stock'], $this->stastockStatus->getOptionArray());
     }
 
     /**
+     * Check text by option id
+     *
      * @dataProvider getOptionTextDataProvider
      * @param string $text
      * @param string $optionId
@@ -39,6 +44,8 @@ class StockStatusTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Array with text data for test
+     *
      * @return array
      */
     public function getOptionTextDataProvider()

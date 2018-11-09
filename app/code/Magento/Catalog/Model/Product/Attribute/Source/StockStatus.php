@@ -17,12 +17,15 @@ use Magento\Framework\Data\OptionSourceInterface;
  */
 class StockStatus extends AbstractSource implements SourceInterface, OptionSourceInterface
 {
-    /**#@+
-     * Product stock status values
+    /**
+     * Stock status value for product in stock
      */
     const IN_STOCK = 1;
+
+    /**
+     * Stock status value for out of stock product
+     */
     const OUT_OF_STOCK = 0;
-    /**#@-*/
 
     /**
      * Retrieve option array
