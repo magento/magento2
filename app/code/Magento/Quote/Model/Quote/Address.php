@@ -999,9 +999,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
         $request->setFreeMethodWeight($item ? 0 : $this->getFreeMethodWeight());
 
-        
-         // =======================================================
-
         /**
          * Store and website identifiers need specify from quote
          */
@@ -1013,9 +1010,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
          */
         $request->setBaseCurrency($this->getQuote()->getStore()->getBaseCurrency());
         $request->setPackageCurrency($this->getQuote()->getStore()->getCurrentCurrency());
-
-        // =======================================================
-        
         
         $request->setLimitCarrier($this->getLimitCarrier());
         $baseSubtotalInclTax = $this->getBaseSubtotalTotalInclTax();
