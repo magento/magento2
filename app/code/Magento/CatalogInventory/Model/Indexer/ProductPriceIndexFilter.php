@@ -96,13 +96,13 @@ class ProductPriceIndexFilter implements PriceModifierInterface
 
         $select->from(
             ['stock_item' => $this->stockItem->getMainTable()],
-            ['*', 'MAX(stock_item.is_in_stock) as max_is_in_stock']
+            ['stock_item.product_id', 'MAX(stock_item.is_in_stock) as max_is_in_stock']
         );
 
         if ($this->stockConfiguration->getManageStock()) {
-            $select->where('stock_item.use_config_manage_stock = 1 OR stock_item.manage_stock = 1 ');
+            $select->where('stock_item.use_config_manage_stock = 1 OR stock_item.manage_stock = 1');
         } else {
-            $select->where('use_config_manage_stock = 0 AND manage_stock = 1 ');
+            $select->where('stock_item.use_config_manage_stock = 0 AND stock_item.manage_stock = 1');
         }
 
         $select->group('stock_item.product_id');
