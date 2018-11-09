@@ -13,7 +13,7 @@
             <stories value="Catalog Quick Search"/>
             <title value="Quick Catalog Search for Virtual Product on Single stock"/>
             <description value="Quick Catalog Search for Virtual Product on Single stock"/>
-            <testCaseId value="MSI-1312"/>
+            <testCaseId value="MSI-1813"/>
             <severity value="MAJOR"/>
             <group value="msi"/>
             <group value="single_mode"/>
