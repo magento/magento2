@@ -1164,11 +1164,12 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve current url for store
      *
      * @param bool $fromStore
+     * @param bool $clearUrl
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function getCurrentUrl($fromStore = true)
+    public function getCurrentUrl($fromStore = true, $clearUrl = false)
     {
         $sidQueryParam = $this->_sidResolver->getSessionIdQueryParam($this->_getSession());
         $requestString = $this->_url->escape(ltrim($this->_request->getRequestString(), '/'));
@@ -1216,6 +1217,10 @@ class Store extends AbstractExtensibleModel implements
         }
 
         $currentUrlQueryParams = array_merge($requestString, $storeParsedQuery);
+
+        if ($clearUrl !== false) {
+            $currentUrlQueryParams = false;
+        }
 
         $currentUrl = $storeParsedUrl['scheme']
             . '://'
