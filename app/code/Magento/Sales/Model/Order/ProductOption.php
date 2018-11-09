@@ -15,8 +15,6 @@ use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
 
 /**
  * Adds product option to the order item according to product options processors pool.
- *
- * @api
  */
 class ProductOption
 {
