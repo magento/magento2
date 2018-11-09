@@ -136,6 +136,7 @@ class Image implements ProductRenderCollectorInterface
     public function emulateImageCreating(ProductInterface $product, $imageCode, $storeId, ImageInterface $image)
     {
         $this->storeManager->setCurrentStore($storeId);
+        $this->design->setDefaultDesignTheme();
 
         $imageHelper = $this->imageFactory->create();
         $imageHelper->init($product, $imageCode);
