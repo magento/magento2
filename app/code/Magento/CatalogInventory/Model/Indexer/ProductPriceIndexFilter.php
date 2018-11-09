@@ -82,7 +82,6 @@ class ProductPriceIndexFilter implements PriceModifierInterface
      * @return void
      *
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Zend_Db_Statement_Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = [])
@@ -123,7 +122,6 @@ class ProductPriceIndexFilter implements PriceModifierInterface
             if ($productIds !== null) {
                 $where = [$priceTable->getEntityField() .' IN (?)' => $productIds];
                 $connection->delete($priceTable->getTableName(), $where);
-                $productIds = null;
             }
         }
     }
