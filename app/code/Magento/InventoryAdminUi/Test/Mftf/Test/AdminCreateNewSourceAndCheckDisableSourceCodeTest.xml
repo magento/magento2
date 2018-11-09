@@ -55,6 +55,5 @@
 
         <comment userInput="Check source code field is disabled" stepKey="checkDisabledSourceCode"/>
         <assertElementContainsAttribute selector="{{AdminEditSourceGeneralSection.code}}" attribute="disabled" stepKey="seeSourceCodeFieldIsDisabled"/>
-
     </test>
 </tests>
