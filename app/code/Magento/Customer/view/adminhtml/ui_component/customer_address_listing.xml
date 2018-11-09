@@ -28,7 +28,7 @@
             <updateUrl path="mui/index/render"/>
         </settings>
         <aclResource>Magento_Customer::manage</aclResource>
-        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="customer_address_listing_data_source">
+        <dataProvider class="Magento\Customer\Ui\Component\Listing\Address\DataProvider" name="customer_address_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>entity_id</primaryFieldName>
