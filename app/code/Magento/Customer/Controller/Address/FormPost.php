@@ -110,7 +110,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         }
 
         foreach ($customer->getAddresses() as $customerAddress) {
-            if ($customerAddress->getId() === $addressId) {
+            if ($customerAddress->getId() == $addressId) {
                 $existingAddressData = $this->getCustomerAddressMapper()->toFlatArray($customerAddress);
             }
         }

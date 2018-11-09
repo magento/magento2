@@ -36,4 +36,12 @@ $customerAddress->setData(
 );
 
 $customerAddress->save();
+/** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
+$addressRepository = $objectManager->get(\Magento\Customer\Api\AddressRepositoryInterface::class);
+$customerAddress = $addressRepository->getById(2);
+$customerAddress->setCustomerId(1);
+$customerAddress = $addressRepository->save($customerAddress);
 $customerRegistry->remove($customerAddress->getCustomerId());
+/** @var \Magento\Customer\Model\AddressRegistry $addressRegistry */
+$addressRegistry = $objectManager->get(\Magento\Customer\Model\AddressRegistry::class);
+$addressRegistry->remove($customerAddress->getId());

@@ -27,7 +27,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     protected $validatorMock;
 
     /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $customerRepositoryMock;
+    protected $customerRepository;
 
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
@@ -58,7 +58,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $formFactoryMock = $this->getMockBuilder(\Magento\Customer\Model\Metadata\FormFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
+        $this->customerRepository = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMockForAbstractClass();
         $addressInterfaceFactoryMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -111,7 +111,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             $this->sessionMock,
             $this->validatorMock,
             $formFactoryMock,
-            $this->customerRepositoryMock,
+            $this->customerRepository,
             $addressInterfaceFactoryMock,
             $regionInterfaceFactoryMock,
             $dataObjectProcessorMock,
@@ -140,7 +140,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $this->customerRepositoryMock->expects($this->once())
+        $this->customerRepository->expects($this->once())
             ->method('getById')
             ->with($customerId)
             ->willReturn($this->customer->reveal());
@@ -154,7 +154,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->withArguments([[]])
             ->shouldBeCalled()
             ->willReturn($this->customer->reveal());
-        $this->customerRepositoryMock->expects($this->once())
+        $this->customerRepository->expects($this->once())
             ->method('save')
             ->with($this->customer->reveal())
             ->willReturn($this->customer->reveal());
@@ -187,7 +187,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $this->customerRepositoryMock->expects($this->once())
+        $this->customerRepository->expects($this->once())
             ->method('getById')
             ->with($customerId)
             ->willReturn($this->customer->reveal());

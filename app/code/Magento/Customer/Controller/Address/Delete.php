@@ -6,9 +6,7 @@
  */
 namespace Magento\Customer\Controller\Address;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
-
-class Delete extends \Magento\Customer\Controller\Address implements HttpGetActionInterface
+class Delete extends \Magento\Customer\Controller\Address
 {
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
@@ -23,7 +21,7 @@ class Delete extends \Magento\Customer\Controller\Address implements HttpGetActi
 
             try {
                 $addressesFiltered = array_filter($addresses, function ($customerAddress) use ($addressId){
-                    return $customerAddress->getId() !== $addressId;
+                    return $customerAddress->getId() != $addressId;
                 });
                 if (count($addresses) !== count($addressesFiltered)) {
                     $customer->setAddresses($addressesFiltered);
