@@ -212,6 +212,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         ) {
             $customerModel->setDefaultShipping($prevCustomerDataArr['default_shipping']);
         }
+        $this->setValidationFlag($customerArr, $customerModel);
         $customerModel->save();
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
@@ -221,7 +222,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         ) {
             $customer->setAddresses($delegatedNewOperation->getCustomer()->getAddresses());
         }
-        if ($customer->getAddresses() !== null) {
+        if ($customer->getAddresses() !== null && !$customerModel->getData('ignore_validation_flag')) {
             if ($customer->getId()) {
                 $existingAddresses = $this->getById($customer->getId())->getAddresses();
                 $getIdFunc = function ($address) {
@@ -387,6 +388,20 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         }
         if ($fields) {
             $collection->addFieldToFilter($fields);
+        }
+    }
+
+    /**
+     * Set ignore_validation_flag to skip model validation
+     *
+     * @param array $customerArray
+     * @param Customer $customerModel
+     * @return void
+     */
+    private function setValidationFlag($customerArray, $customerModel)
+    {
+        if (isset($customerArray['ignore_validation_flag'])) {
+            $customerModel->setData('ignore_validation_flag', true);
         }
     }
 }

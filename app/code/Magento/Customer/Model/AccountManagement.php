@@ -1384,6 +1384,7 @@ class AccountManagement implements AccountManagementInterface
             $customerSecure->setRpTokenCreatedAt(
                 $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
             );
+            $this->setIgnoreValidationFlag($customer);
             $this->customerRepository->save($customer);
         }
         return true;
@@ -1536,5 +1537,16 @@ class AccountManagement implements AccountManagementInterface
             $sessionId = $visitor->getSessionId();
             $this->saveHandler->destroy($sessionId);
         }
+    }
+
+    /**
+     * Set ignore_validation_flag for reset password flow to skip unnecessary address and customer validation
+     *
+     * @param Customer $customer
+     * @return void
+     */
+    private function setIgnoreValidationFlag($customer)
+    {
+        $customer->setData('ignore_validation_flag', true);
     }
 }
