@@ -70,4 +70,17 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 
         return $totals;
     }
+
+    /**
+     * Check if we can display Weee total information in PDF
+     *
+     * @return bool
+     */
+    public function canDisplay()
+    {
+        $items = $this->getSource()->getAllItems();
+        $store = $this->getSource()->getStore();
+        $amount = $this->_weeeData->getTotalAmounts($items, $store);
+        return $this->getDisplayZero() === 'true' || $amount != 0;
+    }
 }
