@@ -193,7 +193,7 @@ define([
          * @return {Number}
          */
         getCalculatedPosition: function (data) {
-            return (~~this.currentPage() - 1) * this.pageSize + this.elems().pluck("name").indexOf(data.name);
+            return (~~this.currentPage() - 1) * this.pageSize + this.elems().pluck('name').indexOf(data.name);
         },
 
         /**
