@@ -11,6 +11,10 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\SendFriend\Model\CaptchaValidator;
 
+/**
+ * Controller class Sendmail. Represents send-mail action request flow
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Sendmail extends \Magento\SendFriend\Controller\Product
 {
     /**
@@ -101,7 +105,7 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
             $validate = $this->sendFriend->validate();
             $this->captchaValidator->validateSending($this->getRequest());
             if ($validate === true) {
-                //$this->sendFriend->send();
+                $this->sendFriend->send();
                 $this->messageManager->addSuccess(__('The link to a friend was sent.'));
                 $url = $product->getProductUrl();
                 $resultRedirect->setUrl($this->_redirect->success($url));
