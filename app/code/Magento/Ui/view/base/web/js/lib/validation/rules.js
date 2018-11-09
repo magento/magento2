@@ -116,6 +116,12 @@ define([
             },
             $.mage.__('No white space please')
         ],
+        'no-marginal-whitespace': [
+            function (value) {
+                return !/^\s+|\s+$/i.test(value);
+            },
+            $.mage.__('No marginal white space please')
+        ],
         'zip-range': [
             function (value) {
                 return utils.isEmpty(value) || /^90[2-5]-\d{2}-\d{4}$/.test(value);
@@ -757,7 +763,7 @@ define([
             function (value) {
                 return utils.isEmptyNoTrim(value) || /^[a-z]+[a-z0-9_]+$/.test(value);
             },
-            $.mage.__('Please use only letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.')//eslint-disable-line max-len
+            $.mage.__('Please use only lowercase letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.')//eslint-disable-line max-len
         ],
         'validate-alphanum': [
             function (value) {

@@ -86,8 +86,12 @@ class Product
         $collection->load();
 
         // Methods that perform extra fetches post-load
-        $collection->addMediaGalleryData();
-        $collection->addOptionsToResult();
+        if (in_array('media_gallery_entries', $attributes)) {
+            $collection->addMediaGalleryData();
+        }
+        if (in_array('options', $attributes)) {
+            $collection->addOptionsToResult();
+        }
 
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
