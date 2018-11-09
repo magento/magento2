@@ -17,7 +17,7 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- *
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @api
  * @since 100.0.2
  */
