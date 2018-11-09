@@ -4,28 +4,18 @@
  */
 
 define([
-    'Magento_Ui/js/form/components/button'
-], function (Button) {
+    'Magento_Ui/js/form/components/button',
+    'underscore'
+], function (Button, _) {
     'use strict';
 
     return Button.extend({
         defaults: {
-            entity_id: null,
-            parent_id: null
-        },
-
-        /**
-         * Initializes component.
-         *
-         * @returns {Button}
-         */
-        initialize: function () {
-            this._super();
-            if (!this.parent_id) {
-                this.visible(this.entity_id);
+            entityId: null,
+            parentId: null,
+            listens: {
+                entity: 'changeVisibility'
             }
-
-            return this;
         },
 
         /**
@@ -36,16 +26,20 @@ define([
          */
         applyAction: function (action) {
             if (action.params && action.params[0]) {
-                action.params[0].entity_id = this.entity_id;
-                action.params[0].parent_id = this.parent_id;
+                action.params[0]['entity_id'] = this.entityId;
+                action.params[0]['parent_id'] = this.parentId;
             } else {
                 action.params = [{
-                    entity_id: this.entity_id,
-                    parent_id: this.parent_id
+                    'entity_id': this.entityId,
+                    'parent_id': this.parentId
                 }];
             }
 
             this._super();
+        },
+
+        changeVisibility: function (entity) {
+            this.visible(!_.isEmpty(entity));
         }
     });
 });

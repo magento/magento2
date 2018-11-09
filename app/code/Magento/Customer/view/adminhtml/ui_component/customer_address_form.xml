@@ -21,6 +21,8 @@
             <button name="save" class="Magento\Customer\Block\Adminhtml\Edit\Address\SaveButton"/>
         </buttons>
         <namespace>customer_address_form</namespace>
+        <ajaxSave>true</ajaxSave>
+        <ajaxSaveType>simple</ajaxSaveType>
         <dataScope>data</dataScope>
         <deps>
             <dep>customer_address_form.customer_address_form_data_source</dep>
@@ -44,6 +46,21 @@
             </settings>
         </dataProvider>
     </dataSource>
+    <container name="messages" component="Magento_Ui/js/form/components/html">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="additionalClasses" xsi:type="string">message message-error</item>
+                <item name="visible" xsi:type="boolean">false</item>
+                <item name="imports" xsi:type="array">
+                    <item name="responseData" xsi:type="string">${ $.parentName }:responseData</item>
+                </item>
+                <item name="listens" xsi:type="array">
+                    <item name="responseData.error" xsi:type="string">visible</item>
+                    <item name="responseData.messages" xsi:type="string">content</item>
+                </item>
+            </item>
+        </argument>
+    </container>
     <fieldset name="general">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">

@@ -163,7 +163,7 @@ class Save extends Action implements HttpPostActionInterface
                 'message' => $message,
                 'error' => $error,
                 'data' => [
-                    'addressId' => $addressId
+                    'entity_id' => $addressId
                 ]
             ]
         );
