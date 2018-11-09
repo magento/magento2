@@ -103,7 +103,6 @@ class ProductPriceIndexFilter implements PriceModifierInterface
             $select->where('stock_item.use_config_manage_stock = 1 OR stock_item.manage_stock = 1 ');
         } else {
             $select->where('use_config_manage_stock = 0 AND manage_stock = 1 ');
-
         }
 
         $select->group('stock_item.product_id');
