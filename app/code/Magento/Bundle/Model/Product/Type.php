@@ -736,7 +736,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $price = $product->getPriceModel()
                         ->getSelectionFinalTotalPrice($product, $selection, 0, $qty);
                     $attributes = [
-                        'price' => $this->priceCurrency->convert($price),
+                        'price' => $price,
                         'qty' => $qty,
                         'option_label' => $selection->getOption()
                             ->getTitle(),
