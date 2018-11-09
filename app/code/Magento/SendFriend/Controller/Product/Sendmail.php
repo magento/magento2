@@ -15,7 +15,6 @@ use Magento\SendFriend\Model\CaptchaValidator;
  * Controller class Sendmail. Represents send-mail action request flow
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class Sendmail extends \Magento\SendFriend\Controller\Product
 {
@@ -43,6 +42,8 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param CaptchaValidator|null $captchaValidator
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
