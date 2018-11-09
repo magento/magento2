@@ -13,7 +13,7 @@
             <stories value="Add Bundled Product"/>
             <title value="Bundle Product on Single stock mode created by Admin user"/>
             <description value="Bundle Product on Single stock mode created by Admin user"/>
-            <testCaseId value="1774"/>
+            <testCaseId value="MSI-1774"/>
             <severity value="MAJOR"/>
             <group value="msi"/>
             <group value="single_mode"/>

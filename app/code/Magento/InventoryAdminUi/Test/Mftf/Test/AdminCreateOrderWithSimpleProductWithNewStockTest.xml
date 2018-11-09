@@ -10,7 +10,6 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateOrderWithSimpleProductWithNewStockTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Guest Customer created Order with Simple product"/>
             <title value="Guest Customer created Order with Simple product"/>
             <description value="Guest Customer created Order with Simple product."/>

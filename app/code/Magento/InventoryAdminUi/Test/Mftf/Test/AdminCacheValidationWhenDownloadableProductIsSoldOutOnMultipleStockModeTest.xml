@@ -13,7 +13,7 @@
             <stories value="Cache Validation"/>
             <title value="Cache validation when Downloadable product on Test stock totally sold"/>
             <description value="Cache validation when Downloadable product on Test stock totally sold"/>
-            <testCaseId value="1754"/>
+            <testCaseId value="MSI-1754"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

@@ -6,14 +6,14 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateNewSourceAndCheckDisableSourceCodeTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Source"/>
             <title value="Disable source code field"/>
             <description value="You should be able to create a New Source, via the Admin and check that the source code field is disabled after create."/>
-            <testCaseId value="1799"/>
+            <testCaseId value="MSI-1799"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

@@ -13,7 +13,7 @@
             <stories value="Cache Validation"/>
             <title value="Cache validation when Downloadable product on Single stock mode totally sold"/>
             <description value="Cache validation when Downloadable product on Single stock mode totally sold"/>
-            <testCaseId value="1753"/>
+            <testCaseId value="MSI-1753"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>
