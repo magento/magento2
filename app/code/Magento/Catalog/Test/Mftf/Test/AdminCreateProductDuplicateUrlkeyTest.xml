@@ -43,7 +43,7 @@
     <test name="AdminCreateProductDuplicateProductTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Errors"/>
+            <stories value="Validation Errors"/>
             <title value="No validation errors when trying to duplicate product twice"/>
             <description value="No validation errors when trying to duplicate product twice"/>
             <severity value="MAJOR"/>
