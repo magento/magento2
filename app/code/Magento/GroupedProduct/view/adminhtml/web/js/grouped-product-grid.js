@@ -170,6 +170,7 @@ define([
                 });
                 this.reloadGridData(recordData);
             }
+
             return false;
         },
 
