@@ -33,6 +33,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @param string $query
      * @param array $variables
      * @param string $operationName
+     * @param array $headers
      * @return array|int|string|float|bool GraphQL call results
      * @throws \Exception
      */
