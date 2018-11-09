@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model;
 
+use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
@@ -47,37 +48,63 @@ class GetItemsToCancelFromOrderItem
 
     /**
      * @param OrderItem $orderItem
-     * @return array
+     * @return ItemToSellInterface[]
      */
     public function execute(OrderItem $orderItem): array
     {
-        $itemsToSell = [];
+        $itemsToCancel = [];
         if ($orderItem->getHasChildren()) {
             if (!$orderItem->isDummy(true)) {
                 foreach ($this->processComplexItem($orderItem) as $item) {
-                    $itemsToSell[] = $item;
+                    $itemsToCancel[] = $item;
                 }
             }
         } elseif (!$orderItem->isDummy(true)) {
             $itemSku = $this->getSkuFromOrderItem->execute($orderItem);
-            $qtyToCancel = $orderItem->getIsVirtual() ? $this->getQtyToCancelForVirtualItem($orderItem)
-                : $this->getQtyToCancelForPhysicalItem($orderItem);
-            $itemsToSell[] = $this->itemsToSellFactory->create([
+            $itemsToCancel[] = $this->itemsToSellFactory->create([
                 'sku' => $itemSku,
-                'qty' => $qtyToCancel
+                'qty' => $this->getQtyToCancel($orderItem)
             ]);
         }
 
-        return $itemsToSell;
+        return $this->groupItemsBySku($itemsToCancel);
+    }
+
+    /**
+     * @param ItemToSellInterface[] $itemsToCancel
+     * @return ItemToSellInterface[]
+     */
+    private function groupItemsBySku(array $itemsToCancel): array
+    {
+        $processingItems = $groupedItems = [];
+        foreach ($itemsToCancel as $item) {
+            if ($item->getQuantity() == 0) {
+                continue;
+            }
+            if (empty($processingItems[$item->getSku()])) {
+                $processingItems[$item->getSku()] = $item->getQuantity();
+            } else {
+                $processingItems[$item->getSku()] += $item->getQuantity();
+            }
+        }
+
+        foreach ($processingItems as $sku => $qty) {
+            $groupedItems[] = $this->itemsToSellFactory->create([
+                'sku' => $sku,
+                'qty' => $qty
+            ]);
+        }
+
+        return $groupedItems;
     }
 
     /**
      * @param OrderItem $orderItem
-     * @return array
+     * @return ItemToSellInterface[]
      */
     private function processComplexItem(OrderItem $orderItem): array
     {
-        $itemsToShip = [];
+        $itemsToCancel = [];
         foreach ($orderItem->getChildrenItems() as $item) {
             $productOptions = $item->getProductOptions();
             if (isset($productOptions['bundle_selection_attributes'])) {
@@ -85,11 +112,9 @@ class GetItemsToCancelFromOrderItem
                     $productOptions['bundle_selection_attributes']
                 );
                 if ($bundleSelectionAttributes) {
-                    $qtyToCancel = $orderItem->getIsVirtual() ? $this->getQtyToCancelForVirtualItem($orderItem)
-                        : $this->getQtyToCancelForPhysicalItem($orderItem);
-                    $qty = $bundleSelectionAttributes['qty'] * $qtyToCancel;
+                    $qty = $bundleSelectionAttributes['qty'] * $this->getQtyToCancel($orderItem);
                     $itemSku = $this->getSkuFromOrderItem->execute($item);
-                    $itemsToShip[] = $this->itemsToSellFactory->create([
+                    $itemsToCancel[] = $this->itemsToSellFactory->create([
                         'sku' => $itemSku,
                         'qty' => $qty
                     ]);
@@ -97,33 +122,22 @@ class GetItemsToCancelFromOrderItem
             } else {
                 // configurable product
                 $itemSku = $this->getSkuFromOrderItem->execute($orderItem);
-                $qtyToCancel = $orderItem->getIsVirtual() ? $this->getQtyToCancelForVirtualItem($orderItem)
-                    : $this->getQtyToCancelForPhysicalItem($orderItem);
-                $itemsToShip[] = $this->itemsToSellFactory->create([
+                $itemsToCancel[] = $this->itemsToSellFactory->create([
                     'sku' => $itemSku,
-                    'qty' => $qtyToCancel
+                    'qty' => $this->getQtyToCancel($orderItem)
                 ]);
             }
         }
 
-        return $itemsToShip;
+        return $itemsToCancel;
     }
 
     /**
      * @param OrderItem $item
      * @return float
      */
-    private function getQtyToCancelForPhysicalItem(OrderItem $item): float
+    private function getQtyToCancel(OrderItem $item): float
     {
-        return $item->getQtyOrdered() - $item->getQtyShipped() - $item->getQtyCanceled();
-    }
-
-    /**
-     * @param OrderItem $item
-     * @return float
-     */
-    private function getQtyToCancelForVirtualItem(OrderItem $item): float
-    {
-        return $item->getQtyOrdered() - $item->getQtyInvoiced() - $item->getQtyCanceled();
+        return $item->getQtyOrdered() - max($item->getQtyShipped(), $item->getQtyInvoiced()) - $item->getQtyCanceled();
     }
 }

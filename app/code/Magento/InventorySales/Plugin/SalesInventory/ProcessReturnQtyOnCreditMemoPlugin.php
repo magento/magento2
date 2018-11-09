@@ -90,7 +90,7 @@ class ProcessReturnQtyOnCreditMemoPlugin
 
             if ($this->isValidItem($itemSku, $orderItem->getProductType())) {
                 $qty = (float)$item->getQty();
-                $processedQty = $orderItem->getQtyCanceled() - $orderItem->getQtyRefunded();
+                $processedQty = $orderItem->getQtyInvoiced() - $orderItem->getQtyRefunded() + $qty;
                 $items[$itemSku] = [
                     'qty' => ($items[$itemSku]['qty'] ?? 0) + $qty,
                     'processedQty' => ($items[$itemSku]['processedQty'] ?? 0) + (float)$processedQty
