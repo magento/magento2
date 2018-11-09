@@ -794,7 +794,7 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @inheritdoc
      */
-    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
+    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '', $extensions = [])
     {
         if ($password !== null) {
             $this->checkPasswordStrength($password);
@@ -810,7 +810,7 @@ class AccountManagement implements AccountManagementInterface
         } else {
             $hash = null;
         }
-        return $this->createAccountWithPasswordHash($customer, $hash, $redirectUrl);
+        return $this->createAccountWithPasswordHash($customer, $hash, $redirectUrl, $extensions);
     }
 
     /**
@@ -818,8 +818,12 @@ class AccountManagement implements AccountManagementInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function createAccountWithPasswordHash(CustomerInterface $customer, $hash, $redirectUrl = '')
-    {
+    public function createAccountWithPasswordHash(
+        CustomerInterface $customer,
+        $hash,
+        $redirectUrl = '',
+        $extensions = []
+    ) {
         // This logic allows an existing customer to be added to a different store.  No new account is created.
         // The plan is to move this logic into a new method called something like 'registerAccountWithStore'
         if ($customer->getId()) {
@@ -892,7 +896,7 @@ class AccountManagement implements AccountManagementInterface
         $customer = $this->customerRepository->getById($customer->getId());
         $newLinkToken = $this->mathRandom->getUniqueHash();
         $this->changeResetPasswordLinkToken($customer, $newLinkToken);
-        $this->sendEmailConfirmation($customer, $redirectUrl);
+        $this->sendEmailConfirmation($customer, $redirectUrl, $extensions);
 
         return $customer;
     }
@@ -920,9 +924,10 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @param string $redirectUrl
+     * @param array $extensions
      * @return void
      */
-    protected function sendEmailConfirmation(CustomerInterface $customer, $redirectUrl)
+    protected function sendEmailConfirmation(CustomerInterface $customer, $redirectUrl, $extensions = [])
     {
         try {
             $hash = $this->customerRegistry->retrieveSecureData($customer->getId())->getPasswordHash();
@@ -932,7 +937,14 @@ class AccountManagement implements AccountManagementInterface
             } elseif ($hash == '') {
                 $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD;
             }
-            $this->getEmailNotification()->newAccount($customer, $templateType, $redirectUrl, $customer->getStoreId());
+            $this->getEmailNotification()->newAccount(
+                $customer,
+                $templateType,
+                $redirectUrl,
+                $customer->getStoreId(),
+                null,
+                $extensions
+            );
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
