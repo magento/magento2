@@ -18,11 +18,6 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_defaultPathMock;
-
-    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_objectManager;
@@ -32,7 +27,6 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->_defaultPathMock = $this->createMock(\Magento\Framework\App\DefaultPathInterface::class);
     }
 
     public function testGetUrl()
@@ -60,31 +54,54 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($link->isCurrent());
     }
 
-    public function testIsCurrent()
+    /**
+     * Test if the current url is the same as link path
+     *
+     * @dataProvider linkPathProvider
+     * @param string $linkPath
+     * @param string $currentPathInfo
+     * @param bool $expected
+     * @return void
+     */
+    public function testIsCurrent($linkPath, $currentPathInfo, $expected)
     {
-        $path = 'test/path';
-        $url = 'http://example.com/a/b';
+        $baseUrl = 'http://example.com/';
+        $trimmed = trim($currentPathInfo, '/');
 
-        $this->_requestMock->expects($this->once())->method('getModuleName')->will($this->returnValue('a'));
-        $this->_requestMock->expects($this->once())->method('getControllerName')->will($this->returnValue('b'));
-        $this->_requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('d'));
-        $this->_defaultPathMock->expects($this->atLeastOnce())->method('getPart')->will($this->returnValue('d'));
-
-        $this->_urlBuilderMock->expects($this->at(0))->method('getUrl')->with($path)->will($this->returnValue($url));
-        $this->_urlBuilderMock->expects($this->at(1))->method('getUrl')->with('a/b')->will($this->returnValue($url));
-
-        $this->_requestMock->expects($this->once())->method('getControllerName')->will($this->returnValue('b'));
+        $this->_requestMock->expects($this->any())->method('getPathInfo')->willReturn($currentPathInfo);
+        $this->_urlBuilderMock->expects($this->at(0))
+            ->method('getUrl')
+            ->with($linkPath)
+            ->will($this->returnValue($baseUrl . $linkPath));
+        $this->_urlBuilderMock->expects($this->at(1))
+            ->method('getUrl')
+            ->with($trimmed)
+            ->will($this->returnValue($baseUrl . $trimmed));
         /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
         $link = $this->_objectManager->getObject(
             \Magento\Framework\View\Element\Html\Link\Current::class,
             [
                 'urlBuilder' => $this->_urlBuilderMock,
-                'request' => $this->_requestMock,
-                'defaultPath' => $this->_defaultPathMock
+                'request' => $this->_requestMock
             ]
         );
-        $link->setPath($path);
-        $this->assertTrue($link->isCurrent());
+
+        $link->setCurrent(false);
+        $link->setPath($linkPath);
+        $this->assertEquals($expected, $link->isCurrent());
+    }
+
+    /**
+     * @return array
+     */
+    public function linkPathProvider()
+    {
+        return [
+            ['test/index', '/test/index/', true],
+            ['test/index/index', '/test/index/index/', true],
+            ['test/route', '/test/index/', false],
+            ['test/index', '/test/', false]
+        ];
     }
 
     public function testIsCurrentFalse()
