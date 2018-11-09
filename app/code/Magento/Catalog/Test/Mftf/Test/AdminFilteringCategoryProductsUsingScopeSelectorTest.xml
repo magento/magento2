@@ -115,7 +115,7 @@
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection"/>
         <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
                       stepKey="grabTextFromCategory"/>
-        <assertRegExp expected="/\(4\)/" expectedType="string" actual="$grabTextFromCategory" actualType="variable"
+        <assertRegExp expected="/\(4\)$/" expectedType="string" actual="$grabTextFromCategory" actualType="variable"
                       message="wrongCountProductOnAllStoreViews" stepKey="checkCountProducts"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct0.name$$)}}"
              userInput="$$createProduct0.name$$" stepKey="seeProductName"/>
@@ -139,7 +139,7 @@
         <waitForPageLoad stepKey="waitForCategoryPageLoad2"/>
         <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
                       stepKey="grabTextFromCategory1"/>
-        <assertRegExp expected="/\(2\)/" expectedType="string" actual="$grabTextFromCategory1" actualType="variable"
+        <assertRegExp expected="/\(2\)$/" expectedType="string" actual="$grabTextFromCategory1" actualType="variable"
                       message="wrongCountProductOnWebsite1" stepKey="checkCountProducts1"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection1"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct1.name$$)}}"
@@ -166,7 +166,7 @@
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection2"/>
         <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
                       stepKey="grabTextFromCategory2"/>
-        <assertRegExp expected="/\(2\)/" expectedType="string" actual="$grabTextFromCategory2" actualType="variable"
+        <assertRegExp expected="/\(2\)$/" expectedType="string" actual="$grabTextFromCategory2" actualType="variable"
                       message="wrongCountProductOnWebsite2" stepKey="checkCountProducts2"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
              userInput="$$createProduct2.name$$" stepKey="seeProductName6"/>
