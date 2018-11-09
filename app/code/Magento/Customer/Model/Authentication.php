@@ -83,7 +83,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function processAuthenticationFailure($customerId)
     {
@@ -120,7 +120,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function unlock($customerId)
     {
@@ -152,7 +152,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isLocked($customerId)
     {
