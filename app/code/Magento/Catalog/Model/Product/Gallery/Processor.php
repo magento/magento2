@@ -88,6 +88,8 @@ class Processor
     }
 
     /**
+     * Return media_gallery attribute
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @since 101.0.0
      */
@@ -383,7 +385,8 @@ class Processor
     }
 
     /**
-     * get media attribute codes
+     * Get media attribute codes
+     *
      * @return array
      * @since 101.0.0
      */
@@ -393,6 +396,8 @@ class Processor
     }
 
     /**
+     * Trim .tmp ending from filename
+     *
      * @param string $file
      * @return string
      * @since 101.0.0
@@ -514,7 +519,6 @@ class Processor
     /**
      * Attribute value is not to be saved in a conventional way, separate table is used to store the complex value
      *
-     * {@inheritdoc}
      * @since 101.0.0
      */
     public function isScalar()
