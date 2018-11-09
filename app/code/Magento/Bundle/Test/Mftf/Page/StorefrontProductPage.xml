@@ -10,6 +10,5 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontProductPage" url="/{{var1}}.html" area="storefront" module="Magento_Catalog" parameterized="true">
         <section name="StorefrontBundledSection"/>
-        <section name="StorefrontBundleProductActionSection"/>
     </page>
 </pages>
