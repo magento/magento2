@@ -10,8 +10,8 @@ namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider;
 use Magento\TestFramework\Dependency\DbRule;
-use Magento\TestFramework\Dependency\DeclarativeSchemaRule;
 use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;
 use Magento\TestFramework\Dependency\PhpRule;
@@ -25,19 +25,28 @@ use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Types of dependencies between modules
+     * Soft dependency between modules
      */
     const TYPE_SOFT = 'soft';
 
+    /**
+     * Hard dependency between modules
+     */
     const TYPE_HARD = 'hard';
 
     /**
-     * Types of dependencies map arrays
+     * The identifier of dependency for mapping.
      */
     const MAP_TYPE_DECLARED = 'declared';
 
+    /**
+     * The identifier of dependency for mapping.
+     */
     const MAP_TYPE_FOUND = 'found';
 
+    /**
+     * The identifier of dependency for mapping.
+     */
     const MAP_TYPE_REDUNDANT = 'redundant';
 
     /**
@@ -55,17 +64,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected static $_listConfigXml = [];
-
-    /**
-     * List of db_schema.xml files by modules
-     *
-     * Format: array(
-     *  '{Module_Name}' => '{Filename}'
-     * )
-     *
-     * @var array
-     */
-    protected static $_listDbSchemaXml = [];
 
     /**
      * List of routes.xml files by modules
@@ -174,7 +172,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         self::$_namespaces = implode('|', Files::init()->getNamespaces());
 
         self::_prepareListConfigXml();
-        self::_prepareListDbSchemaXml();
         self::_prepareListRoutesXml();
 
         self::_prepareMapRouters();
@@ -230,7 +227,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
         }
         self::$_rulesInstances = [
-            new DeclarativeSchemaRule($dbRuleTables),
             new PhpRule(self::$_mapRouters, self::$_mapLayoutBlocks),
             new DbRule($dbRuleTables),
             new LayoutRule(
@@ -261,7 +257,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 break;
             case 'layout':
             case 'config':
-            case 'db_schema':
                 //Removing xml comments
                 $contents = preg_replace('~\<!\-\-/.*?\-\-\>~s', '', $contents);
                 break;
@@ -285,6 +280,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         return $contents;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function testUndeclared()
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
@@ -416,17 +414,21 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Collect redundant dependencies
+     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @test
      * @depends testUndeclared
+     * @throws \Exception
      */
     public function collectRedundant()
     {
+        $schemaDependencyProvider = new DeclarativeSchemaDependencyProvider();
         foreach (array_keys(self::$mapDependencies) as $module) {
             $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
             $found = array_merge(
                 $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND),
-                $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND)
+                $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND),
+                $schemaDependencyProvider->getDeclaredExistingModuleDependencies($module)
             );
             $found['Magento\Framework'] = 'Magento\Framework';
             $this->_setDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
@@ -487,6 +489,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * Return all files
      *
      * @return array
+     * @throws \Exception
      */
     public function getAllFiles()
     {
@@ -506,12 +509,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         $files = array_merge(
             $files,
             $this->_prepareFiles('config', Files::init()->getConfigFiles())
-        );
-
-        // Get all configuration files
-        $files = array_merge(
-            $files,
-            $this->_prepareFiles('db_schema', Files::init()->getDbSchemaFiles())
         );
 
         //Get all layout updates files
@@ -539,20 +536,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
                 self::$_listConfigXml[$module] = $file;
-            }
-        }
-    }
-
-    /**
-     * Prepare list of db_schema.xml files (by modules)
-     */
-    protected static function _prepareListDbSchemaXml()
-    {
-        $files = Files::init()->getDbSchemaFiles('db_schema.xml', [], false);
-        foreach ($files as $file) {
-            if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
-                $module = $matches['namespace'] . '\\' . $matches['module'];
-                self::$_listDbSchemaXml[$module] = $file;
             }
         }
     }
