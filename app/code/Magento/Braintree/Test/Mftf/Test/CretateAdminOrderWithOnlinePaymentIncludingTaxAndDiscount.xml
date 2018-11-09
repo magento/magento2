@@ -48,6 +48,9 @@
             <!--Delete Cart Price Rule-->
             <actionGroup ref="AdminDeleteCartPriceRuleForRetailerActionGroup" stepKey="deleteSalesRule"/>
 
+            <!--Set to default configuration Tax Shipping Class-->
+            <actionGroup ref="setDefaultShippingTaxClass" stepKey="setdefaultClass"/>
+
             <!--Delete Simple Sub Category-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
@@ -58,7 +61,7 @@
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
 
             <!-- Rollback Braintree to Default -->
-            <createData entity="DefaultBraintreeConfig" stepKey="DefaultBraintreeConfig"/>
+            <createData entity="RollBackCustomBraintreeConfigurationData" stepKey="rollbackBraintreeConfig"/>
 
             <!--Delete Customer-->
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
