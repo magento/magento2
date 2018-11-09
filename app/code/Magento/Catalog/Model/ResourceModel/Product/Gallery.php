@@ -502,25 +502,17 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Remove images position when product saved in default store
      *
-     * @param string $entityId
+     * @param int $entityId
      * @param int $storeId
      * @return $this
      */
-    public function removeImagesPositionExcludeDefaultStore(string $entityId, int $storeId) : Gallery
+    public function removeImagesPositionExcludeDefaultStore(int $entityId, int $storeId) : Gallery
     {
-        try {
-            $this->getConnection()->beginTransaction();
-            $this->getConnection()->update(
-                $this->getTable(self::GALLERY_VALUE_TABLE),
-                ['position' => null],
-                ['store_id <> ?' => $storeId, $this->metadata->getLinkField() . ' = ?' => $entityId]
-            );
-            $this->getConnection()->commit();
-        } catch (\Exception $e) {
-            $this->getConnection()->rollBack();
-            throw $e;
-        }
-
+        $this->getConnection()->update(
+            $this->getTable(self::GALLERY_VALUE_TABLE),
+            ['position' => null],
+            ['store_id <> ?' => $storeId, $this->metadata->getLinkField() . ' = ?' => $entityId]
+        );
         return $this;
     }
 }
