@@ -54,8 +54,11 @@ class IndexScopeResolver implements IndexScopeResolverInterface
         }
         ksort($tableNameParts);
         array_unshift($tableNameParts, $index);
-
-        return $this->resource->getTableName(implode('_', $tableNameParts));
+        $tableName = implode('_', $tableNameParts);
+        if (!$this->resource->getConnection()->isTableExists($tableName)) {
+            $tableName = $index;
+        }
+        return $this->resource->getTableName($tableName);
     }
 
     /**
