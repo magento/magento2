@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\App\RequestInterface;
 use Magento\Downloadable\Model\Link\Builder as LinkBuilder;
 use Magento\Downloadable\Model\Sample\Builder as SampleBuilder;
@@ -70,44 +73,21 @@ class Downloadable
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterInitialize(
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $product
     ) {
-        if ($downloadable = $this->request->getPost('downloadable')) {
-            $product->setDownloadableData($downloadable);
+        $downloadable = $this->request->getPost('downloadable');
+
+        if ($downloadable || $product->getTypeId() == Type::TYPE_DOWNLOADABLE) {
             $extension = $product->getExtensionAttributes();
-            if (isset($downloadable['link']) && is_array($downloadable['link'])) {
-                $links = [];
-                foreach ($downloadable['link'] as $linkData) {
-                    if (!$linkData || (isset($linkData['is_delete']) && $linkData['is_delete'])) {
-                        continue;
-                    } else {
-                        $links[] = $this->linkBuilder->setData(
-                            $linkData
-                        )->build(
-                            $this->linkFactory->create()
-                        );
-                    }
-                }
-                $extension->setDownloadableProductLinks($links);
-            }
-            if (isset($downloadable['sample']) && is_array($downloadable['sample'])) {
-                $samples = [];
-                foreach ($downloadable['sample'] as $sampleData) {
-                    if (!$sampleData || (isset($sampleData['is_delete']) && (bool)$sampleData['is_delete'])) {
-                        continue;
-                    } else {
-                        $samples[] = $this->sampleBuilder->setData(
-                            $sampleData
-                        )->build(
-                            $this->sampleFactory->create()
-                        );
-                    }
-                }
-                $extension->setDownloadableProductSamples($samples);
-            }
+            $product->setDownloadableData($downloadable);
+
+            $extension->setDownloadableProductLinks($this->getDownloadableLinks($downloadable));
+            $extension->setDownloadableProductSamples($this->getDownloadableSamples($downloadable));
+
             $product->setExtensionAttributes($extension);
             if ($product->getLinksPurchasedSeparately()) {
                 $product->setTypeHasRequiredOptions(true)->setRequiredOptions(true);
@@ -116,5 +96,61 @@ class Downloadable
             }
         }
         return $product;
+    }
+
+    /**
+     * Get downloadable product samples data from request.
+     *
+     * @param $downloadable
+     *
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getDownloadableSamples(?array $downloadable):array
+    {
+        $samples = [];
+        if (isset($downloadable['sample']) && is_array($downloadable['sample'])) {
+            foreach ($downloadable['sample'] as $sampleData) {
+                if (!$sampleData || (isset($sampleData['is_delete']) && (bool)$sampleData['is_delete'])) {
+                    continue;
+                } else {
+                    $samples[] = $this->sampleBuilder->setData(
+                        $sampleData
+                    )->build(
+                        $this->sampleFactory->create()
+                    );
+                }
+            }
+        }
+
+        return $samples;
+    }
+
+    /**
+     * Get downloadable product links data from request.
+     *
+     * @param $downloadable
+     *
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getDownloadableLinks(?array $downloadable):array
+    {
+        $links = [];
+        if (isset($downloadable['link']) && is_array($downloadable['link'])) {
+            foreach ($downloadable['link'] as $linkData) {
+                if (!$linkData || (isset($linkData['is_delete']) && $linkData['is_delete'])) {
+                    continue;
+                } else {
+                    $links[] = $this->linkBuilder->setData(
+                        $linkData
+                    )->build(
+                        $this->linkFactory->create()
+                    );
+                }
+            }
+        }
+
+        return $links;
     }
 }
