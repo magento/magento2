@@ -398,11 +398,11 @@ class Translate implements \Magento\Framework\TranslateInterface
     /**
      * Get theme translation locale file name
      *
-     * @param string $locale
+     * @param string|null $locale
      * @param array $config
      * @return string|null
      */
-    private function getThemeTranslationFileName(string $locale, array $config): ?string
+    private function getThemeTranslationFileName(?string $locale, array $config): ?string
     {
         $fileName = $this->_viewFileSystem->getLocaleFileName(
             'i18n' . '/' . $locale . '.csv',
