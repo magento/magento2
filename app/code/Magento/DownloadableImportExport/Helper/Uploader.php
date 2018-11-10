@@ -39,6 +39,11 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
     protected $parameters = [];
 
     /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public $connection;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -62,6 +67,7 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
         $this->fileUploader->init();
         $this->fileUploader->setAllowedExtensions($this->getAllowedExtensions());
         $this->fileUploader->removeValidateCallback('catalog_product_image');
+        $this->connection = $resource->getConnection('write');
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
     }
 
