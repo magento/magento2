@@ -150,7 +150,10 @@ class Grid extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Internal constructor, that is called from real constructor
+     *
      * @return void
+     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _construct()
@@ -709,6 +712,7 @@ class Grid extends \Magento\Backend\Block\Widget
 
     /**
      * Grid url getter
+     *
      * Version of getGridUrl() but with parameters
      *
      * @param array $params url parameters
