@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Webapi\Rest\Response\Renderer;
 
+/**
+ * Class Xml
+ *
+ * @package Magento\Framework\Webapi\Rest\Response\Renderer
+ */
 class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
 {
     /**
@@ -34,8 +39,9 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      *
      * @param \Magento\Framework\Xml\Generator $xmlGenerator
      */
-    public function __construct(\Magento\Framework\Xml\Generator $xmlGenerator)
-    {
+    public function __construct(
+        \Magento\Framework\Xml\Generator $xmlGenerator
+    ) {
         $this->_xmlGenerator = $xmlGenerator;
     }
 
@@ -53,7 +59,9 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      * Format object|array to valid XML.
      *
      * @param object|array|int|string|bool|float|null $data
+     *
      * @return string
+     * @throws \DOMException
      */
     public function render($data)
     {
