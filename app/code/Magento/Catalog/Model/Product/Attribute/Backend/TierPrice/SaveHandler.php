@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-declare(strict_types=1);
-
 namespace Magento\Catalog\Model\Product\Attribute\Backend\TierPrice;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
@@ -137,7 +135,7 @@ class SaveHandler implements ExtensionInterface
      * @param array $priceRow
      * @return float|null
      */
-    private function getPercentage(array $priceRow): ?float
+    private function getPercentage(array $priceRow)
     {
         return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
             ? (float)$priceRow['percentage_value']
