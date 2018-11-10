@@ -49,6 +49,11 @@ class Storage
     private $customerCollectionFactory;
 
     /**
+     * @var CustomerCollection
+     */
+    public $_customerCollection;
+
+    /**
      * @param CustomerCollectionFactory $collectionFactory
      * @param CollectionByPagesIteratorFactory $colIteratorFactory
      * @param array $data
@@ -58,6 +63,9 @@ class Storage
         CollectionByPagesIteratorFactory $colIteratorFactory,
         array $data = []
     ) {
+        $this->_customerCollection = isset(
+            $data['customer_collection']
+        ) ? $data['customer_collection'] : $collectionFactory->create();
         $this->_pageSize = isset($data['page_size']) ? $data['page_size'] : 0;
         $this->_byPagesIterator = isset(
             $data['collection_by_pages_iterator']
