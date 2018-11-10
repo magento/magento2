@@ -9,6 +9,7 @@ use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Ui\Config\Converter;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * UI Component configuration data
@@ -65,25 +66,36 @@ class Data implements \Magento\Framework\Config\DataInterface
     private $argumentInterpreter;
 
     /**
+     * Store manager.
+     *
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param string $componentName
      * @param ReaderFactory $readerFactory
      * @param CacheInterface $cache
      * @param SerializerInterface $serializer
      * @param InterpreterInterface $argumentInterpreter,
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         $componentName,
         ReaderFactory $readerFactory,
         CacheInterface $cache,
         SerializerInterface $serializer,
-        InterpreterInterface $argumentInterpreter
+        InterpreterInterface $argumentInterpreter,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->readerFactory = $readerFactory;
         $this->cache = $cache;
         $this->serializer = $serializer;
         $this->componentName = $componentName;
         $this->argumentInterpreter = $argumentInterpreter;
-        $this->cacheId = static::CACHE_ID . '_' . $componentName;
+        $this->storeManager = $storeManager ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->cacheId = static::CACHE_ID . '_' . $componentName . '_' . $this->storeManager->getStore()->getCode();
     }
 
     /**
