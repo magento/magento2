@@ -124,6 +124,11 @@ abstract class AbstractAction
     private $queryGenerator;
 
     /**
+     * @var int
+     */
+    private $currentStoreId = 0;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
@@ -164,6 +169,7 @@ abstract class AbstractAction
     {
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
+                $this->currentStoreId = $store->getId();
                 $this->reindexRootCategory($store);
                 $this->reindexAnchorCategories($store);
                 $this->reindexNonAnchorCategories($store);
@@ -586,6 +592,8 @@ abstract class AbstractAction
     }
 
     /**
+     * Get temporary table name
+     *
      * Get temporary table name for concurrent indexing in persistent connection
      * Temp table name is NOT shared between action instances and each action has it's own temp tree index
      *
@@ -597,7 +605,7 @@ abstract class AbstractAction
         if (empty($this->tempTreeIndexTableName)) {
             $this->tempTreeIndexTableName = $this->connection->getTableName('temp_catalog_category_tree_index')
                 . '_'
-                . substr(md5(time() . rand(0, 999999999)), 0, 8);
+                . substr(sha1(time() . random_int(0, 999999999)), 0, 8);
         }
 
         return $this->tempTreeIndexTableName;
@@ -641,7 +649,6 @@ abstract class AbstractAction
             ['child_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX]
         );
-
         // Drop the temporary table in case it already exists on this (persistent?) connection.
         $this->connection->dropTemporaryTable($temporaryName);
         $this->connection->createTemporaryTable($temporaryTable);
@@ -659,25 +666,50 @@ abstract class AbstractAction
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {
-        // This finds all children (cc2) that descend from a parent (cc) by path.
-        // For example, cc.path may be '1/2', and cc2.path may be '1/2/3/4/5'.
-        $temporarySelect = $this->connection->select()->from(
-            ['cc' => $this->getTable('catalog_category_entity')],
-            ['parent_id' => 'entity_id']
-        )->joinInner(
-            ['cc2' => $this->getTable('catalog_category_entity')],
-            'cc2.path LIKE ' . $this->connection->getConcatSql(
-                [$this->connection->quoteIdentifier('cc.path'), $this->connection->quote('/%')]
-            ),
-            ['child_id' => 'entity_id']
+        $isActiveAttributeId = $this->config->getAttribute(
+            \Magento\Catalog\Model\Category::ENTITY,
+            'is_active'
+        )->getId();
+        $categoryMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $categoryLinkField = $categoryMetadata->getLinkField();
+        $selects = $this->prepareSelectsByRange(
+            $this->connection->select()
+                ->from(
+                    ['c' => $this->getTable('catalog_category_entity')],
+                    ['entity_id', 'path']
+                )->joinInner(
+                    ['ccacd' => $this->getTable('catalog_category_entity_int')],
+                    'ccacd.' . $categoryLinkField . ' = c.' . $categoryLinkField . ' AND ccacd.store_id = 0' .
+                    ' AND ccacd.attribute_id = ' . $isActiveAttributeId,
+                    []
+                )->joinLeft(
+                    ['ccacs' => $this->getTable('catalog_category_entity_int')],
+                    'ccacs.' . $categoryLinkField . ' = c.' . $categoryLinkField
+                    . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' .
+                    $this->currentStoreId,
+                    []
+                )->where(
+                    $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
+                    1
+                ),
+            'entity_id'
         );
 
-        $this->connection->query(
-            $temporarySelect->insertFromSelect(
-                $temporaryName,
-                ['parent_id', 'child_id']
-            )
-        );
+        foreach ($selects as $select) {
+            $values = [];
+
+            foreach ($this->connection->fetchAll($select) as $category) {
+                foreach (explode('/', $category['path']) as $parentId) {
+                    if ($parentId !== $category['entity_id']) {
+                        $values[] = [$parentId, $category['entity_id']];
+                    }
+                }
+            }
+
+            if (count($values) > 0) {
+                $this->connection->insertArray($temporaryName, ['parent_id', 'child_id'], $values);
+            }
+        }
     }
 
     /**

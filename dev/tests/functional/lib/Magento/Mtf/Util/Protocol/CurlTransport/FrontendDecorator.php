@@ -64,7 +64,7 @@ class FrontendDecorator implements CurlInterface
     protected function authorize(Customer $customer)
     {
         $url = $_ENV['app_frontend_url'] . 'customer/account/login/';
-        $this->transport->write($url);
+        $this->transport->write($url, [], CurlInterface::GET);
         $this->read();
         $url = $_ENV['app_frontend_url'] . 'customer/account/loginPost/';
         $data = [

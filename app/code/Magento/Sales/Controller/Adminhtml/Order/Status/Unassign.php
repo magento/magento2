@@ -6,7 +6,9 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
-class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status implements HttpPostActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
@@ -18,17 +20,17 @@ class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status
         if ($status) {
             try {
                 $status->unassignState($state);
-                $this->messageManager->addSuccess(__('You have unassigned the order status.'));
+                $this->messageManager->addSuccessMessage(__('You have unassigned the order status.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __('Something went wrong while unassigning the order.')
                 );
             }
         } else {
-            $this->messageManager->addError(__('We can\'t find this order status.'));
+            $this->messageManager->addErrorMessage(__('We can\'t find this order status.'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

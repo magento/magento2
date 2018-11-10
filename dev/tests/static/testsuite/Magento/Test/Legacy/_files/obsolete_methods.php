@@ -6,7 +6,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreStart
+// @codingStandardsIgnoreFile
 
 return [
     ['__get', 'Magento\Framework\DataObject'],
@@ -2528,6 +2528,7 @@ return [
     ['_isAttributeValueEmpty', 'Magento\Catalog\Model\ResourceModel\AbstractResource'],
     ['var_dump', ''],
     ['each', ''],
+    ['strval', ''],
     ['create_function', ''],
     ['configure', 'Magento\Framework\MessageQueue\BatchConsumer'],
     [
@@ -2567,4 +2568,5 @@ return [
             'configure',
             'Magento\Framework\MessageQueue\ConsumerInterface'
         ],
+    ['isOrderIncrementIdUsed', 'Magento\Quote\Model\ResourceModel\Quote', 'Magento\Sales\Model\OrderIncrementIdChecker::isIncrementIdUsed'],
 ];

@@ -21,6 +21,9 @@ use Magento\Store\Model\Store;
 
 /**
  * Build select for attribute.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class SelectBuilderForAttribute
 {

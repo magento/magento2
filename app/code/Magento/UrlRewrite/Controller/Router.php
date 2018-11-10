@@ -7,7 +7,6 @@ namespace Magento\UrlRewrite\Controller;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
-use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -78,44 +77,6 @@ class Router implements \Magento\Framework\App\RouterInterface
      */
     public function match(RequestInterface $request)
     {
-        if ($fromStore = $request->getParam('___from_store')) {
-            //If we're in the process of switching stores then matching rewrite
-            //rule from previous store because the URL was not changed yet from
-            //old store's format.
-            $oldStoreId = $this->storeManager->getStore($fromStore)->getId();
-            $oldRewrite = $this->getRewrite(
-                $request->getPathInfo(),
-                $oldStoreId
-            );
-            if ($oldRewrite && $oldRewrite->getRedirectType() === 0) {
-                //If there is a match and it's a correct URL then just
-                //redirecting to current store's URL equivalent,
-                //otherwise just continuing finding a rule within current store.
-                $currentRewrite = $this->urlFinder->findOneByData(
-                    [
-                        UrlRewrite::ENTITY_TYPE => $oldRewrite->getEntityType(),
-                        UrlRewrite::ENTITY_ID => $oldRewrite->getEntityId(),
-                        UrlRewrite::STORE_ID =>
-                            $this->storeManager->getStore()->getId(),
-                        UrlRewrite::REDIRECT_TYPE => 0,
-                    ]
-                );
-                if ($currentRewrite
-                    && $currentRewrite->getRequestPath()
-                    !== $oldRewrite->getRequestPath()
-                ) {
-                    return $this->redirect(
-                        $request,
-                        $this->url->getUrl(
-                            '',
-                            ['_direct' => $currentRewrite->getRequestPath()]
-                        ),
-                        OptionProvider::TEMPORARY
-                    );
-                }
-            }
-        }
-
         $rewrite = $this->getRewrite(
             $request->getPathInfo(),
             $this->storeManager->getStore()->getId()

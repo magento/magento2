@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCreditMemoAddressInformationSection">
+        <element name="billingAddress" type="text" selector=".order-billing-address address"/>
+        <element name="billingAddressEdit" type="button" selector=".order-billing-address .actions a"/>
+        <element name="shippingAddress" type="text" selector=".order-shipping-address address"/>
+        <element name="shippingAddressEdit" type="button" selector=".order-shipping-address .actions a"/>
+    </section>
+</sections>

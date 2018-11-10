@@ -104,7 +104,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
      * @param ImportProduct\StoreResolver $storeResolver
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -193,6 +192,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * Export process
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function export()
     {
@@ -586,8 +586,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * Get Website code.
      *
      * @param int $websiteId
-     *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getWebsiteCode(int $websiteId): string
     {
@@ -617,8 +617,9 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      *
      * @param int $groupId
      * @param int $allGroups
-     *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _getCustomerGroupById(
         int $groupId,

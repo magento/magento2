@@ -71,7 +71,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
                 $this->getScopeId()
             );
         }
-        return strval($value);
+        return (string)$value;
     }
 
     /**
@@ -88,7 +88,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
                 $this->getScopeId()
             );
         }
-        return strval($value);
+        return (string)$value;
     }
 
     /**

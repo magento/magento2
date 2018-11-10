@@ -178,6 +178,9 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function validateCacheHostsDataProvider()
     {
         return [

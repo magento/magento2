@@ -100,6 +100,12 @@
     left: 0;
     overflow-y: auto;
 
+    &.confirm {
+        .modal-inner-wrap {
+            .lib-css(width, @modal-popup-confirm__width);
+        }
+    }
+
     &._show {
         .modal-inner-wrap {
             -webkit-transform: translateY(0);
@@ -192,18 +198,14 @@
         &._inner-scroll {
             overflow-y: visible;
 
-            .ie11 &,
-            .ie10 &,
-            .ie9 & {
+            .ie11 & {
                 overflow-y: auto;
             }
 
             .modal-inner-wrap {
                 max-height: 90%;
 
-                .ie11 &,
-                .ie10 &,
-                .ie9 & {
+                .ie11 & {
                     max-height: none;
                 }
             }

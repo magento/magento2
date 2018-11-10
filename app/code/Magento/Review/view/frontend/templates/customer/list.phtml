@@ -22,29 +22,29 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($block->getReviews() as $_review): ?>
+                <?php foreach ($block->getReviews() as $review): ?>
                 <tr>
-                    <td data-th="<?= $block->escapeHtml(__('Created')) ?>" class="col date"><?= $block->escapeHtml($block->dateFormat($_review->getReviewCreatedAt())) ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Created')) ?>" class="col date"><?= $block->escapeHtml($block->dateFormat($review->getReviewCreatedAt())) ?></td>
                     <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item">
                         <strong class="product-name">
-                            <a href="<?= $block->escapeUrl($block->getProductUrl($_review)) ?>"><?= $block->escapeHtml($_review->getName()) ?></a>
+                            <a href="<?= $block->escapeUrl($block->getProductUrl($review)) ?>"><?= $block->escapeHtml($review->getName()) ?></a>
                         </strong>
                     </td>
                     <td data-th="<?= $block->escapeHtml(__('Rating')) ?>" class="col summary">
-                    <?php if ($_review->getSum()): ?>
+                    <?php if ($review->getSum()): ?>
                         <div class="rating-summary">
                             <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
-                            <div class="rating-result" title="<?= /* @noEscape */ ((int)$_review->getSum() / (int)$_review->getCount()) ?>%">
-                                <span style="width:<?= /* @noEscape */ ((int)$_review->getSum() / (int)$_review->getCount()) ?>%;"><span><?= /* @noEscape */ ((int)$_review->getSum() / (int)$_review->getCount()) ?>%</span></span>
+                            <div class="rating-result" title="<?= /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) ?>%">
+                                <span style="width:<?= /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) ?>%;"><span><?= /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) ?>%</span></span>
                             </div>
                         </div>
                     <?php endif; ?>
                     </td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Review')) ?>" class="col description">
-                        <?= $this->helper('Magento\Review\Helper\Data')->getDetailHtml($_review->getDetail()) ?>
+                        <?= $this->helper('Magento\Review\Helper\Data')->getDetailHtml($review->getDetail()) ?>
                     </td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Actions')) ?>" class="col actions">
-                        <a href="<?= $block->escapeUrl($block->getReviewUrl($_review)) ?>" class="action more">
+                        <a href="<?= $block->escapeUrl($block->getReviewUrl($review)) ?>" class="action more">
                             <span><?= $block->escapeHtml(__('See Details')) ?></span>
                         </a>
                     </td>

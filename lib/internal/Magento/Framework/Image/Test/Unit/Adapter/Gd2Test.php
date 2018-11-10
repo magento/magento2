@@ -73,6 +73,9 @@ class Gd2Test extends \PHPUnit\Framework\TestCase
         $this->adapter->open('file');
     }
 
+    /**
+     * @return array
+     */
     public function filesProvider()
     {
         $smallFile = [

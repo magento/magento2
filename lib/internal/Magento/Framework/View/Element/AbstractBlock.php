@@ -1074,7 +1074,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
         $cacheLifetime = $this->getData('cache_lifetime');
         if (false === $cacheLifetime || null === $cacheLifetime) {
-            return $cacheLifetime;
+            return null;
         }
 
         return (int)$cacheLifetime;

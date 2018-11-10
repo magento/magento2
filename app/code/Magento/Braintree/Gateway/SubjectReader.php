@@ -43,19 +43,20 @@ class SubjectReader
     }
 
     /**
-     * Reads transaction from subject
+     * Reads transaction from the subject.
      *
      * @param array $subject
-     * @return \Braintree\Transaction
+     * @return Transaction
+     * @throws \InvalidArgumentException if the subject doesn't contain transaction details.
      */
     public function readTransaction(array $subject)
     {
         if (!isset($subject['object']) || !is_object($subject['object'])) {
-            throw new \InvalidArgumentException('Response object does not exist');
+            throw new \InvalidArgumentException('Response object does not exist.');
         }
 
         if (!isset($subject['object']->transaction)
-            && !$subject['object']->transaction instanceof Transaction
+            || !$subject['object']->transaction instanceof Transaction
         ) {
             throw new \InvalidArgumentException('The object is not a class \Braintree\Transaction.');
         }

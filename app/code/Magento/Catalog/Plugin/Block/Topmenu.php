@@ -22,7 +22,7 @@ class Topmenu
     protected $catalogCategory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory
      */
     private $collectionFactory;
 
@@ -40,13 +40,13 @@ class Topmenu
      * Initialize dependencies.
      *
      * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory $categoryCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      */
     public function __construct(
         \Magento\Catalog\Helper\Category $catalogCategory,
-        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory $categoryCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver
     ) {
@@ -162,6 +162,7 @@ class Topmenu
             'url' => $this->catalogCategory->getCategoryUrl($category),
             'has_active' => in_array((string)$category->getId(), explode('/', $currentCategory->getPath()), true),
             'is_active' => $category->getId() == $currentCategory->getId(),
+            'is_category' => true,
             'is_parent_active' => $isParentActive
         ];
     }

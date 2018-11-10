@@ -186,7 +186,7 @@
                         </block>
                         <container name="checkout.cart.widget" as="checkout_cart_widget" label="Shopping Cart Items After"/>
                     </container>
-                    <block class="Magento\Checkout\Block\Cart\Crosssell" name="checkout.cart.crosssell" template="Magento_Catalog::product/list/items.phtml" after="-">
+                    <block class="Magento\Checkout\Block\Cart\Crosssell" name="checkout.cart.crosssell" template="Magento_Catalog::product/list/items.phtml" after="-" ifconfig="checkout/cart/crosssell_enabled">
                         <arguments>
                             <argument name="type" xsi:type="string">crosssell</argument>
                         </arguments>

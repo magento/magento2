@@ -87,7 +87,6 @@
                 <additionalClasses>
                     <class name="admin__field-wide">true</class>
                 </additionalClasses>
-                <dataScope>text_swatch</dataScope>
                 <componentType>dynamicRows</componentType>
             </settings>
             <container name="record" component="Magento_Ui/js/dynamic-rows/record">
@@ -96,8 +95,6 @@
                         <item name="isTemplate" xsi:type="boolean">true</item>
                         <item name="is_collection" xsi:type="boolean">true</item>
                         <item name="componentType" xsi:type="string">container</item>
-                        <item name="positionProvider" xsi:type="string">text_swatch.position</item>
-                        <item name="dataScope" xsi:type="string"/>
                     </item>
                 </argument>
                 <field name="defaulttext" component="Magento_Catalog/js/form/element/checkbox" sortOrder="0" formElement="checkbox">
@@ -183,15 +180,11 @@
                         </item>
                     </argument>
                     <settings>
-                        <additionalClasses>
-                            <class name="_hidden">true</class>
-                        </additionalClasses>
                         <dataType>text</dataType>
                         <visible>false</visible>
-                        <dataScope>position</dataScope>
                     </settings>
                 </field>
-                <actionDelete name="action_delete" component="Magento_Catalog/js/form/element/action-delete" template="Magento_Catalog/form/element/action-delete">
+                <actionDelete name="action_delete">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="fit" xsi:type="boolean">true</item>
@@ -227,7 +220,6 @@
                     <class name="swatch-visual-options-container">true</class>
                     <class name="admin__field-wide">true</class>
                 </additionalClasses>
-                <dataScope>visual_swatch</dataScope>
                 <componentType>dynamicRows</componentType>
             </settings>
             <container name="record" component="Magento_Ui/js/dynamic-rows/record">
@@ -236,8 +228,6 @@
                         <item name="isTemplate" xsi:type="boolean">true</item>
                         <item name="is_collection" xsi:type="boolean">true</item>
                         <item name="componentType" xsi:type="string">container</item>
-                        <item name="positionProvider" xsi:type="string">text_swatch.position</item>
-                        <item name="dataScope" xsi:type="string"/>
                     </item>
                 </argument>
                 <field name="defaultvisual" component="Magento_Catalog/js/form/element/checkbox" sortOrder="0" formElement="checkbox">
@@ -276,7 +266,6 @@
                             <class name="swatches-visual-col">true</class>
                         </additionalClasses>
                         <label translate="true">Swatch</label>
-                        <dataScope>swatchvisual</dataScope>
                     </settings>
                 </field>
                 <field name="optionvisual_default_store_view" component="Magento_Catalog/js/form/element/input" template="Magento_Catalog/form/element/input" formElement="input">
@@ -290,7 +279,6 @@
                     <settings>
                         <dataType>text</dataType>
                         <label translate="true">Default Store View</label>
-                        <dataScope>optionvisual_default_store_view</dataScope>
                     </settings>
                 </field>
                 <field name="optionvisual_admin" component="Magento_Catalog/js/form/element/input" template="Magento_Catalog/form/element/input" formElement="input">
@@ -304,7 +292,6 @@
                     <settings>
                         <dataType>text</dataType>
                         <label translate="true">Admin</label>
-                        <dataScope>optionvisual_admin</dataScope>
                     </settings>
                 </field>
                 <field name="position" component="Magento_Catalog/js/form/element/input" formElement="input">
@@ -315,15 +302,10 @@
                         </item>
                     </argument>
                     <settings>
-                        <additionalClasses>
-                            <class name="_hidden">true</class>
-                        </additionalClasses>
-                        <dataType>text</dataType>
-                        <visible>false</visible>
-                        <dataScope>position</dataScope>
+                         <visible>false</visible>
                     </settings>
                 </field>
-                <actionDelete name="action_delete" component="Magento_Catalog/js/form/element/action-delete" template="Magento_Catalog/form/element/action-delete">
+                <actionDelete name="action_delete">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="fit" xsi:type="boolean">true</item>

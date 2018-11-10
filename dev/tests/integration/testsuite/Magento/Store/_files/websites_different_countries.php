@@ -10,6 +10,7 @@ use Magento\Store\Model\Website;
 use Magento\Store\Model\Store;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndex;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Store\Model\Group;
 
 $objectManager = Bootstrap::getObjectManager();
 //Creating second website with a store.
@@ -21,11 +22,22 @@ if (!$website->getId()) {
     $website->setData([
         'code' => 'test',
         'name' => 'Test Website',
-        'default_group_id' => '1',
         'is_default' => '0',
     ]);
     $website->save();
 }
+
+/**
+ * @var Group $storeGroup
+ */
+$storeGroup = $objectManager->create(Group::class);
+$storeGroup->setCode('some_group')
+    ->setName('custom store group')
+    ->setWebsite($website);
+$storeGroup->save($storeGroup);
+
+$website->setDefaultGroupId($storeGroup->getId());
+$website->save($website);
 
 $websiteId = $website->getId();
 $store = $objectManager->create(Store::class);
@@ -44,9 +56,6 @@ if (!$store->getId()) {
     $store->save();
 }
 
-/* Refresh stores memory cache */
-$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
-
 //Setting up allowed countries
 $configResource = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
 //Allowed countries for default website.
@@ -59,7 +68,7 @@ $configResource->saveConfig(
 //Allowed countries for second website
 $configResource->saveConfig(
     'general/country/allow',
-    'ES',
+    'ES,US,UK,DE',
     \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
     $websiteId
 );

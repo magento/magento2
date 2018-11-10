@@ -75,7 +75,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
      * @param \Magento\Framework\DataObject $config
      * @return \Magento\Framework\DataObject
      */
-    public function getConfig($config)
+    public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
     {
         $settings = $this->getPluginSettings($config);
         return $config->addData($settings);

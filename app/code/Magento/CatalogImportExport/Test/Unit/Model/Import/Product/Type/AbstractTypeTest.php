@@ -134,8 +134,28 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('addFieldToFilter')
             ->with(
-                'main_table.attribute_id',
-                ['in' => ['attribute_id', 'boolean_attribute']]
+                ['main_table.attribute_id', 'main_table.attribute_code'],
+                [
+                    [
+                        'in' =>
+                            [
+                                'attribute_id',
+                                'boolean_attribute',
+                            ],
+                    ],
+                    [
+                        'in' =>
+                            [
+                                'related_tgtr_position_behavior',
+                                'related_tgtr_position_limit',
+                                'upsell_tgtr_position_behavior',
+                                'upsell_tgtr_position_limit',
+                                'thumbnail_label',
+                                'small_image_label',
+                                'image_label',
+                            ],
+                    ],
+                ]
             )
             ->willReturn([$attribute1, $attribute2]);
 
@@ -269,6 +289,9 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->simpleType->isRowValid($rowData, $rowNum));
     }
 
+    /**
+     * @return array
+     */
     public function addAttributeOptionDataProvider()
     {
         return [

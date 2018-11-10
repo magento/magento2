@@ -44,20 +44,16 @@ class ProductViewTest extends GraphQlAbstract
             attribute_set_id
             country_of_manufacture
             created_at
-            custom_layout
-            custom_layout_update
             description
             gift_message_available
             id
             categories {
                name
-               is_active
                url_path
                available_sort_by
                level
             }
-            image
-            image_label
+            image { url, label }
             meta_description
             meta_keyword
             meta_title
@@ -208,15 +204,12 @@ class ProductViewTest extends GraphQlAbstract
             }
             short_description
             sku
-            small_image
-            small_image_label
+            small_image{ url, label }
+            thumbnail { url, label }
             special_from_date
             special_price
             special_to_date
-            swatch_image
-            tax_class_id
-            thumbnail
-            thumbnail_label
+            swatch_image            
             tier_price
             tier_prices
             {
@@ -230,6 +223,7 @@ class ProductViewTest extends GraphQlAbstract
             updated_at
             url_key
             url_path
+            canonical_url
             websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
@@ -275,6 +269,11 @@ QUERY;
             'Filter category',
             $responseObject->getData('products/items/0/categories/2/name')
         );
+        $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
+        self::assertEquals(
+            $storeManager->getStore()->getBaseUrl() . 'simple-product.html',
+            $responseObject->getData('products/items/0/canonical_url')
+        );
     }
 
     /**
@@ -283,7 +282,6 @@ QUERY;
      */
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
-        $this->markTestSkipped("Skipped until ticket MAGETWO-90021 is resolved.");
         $productSku = 'simple';
 
         $query = <<<QUERY
@@ -292,20 +290,16 @@ QUERY;
     {
         items{
             attribute_set_id
-            category_ids
             categories
             {
                 id
             }
             country_of_manufacture
             created_at
-            custom_layout
-            custom_layout_update
             description
             gift_message_available
             id
-            image
-            image_label
+            image {url, label}
             meta_description
             meta_keyword
             meta_title
@@ -454,15 +448,12 @@ QUERY;
             }
             short_description
             sku
-            small_image
-            small_image_label
+            small_image { url, label }
             special_from_date
             special_price
             special_to_date
             swatch_image
-            tax_class_id
-            thumbnail
-            thumbnail_label
+            thumbnail { url, label }
             tier_price
             tier_prices
             {
@@ -486,7 +477,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        
+
         /**
          * @var ProductRepositoryInterface $productRepository
          */
@@ -922,7 +913,6 @@ QUERY;
             'meta_keyword',
             'meta_title',
             'short_description',
-            'tax_class_id',
             'country_of_manufacture',
             'gift_message_available',
             'news_from_date',
@@ -959,30 +949,5 @@ QUERY;
                 break;
         }
         return $eavAttributeCode;
-    }
-
-    /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields($actualResponse, $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            self::assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            self::assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
-            );
-        }
     }
 }

@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+/**
+ * Gd2 adapter.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 {
     /**
@@ -66,6 +71,16 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $this->_getCallback('create', null, sprintf('Unsupported image format. File: %s', $this->_fileName)),
             $this->_fileName
         );
+        $fileType = $this->getImageType();
+        if (in_array($fileType, [IMAGETYPE_PNG, IMAGETYPE_GIF])) {
+            $this->_keepTransparency = true;
+            if ($this->_imageHandler) {
+                $isAlpha = $this->checkAlpha($this->_fileName);
+                if ($isAlpha) {
+                    $this->_fillBackgroundColor($this->_imageHandler);
+                }
+            }
+        }
     }
 
     /**
@@ -106,12 +121,13 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         }
 
         return round(
-            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + Pow(2, 16)) * 1.65
+            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + pow(2, 16)) * 1.65
         );
     }
 
     /**
      * Converts memory value (e.g. 64M, 129K) to bytes.
+     *
      * Case insensitive value might be used.
      *
      * @param string $memoryValue
@@ -132,6 +148,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
     /**
      * Save image to specific path.
+     *
      * If some folders of path does not exist they will be created
      *
      * @param null|string $destination
@@ -188,7 +205,10 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     }
 
     /**
+     * Render image and return its binary contents.
+     *
      * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
+     *
      * @return string
      */
     public function getImage()
@@ -223,6 +243,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
     /**
      * Fill image with main background color.
+     *
      * Returns a color identifier.
      *
      * @param resource &$imageResourceTo
@@ -425,8 +446,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $col = imagecolorallocate($newWatermark, 255, 255, 255);
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->getWatermarkWidth(), $this->getWatermarkHeight(), $col);
-            imagealphablending($newWatermark, true);
-            imageSaveAlpha($newWatermark, true);
+            imagesavealpha($newWatermark, true);
             imagecopyresampled(
                 $newWatermark,
                 $watermark,
@@ -450,8 +470,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $col = imagecolorallocate($newWatermark, 255, 255, 255);
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->_imageSrcWidth, $this->_imageSrcHeight, $col);
-            imagealphablending($newWatermark, true);
-            imageSaveAlpha($newWatermark, true);
+            imagesavealpha($newWatermark, true);
             imagecopyresampled(
                 $newWatermark,
                 $watermark,
@@ -669,7 +688,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     private function _saveAlpha($imageHandler)
     {
         $background = imagecolorallocate($imageHandler, 0, 0, 0);
-        ImageColorTransparent($imageHandler, $background);
+        imagecolortransparent($imageHandler, $background);
         imagealphablending($imageHandler, false);
         imagesavealpha($imageHandler, true);
     }
@@ -730,6 +749,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
     /**
      * Create Image using ttf font
+     *
      * Note: This function requires both the GD library and the FreeType library
      *
      * @param string $text

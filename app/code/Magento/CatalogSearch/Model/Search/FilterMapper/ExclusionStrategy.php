@@ -7,13 +7,24 @@
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
+use Magento\Customer\Model\Context as CustomerContext;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * Strategy which processes exclusions from general rules
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExclusionStrategy implements FilterStrategyInterface
 {
@@ -44,21 +55,47 @@ class ExclusionStrategy implements FilterStrategyInterface
     private $tableResolver;
 
     /**
+     * @var IndexScopeResolverInterface
+     */
+    private $priceTableResolver;
+
+    /**
+     * @var DimensionFactory
+     */
+    private $dimensionFactory;
+
+    /**
+     * @var Context
+     */
+    private $httpContext;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param AliasResolver $aliasResolver
      * @param TableResolver|null $tableResolver
+     * @param DimensionFactory $dimensionFactory
+     * @param IndexScopeResolverInterface $priceTableResolver
+     * @param Context $httpContext
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         AliasResolver $aliasResolver,
-        TableResolver $tableResolver = null
+        TableResolver $tableResolver = null,
+        DimensionFactory $dimensionFactory = null,
+        IndexScopeResolverInterface $priceTableResolver = null,
+        Context $httpContext = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->storeManager = $storeManager;
         $this->aliasResolver = $aliasResolver;
         $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
+        $this->dimensionFactory = $dimensionFactory ?: ObjectManager::getInstance()->get(DimensionFactory::class);
+        $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(
+            IndexScopeResolverInterface::class
+        );
+        $this->httpContext = $httpContext ?: ObjectManager::getInstance()->get(Context::class);
     }
 
     /**
@@ -93,7 +130,17 @@ class ExclusionStrategy implements FilterStrategyInterface
         \Magento\Framework\DB\Select $select
     ) {
         $alias = $this->aliasResolver->getAlias($filter);
-        $tableName = $this->resourceConnection->getTableName('catalog_product_index_price');
+        $websiteId = $this->storeManager->getWebsite()->getId();
+        $tableName = $this->priceTableResolver->resolve(
+            'catalog_product_index_price',
+            [
+                $this->dimensionFactory->create(WebsiteDimensionProvider::DIMENSION_NAME, (string)$websiteId),
+                $this->dimensionFactory->create(
+                    CustomerGroupDimensionProvider::DIMENSION_NAME,
+                    (string)$this->httpContext->getValue(CustomerContext::CONTEXT_GROUP)
+                )
+            ]
+        );
         $mainTableAlias = $this->extractTableAliasFromSelect($select);
 
         $select->joinInner(
@@ -102,7 +149,7 @@ class ExclusionStrategy implements FilterStrategyInterface
             ],
             $this->resourceConnection->getConnection()->quoteInto(
                 sprintf('%s.entity_id = price_index.entity_id AND price_index.website_id = ?', $mainTableAlias),
-                $this->storeManager->getWebsite()->getId()
+                $websiteId
             ),
             []
         );

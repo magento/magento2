@@ -9,6 +9,9 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\Mview\ActionInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 
+/**
+ * Catalog search materialized view index action.
+ */
 class Action implements ActionInterface
 {
     /**

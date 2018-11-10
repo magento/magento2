@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Controller\Ajax;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
@@ -23,7 +24,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
  * @method \Magento\Framework\App\Response\Http getResponse()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Login extends \Magento\Framework\App\Action\Action
+class Login extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Session\Generic

@@ -48,6 +48,7 @@ abstract class PrintAction extends \Magento\Backend\App\Action
 
     /**
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
+     * @throws \Exception
      */
     public function execute()
     {
@@ -63,9 +64,11 @@ abstract class PrintAction extends \Magento\Backend\App\Action
                 $date = $this->_objectManager->get(
                     \Magento\Framework\Stdlib\DateTime\DateTime::class
                 )->date('Y-m-d_H-i-s');
+                $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
+
                 return $this->_fileFactory->create(
                     'packingslip' . $date . '.pdf',
-                    $pdf->render(),
+                    $fileContent,
                     DirectoryList::VAR_DIR,
                     'application/pdf'
                 );

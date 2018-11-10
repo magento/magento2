@@ -88,7 +88,7 @@ class VaultDetailsHandlerTest extends TestCase
 
         $this->paymentInfoMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->setMethods(['__wakeup', 'getExtensionAttributes'])
             ->getMock();
 
         $this->paymentTokenMock = $objectManager->getObject(PaymentToken::class);
@@ -106,6 +106,10 @@ class VaultDetailsHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+
+        $this->paymentInfoMock->expects(self::any())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->paymentExtensionMock);
 
         $this->subject = [
             'payment' => $this->paymentDataObjectMock,
@@ -184,7 +188,7 @@ class VaultDetailsHandlerTest extends TestCase
             ->method('create');
 
         $this->handler->handle($this->subject, $response);
-        self::assertNull($this->paymentInfoMock->getExtensionAttributes());
+        self::assertNotNull($this->paymentInfoMock->getExtensionAttributes());
     }
 
     /**

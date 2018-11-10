@@ -7,7 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magento_Marketplace::partners" title="Find Partners &amp; Extensions" module="Magento_Marketplace" sortOrder="80"
-             action="marketplace/index" resource="Magento_Marketplace::partners"/>
+        <add id="Magento_Marketplace::partners" title="Find Partners &amp; Extensions" translate="title" module="Magento_Marketplace" sortOrder="80" action="marketplace/index" resource="Magento_Marketplace::partners"/>
     </menu>
 </config>

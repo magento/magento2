@@ -156,6 +156,11 @@ class LinksTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(json_encode($config), $encodedJsonConfig);
     }
 
+    /**
+     * @param $linkPrice
+     * @param $linkId
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getLinkMock($linkPrice, $linkId)
     {
         $linkMock = $this->createPartialMock(\Magento\Downloadable\Model\Link::class, ['getPrice',

@@ -103,7 +103,7 @@ class Write extends Read implements WriteInterface
      * @param int $lockMode
      * @return bool
      */
-    public function lock($lockMode = LOCK_EX)
+    public function lock($lockMode = \LOCK_EX)
     {
         return $this->driver->fileLock($this->resource, $lockMode);
     }

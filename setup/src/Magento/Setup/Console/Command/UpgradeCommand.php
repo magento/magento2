@@ -47,10 +47,9 @@ class UpgradeCommand extends AbstractSetupCommand
     private $appState;
 
     /**
-     * Constructor.
-     *
      * @param InstallerFactory $installerFactory
      * @param DeploymentConfig $deploymentConfig
+     * @param AppState|null $appState
      */
     public function __construct(
         InstallerFactory $installerFactory,
@@ -102,7 +101,7 @@ class UpgradeCommand extends AbstractSetupCommand
                 InputOption::VALUE_OPTIONAL,
                 'Magento Installation will be run in dry-run mode',
                 false
-            ),
+            )
         ];
         $this->setName('setup:upgrade')
             ->setDescription('Upgrades the Magento application, DB data, and schema')

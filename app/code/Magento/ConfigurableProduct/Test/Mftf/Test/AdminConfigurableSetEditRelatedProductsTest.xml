@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableSetEditRelatedProductsTest" extends="AdminSimpleSetEditRelatedProductsTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create/Edit configurable product"/>
+            <title value="Admin should be able to set/edit Related Products information when editing a configurable product"/>
+            <description value="Admin should be able to set/edit Related Products information when editing a configurable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3414"/>
+            <group value="ConfigurableProduct"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+        </before>
+        <after>
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Create product -->
+        <remove keyForRemoval="goToCreateProduct"/>
+        <actionGroup ref="createConfigurableProduct" stepKey="fillProductForm">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!--See related product in storefront-->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToStorefront"/>
+    </test>
+</tests>

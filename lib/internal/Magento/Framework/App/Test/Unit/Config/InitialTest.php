@@ -65,6 +65,9 @@ class InitialTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->config->getData($scope));
     }
 
+    /**
+     * @return array
+     */
     public function getDataDataProvider()
     {
         return [

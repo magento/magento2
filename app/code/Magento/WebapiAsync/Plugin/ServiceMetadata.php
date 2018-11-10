@@ -129,7 +129,8 @@ class ServiceMetadata
     private function getSynchronousOnlyServiceMethods(\Magento\Webapi\Model\ServiceMetadata $serviceMetadata)
     {
         $synchronousOnlyServiceMethods = [];
-        foreach ($this->serviceConfig->getServices() as $service => $serviceData) {
+        $services = $this->serviceConfig->getServices()[Converter::KEY_SERVICES] ?? [];
+        foreach ($services as $service => $serviceData) {
             if (!isset($serviceData[Converter::KEY_METHODS])) {
                 continue;
             }

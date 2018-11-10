@@ -55,24 +55,31 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
      * situation: one product is supplying the price, which could be a price of zero (0)
      *
      * @dataProvider resolvePriceDataProvider
+     *
+     * @param $variantPrices
+     * @param $expectedPrice
      */
-    public function testResolvePrice($expectedValue)
+    public function testResolvePrice($variantPrices, $expectedPrice)
     {
-        $price = $expectedValue;
-
         $product = $this->getMockBuilder(
             \Magento\Catalog\Model\Product::class
         )->disableOriginalConstructor()->getMock();
 
         $product->expects($this->never())->method('getSku');
 
-        $this->lowestPriceOptionsProvider->expects($this->once())->method('getProducts')->willReturn([$product]);
-        $this->priceResolver->expects($this->once())
-            ->method('resolvePrice')
-            ->with($product)
-            ->willReturn($price);
+        $products = array_map(function () {
+            return $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+        }, $variantPrices);
 
-        $this->assertEquals($expectedValue, $this->resolver->resolvePrice($product));
+        $this->lowestPriceOptionsProvider->expects($this->once())->method('getProducts')->willReturn($products);
+        $this->priceResolver
+            ->method('resolvePrice')
+            ->willReturnOnConsecutiveCalls(...$variantPrices);
+
+        $actualPrice = $this->resolver->resolvePrice($product);
+        self::assertSame($expectedPrice, $actualPrice);
     }
 
     /**
@@ -81,8 +88,40 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
     public function resolvePriceDataProvider()
     {
         return [
-            'price of zero' => [0.00],
-            'price of five' => [5],
+            'Single variant at price 0.00 (float), should return 0.00 (float)' => [
+                $variantPrices = [
+                    0.00,
+                ],
+                $expectedPrice = 0.00,
+            ],
+            'Single variant at price 5 (integer), should return 5.00 (float)' => [
+                $variantPrices = [
+                    5,
+                ],
+                $expectedPrice = 5.00,
+            ],
+            'Single variants at price null (null), should return 0.00 (float)' => [
+                $variantPrices = [
+                    null,
+                ],
+                $expectedPrice = 0.00,
+            ],
+            'Multiple variants at price 0, 10, 20, should return 0.00 (float)' => [
+                $variantPrices = [
+                    0,
+                    10,
+                    20,
+                ],
+                $expectedPrice = 0.00,
+            ],
+            'Multiple variants at price 10, 0, 20, should return 0.00 (float)' => [
+                $variantPrices = [
+                    10,
+                    0,
+                    20,
+                ],
+                $expectedPrice = 0.00,
+            ],
         ];
     }
 }

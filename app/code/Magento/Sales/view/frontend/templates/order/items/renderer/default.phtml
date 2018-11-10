@@ -20,9 +20,9 @@ $_item = $block->getItem();
                 <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                 <dd>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
-                        <?= $block->escapeHtml($_formatedOptionValue['full_view']) ?>
+                        <?= $block->escapeHtml($_formatedOptionValue['full_view'], ['a']) ?>
                     <?php else: ?>
-                        <?=$block->escapeHtml($_formatedOptionValue['value']) ?>
+                        <?=$block->escapeHtml($_formatedOptionValue['value'], ['a']) ?>
                     <?php endif; ?>
                 </dd>
             <?php else: ?>

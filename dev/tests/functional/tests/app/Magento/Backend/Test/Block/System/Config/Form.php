@@ -60,7 +60,17 @@ class Form extends Block
      */
     public function getGroup($tabName, $groupName)
     {
-        $this->openTab($tabName);
+        $this->baseUrl = $this->getBrowserUrl();
+        if (substr($this->baseUrl, -1) !== '/') {
+            $this->baseUrl = $this->baseUrl . '/';
+        }
+
+        $tabUrl = $this->getTabUrl($tabName);
+
+        if ($this->getBrowserUrl() !== $tabUrl) {
+            $this->browser->open($tabUrl);
+        }
+        $this->waitForElementNotVisible($this->tabReadiness);
 
         $groupElement = $this->_rootElement->find(
             sprintf($this->groupBlock, $tabName, $groupName),
@@ -83,24 +93,6 @@ class Form extends Block
 
         $blockFactory = Factory::getBlockFactory();
         return $blockFactory->getMagentoBackendSystemConfigFormGroup($groupElement);
-    }
-
-    /**
-     * Check whether specified group presented on page.
-     *
-     * @param string $tabName
-     * @param string $groupName
-     *
-     * @return bool
-     */
-    public function isGroupVisible(string $tabName, string $groupName)
-    {
-        $this->openTab($tabName);
-
-        return $this->_rootElement->find(
-            sprintf($this->groupBlockLink, $tabName, $groupName),
-            Locator::SELECTOR_CSS
-        )->isVisible();
     }
 
     /**
@@ -144,25 +136,5 @@ class Form extends Block
         }
 
         return $tabUrl;
-    }
-
-    /**
-     * Open specified tab.
-     *
-     * @param string $tabName
-     * @return void
-     */
-    private function openTab(string $tabName)
-    {
-        $this->baseUrl = $this->getBrowserUrl();
-        if (substr($this->baseUrl, -1) !== '/') {
-            $this->baseUrl = $this->baseUrl . '/';
-        }
-        $tabUrl = $this->getTabUrl($tabName);
-
-        if ($this->getBrowserUrl() !== $tabUrl) {
-            $this->browser->open($tabUrl);
-        }
-        $this->waitForElementNotVisible($this->tabReadiness);
     }
 }

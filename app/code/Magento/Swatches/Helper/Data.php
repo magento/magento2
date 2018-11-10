@@ -132,6 +132,8 @@ class Data
     }
 
     /**
+     * Assemble Additional Data for Eav Attribute
+     *
      * @param Attribute $attribute
      * @return $this
      */
@@ -159,6 +161,30 @@ class Data
     }
 
     /**
+     * Check is media attribute available
+     *
+     * @param ModelProduct $product
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function isMediaAvailable(ModelProduct $product, string $attributeCode): bool
+    {
+        $isAvailable = false;
+
+        $mediaGallery = $product->getMediaGalleryEntries();
+        foreach ($mediaGallery as $mediaEntry) {
+            if (in_array($attributeCode, $mediaEntry->getTypes(), true)) {
+                $isAvailable = !$mediaEntry->isDisabled();
+                break;
+            }
+        }
+
+        return $isAvailable;
+    }
+
+    /**
+     * Load first variation
+     *
      * @param string $attributeCode swatch_image|image
      * @param ModelProduct $configurableProduct
      * @param array $requiredAttributes
@@ -170,8 +196,8 @@ class Data
             $usedProducts = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
 
             foreach ($usedProducts as $simpleProduct) {
-                if (!in_array($simpleProduct->getData($attributeCode), [null, self::EMPTY_IMAGE_VALUE], true)
-                    && !array_diff_assoc($requiredAttributes, $simpleProduct->getData())
+                if (!array_diff_assoc($requiredAttributes, $simpleProduct->getData())
+                    && $this->isMediaAvailable($simpleProduct, $attributeCode)
                 ) {
                     return $simpleProduct;
                 }
@@ -182,6 +208,8 @@ class Data
     }
 
     /**
+     * Load first variation with swatch image
+     *
      * @param Product $configurableProduct
      * @param array $requiredAttributes
      * @return bool|Product
@@ -192,6 +220,8 @@ class Data
     }
 
     /**
+     * Load first variation with image
+     *
      * @param Product $configurableProduct
      * @param array $requiredAttributes
      * @return bool|Product
@@ -247,6 +277,8 @@ class Data
     }
 
     /**
+     * Add filter by attribute
+     *
      * @param ProductCollection $productCollection
      * @param array $attributes
      * @return void
@@ -259,6 +291,8 @@ class Data
     }
 
     /**
+     * Add filter by parent
+     *
      * @param ProductCollection $productCollection
      * @param integer $parentId
      * @return void
@@ -277,6 +311,7 @@ class Data
 
     /**
      * Method getting full media gallery for current Product
+     *
      * Array structure: [
      *  ['image'] => 'http://url/pub/media/catalog/product/2/0/blabla.jpg',
      *  ['mediaGallery'] => [
@@ -285,53 +320,42 @@ class Data
      *      ...,
      *      ]
      * ]
+     *
      * @param ModelProduct $product
+     *
      * @return array
      */
     public function getProductMediaGallery(ModelProduct $product)
     {
-        if (!in_array($product->getData('image'), [null, self::EMPTY_IMAGE_VALUE], true)) {
-            $baseImage = $product->getData('image');
-        } else {
-            $productMediaAttributes = array_filter($product->getMediaAttributeValues(), function ($value) {
-                return $value !== self::EMPTY_IMAGE_VALUE && $value !== null;
-            });
-            foreach ($productMediaAttributes as $attributeCode => $value) {
-                if ($attributeCode !== 'swatch_image') {
-                    $baseImage = (string)$value;
-                    break;
-                }
+        $baseImage = null;
+        $gallery = [];
+
+        $mediaGallery = $product->getMediaGalleryEntries();
+        foreach ($mediaGallery as $mediaEntry) {
+            if ($mediaEntry->isDisabled()) {
+                continue;
             }
+
+            if (in_array('image', $mediaEntry->getTypes(), true) || !$baseImage) {
+                $baseImage = $mediaEntry->getFile();
+            }
+
+            $gallery[$mediaEntry->getId()] = $this->getAllSizeImages($mediaEntry->getFile());
         }
 
-        if (empty($baseImage)) {
+        if (!$baseImage) {
             return [];
         }
 
         $resultGallery = $this->getAllSizeImages($baseImage);
-        $resultGallery['gallery'] = $this->getGalleryImages($product);
+        $resultGallery['gallery'] = $gallery;
 
         return $resultGallery;
     }
 
     /**
-     * @param ModelProduct $product
-     * @return array
-     */
-    private function getGalleryImages(ModelProduct $product)
-    {
-        //TODO: remove after fix MAGETWO-48040
-        $product = $this->productRepository->getById($product->getId());
-
-        $result = [];
-        $mediaGallery = $product->getMediaGalleryImages();
-        foreach ($mediaGallery as $media) {
-            $result[$media->getData('value_id')] = $this->getAllSizeImages($media->getData('file'));
-        }
-        return $result;
-    }
-
-    /**
+     * Get all size images
+     *
      * @param string $imageFile
      * @return array
      */
@@ -469,6 +493,8 @@ class Data
     }
 
     /**
+     * Add fallback options
+     *
      * @param array $fallbackValues
      * @param array $swatches
      * @return array
@@ -480,6 +506,8 @@ class Data
             if (isset($optionsArray[$currentStoreId]['type'], $swatches[$optionId]['type'])
                 && $swatches[$optionId]['type'] === $optionsArray[$currentStoreId]['type']
             ) {
+                $swatches[$optionId] = $optionsArray[$currentStoreId];
+            } elseif (isset($optionsArray[$currentStoreId])) {
                 $swatches[$optionId] = $optionsArray[$currentStoreId];
             } elseif (isset($optionsArray[self::DEFAULT_STORE_ID])) {
                 $swatches[$optionId] = $optionsArray[self::DEFAULT_STORE_ID];
@@ -497,9 +525,7 @@ class Data
      */
     public function isProductHasSwatch(Product $product)
     {
-        $swatchAttributes = $this->getSwatchAttributes($product);
-
-        return count($swatchAttributes) > 0;
+        return !empty($this->getSwatchAttributes($product));
     }
 
     /**

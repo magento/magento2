@@ -257,7 +257,7 @@ define([
         /**
          * Creates filter component configuration associated with the provided column.
          *
-         * @param {Column} column - Column component whith a basic filter declaration.
+         * @param {Column} column - Column component with a basic filter declaration.
          * @returns {Object} Filters' configuration.
          */
         buildFilter: function (column) {
@@ -331,7 +331,7 @@ define([
         },
 
         /**
-         * Finds filters whith a not empty data
+         * Finds filters with a not empty data
          * and sets them to the 'active' filters array.
          *
          * @returns {Filters} Chainable.

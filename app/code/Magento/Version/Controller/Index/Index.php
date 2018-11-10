@@ -6,15 +6,15 @@
  */
 namespace Magento\Version\Controller\Index;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\Exception\StateException;
 
 /**
  * Magento Version controller
  */
-class Index extends Action
+class Index extends Action implements HttpGetActionInterface
 {
     /**
      * @var ProductMetadataInterface

@@ -13,7 +13,7 @@ class Link extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'rss/grid/link.phtml';
+    protected $_template = 'Magento_Catalog::rss/grid/link.phtml';
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
@@ -69,7 +69,7 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return string
+     * @return array
      */
     protected function getLinkParams()
     {

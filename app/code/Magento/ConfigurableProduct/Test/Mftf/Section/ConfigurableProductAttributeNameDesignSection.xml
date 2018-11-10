@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CatalogProductsSection">
+        <element name="catalogItem" type="button" selector="//*[@id='menu-magento-catalog-catalog']/a/span"/>
+        <element name="productItem" type="button" selector="//*[@data-ui-id='menu-magento-catalog-catalog-products']/a"/>
+        <element name="storesItem" type="button" selector="//*[@id='menu-magento-backend-stores']/a/span"/>
+        <element name="searchDefaultLabelField" type="input" selector="//*[@id='attributeGrid_filter_frontend_label']"/>
+        <element name="searchButton" type="button" selector="//div[@class='admin__filter-actions']//*[contains(text(), 'Search')]"/>
+        <element name="storesProductItem" type="button" selector="//*[@data-ui-id='menu-magento-catalog-catalog-attributes-attributes']/a"/>
+        <element name="createdAttributeItem" type="button" selector="//td[contains(@class, 'col-label') and normalize-space()='design']"/>
+        <element name="deleteAttributeItem" type="button" selector="//*[@id='delete']"/>
+        <element name="okButton" type="button" selector="//footer[@class='modal-footer']//*[contains(text(),'OK')]"/>
+        <element name="messageSuccessSavedProduct" type="button" selector="//div[@data-ui-id='messages-message-success']"/>
+        <element name="resetFilter" type="button" selector="//span[contains(text(), 'Reset Filter')]"/>
+    </section>
+
+    <section name="ConfigurableProductSection">
+        <element name="addProductItem" type="button" selector="//*[@id='add_new_product']/button[2]"/>
+        <element name="configProductItem" type="button" selector="//*[@id='add_new_product']//*[contains(text(),'Configurable Product')]"/>
+        <element name="nextButton" type="button" selector="//div[@class='nav-bar-outer-actions']//*[contains(text(),'Next')]"/>
+        <element name="generateConfigure" type="button" selector="//div[@class='nav-bar-outer-actions']//*[contains(text(),'Generate Products')]"/>
+        <element name="selectCreatedAttribute" type="button" selector="//*[@class='admin__data-grid-wrap']//td[normalize-space()='design']/preceding-sibling::td"/>
+        <element name="closeFrame" type="button" selector="//*[@class='modal-header']//*[contains(text(),'Create Product Configurations')]/following-sibling::button"/>
+    </section>
+
+    <section name="NewProduct">
+        <element name="productName" type="input" selector="//input[@name='product[name]']"/>
+        <element name="price" type="input" selector="//input[@name='product[price]']"/>
+        <element name="weight" type="input" selector="//input[@name='product[weight]']"/>
+        <element name="createConfigurationButton" type="button" selector="//*[contains(text(),'Create Configurations')]"/>
+        <element name="createNewAttributeButton" type="button" selector="//*[contains(text(),'Create New Attribute')]"/>
+        <element name="newAttributeIFrame" type="iframe" selector="create_new_attribute_container"/>
+        <element name="defaultLabel" type="input" selector="//*[@id='attribute_label']"/>
+        <element name="addOptionButton" type="button" selector="//*[@id='add_new_option_button']"/>
+        <element name="adminFieldRed" type="input" selector="//input[@name='option[value][option_0][0]']"/>
+        <element name="defaultStoreViewFieldRed" type="input" selector="//input[@name='option[value][option_0][1]']"/>
+        <element name="adminFieldBlue" type="input" selector="//input[@name='option[value][option_1][0]']"/>
+        <element name="defaultStoreViewFieldBlue" type="input" selector="//input[@name='option[value][option_1][1]']"/>
+        <element name="adminFieldYellow" type="input" selector="//input[@name='option[value][option_2][0]']"/>
+        <element name="defaultStoreViewFieldYellow" type="input" selector="//input[@name='option[value][option_2][1]']"/>
+        <element name="adminFieldGreen" type="input" selector="//input[@name='option[value][option_3][0]']"/>
+        <element name="defaultStoreViewFieldGreen" type="input" selector="//input[@name='option[value][option_3][1]']"/>
+        <element name="adminFieldBlack" type="input" selector="//input[@name='option[value][option_4][0]']"/>
+        <element name="defaultStoreViewFieldBlack" type="input" selector="//input[@name='option[value][option_4][1]']"/>
+        <element name="saveAttributeButton" type="button" selector="//*[@id='save']"/>
+        <element name="advancedAttributeProperties" type="button" selector="//*[@id='advanced_fieldset-wrapper']//*[contains(text(),'Advanced Attribute Properties')]"/>
+        <element name="attributeCodeField" type="input"  selector="//*[@id='attribute_code']"/>
+
+    </section>
+
+    <section name="CreateProductConfigurations">
+        <element name="checkboxRed" type="input" selector="//fieldset[@class='admin__fieldset admin__fieldset-options']//*[contains(text(),'red')]/preceding-sibling::input"/>
+        <element name="checkboxBlue" type="input" selector="//fieldset[@class='admin__fieldset admin__fieldset-options']//*[contains(text(),'blue')]/preceding-sibling::input"/>
+        <element name="checkboxYellow" type="input" selector="//fieldset[@class='admin__fieldset admin__fieldset-options']//*[contains(text(),'yellow')]/preceding-sibling::input"/>
+        <element name="checkboxGreen" type="input" selector="//fieldset[@class='admin__fieldset admin__fieldset-options']//*[contains(text(),'green')]/preceding-sibling::input"/>
+        <element name="checkboxBlack" type="input" selector="//fieldset[@class='admin__fieldset admin__fieldset-options']//*[contains(text(),'black')]/preceding-sibling::input"/>
+        <element name="errorMessage" type="input" selector="//div[@data-ui-id='messages-message-error']"/>
+    </section>
+
+</sections>

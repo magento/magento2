@@ -118,7 +118,7 @@ class Circular
             return;
         }
         $this->circularDependencies[$path] = $modules;
-        array_push($modules, array_shift($modules));
+        $modules[] = array_shift($modules);
         $this->buildCircular($modules);
     }
 
@@ -133,7 +133,7 @@ class Circular
         $dependenciesByModule = [];
         foreach ($circularDependencies as $circularDependency) {
             $module = $circularDependency[0];
-            array_push($circularDependency, $module);
+            $circularDependency[] = $module;
             $dependenciesByModule[$module][] = $circularDependency;
         }
 

@@ -119,6 +119,9 @@ class CollectionTest extends AbstractCollectionTest
         $this->assertEquals($expectedResult[$item->getId()], $item->getStoreId());
     }
 
+    /**
+     * @return array
+     */
     public function getItemsDataProvider()
     {
         return [

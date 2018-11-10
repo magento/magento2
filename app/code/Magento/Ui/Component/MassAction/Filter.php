@@ -99,14 +99,12 @@ class Filter
                 throw new LocalizedException(__('An item needs to be selected. Select and try again.'));
             }
         }
-        /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
-        $idsArray = $this->getFilterIds();
-        if (!empty($idsArray)) {
-            $collection->addFieldToFilter(
-                $collection->getIdFieldName(),
-                ['in' => $idsArray]
-            );
-        }
+
+        $collection->addFieldToFilter(
+            $collection->getIdFieldName(),
+            ['in' => $this->getFilterIds()]
+        );
+
         return $collection;
     }
 

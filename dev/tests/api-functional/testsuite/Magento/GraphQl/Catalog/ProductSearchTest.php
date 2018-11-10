@@ -381,82 +381,9 @@ QUERY;
 }
 QUERY;
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 1 specified is greater ' .
-            'than the number of pages available.');
+        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 2 specified is greater ' .
+            'than the 1 page(s) available');
         $this->graphQlQuery($query);
-    }
-
-    /**
-     * The query returns a total_count of 2 records; setting the pageSize = 1 and currentPage2
-     * Expected result is to get the second product on the list on the second page
-     *
-     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
-     */
-    public function testSearchWithFilterPageSizeLessThanCurrentPage()
-    {
-
-        $query
-            = <<<QUERY
-{
-    products(
-     search : "simple"
-        filter:
-        {
-          special_price:{neq:"null"}
-          price:{lt:"60"}
-          or:
-          {
-           sku:{like:"%simple%"}
-           name:{like:"%configurable%"}
-          }
-           weight:{eq:"1"}
-        }
-        pageSize:1
-        currentPage:2
-        sort:
-       {
-        price:DESC
-       }
-    )
-    {
-        items
-         {
-           sku
-           price {
-            minimalPrice {
-                amount {
-                    value
-                    currency
-                }
-            }
-           }
-           name
-           ... on PhysicalProductInterface {
-            weight
-           }
-           type_id
-           attribute_set_id
-         }
-        total_count
-        page_info
-        {
-          page_size
-        }
-    }
-}
-QUERY;
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        // when pagSize =1 and currentPage = 2, it should have simple2 on first page and simple1 on 2nd page
-        // since sorting is done on price in the DESC order
-        $product = $productRepository->get('simple1');
-        $filteredProducts = [$product];
-
-        $response = $this->graphQlQuery($query);
-        $this->assertEquals(1, $response['products']['total_count']);
-        $this->assertProductItems($filteredProducts, $response);
     }
 
     /**
@@ -512,6 +439,15 @@ QUERY;
           page_size
           current_page
         }
+        sort_fields 
+        {
+          default
+          options 
+          {
+            value
+            label
+          }
+        }
     }
 }
 QUERY;
@@ -530,15 +466,21 @@ QUERY;
         $this->assertProductItems($filteredChildProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
         $this->assertEquals(1, $response['products']['page_info']['current_page']);
+        $this->assertArrayHasKey('sort_fields', $response['products']);
+        $this->assertArrayHasKey('options', $response['products']['sort_fields']);
+        $this->assertArrayHasKey('default', $response['products']['sort_fields']);
+        $this->assertEquals('position', $response['products']['sort_fields']['default']);
+        $this->assertArrayHasKey('value', $response['products']['sort_fields']['options'][0]);
+        $this->assertArrayHasKey('label', $response['products']['sort_fields']['options'][0]);
+        $this->assertEquals('position', $response['products']['sort_fields']['options'][0]['value']);
     }
 
     /**
-     * Verify the items in the second page is correct after sorting their name in ASC order
+     * Verify the items is correct after sorting their name in ASC order
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterProductsInNextPageSortedByNameASC()
+    public function testQueryProductsSortedByNameASC()
     {
         $query
             = <<<QUERY
@@ -546,44 +488,27 @@ QUERY;
     products(
         filter:
         {
-            price:{gt: "5", lt: "50"}
-            or:
-            {
-                sku:{eq:"simple1"}
-                name:{like:"configurable%"}
-            }
+            sku:{in:["simple2", "simple1"]}
         }
-         pageSize:4
+         pageSize:1
          currentPage:2
          sort:
          {
-          name:ASC
+             name:ASC
          }
     )
     {
       items
       {
         sku
-        price {
-            minimalPrice {
-                amount {
-                    value
-                    currency
-                }
-            }
-        }
         name
-        type_id
-        ... on PhysicalProductInterface {
-            weight
-           }
-           attribute_set_id
-         }
-        total_count
-        page_info
-        {
+      }
+      total_count
+      page_info
+      {
           page_size
-        }
+          current_page
+      }
     }
 }
 QUERY;
@@ -591,13 +516,15 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get('simple1');
-        $filteredProducts = [$product];
+        $product = $productRepository->get('simple2');
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(1, $response['products']['total_count']);
-        $this->assertProductItems($filteredProducts, $response);
-        $this->assertEquals(4, $response['products']['page_info']['page_size']);
+        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertEquals(['page_size' => 1, 'current_page' => 2], $response['products']['page_info']);
+        $this->assertEquals(
+            [['sku' => $product->getSku(), 'name' => $product->getName()]],
+            $response['products']['items']
+        );
     }
 
     /**
@@ -616,7 +543,9 @@ QUERY;
      sku
      name
      attribute_set_id
-     category_ids
+     categories {
+        id
+     }
    }
  }
 }
@@ -630,11 +559,11 @@ QUERY;
         $product = $productRepository->get('simple333');
         $categoryIds  = $product->getCategoryIds();
         foreach ($categoryIds as $index => $value) {
-            $categoryIds[$index] = (int)$value;
+            $categoryIds[$index] = [ 'id' => (int)$value];
         }
-        $this->assertNotEmpty($response['products']['items'][0]['category_ids'], "Category_ids must not be empty");
-        $this->assertNotNull($response['products']['items'][0]['category_ids'], "categoy_ids must not be null");
-        $this->assertEquals($categoryIds, $response['products']['items'][0]['category_ids']);
+        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
+        $this->assertNotNull($response['products']['items'][0]['categories'], "categories must not be null");
+        $this->assertEquals($categoryIds, $response['products']['items'][0]['categories']);
         /** @var MetadataPool $metaData */
         $metaData = ObjectManager::getInstance()->get(MetadataPool::class);
         $linkField = $metaData->getMetadata(ProductInterface::class)->getLinkField();
@@ -661,7 +590,7 @@ QUERY;
   products(
         filter:
         {
-            category_ids:{eq:"{$queryCategoryId}"}
+            category_id:{eq:"{$queryCategoryId}"}
         }
     pageSize:2
             
@@ -672,14 +601,12 @@ QUERY;
        sku
        name
        type_id
-       category_ids
        categories{
           name
           id
           path
           children_count
           product_count
-          is_active
         }
       }
        total_count
@@ -710,7 +637,6 @@ QUERY;
             foreach ($categoryIds as $index => $value) {
                 $categoryIds[$index] = (int)$value;
             }
-            $this->assertEquals($response['products']['items'][$itemIndex]['category_ids'], $categoryIds);
             $categoryInResponse = array_map(
                 null,
                 $categoryIds,
@@ -728,7 +654,6 @@ QUERY;
                         'path' => $category->getPath(),
                         'children_count' => $category->getChildrenCount(),
                         'product_count' => $category->getProductCount(),
-                        'is_active' => $category->getIsActive(),
                     ]
                 );
             }
@@ -1118,8 +1043,8 @@ QUERY;
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 1 specified is greater ' .
-            'than the number of pages available.');
+        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 2 specified is greater ' .
+            'than the 1 page(s) available.');
         $this->graphQlQuery($query);
     }
 
@@ -1144,7 +1069,6 @@ QUERY;
            ... on PhysicalProductInterface {
                weight
            }
-           category_ids
        }
    }
 }
@@ -1178,7 +1102,6 @@ QUERY;
       {
        sku
        name
-       category_ids
       }
        total_count
         
@@ -1268,31 +1191,6 @@ QUERY;
                     'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
                     'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
-            );
-        }
-    }
-
-    /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields(array $actualResponse, array $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            $this->assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            $this->assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
             );
         }
     }

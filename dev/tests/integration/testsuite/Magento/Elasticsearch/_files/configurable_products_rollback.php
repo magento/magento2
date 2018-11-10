@@ -25,7 +25,7 @@ foreach (['simple_10', 'simple_20', 'configurable'] as $sku) {
     }
 }
 
-require __DIR__ . '/../../ConfigurableProduct/_files/configurable_attribute_rollback.php';
+require __DIR__ . '/configurable_attribute_rollback.php';
 require __DIR__ . '/select_attribute_rollback.php';
 require __DIR__ . '/multiselect_attribute_rollback.php';
 

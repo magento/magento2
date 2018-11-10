@@ -79,6 +79,8 @@ class CreateSimpleProductEntityTest extends Injectable
         $flushCache = false,
         $configData = null
     ) {
+        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/1620');
+
         $this->configData = $configData;
         $this->flushCache = $flushCache;
 

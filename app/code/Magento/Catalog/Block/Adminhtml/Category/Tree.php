@@ -27,7 +27,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @var string
      */
-    protected $_template = 'catalog/category/tree.phtml';
+    protected $_template = 'Magento_Catalog::catalog/category/tree.phtml';
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
@@ -325,7 +325,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      *
      * @param Node|array $node
      * @param int $level
-     * @return string
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

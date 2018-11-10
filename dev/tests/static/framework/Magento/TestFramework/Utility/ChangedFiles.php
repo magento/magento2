@@ -32,7 +32,7 @@ class ChangedFiles
         $fileUtilities = Files::init();
         if (isset($_ENV['INCREMENTAL_BUILD'])) {
             $phpFiles = [];
-            foreach (glob($changedFilesList) as $listFile) {
+            foreach (glob($changedFilesList, GLOB_NOSORT) as $listFile) {
                 $phpFiles = array_merge($phpFiles, file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
             }
             array_walk(

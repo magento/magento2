@@ -1,18 +1,6 @@
 app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/backbone-min.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/handlebars.min-v4.0.10.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/highlight.9.1.0.pack.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/highlight.9.1.0.pack_extended.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/jquery-1.8.0.min.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/jquery.ba-bbq.min.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/jquery.slideto.min.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/jquery.wiggle.min.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/jsoneditor.min.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/lodash.min.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/marked.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/object-assign-pollyfill.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/swagger-oauth.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/underscore-min.js
+app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui-bundle.js
+app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui-standalone-preset.js
 app/code/Magento/Tinymce3/view/base/web/tiny_mce/**/*.js
 app/code/Magento/Authorizenet/view/adminhtml/web/js/direct-post.js
 app/code/Magento/Catalog/view/adminhtml/web/catalog/product/composite/configure.js
@@ -26,3 +14,6 @@ lib/web/mage/adminhtml/varienLoader.js
 lib/web/magnifier/magnifier.js
 lib/web/magnifier/magnify.js
 lib/web/varien/js.js
+
+// MINIFIED FILES
+app/code/**/*.min.js
