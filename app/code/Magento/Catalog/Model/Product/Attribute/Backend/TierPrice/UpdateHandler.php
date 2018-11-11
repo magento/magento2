@@ -82,14 +82,14 @@ class UpdateHandler implements ExtensionInterface
                     __('Tier prices data should be array, but actually other type is received')
                 );
             }
-            $websiteId = $this->storeManager->getStore($entity->getStoreId())->getWebsiteId();
+            $websiteId = (int)$this->storeManager->getStore($entity->getStoreId())->getWebsiteId();
             $isGlobal = $attribute->isScopeGlobal() || $websiteId === 0;
             $identifierField = $this->metadataPoll->getMetadata(ProductInterface::class)->getLinkField();
-            $productId = $entity->getData($identifierField);
+            $productId = (int)$entity->getData($identifierField);
 
             // prepare original data to compare
             $origPrices = $entity->getOrigData($attribute->getName());
-            $old = $this->prepareOriginalDataToCompare($origPrices, $isGlobal);
+            $old = $this->prepareOldTierPriceToCompare($origPrices);
             // prepare data for save
             $new = $this->prepareNewDataForSave($priceRows, $isGlobal);
 
@@ -262,19 +262,18 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
+     * Prepare old data to compare.
+     *
      * @param array|null $origPrices
-     * @param bool $isGlobal
      * @return array
      */
-    private function prepareOriginalDataToCompare($origPrices, $isGlobal = true): array
+    private function prepareOldTierPriceToCompare($origPrices): array
     {
         $old = [];
         if (is_array($origPrices)) {
             foreach ($origPrices as $data) {
-                if ($isGlobal === $this->isWebsiteGlobal((int)$data['website_id'])) {
-                    $key = $this->getPriceKey($data);
-                    $old[$key] = $data;
-                }
+                $key = $this->getPriceKey($data);
+                $old[$key] = $data;
             }
         }
 
