@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
 
 /**
  * Returns product's image url
@@ -23,14 +24,22 @@ class Url implements ResolverInterface
      * @var ImageFactory
      */
     private $productImageFactory;
+    /**
+     * @var AssetRepository
+     */
+    private $assetRepository;
 
     /**
+     * Url constructor.
      * @param ImageFactory $productImageFactory
+     * @param AssetRepository $assetRepository
      */
     public function __construct(
-        ImageFactory $productImageFactory
+        ImageFactory $productImageFactory,
+        AssetRepository $assetRepository
     ) {
         $this->productImageFactory = $productImageFactory;
+        $this->assetRepository = $assetRepository;
     }
 
     /**
@@ -55,8 +64,7 @@ class Url implements ResolverInterface
         $product = $value['model'];
         $imagePath = $product->getData($value['image_type']);
 
-        $imageUrl = $this->getImageUrl($value['image_type'], $imagePath);
-        return $imageUrl;
+        return $this->getImageUrl($value['image_type'], $imagePath);
     }
 
     /**
@@ -71,7 +79,15 @@ class Url implements ResolverInterface
         $image = $this->productImageFactory->create();
         $image->setDestinationSubdir($imageType)
             ->setBaseFile($imagePath);
-        $imageUrl = $image->getUrl();
+
+        $imageUrl = $image->isBaseFilePlaceholder()
+            ? $this->assetRepository->createAsset(
+                "Magento_Catalog::images/product/placeholder/{$imageType}.jpg",
+                ['area' => \Magento\Framework\App\Area::AREA_FRONTEND]
+            )
+                ->getUrl()
+            : $image->getUrl();
+
         return $imageUrl;
     }
 }
