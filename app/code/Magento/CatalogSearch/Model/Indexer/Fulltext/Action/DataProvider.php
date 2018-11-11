@@ -316,7 +316,10 @@ class DataProvider
             /** @var \Magento\Eav\Model\Entity\Attribute[] $attributes */
             $attributes = $productAttributes->getItems();
 
-            /** @deprecated */
+            /**
+             * @deprecated Event argument catelogsearch_searchable_attributes_load_after.
+             * @see catalogsearch_searchable_attributes_load_after instead.
+             */
             $this->eventManager->dispatch(
                 'catelogsearch_searchable_attributes_load_after',
                 ['engine' => $this->engine, 'attributes' => $attributes]
