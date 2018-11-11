@@ -71,20 +71,23 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param CacheInterface $cache
      * @param SerializerInterface $serializer
      * @param InterpreterInterface $argumentInterpreter,
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         $componentName,
         ReaderFactory $readerFactory,
         CacheInterface $cache,
         SerializerInterface $serializer,
-        InterpreterInterface $argumentInterpreter
+        InterpreterInterface $argumentInterpreter,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->readerFactory = $readerFactory;
         $this->cache = $cache;
         $this->serializer = $serializer;
         $this->componentName = $componentName;
         $this->argumentInterpreter = $argumentInterpreter;
-        $storeManager = \Magento\Framework\App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $storeManager = $storeManager ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->cacheId = static::CACHE_ID . '_' . $componentName . '_' . $storeManager->getStore()->getId();
     }
 
