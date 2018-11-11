@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="navigateToEditProductAttribute">
+        <arguments>
+            <argument name="attributeLabel" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <fillField selector="{{AdminProductAttributeGridSection.gridFilterFrontEndLabel}}" userInput="{{attributeLabel}}" stepKey="navigateToAttributeEditPage1" />
+        <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="navigateToAttributeEditPage2" />
+        <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="navigateToAttributeEditPage3" />
+    </actionGroup>
+    <actionGroup name="changeUseForPromoRuleConditionsProductAttribute">
+        <arguments>
+            <argument name="useForPromoRule" type="string" defaultValue="Yes"/>
+        </arguments>
+        <click selector="{{StorefrontPropertiesSection.storefrontPropertiesTab}}" stepKey="clickStoreFrontPropertiesTab"/>
+        <selectOption selector="{{StorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="{{useForPromoRule}}" stepKey="changeOption"/>
+        <click selector="{{AttributePropertiesSection.save}}" stepKey="saveAttribute"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the product attribute." stepKey="successMessage"/>
+    </actionGroup>
+</actionGroups>
