@@ -20,7 +20,6 @@ define([
     return Abstract.extend({
         defaults: {
             elementSelector: 'textarea',
-            value: '',
             $wysiwygEditorButton: '',
             links: {
                 value: '${ $.provider }:${ $.dataScope }'

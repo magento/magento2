@@ -32,6 +32,13 @@
         <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
         <element name="LayoutDropdown" type="select" selector="select[name='page_layout']"/>
     </section>
+    <section name="CategoryDisplaySettingsSection">
+        <element name="DisplaySettingTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Display Settings']"/>
+        <element name="layeredNavigationPriceInput" type="input" selector="input[name='filter_price_range']"/>
+        <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
+        <element name="filterPriceRangeUseConfig" type="checkbox" selector="input[name='use_config[filter_price_range]']"/>
+        <element name="RequiredFieldIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index={{arg1}}]&gt;.admin__field-label span'), ':after').getPropertyValue('content');" parameterized="true"/>
+    </section>
     <section name="CatalogWYSIWYGSection">
         <element name="ShowHideBtn" type="button" selector="#togglecategory_form_description"/>
         <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by"/>

@@ -15,10 +15,26 @@
             <argument name="mode" type="string"/>
             <argument name="numOfProductsPerPage" type="string"/>
             <argument name="sortBy" type="string" defaultValue="position"/>
+            <argument name="sort" type="string" defaultValue="asc"/>
         </arguments>
         <!-- Go to storefront category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url(category)}}?product_list_limit={{numOfProductsPerPage}}&amp;product_list_mode={{mode}}&amp;product_list_order={{sortBy}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url(category)}}?product_list_limit={{numOfProductsPerPage}}&amp;product_list_mode={{mode}}&amp;product_list_order={{sortBy}}&amp;product_list_dir={{sort}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="VerifyCategoryPageParameters">
+        <arguments>
+            <argument name="category"/>
+            <argument name="mode" type="string"/>
+            <argument name="numOfProductsPerPage" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+        </arguments>
+        <seeInCurrentUrl url="/{{category.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{category.name}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+        <see userInput="{{mode}}" selector="{{StorefrontCategoryMainSection.modeGridIsActive}}" stepKey="assertViewMode"/>
+        <see userInput="{{numOfProductsPerPage}}" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="assertNumberOfProductsPerPage"/>
+        <see userInput="{{sortBy}}" selector="{{StorefrontCategoryMainSection.sortedBy}}" stepKey="assertSortedBy"/>
     </actionGroup>
 
     <!-- Check the category page -->

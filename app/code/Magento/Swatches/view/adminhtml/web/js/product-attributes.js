@@ -438,25 +438,24 @@ define([
                 .collapse('hide');
 
             editForm.on('beforeSubmit', function () {
-                var swatchValues = [],
-                    optionContainer;
+                var optionContainer, optionsValues;
 
                 activePanel = swatchTextPanel.hasClass(activePanelClass) ? swatchTextPanel : swatchVisualPanel;
                 optionContainer = activePanel.find('table tbody');
 
                 if (activePanel.hasClass(activePanelClass)) {
-                    optionContainer
-                        .find('input')
-                        .each(function () {
-                            swatchValues.push(this.name + '=' + $(this).val());
-                        });
-
+                    optionsValues = $.map(
+                        optionContainer.find('tr'),
+                        function (row) {
+                            return $(row).find('input, select, textarea').serialize();
+                        }
+                    );
                     $('<input>')
                         .attr({
                             type: 'hidden',
                             name: 'serialized_options'
                         })
-                        .val(JSON.stringify(swatchValues))
+                        .val(JSON.stringify(optionsValues))
                         .prependTo(editForm);
                 }
 
