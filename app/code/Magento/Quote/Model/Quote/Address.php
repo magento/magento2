@@ -1008,8 +1008,15 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         /**
          * Currencies need to convert in free shipping
          */
-        $request->setBaseCurrency($this->getQuote()->getStore()->getBaseCurrency());
-        $request->setPackageCurrency($this->getQuote()->getStore()->getCurrentCurrency());
+         if ($this->getQuote()->getStoreId()) {
+            $storeId = $this->getQuote()->getStoreId();
+            $request->setStoreId($storeId);
+            $request->setWebsiteId($this->storeManager->getStore($storeId)->getWebsiteId());
+        } else {
+            $request->setStoreId($this->storeManager->getStore()->getId());
+            $request->setWebsiteId($this->storeManager->getWebsite()->getId());
+        }      
+        
         
         $request->setLimitCarrier($this->getLimitCarrier());
         $baseSubtotalInclTax = $this->getBaseSubtotalTotalInclTax();
