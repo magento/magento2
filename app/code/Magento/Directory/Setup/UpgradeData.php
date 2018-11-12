@@ -49,6 +49,9 @@ class UpgradeData implements UpgradeDataInterface
         if (version_compare($context->getVersion(), '2.0.3', '<')) {
             $this->addCountryRegions($setup, 'AU', $this->getDataForAustralia());
         }
+        if (version_compare($context->getVersion(), '2.0.4', '<')) {
+            $this->addCountryRegions($setup, 'MX', $this->getDataForMexico());
+        }
     }
 
     /**
@@ -146,6 +149,49 @@ class UpgradeData implements UpgradeDataInterface
             'TAS' => 'Tasmania',
             'WA' => 'Western Australia',
             'NT' => 'Northern Territory'
+        ];
+    }
+
+    /**
+     * Mexican states data.
+     *
+     * @return array
+     */
+    private function getDataForMexico()
+    {
+        return [
+            'AGU' => 'Aguascalientes',
+            'BCN' => 'Baja California',
+            'BCS' => 'Baja California Sur',
+            'CAM' => 'Campeche',
+            'CHP' => 'Chiapas',
+            'CHH' => 'Chihuahua',
+            'CMX' => 'Ciudad de México',
+            'COA' => 'Coahuila',
+            'COL' => 'Colima',
+            'DUR' => 'Durango',
+            'MEX' => 'Estado de México',
+            'GUA' => 'Guanajuato',
+            'GRO' => 'Guerrero',
+            'HID' => 'Hidalgo',
+            'JAL' => 'Jalisco',
+            'MIC' => 'Michoacán',
+            'MOR' => 'Morelos',
+            'NAY' => 'Nayarit',
+            'NLE' => 'Nuevo León',
+            'OAX' => 'Oaxaca',
+            'PUE' => 'Puebla',
+            'QUE' => 'Querétaro',
+            'ROO' => 'Quintana Roo',
+            'SLP' => 'San Luis Potosí',
+            'SIN' => 'Sinaloa',
+            'SON' => 'Sonora',
+            'TAB' => 'Tabasco',
+            'TAM' => 'Tamaulipas',
+            'TLA' => 'Tlaxcala',
+            'VER' => 'Veracruz',
+            'YUC' => 'Yucatán',
+            'ZAC' => 'Zacatecas',
         ];
     }
 
