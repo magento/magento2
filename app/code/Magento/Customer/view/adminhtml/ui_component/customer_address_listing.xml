@@ -63,22 +63,20 @@
             </settings>
         </filters>
         <massaction name="listing_massaction" component="Magento_Customer/js/grid/massactions">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="actions" xsi:type="array">
-                        <item name="0" xsi:type="array">
-                            <item name="isAjax" xsi:type="boolean">true</item>
-                            <item name="confirm" xsi:type="array">
-                                <item name="message" xsi:type="string" translate="true">Are you sure to delete selected address?</item>
-                                <item name="title" xsi:type="string" translate="true">Delete items</item>
-                            </item>
-                            <item name="url" xsi:type="url" path="customer/address/massDelete"/>
-                            <item name="type" xsi:type="string">delete</item>
-                            <item name="label" xsi:type="string" translate="true">Delete</item>
+            <settings>
+                <actions xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="isAjax" xsi:type="boolean">true</item>
+                        <item name="confirm" xsi:type="array">
+                            <item name="message" xsi:type="string" translate="true">Are you sure to delete selected address?</item>
+                            <item name="title" xsi:type="string" translate="true">Delete items</item>
                         </item>
+                        <item name="url" xsi:type="url" path="customer/address/massDelete"/>
+                        <item name="type" xsi:type="string">delete</item>
+                        <item name="label" xsi:type="string" translate="true">Delete</item>
                     </item>
-                </item>
-            </argument>
+                </actions>
+            </settings>
         </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
