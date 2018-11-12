@@ -35,7 +35,7 @@ class CustomerLogin implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-		$this->wishlistData->refreshFormKey();
+        $this->wishlistData->refreshFormKey();
         $this->wishlistData->calculate();
     }
 }

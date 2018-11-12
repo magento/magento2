@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Wishlist\Helper;
 
 use Magento\Framework\App\ActionInterface;
@@ -20,8 +22,8 @@ use Magento\Framework\App\PageCache\FormKey as PageCacheFormKey;
  * @api
  * @since 100.0.2
  */
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
-{
+class Data extends \Magento\Framework\App\Helper\AbstractHelper {
+
     /**
      * Config key 'Display Wishlist Summary'
      */
@@ -123,9 +125,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Customer\Helper\View $customerViewHelper,
         WishlistProviderInterface $wishlistProvider,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-		FormKey $fromKey,
-		CookieMetadataFactory $cookieMetadata,
-		PageCacheFormKey $pageCacheForm
+        FormKey $fromKey,
+        CookieMetadataFactory $cookieMetadata,
+        PageCacheFormKey $pageCacheForm
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
@@ -135,9 +137,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_customerViewHelper = $customerViewHelper;
         $this->wishlistProvider = $wishlistProvider;
         $this->productRepository = $productRepository;
-		$this->fromKey = $fromKey;
-		$this->cookieMetadata = $cookieMetadata;
-		$this->pageCacheForm = $pageCacheForm;
+        $this->fromKey = $fromKey;
+        $this->cookieMetadata = $cookieMetadata;
+        $this->pageCacheForm = $pageCacheForm;
         parent::__construct($context);
     }
 
@@ -146,8 +148,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return bool
      */
-    protected function _isCustomerLogIn()
-    {
+    protected function _isCustomerLogIn() {
         return $this->_customerSession->isLoggedIn();
     }
 
@@ -156,8 +157,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
-    protected function _getCurrentCustomer()
-    {
+    protected function _getCurrentCustomer() {
         return $this->getCustomer();
     }
 
@@ -167,8 +167,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return void
      */
-    public function setCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer)
-    {
+    public function setCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer) {
         $this->_currentCustomer = $customer;
     }
 
@@ -177,8 +176,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface|null
      */
-    public function getCustomer()
-    {
+    public function getCustomer() {
         if (!$this->_currentCustomer && $this->_customerSession->isLoggedIn()) {
             $this->_currentCustomer = $this->_customerSession->getCustomerDataObject();
         }
@@ -190,8 +188,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Wishlist\Model\Wishlist
      */
-    public function getWishlist()
-    {
+    public function getWishlist() {
         if ($this->_wishlist === null) {
             if ($this->_coreRegistry->registry('shared_wishlist')) {
                 $this->_wishlist = $this->_coreRegistry->registry('shared_wishlist');
@@ -208,23 +205,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return int
      */
-    public function getItemCount()
-    {
+    public function getItemCount() {
         $storedDisplayType = $this->_customerSession->getWishlistDisplayType();
         $currentDisplayType = $this->scopeConfig->getValue(
-            self::XML_PATH_WISHLIST_LINK_USE_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                self::XML_PATH_WISHLIST_LINK_USE_QTY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         $storedDisplayOutOfStockProducts = $this->_customerSession->getDisplayOutOfStockProducts();
         $currentDisplayOutOfStockProducts = $this->scopeConfig->getValue(
-            self::XML_PATH_CATALOGINVENTORY_SHOW_OUT_OF_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                self::XML_PATH_CATALOGINVENTORY_SHOW_OUT_OF_STOCK, \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (!$this->_customerSession->hasWishlistItemCount() ||
-            $currentDisplayType != $storedDisplayType ||
-            $this->_customerSession->hasDisplayOutOfStockProducts() ||
-            $currentDisplayOutOfStockProducts != $storedDisplayOutOfStockProducts
+                $currentDisplayType != $storedDisplayType ||
+                $this->_customerSession->hasDisplayOutOfStockProducts() ||
+                $currentDisplayOutOfStockProducts != $storedDisplayOutOfStockProducts
         ) {
             $this->calculate();
         }
@@ -237,8 +231,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
-    protected function _createWishlistItemCollection()
-    {
+    protected function _createWishlistItemCollection() {
         return $this->getWishlist()->getItemCollection();
     }
 
@@ -247,8 +240,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
-    public function getWishlistItemCollection()
-    {
+    public function getWishlistItemCollection() {
         if ($this->_wishlistItemCollection === null) {
             $this->_wishlistItemCollection = $this->_createWishlistItemCollection();
         }
@@ -261,8 +253,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return \Magento\Store\Model\Store
      */
-    protected function _getUrlStore($item)
-    {
+    protected function _getUrlStore($item) {
         $storeId = null;
         $product = null;
         if ($item instanceof \Magento\Wishlist\Model\Item) {
@@ -289,8 +280,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $addReferer
      * @return string
      */
-    public function getRemoveParams($item, $addReferer = false)
-    {
+    public function getRemoveParams($item, $addReferer = false) {
         $url = $this->_getUrl('wishlist/index/remove');
         $params = ['item' => $item->getWishlistItemId()];
         if ($addReferer) {
@@ -305,14 +295,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return string
      */
-    public function getConfigureUrl($item)
-    {
+    public function getConfigureUrl($item) {
         return $this->_getUrl(
-            'wishlist/index/configure',
-            [
-                'id' => $item->getWishlistItemId(),
-                'product_id' => $item->getProductId()
-            ]
+                        'wishlist/index/configure', [
+                    'id' => $item->getWishlistItemId(),
+                    'product_id' => $item->getProductId()
+                        ]
         );
     }
 
@@ -323,8 +311,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $params
      * @return string
      */
-    public function getAddParams($item, array $params = [])
-    {
+    public function getAddParams($item, array $params = []) {
         $productId = null;
         if ($item instanceof \Magento\Catalog\Model\Product) {
             $productId = $item->getEntityId();
@@ -348,8 +335,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getMoveFromCartParams($itemId)
-    {
+    public function getMoveFromCartParams($itemId) {
         $url = $this->_getUrl('wishlist/index/fromcart');
         $params = ['item' => $itemId];
         return $this->_postDataHelper->getPostData($url, $params);
@@ -362,8 +348,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return  string|false
      */
-    public function getUpdateParams($item)
-    {
+    public function getUpdateParams($item) {
         $itemId = null;
         if ($item instanceof \Magento\Catalog\Model\Product) {
             $itemId = $item->getWishlistItemId();
@@ -389,8 +374,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return  string
      */
-    public function getAddToCartUrl($item)
-    {
+    public function getAddToCartUrl($item) {
         return $this->_getUrlStore($item)->getUrl('wishlist/index/cart', $this->_getCartUrlParameters($item));
     }
 
@@ -401,15 +385,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $addReferer
      * @return string
      */
-    public function getAddToCartParams($item, $addReferer = false)
-    {
+    public function getAddToCartParams($item, $addReferer = false) {
         $params = $this->_getCartUrlParameters($item);
         if ($addReferer) {
             $params = $this->addRefererToParams($params);
         }
         return $this->_postDataHelper->getPostData(
-            $this->_getUrlStore($item)->getUrl('wishlist/index/cart'),
-            $params
+                        $this->_getUrlStore($item)->getUrl('wishlist/index/cart'), $params
         );
     }
 
@@ -419,10 +401,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $params
      * @return array
      */
-    public function addRefererToParams(array $params)
-    {
-        $params[ActionInterface::PARAM_NAME_URL_ENCODED] =
-            $this->urlEncoder->encode($this->_getRequest()->getServer('HTTP_REFERER'));
+    public function addRefererToParams(array $params) {
+        $params[ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlEncoder->encode($this->_getRequest()->getServer('HTTP_REFERER'));
         return $params;
     }
 
@@ -432,11 +412,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return  string
      */
-    public function getSharedAddToCartUrl($item)
-    {
+    public function getSharedAddToCartUrl($item) {
         return $this->_postDataHelper->getPostData(
-            $this->_getUrlStore($item)->getUrl('wishlist/shared/cart'),
-            $this->_getCartUrlParameters($item)
+                        $this->_getUrlStore($item)->getUrl('wishlist/shared/cart'), $this->_getCartUrlParameters($item)
         );
     }
 
@@ -445,10 +423,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getSharedAddAllToCartUrl()
-    {
+    public function getSharedAddAllToCartUrl() {
         return $this->_postDataHelper->getPostData(
-            $this->_storeManager->getStore()->getUrl('*/*/allcart', ['_current' => true])
+                        $this->_storeManager->getStore()->getUrl('*/*/allcart', ['_current' => true])
         );
     }
 
@@ -456,8 +433,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return array
      */
-    protected function _getCartUrlParameters($item)
-    {
+    protected function _getCartUrlParameters($item) {
         $params = [
             'item' => is_string($item) ? $item : $item->getWishlistItemId(),
         ];
@@ -473,8 +449,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int $wishlistId
      * @return string
      */
-    public function getListUrl($wishlistId = null)
-    {
+    public function getListUrl($wishlistId = null) {
         $params = [];
         if ($wishlistId) {
             $params['wishlist_id'] = $wishlistId;
@@ -487,12 +462,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return bool
      */
-    public function isAllow()
-    {
+    public function isAllow() {
         if ($this->_moduleManager->isOutputEnabled($this->_getModuleName()) && $this->scopeConfig->getValue(
-            'wishlist/general/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )
+                        'wishlist/general/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
         ) {
             return true;
         }
@@ -504,8 +477,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return bool
      */
-    public function isAllowInCart()
-    {
+    public function isAllowInCart() {
         return $this->isAllow() && $this->getCustomer();
     }
 
@@ -514,11 +486,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string|null
      */
-    public function getCustomerName()
-    {
-        return $this->getCustomer()
-            ? $this->_customerViewHelper->getCustomerName($this->getCustomer())
-            : null;
+    public function getCustomerName() {
+        return $this->getCustomer() ? $this->_customerViewHelper->getCustomerName($this->getCustomer()) : null;
     }
 
     /**
@@ -527,8 +496,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int|string|null $wishlistId
      * @return string
      */
-    public function getRssUrl($wishlistId = null)
-    {
+    public function getRssUrl($wishlistId = null) {
         $customer = $this->_getCurrentCustomer();
         if ($customer) {
             $key = $customer->getId() . ',' . $customer->getEmail();
@@ -545,8 +513,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Framework\Phrase
      */
-    public function defaultCommentString()
-    {
+    public function defaultCommentString() {
         return __('Comment');
     }
 
@@ -555,8 +522,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Framework\Phrase
      */
-    public function getDefaultWishlistName()
-    {
+    public function getDefaultWishlistName() {
         return __('Wish List');
     }
 
@@ -567,31 +533,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return $this
      */
-    public function calculate()
-    {
+    public function calculate() {
         $count = 0;
         if ($this->getCustomer()) {
             $collection = $this->getWishlistItemCollection()->setInStockFilter(true);
             if ($this->scopeConfig->getValue(
-                self::XML_PATH_WISHLIST_LINK_USE_QTY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
+                            self::XML_PATH_WISHLIST_LINK_USE_QTY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    )
             ) {
                 $count = $collection->getItemsQty();
             } else {
                 $count = $collection->getSize();
             }
             $this->_customerSession->setWishlistDisplayType(
-                $this->scopeConfig->getValue(
-                    self::XML_PATH_WISHLIST_LINK_USE_QTY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
+                    $this->scopeConfig->getValue(
+                            self::XML_PATH_WISHLIST_LINK_USE_QTY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    )
             );
             $this->_customerSession->setDisplayOutOfStockProducts(
-                $this->scopeConfig->getValue(
-                    self::XML_PATH_CATALOGINVENTORY_SHOW_OUT_OF_STOCK,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
+                    $this->scopeConfig->getValue(
+                            self::XML_PATH_CATALOGINVENTORY_SHOW_OUT_OF_STOCK, \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    )
             );
         }
         $this->_customerSession->setWishlistItemCount($count);
@@ -604,11 +566,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return bool
      */
-    public function isDisplayQty()
-    {
+    public function isDisplayQty() {
         return $this->scopeConfig->getValue(
-            self::XML_PATH_WISHLIST_LINK_USE_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        self::XML_PATH_WISHLIST_LINK_USE_QTY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -619,8 +579,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  array $additional
      * @return string
      */
-    public function getProductUrl($item, $additional = [])
-    {
+    public function getProductUrl($item, $additional = []) {
         if ($item instanceof \Magento\Catalog\Model\Product) {
             $product = $item;
         } else {
@@ -631,22 +590,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $config = $buyRequest->getSuperProductConfig();
             if ($config && !empty($config['product_id'])) {
                 $product = $this->productRepository->getById(
-                    $config['product_id'],
-                    false,
-                    $this->_storeManager->getStore()->getStoreId()
+                        $config['product_id'], false, $this->_storeManager->getStore()->getStoreId()
                 );
             }
         }
         return $product->getUrlModel()->getUrl($product, $additional);
     }
 
-	/**
+    /**
      * Refresh and set new form_key in session and cookie
      *
      * @return $this
      */
-    public function refreshFormKey()
-    {
+    public function refreshFormKey() {
         $beforeWishlistRequest = $this->_customerSession->getBeforeWishlistRequest();
 
         if ($beforeWishlistRequest !== null) {
@@ -656,10 +612,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
             $cookieMetadata = $this->cookieMetadata->createPublicCookieMetadata();
             $cookieMetadata->setDomain($this->configInterface->getCookieDomain());
-			$cookieMetadata->setPath($this->configInterface->getCookiePath());
+            $cookieMetadata->setPath($this->configInterface->getCookiePath());
             $cookieMetadata->setDuration($this->configInterface->getCookieLifetime());
 
-            $this->pageCacheForm->set($formKey,$cookieMetadata);
+            $this->pageCacheForm->set($formKey, $cookieMetadata);
 
             $beforeWishlistRequest['form_key'] = $formKey;
             $this->_customerSession->setBeforeWishlistRequest($beforeWishlistRequest);
@@ -671,4 +627,5 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         return $this;
     }
+
 }
