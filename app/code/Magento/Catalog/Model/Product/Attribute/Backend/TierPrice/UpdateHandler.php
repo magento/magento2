@@ -52,12 +52,12 @@ class UpdateHandler extends AbstractHandler
         MetadataPool $metadataPool,
         Tierprice $tierPriceResource
     ) {
+        parent::__construct($groupManagement);
+
         $this->storeManager = $storeManager;
         $this->attributeRepository = $attributeRepository;
         $this->metadataPoll = $metadataPool;
         $this->tierPriceResource = $tierPriceResource;
-
-        parent::__construct($groupManagement);
     }
 
     /**
