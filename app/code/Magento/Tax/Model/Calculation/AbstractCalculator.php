@@ -408,16 +408,19 @@ abstract class AbstractCalculator
     protected function deltaRound($price, $rate, $direction, $type = self::KEY_REGULAR_DELTA_ROUNDING, $round = true)
     {
         if ($price) {
+            if (!$round) {
+                return $price;
+            }
             $rate = (string)$rate;
             $type = $type . $direction;
+            // initialize the delta to a small number to avoid non-deterministic behavior with rounding of 0.5
+            $delta = isset($this->roundingDeltas[$type][$rate]) ?
+                $this->roundingDeltas[$type][$rate] :
+                0.000001;
+            $price += $delta;
             $roundPrice = $price;
             if ($round) {
-                // initialize the delta to a small number to avoid non-deterministic behavior with rounding of 0.5
-                $delta = isset($this->roundingDeltas[$type][$rate]) ?
-                    $this->roundingDeltas[$type][$rate] :
-                    0.000001;
-                $price += $delta;
-                $roundPrice = $this->calculationTool->round($price);
+                $roundPrice = $this->calculationTool->round($roundPrice);
             }
             $this->roundingDeltas[$type][$rate] = $price - $roundPrice;
             $price = $roundPrice;
