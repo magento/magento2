@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSimpleProductUiValidationTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Edit products"/>
+            <title value="UI elements on the simple product edit screen should be organized as expected"/>
+            <description value="Admin should be able to use simple product UI in expected manner"/>
+            <testCaseId value="MAGETWO-92835"/>
+            <group value="Catalog"/>
+            <severity value="AVERAGE"/>
+        </annotations>
+
+        <before>
+            <!-- This was copied and modified from the EndToEndB2CGuestUserTest -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!--check admin for valid Enable Status label-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToEditPage"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeCheckboxEnableProductIsChecked"/>
+
+        <!--check click on wrapping container does not trigger status change-->
+        <click selector="{{AdminProductFormSection.enableProductAttributeLabelWrapper}}" stepKey="clickEnableProductWrapper"/>
+        <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeCheckboxEnableProductIsCheckedAfterWrapperClick"/>
+
+        <!--check click on label itself does trigger status change-->
+        <click selector="{{AdminProductFormSection.enableProductAttributeLabel}}" stepKey="clickEnableProductLabel"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="dontSeeCheckboxEnableProductIsCheckedAfterLabelClick"/>
+    </test>
+</tests>

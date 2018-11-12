@@ -12,7 +12,7 @@
                data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()" />
         <label class="label" data-bind="attr: {'for': getCode()}">
             <!-- PayPal Logo -->
-            <img data-bind="attr: {src: getPaymentAcceptanceMarkSrc(), alt: $t('Acceptance Mark')}"
+            <img data-bind="attr: {src: getPaymentAcceptanceMarkSrc(), alt: $t('Acceptance Mark'), title: $t('Acceptance Mark')}"
                  class="payment-icon"/>
             <!-- PayPal Logo -->
             <span text="getTitle()"></span>
@@ -45,7 +45,7 @@
                             </span>
                 <div class="field-tooltip-content"
                      data-target="dropdown"
-                     translate="'We store you payment information securely on Braintree servers via SSL.'"></div>
+                     translate="'We store your payment information securely on Braintree servers via SSL.'"></div>
             </div>
         </div>
         <!-- /ko -->

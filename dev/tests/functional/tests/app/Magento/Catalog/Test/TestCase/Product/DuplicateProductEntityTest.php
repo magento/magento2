@@ -90,6 +90,8 @@ class DuplicateProductEntityTest extends Injectable
      */
     public function test($productType)
     {
+        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/666');
+
         // Precondition
         $product = $this->createProduct($productType);
 

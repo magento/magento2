@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Catalog product upsell items block
@@ -170,8 +169,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
      */
     public function setColumnCount($columns)
     {
-        if (intval($columns) > 0) {
-            $this->_columnCount = intval($columns);
+        if ((int) $columns > 0) {
+            $this->_columnCount = (int) $columns;
         }
         return $this;
     }
@@ -213,8 +212,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
      */
     public function setItemLimit($type, $limit)
     {
-        if (intval($limit) > 0) {
-            $this->_itemLimits[$type] = intval($limit);
+        if ((int) $limit > 0) {
+            $this->_itemLimits[$type] = (int) $limit;
         }
         return $this;
     }

@@ -28,13 +28,18 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
             ->method('getMenuModel')
             ->will($this->returnValue($menuModel));
 
+        $titleBlock = $this->createMock(\Magento\Theme\Block\Html\Title::class);
+        $titleBlock->expects($this->once())->method('setPageTitle');
+
         $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $layout->expects($this->any())
             ->method('getBlock')
-            ->with($this->equalTo('menu'))
-            ->will($this->returnValue($menuBlock));
+            ->willReturnMap([
+                ['menu', $menuBlock],
+                ['page.title', $titleBlock]
+            ]);
 
-        $this->view->expects($this->once())
+        $this->view->expects($this->any())
             ->method('getLayout')
             ->will($this->returnValue($layout));
 

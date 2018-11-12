@@ -97,6 +97,9 @@ class CreateQuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->createQuantityValidator->validate($this->entity));
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [

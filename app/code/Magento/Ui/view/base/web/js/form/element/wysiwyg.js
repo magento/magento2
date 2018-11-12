@@ -20,7 +20,6 @@ define([
     return Abstract.extend({
         defaults: {
             elementSelector: 'textarea',
-            value: '',
             $wysiwygEditorButton: '',
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
@@ -59,6 +58,14 @@ define([
             }.bind(this));
 
             return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        destroy: function () {
+            this._super();
+            wysiwyg.removeEvents(this.wysiwygId);
         },
 
         /**

@@ -1,0 +1,96 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    createEmptyCart: String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateEmptyCart") @doc(description:"Creates empty shopping cart for guest or logged in user")
+    applyCouponToCart(input: ApplyCouponToCartInput): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ApplyCouponToCart")
+    removeCouponFromCart(input: RemoveCouponFromCartInput): RemoveCouponFromCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\RemoveCouponFromCart")
+    addSimpleProductsToCart(input: AddSimpleProductsToCartInput): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
+}
+
+input ApplyCouponToCartInput {
+    cart_id: String!
+    coupon_code: String!
+}
+
+type ApplyCouponToCartOutput {
+    cart: Cart!
+}
+
+type Cart {
+    items: [CartItemInterface]
+    applied_coupon: AppliedCoupon
+}
+
+type CartAddress {
+    applied_coupon: AppliedCoupon
+}
+
+type AppliedCoupon {
+    code: String!
+}
+
+input RemoveCouponFromCartInput {
+    cart_id: String!
+}
+
+type RemoveCouponFromCartOutput {
+    cart: Cart
+}
+
+input AddSimpleProductsToCartInput {
+    cart_id: String!
+    cartItems: [SimpleProductCartItemInput!]!
+}
+
+input SimpleProductCartItemInput {
+    data: CartItemInput!
+    customizable_options:[CustomizableOptionInput!]
+}
+
+input CustomizableOptionInput {
+    id: Int!
+    value: String!
+}
+
+type AddSimpleProductsToCartOutput {
+    cart: Cart!
+}
+
+type SimpleCartItem implements CartItemInterface @doc(description: "Simple Cart Item") {
+    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
+}
+
+input CartItemInput {
+    sku: String!
+    qty: Float!
+}
+
+interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") {
+    id: String!
+    qty: Float!
+    product: ProductInterface!
+}
+
+type SelectedCustomizableOption {
+    id: Int!
+    label: String!
+    type: String!
+    is_required: Int!
+    values: [SelectedCustomizableOptionValue!]!
+    sort_order: Int!
+}
+
+type SelectedCustomizableOptionValue {
+    id: Int!
+    label: String!
+    value: String!
+    price: CartItemSelectedOptionValuePrice!
+    sort_order: Int!
+}
+
+type CartItemSelectedOptionValuePrice {
+    value: Float!
+    units: String!
+    type: PriceTypeEnum!
+}

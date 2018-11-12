@@ -173,6 +173,10 @@ class RefundOrderInventoryObserverTest extends \PHPUnit\Framework\TestCase
         $this->observer->execute($this->eventObserver);
     }
 
+    /**
+     * @param $productId
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getCreditMemoItem($productId)
     {
         $backToStock = true;

@@ -630,7 +630,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $serviceCode = null;
         } else {
             $params['10_action'] = 'Rate';
-            $serviceCode = $rowRequest->getProduct() ? $rowRequest->getProduct() : '';
+            $serviceCode = $rowRequest->getProduct() ? $rowRequest->getProduct() : null;
         }
         $serviceDescription = $serviceCode ? $this->getShipmentByCode($serviceCode) : '';
 
@@ -664,8 +664,8 @@ XMLRequest;
       <Shipper>
 XMLRequest;
 
-        if ($this->getConfigFlag('negotiated_active') && ($shipper = $this->getConfigData('shipper_number'))) {
-            $xmlParams .= "<ShipperNumber>{$shipper}</ShipperNumber>";
+        if ($this->getConfigFlag('negotiated_active') && ($shipperNumber = $this->getConfigData('shipper_number'))) {
+            $xmlParams .= "<ShipperNumber>{$shipperNumber}</ShipperNumber>";
         }
 
         if ($rowRequest->getIsReturn()) {
@@ -688,6 +688,7 @@ XMLRequest;
           <StateProvinceCode>{$shipperStateProvince}</StateProvinceCode>
       </Address>
     </Shipper>
+    
     <ShipTo>
       <Address>
           <PostalCode>{$params['19_destPostal']}</PostalCode>
@@ -703,8 +704,7 @@ XMLRequest;
         $xmlParams .= <<<XMLRequest
       </Address>
     </ShipTo>
-
-
+    
     <ShipFrom>
       <Address>
           <PostalCode>{$params['15_origPostal']}</PostalCode>
@@ -714,9 +714,13 @@ XMLRequest;
     </ShipFrom>
 
     <Package>
-      <PackagingType><Code>{$params['48_container']}</Code></PackagingType>
+      <PackagingType>
+        <Code>{$params['48_container']}</Code>
+      </PackagingType>
       <PackageWeight>
-         <UnitOfMeasurement><Code>{$rowRequest->getUnitMeasure()}</Code></UnitOfMeasurement>
+        <UnitOfMeasurement>
+          <Code>{$rowRequest->getUnitMeasure()}</Code>
+        </UnitOfMeasurement>
         <Weight>{$params['23_weight']}</Weight>
       </PackageWeight>
     </Package>
@@ -730,8 +734,8 @@ XMLRequest;
         }
 
         $xmlParams .= <<<XMLRequest
-  </Shipment>
-</RatingServiceSelectionRequest>
+      </Shipment>
+    </RatingServiceSelectionRequest>
 XMLRequest;
 
         $xmlRequest .= $xmlParams;
@@ -887,7 +891,7 @@ XMLRequest;
 
                         if ($successConversion) {
                             $costArr[$code] = $cost;
-                            $priceArr[$code] = $this->getMethodPrice(floatval($cost), $code);
+                            $priceArr[$code] = $this->getMethodPrice((float)$cost, $code);
                         }
                     }
                 }
@@ -907,10 +911,13 @@ XMLRequest;
             $error = $this->_rateErrorFactory->create();
             $error->setCarrier('ups');
             $error->setCarrierTitle($this->getConfigData('title'));
+            if ($this->getConfigData('specificerrmsg') !== '') {
+                $errorTitle = $this->getConfigData('specificerrmsg');
+            }
             if (!isset($errorTitle)) {
                 $errorTitle = __('Cannot retrieve shipping rates');
             }
-            $error->setErrorMessage($this->getConfigData('specificerrmsg'));
+            $error->setErrorMessage($errorTitle);
             $result->append($error);
         } else {
             foreach ($priceArr as $method => $price) {
@@ -1014,14 +1021,14 @@ XMLAuth;
 
         foreach ($trackings as $tracking) {
             /**
-             * RequestOption==>'activity' or '1' to request all activities
+             * RequestOption==>'1' to request all activities
              */
             $xmlRequest = <<<XMLAuth
 <?xml version="1.0" ?>
 <TrackRequest xml:lang="en-US">
     <Request>
         <RequestAction>Track</RequestAction>
-        <RequestOption>activity</RequestOption>
+        <RequestOption>1</RequestOption>
     </Request>
     <TrackingNumber>$tracking</TrackingNumber>
     <IncludeFreight>01</IncludeFreight>
@@ -1085,15 +1092,15 @@ XMLAuth;
                 if ($activityTags) {
                     $index = 1;
                     foreach ($activityTags as $activityTag) {
-                        $addArr = [];
+                        $addressArr = [];
                         if (isset($activityTag->ActivityLocation->Address->City)) {
-                            $addArr[] = (string)$activityTag->ActivityLocation->Address->City;
+                            $addressArr[] = (string)$activityTag->ActivityLocation->Address->City;
                         }
                         if (isset($activityTag->ActivityLocation->Address->StateProvinceCode)) {
-                            $addArr[] = (string)$activityTag->ActivityLocation->Address->StateProvinceCode;
+                            $addressArr[] = (string)$activityTag->ActivityLocation->Address->StateProvinceCode;
                         }
                         if (isset($activityTag->ActivityLocation->Address->CountryCode)) {
-                            $addArr[] = (string)$activityTag->ActivityLocation->Address->CountryCode;
+                            $addressArr[] = (string)$activityTag->ActivityLocation->Address->CountryCode;
                         }
                         $dateArr = [];
                         $date = (string)$activityTag->Date;
@@ -1117,8 +1124,8 @@ XMLAuth;
                             //HH:MM:SS
                             $resultArr['deliverylocation'] = (string)$activityTag->ActivityLocation->Description;
                             $resultArr['signedby'] = (string)$activityTag->ActivityLocation->SignedForByName;
-                            if ($addArr) {
-                                $resultArr['deliveryto'] = implode(', ', $addArr);
+                            if ($addressArr) {
+                                $resultArr['deliveryto'] = implode(', ', $addressArr);
                             }
                         } else {
                             $tempArr = [];
@@ -1127,8 +1134,8 @@ XMLAuth;
                             //YYYY-MM-DD
                             $tempArr['deliverytime'] = implode(':', $timeArr);
                             //HH:MM:SS
-                            if ($addArr) {
-                                $tempArr['deliverylocation'] = implode(', ', $addArr);
+                            if ($addressArr) {
+                                $tempArr['deliverylocation'] = implode(', ', $addressArr);
                             }
                             $packageProgress[] = $tempArr;
                         }

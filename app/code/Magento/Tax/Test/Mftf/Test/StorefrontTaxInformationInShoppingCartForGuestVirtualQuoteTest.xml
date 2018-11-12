@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontTaxInformationInShoppingCartForGuestVirtualQuoteTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Shopping cart taxes"/>
+            <title value="Tax information are updating/recalculating on fly in shopping cart for Guest (virtual quote)"/>
+            <description value="Tax information are updating/recalculating on fly in shopping cart for Guest (virtual quote)"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-41931"/>
+            <group value="checkout"/>
+            <group value="tax"/>
+         </annotations>
+         <before>
+             <!-- Preconditions  -->
+            <!--  Tax Rule is created based on default tax rates (Stores>Tax Rule) US-CA-*-Rate 1 = 8.2500 US-NY-*-Rate 1 = 8.3750 -->
+            <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
+            <!--  Fixed Product Tax attribute is created and added to default attribute set -->
+            <createData entity="productFPTAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
+                <requiredEntity createDataKey="createProductFPTAttribute"/>
+            </createData>
+            <!--  Tax configuration (Store>Configuration; Sales>Tax) -->
+            <createData entity="Tax_Config_CA" stepKey="taxConfigurationCA"/>
+            <!--  Virtual product is created: Price = 10 -->
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <field key="price">40.00</field>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+            <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+        </after>
+        <!--  Test Steps  -->
+        <!--  Step 1: Go to Storefront as Guest -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!--  Step 2: Add virtual product to shopping cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.name$$)}}" stepKey="amOnStorefrontVirtualProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddVirtualProductToCart">
+            <argument name="product" value="$$createVirtualProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!--  Step 3: Go to Shopping Cart -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <!--  Step 4: Open Estimate Shipping and Tax section -->
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$3.30" stepKey="checkTaxAmountCA" />
+        <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary"/>
+        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-CA-*-Rate 1 (8.25%)" stepKey="checkRateCA" />
+        <!--  Step 5: Change Data -->
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="Switzerland" stepKey="selectSwitzerlandCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Aargau" stepKey="selectAargauRegion"/>
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="1234" stepKey="inputPostCode"/>
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.00" stepKey="checkTaxAmount" />
+        <!--  Step 6: Change Data -->
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUnitedStatesCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="New York" stepKey="selectNewYorkRegion"/>
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="12345" stepKey="inputPostCode2"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary2" />
+        <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary2"/>
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$3.35" stepKey="checkTaxAmountNY" />
+        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY" />
+    </test>
+</tests>

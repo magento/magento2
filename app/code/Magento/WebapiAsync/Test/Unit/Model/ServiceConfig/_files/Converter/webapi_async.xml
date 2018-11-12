@@ -16,4 +16,8 @@
     </service>
 
     <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="get" />
+
+    <route url="async/V1/products" method="POST" alias="asyncProducts"/>
+    <route url="async/bulk/V1/cmsBlock" method="POST" alias="asyncBulkCmsBlocks"/>
+    <route url="async/V1/customers" method="POST" alias="asyncCustomers"/>
 </services>

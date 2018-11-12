@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CheckoutOrderSummarySection">
+        <element name="miniCartTab" type="button" selector=".title[role='tab']"/>
+        <element name="productItemName" type="text" selector=".product-item-name"/>
+        <element name="productItemQty" type="text" selector=".value"/>
+        <element name="productItemPrice" type="text" selector=".price"/>
+        <element name="orderNumber" type="text" selector="//div[@class='checkout-success']//a"/>
+        <element name="shippingAddress" type="textarea" selector="//*[@class='box box-address-shipping']//address"/>
+        <element name="billingAddress" type="textarea" selector="//*[@class='box box-address-billing']//address"/>
+        <element name="additionalAddress" type="text" selector=".block.block-addresses-list"/>
+    </section>
+</sections>

@@ -92,6 +92,9 @@
                 .lib-css(padding, @_nav-level0-item-padding);
                 .lib-css(text-transform, @_nav-level0-text-transform);
                 word-wrap: break-word;
+                &:hover {
+                    .lib-css(color, @navigation-level0-item__hover__color);
+                }
             }
 
             &.active {
@@ -139,6 +142,11 @@
         .submenu {
             > li {
                 word-wrap: break-word;
+                > a {
+                    &:hover {
+                        .lib-css(color, @navigation-level0-item__hover__color);
+                    }
+                }
             }
 
             &:not(:first-child) {
@@ -178,6 +186,9 @@
                             .lib-css(text-decoration, @_submenu-item-text-decoration);
                             display: block;
                             line-height: normal;
+                            &:hover {
+                                .lib-css(color, @navigation-level0-item__hover__color);
+                            }
                         }
                     }
                 }
@@ -355,6 +366,25 @@
                 overflow: visible !important;
             }
 
+            &.parent {
+                > .level-top {
+                    padding-right: 20px;
+
+                    > .ui-menu-icon {
+                        position: absolute;
+                        right: 0;
+
+                        .lib-icon-font(
+                            @icon-down,
+                            @_icon-font-size: 12px,
+                            @_icon-font-line-height: 20px,
+                            @_icon-font-text-hide: true,
+                            @_icon-font-position: after
+                        );
+                    }
+                }
+            }
+
             .submenu {
                 .lib-css(background, @_submenu-background-color);
                 .lib-css(border, @_submenu-border-width @_submenu-border-style @_submenu-border-color);
@@ -413,6 +443,26 @@
                 .submenu-reverse{
                     left: auto !important;
                     right: 100%;
+                }
+
+                li {
+                    margin: 0;
+                    &.parent {
+                        > a {
+                            > .ui-menu-icon {
+                                position: absolute;
+                                right: 3px;
+
+                                .lib-icon-font(
+                                    @icon-next,
+                                    @_icon-font-size: 12px,
+                                    @_icon-font-line-height: 20px,
+                                    @_icon-font-text-hide: true,
+                                    @_icon-font-position: after
+                                );
+                            }
+                        }
+                    }
                 }
             }
 

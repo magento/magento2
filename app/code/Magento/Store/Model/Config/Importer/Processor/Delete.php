@@ -168,10 +168,7 @@ class Delete implements ProcessorInterface
 
         foreach ($items as $storeCode) {
             $store = $this->storeRepository->get($storeCode);
-            $store->getResource()->delete($store);
-            $store->getResource()->addCommitCallback(function () use ($store) {
-                $this->eventManager->dispatch('store_delete', ['store' => $store]);
-            });
+            $store->delete();
         }
     }
 

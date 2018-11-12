@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="BlockPageActionsSection">
+        <element name="addNewBlock" type="button" selector="#add" timeout="30"/>
+        <element name="select" type="button" selector="//div[text()='{{var1}}']//parent::td//following-sibling::td//button[text()='Select']" parameterized="true"/>
+        <element name="edit" type="button" selector="//div[text()='{{var1}}']//parent::td//following-sibling::td//a[text()='Edit']" parameterized="true"/>
+        <element name="idColumn" type="button" selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]"/>
+        <element name="clearAll" type="button" selector="//div[@class='admin__data-grid-header']//button[contains(text(), 'Clear all')]"/>
+        <element name="activeFilters" type="button" selector="//div[@class='admin__data-grid-header']//span[contains(text(), 'Active filters:')]" />
+        <element name="FilterBtn" type="input" selector="//button[text()='Filters']"/>
+        <element name="URLKey" type="input" selector="//div[@class='admin__form-field-control']/input[@name='identifier']"/>
+        <element name="ApplyFiltersBtn" type="button" selector="//span[text()='Apply Filters']"/>
+    </section>
+</sections>

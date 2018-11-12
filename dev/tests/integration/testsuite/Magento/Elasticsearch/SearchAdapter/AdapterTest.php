@@ -314,7 +314,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      */
     public function testAdvancedSearchCompositeProductWithOutOfStockOption()
     {
-        $this->markTestSkipped('Filter of composite products with Out of Stock child not supported till MAGETWO-59305');
         parent::testAdvancedSearchCompositeProductWithOutOfStockOption();
     }
 
@@ -326,7 +325,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      */
     public function testAdvancedSearchCompositeProductWithDisabledChild()
     {
-        $this->markTestSkipped('Filter of composite products with Out of Stock child not supported till MAGETWO-59305');
         // Reindex Elastic Search since date_attribute data fixture added new fields to be indexed
         $this->reindexAll();
         parent::testAdvancedSearchCompositeProductWithDisabledChild();
@@ -357,5 +355,18 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
         );
         $indexer->load('catalogsearch_fulltext');
         $indexer->reindexAll();
+    }
+
+    /**
+     * Date data provider
+     *
+     * @return array
+     */
+    public function dateDataProvider()
+    {
+        return [
+            [['from' => '1999-12-31T00:00:00Z', 'to' => '2000-01-01T00:00:00Z'], 1],
+            [['from' => '2000-02-01T00:00:00Z', 'to' => ''], 0],
+        ];
     }
 }

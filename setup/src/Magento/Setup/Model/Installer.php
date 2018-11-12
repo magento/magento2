@@ -56,8 +56,8 @@ class Installer
     /**#@+
      * Parameters for enabling/disabling modules
      */
-    const ENABLE_MODULES = 'enable_modules';
-    const DISABLE_MODULES = 'disable_modules';
+    const ENABLE_MODULES = 'enable-modules';
+    const DISABLE_MODULES = 'disable-modules';
     /**#@- */
 
     /**#@+
@@ -267,8 +267,7 @@ class Installer
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      * @param ComponentRegistrar $componentRegistrar
      * @param PhpReadinessCheck $phpReadinessCheck
-     *
-     * @param DeclarationInstaller|null $declarationInstaller
+     * @throws \Magento\Setup\Exception
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -346,7 +345,9 @@ class Installer
                 [$request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX]],
             ];
         }
-        $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
+        if ($this->isAdminDataSet($request)) {
+            $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
+        }
 
         if (!$this->isDryRun($request)) {
             $script[] = ['Caches clearing:', 'cleanCaches', [$request]];
@@ -410,7 +411,7 @@ class Installer
     }
 
     /**
-     * Creates modules deployment configuration segment
+     * Create modules deployment configuration segment
      *
      * @param \ArrayObject|array $request
      * @param bool $dryRun
@@ -423,8 +424,8 @@ class Installer
         $deploymentConfig = $this->deploymentConfigReader->load();
         $currentModules = isset($deploymentConfig[ConfigOptionsListConstants::KEY_MODULES])
             ? $deploymentConfig[ConfigOptionsListConstants::KEY_MODULES] : [];
-        $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES);
-        $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);
+        $enable = $this->readListOfModules($all, $request, InstallCommand::INPUT_KEY_ENABLE_MODULES);
+        $disable = $this->readListOfModules($all, $request, InstallCommand::INPUT_KEY_DISABLE_MODULES);
         $result = [];
         foreach ($all as $module) {
             if ((isset($currentModules[$module]) && !$currentModules[$module])) {
@@ -815,6 +816,11 @@ class Installer
      */
     public function installSchema(array $request)
     {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        //For backward compatibility in install and upgrade scripts with enabled parallelization.
+        $registry->register('setup-mode-enabled', true);
+
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->setupFactory->create($this->context->getResources());
@@ -831,6 +837,8 @@ class Installer
             $schemaListener->setResource('default');
             $this->schemaPersistor->persist($schemaListener);
         }
+
+        $registry->unregister('setup-mode-enabled');
     }
 
     /**
@@ -853,12 +861,19 @@ class Installer
      */
     public function installDataFixtures(array $request = [])
     {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        //For backward compatibility in install and upgrade scripts with enabled parallelization.
+        $registry->register('setup-mode-enabled', true);
+
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
         $this->handleDBSchemaData($setup, 'data', $request);
+
+        $registry->unregister('setup-mode-enabled');
     }
 
     /**
@@ -890,12 +905,13 @@ class Installer
     }
 
     /**
-     * Handles database schema and data (install/upgrade/backup/uninstall etc)
+     * Handle database schema and data (install/upgrade/backup/uninstall etc)
      *
-     * @param SchemaSetupInterface | ModuleDataSetupInterface $setup
+     * @param SchemaSetupInterface|ModuleDataSetupInterface $setup
      * @param string $type
      * @param array $request
      * @return void
+     * @throws \Magento\Framework\Setup\Exception
      * @throws \Magento\Setup\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -1013,6 +1029,8 @@ class Installer
     }
 
     /**
+     * Assert DbConfigExists
+     *
      * @return void
      * @throws \Magento\Setup\Exception
      */
@@ -1068,7 +1086,8 @@ class Installer
     }
 
     /**
-     * Creates data handler
+     * Create data handler
+     *
      * @param string $className
      * @param string $interfaceName
      * @return mixed|null
@@ -1087,7 +1106,7 @@ class Installer
     }
 
     /**
-     * Creates store order increment prefix configuration
+     * Create store order increment prefix configuration
      *
      * @param string $orderIncrementPrefix Value to use for order increment prefix
      * @return void
@@ -1131,7 +1150,7 @@ class Installer
     }
 
     /**
-     * Creates admin account
+     * Create admin account
      *
      * @param \ArrayObject|array $data
      * @return void
@@ -1456,5 +1475,29 @@ class Installer
         foreach ($messages as $message) {
             $this->log->log($message);
         }
+    }
+
+    /**
+     * Checks that admin data is not empty in request array
+     *
+     * @param \ArrayObject|array $request
+     * @return bool
+     */
+    private function isAdminDataSet($request)
+    {
+        $adminData = array_filter($request, function ($value, $key) {
+            return in_array(
+                $key,
+                [
+                    AdminAccount::KEY_EMAIL,
+                    AdminAccount::KEY_FIRST_NAME,
+                    AdminAccount::KEY_LAST_NAME,
+                    AdminAccount::KEY_USER,
+                    AdminAccount::KEY_PASSWORD,
+                ]
+            ) && $value !== null;
+        }, ARRAY_FILTER_USE_BOTH);
+
+        return !empty($adminData);
     }
 }

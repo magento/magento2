@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+
+    <actionGroup name="CreateNewOrderActionGroup">
+        <click stepKey="createNewOrder" selector="{{NewOrderSection.createNewOrder}}"/>
+        <waitForPageLoad stepKey="waitForCustomersList" time="3"/>
+        <click stepKey="chooseCustomer" selector="{{NewOrderSection.customer}}"/>
+        <waitForPageLoad stepKey="waitForOrderPage" time="3"/>
+        <click stepKey="addProducts" selector="{{NewOrderSection.addProducts}}"/>
+        <waitForPageLoad stepKey="waitForProducts" time="3"/>
+        <click stepKey="chooseProducts" selector="{{NewOrderSection.chooseProduct}}"/>
+        <waitForPageLoad stepKey="waitForProductChoose" time="3"/>
+        <click stepKey="addSelectedProduct" selector="{{NewOrderSection.addSelectedProduct}}"/>
+        <waitForAjaxLoad stepKey="waitForChoose" time="3"/>
+        <click stepKey="openAddresses" selector="{{NewOrderSection.openAddresses}}"/>
+        <click stepKey="chooseAddress" selector="{{NewOrderSection.chooseAddress}}"/>
+        <fillField stepKey="fillState" selector="{{NewOrderSection.state}}" userInput="Yerevan"/>
+        <scrollTo stepKey="scrollTo" selector="#order-methods"/>
+        <waitForPageLoad stepKey="waitForMethods" time="3"/>
+        <click stepKey="startJSMethodExecution" selector="{{NewOrderSection.openShippingMethods}}"/>
+        <waitForPageLoad stepKey="waitForJSMethodExecution" time="3"/>
+        <click stepKey="openShippingMethods" selector="{{NewOrderSection.openShippingMethods}}"/>
+        <waitForPageLoad stepKey="waitForShippingMethods" time="3"/>
+        <click stepKey="chooseShippingMethods" selector="{{NewOrderSection.shippingMethod}}"/>
+        <waitForPageLoad stepKey="waitForShippingMethodChoose" time="4"/>
+        <click stepKey="chooseBraintree" selector="{{NewOrderSection.creditCardBraintree}}"/>
+        <waitForPageLoad stepKey="waitForBraintreeConfigs" time="5"/>
+        <click stepKey="openCardTypes" selector="{{NewOrderSection.openCardTypes}}"/>
+        <waitForPageLoad stepKey="waitForCardTypes" time="3"/>
+        <click stepKey="chooseCardType" selector="{{NewOrderSection.masterCard}}"/>
+        <waitForPageLoad stepKey="waitForCardSelected" time="3"/>
+
+        <switchToIFrame stepKey="switchToCardNumber" selector="{{NewOrderSection.cardFrame}}"/>
+        <fillField stepKey="fillCardNumber" selector="{{NewOrderSection.creditCardNumber}}" userInput="{{PaymentAndShippingInfo.cardNumber}}"/>
+        <waitForPageLoad stepKey="waitForFillCardNumber" time="1"/>
+        <switchToIFrame stepKey="switchBackFromCard"/>
+
+        <switchToIFrame stepKey="switchToExpirationMonth" selector="{{NewOrderSection.monthFrame}}"/>
+        <fillField stepKey="fillMonth" selector="{{NewOrderSection.expirationMonth}}" userInput="{{PaymentAndShippingInfo.month}}"/>
+        <waitForPageLoad stepKey="waitForFillMonth" time="1"/>
+        <switchToIFrame stepKey="switchBackFromMonth"/>
+
+        <switchToIFrame stepKey="switchToExpirationYear" selector="{{NewOrderSection.yearFrame}}"/>
+        <fillField stepKey="fillYear" selector="{{NewOrderSection.expirationYear}}" userInput="{{PaymentAndShippingInfo.year}}"/>
+        <waitForPageLoad stepKey="waitForFillYear" time="1"/>
+        <switchToIFrame stepKey="switchBackFromYear"/>
+
+        <switchToIFrame stepKey="switchToCVV" selector="{{NewOrderSection.cvvFrame}}"/>
+        <fillField stepKey="fillCVV" selector="{{NewOrderSection.cvv}}" userInput="{{PaymentAndShippingInfo.cvv}}"/>
+        <wait stepKey="waitForFillCVV" time="1"/>
+        <switchToIFrame stepKey="switchBackFromCVV"/>
+
+        <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
+        <waitForPageLoad stepKey="waitForSaveConfig" time="5"/>
+        <waitForElementVisible selector="{{NewOrderSection.successMessage}}" stepKey="waitForSuccessMessage" time="1"/>
+
+    </actionGroup>
+
+</actionGroups>

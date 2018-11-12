@@ -7,8 +7,10 @@
 namespace Magento\Fedex\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Webapi\Soap\ClientFactory;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
@@ -17,7 +19,6 @@ use Magento\Shipping\Model\Rate\Result;
 /**
  * Fedex shipping implementation
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -144,6 +145,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     private $serializer;
 
     /**
+     * @var ClientFactory
+     */
+    private $soapClientFactory;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -164,7 +170,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param array $data
      * @param Json|null $serializer
-     *
+     * @param ClientFactory|null $soapClientFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -187,7 +193,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Framework\Module\Dir\Reader $configReader,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+        ClientFactory $soapClientFactory = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -214,6 +221,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->_rateServiceWsdl = $wsdlBasePath . 'RateService_v10.wsdl';
         $this->_trackServiceWsdl = $wsdlBasePath . 'TrackService_v' . self::$trackServiceVersion . '.wsdl';
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->soapClientFactory = $soapClientFactory ?: ObjectManager::getInstance()->get(ClientFactory::class);
     }
 
     /**
@@ -225,7 +233,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function _createSoapClient($wsdl, $trace = false)
     {
-        $client = new \SoapClient($wsdl, ['trace' => $trace]);
+        $client = $this->soapClientFactory->create($wsdl, ['trace' => $trace]);
         $client->__setLocation(
             $this->getConfigFlag(
                 'sandbox_mode'
@@ -1263,7 +1271,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $countriesOfManufacture[] = $product->getCountryOfManufacture();
         }
 
-        $paymentType = $request->getIsReturn() ? 'RECIPIENT' : 'SENDER';
+        $paymentType = $this->getPaymentType($request);
         $optionType = $request->getShippingMethod() == self::RATE_REQUEST_SMARTPOST
             ? 'SERVICE_DEFAULT' : $packageParams->getDeliveryConfirmation();
         $requestClient = [
@@ -1748,5 +1756,19 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         return false;
+    }
+
+    /**
+     * Defines payment type by request.
+     * Two values are available: RECIPIENT or SENDER.
+     *
+     * @param DataObject $request
+     * @return string
+     */
+    private function getPaymentType(DataObject $request): string
+    {
+        return $request->getIsReturn() && $request->getShippingMethod() !== self::RATE_REQUEST_SMARTPOST
+            ? 'RECIPIENT'
+            : 'SENDER';
     }
 }

@@ -52,6 +52,9 @@ class SerializedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->serializedConfig->getValue());
     }
 
+    /**
+     * @return array
+     */
     public function afterLoadDataProvider()
     {
         return [
@@ -87,6 +90,9 @@ class SerializedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->serializedConfig->getValue());
     }
 
+    /**
+     * @return array
+     */
     public function beforeSaveDataProvider()
     {
         return [

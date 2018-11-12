@@ -154,13 +154,13 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     /**
      * Get product URL
      *
-     * @param \Magento\Review\Model\Review $review
+     * @param \Magento\Catalog\Model\Product $product
      * @return string
      * @since 100.2.0
      */
-    public function getProductUrl($review)
+    public function getProductUrl($product)
     {
-        return $this->getUrl('catalog/product/view', ['id' => $review->getEntityPkValue()]);
+        return $product->getProductUrl();
     }
 
     /**

@@ -53,8 +53,7 @@ class ProductViewTest extends GraphQlAbstract
                available_sort_by
                level
             }
-            image
-            image_label
+            image { url, label }
             meta_description
             meta_keyword
             meta_title
@@ -205,14 +204,12 @@ class ProductViewTest extends GraphQlAbstract
             }
             short_description
             sku
-            small_image
-            small_image_label
+            small_image{ url, label }
+            thumbnail { url, label }
             special_from_date
             special_price
             special_to_date
-            swatch_image
-            thumbnail
-            thumbnail_label
+            swatch_image            
             tier_price
             tier_prices
             {
@@ -285,7 +282,6 @@ QUERY;
      */
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
-        $this->markTestSkipped("Skipped until ticket MAGETWO-90021 is resolved.");
         $productSku = 'simple';
 
         $query = <<<QUERY
@@ -303,8 +299,7 @@ QUERY;
             description
             gift_message_available
             id
-            image
-            image_label
+            image {url, label}
             meta_description
             meta_keyword
             meta_title
@@ -453,14 +448,12 @@ QUERY;
             }
             short_description
             sku
-            small_image
-            small_image_label
+            small_image { url, label }
             special_from_date
             special_price
             special_to_date
             swatch_image
-            thumbnail
-            thumbnail_label
+            thumbnail { url, label }
             tier_price
             tier_prices
             {
@@ -484,7 +477,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        
+
         /**
          * @var ProductRepositoryInterface $productRepository
          */
@@ -956,30 +949,5 @@ QUERY;
                 break;
         }
         return $eavAttributeCode;
-    }
-
-    /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields($actualResponse, $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            self::assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            self::assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
-            );
-        }
     }
 }

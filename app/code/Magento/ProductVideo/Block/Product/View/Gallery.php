@@ -9,9 +9,8 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ProductVideo\Block\Product\View;
 
-use Magento\Catalog\Model\Product\Image\UrlBuilder;
+namespace Magento\ProductVideo\Block\Product\View;
 
 /**
  * @api
@@ -93,6 +92,6 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
      */
     public function getOptionsMediaGalleryDataJson()
     {
-        return  $this->jsonEncoder->encode([]);
+        return $this->jsonEncoder->encode([]);
     }
 }

@@ -59,13 +59,16 @@ abstract class Reorder extends Action\Action
                 $cart->addOrderItem($item);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 if ($this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getUseNotice(true)) {
-                    $this->messageManager->addNotice($e->getMessage());
+                    $this->messageManager->addNoticeMessage($e->getMessage());
                 } else {
-                    $this->messageManager->addError($e->getMessage());
+                    $this->messageManager->addErrorMessage($e->getMessage());
                 }
                 return $resultRedirect->setPath('*/*/history');
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('We can\'t add this item to your shopping cart right now.'));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('We can\'t add this item to your shopping cart right now.')
+                );
                 return $resultRedirect->setPath('checkout/cart');
             }
         }

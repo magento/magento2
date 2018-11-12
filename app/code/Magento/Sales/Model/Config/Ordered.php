@@ -167,13 +167,8 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
                     if (!isset($a['sort_order']) || !isset($b['sort_order'])) {
                         return 0;
                     }
-                    if ($a['sort_order'] > $b['sort_order']) {
-                        return 1;
-                    } elseif ($a['sort_order'] < $b['sort_order']) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
+
+                    return $a['sort_order'] <=> $b['sort_order'];
                 }
             );
         }

@@ -77,6 +77,7 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
      *
      * @param AbstractCollection $collection
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Redirect
+     * @throws \Exception
      */
     protected function massAction(AbstractCollection $collection)
     {
@@ -84,12 +85,16 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
             ->create()
             ->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$shipmentsCollection->getSize()) {
-            $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
+            $this->messageManager->addErrorMessage(__('There are no printable documents related to selected orders.'));
             return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
+
+        $pdf = $this->pdfShipment->getPdf($shipmentsCollection->getItems());
+        $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
+
         return $this->fileFactory->create(
             sprintf('packingslip%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
-            $this->pdfShipment->getPdf($shipmentsCollection->getItems())->render(),
+            $fileContent,
             DirectoryList::VAR_DIR,
             'application/pdf'
         );

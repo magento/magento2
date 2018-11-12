@@ -29,6 +29,9 @@ class SetupInfoTest extends \PHPUnit\Framework\TestCase
         new SetupInfo($server);
     }
 
+    /**
+     * @return array
+     */
     public function constructorExceptionsDataProvider()
     {
         $docRootErr = 'DOCUMENT_ROOT variable is unavailable.';

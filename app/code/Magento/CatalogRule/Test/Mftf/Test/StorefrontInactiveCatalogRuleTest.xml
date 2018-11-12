@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontInactiveCatalogRuleTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Customer view catalog price rule"/>
+            <title value="Customer should not see the catalog price rule promotion if status is inactive"/>
+            <description value="Customer should not see the catalog price rule promotion if status is inactive"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-79"/>
+            <group value="CatalogRule"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI"/>
+            <actionGroup stepKey="selectLoggedInCustomers" ref="selectNotLoggedInCustomerGroup"/>
+            <selectOption selector="{{AdminNewCatalogPriceRule.status}}" userInput="Inactive" stepKey="setInactive"/>
+            <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
+            <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="seeSuccess"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <amOnPage url="admin/catalog_rule/promo_catalog/" stepKey="goToPriceRulePage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="logout"/>
+        </after>
+
+        <!-- Verify price is not discounted on category page -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategory"/>
+        <waitForPageLoad stepKey="waitForCategory"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" userInput="$$createProduct.price$$" stepKey="seePrice1"/>
+
+        <!-- Verify price is not discounted on the product page -->
+        <amOnPage url="$$createProduct.sku$$.html" stepKey="goToProduct"/>
+        <waitForPageLoad stepKey="waitForProduct"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createProduct.price$$" stepKey="seePrice2"/>
+
+        <!-- Verify price is not discounted in the cart -->
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
+        <waitForPageLoad stepKey="waitForCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForCheckout"/>
+        <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$$createProduct.price$$" stepKey="seePrice3"/>
+    </test>
+</tests>

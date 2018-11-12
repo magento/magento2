@@ -11,12 +11,14 @@ namespace Magento\Framework\Mail\Template;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\MessageInterface;
+use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransportBuilder
 {
@@ -89,24 +91,34 @@ class TransportBuilder
     protected $mailTransportFactory;
 
     /**
+     * @var \Magento\Framework\Mail\MessageInterfaceFactory
+     */
+    private $messageFactory;
+
+    /**
      * @param FactoryInterface $templateFactory
      * @param MessageInterface $message
      * @param SenderResolverInterface $senderResolver
      * @param ObjectManagerInterface $objectManager
      * @param TransportInterfaceFactory $mailTransportFactory
+     * @param MessageInterfaceFactory $messageFactory
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         FactoryInterface $templateFactory,
         MessageInterface $message,
         SenderResolverInterface $senderResolver,
         ObjectManagerInterface $objectManager,
-        TransportInterfaceFactory $mailTransportFactory
+        TransportInterfaceFactory $mailTransportFactory,
+        MessageInterfaceFactory $messageFactory = null
     ) {
         $this->templateFactory = $templateFactory;
-        $this->message = $message;
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
         $this->mailTransportFactory = $mailTransportFactory;
+        $this->messageFactory = $messageFactory ?: $this->objectManager->get(MessageInterfaceFactory::class);
+        $this->message = $this->messageFactory->create();
     }
 
     /**
@@ -242,7 +254,7 @@ class TransportBuilder
      */
     protected function reset()
     {
-        $this->message = $this->objectManager->create(\Magento\Framework\Mail\Message::class);
+        $this->message = $this->messageFactory->create();
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;

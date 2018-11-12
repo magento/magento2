@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+
+    <!--Go to all users-->
+    <actionGroup name="GoToAllUsers">
+        <click selector="{{AdminCreateUserSection.system}}" stepKey="clickOnSystemIcon"/>
+        <waitForPageLoad stepKey="waitForSystemsPageToOpen"/>
+        <click selector="{{AdminCreateUserSection.allUsers}}" stepKey="clickToSelectUserRoles"/>
+        <waitForPageLoad stepKey="waitForUserRolesPageToOpen"/>
+    </actionGroup>
+
+    <!--Create new user with specified role-->
+    <actionGroup name="AdminCreateUserAction">
+        <click selector="{{AdminCreateUserSection.create}}" stepKey="clickToCreateNewUser"/>
+        <waitForPageLoad stepKey="waitForNewUserPageLoad" time="10"/>
+        <fillField selector="{{AdminCreateUserSection.usernameTextField}}" userInput="{{NewAdmin.username}}" stepKey="enterUserName" />
+        <fillField selector="{{AdminCreateUserSection.firstNameTextField}}" userInput="{{NewAdmin.firstName}}" stepKey="enterFirstName" />
+        <fillField selector="{{AdminCreateUserSection.lastNameTextField}}" userInput="{{NewAdmin.lastName}}" stepKey="enterLastName" />
+        <fillField selector="{{AdminCreateUserSection.emailTextField}}" userInput="{{NewAdmin.email}}" stepKey="enterEmail" />
+        <fillField selector="{{AdminCreateUserSection.passwordTextField}}" userInput="{{NewAdmin.password}}" stepKey="enterPassword" />
+        <fillField selector="{{AdminCreateUserSection.pwConfirmationTextField}}" userInput="{{NewAdmin.password}}" stepKey="confirmPassword" />
+        <fillField selector="{{AdminCreateUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword" />
+        <scrollToTopOfPage stepKey="scrollToTopOfPage" />
+        <click selector="{{AdminCreateUserSection.userRoleTab}}" stepKey="clickUserRole" />
+        <waitForAjaxLoad stepKey="waitForRoles" time="5"/>
+        <fillField selector="{{AdminCreateRoleSection.roleNameFilterTextField}}" userInput="{{role.name}}" stepKey="filterRole" />
+        <click selector="{{AdminCreateRoleSection.searchButton}}" stepKey="clickSearch" />
+        <waitForPageLoad stepKey="waitForSearch" time="10"/>
+        <click selector="{{AdminCreateRoleSection.searchResultFirstRow}}" stepKey="selectRole" />
+        <click selector="{{AdminCreateUserSection.saveButton}}" stepKey="clickSaveUser" />
+        <waitForPageLoad stepKey="waitForSaveUser" time="10"/>
+        <see userInput="You saved the user." stepKey="seeSuccessMessage" />
+    </actionGroup>
+
+
+    <!--Delete User-->
+    <actionGroup name="AdminDeleteUserActionGroup">
+
+        <click stepKey="clickOnUser" selector="{{AdminDeleteUserSection.theUser}}"/>
+        <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click stepKey="clickToDeleteUser" selector="{{AdminDeleteUserSection.delete}}"/>
+        <waitForPageLoad stepKey="waitForDeletePopupOpen" time="5"/>
+        <click stepKey="clickToConfirm" selector="{{AdminDeleteUserSection.confirm}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="10"/>
+        <see userInput="You deleted the user." stepKey="seeSuccessMessage" />
+    </actionGroup>
+
+</actionGroups>

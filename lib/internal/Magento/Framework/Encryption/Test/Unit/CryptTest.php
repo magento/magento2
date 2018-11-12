@@ -26,6 +26,10 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         $this->_key = substr(__CLASS__, -32, 32);
     }
 
+    /**
+     * @param $length
+     * @return bool|string
+     */
     protected function _getRandomString($length)
     {
         $result = '';
@@ -44,18 +48,31 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @param $cipherName
+     * @param $modeName
+     * @return mixed
+     */
     protected function _getKeySize($cipherName, $modeName)
     {
         $this->_requireCipherInfo();
         return self::$_cipherInfo[$cipherName][$modeName]['key_size'];
     }
 
+    /**
+     * @param $cipherName
+     * @param $modeName
+     * @return mixed
+     */
     protected function _getInitVectorSize($cipherName, $modeName)
     {
         $this->_requireCipherInfo();
         return self::$_cipherInfo[$cipherName][$modeName]['iv_size'];
     }
 
+    /**
+     * @return array
+     */
     public function getCipherModeCombinations(): array
     {
         $result = [];
@@ -83,8 +100,12 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($initVector, $crypt->getInitVector());
     }
 
+    /**
+     * @return array
+     */
     public function getConstructorExceptionData()
     {
+        $key = substr(__CLASS__, -32, 32);
         $result = [];
         foreach (self::SUPPORTED_CIPHER_MODE_COMBINATIONS as $cipher => $modes) {
             /** @var array $modes */
@@ -94,8 +115,8 @@ class CryptTest extends \PHPUnit\Framework\TestCase
                 $tooLongInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) + 1);
                 $result['tooLongKey-' . $cipher . '-' . $mode . '-false'] = [$tooLongKey, $cipher, $mode, false];
                 $keyPrefix = 'key-' . $cipher . '-' . $mode;
-                $result[$keyPrefix . '-tooShortInitVector'] = [$this->_key, $cipher, $mode, $tooShortInitVector];
-                $result[$keyPrefix . '-tooLongInitVector'] = [$this->_key, $cipher, $mode, $tooLongInitVector];
+                $result[$keyPrefix . '-tooShortInitVector'] = [$key, $cipher, $mode, $tooShortInitVector];
+                $result[$keyPrefix . '-tooLongInitVector'] = [$key, $cipher, $mode, $tooLongInitVector];
             }
         }
         return $result;
@@ -120,6 +141,9 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($cryptExpected->getInitVector(), $cryptActual->getInitVector());
     }
 
+    /**
+     * @return mixed
+     */
     public function getCryptData()
     {
         $fixturesFilename = __DIR__ . '/Crypt/_files/_crypt_fixtures.php';

@@ -135,7 +135,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         );
         /** @var \Magento\Framework\Filesystem\DriverPool $result */
         $this->assertInstanceOf(\Magento\Framework\Filesystem\DriverPool::class, $result);
-        $this->assertInstanceof($driverClass, $result->getDriver('custom'));
+        $this->assertInstanceOf($driverClass, $result->getDriver('custom'));
     }
 
     public function testGetParams()
@@ -189,6 +189,9 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($isDeveloper, $bootstrap->isDeveloperMode());
     }
 
+    /**
+     * @return array
+     */
     public function testIsDeveloperModeDataProvider()
     {
         return [

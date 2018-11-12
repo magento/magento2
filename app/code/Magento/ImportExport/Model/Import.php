@@ -78,6 +78,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     const FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR = '_import_multiple_value_separator';
 
     /**
+     * Import empty attribute value constant.
+     */
+    const FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '_import_empty_attribute_value_constant';
+
+    /**
      * Allow multiple values wrapping in double quotes for additional attributes.
      */
     const FIELDS_ENCLOSURE = 'fields_enclosure';
@@ -88,6 +93,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * default delimiter for several values in one cell as default for FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR
      */
     const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
+
+    /**
+     * default empty attribute value constant
+     */
+    const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';
 
     /**#@+
      * Import constants
@@ -171,7 +181,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param Source\Import\Behavior\Factory $behaviorFactory
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param History $importHistoryModel
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $localeDate
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -433,6 +443,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
+     * Processing of import.
+     *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -452,6 +464,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
+     * Get error aggregator instance.
+     *
      * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -575,6 +589,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $this->addLogComment($messages);
 
         $result = !$errorAggregator->getErrorsCount();
+        $validationStrategy = $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY);
+        if ($validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS) {
+            $result = true;
+        }
+
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         }
@@ -700,9 +719,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Create history report
      *
+     * @param string $sourceFileRelative
      * @param string $entity
      * @param string $extension
-     * @param string $sourceFileRelative
      * @param array $result
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontFilterByImageSwatchTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="View swatches in product listing"/>
+            <title value="Customers can filter products using image swatches"/>
+            <description value="Customers can filter products using image swatches"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3461"/>
+            <group value="Swatches"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Begin creating a new product attribute -->
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
+
+        <!-- Select visual swatch -->
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_visual" stepKey="selectInputType"/>
+
+        <!-- This hack is because the same <input type="file"> is re-purposed used for all uploads. -->
+        <executeJS function="HTMLInputElement.prototype.click = function() { if(this.type !== 'file') HTMLElement.prototype.click.call(this); };" stepKey="disableClick"/>
+
+        <!-- Set swatch #1 image using file upload -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch1">
+            <argument name="index" value="0"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile('1')}}" stepKey="clickUploadFile1"/>
+        <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1"/>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="adobe-thumb" stepKey="fillAdmin1"/>
+
+        <!-- Set swatch #2 image using the file upload -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch2">
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile('2')}}" stepKey="clickUploadFile2"/>
+        <attachFile selector="input[name='datafile']" userInput="adobe-small.jpg" stepKey="attachFile2"/>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="adobe-small" stepKey="fillAdmin2"/>
+
+        <!-- Set scope to global -->
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
+
+        <!-- Set Use In Layered Navigation -->
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="1" stepKey="selectUseInLayeredNavigation"/>
+
+        <!-- Save the new attribute -->
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit1"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
+
+        <!-- Create a configurable product to verify the storefront with -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+
+        <!-- Create configurations based off the visual swatch we created earlier -->
+        <actionGroup ref="createConfigurationsForAttribute" stepKey="createConfigurations">
+            <argument name="attributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+
+        <!-- Go to the category page -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPage"/>
+
+        <!-- Verify swatches are present in the layered navigation -->
+        <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeInLayeredNav"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandAttribute"/>
+        <grabAttributeFrom selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" userInput="style" stepKey="grabSwatch1"/>
+        <grabAttributeFrom selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" userInput="style" stepKey="grabSwatch2"/>
+        <assertContains stepKey="assertSwatch1">
+            <expectedResult type="string">adobe-thumb</expectedResult>
+            <actualResult type="string">{$grabSwatch1}</actualResult>
+        </assertContains>
+        <assertContains stepKey="assertSwatch2">
+            <expectedResult type="string">adobe-small</expectedResult>
+            <actualResult type="string">{$grabSwatch2}</actualResult>
+        </assertContains>
+
+        <!-- Click a swatch and expect to see the configurable product, not see the simple product -->
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" stepKey="filterBySwatch1"/>
+        <see selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="{{BaseConfigurableProduct.name}}" stepKey="seeConfigurableProduct"/>
+        <dontSee selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="$$createSimpleProduct.name$$" stepKey="dontSeeSimpleProduct"/>
+    </test>
+</tests>
