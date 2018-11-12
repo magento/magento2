@@ -342,6 +342,8 @@ class Eav extends AbstractModifier
             }
 
             $attributeContainer = $this->addContainerChildren($attributeContainer, $attribute, $groupCode, $sortOrder);
+            $attributeContainer['arguments']['data']['config']['dataScope'] =
+                static::CONTAINER_PREFIX . $attribute->getAttributeCode();
 
             $meta[static::CONTAINER_PREFIX . $attribute->getAttributeCode()] = $attributeContainer;
         }
