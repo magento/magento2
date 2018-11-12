@@ -35,7 +35,6 @@ define([
     var checkoutConfig = window.checkoutConfig,
         validators = [],
         observedElements = [],
-        postcodeElement = null,
         postcodeElementName = 'postcode';
 
     validators.push(defaultValidator);
@@ -79,7 +78,11 @@ define([
             }
 
             $.each(elements, function (index, field) {
-                uiRegistry.async(formPath + '.' + field)(self.doElementBinding.bind(self));
+                var elementBinding = self.doElementBinding.bind(self),
+                    fullPath = formPath + '.' + field,
+                    func = uiRegistry.async(fullPath);
+
+                func(elementBinding);
             });
         },
 
@@ -101,7 +104,6 @@ define([
 
             if (element.index === postcodeElementName) {
                 this.bindHandler(element, delay);
-                postcodeElement = element;
             }
         },
 
@@ -136,7 +138,7 @@ define([
                     if (!formPopUpState.isVisible()) {
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function () {
-                            self.postcodeValidation();
+                            self.postcodeValidation(element);
                             self.validateFields();
                         }, delay);
                     }
@@ -148,7 +150,7 @@ define([
         /**
          * @return {*}
          */
-        postcodeValidation: function () {
+        postcodeValidation: function (postcodeElement) {
             var countryId = $('select[name="country_id"]').val(),
                 validationResult,
                 warnMessage;
@@ -178,8 +180,8 @@ define([
          */
         validateFields: function () {
             var addressFlat = addressConverter.formDataProviderToFlatData(
-                    this.collectObservedData(),
-                    'shippingAddress'
+                this.collectObservedData(),
+                'shippingAddress'
                 ),
                 address;
 
