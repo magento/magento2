@@ -38,7 +38,7 @@
         <!-- ko foreach: rates -->
         <tr class="totals-tax-details">
             <!-- ko if: percent -->
-                <th class="mark" scope="row" data-bind="text: title + ' (' + percent + '%)'"></th>
+                <th class="mark" scope="row" data-bind="text: title + ' (' + $parents[1].formatPrice(percent) + '%)'"></th>
             <!-- /ko -->
             <!-- ko if: !percent -->
                 <th class="mark" scope="row" data-bind="text: title"></th>
