@@ -181,7 +181,7 @@
                 </validation>
             </settings>
         </field>
-        <field name="country_id" component="Magento_Ui/js/form/element/country" sortOrder="90" formElement="select">
+        <field name="country_id" component="Magento_Customer/js/form/element/country" sortOrder="90" formElement="select">
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
@@ -196,7 +196,7 @@
                 </select>
             </formElements>
         </field>
-        <field name="region_id" component="Magento_Ui/js/form/element/region" formElement="select">
+        <field name="region_id" component="Magento_Customer/js/form/element/region" formElement="select">
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>

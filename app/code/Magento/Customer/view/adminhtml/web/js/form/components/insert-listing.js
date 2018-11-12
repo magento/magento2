@@ -4,8 +4,9 @@
  */
 
 define([
-    'Magento_Ui/js/form/components/insert-listing'
-], function (Insert) {
+    'Magento_Ui/js/form/components/insert-listing',
+    'underscore'
+], function (Insert, _) {
     'use strict';
 
     return Insert.extend({
@@ -25,29 +26,28 @@ define([
         },
 
         deleteAction: function (data) {
+            this._delete([parseFloat(data[data['id_field_name']])]);
+        },
+
+        deleteMassaction: function (data) {
+            var ids = _.map(data, function (val) {
+                return parseFloat(val);
+            });
+
+            this._delete(ids);
+        },
+
+        _delete: function (ids) {
             var defaultShippingId = parseFloat(this.source.get('data.default_shipping_address.entity_id')),
                 defaultBillingId = parseFloat(this.source.get('data.default_billing_address.entity_id'));
 
-            if (parseFloat(data[data['id_field_name']]) === defaultShippingId) {
+            if (ids.indexOf(defaultShippingId) !== -1) {
                 this.source.set('data.default_shipping_address', []);
             }
-            if (parseFloat(data[data['id_field_name']]) === defaultBillingId) {
+
+            if (ids.indexOf(defaultBillingId) !== -1) {
                 this.source.set('data.default_billing_address', []);
             }
-        },
-
-        //TODO: release logic with massaction
-        deleteMassaction: function (data) {
-            debugger;
-            // var defaultShippingId = parseFloat(this.source.get('data.default_shipping_address.entity_id')),
-            //     defaultBillingId = parseFloat(this.source.get('data.default_billing_address.entity_id'));
-            //
-            // if (parseFloat(data[data['id_field_name']]) === defaultShippingId) {
-            //     this.source.set('data.default_shipping_address', []);
-            // }
-            // if (parseFloat(data[data['id_field_name']]) === defaultBillingId) {
-            //     this.source.set('data.default_billing_address', []);
-            // }
         }
     });
 });

@@ -49,11 +49,12 @@ define([
 
                 _.extend(selections, data.params || {});
 
+                console.log(selections);
                 this.request(action.url, selections).done(function (response) {
                     if (!response.error) {
                         this.trigger('massaction', {
                             action: action.type,
-                            data: selections
+                            data: this.selections().selected()
                         });
                     }
                 }.bind(this));

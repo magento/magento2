@@ -18,11 +18,17 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $request;
 
     /**
+     * @var \Magento\Directory\Model\CountryFactory
+     */
+    private $countryDirectory;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Directory\Model\CountryFactory $countryFactory,
      * @param array $meta
      * @param array $data
      */
@@ -32,11 +38,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $requestFieldName,
         CollectionFactory $collectionFactory,
         \Magento\Framework\App\RequestInterface $request,
+        \Magento\Directory\Model\CountryFactory $countryFactory,
         array $meta = [],
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $collectionFactory->create();
+        $this->countryDirectory = $countryFactory->create();
         $this->request = $request;
     }
 
@@ -55,7 +63,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
         foreach ($data['items'] as $key => $item) {
             if (isset($item['country_id']) && !isset($item['country'])) {
-                $data['items'][$key]['country'] = $item['country_id'];
+                $data['items'][$key]['country'] = $this->countryDirectory->loadByCode($item['country_id'])->getName();
             }
         }
 
