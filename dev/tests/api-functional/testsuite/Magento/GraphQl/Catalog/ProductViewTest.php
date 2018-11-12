@@ -91,6 +91,7 @@ class ProductViewTest extends GraphQlAbstract
                 title
                 required
                 sort_order
+                option_id
                 ... on CustomizableFieldOption {
                   product_sku
                   field_option: value {
@@ -337,6 +338,7 @@ QUERY;
                 title
                 required
                 sort_order
+                option_id
                 ... on CustomizableFieldOption {
                   product_sku
                   field_option: value {
@@ -753,7 +755,8 @@ QUERY;
             $assertionMap = [
                 ['response_field' => 'sort_order', 'expected_value' => $option->getSortOrder()],
                 ['response_field' => 'title', 'expected_value' => $option->getTitle()],
-                ['response_field' => 'required', 'expected_value' => $option->getIsRequire()]
+                ['response_field' => 'required', 'expected_value' => $option->getIsRequire()],
+                ['response_field' => 'option_id', 'expected_value' => $option->getOptionId()]
             ];
 
             if (!empty($option->getValues())) {
@@ -777,7 +780,7 @@ QUERY;
                         ['response_field' => 'product_sku', 'expected_value' => $option->getProductSku()],
                     ]
                 );
-                $valueKeyName = "";
+
                 if ($option->getType() === 'file') {
                     $valueKeyName = 'file_option';
                     $valueAssertionMap = [
