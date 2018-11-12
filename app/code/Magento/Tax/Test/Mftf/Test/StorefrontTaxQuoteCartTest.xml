@@ -253,6 +253,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-297"/>
             <group value="Tax"/>
+            <skip>
+                <issueId value="MAGETWO-96266"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
