@@ -12,6 +12,9 @@ use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\Cms\Helper\Page as PageHelper;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Test the GraphQL endpoint's URLResolver query to verify canonical URL's are correctly returned.
@@ -321,6 +324,20 @@ QUERY;
      */
     public function testResolveSlash()
     {
+        /** @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface */
+        $scopeConfigInterface = $this->objectManager->get(ScopeConfigInterface::class);
+        $homePageIdentifier = $scopeConfigInterface->getValue(
+            PageHelper::XML_PATH_HOME_PAGE,
+            ScopeInterface::SCOPE_STORE
+        );
+        /** @var \Magento\Cms\Model\Page $page */
+        $page = $this->objectManager->get(\Magento\Cms\Model\Page::class);
+        $page->load($homePageIdentifier);
+        $homePageId = $page->getId();
+        /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $urlPathGenerator */
+        $urlPathGenerator = $this->objectManager->get(\Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator::class);
+        /** @param \Magento\Cms\Api\Data\PageInterface $page */
+        $targetPath = $urlPathGenerator->getCanonicalUrlPath($page);
         $query
             = <<<QUERY
 {
@@ -333,10 +350,9 @@ QUERY;
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-
         $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals(2, $response['urlResolver']['id']);
-        $this->assertEquals('cms/page/view/page_id/2', $response['urlResolver']['canonical_url']);
+        $this->assertEquals($homePageId, $response['urlResolver']['id']);
+        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
         $this->assertEquals('CMS_PAGE', $response['urlResolver']['type']);
     }
 }

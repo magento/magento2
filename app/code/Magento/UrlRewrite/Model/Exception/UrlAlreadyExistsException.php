@@ -36,7 +36,7 @@ class UrlAlreadyExistsException extends \Magento\Framework\Exception\AlreadyExis
     }
 
     /**
-     * Returns urls.
+     * Get URLs
      *
      * @return array
      * @since 100.2.0

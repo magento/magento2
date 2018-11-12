@@ -18,7 +18,7 @@
             <testCaseId value="MAGETWO-63898"/>
             <group value="analytics"/>
             <skip>
-                <issueId value="MAGETWO-90659"/>
+                <issueId value="MAGETWO-96223"/>
             </skip>
         </annotations>
 

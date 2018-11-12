@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-82648"/>
             <group value="analytics"/>
-            <skip>
-                <issueId value="MAGETWO-90659"/>
-            </skip>
         </annotations>
         <before>
             <createData stepKey="noReportUserRole" entity="adminNoReportRole"/>

@@ -20,20 +20,20 @@
         <column xsi:type="smallint" name="type" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Swatch type: 0 - text, 1 - visual color, 2 - visual image"/>
         <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Swatch Value"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="swatch_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="EAV_ATTRIBUTE_OPTION_SWATCH_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="EAV_ATTRIBUTE_OPTION_SWATCH_STORE_ID_STORE_STORE_ID"
                     table="eav_attribute_option_swatch" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="EAV_ATTR_OPT_SWATCH_OPT_ID_EAV_ATTR_OPT_OPT_ID"
+        <constraint xsi:type="foreign" referenceId="EAV_ATTR_OPT_SWATCH_OPT_ID_EAV_ATTR_OPT_OPT_ID"
                     table="eav_attribute_option_swatch" column="option_id" referenceTable="eav_attribute_option"
                     referenceColumn="option_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="EAV_ATTRIBUTE_OPTION_SWATCH_STORE_ID_OPTION_ID">
+        <constraint xsi:type="unique" referenceId="EAV_ATTRIBUTE_OPTION_SWATCH_STORE_ID_OPTION_ID">
             <column name="store_id"/>
             <column name="option_id"/>
         </constraint>
-        <index name="EAV_ATTRIBUTE_OPTION_SWATCH_SWATCH_ID" indexType="btree">
+        <index referenceId="EAV_ATTRIBUTE_OPTION_SWATCH_SWATCH_ID" indexType="btree">
             <column name="swatch_id"/>
         </index>
     </table>

@@ -63,14 +63,15 @@ class Schema
 
     /**
      * Retrieve table by it name.
+     *
      * Return false if table is not present in schema.
      *
-     * @param  $name
+     * @param string $name
      * @return bool|Table
      */
     public function getTableByName($name)
     {
         $name = $this->resourceConnection->getTableName($name);
-        return isset($this->tables[$name]) ? $this->tables[$name] : false;
+        return $this->tables[$name] ?? false;
     }
 }

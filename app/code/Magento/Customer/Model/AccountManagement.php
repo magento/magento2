@@ -681,8 +681,8 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
-        $this->sessionManager->destroy();
         $this->destroyCustomerSessions($customer->getId());
+        $this->sessionManager->destroy();
         $this->customerRepository->save($customer);
 
         return true;
@@ -837,6 +837,7 @@ class AccountManagement implements AccountManagementInterface
             if ($customer->getWebsiteId()) {
                 $storeId = $this->storeManager->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
             } else {
+                $this->storeManager->setCurrentStore(null);
                 $storeId = $this->storeManager->getStore()->getId();
             }
             $customer->setStoreId($storeId);
@@ -1011,7 +1012,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Returns eval validator
+     * Get EAV validator
      *
      * @return Backend
      */
@@ -1216,7 +1217,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Return array with template types
+     * Get template types
      *
      * @return array
      * @deprecated 100.1.0

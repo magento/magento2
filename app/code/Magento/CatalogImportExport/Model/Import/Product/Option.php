@@ -1794,7 +1794,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ];
 
             $priceData = false;
-            if (!empty($rowData[self::COLUMN_ROW_PRICE])) {
+            $customOptionRowPrice = $rowData[self::COLUMN_ROW_PRICE];
+            if (!empty($customOptionRowPrice) || $customOptionRowPrice === '0') {
                 $priceData = [
                     'price' => (double)rtrim($rowData[self::COLUMN_ROW_PRICE], '%'),
                     'price_type' => 'fixed',

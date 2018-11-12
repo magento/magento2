@@ -19,6 +19,8 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class contains tests for Direct Post integration
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DirectpostTest extends \PHPUnit\Framework\TestCase
 {
@@ -141,7 +143,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             [
                 'filter_action' => 'report',
                 'order_id' => '100000004',
-                'expected_order_state' => Order::STATE_PROCESSING
+                'expected_order_state' => Order::STATE_COMPLETE
             ],
         ];
     }

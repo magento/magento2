@@ -93,7 +93,7 @@ return [
                         'tinyint_ref' => 'tinyint_ref',
                     ],
                     'type' => 'primary',
-                    'name' => 'tinyint_primary',
+                    'referenceId' => 'tinyint_primary',
                 ],
             ],
             'name' => 'reference_table',
@@ -125,7 +125,7 @@ return [
                         'int_auto_increment_with_nullable' => 'int_auto_increment_with_nullable',
                     ],
                     'type' => 'unique',
-                    'name' => 'AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE',
+                    'referenceId' => 'AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE',
                 ],
             ],
             'name' => 'auto_increment_test',
@@ -225,17 +225,17 @@ return [
                 ],
             ],
             'constraint' => [
-                'TEST_TABLE_SMALLINT_BIGINT' => [
+                'TEST_TABLE_UNIQUE' => [
                     'column' => [
                         'smallint' => 'smallint',
                         'bigint' => 'bigint',
                     ],
                     'type' => 'unique',
-                    'name' => 'TEST_TABLE_SMALLINT_BIGINT',
+                    'referenceId' => 'TEST_TABLE_UNIQUE',
                 ],
-                'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF' => [
+                'TEST_TABLE_TINYINT_REFERENCE' => [
                     'type' => 'foreign',
-                    'name' => 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF',
+                    'referenceId' => 'TEST_TABLE_TINYINT_REFERENCE',
                     'column' => 'tinyint',
                     'table' => 'test_table',
                     'referenceTable' => 'reference_table',
@@ -244,12 +244,12 @@ return [
                 ],
             ],
             'index' => [
-                'TEST_TABLE_TINYINT_BIGINT' => [
+                'TEST_TABLE_INDEX' => [
                     'column' => [
                         'tinyint' => 'tinyint',
                         'bigint' => 'bigint',
                     ],
-                    'name' => 'TEST_TABLE_TINYINT_BIGINT',
+                    'referenceId' => 'TEST_TABLE_INDEX',
                     'indexType' => 'btree',
                 ],
             ],
