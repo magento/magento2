@@ -57,26 +57,31 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
     /**
      * Test if the current url is the same as link path
      *
-     * @dataProvider linkPathProvider
-     * @param string $linkPath
-     * @param string $currentPathInfo
-     * @param bool $expected
      * @return void
      */
-    public function testIsCurrent($linkPath, $currentPathInfo, $expected)
+    public function testIsCurrent()
     {
-        $baseUrl = 'http://example.com/';
-        $trimmed = trim($currentPathInfo, '/');
+        $path = 'test/index';
+        $url = 'http://example.com/test/index';
 
-        $this->_requestMock->expects($this->any())->method('getPathInfo')->willReturn($currentPathInfo);
+        $this->_requestMock->expects($this->once())
+            ->method('getModuleName')
+            ->will($this->returnValue('test'));
+        $this->_requestMock->expects($this->once())
+            ->method('getControllerName')
+            ->will($this->returnValue('index'));
+        $this->_requestMock->expects($this->once())
+            ->method('getActionName')
+            ->will($this->returnValue('index'));
         $this->_urlBuilderMock->expects($this->at(0))
             ->method('getUrl')
-            ->with($linkPath)
-            ->will($this->returnValue($baseUrl . $linkPath));
+            ->with($path)
+            ->will($this->returnValue($url));
         $this->_urlBuilderMock->expects($this->at(1))
             ->method('getUrl')
-            ->with($trimmed)
-            ->will($this->returnValue($baseUrl . $trimmed));
+            ->with('test/index')
+            ->will($this->returnValue($url));
+
         /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
         $link = $this->_objectManager->getObject(
             \Magento\Framework\View\Element\Html\Link\Current::class,
@@ -86,22 +91,8 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $link->setCurrent(false);
-        $link->setPath($linkPath);
-        $this->assertEquals($expected, $link->isCurrent());
-    }
-
-    /**
-     * @return array
-     */
-    public function linkPathProvider()
-    {
-        return [
-            ['test/index', '/test/index/', true],
-            ['test/index/index', '/test/index/index/', true],
-            ['test/route', '/test/index/', false],
-            ['test/index', '/test/', false]
-        ];
+        $link->setPath($path);
+        $this->assertTrue($link->isCurrent());
     }
 
     public function testIsCurrentFalse()
