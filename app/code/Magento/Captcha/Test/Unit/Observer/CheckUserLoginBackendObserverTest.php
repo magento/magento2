@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Observer;
 
 use Magento\Captcha\Helper\Data;
@@ -76,12 +78,13 @@ class CheckUserLoginBackendObserverTest extends TestCase
      * @return void
      * @throws AuthenticationException
      */
-    public function testCheckOnBackendLoginWithCorrectCaptcha($isRequired, $isCorrect, $invokedTimes)
+    public function testCheckOnBackendLoginWithCorrectCaptcha(bool $isRequired, bool $isCorrect, int $invokedTimes): void
     {
         $formId = 'backend_login';
         $login = 'admin';
         $captchaValue = 'captcha-value';
 
+        /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
         $eventMock = $this->createPartialMock(Event::class, ['getUsername']);
         $captcha = $this->createMock(DefaultModel::class);
@@ -119,7 +122,7 @@ class CheckUserLoginBackendObserverTest extends TestCase
     /**
      * @return array
      */
-    public function captchaCorrectnessCheckDataProvider()
+    public function captchaCorrectnessCheckDataProvider(): array
     {
         return [
             [true, true, 1],
@@ -134,12 +137,13 @@ class CheckUserLoginBackendObserverTest extends TestCase
      * @return void
      * @throws AuthenticationException
      */
-    public function testCheckOnBackendLoginWithWrongCaptcha()
+    public function testCheckOnBackendLoginWithWrongCaptcha(): void
     {
         $formId = 'backend_login';
         $login = 'admin';
         $captchaValue = 'captcha-value';
 
+        /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
         $eventMock = $this->createPartialMock(Event::class, ['getUsername']);
         $captcha = $this->createMock(DefaultModel::class);
@@ -167,7 +171,7 @@ class CheckUserLoginBackendObserverTest extends TestCase
             ->with($this->requestMock, $formId)
             ->willReturn($captchaValue);
 
-        $this->expectException(AuthenticationException::class, 'Incorrect CAPTCHA.');
+        $this->expectException(AuthenticationException::class);
 
         $this->observer->execute($observerMock);
     }
