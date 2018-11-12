@@ -64,14 +64,15 @@ class Current extends Template
     private function getMca()
     {
         $routeParts = [
-            'module' => $this->_request->getModuleName(),
-            'controller' => $this->_request->getControllerName(),
-            'action' => $this->_request->getActionName(),
+            $this->_request->getModuleName(),
+            $this->_request->getControllerName(),
+            $this->_request->getActionName(),
         ];
 
         $parts = [];
+        $pathParts = explode('/', $this->getPath());
         foreach ($routeParts as $key => $value) {
-            if (!empty($value) && $value != $this->_defaultPath->getPart($key)) {
+            if (isset($pathParts[$key]) && $pathParts[$key] === $value) {
                 $parts[] = $value;
             }
         }
@@ -85,7 +86,7 @@ class Current extends Template
      */
     public function isCurrent()
     {
-        return $this->getCurrent() || $this->getUrl($this->getPath()) == $this->getUrl($this->getPathInfo());
+        return $this->getCurrent() || $this->getUrl($this->getPath()) == $this->getUrl($this->getMca());
     }
 
     /**
@@ -150,15 +151,5 @@ class Current extends Template
         }
 
         return $attributesHtml;
-    }
-
-    /**
-     * Get current page path info
-     *
-     * @return string
-     */
-    private function getPathInfo()
-    {
-        return trim($this->_request->getPathInfo(), '/');
     }
 }
