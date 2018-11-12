@@ -59,7 +59,7 @@ class StockStatus extends AbstractSource implements SourceInterface, OptionSourc
      * @param int|string $optionId
      * @return string|bool
      */
-    public function getOptionText(int $optionId) : mixed
+    public function getOptionText($optionId)
     {
         $options = self::getOptionArray();
 
