@@ -1651,6 +1651,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 $item->setProduct($candidate);
                 // Add only item that is not in quote already
                 $this->addItem($item);
+            } else {
+                $item->setOptions($candidate->getCustomOptions());
             }
             $items[] = $item;
 

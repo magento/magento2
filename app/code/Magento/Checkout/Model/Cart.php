@@ -527,7 +527,7 @@ class Cart extends DataObject implements CartInterface
             $qty = isset($itemInfo['qty']) ? (double)$itemInfo['qty'] : false;
             if ($qty > 0) {
                 $item->setQty($qty);
-
+                $this->updateItem($itemId, $item->getBuyRequest());
                 if ($item->getHasError()) {
                     throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
                 }
