@@ -208,9 +208,10 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve array of associated products
      *
      * @param \Magento\Catalog\Model\Product $product
+     * @param bool $includeOutOfStock
      * @return array
      */
-    public function getAssociatedProducts($product)
+    public function getAssociatedProducts($product, bool $includeOutOfStock = true)
     {
         if (!$product->hasData($this->_keyAssociatedProducts)) {
             $associatedProducts = [];
@@ -228,7 +229,9 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ['in' => $this->getStatusFilters($product)]
             );
 
-            $this->stockHelper->addIsInStockFilterToCollection($collection);
+            if (!$includeOutOfStock) {
+               $this->stockHelper->addIsInStockFilterToCollection($collection);
+            }
 
             foreach ($collection as $item) {
                 $associatedProducts[] = $item;
@@ -349,7 +352,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected function getProductInfo(\Magento\Framework\DataObject $buyRequest, $product, $isStrictProcessMode)
     {
         $productsInfo = $buyRequest->getSuperGroup() ?: [];
-        $associatedProducts = $this->getAssociatedProducts($product);
+        $associatedProducts = $this->getAssociatedProducts($product, !empty($productsInfo));
 
         if (!is_array($productsInfo)) {
             return __('Please specify the quantity of product(s).')->render();
