@@ -28,8 +28,12 @@ define([
                     billingAddress: ko.observable(),
                     shippingAddress: ko.observable(),
                     paymentMethod: ko.observable(),
-                    totals: ko.observable({})
+                    totals: ko.observable({}),
 
+                    /** Stub */
+                    isVirtual: function () {
+                        return false;
+                    }
                 },
                 'Magento_Checkout/js/action/set-payment-information': setPaymentMock,
                 'Magento_Checkout/js/model/payment/additional-validators': {
