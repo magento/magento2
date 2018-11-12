@@ -6,9 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Product\Compare;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class Remove extends \Magento\Catalog\Controller\Product\Compare
+class Remove extends \Magento\Catalog\Controller\Product\Compare implements HttpPostActionInterface
 {
     /**
      * Remove item from compare list

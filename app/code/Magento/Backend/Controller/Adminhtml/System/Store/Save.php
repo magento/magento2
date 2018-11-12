@@ -6,12 +6,14 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
 /**
  * Class Save
  *
  * Save controller for system entities such as: Store, StoreGroup, Website
  */
-class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
+class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpPostActionInterface
 {
     /**
      * Process Website model save

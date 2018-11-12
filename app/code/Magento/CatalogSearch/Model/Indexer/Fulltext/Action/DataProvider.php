@@ -12,6 +12,8 @@ use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
 /**
+ * Catalog search full test search data provider.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api

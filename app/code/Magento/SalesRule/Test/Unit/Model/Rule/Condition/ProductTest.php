@@ -298,8 +298,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->method('getProduct')
             ->willReturn($product);
 
-        $this->model->setAttribute('quote_item_price')
-            ->setOperator($operator);
+        $this->model->setAttribute('quote_item_price');
+        $this->model->setData('operator', $operator);
 
         $this->assertEquals($isValid, $this->model->setValue($conditionValue)->validate($item));
     }

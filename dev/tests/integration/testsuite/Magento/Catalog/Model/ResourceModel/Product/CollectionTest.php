@@ -187,4 +187,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         self::assertContains($expected, str_replace(PHP_EOL, '', $sql));
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
+     * @magentoDbIsolation enabled
+     */
+    public function testAddAttributeToFilterAffectsGetSize(): void
+    {
+        $this->assertEquals(10, $this->collection->getSize());
+        $this->collection->addAttributeToFilter('sku', 'Product1');
+        $this->assertEquals(1, $this->collection->getSize());
+    }
 }

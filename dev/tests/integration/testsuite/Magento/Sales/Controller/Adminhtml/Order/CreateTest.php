@@ -8,10 +8,13 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Backend\Model\Session\Quote;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -20,6 +23,11 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      */
     protected $productRepository;
 
+    /**
+     * @inheritDoc
+     *
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -27,8 +35,12 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
     }
 
+    /**
+     * Test LoadBlock being dispatched.
+     */
     public function testLoadBlockAction()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('block', ',');
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
@@ -46,6 +58,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         )->addProducts(
             [$product->getId() => ['qty' => 1]]
         );
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('block', 'data');
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
@@ -57,10 +70,14 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     }
 
     /**
+     * @param string $block Block name.
+     * @param string $expected Contains HTML.
+     *
      * @dataProvider loadBlockActionsDataProvider
      */
     public function testLoadBlockActions($block, $expected)
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('block', $block);
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
@@ -68,6 +85,9 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->assertContains($expected, $html);
     }
 
+    /**
+     * @return array
+     */
     public function loadBlockActionsDataProvider()
     {
         return [
@@ -90,6 +110,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         )->addProducts(
             [$product->getId() => ['qty' => 1]]
         );
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('block', 'items');
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
@@ -215,6 +236,11 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->assertContains(sprintf('"productId":"%s"', $product->getEntityId()), $body);
     }
 
+    /**
+     * Test not allowing to save.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testDeniedSaveAction()
     {
         $this->_objectManager->configure(
@@ -230,6 +256,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea('adminhtml');
 
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/sales/order_create/save');
         $this->assertEquals('403', $this->getResponse()->getHttpResponseCode());
     }
@@ -263,6 +290,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             'region' => 'Kyivska',
             'region_id' => 1
         ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'order' => ['billing_address' => $data],

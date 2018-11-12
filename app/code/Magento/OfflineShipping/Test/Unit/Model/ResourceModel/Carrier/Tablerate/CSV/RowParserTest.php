@@ -37,7 +37,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->locationDirectoryMock = $this->getMockBuilder(LocationDirectory::class)
-            ->setMethods(['hasCountryId', 'getCountryId', 'hasRegionId', 'getRegionId'])
+            ->setMethods(['hasCountryId', 'getCountryId', 'hasRegionId', 'getRegionIds'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->columnResolverMock = $this->getMockBuilder(ColumnResolver::class)
@@ -92,7 +92,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
             $conditionShortName,
             $columnValueMap
         );
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals([$expectedResult], $result);
     }
 
     /**

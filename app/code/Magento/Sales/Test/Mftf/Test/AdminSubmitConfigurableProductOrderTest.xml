@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminSubmitConfigurableProductOrderTest">
+        <annotations>
+            <title value="Create Order in Admin and update product configuration"/>
+            <stories value="MAGETWO-59632: Create Sales > Order from admin add configurable product and change options click OK does not update Items Ordered List"/>
+            <description value="Create Order in Admin and update product configuration"/>
+            <features value="Sales"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-59633"/>
+            <group value="Sales"/>
+        </annotations>
+
+        <before>
+            <!--Set default flat rate shipping method settings-->
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+
+            <!--Create simple customer-->
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+
+            <!-- Create the category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <!-- Create the configurable product and add it to the category -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create an attribute with two options to be used in the first child product -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Add the attribute we just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Get the option of the attribute we created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create a simple product and give it the attribute with option -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Add simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!--Create new customer order-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <!--Add configurable product to order-->
+        <actionGroup ref="addConfigurableProductToOrderFromAdmin" stepKey="addConfigurableProductToOrder">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="attribute" value="$$createConfigProductAttribute$$"/>
+            <argument name="option" value="$$getConfigAttributeOption1$$"/>
+        </actionGroup>
+
+        <!--Configure ordered configurable product-->
+        <actionGroup ref="configureOrderedConfigurableProduct" stepKey="configureOrderedConfigurableProduct">
+            <argument name="attribute" value="$$createConfigProductAttribute$$"/>
+            <argument name="option" value="$$getConfigAttributeOption2$$"/>
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
+
+        <!--Submit order-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+
+        <!--Verify order information-->
+        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
+        </after>
+    </test>
+</tests>

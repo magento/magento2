@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Controller\Address;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
@@ -27,7 +28,7 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormPost extends \Magento\Customer\Controller\Address
+class FormPost extends \Magento\Customer\Controller\Address implements HttpPostActionInterface
 {
     /**
      * @var RegionFactory

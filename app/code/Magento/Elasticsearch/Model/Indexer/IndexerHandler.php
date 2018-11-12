@@ -12,6 +12,9 @@ use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Magento\Framework\App\ScopeResolverInterface;
 
+/**
+ * Indexer Handler for Elasticsearch engine.
+ */
 class IndexerHandler implements IndexerInterface
 {
     /**
@@ -82,7 +85,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function saveIndex($dimensions, \Traversable $documents)
     {
@@ -97,7 +100,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
@@ -112,7 +115,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function cleanIndex($dimensions)
     {
@@ -122,14 +125,16 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function isAvailable()
+    public function isAvailable($dimensions = [])
     {
         return $this->adapter->ping();
     }
 
     /**
+     * Returns indexer id.
+     *
      * @return string
      */
     private function getIndexerId()

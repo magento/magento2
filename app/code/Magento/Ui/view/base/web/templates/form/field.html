@@ -8,8 +8,8 @@
      visible="visible"
      css="$data.additionalClasses"
      attr="'data-index': index">
-    <div class="admin__field-label">
-        <label if="$data.label" visible="$data.labelVisible"  attr="for: uid">
+    <div class="admin__field-label" visible="$data.labelVisible">
+        <label if="$data.label"  attr="for: uid">
             <span translate="label" attr="'data-config-scope': $data.scopeLabel" />
         </label>
     </div>

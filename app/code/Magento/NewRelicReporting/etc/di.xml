@@ -30,6 +30,9 @@
     <type name="Magento\Framework\App\Http">
         <plugin name="framework-http-newrelic" type="Magento\NewRelicReporting\Plugin\HttpPlugin"/>
     </type>
+    <type name="Magento\Framework\App\State">
+        <plugin name="framework-state-newrelic" type="Magento\NewRelicReporting\Plugin\StatePlugin"/>
+    </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
