@@ -10,20 +10,20 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="CreateAdminOrderPayedWithOnlinePaymentIncludingTaxAndDiscount">
         <annotations>
-            <features value="Sales"/>
+            <features value="Braintree"/>
             <stories value="Get access to a New Credit Memo Page from Invocie for Order payed with online payment via Admin"/>
             <title value="Admin should be able to open a New Credit Memo Page from Invoice Page for Order with tax and discount and payed using online payment method"/>
             <description value="Admin should be able to open a New Credit Memo Page from Invoice Page for Order with tax and discount and payed using online payment method"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-94472"/>
-            <group value="sales"/>
+            <group value="braintree"/>
         </annotations>
 
         <before>
             <!--Create Default Category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
-            <!--Create Simple product with Special Price-->
+            <!--Create Simple product-->
             <createData entity="_defaultProduct" stepKey="simpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
@@ -99,8 +99,9 @@
 
         <!--Submit Order-->
         <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
-        <waitForPageLoad stepKey="waitForSaveConfig" time="10"/>
-        <waitForElementVisible selector="{{NewOrderSection.successMessage}}" stepKey="waitForSuccessMessage" time="5"/>
+        <waitForPageLoad stepKey="waitForSubmitOrder" time="5"/>
+        <see selector="{{NewOrderSection.successMessage}}" userInput="You created the order." stepKey="seeNewOrder" after="waitForSubmitOrder"/>
+
 
         <!-- Create New invoice-->
         <actionGroup ref="adminFastCreateInvoice" stepKey="createInvoice"/>
@@ -108,6 +109,6 @@
         <!--Get access to Credit Memo page from Invocie page-->
         <click selector="{{AdminInvoiceMainActionsSection.openNewCreditMemoFromInvoice}}" stepKey="clickCreateNewCreditMemo"/>
         <waitForPageLoad stepKey="waitForLoadNewCreditMemoPage" time="5"/>
-        <waitForElementVisible selector="{{AdminCreditMemoOrderInformationSection.orderId}}" stepKey="waitForOrderIdOnCreditMemoPage"/>
+        <see selector="{{AdminCreditMemoOrderInformationSection.orderId}}" userInput="New Memo" stepKey="seeNewCreditMemo" after="waitForLoadNewCreditMemoPage"/>
     </test>
 </tests>
