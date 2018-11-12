@@ -22,6 +22,21 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 
+    <actionGroup name="VerifyCategoryPageParameters">
+        <arguments>
+            <argument name="category"/>
+            <argument name="mode" type="string"/>
+            <argument name="numOfProductsPerPage" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+        </arguments>
+        <seeInCurrentUrl url="/{{category.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{category.name}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+        <see userInput="{{mode}}" selector="{{StorefrontCategoryMainSection.modeGridIsActive}}" stepKey="assertViewMode"/>
+        <see userInput="{{numOfProductsPerPage}}" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="assertNumberOfProductsPerPage"/>
+        <see userInput="{{sortBy}}" selector="{{StorefrontCategoryMainSection.sortedBy}}" stepKey="assertSortedBy"/>
+    </actionGroup>
+
     <!-- Check the category page -->
     <actionGroup name="StorefrontCheckCategoryActionGroup">
         <arguments>
