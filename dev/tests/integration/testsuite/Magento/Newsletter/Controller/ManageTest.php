@@ -40,7 +40,7 @@ class ManageTest extends \Magento\TestFramework\TestCase\AbstractController
     protected function tearDown()
     {
         $this->customerSession->setCustomerId(null);
-        $this->coreSession->unsData('_form_key');
+        $this->coreSession->unsetData('_form_key');
     }
 
     /**
