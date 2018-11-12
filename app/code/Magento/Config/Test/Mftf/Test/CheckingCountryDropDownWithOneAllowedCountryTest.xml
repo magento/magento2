@@ -10,39 +10,31 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="CheckingCountryDropDownWithOneAllowedCountryTest">
         <annotations>
-            <features value="Backend"/>
-            <stories value="Dynamic Media URL"/>
-            <title value="Verify that Allow Dynamic Media URLs setting is removed from configuration page"/>
-            <description value="Verify that Allow Dynamic Media URLs setting is removed from configuration page"/>
-            <severity value="CRITICAL"/>
-            <useCaseId value="MC-1387564"/>
-            <testCaseId value="MC-3185678"/>
+            <features value="Config"/>
+            <stories value="MAGETWO-96107: Additional blank option in country dropdown"/>
+            <title value="Checking country drop-down with one allowed country"/>
+            <description value="Check country drop-down with one allowed country"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96133"/>
             <group value="configuration"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="EnableAdminAccountAllowCountry" stepKey="setAllowedCountries"/>
-
         </before>
         <after>
             <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-
          <!--Flush Magento Cache-->
         <magentoCLI stepKey="flushCache" command="cache:flush"/>
-
          <!--Create a customer account from Storefront-->
         <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="createAnAccount">
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
         <click selector="{{CheckoutPaymentSection.addressBook}}" stepKey="goToAddressBook"/>
-        <wait time="20" stepKey="kk"/>
-
         <click selector="{{StorefrontCustomerAddressSection.country}}" stepKey="clickToExpandCountryDropDown"/>
         <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="United States" stepKey="seeSelectedCountry"/>
         <dontSee selector="{{StorefrontCustomerAddressSection.country}}" userInput="Brazil" stepKey="canNotSeeSelectedCountry"/>
     </test>
 </tests>
-
-
