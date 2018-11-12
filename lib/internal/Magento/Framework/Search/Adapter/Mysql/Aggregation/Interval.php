@@ -8,6 +8,12 @@ namespace Magento\Framework\Search\Adapter\Mysql\Aggregation;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 
+/**
+ * MySQL search aggregation interval.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class Interval implements IntervalInterface
 {
     /**
@@ -41,7 +47,7 @@ class Interval implements IntervalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function load($limit, $offset = null, $lower = null, $upper = null)
@@ -64,7 +70,7 @@ class Interval implements IntervalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function loadPrevious($data, $index, $lower = null)
@@ -86,7 +92,7 @@ class Interval implements IntervalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function loadNext($data, $rightIndex, $upper = null)
@@ -124,6 +130,8 @@ class Interval implements IntervalInterface
     }
 
     /**
+     * Convert array values to float.
+     *
      * @param array $prices
      * @return array
      */

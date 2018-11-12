@@ -11,6 +11,7 @@
     <test name="StorefrontRedirectToOrderHistory">
         <annotations>
             <features value="Redirection Rules"/>
+            <stories value="Create Invoice"/>
             <title value="Create Invoice"/>
             <description
                     value="Check while order printing URL with an id of not relevant order redirects to order history"/>

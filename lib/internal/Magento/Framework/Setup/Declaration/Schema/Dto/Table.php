@@ -134,7 +134,7 @@ class Table extends GenericElement implements
     }
 
     /**
-     * Returns constraint by name
+     * Get constraint by name.
      *
      * @param string $name
      * @return Constraint | bool
@@ -194,7 +194,7 @@ class Table extends GenericElement implements
     }
 
     /**
-     * Returns index by name
+     * Get index by name
      *
      * @param string $name
      * @return Index | bool
@@ -325,7 +325,7 @@ class Table extends GenericElement implements
     }
 
     /**
-     * Returns engine name
+     * Get engine name
      *
      * @return string
      */
@@ -369,7 +369,7 @@ class Table extends GenericElement implements
     }
 
     /**
-     * Returns name without prefix
+     * Get name without prefix
      *
      * @return string
      */
@@ -379,7 +379,7 @@ class Table extends GenericElement implements
     }
 
     /**
-     * Returns comment
+     * Get comment
      *
      * @return null|string
      */
