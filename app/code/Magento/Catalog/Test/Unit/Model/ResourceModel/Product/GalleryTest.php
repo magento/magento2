@@ -482,13 +482,11 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $storeId = 0;
         $entityId = 1;
 
-        $this->connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $this->connection->expects($this->once())->method('update')->with(
             'table',
             ['position' => null],
             ['store_id <> ?' => $storeId, 'entity_id = ?' => $entityId]
         )->willReturn(1);
-        $this->connection->expects($this->once())->method('commit')->willReturnSelf();
 
         $this->resource->removeImagesPositionExcludeDefaultStore($entityId, $storeId);
     }
