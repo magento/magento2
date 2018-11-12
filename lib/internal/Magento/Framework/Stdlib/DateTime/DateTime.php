@@ -141,6 +141,9 @@ class DateTime
                 $result = $input->getTimestamp();
                 break;
             default:
+                if (strpos($input, '/') !== false && substr($input,0,2) > 12) {
+                    $input = str_replace('/', '-', $input);
+                }
                 $result = strtotime($input);
         }
 
