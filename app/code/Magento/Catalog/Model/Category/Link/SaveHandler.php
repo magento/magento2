@@ -111,18 +111,16 @@ class SaveHandler implements ExtensionInterface
             return $result;
         }
 
+        $oldCategoryList = array_column($oldCategoryPositions, 'category_id');
         foreach ($newCategoryPositions as $newCategoryPosition) {
-            $key = array_search(
-                $newCategoryPosition['category_id'],
-                array_column($oldCategoryPositions, 'category_id')
-            );
+            $key = array_search($newCategoryPosition['category_id'], $oldCategoryList);
 
             if ($key === false) {
                 $result[] = $newCategoryPosition;
             } elseif (isset($oldCategoryPositions[$key])
                 && $oldCategoryPositions[$key]['position'] != $newCategoryPosition['position']
             ) {
-                $result[] = $newCategoryPositions[$key];
+                $result[] = $newCategoryPosition;
                 unset($oldCategoryPositions[$key]);
             }
         }

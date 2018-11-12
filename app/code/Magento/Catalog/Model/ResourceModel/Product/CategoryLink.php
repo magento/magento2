@@ -114,16 +114,15 @@ class CategoryLink
     private function processCategoryLinks($newCategoryPositions, &$oldCategoryPositions)
     {
         $result = ['changed' => [], 'updated' => []];
+
+        $oldCategoryList = array_column($oldCategoryPositions, 'category_id');
         foreach ($newCategoryPositions as $newCategoryPosition) {
-            $key = array_search(
-                $newCategoryPosition['category_id'],
-                array_column($oldCategoryPositions, 'category_id')
-            );
+            $key = array_search($newCategoryPosition['category_id'], $oldCategoryList);
 
             if ($key === false) {
                 $result['changed'][] = $newCategoryPosition;
             } elseif ($oldCategoryPositions[$key]['position'] != $newCategoryPosition['position']) {
-                $result['updated'][] = $newCategoryPositions[$key];
+                $result['updated'][] = $newCategoryPosition;
                 unset($oldCategoryPositions[$key]);
             }
         }
