@@ -93,7 +93,6 @@ class PreProcessor implements PreProcessorInterface
             }
 
             $area = $this->areaList->getArea($areaCode);
-            $area->load(\Magento\Framework\App\Area::PART_DESIGN);
             $area->load(\Magento\Framework\App\Area::PART_TRANSLATE);
 
             $this->translate->setLocale($context->getLocale())->loadData($areaCode, true);
