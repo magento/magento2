@@ -38,7 +38,6 @@ class Orders implements ResolverInterface
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->checkCustomerAccount = $checkCustomerAccount;
-
     }
 
     /**
