@@ -7,70 +7,66 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccountInterface;
+use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 
 /**
- * Class Orders
+ * Orders data reslover
  */
 class Orders implements ResolverInterface
 {
-	/**
-	 * @var CollectionFactoryInterface
-	 */
-	private $collectionFactory;
+    /**
+     * @var CollectionFactoryInterface
+     */
+    private $collectionFactory;
 
-	/**
-	 * @var CheckCustomerAccountInterface
-	 */
-	private $checkCustomerAccount;
+    /**
+     * @var CheckCustomerAccount
+     */
+    private $checkCustomerAccount;
 
-	/**
-	 * Orders constructor.
-	 * @param CollectionFactoryInterface $collectionFactory
-	 * @param CheckCustomerAccountInterface $checkCustomerAccount
-	 */
-	public function __construct(
-		CollectionFactoryInterface $collectionFactory,
-		CheckCustomerAccountInterface $checkCustomerAccount
-	) {
-		$this->collectionFactory = $collectionFactory;
-		$this->checkCustomerAccount = $checkCustomerAccount;
+    /**
+     * @param CollectionFactoryInterface $collectionFactory
+     * @param CheckCustomerAccount $checkCustomerAccount
+     */
+    public function __construct(
+        CollectionFactoryInterface $collectionFactory,
+        CheckCustomerAccount $checkCustomerAccount
+    ) {
+        $this->collectionFactory = $collectionFactory;
+        $this->checkCustomerAccount = $checkCustomerAccount;
 
-	}
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function resolve(
-		Field $field,
-		$context,
-		ResolveInfo $info,
-		array $value = null,
-		array $args = null
-	) {
-		$customerId = $context->getUserId();
+    /**
+     * @inheritdoc
+     */
+    public function resolve(
+        Field $field,
+        $context,
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) {
+        $customerId = $context->getUserId();
+        $this->checkCustomerAccount->execute($customerId, $context->getUserType());
 
-		$this->checkCustomerAccount->execute($customerId, $context->getUserType());
+        $items = [];
+        $orders = $this->collectionFactory->create($customerId);
 
-		$items = [];
-		$orders = $this->collectionFactory->create($customerId);
-
-		/** @var \Magento\Sales\Model\Order $order */
-		foreach ($orders as $order) {
-			$items[] = [
-				'id' => $order->getId(),
-				'increment_id' => $order->getIncrementId(),
-				'created_at' => $order->getCreatedAt(),
-				'grand_total' => $order->getGrandTotal(),
-				'status' => $order->getStatus()
-			];
-		}
-
-		return ['items' => $items];
-	}
+        /** @var \Magento\Sales\Model\Order $order */
+        foreach ($orders as $order) {
+            $items[] = [
+                'id' => $order->getId(),
+                'increment_id' => $order->getIncrementId(),
+                'created_at' => $order->getCreatedAt(),
+                'grand_total' => $order->getGrandTotal(),
+                'status' => $order->getStatus(),
+            ];
+        }
+        return ['items' => $items];
+    }
 }
