@@ -67,7 +67,7 @@ class Identifier
      * Mark sections with data id
      *
      * @param array $sectionsData
-     * @param null $sectionNames
+     * @param array|null $sectionNames
      * @param bool $forceNewTimestamp
      * @return array
      */

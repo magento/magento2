@@ -53,7 +53,7 @@ class SectionPool implements SectionPoolInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionsData(array $sectionNames = null, $forceNewTimestamp = false)
     {

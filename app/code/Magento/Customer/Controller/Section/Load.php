@@ -59,7 +59,7 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Json
+     * @inheritdoc
      */
     public function execute()
     {

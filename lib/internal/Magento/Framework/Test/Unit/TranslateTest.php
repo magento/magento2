@@ -11,6 +11,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Translate;
 
 /**
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TranslateTest extends \PHPUnit\Framework\TestCase
