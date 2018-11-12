@@ -87,12 +87,18 @@ class MassDelete extends Action implements HttpPostActionInterface
      */
     public function execute(): Json
     {
+        $customerData = $this->_session->getData('customer_data');
         /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
         $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $collectionSize = $collection->getSize();
         $error = false;
 
         try {
+            if ($customerData && $customerData['customer_id']) {
+                $collection->addFieldToFilter('parent_id', $customerData['customer_id']);
+            } else {
+                throw new \Exception();
+            }
+            $collectionSize = $collection->getSize();
             /** @var \Magento\Customer\Model\Address $address */
             foreach ($collection as $address) {
                 $this->addressRepository->deleteById($address->getId());

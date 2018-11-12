@@ -13,10 +13,16 @@ use Magento\Customer\Model\ResourceModel\Address\Grid\CollectionFactory;
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
+     * @var \Magento\Framework\App\RequestInterface $request,
+     */
+    private $request;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param array $meta
      * @param array $data
      */
@@ -25,11 +31,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
+        \Magento\Framework\App\RequestInterface $request,
         array $meta = [],
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $collectionFactory->create();
+        $this->request = $request;
     }
 
     /**
@@ -40,7 +48,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     public function getData(): array
     {
         $collection = $this->getCollection();
-        $data = $collection->toArray();
+        $data['items'] = [];
+        if ($this->request->getParam('parent_id')) {
+            $collection->addFieldToFilter('parent_id', $this->request->getParam('parent_id'));
+            $data = $collection->toArray();
+        }
         foreach ($data['items'] as $key => $item) {
             if (isset($item['country_id']) && !isset($item['country'])) {
                 $data['items'][$key]['country'] = $item['country_id'];

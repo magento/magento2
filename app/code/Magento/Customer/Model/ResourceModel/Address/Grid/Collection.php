@@ -77,22 +77,6 @@ class Collection extends AbstractCollection implements SearchResultInterface
     }
 
     /**
-     * Resource initialization
-     *
-     * @return $this
-     */
-    protected function _initSelect()
-    {
-        parent::_initSelect();
-        $parentId = $this->context->getRequestParam('parent_id');
-        if ($parentId !== null) {
-            $this->getSelect()->where('parent_id=?', $parentId);
-        }
-
-        return $this;
-    }
-
-    /**
      * @inheritdoc
      *
      * @return AggregationInterface
