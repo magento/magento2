@@ -23,7 +23,7 @@
 }(function ($, cvvValidator, creditCardNumberValidator, yearValidator, monthValidator, creditCardData) {
     'use strict';
 
-    $('.payment-method-content input[type="number"]').on('keyup', function() {
+    $('.payment-method-content input[type="number"]').on('keyup', function () {
         if ($(this).val() < 0) {
             $(this).val($(this).val().replace(/^-/, ''));
         }
