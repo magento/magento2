@@ -169,6 +169,7 @@ class Send extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve Current Product Id
      *
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      * @return int
      */
     public function getProductId()
@@ -179,6 +180,7 @@ class Send extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve current category id for product
      *
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      * @return int
      */
     public function getCategoryId()

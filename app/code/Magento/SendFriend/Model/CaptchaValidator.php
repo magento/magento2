@@ -65,6 +65,7 @@ class CaptchaValidator
      * @param RequestInterface $request
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
     public function validateSending(RequestInterface $request)
     {
@@ -77,6 +78,7 @@ class CaptchaValidator
      * @param RequestInterface $request
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
     private function validateCaptcha(RequestInterface $request)
     {
@@ -107,6 +109,7 @@ class CaptchaValidator
      * @param DefaultModel $captchaModel
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
     private function logCaptchaAttempt(DefaultModel $captchaModel)
     {
