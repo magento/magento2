@@ -23,7 +23,6 @@ use Magento\Store\Model\StoreManagerInterface;
  * Collect enough information about image rendering on front
  * If you want to add new image, that should render on front you need
  * to configure this class in di.xml
- *
  */
 class Image implements ProductRenderCollectorInterface
 {
@@ -128,6 +127,8 @@ class Image implements ProductRenderCollectorInterface
     }
 
     /**
+     * Emulate image creation
+     * 
      * Callback in which we emulate initialize default design theme, depends on current store, be settings store id
      * from render info
      *
