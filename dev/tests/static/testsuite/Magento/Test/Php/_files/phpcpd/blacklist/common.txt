@@ -202,3 +202,6 @@ setup/performance-toolkit/aggregate-report
 Magento/MessageQueue/Setup
 Magento/Elasticsearch/Elasticsearch5
 Test/_files
+Magento/InventoryCatalogAdminUi/Controller/Adminhtml
+Magento/InventoryConfigurableProductIndexer/Indexer
+Magento/InventoryGroupedProductIndexer/Indexer

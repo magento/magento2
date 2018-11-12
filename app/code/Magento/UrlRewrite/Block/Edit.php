@@ -173,7 +173,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
                             ['id' => $this->getUrlRewrite()->getId()]
                         )
                     )
-                    . ')',
+                    . ', {data: {}})',
                 'class' => 'scalable delete',
                 'level' => -1
             ]
@@ -243,7 +243,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Since buttons are set as children, we remove them as children after generating them
      * not to duplicate them in future
      *
-     * @param string $area
+     * @param string|null $area
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

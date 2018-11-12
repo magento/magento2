@@ -105,6 +105,7 @@
             <data name="issue" xsi:type="string">MAGETWO-66737: Magento\Checkout\Test\TestCase\OnePageCheckoutTest with OnePageCheckoutTestVariation3 and 4 is not stable</data>
         </variation>
         <variation name="OnePageCheckoutTestVariation4" summary="One Page Checkout Products with Special Prices" ticketId="MAGETWO-12429">
+            <data name="issue" xsi:type="string">MAGETWO-95659: Fix and Unskip MTF OnePageCheckoutOfflinePaymentMethodsTest</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_with_special_price</data>
             <data name="products/1" xsi:type="string">configurableProduct::product_with_special_price</data>
@@ -125,7 +126,6 @@
             <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
-            <data name="issue" xsi:type="string">MAGETWO-66737: Magento\Checkout\Test\TestCase\OnePageCheckoutTest with OnePageCheckoutTestVariation3 and 4 is not stable</data>
         </variation>
         <variation name="OnePageCheckoutTestVariation5" summary="Guest Checkout using Check/Money Order and Free Shipping with Prices/Taxes Verifications" ticketId="MAGETWO-12412">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S0</data>

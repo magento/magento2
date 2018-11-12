@@ -7,16 +7,22 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-<actionGroup name="ConfigAdminAccountSharingActionGroup">
-    <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/system_config/edit/section/admin/" stepKey="navigateToConfigurationPage" />
-    <waitForPageLoad stepKey="wait1"/>
-    <conditionalClick stepKey="expandSecurityTab" selector="{{AdminSection.SecurityTab}}" dependentSelector="{{AdminSection.CheckIfTabExpand}}" visible="true" />
-    <waitForElementVisible selector="{{AdminSection.AdminAccountSharing}}" stepKey="waitForAdminAccountSharingDrpDown" />
-    <uncheckOption selector="{{AdminSection.EnableSystemValue}}" stepKey="uncheckUseSystemValue"/>
-    <selectOption selector="{{AdminSection.AdminAccountSharing}}" userInput="Yes" stepKey="selectYes"/>
-    <click selector="{{AdminSection.SecurityTab}}" stepKey="clollapseSecurityTab" />
-    <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
-</actionGroup>
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ConfigAdminAccountSharingActionGroup">
+        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/system_config/edit/section/admin/" stepKey="navigateToConfigurationPage" />
+        <waitForPageLoad stepKey="wait1"/>
+        <conditionalClick stepKey="expandSecurityTab" selector="{{AdminSection.SecurityTab}}" dependentSelector="{{AdminSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{AdminSection.AdminAccountSharing}}" stepKey="waitForAdminAccountSharingDrpDown" />
+        <uncheckOption selector="{{AdminSection.EnableSystemValue}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{AdminSection.AdminAccountSharing}}" userInput="Yes" stepKey="selectYes"/>
+        <click selector="{{AdminSection.SecurityTab}}" stepKey="clollapseSecurityTab" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+    </actionGroup>
+    <actionGroup name="EnableAdminAccountSharingActionGroup">
+        <createData stepKey="setConfig" entity="EnableAdminAccountSharing"/>
+    </actionGroup>
+    <actionGroup name="DisableAdminAccountSharingActionGroup">
+        <createData stepKey="setConfig" entity="DisableAdminAccountSharing"/>
+    </actionGroup>
 </actionGroups>
 

@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontPurchaseProductWithCustomOptions">
         <annotations>
             <features value="Catalog"/>
@@ -95,6 +95,7 @@
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="{{ProductOptionField.title}}" stepKey="seeProductOptionFieldInput1"/>
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="{{ProductOptionArea.title}}" stepKey="seeProductOptionAreaInput1"/>
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="{{productWithOptions.file}}" stepKey="seeProductOptionFileInput1"/>
+        <seeElement selector="{{CheckoutPaymentSection.ProductOptionLinkActiveByProductItemName($createProduct.name$, productWithOptions.file)}}" stepKey="seeProductOptionFileInputLink1"/>
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeProductOptionValueRadioButtons1Input1"/>
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeProductOptionValueCheckboxInput1" />
@@ -128,6 +129,7 @@
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionField.title}}" stepKey="seeAdminOrderProductOptionField" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionArea.title}}" stepKey="seeAdminOrderProductOptionArea"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{productWithOptions.file}}" stepKey="seeAdminOrderProductOptionFile"/>
+        <seeElement selector="{{AdminOrderItemsOrderedSection.productNameOptionsLink(productWithOptions.file)}}" stepKey="seeAdminOrderProductOptionFileLink"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeAdminOrderProductOptionValueRadioButton1"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeAdminOrderProductOptionValueCheckbox" />
@@ -144,6 +146,7 @@
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionField.title}}" stepKey="seeAdminOrderProductOptionField1" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionArea.title}}" stepKey="seeAdminOrderProductOptionArea1"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{productWithOptions.file}}" stepKey="seeAdminOrderProductOptionFile1"/>
+        <seeElement selector="{{AdminOrderItemsOrderedSection.productNameOptionsLink(productWithOptions.file)}}" stepKey="seeAdminOrderProductOptionFileLink1"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeAdminOrderProductOptionValueDropdown11"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeAdminOrderProductOptionValueRadioButton11"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeAdminOrderProductOptionValueCheckbox1" />
@@ -161,6 +164,7 @@
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionField.title, ProductOptionField.title)}}" userInput="{{ProductOptionField.title}}" stepKey="seeStorefontOrderProductOptionField1" />
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionArea.title, ProductOptionArea.title)}}" userInput="{{ProductOptionArea.title}}" stepKey="seeStorefontOrderProductOptionArea1"/>
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptionsFile($createProduct.name$, ProductOptionFile.title, productWithOptions.file)}}" userInput="{{productWithOptions.file}}" stepKey="seeStorefontOrderProductOptionFile1"/>
+        <seeElement selector="{{StorefrontCustomerOrderSection.productCustomOptionsLink($createProduct.name$, ProductOptionFile.title, productWithOptions.file)}}" stepKey="seeStorefontOrderProductOptionFileLink1"/>
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionDropDown.title, ProductOptionValueDropdown1.title)}}" userInput="{{ProductOptionValueDropdown1.title}}" stepKey="seeStorefontOrderProductOptionValueDropdown11"/>
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionRadiobutton.title, ProductOptionValueRadioButtons1.title)}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeStorefontOrderProductOptionValueRadioButtons11"/>
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionCheckbox.title, ProductOptionValueCheckbox.title)}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeStorefontOrderProductOptionValueCheckbox1" />

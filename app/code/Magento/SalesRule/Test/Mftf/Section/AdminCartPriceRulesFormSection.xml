@@ -6,7 +6,7 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCartPriceRulesFormSection">
         <element name="save" type="button" selector="#save" timeout="30"/>
         <element name="saveAndContinue" type="button" selector="#save_and_continue" timeout="30"/>
@@ -21,14 +21,23 @@
         <element name="coupon" type="select" selector="select[name='coupon_type']"/>
         <element name="couponCode" type="input" selector="input[name='coupon_code']"/>
         <element name="useAutoGeneration" type="checkbox" selector="input[name='use_auto_generation']"/>
+        <element name="userPerCoupon" type="input" selector="//input[@name='uses_per_coupon']"/>
+        <element name="userPerCustomer" type="input" selector="//input[@name='uses_per_customer']"/>
+        <element name="priority" type="input" selector="//*[@name='sort_order']"/>
 
         <!-- Actions sub-form -->
         <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
         <element name="apply" type="select" selector="select[name='simple_action']"/>
+        <element name="conditions" type="button" selector=".rule-param.rule-param-new-child > a"/>
+        <element name="childAttribute" type="select" selector="//select[contains(@name, 'new_child')]"/>
+        <element name="condition" type="text" selector="//span[@class='rule-param']/a[text()='{{arg}}']" parameterized="true"/>
+        <element name="operator" type="select" selector="//select[contains(@name, '[operator]')]"/>
+        <element name="option" type="select" selector="//ul[@class='rule-param-children']//select[contains(@name, '[value]')]"/>
         <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
+        <element name="freeShipping" type="select" selector="//select[@name='simple_free_shipping']"/>
 
         <!-- Manage Coupon Codes sub-form -->
         <element name="manageCouponCodesHeader" type="button" selector="div[data-index='manage_coupon_codes']" timeout="30"/>

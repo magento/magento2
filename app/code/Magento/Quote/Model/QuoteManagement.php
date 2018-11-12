@@ -253,7 +253,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__("The quote can't be created."));
         }
-        return $quote->getId();
+        return (int)$quote->getId();
     }
 
     /**

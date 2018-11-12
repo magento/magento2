@@ -93,15 +93,20 @@ class Grid extends AbstractGrid
     {
         $select = $this->getGridOriginSelect()
             ->where(($field ?: $this->mainTableName . '.entity_id') . ' = ?', $value);
-        return $this->getConnection()->query(
-            $this->getConnection()
-                ->insertFromSelect(
-                    $select,
-                    $this->getTable($this->gridTableName),
-                    array_keys($this->columns),
-                    AdapterInterface::INSERT_ON_DUPLICATE
-                )
-        );
+        $sql = $this->getConnection()
+            ->insertFromSelect(
+                $select,
+                $this->getTable($this->gridTableName),
+                array_keys($this->columns),
+                AdapterInterface::INSERT_ON_DUPLICATE
+            );
+
+        $this->addCommitCallback(function () use ($sql) {
+            $this->getConnection()->query($sql);
+        });
+
+        // need for backward compatibility
+        return $this->getConnection()->query($sql);
     }
 
     /**
@@ -126,6 +131,8 @@ class Grid extends AbstractGrid
     }
 
     /**
+     * Get order id field.
+     *
      * @return string
      */
     public function getOrderIdField()

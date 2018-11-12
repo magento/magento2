@@ -25,6 +25,130 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $attributes['quote_item_qty'] = __('Quantity in cart');
         $attributes['quote_item_price'] = __('Price in cart');
         $attributes['quote_item_row_total'] = __('Row total in cart');
+
+        $attributes['parent::category_ids'] = __('Category (Parent only)');
+        $attributes['children::category_ids'] = __('Category (Children Only)');
+    }
+
+    /**
+     * Retrieve attribute
+     *
+     * @return string
+     */
+    public function getAttribute()
+    {
+        $attribute = $this->getData('attribute');
+        if (strpos($attribute, '::') !== false) {
+            list (, $attribute) = explode('::', $attribute);
+        }
+        return $attribute;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAttributeName()
+    {
+        $attribute = $this->getAttribute();
+        if ($this->getAttributeScope()) {
+            $attribute = $this->getAttributeScope() . '::' . $attribute;
+        }
+        return $this->getAttributeOption($attribute);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function loadAttributeOptions()
+    {
+        $productAttributes = $this->_productResource->loadAllAttributes()->getAttributesByCode();
+
+        $attributes = [];
+        foreach ($productAttributes as $attribute) {
+            /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+            if (!$attribute->isAllowedForRuleCondition()
+                || !$attribute->getDataUsingMethod($this->_isUsedForRuleProperty)
+            ) {
+                continue;
+            }
+            $frontLabel = $attribute->getFrontendLabel();
+            $attributes[$attribute->getAttributeCode()] = $frontLabel;
+            $attributes['parent::' . $attribute->getAttributeCode()] = $frontLabel . __('(Parent Only)');
+            $attributes['children::' . $attribute->getAttributeCode()] = $frontLabel . __('(Children Only)');
+        }
+
+        $this->_addSpecialAttributes($attributes);
+
+        asort($attributes);
+        $this->setAttributeOption($attributes);
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAttributeElementHtml()
+    {
+        $html = parent::getAttributeElementHtml() .
+                $this->getAttributeScopeElement()->getHtml();
+        return $html;
+    }
+
+    /**
+     * Retrieve form element for scope element
+     *
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     */
+    private function getAttributeScopeElement()
+    {
+        return $this->getForm()->addField(
+            $this->getPrefix() . '__' . $this->getId() . '__attribute_scope',
+            'hidden',
+            [
+                'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][attribute_scope]',
+                'value' => $this->getAttributeScope(),
+                'no_span' => true,
+                'class' => 'hidden',
+                'data-form-part' => $this->getFormName()
+            ]
+        );
+    }
+
+    /**
+     * Set attribute value
+     *
+     * @param string $value
+     */
+    public function setAttribute($value)
+    {
+        if (strpos($value, '::') !== false) {
+            list($scope, $attribute) = explode('::', $value);
+            $this->setData('attribute_scope', $scope);
+            $this->setData('attribute', $attribute);
+        } else {
+            $this->setData('attribute', $value);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function loadArray($arr)
+    {
+        parent::loadArray($arr);
+        $this->setAttributeScope(isset($arr['attribute_scope']) ? $arr['attribute_scope'] : null);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function asArray(array $arrAttributes = [])
+    {
+        $out = parent::asArray($arrAttributes);
+        $out['attribute_scope'] = $this->getAttributeScope();
+        return $out;
     }
 
     /**
@@ -89,6 +213,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
+     * Get locale-based formatted price.
+     *
      * @param string $value
      * @return float|null
      */

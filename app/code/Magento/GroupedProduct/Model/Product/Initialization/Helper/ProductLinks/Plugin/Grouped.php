@@ -8,6 +8,7 @@ namespace Magento\GroupedProduct\Model\Product\Initialization\Helper\ProductLink
 use Magento\Catalog\Api\Data\ProductLinkExtensionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GroupedProduct\Model\Product\Type\Grouped as TypeGrouped;
 
@@ -111,7 +112,7 @@ class Grouped
                     foreach ($linkRaw['custom_attributes'] as $option) {
                         $name = $option['attribute_code'];
                         $value = $option['value'];
-                        $setterName = 'set' . ucfirst($name);
+                        $setterName = 'set' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($name);
                         // Check if setter exists
                         if (method_exists($productLinkExtension, $setterName)) {
                             call_user_func([$productLinkExtension, $setterName], $value);

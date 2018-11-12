@@ -6,7 +6,7 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="OpenEditCustomerFromAdminActionGroup">
         <arguments>
             <argument name="customer"/>
@@ -19,5 +19,27 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEdit"/>
         <waitForPageLoad stepKey="waitForPageLoad2" />
+    </actionGroup>
+    <actionGroup name="DeleteCustomerFromAdminActionGroup">
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{customer.email}}" stepKey="fillSearch"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickSubmit"/>
+        <waitForAjaxLoad stepKey="waitForLoadAjax"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.multicheck}}" stepKey="selectAll"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.actions}}" stepKey="clickActions"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="clickDelete"/>
+        <waitForAjaxLoad stepKey="waitForLoadConfirmation"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="A total of 1 record(s) were deleted" stepKey="seeSuccess"/>
+    </actionGroup>
+    <actionGroup name="AdminClearCustomersFiltersActionGroup">
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="amOnCustomersPage"/>
+        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
     </actionGroup>
 </actionGroups>

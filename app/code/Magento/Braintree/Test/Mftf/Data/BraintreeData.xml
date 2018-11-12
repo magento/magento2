@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SampleBraintreeConfig" type="braintree_config_state">
         <requiredEntity type="title">SampleTitle</requiredEntity>
         <requiredEntity type="payment_action">SamplePaymentAction</requiredEntity>
@@ -33,6 +33,33 @@
     </entity>
     <entity name="SamplePrivateKey" type="private_key">
         <data key="value">somePrivateKey</data>
+    </entity>
+
+    <entity name="BraintreeConfig" type="braintree_config_state">
+        <requiredEntity type="title">BraintreeTitle</requiredEntity>
+        <requiredEntity type="payment_action">PaymentAction</requiredEntity>
+        <requiredEntity type="environment">Environment</requiredEntity>
+        <requiredEntity type="merchant_id">MerchantId</requiredEntity>
+        <requiredEntity type="public_key">PublicKey</requiredEntity>
+        <requiredEntity type="private_key">PrivateKey</requiredEntity>
+    </entity>
+    <entity name="BraintreeTitle" type="title">
+        <data key="value">Credit Card (Braintree)</data>
+    </entity>
+    <entity name="PaymentAction" type="payment_action">
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="Environment" type="environment">
+        <data key="value">sandbox</data>
+    </entity>
+    <entity name="MerchantId" type="merchant_id">
+        <data key="value">d4pdjhxgjfrsmzbf</data>
+    </entity>
+    <entity name="PublicKey" type="public_key">
+        <data key="value">m7q4wmh43xrgyrst</data>
+    </entity>
+    <entity name="PrivateKey" type="private_key">
+        <data key="value">67de364080b1b4e2492d7a3de413a572</data>
     </entity>
 
     <!-- default configuration used to restore Magento config -->
@@ -61,6 +88,28 @@
     </entity>
     <entity name="DefaultPrivateKey" type="private_key">
         <data key="value"/>
+    </entity>
+
+    <entity name="CustomBraintreeConfigurationData" type="custom_braintree_config_state">
+        <requiredEntity type="braintree_cc_vault_active">BraintreeValuteActive</requiredEntity>
+        <requiredEntity type="active">EnableSolution</requiredEntity>
+    </entity>
+    <entity name="BraintreeValuteActive" type="braintree_cc_vault_active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnableSolution" type="active">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="RollBackCustomBraintreeConfigurationData" type="custom_braintree_config_state">
+        <requiredEntity type="braintree_cc_vault_active">DefaultBraintreeValuteActive</requiredEntity>
+        <requiredEntity type="active">DefaultEnableSolution</requiredEntity>
+    </entity>
+    <entity name="DefaultBraintreeValuteActive" type="braintree_cc_vault_active">
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultEnableSolution" type="active">
+        <data key="value">0</data>
     </entity>
 
     <entity name="testData" type="data">

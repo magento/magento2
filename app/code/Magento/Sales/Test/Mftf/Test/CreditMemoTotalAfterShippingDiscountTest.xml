@@ -7,10 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="CreditMemoTotalAfterShippingDiscountTest">
         <annotations>
-            <features value="Credit memo"/>
+            <features value="Sales"/>
+            <stories value="Credit memos"/>
             <title value="Verify credit memo grand total after shipping discount is applied via Cart Price Rule"/>
             <description value="Verify credit memo grand total after shipping discount is applied via Cart Price Rule"/>
             <severity value="MAJOR"/>

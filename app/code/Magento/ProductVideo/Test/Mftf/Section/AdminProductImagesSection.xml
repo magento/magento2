@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductImagesSection">
         <element name="addVideoButton" type="button" selector="#add_video_button" timeout="60"/>
         <element name="removeVideoButton" type="button" selector="//*[@id='media_gallery_content']//button[@class='action-remove']" timeout="60"/>

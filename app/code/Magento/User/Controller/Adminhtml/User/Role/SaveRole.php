@@ -7,6 +7,7 @@
 
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Controller\ResultFactory;
@@ -14,9 +15,11 @@ use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
 
 /**
+ * Save role controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
+class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements HttpPostActionInterface
 {
     /**
      * Session keys for Info form data
@@ -58,9 +61,8 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     {
         if (!($this->securityCookie instanceof SecurityCookie)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
-        } else {
-            return $this->securityCookie;
         }
+        return $this->securityCookie;
     }
 
     /**
@@ -150,6 +152,8 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     }
 
     /**
+     * Process previous users
+     *
      * @param \Magento\Authorization\Model\Role $role
      * @return $this
      * @throws \Exception
@@ -206,6 +210,8 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     }
 
     /**
+     * Save data to session and redirect
+     *
      * @param \Magento\Authorization\Model\Role $role
      * @param array $data
      * @param \Magento\Backend\Model\View\Result\Redirect $resultRedirect

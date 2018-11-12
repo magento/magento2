@@ -7,13 +7,13 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="CustomerAddressSimple" type="address">
         <data key="id">0</data>
         <data key="customer_id">12</data>
         <requiredEntity type="region">CustomerRegionOne</requiredEntity>
         <data key="region_id">0</data>
-        <data key="country_id">USA</data>
+        <data key="country_id">US</data>
         <array key="street">
             <item>7700 W Parmer Ln</item>
             <item>Bld D</item>

@@ -6,10 +6,11 @@
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class LogoutSuccess extends \Magento\Customer\Controller\AbstractAccount
+class LogoutSuccess extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
 {
     /**
      * @var PageFactory

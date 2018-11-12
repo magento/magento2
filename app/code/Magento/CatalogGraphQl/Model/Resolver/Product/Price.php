@@ -7,13 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
@@ -36,23 +35,15 @@ class Price implements ResolverInterface
     private $priceInfoFactory;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @param StoreManagerInterface $storeManager
      * @param PriceInfoFactory $priceInfoFactory
-     * @param ValueFactory $valueFactory
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        PriceInfoFactory $priceInfoFactory,
-        ValueFactory $valueFactory
+        PriceInfoFactory $priceInfoFactory
     ) {
         $this->storeManager = $storeManager;
         $this->priceInfoFactory = $priceInfoFactory;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -66,12 +57,9 @@ class Price implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new GraphQlInputException(__('"model" value should be specified'));
         }
 
         /** @var Product $product */
@@ -90,11 +78,7 @@ class Price implements ResolverInterface
             'maximalPrice' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $maximalPriceAmount)
         ];
 
-        $result = function () use ($prices) {
-            return $prices;
-        };
-
-        return $this->valueFactory->create($result);
+        return $prices;
     }
 
     /**

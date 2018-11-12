@@ -18,6 +18,7 @@
             <group value="sales"/>
         </annotations>
         <before>
+            <actionGroup ref="EnableAdminAccountSharingActionGroup" stepKey="enableAdminAccountSharing"/>
             <createData entity="EnabledMinimumOrderAmount500" stepKey="enableMinimumOrderAmount"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
