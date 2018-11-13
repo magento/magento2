@@ -32,6 +32,11 @@
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
         <element name="freeShipping" type="select" selector="select[name='simple_free_shipping']"/>
+        <element name="conditions" type="button" selector=".rule-param.rule-param-new-child > a"/>
+        <element name="condition" type="text" selector="//span[@class='rule-param']/a[text()='{{arg}}']" parameterized="true"/>
+        <element name="operator" type="select" selector="select[name*='[operator]']"/>
+        <element name="childAttribute" type="select" selector="select[name*='new_child']"/>
+        <element name="optionInput" type="input" selector="ul[class*='rule-param-children'] input[name*='[value]']"/>
 
         <!-- Manage Coupon Codes sub-form -->
         <element name="manageCouponCodesHeader" type="button" selector="div[data-index='manage_coupon_codes']" timeout="30"/>

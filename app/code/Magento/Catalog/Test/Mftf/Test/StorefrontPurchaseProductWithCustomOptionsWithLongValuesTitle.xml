@@ -65,6 +65,7 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>

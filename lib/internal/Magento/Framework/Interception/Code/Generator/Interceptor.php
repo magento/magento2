@@ -113,7 +113,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             "} else {\n" .
             "    return \$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
             "}",
-            'returnType' => $method->getReturnType(),
+            'returnType' => $this->getReturnTypeValue($method->getReturnType()),
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
 
@@ -182,5 +182,24 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             }
         }
         return $result;
+    }
+
+    /**
+     * Returns return type
+     *
+     * @param mixed $returnType
+     * @return null|string
+     */
+    private function getReturnTypeValue($returnType)
+    {
+        $returnTypeValue = null;
+
+        if ($returnType) {
+            $returnTypeValue = ((string)$returnType === 'self')
+                ? $this->getSourceClassName()
+                : (string)$returnType;
+        }
+
+        return $returnTypeValue;
     }
 }

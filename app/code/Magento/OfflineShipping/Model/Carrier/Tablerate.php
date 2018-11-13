@@ -60,6 +60,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory
      * @param \Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory $tablerateFactory
      * @param array $data
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(

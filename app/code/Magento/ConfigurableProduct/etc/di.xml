@@ -228,4 +228,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\SalesRule\Model\Quote\ChildrenValidationLocator">
+        <arguments>
+            <argument name="productTypeChildrenValidationMap" xsi:type="array">
+                <item name="configurable" xsi:type="boolean">false</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

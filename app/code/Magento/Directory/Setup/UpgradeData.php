@@ -46,6 +46,9 @@ class UpgradeData implements UpgradeDataInterface
         if (version_compare($context->getVersion(), '2.0.2', '<')) {
             $this->addCountryRegions($setup, 'IN', $this->getDataForIndia());
         }
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
+            $this->addCountryRegions($setup, 'AU', $this->getDataForAustralia());
+        }
     }
 
     /**
@@ -124,6 +127,25 @@ class UpgradeData implements UpgradeDataInterface
             'UP' => 'Uttar Pradesh',
             'UT' => 'Uttarakhand',
             'WB' => 'West Bengal',
+        ];
+    }
+
+    /**
+     * Australian states data.
+     *
+     * @return array
+     */
+    private function getDataForAustralia()
+    {
+        return [
+            'ACT' => 'Australian Capital Territory',
+            'NSW' => 'New South Wales',
+            'VIC' => 'Victoria',
+            'QLD' => 'Queensland',
+            'SA' => 'South Australia',
+            'TAS' => 'Tasmania',
+            'WA' => 'Western Australia',
+            'NT' => 'Northern Territory'
         ];
     }
 

@@ -222,13 +222,13 @@ class Save extends Attribute
                 $data['backend_model'] = $this->productHelper->getAttributeBackendModelByInputType(
                     $data['frontend_input']
                 );
+
+                if ($model->getIsUserDefined() === null) {
+                    $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
+                }
             }
 
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
-
-            if ($model->getIsUserDefined() === null || $model->getIsUserDefined() != 0) {
-                $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
-            }
 
             $defaultValueField = $model->getDefaultValueByInput($data['frontend_input']);
             if ($defaultValueField) {
