@@ -230,7 +230,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             );
 
             if (!$includeOutOfStock) {
-               $this->stockHelper->addIsInStockFilterToCollection($collection);
+                $this->stockHelper->addIsInStockFilterToCollection($collection);
             }
 
             foreach ($collection as $item) {
