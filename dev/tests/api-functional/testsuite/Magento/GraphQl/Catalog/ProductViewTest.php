@@ -44,7 +44,6 @@ class ProductViewTest extends GraphQlAbstract
             attribute_set_id
             country_of_manufacture
             created_at
-            description
             gift_message_available
             id
             categories {
@@ -202,7 +201,6 @@ class ProductViewTest extends GraphQlAbstract
                 position
                 sku
             }
-            short_description
             sku
             small_image{ url, label }
             thumbnail { url, label }
@@ -296,7 +294,6 @@ QUERY;
             }
             country_of_manufacture
             created_at
-            description
             gift_message_available
             id
             image {url, label}
@@ -446,7 +443,6 @@ QUERY;
                 position
                 sku
             }
-            short_description
             sku
             small_image { url, label }
             special_from_date
@@ -908,11 +904,9 @@ QUERY;
     {
         $eavAttributes = [
             'url_key',
-            'description',
             'meta_description',
             'meta_keyword',
             'meta_title',
-            'short_description',
             'country_of_manufacture',
             'gift_message_available',
             'news_from_date',
