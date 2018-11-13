@@ -7,7 +7,6 @@ namespace Magento\AdminNotification\Model;
 
 use Magento\Framework\Notification\MessageInterface;
 use Magento\Framework\Notification\NotifierInterface;
-use Magento\AdminNotification\Model\InboxInterface;
 
 /**
  * AdminNotification Inbox model
@@ -77,7 +76,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      */
     public function getNoticeStatus()
     {
-        return $this->getResource()->getNoticeStatus($this);
+        return $this->getResource()->getNoticeStatus();
     }
 
     /**
