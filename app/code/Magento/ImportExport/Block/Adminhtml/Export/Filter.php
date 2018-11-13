@@ -250,7 +250,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             if ('' === $firstOption['value']) {
                 $options[key($options)]['label'] = '';
             } else {
-                array_unshift($options, ['value' => '', 'label' => '']);
+                array_unshift($options, ['value' => '', 'label' => __('-- Not Selected --')]);
             }
             $arguments = [
                 'name' => $this->getFilterElementName($attribute->getAttributeCode()),
