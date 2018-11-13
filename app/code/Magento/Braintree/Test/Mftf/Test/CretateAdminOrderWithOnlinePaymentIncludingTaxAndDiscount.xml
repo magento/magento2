@@ -109,6 +109,6 @@
         <!--Get access to Credit Memo page from Invocie page-->
         <click selector="{{AdminInvoiceMainActionsSection.openNewCreditMemoFromInvoice}}" stepKey="clickCreateNewCreditMemo"/>
         <waitForPageLoad stepKey="waitForLoadNewCreditMemoPage" time="5"/>
-        <see selector="{{AdminCreditMemoOrderInformationSection.orderId}}" userInput="New Memo" stepKey="seeNewCreditMemo" after="waitForLoadNewCreditMemoPage"/>
+        <see selector="{{AdminCreditMemoOrderInformationSection.orderId}}" userInput="New Memo for" stepKey="seeNewCreditMemo" after="waitForLoadNewCreditMemoPage"/>
     </test>
 </tests>
