@@ -55,6 +55,6 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
         $this->assertNull(
             $actualQuoteItem->getCustomPrice(),
             'Item custom price has to be null'
-            );
+        );
     }
 }
