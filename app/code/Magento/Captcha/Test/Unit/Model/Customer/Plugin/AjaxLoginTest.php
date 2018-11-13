@@ -149,7 +149,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
         $this->resultJsonMock
             ->expects($this->once())
             ->method('setData')
-            ->with(['errors' => true, 'message' => __('Incorrect CAPTCHA')])
+            ->with(['errors' => true, 'message' => __('Incorrect CAPTCHA'), 'captcha' => true])
             ->will($this->returnSelf());
 
         $closure = function () {
