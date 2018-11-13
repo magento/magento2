@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Button for deletion of customer address in admin
  */
-class Delete extends Action implements HttpGetActionInterface
+class Delete extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session

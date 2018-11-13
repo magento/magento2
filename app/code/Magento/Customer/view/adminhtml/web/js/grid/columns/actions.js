@@ -18,8 +18,9 @@ define([
     return Actions.extend({
         defaults: {
             ajaxSettings: {
-                method: 'GET',
-                dataType: 'json'
+                method: 'POST',
+                dataType: 'json',
+                formKey: $('input[name="form_key"]').val()
             },
             listens: {
                 action: 'onAction'

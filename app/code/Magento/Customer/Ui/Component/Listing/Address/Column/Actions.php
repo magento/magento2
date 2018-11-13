@@ -113,6 +113,7 @@ class Actions extends Column
                             ['parent_id' => $item['parent_id'], 'id' => $item['entity_id']]
                         ),
                         'label' => __('Delete'),
+                        'post' => true,
                         'isAjax' => true,
                         'confirm' => [
                             'title' => __('Delete address'),
