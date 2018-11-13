@@ -7,17 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use Magento\Catalog\Model\Product;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Catalog\Helper\Output as OutputHelper;
 
 /**
  * Resolve rendered content for attributes where HTML content is allowed
  */
-class ProductHtmlAttribute implements ResolverInterface
+class ProductComplexTextAttribute implements ResolverInterface
 {
     /**
      * @var OutputHelper
@@ -42,7 +42,7 @@ class ProductHtmlAttribute implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) {
+    ): array {
         if (!isset($value['model'])) {
             throw new GraphQlInputException(__('"model" value should be specified'));
         }
@@ -51,6 +51,7 @@ class ProductHtmlAttribute implements ResolverInterface
         $product = $value['model'];
         $fieldName = $field->getName();
         $renderedValue = $this->outputHelper->productAttribute($product, $product->getData($fieldName), $fieldName);
-        return $renderedValue;
+
+        return ['html' => $renderedValue ?? ''];
     }
 }
