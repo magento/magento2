@@ -24,7 +24,7 @@ class QueryComplexityLimiterTest extends GraphQlAbstract
         $query
             = <<<QUERY
 {
-category(id: 2) {
+  category(id: 2) {
     products {
       items {
         name
@@ -52,9 +52,15 @@ category(id: 2) {
               new_from_date
               tier_price
               manufacturer
-              thumbnail
+              thumbnail {
+                url
+                label
+              }
               sku
-              image
+              image {
+                url
+                label
+              }
               canonical_url
               updated_at
               created_at
@@ -76,12 +82,18 @@ category(id: 2) {
                     special_from_date
                     special_to_date
                     new_to_date
-                    thumbnail
+                    thumbnail {
+                      url
+                      label
+                    }
                     new_from_date
                     tier_price
                     manufacturer
                     sku
-                    image
+                    image {
+                      url
+                      label
+                    }
                     canonical_url
                     updated_at
                     created_at
@@ -111,9 +123,15 @@ category(id: 2) {
                           new_from_date
                           tier_price
                           manufacturer
-                          thumbnail
+                          thumbnail {
+                            url
+                            label
+                          }
                           sku
-                          image
+                          image {
+                            url
+                            label
+                          }
                           canonical_url
                           updated_at
                           created_at
@@ -139,7 +157,10 @@ category(id: 2) {
                                 tier_price
                                 manufacturer
                                 sku
-                                image
+                                image {
+                                  url
+                                  label
+                                }
                                 canonical_url
                                 updated_at
                                 created_at
@@ -160,13 +181,101 @@ category(id: 2) {
                                       name
                                       special_from_date
                                       special_to_date
+                                      price {
+                                        minimalPrice {
+                                          amount {
+                                            value
+                                            currency
+                                          }
+                                        }
+                                        maximalPrice {
+                                          amount {
+                                            value
+                                            currency
+                                          }
+                                        }
+                                        regularPrice {
+                                          amount {
+                                            value
+                                            currency
+                                          }
+                                        }
+                                      }
+                                      tier_price
+                                      special_price
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
                                       new_to_date
                                       new_from_date
                                       tier_price
                                       manufacturer
                                       sku
-                                      image
-                                      thumbnail
+                                      image {
+                                        url
+                                        label
+                                      }
+                                      thumbnail {
+                                        url
+                                        label
+                                      }
                                       canonical_url
                                       updated_at
                                       created_at
@@ -221,9 +330,10 @@ category(id: 2) {
     }
   }
 }
+
 QUERY;
 
-        self::expectExceptionMessageRegExp('/Max query complexity should be 160 but got 169/');
+        self::expectExceptionMessageRegExp('/Max query complexity should be 250 but got 252/');
         $this->graphQlQuery($query);
     }
 
