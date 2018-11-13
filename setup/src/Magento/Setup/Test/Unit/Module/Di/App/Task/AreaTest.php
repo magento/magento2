@@ -48,7 +48,7 @@ class AreaTest extends \PHPUnit\Framework\TestCase
         $this->configReaderMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Config\Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configWriterMock = 
+        $this->configWriterMock =
             $this->getMockBuilder(\Magento\Framework\App\ObjectManager\ConfigWriterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -113,7 +113,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         $this->_cacheId = $cacheId;
         $this->_reader = $reader;
         $this->_scopeList = $scopeList;
-        $this->cacheManager = 
+        $this->cacheManager =
             $cacheManager ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CacheManager::class);
         $intercepted = $this->cacheManager->load($cacheId);
         if ($intercepted !== null) {

@@ -40,7 +40,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->serializer = $this->objectManager->get(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->cache = $this->objectManager->get(\Magento\Framework\App\CacheInterface::class);
-        $this->configWriter = 
+        $this->configWriter =
             $this->objectManager->get(\Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem::class);
 
         $this->initializeMetadataDirectory();

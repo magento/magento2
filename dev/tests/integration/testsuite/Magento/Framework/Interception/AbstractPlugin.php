@@ -56,6 +56,8 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
 
     /**
      * Set up Interception Config
+     *
+     * @param array $pluginConfig
      */
     public function setUpInterceptionConfig($pluginConfig)
     {
