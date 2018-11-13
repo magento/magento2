@@ -19,6 +19,11 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
+     * @var \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $memorizer;
+
+    /**
      * @var \Magento\Framework\Url | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $urlBuilder;
@@ -62,6 +67,16 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
                 'getLimit',
                 'getCurrentPage'
             ]);
+        $this->memorizer = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer::class,
+            [
+                'getDirection',
+                'getOrder',
+                'getMode',
+                'getLimit',
+                'isMemorizingAllowed'
+            ]
+        );
         $this->layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getChildName', 'getBlock']);
         $this->pagerBlock = $this->createPartialMock(\Magento\Theme\Block\Html\Pager::class, [
                 'setUseContainer',
@@ -116,6 +131,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
                 'context' => $context,
                 'catalogConfig' => $this->catalogConfig,
                 'toolbarModel' => $this->model,
+                'toolbarMemorizer' => $this->memorizer,
                 'urlEncoder' => $this->urlEncoder,
                 'productListHelper' => $this->productListHelper
             ]
@@ -155,7 +171,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
     public function testGetCurrentOrder()
     {
         $order = 'price';
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getOrder')
             ->will($this->returnValue($order));
         $this->catalogConfig->expects($this->once())
@@ -169,7 +185,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
     {
         $direction = 'desc';
 
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getDirection')
             ->will($this->returnValue($direction));
 
@@ -183,7 +199,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->productListHelper->expects($this->once())
             ->method('getAvailableViewMode')
             ->will($this->returnValue(['list' => 'List']));
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue($mode));
 
@@ -232,11 +248,11 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $mode = 'list';
         $limit = 10;
 
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue($mode));
 
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getLimit')
             ->will($this->returnValue($limit));
         $this->productListHelper->expects($this->once())
@@ -266,7 +282,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->productListHelper->expects($this->exactly(2))
             ->method('getAvailableLimit')
             ->will($this->returnValue([10 => 10, 20 => 20]));
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getLimit')
             ->will($this->returnValue($limit));
         $this->pagerBlock->expects($this->once())

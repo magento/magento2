@@ -195,6 +195,8 @@ abstract class AbstractType
     }
 
     /**
+     * Initialize template for error message.
+     *
      * @param array $templateCollection
      * @return $this
      */
@@ -377,6 +379,8 @@ abstract class AbstractType
     }
 
     /**
+     * Adding attribute option.
+     *
      * In case we've dynamically added new attribute option during import we need to add it to our cache
      * in order to keep it up to date.
      *
@@ -508,8 +512,10 @@ abstract class AbstractType
     }
 
     /**
-     * Prepare attributes values for save: exclude non-existent, static or with empty values attributes;
-     * set default values if needed
+     * Adding default attribute to product before save.
+     *
+     * Prepare attributes values for save: exclude non-existent, static or with empty values attributes,
+     * set default values if needed.
      *
      * @param array $rowData
      * @param bool $withDefaultValue
@@ -537,9 +543,9 @@ abstract class AbstractType
                 } else {
                     $resultAttrs[$attrCode] = $rowData[$attrCode];
                 }
-            } elseif (array_key_exists($attrCode, $rowData)) {
+            } elseif (array_key_exists($attrCode, $rowData) && empty($rowData['_store'])) {
                 $resultAttrs[$attrCode] = $rowData[$attrCode];
-            } elseif ($withDefaultValue && null !== $attrParams['default_value']) {
+            } elseif ($withDefaultValue && null !== $attrParams['default_value'] && empty($rowData['_store'])) {
                 $resultAttrs[$attrCode] = $attrParams['default_value'];
             }
         }
@@ -611,7 +617,8 @@ abstract class AbstractType
     }
 
     /**
-     * Clean cached values
+     * Clean cached values.
+     *
      * @since 100.2.0
      */
     public function __destruct()
