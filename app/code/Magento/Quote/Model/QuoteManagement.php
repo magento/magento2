@@ -354,6 +354,12 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         if ($quote->getCheckoutMethod() === self::METHOD_GUEST) {
             $quote->setCustomerId(null);
             $quote->setCustomerEmail($quote->getBillingAddress()->getEmail());
+            $quote->setCustomerFirstname($quote->getBillingAddress()->getFirstname());
+            $quote->setCustomerLastname($quote->getBillingAddress()->getLastname());
+
+            if ($quote->getBillingAddress()->getMiddlename()) {
+                $quote->setCustomerMiddlename($quote->getBillingAddress()->getMiddlename());
+            }
             $quote->setCustomerIsGuest(true);
             $quote->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
         }
