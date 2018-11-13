@@ -263,6 +263,66 @@ class QueryComplexityLimiterTest extends GraphQlAbstract
                                         percentage_value
                                         website_id
                                       }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
                                       new_to_date
                                       new_from_date
                                       tier_price
@@ -330,10 +390,9 @@ class QueryComplexityLimiterTest extends GraphQlAbstract
     }
   }
 }
-
 QUERY;
 
-        self::expectExceptionMessageRegExp('/Max query complexity should be 250 but got 252/');
+        self::expectExceptionMessageRegExp('/Max query complexity should be 300 but got 302/');
         $this->graphQlQuery($query);
     }
 
