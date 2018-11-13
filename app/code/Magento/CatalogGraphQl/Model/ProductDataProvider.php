@@ -5,23 +5,38 @@
  */
 declare(strict_types=1);
 
-namespace Magento\WishlistGraphQl\Model;
+namespace Magento\CatalogGraphQl\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
-class WishlistItemsProductDataProvider
+/**
+ * Product data provider
+ *
+ * TODO: will be replaces on deferred mechanism
+ */
+class ProductDataProvider
 {
     /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
 
+    /**
+     * @param ProductRepositoryInterface $productRepository
+     */
     public function __construct(ProductRepositoryInterface $productRepository)
     {
         $this->productRepository = $productRepository;
     }
 
-    public function getProductDataById(int $productId) {
+    /**
+     * Get product data by id
+     *
+     * @param int $productId
+     * @return array
+     */
+    public function getProductDataById(int $productId): array
+    {
         $product = $this->productRepository->getById($productId);
         $productData = $product->toArray();
         $productData['model'] = $product;

@@ -7,14 +7,16 @@ type Query {
 
 type WishlistOutput {
     items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @doc(description: "todo"),
-    sharing_code: String! @doc(description: "todo"),
-    updated_at: String! @doc(description: "todo")
+    items_count: Int @doc(description: "todo"),
+    name: String @doc(description: "todo"),
+    sharing_code: String @doc(description: "todo"),
+    updated_at: String @doc(description: "todo")
 }
 
 type WishlistItem {
-    id: Int! @doc(description: "todo")
-    qty: Float! @doc(description: "todo"),
-    description: String! @doc(description: "todo"),
-    added_at: String! @doc(description: "todo"),
-    product: ProductInterface @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsProductsResolver")
+    id: Int @doc(description: "todo")
+    qty: Float @doc(description: "todo"),
+    description: String @doc(description: "todo"),
+    added_at: String @doc(description: "todo"),
+    product: ProductInterface @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\ProductResolver")
 }

@@ -8,40 +8,45 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Wishlist;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
+use Magento\Wishlist\Model\WishlistFactory;
 
 class WishlistTest extends GraphQlAbstract
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
     /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
 
+    /**
+     * @var WishlistFactory
+     */
+    private $wishlistFactory;
+
+    /**
+     * @var WishlistResourceModel
+     */
+    private $wishlistResource;
+
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
+        $this->wishlistFactory = Bootstrap::getObjectManager()->get(WishlistFactory::class);
+        $this->wishlistResource = Bootstrap::getObjectManager()->get(WishlistResourceModel::class);
     }
 
     /**
-     * Verify the fields of CMS Block selected by identifiers
-     *
      * @magentoApiDataFixture Magento/Wishlist/_files/wishlist.php
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     * @throws \Exception
      */
-    public function testGetCustomersWishlist(): void
+    public function testGetCustomerWishlist(): void
     {
         /** @var \Magento\Wishlist\Model\Wishlist $wishlist */
-        $wishlist = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Wishlist\Model\Wishlist::class
-        );
-        $wishlist->loadByCustomerId(1, true);
+        $wishlist = $this->wishlistFactory->create();
+        $this->wishlistResource->load($wishlist, 1, 'customer_id');
+
         /** @var Item $wishlistItem */
         $wishlistItem = $wishlist->getItemCollection()->getFirstItem();
         $wishlistItemProduct = $wishlistItem->getProduct();
@@ -49,26 +54,41 @@ class WishlistTest extends GraphQlAbstract
             <<<QUERY
 {
   wishlist {
+    items_count
+    name
+    sharing_code
+    updated_at
     items {
       id
       qty
+      description
+      added_at
       product {
         sku
         name
       }
-      description
-      added_at
     }
-    sharing_code
-    updated_at
   }
 }
 QUERY;
 
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders('customer@example.com', 'password'));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders('customer@example.com', 'password')
+        );
+
+        $this->assertEquals($wishlist->getItemsCount(), $response['wishlist']['items_count']);
+        $this->assertEquals($wishlist->getName(), $response['wishlist']['name']);
         $this->assertEquals($wishlist->getSharingCode(), $response['wishlist']['sharing_code']);
+        $this->assertEquals($wishlist->getUpdatedAt(), $response['wishlist']['updated_at']);
+
+        $this->assertEquals($wishlistItem->getId(), $response['wishlist']['items'][0]['id']);
         $this->assertEquals($wishlistItem->getData('qty'), $response['wishlist']['items'][0]['qty']);
         $this->assertEquals($wishlistItem->getDescription(), $response['wishlist']['items'][0]['description']);
+        $this->assertEquals($wishlistItem->getAddedAt(), $response['wishlist']['items'][0]['added_at']);
+
         $this->assertEquals($wishlistItemProduct->getSku(), $response['wishlist']['items'][0]['product']['sku']);
         $this->assertEquals($wishlistItemProduct->getName(), $response['wishlist']['items'][0]['product']['name']);
     }
