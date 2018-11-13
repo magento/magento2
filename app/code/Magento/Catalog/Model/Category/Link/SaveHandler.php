@@ -106,25 +106,19 @@ class SaveHandler implements ExtensionInterface
      */
     private function mergeCategoryLinks($newCategoryPositions, $oldCategoryPositions)
     {
-        $result = [];
         if (empty($newCategoryPositions)) {
-            return $result;
+            return [];
         }
 
-        $oldCategoryList = array_column($oldCategoryPositions, 'category_id');
+        $categoryPositions = array_combine(array_column($oldCategoryPositions, 'category_id'), $oldCategoryPositions);
         foreach ($newCategoryPositions as $newCategoryPosition) {
-            $key = array_search($newCategoryPosition['category_id'], $oldCategoryList);
-
-            if ($key === false) {
-                $result[] = $newCategoryPosition;
-            } elseif (isset($oldCategoryPositions[$key])
-                && $oldCategoryPositions[$key]['position'] != $newCategoryPosition['position']
-            ) {
-                $result[] = $newCategoryPosition;
-                unset($oldCategoryPositions[$key]);
+            $categoryId = $newCategoryPosition['category_id'];
+            if (!isset($categoryPositions[$categoryId])) {
+                $categoryPositions[$categoryId] = ['category_id' => $categoryId];
             }
+            $categoryPositions[$categoryId]['position'] = $newCategoryPosition['position'];
         }
-        $result = array_merge($result, $oldCategoryPositions);
+        $result = array_values($categoryPositions);
 
         return $result;
     }
