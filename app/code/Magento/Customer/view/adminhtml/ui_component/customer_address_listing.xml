@@ -63,20 +63,18 @@
             </settings>
         </filters>
         <massaction name="listing_massaction" component="Magento_Customer/js/grid/massactions">
-            <settings>
-                <actions xsi:type="array">
-                    <item name="0" xsi:type="array">
-                        <item name="isAjax" xsi:type="boolean">true</item>
-                        <item name="confirm" xsi:type="array">
-                            <item name="message" xsi:type="string" translate="true">Are you sure to delete selected address?</item>
-                            <item name="title" xsi:type="string" translate="true">Delete items</item>
-                        </item>
-                        <item name="url" xsi:type="url" path="customer/address/massDelete"/>
-                        <item name="type" xsi:type="string">delete</item>
-                        <item name="label" xsi:type="string" translate="true">Delete</item>
-                    </item>
-                </actions>
-            </settings>
+            <action name="customer_addresses_mass_delete">
+                <settings>
+                    <isAjax>true</isAjax>
+                    <confirm>
+                        <message translate="true">Are you sure to delete selected address?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="customer/address/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
         </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
