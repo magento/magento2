@@ -66,30 +66,6 @@ class Quantity extends AbstractModifier
     }
 
     /**
-     * Disable qty field
-     *
-     * @param string $stockQtyPath
-     * @param array $meta
-     * @return array
-     */
-    private function disableQtyField(string $stockQtyPath, array $meta): array
-    {
-        $meta = $this->arrayManager->merge(
-            $stockQtyPath . '/children/qty/arguments/data/config',
-            $meta,
-            [
-                'disabled' => true,
-            ]
-        );
-        $meta = $this->arrayManager->remove(
-            $stockQtyPath . '/children/qty/arguments/data/config/imports/disabled',
-            $meta
-        );
-
-        return $meta;
-    }
-
-    /**
      * @inheritdoc
      */
     public function modifyMeta(array $meta)
@@ -103,7 +79,6 @@ class Quantity extends AbstractModifier
         $product = $this->locator->getProduct();
 
         if ($this->isSourceItemManagementAllowedForProductType->execute($product->getTypeId()) === false) {
-            $meta = $this->disableQtyField($stockQtyPath, $meta);
             return $meta;
         }
 
