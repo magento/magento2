@@ -93,7 +93,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     }
 
     /**
-     * Disable for collection processing | ????
+     * Disable for collection processing
      *
      * @param Filter $filter
      * @return bool
@@ -123,17 +123,12 @@ class SourceSelectionDataProvider extends AbstractDataProvider
                 continue;
             }
 
-            $orderItemId = $orderItem->getId();
-            //TODO: Need to add additional logic for bundle product with flag ship Together
-            if ($orderItem->getParentItem() && !$orderItem->isShipSeparately()) {
-                $orderItemId = $orderItem->getParentItemId();
-            }
-
-            $qty = $orderItem->getSimpleQtyToShip();
-            $qty = $this->castQty($orderItem, $qty);
-            $sku = $this->getSkuFromOrderItem->execute($orderItem);
+            $item = $orderItem->isDummy(true) ? $orderItem->getParentItem() : $orderItem;
+            $qty = $item->getSimpleQtyToShip();
+            $qty = $this->castQty($item, $qty);
+            $sku = $this->getSkuFromOrderItem->execute($item);
             $data[$orderId]['items'][] = [
-                'orderItemId' => $orderItemId,
+                'orderItemId' => $item->getId(),
                 'sku' => $sku,
                 'product' => $this->getProductName($orderItem),
                 'qtyToShip' => $qty,
