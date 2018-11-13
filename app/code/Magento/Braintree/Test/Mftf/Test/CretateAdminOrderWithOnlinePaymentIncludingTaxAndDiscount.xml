@@ -70,8 +70,21 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <!-- Create a cart price rule for Fixed amount discount for whole cart -->
-        <actionGroup ref="AdminCreateCartPriceRuleForRetailerActionGroup" stepKey="createCartPriceRule"/>
+        <!-- Create a cart price rule with 10% discount for whole cart -->
+        <click selector="{{AdminMenuSection.marketing}}" stepKey="clickOnMarketing" />
+        <waitForPageLoad stepKey="waitForMarketing" time="3"/>
+        <click selector="{{CartPriceRulesSubmenuSection.cartPriceRules}}" stepKey="clickOnCartPriceRules"/>
+        <waitForPageLoad stepKey="waitForCartPriceRules" time="3"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
+        <actionGroup ref="selectRetailerCustomerGroup" stepKey="selectRetailerCustomerGroup"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Percent of product price discount" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="10" stepKey="fillDiscountAmount"/>
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForCartRuleLoad" time="3"/>
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
 
         <!--Set Taxable Goods for Shipping Tax Class-->
         <actionGroup ref="changeShippingTaxClass" stepKey="changeShippingTaxClass"/>
@@ -100,15 +113,14 @@
         <!--Submit Order-->
         <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
         <waitForPageLoad stepKey="waitForSubmitOrder" time="5"/>
-        <see selector="{{NewOrderSection.successMessage}}" userInput="You created the order." stepKey="seeNewOrder" after="waitForSubmitOrder"/>
-
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeOrderSuccessMessage" after="waitForSubmitOrder"/>
 
         <!-- Create New invoice-->
         <actionGroup ref="adminFastCreateInvoice" stepKey="createInvoice"/>
 
-        <!--Get access to Credit Memo page from Invocie page-->
+        <!--Get access to Credit Memo page from Invoice page-->
         <click selector="{{AdminInvoiceMainActionsSection.openNewCreditMemoFromInvoice}}" stepKey="clickCreateNewCreditMemo"/>
         <waitForPageLoad stepKey="waitForLoadNewCreditMemoPage" time="5"/>
-        <see selector="{{AdminCreditMemoOrderInformationSection.orderId}}" userInput="New Memo for" stepKey="seeNewCreditMemo" after="waitForLoadNewCreditMemoPage"/>
+        <see selector="{{AdminCreditMemoOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="seeNewCreditMemo"/>
     </test>
 </tests>
