@@ -11,7 +11,7 @@ use Magento\InventorySalesApi\Model\ReturnProcessor\Request\ItemsToRefundInterfa
 use Magento\InventorySalesApi\Model\ReturnProcessor\ProcessRefundItemsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
@@ -84,13 +84,13 @@ class ProcessReturnQtyOnCreditMemoPlugin
     ) {
         $items = [];
         foreach ($creditmemo->getItems() as $item) {
-            /** @var OrderItemInterface $orderItem */
+            /** @var OrderItem $orderItem */
             $orderItem = $item->getOrderItem();
             $itemSku = $this->getSkuFromOrderItem->execute($orderItem);
 
             if ($this->isValidItem($itemSku, $orderItem->getProductType())) {
                 $qty = (float)$item->getQty();
-                $processedQty = $orderItem->getQtyInvoiced() - $orderItem->getQtyRefunded() + $qty;
+                $processedQty = $this->getProcessedQty($orderItem) + $qty;
                 $items[$itemSku] = [
                     'qty' => ($items[$itemSku]['qty'] ?? 0) + $qty,
                     'processedQty' => ($items[$itemSku]['processedQty'] ?? 0) + (float)$processedQty
@@ -107,6 +107,27 @@ class ProcessReturnQtyOnCreditMemoPlugin
             ]);
         }
         $this->processRefundItems->execute($order, $itemsToRefund, $returnToStockItems);
+    }
+
+    /**
+     * The goal of next code is to overcome current behaviour where children order items of Bundle product
+     * store incorrect Qty value of Invoiced items. As a temporary solution a function which retrieves these
+     * data (Qty Invoiced) from the parent Order Item is introduced.
+     * See: https://github.com/magento-engcom/msi/issues/1887
+     *
+     * @param OrderItem $orderItem
+     * @return float
+     */
+    private function getProcessedQty(OrderItem $orderItem): float
+    {
+        $parentItem = $orderItem->getParentItem();
+        if ($parentItem && !$orderItem->isDummy(true)) {
+            $qtyInvoiced = $parentItem->getQtyInvoiced();
+        } else {
+            $qtyInvoiced = $orderItem->getQtyInvoiced();
+        }
+
+        return $qtyInvoiced - $orderItem->getQtyRefunded();
     }
 
     /**
