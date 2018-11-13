@@ -11,18 +11,37 @@ define([
     'use strict';
 
     return Component.extend({
+        defaults: {
+            isShowAddToCart: false
+        },
+
         /** @inheritdoc */
         initialize: function () {
-            var isShowAddToCart;
-
             this._super();
             this.lastOrderedItems = customerData.get('last-ordered-items');
+            this.lastOrderedItems.subscribe(this.checkSalableItems.bind(this));
+            this.checkSalableItems();
 
-            isShowAddToCart = _.some(this.lastOrderedItems().items, {
+            return this;
+        },
+
+        /** @inheritdoc */
+        initObservable: function () {
+            this._super()
+                .observe('isShowAddToCart');
+
+            return this;
+        },
+
+        /**
+         * Check if items is_saleable and change add to cart button visibility.
+         */
+        checkSalableItems: function () {
+            var isShowAddToCart = _.some(this.lastOrderedItems().items, {
                 'is_saleable': true
             });
 
-            this.lastOrderedItems.isShowAddToCart = isShowAddToCart;
+            this.isShowAddToCart(isShowAddToCart);
         }
     });
 });
