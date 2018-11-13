@@ -188,7 +188,7 @@ define([
         /**
          * Bind form submit.
          *
-         @param {boolean} isFileUploaded
+         * @param {boolean} isFileUploaded
          */
         bindFormSubmit: function (isFileUploaded) {
             var self = this;
