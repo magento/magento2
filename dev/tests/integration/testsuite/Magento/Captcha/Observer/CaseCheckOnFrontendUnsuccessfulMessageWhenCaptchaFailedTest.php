@@ -5,7 +5,7 @@
  */
 namespace Magento\Captcha\Observer;
 
-use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
@@ -28,8 +28,8 @@ class CaseCheckOnFrontendUnsuccessfulMessageWhenCaptchaFailedTest extends Abstra
      */
     public function testLoginCheckUnsuccessfulMessageWhenCaptchaFailed()
     {
-        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
-        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
         $post = [
             'login' => [
                 'username' => 'dummy@dummy.com',
@@ -39,8 +39,7 @@ class CaseCheckOnFrontendUnsuccessfulMessageWhenCaptchaFailedTest extends Abstra
             'form_key' => $formKey->getFormKey(),
         ];
 
-        $this->getRequest()->setMethod(Request::METHOD_POST);
-        $this->getRequest()->setPostValue($post);
+        $this->prepareRequestData($post);
 
         $this->dispatch('customer/account/loginPost');
 
@@ -62,10 +61,8 @@ class CaseCheckOnFrontendUnsuccessfulMessageWhenCaptchaFailedTest extends Abstra
      */
     public function testForgotPasswordCheckUnsuccessfulMessageWhenCaptchaFailed()
     {
-        $email = 'dummy@dummy.com';
-
-        $this->getRequest()->setPostValue(['email' => $email]);
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $post = ['email' => 'dummy@dummy.com'];
+        $this->prepareRequestData($post);
 
         $this->dispatch('customer/account/forgotPasswordPost');
 
@@ -74,5 +71,48 @@ class CaseCheckOnFrontendUnsuccessfulMessageWhenCaptchaFailedTest extends Abstra
             $this->equalTo(['Incorrect CAPTCHA']),
             MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * Test incorrect captcha on customer create account page
+     *
+     * @codingStandardsIgnoreStart
+     * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
+     * @magentoConfigFixture default_store customer/captcha/enable 1
+     * @magentoConfigFixture default_store customer/captcha/forms user_create
+     * @magentoConfigFixture default_store customer/captcha/mode always
+     */
+    public function testCreateAccountCheckUnsuccessfulMessageWhenCaptchaFailed()
+    {
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+        $post = [
+            'firstname' => 'Firstname',
+            'lastname' => 'Lastname',
+            'email' => 'dummy@dummy.com',
+            'password' => 'TestPassword123',
+            'password_confirmation' => 'TestPassword123',
+            'captcha' => ['user_create' => 'wrong_captcha'],
+            'form_key' => $formKey->getFormKey(),
+        ];
+        $this->prepareRequestData($post);
+
+        $this->dispatch('customer/account/createPost');
+
+        $this->assertRedirect($this->stringContains('customer/account/create'));
+        $this->assertSessionMessages(
+            $this->equalTo(['Incorrect CAPTCHA']),
+            MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
+     * @param array $postData
+     * @return void
+     */
+    private function prepareRequestData($postData)
+    {
+        $this->getRequest()->setMethod(Request::METHOD_POST);
+        $this->getRequest()->setPostValue($postData);
     }
 }
