@@ -14,7 +14,6 @@ use Magento\Captcha\Observer\CheckUserLoginBackendObserver;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\Exception\Plugin\AuthenticationException;
 use Magento\Framework\Message\ManagerInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -71,14 +70,11 @@ class CheckUserLoginBackendObserverTest extends TestCase
     /**
      * Test check user login in backend with correct captcha
      *
-     * @dataProvider captchaCorrectnessCheckDataProvider
+     * @dataProvider requiredCaptchaDataProvider
      * @param bool $isRequired
-     * @param bool $isCorrect
-     * @param int $invokedTimes
      * @return void
-     * @throws AuthenticationException
      */
-    public function testCheckOnBackendLoginWithCorrectCaptcha(bool $isRequired, bool $isCorrect, int $invokedTimes): void
+    public function testCheckOnBackendLoginWithCorrectCaptcha(bool $isRequired): void
     {
         $formId = 'backend_login';
         $login = 'admin';
@@ -89,32 +85,13 @@ class CheckUserLoginBackendObserverTest extends TestCase
         $eventMock = $this->createPartialMock(Event::class, ['getUsername']);
         $captcha = $this->createMock(DefaultModel::class);
 
-        $eventMock->expects($this->any())
-            ->method('getUsername')
-            ->willReturn('admin');
-        $observerMock->expects($this->any())
-            ->method('getEvent')
-            ->willReturn($eventMock);
-        $captcha->expects($this->once())->method('isRequired')
-            ->with($login)
-            ->willReturn($isRequired);
-        $captcha->expects($this->exactly($invokedTimes))
-            ->method('isCorrect')
-            ->with($captchaValue)
-            ->willReturn($isCorrect);
-        $this->helperMock->expects($this->once())
-            ->method('getCaptcha')
-            ->with($formId)
-            ->willReturn($captcha);
-
-        $this->captchaStringResolverMock->expects($this->exactly($invokedTimes))
-            ->method('resolve')
-            ->with($this->requestMock, $formId)
+        $eventMock->method('getUsername')->willReturn('admin');
+        $observerMock->method('getEvent')->willReturn($eventMock);
+        $captcha->method('isRequired')->with($login)->willReturn($isRequired);
+        $captcha->method('isCorrect')->with($captchaValue)->willReturn(true);
+        $this->helperMock->method('getCaptcha')->with($formId)->willReturn($captcha);
+        $this->captchaStringResolverMock->method('resolve')->with($this->requestMock, $formId)
             ->willReturn($captchaValue);
-
-        $this->messageManagerMock->expects($this->exactly(0))
-            ->method('addError')
-            ->with(__('Incorrect CAPTCHA'));
 
         $this->observer->execute($observerMock);
     }
@@ -122,11 +99,11 @@ class CheckUserLoginBackendObserverTest extends TestCase
     /**
      * @return array
      */
-    public function captchaCorrectnessCheckDataProvider(): array
+    public function requiredCaptchaDataProvider(): array
     {
         return [
-            [true, true, 1],
-            [false, true, 0]
+            [true],
+            [false]
         ];
     }
 
@@ -135,7 +112,7 @@ class CheckUserLoginBackendObserverTest extends TestCase
      * Test check user login in backend with wrong captcha
      *
      * @return void
-     * @throws AuthenticationException
+     * @expectedException \Magento\Framework\Exception\Plugin\AuthenticationException
      */
     public function testCheckOnBackendLoginWithWrongCaptcha(): void
     {
@@ -148,30 +125,13 @@ class CheckUserLoginBackendObserverTest extends TestCase
         $eventMock = $this->createPartialMock(Event::class, ['getUsername']);
         $captcha = $this->createMock(DefaultModel::class);
 
-        $eventMock->expects($this->any())
-            ->method('getUsername')
-            ->willReturn('admin');
-        $observerMock->expects($this->any())
-            ->method('getEvent')
-            ->willReturn($eventMock);
-        $captcha->expects($this->once())->method('isRequired')
-            ->with($login)
-            ->willReturn(true);
-        $captcha->expects($this->exactly(1))
-            ->method('isCorrect')
-            ->with($captchaValue)
-            ->willReturn(false);
-        $this->helperMock->expects($this->once())
-            ->method('getCaptcha')
-            ->with($formId)
-            ->willReturn($captcha);
-
-        $this->captchaStringResolverMock->expects($this->exactly(1))
-            ->method('resolve')
-            ->with($this->requestMock, $formId)
+        $eventMock->method('getUsername')->willReturn($login);
+        $observerMock->method('getEvent')->willReturn($eventMock);
+        $captcha->method('isRequired')->with($login)->willReturn(true);
+        $captcha->method('isCorrect')->with($captchaValue)->willReturn(false);
+        $this->helperMock->method('getCaptcha')->with($formId)->willReturn($captcha);
+        $this->captchaStringResolverMock->method('resolve')->with($this->requestMock, $formId)
             ->willReturn($captchaValue);
-
-        $this->expectException(AuthenticationException::class);
 
         $this->observer->execute($observerMock);
     }
