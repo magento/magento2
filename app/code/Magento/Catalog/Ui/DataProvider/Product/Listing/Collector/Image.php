@@ -128,7 +128,7 @@ class Image implements ProductRenderCollectorInterface
 
     /**
      * Emulate image creation
-     * 
+     *
      * Callback in which we emulate initialize default design theme, depends on current store, be settings store id
      * from render info
      *
