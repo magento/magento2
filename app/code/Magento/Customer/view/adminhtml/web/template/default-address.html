@@ -17,7 +17,8 @@
                 </if>
                 <if args="address.street">
                     <text args="address.street" if="_.isString(address.street)"/>
-                    <text args="_.values(address.street).join(', ')" ifnot="_.isString(address.street)"/>
+                    <text args="_.values(address.street).filter(value => _.isString(value)).join(', ')"
+                          ifnot="_.isString(address.street)"/>
                     <br/>
                 </if>
                 <text args="address.city + ', '" if="address.city"/>
