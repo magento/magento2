@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
+use Magento\Setup\Model\AdminAccount;
 use Symfony\Component\Console\Input\InputOption;
 use Magento\Setup\Model\ConfigModel;
 use Symfony\Component\Console\Question\Question;
@@ -103,7 +104,7 @@ class InstallCommand extends AbstractSetupCommand
     {
         $inputOptions = $this->configModel->getAvailableOptions();
         $inputOptions = array_merge($inputOptions, $this->userConfig->getOptionsList());
-        $inputOptions = array_merge($inputOptions, $this->adminUser->getOptionsList());
+        $inputOptions = array_merge($inputOptions, $this->adminUser->getOptionsList(InputOption::VALUE_OPTIONAL));
         $inputOptions = array_merge($inputOptions, [
             new InputOption(
                 self::INPUT_KEY_CLEANUP_DB,
@@ -178,7 +179,7 @@ class InstallCommand extends AbstractSetupCommand
         }
 
         $errors = $this->configModel->validate($configOptionsToValidate);
-        $errors = array_merge($errors, $this->adminUser->validate($input));
+        $errors = array_merge($errors, $this->validateAdmin($input));
         $errors = array_merge($errors, $this->validate($input));
         $errors = array_merge($errors, $this->userConfig->validate($input));
 
@@ -247,7 +248,7 @@ class InstallCommand extends AbstractSetupCommand
 
         $output->writeln("");
 
-        foreach ($this->adminUser->getOptionsList() as $option) {
+        foreach ($this->adminUser->getOptionsList(InputOption::VALUE_OPTIONAL) as $option) {
             $configOptionsToValidate[$option->getName()] = $this->askQuestion(
                 $input,
                 $output,
@@ -337,5 +338,24 @@ class InstallCommand extends AbstractSetupCommand
         $value = $helper->ask($input, $output, $question);
 
         return $value;
+    }
+
+    /**
+     * Performs validation of admin options if at least one of them was set.
+     *
+     * @param InputInterface $input
+     * @return array
+     */
+    private function validateAdmin(InputInterface $input): array
+    {
+        if ($input->getOption(AdminAccount::KEY_FIRST_NAME)
+            || $input->getOption(AdminAccount::KEY_LAST_NAME)
+            || $input->getOption(AdminAccount::KEY_EMAIL)
+            || $input->getOption(AdminAccount::KEY_USER)
+            || $input->getOption(AdminAccount::KEY_PASSWORD)
+        ) {
+            return $this->adminUser->validate($input);
+        }
+        return [];
     }
 }
