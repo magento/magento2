@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "94ba8bea0470c1e4599c17145dcf3508",
+    "content-hash": "243bbfba7578f2084615fa0c092f87a8",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6351,16 +6351,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.3.10",
+            "version": "2.3.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "7cd80dbf1af405473f1a976c3b75097a0f27725d"
+                "reference": "3ca1bd74228a61bd05520bed1ef88b5a19764d92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/7cd80dbf1af405473f1a976c3b75097a0f27725d",
-                "reference": "7cd80dbf1af405473f1a976c3b75097a0f27725d",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/3ca1bd74228a61bd05520bed1ef88b5a19764d92",
+                "reference": "3ca1bd74228a61bd05520bed1ef88b5a19764d92",
                 "shasum": ""
             },
             "require": {
@@ -6418,7 +6418,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-11-06T20:54:16+00:00"
+            "time": "2018-11-13T18:22:25+00:00"
         },
         {
             "name": "moontoast/math",
