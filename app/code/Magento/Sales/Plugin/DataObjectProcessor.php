@@ -10,7 +10,7 @@ namespace Magento\Sales\Plugin;
 use Magento\Framework\Reflection\DataObjectProcessor as Subject;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order\Item as OrderItem;
-use Magento\Weee\Block\Item\Price\Renderer;
+use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 
 /**
  * Class for changing row total in response.
@@ -18,15 +18,15 @@ use Magento\Weee\Block\Item\Price\Renderer;
 class DataObjectProcessor
 {
     /**
-     * @var Renderer
+     * @var DefaultColumn
      */
     private $priceRenderer;
 
     /**
-     * @param Renderer $priceRenderer
+     * @param DefaultColumn $priceRenderer
      */
     public function __construct(
-        Renderer $priceRenderer
+        DefaultColumn $priceRenderer
     ) {
         $this->priceRenderer = $priceRenderer;
     }
