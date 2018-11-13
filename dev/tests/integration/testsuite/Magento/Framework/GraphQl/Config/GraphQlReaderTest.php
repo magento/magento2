@@ -194,7 +194,7 @@ QUERY;
             $sortFields = ['inputFields', 'fields'];
             foreach ($sortFields as $sortField) {
                 isset($searchTerm[$sortField]) && is_array($searchTerm[$sortField])
-                    ? usort($searchTerm[$sortField], function($a, $b) {
+                    ? usort($searchTerm[$sortField], function ($a, $b) {
                         $cmpField = 'name';
                         return isset($a[$cmpField]) && isset($b[$cmpField])
                             ? strcmp($a[$cmpField], $b[$cmpField]) : 0;
