@@ -234,15 +234,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements
     {
         return $this->_catalogLayer->getCurrentCategory();
     }
-
-    /**
-     * Check availability display left block
-     */
-    public function canShowBlock()
-    {
-        return $this->getCurrentCategory()->getDisplayMode() !== \Magento\Catalog\Model\Category::DM_PAGE;
-    }
-
     /**
      * Return identifiers for produced content
      *
@@ -251,5 +242,32 @@ class Navigation extends \Magento\Framework\View\Element\Template implements
     public function getIdentities()
     {
         return [\Magento\Catalog\Model\Category::CACHE_TAG, \Magento\Store\Model\Group::CACHE_TAG];
+    }
+
+    /**
+     * Render block HTML
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if (!$this->canShowBlock()) {
+            return '';
+        }
+
+        return parent::_toHtml();
+    }
+
+    /**
+     * Check availability display left block
+     */
+    protected function canShowBlock()
+    {
+        $displayMode = true;
+
+        if($this->getCurrentCategory()->getDisplayMode() == \Magento\Catalog\Model\Category::DM_PAGE){
+            $displayMode = false;
+        }
+
+        return $displayMode ;
     }
 }
