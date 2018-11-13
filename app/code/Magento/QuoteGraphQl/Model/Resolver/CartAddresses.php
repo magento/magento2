@@ -11,14 +11,12 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteId;
-use Magento\QuoteGraphQl\Model\Resolver\Address\AddressDataProvider;
+use Magento\QuoteGraphQl\Model\Cart\Address\AddressDataProvider;
 
 /**
  * @inheritdoc
  */
-class CartAddress implements ResolverInterface
+class CartAddresses implements ResolverInterface
 {
     /**
      * @var AddressDataProvider
@@ -26,29 +24,11 @@ class CartAddress implements ResolverInterface
     private $addressDataProvider;
 
     /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
-
-    /**
-     * @var MaskedQuoteIdToQuoteId
-     */
-    private $maskedQuoteIdToQuoteId;
-
-    /**
-     * CartAddress constructor.
-     *
-     * @param MaskedQuoteIdToQuoteId $maskedQuoteIdToQuoteId
-     * @param CartRepositoryInterface $cartRepository
      * @param AddressDataProvider $addressDataProvider
      */
     public function __construct(
-        MaskedQuoteIdToQuoteId $maskedQuoteIdToQuoteId,
-        CartRepositoryInterface $cartRepository,
         AddressDataProvider $addressDataProvider
     ) {
-        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
-        $this->cartRepository = $cartRepository;
         $this->addressDataProvider = $addressDataProvider;
     }
 

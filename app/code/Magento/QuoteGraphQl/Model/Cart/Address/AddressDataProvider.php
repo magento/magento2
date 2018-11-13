@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver\Address;
+namespace Magento\QuoteGraphQl\Model\Cart\Address;
 
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Quote\Api\Data\AddressInterface;
