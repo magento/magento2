@@ -107,7 +107,6 @@ class CheckUserLoginBackendObserverTest extends TestCase
         ];
     }
 
-
     /**
      * Test check user login in backend with wrong captcha
      *
