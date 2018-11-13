@@ -37,7 +37,7 @@ class GraphQlNoSuchEntityException extends NoSuchEntityException implements \Gra
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function isClientSafe() : bool
     {
@@ -45,7 +45,7 @@ class GraphQlNoSuchEntityException extends NoSuchEntityException implements \Gra
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getCategory() : string
     {
