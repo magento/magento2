@@ -27,6 +27,8 @@ class ExternalVideoResourceBackend
     }
 
     /**
+     * Plugin for after duplicate action
+     *
      * @param Gallery $originalResourceModel
      * @param array $valueIdMap
      * @return array
@@ -45,6 +47,8 @@ class ExternalVideoResourceBackend
     }
 
     /**
+     * Plugin for after create batch base select action
+     *
      * @param Gallery $originalResourceModel
      * @param Select $select
      * @return Select
@@ -62,7 +66,11 @@ class ExternalVideoResourceBackend
             ),
             []
         )->joinLeft(
-            ['default_value_video' => $originalResourceModel->getTable('catalog_product_entity_media_gallery_value_video')],
+            [
+                'default_value_video' => $originalResourceModel->getTable(
+                    'catalog_product_entity_media_gallery_value_video'
+                )
+            ],
             implode(
                 ' AND ',
                 [
