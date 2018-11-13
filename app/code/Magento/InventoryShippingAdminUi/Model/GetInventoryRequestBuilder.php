@@ -31,7 +31,7 @@ class GetInventoryRequestBuilder
         $this->inventoryRequestBuilders = $inventoryRequestBuilders;
 
         foreach ($this->inventoryRequestBuilders as $code => $builder) {
-            if (!($builder instanceof InventoryRequestBuilderInterface)) {
+            if (!($builder instanceof InventoryRequestBuilderFromOrderInterface)) {
                 throw new \InvalidArgumentException(
                     'Distance provider ' . $code . ' must implement InventoryRequestBuilderInterface'
                 );
@@ -43,10 +43,10 @@ class GetInventoryRequestBuilder
      * Get the inventory request builder for the source selection algorythm
      *
      * @param string $code
-     * @return \Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilderInterface
+     * @return \Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilderFromOrderInterface
      * @throws NoSuchEntityException
      */
-    public function execute(string $code): InventoryRequestBuilderInterface
+    public function execute(string $code): InventoryRequestBuilderFromOrderInterface
     {
         if (!isset($this->inventoryRequestBuilders[$code])) {
             throw new NoSuchEntityException(__('Unknown inventory request builder %1', $code));

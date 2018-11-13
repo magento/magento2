@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShippingAdminUi\Model;
 
-use Magento\Framework\App\RequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 
-interface InventoryRequestBuilderInterface
+interface InventoryRequestBuilderFromOrderInterface
 {
     /**
      * Source selection results provider
      *
-     * @param RequestInterface $request
+     * @param OrderInterface $order
      * @return InventoryRequestInterface
      */
-    public function execute(RequestInterface $request): InventoryRequestInterface;
+    public function execute(OrderInterface $order): InventoryRequestInterface;
 }

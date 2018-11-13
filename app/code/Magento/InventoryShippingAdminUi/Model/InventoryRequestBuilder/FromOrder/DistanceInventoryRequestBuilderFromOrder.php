@@ -9,7 +9,7 @@ namespace Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilder;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilderInterface;
+use Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilderFromOrderInterface;
 use Magento\InventorySourceSelection\Model\GetAddressRequestFromOrder;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
@@ -20,7 +20,7 @@ use Magento\Sales\Api\OrderItemRepositoryInterface;
 /**
  * @inheritdoc
  */
-class DistanceInventoryRequestBuilder implements InventoryRequestBuilderInterface
+class DistanceInventoryRequestBuilderFromOrder implements InventoryRequestBuilderFromOrderInterface
 {
     /**
      * @var StockByWebsiteIdResolverInterface

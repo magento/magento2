@@ -5,19 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilder;
+namespace Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilder\FromOrder;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilderInterface;
+use Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilderFromOrderInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
+use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * @inheritdoc
  */
-class DefaultInventoryRequestBuilder implements InventoryRequestBuilderInterface
+class DefaultBuilder implements InventoryRequestBuilderFromOrderInterface
 {
     /**
      * @var StockByWebsiteIdResolverInterface
@@ -52,8 +53,9 @@ class DefaultInventoryRequestBuilder implements InventoryRequestBuilderInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(RequestInterface $request): InventoryRequestInterface
+    public function execute(OrderInterface $order): InventoryRequestInterface
     {
         $postRequest = $request->getPost()->toArray();
         $requestData = $postRequest['requestData'];

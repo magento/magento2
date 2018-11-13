@@ -11,8 +11,8 @@
     <type name="Magento\InventoryShippingAdminUi\Model\GetInventoryRequestBuilder">
         <arguments>
             <argument name="inventoryRequestBuilders" xsi:type="array">
-                <item name="priority" xsi:type="object">Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilder\DefaultInventoryRequestBuilder</item>
-                <item name="distance" xsi:type="object">Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilder\DistanceInventoryRequestBuilder</item>
+                <item name="priority" xsi:type="object">DefaultInventoryRequestBuilderFromOrder</item>
+                <item name="distance" xsi:type="object">DistanceInventoryRequestBuilderFromOrder</item>
             </argument>
         </arguments>
     </type>
