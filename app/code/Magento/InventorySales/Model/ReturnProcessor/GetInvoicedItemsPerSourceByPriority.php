@@ -145,8 +145,8 @@ class GetInvoicedItemsPerSourceByPriority implements GetSourceDeductedOrderItems
         try {
             $availableSourcesForProduct = $this->getSourceItemsBySku->execute($sku);
             $assignedSourcesToStock = $this->getSourcesAssignedToStockOrderedByPriority->execute($stockId);
-            foreach ($availableSourcesForProduct as $availableSource) {
-                foreach ($assignedSourcesToStock as $assignedSource) {
+            foreach ($assignedSourcesToStock as $assignedSource) {
+                foreach ($availableSourcesForProduct as $availableSource) {
                     if ($assignedSource->getSourceCode() == $availableSource->getSourceCode()) {
                         $sourceCode = $assignedSource->getSourceCode();
                         break 2;
