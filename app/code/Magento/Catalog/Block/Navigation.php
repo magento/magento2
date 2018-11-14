@@ -234,6 +234,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements
     {
         return $this->_catalogLayer->getCurrentCategory();
     }
+
     /**
      * Return identifiers for produced content
      *
@@ -250,11 +251,8 @@ class Navigation extends \Magento\Framework\View\Element\Template implements
      */
     protected function _toHtml()
     {
-        if (!$this->canShowBlock()) {
-            return '';
-        }
+        return $this->canShowBlock() ? parent::_toHtml() : '';
 
-        return parent::_toHtml();
     }
 
     /**
@@ -262,12 +260,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements
      */
     protected function canShowBlock()
     {
-        $displayMode = true;
+        return $this->getCurrentCategory()->getDisplayMode() != \Magento\Catalog\Model\Category::DM_PAGE;
 
-        if($this->getCurrentCategory()->getDisplayMode() == \Magento\Catalog\Model\Category::DM_PAGE){
-            $displayMode = false;
-        }
-
-        return $displayMode ;
     }
 }
