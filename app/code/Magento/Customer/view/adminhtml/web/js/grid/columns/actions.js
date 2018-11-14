@@ -19,14 +19,18 @@ define([
         defaults: {
             ajaxSettings: {
                 method: 'POST',
-                dataType: 'json',
-                formKey: $('input[name="form_key"]').val()
+                dataType: 'json'
             },
             listens: {
                 action: 'onAction'
             }
         },
 
+        /**
+         * Reload customer address listing data source after customer address delete action
+         *
+         * @param {Object} data
+         */
         onAction: function (data) {
             if (data.action === 'delete') {
                 this.source().reload({
@@ -66,9 +70,17 @@ define([
             }
         },
 
+        /**
+         * Send customer address listing ajax request
+         *
+         * @param {String} href
+         */
         request: function (href) {
             var settings = _.extend({}, this.ajaxSettings, {
-                url: href
+                url: href,
+                data: {
+                    'form_key': window.FORM_KEY
+                }
             });
 
             $('body').trigger('processStart');
