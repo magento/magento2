@@ -55,7 +55,6 @@ class Total extends \Magento\Framework\DataObject
      */
     public function setTotalAmount($code, $amount)
     {
-        /* (Fixes issue #18027) Round the total amount to 4 decimal places, to avoid floating point overflows */
         $amount = is_float($amount) ? round($amount, 4) : $amount;
 
         $this->totalAmounts[$code] = $amount;
@@ -76,7 +75,6 @@ class Total extends \Magento\Framework\DataObject
      */
     public function setBaseTotalAmount($code, $amount)
     {
-        /* (Fixes issue #18027) Round the total amount to 4 decimal places, to avoid floating point overflows */
         $amount = is_float($amount) ? round($amount, 4) : $amount;
 
         $this->baseTotalAmounts[$code] = $amount;
