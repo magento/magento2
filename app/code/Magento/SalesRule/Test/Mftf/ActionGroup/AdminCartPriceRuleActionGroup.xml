@@ -14,6 +14,6 @@
 
     <actionGroup name="selectRetailerCustomerGroup">
         <!-- This actionGroup was created to be merged from B2B. Retailer Customer Group -->
-        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="Retailer" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="Retailer" stepKey="selectRetailerCustomerGroup"/>
     </actionGroup>
 </actionGroups>
