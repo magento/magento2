@@ -142,6 +142,7 @@ class GetInvoicedItemsPerSourceByPriority implements GetSourceDeductedOrderItems
      */
     private function getSourceCodeWithHighestPriorityBySku(string $sku, int $stockId): string
     {
+        $sourceCode = $this->defaultSourceProvider->getCode();
         try {
             $availableSourcesForProduct = $this->getSourceItemsBySku->execute($sku);
             $assignedSourcesToStock = $this->getSourcesAssignedToStockOrderedByPriority->execute($stockId);
@@ -154,7 +155,6 @@ class GetInvoicedItemsPerSourceByPriority implements GetSourceDeductedOrderItems
                 }
             }
         } catch (LocalizedException $e) {
-            $sourceCode = $this->defaultSourceProvider->getCode();
         }
 
         return $sourceCode;
