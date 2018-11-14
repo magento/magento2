@@ -134,7 +134,6 @@ class PurgeCache
             } catch (\Exception $e) {
                 $unresponsiveServerError[] = "Cache host: " . $server->getHost() . ":" . $server->getPort() .
                     "resulted in error message: " . $e->getMessage();
-                continue;
             }
         }
 
@@ -147,6 +146,7 @@ class PurgeCache
             if ($errorCount == count($servers)) {
                 $this->logger->critical('No cache server(s) could be purged ' . $loggerMessage, compact('server',
                     'formattedTagsChunk'));
+                return false;
             } else {
                 $this->logger->warning('Unresponsive cache server(s) hit' . $loggerMessage, compact('server',
                     'formattedTagsChunk'));
