@@ -9,10 +9,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 Bootstrap::getInstance()->loadArea('frontend');
 $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('simple')
-    ->setId(1)
     ->setAttributeSetId(4)
     ->setName('Simple Product')
-    ->setSku('simple')
+    ->setSku('simple_quote_custom_price')
     ->setPrice(10)
     ->setTaxClassId(0)
     ->setMetaTitle('meta title')
@@ -28,7 +27,7 @@ $product->setTypeId('simple')
     )->save();
 
 $productRepository = Bootstrap::getObjectManager()->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-$product = $productRepository->get('simple');
+$product = $productRepository->get('simple_quote_custom_price');
 
 $addressData = include __DIR__ . '/address_data.php';
 $billingAddress = Bootstrap::getObjectManager()->create(
