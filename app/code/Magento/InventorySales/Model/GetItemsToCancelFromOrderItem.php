@@ -63,7 +63,7 @@ class GetItemsToCancelFromOrderItem
             $itemSku = $this->getSkuFromOrderItem->execute($orderItem);
             $itemsToCancel[] = $this->itemsToSellFactory->create([
                 'sku' => $itemSku,
-                'qty' => $this->getQtyToCancelCorrectedForBundleChildItem($orderItem)
+                'qty' => $this->getQtyToCancel($orderItem)
             ]);
         }
 
@@ -138,20 +138,5 @@ class GetItemsToCancelFromOrderItem
     private function getQtyToCancel(OrderItem $item): float
     {
         return $item->getQtyOrdered() - max($item->getQtyShipped(), $item->getQtyInvoiced()) - $item->getQtyCanceled();
-    }
-
-    /**
-     * The goal of next code is to overcome current behaviour where children order items of Bundle product
-     * store incorrect Qty value of Invoiced items. As a temporary solution a function which retrieves these
-     * data (Qty Invoiced) from the parent Order Item is introduced.
-     * See: https://github.com/magento-engcom/msi/issues/1887
-     *
-     * @param OrderItem $item
-     * @return float
-     */
-    private function getQtyToCancelCorrectedForBundleChildItem(OrderItem $item): float
-    {
-        $qtyInvoiced = $item->getParentItem() ? $item->getParentItem()->getQtyInvoiced() :  $item->getQtyInvoiced();
-        return $item->getQtyOrdered() - max($item->getQtyShipped(), $qtyInvoiced) - $item->getQtyCanceled();
     }
 }
