@@ -7,4 +7,5 @@ tests/functional.suite.yml
 tests/functional/Magento/FunctionalTest/_generated
 vendor/*
 mftf.log
+/.credentials.example
 /utils/

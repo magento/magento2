@@ -659,11 +659,13 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
                     'getId',
                     'getCanSendNewEmailFlag',
                     'getItems',
+                    'setShippingMethod',
                 ]
             )->getMock();
         $orderMock->method('setQuote')->with($this->quoteMock);
         $orderMock->method('setBillingAddress')->with($orderAddressMock)->willReturnSelf();
         $orderMock->method('setShippingAddress')->with($orderAddressMock)->willReturnSelf();
+        $orderMock->expects($this->once())->method('setShippingMethod')->with('carrier')->willReturnSelf();
         $orderMock->method('setPayment')->with($orderPaymentMock)->willReturnSelf();
         $orderMock->method('addItem')->with($orderItemMock)->willReturnSelf();
         $orderMock->method('getIncrementId')->willReturn('1');

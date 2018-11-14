@@ -6,7 +6,9 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Cancel extends \Magento\Sales\Controller\Adminhtml\Order implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session

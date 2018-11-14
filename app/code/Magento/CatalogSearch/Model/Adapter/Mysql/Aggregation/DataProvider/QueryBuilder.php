@@ -22,8 +22,8 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 /**
  * Attribute query builder
  *
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * @deprecated
+ * @see \Magento\ElasticSearch
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

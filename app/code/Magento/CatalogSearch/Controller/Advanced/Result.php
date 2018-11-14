@@ -6,17 +6,16 @@
  */
 namespace Magento\CatalogSearch\Controller\Advanced;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\UrlFactory;
 
 /**
- * Catalog advanced search result
- *
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Advanced search result.
  */
-class Result extends \Magento\Framework\App\Action\Action
+class Result extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     const DEFAULT_NO_RESULT_HANDLE = 'catalogsearch_advanced_result_noresults';
 
@@ -52,9 +51,7 @@ class Result extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * Run action
-     *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @inheritdoc
      */
     public function execute()
     {

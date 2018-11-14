@@ -288,7 +288,7 @@
                     <settings>
                         <scopeLabel>[GLOBAL]</scopeLabel>
                         <validation>
-                            <rule name="validate-number" xsi:type="boolean">true</rule>
+                            <rule name="validate-greater-than-zero" xsi:type="boolean">true</rule>
                         </validation>
                         <label translate="true">Maximum Qty Allowed in Shopping Cart</label>
                         <dataScope>max_sale_qty</dataScope>
