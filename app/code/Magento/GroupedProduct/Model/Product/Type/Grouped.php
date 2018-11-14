@@ -213,7 +213,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Retrieve array of associated products excluding those that are out of stock
+     * Retrieve array of associated products including those that are out of stock
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
