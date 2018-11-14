@@ -31,4 +31,5 @@
         <data key="name">NewStore</data>
         <data key="code">Base1</data>
     </entity>
+    <entity name="customStoreGroup2" extends="customStoreGroup" type="group"/>
 </entities>

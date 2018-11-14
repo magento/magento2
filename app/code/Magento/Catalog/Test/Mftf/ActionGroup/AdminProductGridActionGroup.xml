@@ -172,7 +172,6 @@
         </arguments>
         <!--TODO use other action group for filtering grid when MQE-539 is implemented -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <waitForPageLoad time="60" stepKey="waitForPageLoadInitial"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
