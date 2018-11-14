@@ -144,12 +144,12 @@ class PurgeCache
             $loggerMessage = implode(" ", $unresponsiveServerError);
 
             if ($errorCount == count($servers)) {
-                $this->logger->critical('No cache server(s) could be purged ' . $loggerMessage, compact('server',
-                    'formattedTagsChunk'));
+                $this->logger->critical('No cache server(s) could be purged ' . $loggerMessage,
+                    compact('server', 'formattedTagsChunk'));
                 return false;
             } else {
-                $this->logger->warning('Unresponsive cache server(s) hit' . $loggerMessage, compact('server',
-                    'formattedTagsChunk'));
+                $this->logger->warning('Unresponsive cache server(s) hit' . $loggerMessage,
+                    compact('server', 'formattedTagsChunk'));
             }
         }
 
