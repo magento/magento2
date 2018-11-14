@@ -31,13 +31,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_keyAssociatedProducts = '_cache_instance_associated_products';
 
     /**
-     * Cache key for Associated Products that are in stock
-     *
-     * @var string
-     */
-    protected $_keyInStockAssociatedProducts = '_cache_instance_in_stock_associated_products';
-
-    /**
      * Cache key for Associated Product Ids
      *
      * @var string
@@ -100,6 +93,13 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @var \Magento\CatalogInventory\Helper\Stock|null
      */
     private $stockHelper;
+
+    /**
+     * Cache key for Associated Products that are in stock
+     *
+     * @var string
+     */
+    private $_keyInStockAssociatedProducts = '_cache_instance_in_stock_associated_products';
 
     /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
