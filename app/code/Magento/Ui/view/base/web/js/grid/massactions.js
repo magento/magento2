@@ -153,9 +153,9 @@ define([
             var itemsType = data.excludeMode ? 'excluded' : 'selected',
                 selections = {};
 
-            if (itemsType === 'excluded' && data['selected'].length){
-                data['selected'] = _.difference(data['selected'], data['excluded']);
+            if (itemsType === 'excluded' && data.selected && data.selected.length) {
                 itemsType = 'selected';
+                data[itemsType] = _.difference(data.selected, data.excluded);
             }
 
             selections[itemsType] = data[itemsType];
