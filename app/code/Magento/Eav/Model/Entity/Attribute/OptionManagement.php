@@ -141,7 +141,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
      */
     protected function validateOption($attribute, $optionId)
     {
-        if (!$attribute->getSource()->getOptionText($optionId)) {
+        if ($attribute->getSource()->getOptionText($optionId) === false) {
             throw new NoSuchEntityException(
                 __(
                     'The "%1" attribute doesn\'t include an option with "%2" ID.',
