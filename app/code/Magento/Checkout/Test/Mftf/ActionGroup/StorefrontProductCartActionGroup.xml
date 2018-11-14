@@ -84,6 +84,8 @@
             <argument name="total"/>
         </arguments>
         <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <waitForPageLoad stepKey="waitPageFullyLoaded"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <waitForText userInput="${{total}}" selector="{{CheckoutCartSummarySection.total}}" time="30" stepKey="waitForTotal"/>
         <see userInput="${{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
         <see userInput="${{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" stepKey="assertShipping"/>
