@@ -94,6 +94,7 @@
         <waitForPageLoad stepKey="waitForCart"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
+        <waitForElementVisible stepKey="waitForCorrectShippingAmount" selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}[text()='$5.00']"/>
         <see stepKey="seeTax" selector="{{CheckoutPaymentSection.tax}}" userInput="$10.30"/>
         <click stepKey="expandTax" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTaxPercent" selector="{{CheckoutPaymentSection.taxPercentage}}" userInput="({{SimpleTaxNY.rate}}%)"/>
