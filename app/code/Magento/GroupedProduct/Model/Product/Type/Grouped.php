@@ -10,6 +10,7 @@ namespace Magento\GroupedProduct\Model\Product\Type;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\CatalogInventory\Helper\Stock as StockHelper;
+use \Magento\Catalog\Model\Product;
 
 /**
  * Grouped product type model
@@ -28,6 +29,13 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @var string
      */
     protected $_keyAssociatedProducts = '_cache_instance_associated_products';
+
+    /**
+     * Cache key for Associated Products that are in stock
+     *
+     * @var string
+     */
+    protected $_keyInStockAssociatedProducts = '_cache_instance_in_stock_associated_products';
 
     /**
      * Cache key for Associated Product Ids
@@ -205,39 +213,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Retrieve array of associated products
+     * Retrieve array of associated products excluding those that are out of stock
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param bool $includeOutOfStock
      * @return array
      */
-    public function getAssociatedProducts($product, bool $includeOutOfStock = true)
+    public function getAssociatedProducts($product)
     {
         if (!$product->hasData($this->_keyAssociatedProducts)) {
-            $associatedProducts = [];
-
-            $this->setSaleableStatus($product);
-
-            $collection = $this->getAssociatedProductCollection(
-                $product
-            )->addAttributeToSelect(
-                ['name', 'price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id']
-            )->addFilterByRequiredOptions()->setPositionOrder()->addStoreFilter(
-                $this->getStoreFilter($product)
-            )->addAttributeToFilter(
-                'status',
-                ['in' => $this->getStatusFilters($product)]
-            );
-
-            if (!$includeOutOfStock) {
-                $this->stockHelper->addIsInStockFilterToCollection($collection);
-            }
-
-            foreach ($collection as $item) {
-                $associatedProducts[] = $item;
-            }
-
-            $product->setData($this->_keyAssociatedProducts, $associatedProducts);
+            $this->assignAssociatedProducts($product, true);
         }
         return $product->getData($this->_keyAssociatedProducts);
     }
@@ -352,7 +336,9 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected function getProductInfo(\Magento\Framework\DataObject $buyRequest, $product, $isStrictProcessMode)
     {
         $productsInfo = $buyRequest->getSuperGroup() ?: [];
-        $associatedProducts = $this->getAssociatedProducts($product, !empty($productsInfo));
+        $associatedProducts = empty($productsInfo)
+            ? $this->getInStockAssociatedProducts($product)
+            : $this->getAssociatedProducts($product);
 
         if (!is_array($productsInfo)) {
             return __('Please specify the quantity of product(s).')->render();
@@ -391,7 +377,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             return $productsInfo;
         }
         $associatedProducts = !$isStrictProcessMode || !empty($productsInfo)
-            ? $this->getAssociatedProducts($product)
+            ? $this->getInStockAssociatedProducts($product)
             : false;
 
         foreach ($associatedProducts as $subProduct) {
@@ -523,5 +509,55 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
         }
         return $prices ? min($prices) : 0;
+    }
+
+    /**
+     * Retrieve array of associated products that are out in stock
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return array
+     */
+    private function getInStockAssociatedProducts($product)
+    {
+        if (!$product->hasData($this->_keyInStockAssociatedProducts)) {
+            $this->assignAssociatedProducts($product, false);
+        }
+        return $product->getData($this->_keyInStockAssociatedProducts);
+    }
+
+    /**
+     * Caches associated products to the product optionally including out of stock items
+     *
+     * @param Product $product
+     * @param bool $includeOutOfStock
+     */
+    private function assignAssociatedProducts(Product $product, bool $includeOutOfStock = true): void
+    {
+        $associatedProducts = [];
+
+        $this->setSaleableStatus($product);
+
+        $collection = $this->getAssociatedProductCollection(
+            $product
+        )->addAttributeToSelect(
+            ['name', 'price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id']
+        )->addFilterByRequiredOptions()->setPositionOrder()->addStoreFilter(
+            $this->getStoreFilter($product)
+        )->addAttributeToFilter(
+            'status',
+            ['in' => $this->getStatusFilters($product)]
+        );
+
+        if (!$includeOutOfStock) {
+            $this->stockHelper->addIsInStockFilterToCollection($collection);
+        }
+
+        foreach ($collection as $item) {
+            $associatedProducts[] = $item;
+        }
+
+        $cacheKey = $includeOutOfStock ? $this->_keyAssociatedProducts : $this->_keyInStockAssociatedProducts;
+
+        $product->setData($cacheKey, $associatedProducts);
     }
 }
