@@ -188,7 +188,7 @@ define([
         /**
          * Bind form submit.
          *
-         * @param {boolean} isFileUploaded
+         * @param {Boolean} isFileUploaded
          */
         bindFormSubmit: function (isFileUploaded) {
             var self = this;
@@ -199,6 +199,7 @@ define([
                 if (!$($(self.options.qtyInfo).closest('form')).valid()) {
                     event.stopPropagation();
                     event.preventDefault();
+
                     return;
                 }
 
