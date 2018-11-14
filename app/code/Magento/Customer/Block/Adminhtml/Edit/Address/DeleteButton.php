@@ -34,19 +34,11 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
                             'actions' => [
                                 [
                                     'targetName' => 'customer_address_form.customer_address_form',
-                                    'actionName' => 'delete',
+                                    'actionName' => 'deleteAddress',
                                     'params' => [
                                         $this->getDeleteUrl(),
                                     ],
 
-                                ],
-                                [
-                                    'targetName' => 'customer_form.areas.address.address.customer_address_update_modal',
-                                    'actionName' => 'closeModal'
-                                ],
-                                [
-                                    'targetName' => 'customer_address_listing.customer_address_listing',
-                                    'actionName' => 'reload'
                                 ]
                             ],
                         ],

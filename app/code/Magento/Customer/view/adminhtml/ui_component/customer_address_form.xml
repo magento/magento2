@@ -10,6 +10,9 @@
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">customer_address_form.customer_address_form_data_source</item>
         </item>
+        <item name="config" xsi:type="array">
+            <item name="confirmationMessage" translate="true" xsi:type="string">Are you sure you want to delete this address?</item>
+        </item>
         <item name="label" xsi:type="string" translate="true">Update Address</item>
         <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>

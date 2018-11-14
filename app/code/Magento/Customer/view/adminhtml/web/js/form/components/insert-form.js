@@ -50,6 +50,14 @@ define([
             ) {
                 this.source.set('data.default_shipping_address', []);
             }
+        },
+
+        onAddressDelete: function (id) {
+            this.addressModal().closeModal();
+            this.addressListing().reload({
+                refresh: true
+            });
+            this.addressListing()._delete([parseFloat(id)]);
         }
     });
 });
