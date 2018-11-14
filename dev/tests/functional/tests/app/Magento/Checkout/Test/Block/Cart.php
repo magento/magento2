@@ -107,6 +107,13 @@ class Cart extends Block
     protected $cartItemClass = \Magento\Checkout\Test\Block\Cart\CartItem::class;
 
     /**
+     * Locator for page with ajax loading state.
+     *
+     * @var string
+     */
+    private $ajaxLoading = 'body.ajax-loading';
+
+    /**
      * Wait for PayPal page is loaded.
      *
      * @return void
@@ -272,5 +279,15 @@ class Cart extends Block
     public function waitForCheckoutButton()
     {
         $this->waitForElementVisible($this->inContextPaypalCheckoutButton);
+    }
+
+    /**
+     * Wait loading.
+     *
+     * @return void
+     */
+    public function waitForLoader()
+    {
+        $this->waitForElementNotVisible($this->ajaxLoading);
     }
 }

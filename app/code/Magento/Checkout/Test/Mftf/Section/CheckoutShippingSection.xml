@@ -34,5 +34,6 @@
         <element name="state" type="button" selector="//*[text()='Alabama']"/>
         <element name="stateInput" type="input" selector="input[name=region]"/>
         <element name="regionOptions" type="select" selector="select[name=region_id] option"/>
+        <element name="editActiveAddress" type="button" selector="//div[@class='shipping-address-item selected-item']//span[text()='Edit']" timeout="30"/>
     </section>
 </sections>
