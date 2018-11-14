@@ -138,11 +138,13 @@ class PurgeCache
             }
         }
 
-        if($errorCount = count($unresponsiveServerError) > 0) {
+        $errorCount = count($unresponsiveServerError);
 
-            $loggerMessage = implode(" ",$unresponsiveServerError);
+        if ($errorCount > 0) {
 
-            if($errorCount == count($servers)) {
+            $loggerMessage = implode(" ", $unresponsiveServerError);
+
+            if ($errorCount == count($servers)) {
                 $this->logger->critical('No cache server(s) could be purged ' . $loggerMessage, compact('server',
                     'formattedTagsChunk'));
             } else {
