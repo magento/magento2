@@ -90,7 +90,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($sku, $optionId)
     {
@@ -123,7 +123,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($sku)
     {
@@ -132,6 +132,8 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
+     * Return list of product options
+     *
      * @param ProductInterface $product
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
      */
@@ -141,7 +143,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Bundle\Api\Data\OptionInterface $option)
     {
@@ -157,7 +159,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($sku, $optionId)
     {
@@ -169,7 +171,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -189,6 +191,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param \Magento\Bundle\Api\Data\OptionInterface $option
      * @return $this
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     protected function updateOptionSelection(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -228,9 +233,12 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
+     * Retrieve product by SKU
+     *
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     private function getProduct($sku)
     {

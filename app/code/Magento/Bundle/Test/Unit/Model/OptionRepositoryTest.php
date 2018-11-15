@@ -280,7 +280,8 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests if NoSuchEntityException thrown when provided $optionId not found
      */
-    public function testDeleteByIdException() {
+    public function testDeleteByIdException()
+    {
         $productSku = 'sku';
         $optionId = null;
 
