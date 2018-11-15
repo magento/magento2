@@ -21,6 +21,7 @@ use Magento\Ui\DataProvider\EavValidationRules;
  *
  * Test for class \Magento\Customer\Model\Customer\DataProvider
  *
+ * @deprecated tested class is not used.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProviderTest extends \PHPUnit\Framework\TestCase

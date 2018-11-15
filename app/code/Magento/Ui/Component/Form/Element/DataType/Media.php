@@ -35,6 +35,7 @@ class Media extends AbstractDataType
                 $this->getData(),
                 [
                     'config' => [
+                        'dataScope' => $this->getName(),
                         'uploaderConfig' => [
                             'url' => $url
                         ],
