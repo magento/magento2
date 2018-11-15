@@ -107,8 +107,9 @@ class Navigation extends \Magento\Framework\View\Element\Template
      */
     public function canShowBlock()
     {
-        return $this->getLayer()->getCurrentCategory()->getDisplayMode() !== \Magento\Catalog\Model\Category::DM_PAGE
-        && $this->visibilityFlag->isEnabled($this->getLayer(), $this->getFilters());
+        $page =  $this->getLayer()->getCurrentCategory()->getDisplayMode();
+        $visibilityFlag = $this->visibilityFlag->isEnabled($this->getLayer(), $this->getFilters());
+        return ($page !== \Magento\Catalog\Model\Category::DM_PAGE && $visibilityFlag);
 
     }
 
