@@ -129,8 +129,8 @@
         <waitForPageLoad stepKey="waitForCategoryPageLoad1"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption('Default Store View')}}"
                stepKey="clickStoreView"/>
-        <waitForElement selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
-                        stepKey="waitForModalAccept"/>
+        <waitForElementVisible selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
+                               stepKey="waitForPopup1"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}" stepKey="clickActionAccept"/>
         <waitForElementNotVisible selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
                                   stepKey="waitForNotVisibleModalAccept"/>
@@ -152,8 +152,8 @@
         <waitForPageLoad stepKey="waitForCategoryPageLoad3"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption('secondStoreView')}}"
                stepKey="clickStoreView1"/>
-        <waitForElement selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
-                        stepKey="waitForModalAccept1"/>
+        <waitForElementVisible selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
+                               stepKey="waitForPopup2"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
                stepKey="clickActionAccept1"/>
         <waitForElementNotVisible selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
