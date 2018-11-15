@@ -106,17 +106,18 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
         $productLinks = $this->linkManagement->getChildren($product->getSku(), $optionId);
 
-        /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
+        /** @var \Magento\Bundle\Api\Data\OptionInterface $optionDataObject */
         $optionDataObject = $this->optionFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $optionDataObject,
             $option->getData(),
             \Magento\Bundle\Api\Data\OptionInterface::class
         );
-        $optionDataObject->setOptionId($option->getId())
-            ->setTitle($option->getTitle() === null ? $option->getDefaultTitle() : $option->getTitle())
-            ->setSku($product->getSku())
-            ->setProductLinks($productLinks);
+
+        $optionDataObject->setOptionId($option->getId());
+        $optionDataObject->setTitle($option->getTitle() === null ? $option->getDefaultTitle() : $option->getTitle());
+        $optionDataObject->setSku($product->getSku());
+        $optionDataObject->setProductLinks($productLinks);
 
         return $optionDataObject;
     }
@@ -160,10 +161,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      */
     public function deleteById($sku, $optionId)
     {
-        $product = $this->getProduct($sku);
-        $optionCollection = $this->type->getOptionsCollection($product);
-        $optionCollection->setIdFilter($optionId);
-        $hasBeenDeleted = $this->delete($optionCollection->getFirstItem());
+        /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
+        $option = $this->get($sku, $optionId);
+        $hasBeenDeleted = $this->delete($option);
 
         return $hasBeenDeleted;
     }
