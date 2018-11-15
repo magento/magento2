@@ -7,7 +7,6 @@ namespace Magento\Swatches\Helper;
 
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product as ModelProduct;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -254,17 +253,14 @@ class Data
         $this->addFilterByParent($productCollection, $parentId);
 
         $configurableAttributes = $this->getAttributesFromConfigurable($parentProduct);
-        $allAttributesArray = [];
+
+        $resultAttributesToFilter = [];
         foreach ($configurableAttributes as $attribute) {
-            if (!empty($attribute['default_value'])) {
-                $allAttributesArray[$attribute['attribute_code']] = $attribute['default_value'];
+            $attributeCode = $attribute->getData('attribute_code');
+            if (array_key_exists($attributeCode, $attributes)) {
+                $resultAttributesToFilter[$attributeCode] = $attributes[$attributeCode];
             }
         }
-
-        $resultAttributesToFilter = array_merge(
-            $attributes,
-            array_diff_key($allAttributesArray, $attributes)
-        );
 
         $this->addFilterByAttributes($productCollection, $resultAttributesToFilter);
 
