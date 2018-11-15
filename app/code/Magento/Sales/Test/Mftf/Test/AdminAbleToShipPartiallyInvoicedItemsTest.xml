@@ -39,6 +39,8 @@
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+        <conditionalClick selector="{{AdminOrderFormStoreSelectorSection.defaultStoreViewButton}}" dependentSelector="{{AdminOrderFormStoreSelectorSection.storeSelectorContainer}}" visible="true" stepKey="selectFirstStoreViewIfAppears"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappearedAfterStoreSelected"/>
         <actionGroup ref="addSimpleProductToOrderWithCustomQuantity" stepKey="addSimpleProductToOrderWithUserDefinedQty">
             <argument name="product" value="_defaultProduct"/>
             <argument name="quantity" value="10"/>
@@ -55,6 +57,9 @@
         </actionGroup>
         <!-- Select shipping -->
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="SelectCheckMoneyPaymentMethod" stepKey="selectCheckMoneyPayment"/>
 
         <!--Verify totals on Order page-->
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="$1,230.00" stepKey="seeOrderSubTotal" after="selectFlatRateShipping"/>
