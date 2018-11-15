@@ -548,6 +548,7 @@ class Editor extends Textarea
      */
     public function getHtmlId()
     {
-        return parent::getHtmlId() . '${ $.wysiwygUniqueSuffix }';
+        $suffix = $this->getConfig('dynamic_id') ? '${ $.wysiwygUniqueSuffix }' : '';
+        return parent::getHtmlId() . $suffix;
     }
 }
