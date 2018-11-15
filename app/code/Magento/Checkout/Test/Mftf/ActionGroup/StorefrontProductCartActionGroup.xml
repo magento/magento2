@@ -88,8 +88,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <waitForText userInput="${{total}}" selector="{{CheckoutCartSummarySection.total}}" time="30" stepKey="waitForTotal"/>
         <see userInput="${{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
-        <see userInput="${{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" stepKey="assertShipping"/>
         <see userInput="({{shippingMethod}})" selector="{{CheckoutCartSummarySection.shippingMethod}}" stepKey="assertShippingMethod"/>
+        <waitForText userInput="${{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="30" stepKey="assertShipping"/>
         <see userInput="${{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal"/>
     </actionGroup>
 
