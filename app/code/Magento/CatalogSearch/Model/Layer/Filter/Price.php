@@ -10,8 +10,6 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 /**
  * Layer price filter based on Search API
  *
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends AbstractFilter
@@ -88,6 +86,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get resource model.
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     public function getResource()
@@ -225,6 +225,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get 'to' part of the filter.
+     *
      * @param float $from
      * @return float
      */
@@ -239,6 +241,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get 'from' part of the filter.
+     *
      * @param float $from
      * @return float
      */
@@ -253,6 +257,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Prepare filter data.
+     *
      * @param string $key
      * @param int $count
      * @return array

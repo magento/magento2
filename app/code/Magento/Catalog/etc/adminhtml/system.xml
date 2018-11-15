@@ -93,6 +93,11 @@
                     <comment>Whether to show "All" option in the "Show X Per Page" dropdown</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="remember_pagination" translate="label comment" type="select" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Remember Category Pagination</label>
+                    <comment>Changing may affect SEO and cache storage consumption.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="placeholder" translate="label" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Product Image Placeholders</label>
