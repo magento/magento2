@@ -225,10 +225,10 @@ type ProductPrices @doc(description: "The ProductPrices object contains the regu
     regularPrice: Price @doc(description: "The base price of a product.")
 }
 
-type ProductLinks implements ProductLinksInterface @doc(description: "ProductLinks is an implementation of ProductLinksInterface.") {
+type Related implements ProductLinksInterface @doc(description: "Related is an implementation of ProductLinksInterface.") {
 }
 
-interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite") @doc(description:"ProductLinks contains information about linked products, including the link type and product type of each item.") {
+interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite") @doc(description:"Related contains information about linked products, including the link type and product type of each item.") {
     sku: String @doc(description: "The identifier of the linked product")
     link_type: String @doc(description: "One of related, associated, upsell, or crosssell")
     linked_product_sku: String @doc(description: "The SKU of the linked product")
@@ -269,8 +269,11 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     country_of_manufacture: String @doc(description: "The product's country of origin")
     type_id: String @doc(description: "One of simple, virtual, bundle, downloadable, grouped, or configurable")
     websites: [Website] @doc(description: "An array of websites in which the product is available") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Websites")
-    product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductLinks")
+    product_links: [ProductLinksInterface] @doc(description: "An array of Related objects") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Related")
     media_gallery_entries: [MediaGalleryEntry] @doc(description: "An array of MediaGalleryEntry objects") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
+    related_products: RelatedProduct @doc(description: "RelatedProduct") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Related")
+    upsell_products: UpsellProduct @doc(description: "RelatedProduct")  @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Related")
+    crosssell_products: CrosssellProduct @doc(description: "RelatedProduct")  @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Related")
     tier_prices: [ProductTierPrices] @doc(description: "An array of ProductTierPrices objects") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\TierPrices")
     price: ProductPrices @doc(description: "A ProductPrices object, indicating the price of an item") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available")
@@ -525,6 +528,15 @@ type MediaGalleryEntry  @doc(description: "MediaGalleryEntry defines characteris
     file: String @doc(description: "The path of the image on the server")
     content: ProductMediaGalleryEntriesContent @doc(description: "Contains a ProductMediaGalleryEntriesContent object")
     video_content: ProductMediaGalleryEntriesVideoContent @doc(description: "Contains a ProductMediaGalleryEntriesVideoContent object")
+}
+type RelatedProduct @doc(description: "RelatedProduct"){
+    items: [ProductInterface] @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Related\\RelatedProducts")
+}
+type UpsellProduct @doc(description: "UpsellProduct"){
+    items: [ProductInterface] @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Related\\UpSellProducts")
+}
+type CrosssellProduct @doc(description: "CrosssellProduct"){
+    items: [ProductInterface] @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Related\\CrossSellProducts")
 }
 
 type LayerFilter {
