@@ -225,7 +225,7 @@ type ProductPrices @doc(description: "The ProductPrices object contains the regu
     regularPrice: Price @doc(description: "The base price of a product.")
 }
 
-type Related implements ProductLinksInterface @doc(description: "Related is an implementation of ProductLinksInterface.") {
+type ProductLinks implements ProductLinksInterface @doc(description: "ProductLinks is an implementation of ProductLinksInterface.") {
 }
 
 interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite") @doc(description:"Related contains information about linked products, including the link type and product type of each item.") {
@@ -269,7 +269,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     country_of_manufacture: String @doc(description: "The product's country of origin")
     type_id: String @doc(description: "One of simple, virtual, bundle, downloadable, grouped, or configurable")
     websites: [Website] @doc(description: "An array of websites in which the product is available") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Websites")
-    product_links: [ProductLinksInterface] @doc(description: "An array of Related objects") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Related")
+    product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductLinks")
     media_gallery_entries: [MediaGalleryEntry] @doc(description: "An array of MediaGalleryEntry objects") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
     related_products: RelatedProduct @doc(description: "RelatedProduct") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Related")
     upsell_products: UpsellProduct @doc(description: "RelatedProduct")  @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Related")
