@@ -95,6 +95,7 @@
         <!-- Assert that taxes are applied correctly for NY -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTax" selector="{{CheckoutPaymentSection.tax}}" userInput="$10.30"/>
@@ -211,6 +212,7 @@
         <!-- Assert that taxes are applied correctly for NY -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTax" selector="{{CheckoutPaymentSection.tax}}" userInput="$8.37"/>
@@ -320,6 +322,7 @@
         <!-- Assert that taxes are applied correctly for CA -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTax3" selector="{{CheckoutPaymentSection.tax}}" userInput="$10.15"/>
@@ -426,6 +429,7 @@
         <!-- Assert that taxes are applied correctly for NY -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
         <!-- Assert that taxes are applied correctly for CA -->
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
