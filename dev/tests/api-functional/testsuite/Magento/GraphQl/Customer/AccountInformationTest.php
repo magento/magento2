@@ -238,7 +238,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage For changing "email" you should provide current "password".
+     * @expectedExceptionMessage Provide the current "password" to change "email".
      */
     public function testUpdateEmailIfPasswordIsMissed()
     {
