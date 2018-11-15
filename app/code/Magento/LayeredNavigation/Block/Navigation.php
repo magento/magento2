@@ -12,6 +12,7 @@
 namespace Magento\LayeredNavigation\Block;
 
 use Magento\Framework\View\Element\Template;
+use Magento\Catalog\Model\Category;
 
 /**
  * @api
@@ -107,10 +108,8 @@ class Navigation extends \Magento\Framework\View\Element\Template
      */
     public function canShowBlock()
     {
-        $page =  $this->getLayer()->getCurrentCategory()->getDisplayMode();
-        $visibilityFlag = $this->visibilityFlag->isEnabled($this->getLayer(), $this->getFilters());
-        return ($page !== \Magento\Catalog\Model\Category::DM_PAGE && $visibilityFlag);
-
+        return $this->visibilityFlag->isEnabled($this->getLayer(), $this->getFilters()) 
+            && ($this->getLayer()->getCurrentCategory()->getDisplayMode() !== Category::DM_PAGE);
     }
 
     /**

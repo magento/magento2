@@ -7,6 +7,7 @@
 namespace Magento\LayeredNavigation\Test\Unit\Block;
 
 use Magento\Catalog\Model\Category;
+
 class NavigationTest extends \PHPUnit\Framework\TestCase
 {
     /**

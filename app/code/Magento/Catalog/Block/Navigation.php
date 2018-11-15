@@ -252,7 +252,6 @@ class Navigation extends \Magento\Framework\View\Element\Template implements
     protected function _toHtml()
     {
         return $this->canShowBlock() ? parent::_toHtml() : '';
-
     }
 
     /**
@@ -261,6 +260,5 @@ class Navigation extends \Magento\Framework\View\Element\Template implements
     protected function canShowBlock()
     {
         return $this->getCurrentCategory()->getDisplayMode() != \Magento\Catalog\Model\Category::DM_PAGE;
-
     }
 }
