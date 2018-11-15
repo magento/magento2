@@ -63,9 +63,6 @@ class ToOrderItem
             'to_order_item',
             $item
         );
-        if ($item instanceof \Magento\Quote\Model\Quote\Address\Item) {
-            $orderItemData['quote_item_id'] = $item->getQuoteItemId();
-        }
         if (!$item->getNoDiscount()) {
             $data = array_merge(
                 $data,
@@ -75,6 +72,9 @@ class ToOrderItem
                     $item
                 )
             );
+        }
+        if ($item instanceof \Magento\Quote\Model\Quote\Address\Item) {
+            $orderItemData['quote_item_id'] = $item->getQuoteItemId();
         }
 
         $orderItem = $this->orderItemFactory->create();
