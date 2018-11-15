@@ -48,10 +48,10 @@ class QuoteInfiniteLoopTest extends \PHPUnit\Framework\TestCase
      * @dataProvider getLoadQuoteParametersProvider
      *
      * @param $triggerRecollect
-     * @param $thirdPartObserverEnabled
+     * @param $observerEnabled
      * @return void
      */
-    public function testLoadQuoteSuccessfully($triggerRecollect, $thirdPartObserverEnabled): void
+    public function testLoadQuoteSuccessfully($triggerRecollect, $observerEnabled): void
     {
         $originalQuote = $this->generateQuote($triggerRecollect);
         $quoteId = $originalQuote->getId();
@@ -63,7 +63,7 @@ class QuoteInfiniteLoopTest extends \PHPUnit\Framework\TestCase
             "trigger_recollect failed to be set"
         );
 
-        if ($thirdPartObserverEnabled) {
+        if ($observerEnabled) {
             $this->config->enableObserver();
         }
 

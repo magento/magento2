@@ -39,6 +39,7 @@ class AfterCollectTotals implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        $observer->getEvent();
         if ($this->config->isActive()) {
             $this->session->getQuote();
         }
