@@ -7,10 +7,10 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCreateStoreGroupActionGroup">
+    <actionGroup name="AdminStoreGroupCreateActionGroup">
         <arguments>
             <argument name="Website" defaultValue="_defaultWebsite"/>
-            <argument name="storeGroup" defaultValue="CustomStoreGroupCustomWebsite"/>
+            <argument name="storeGroup"/>
         </arguments>
         <amOnPage url="{{AdminSystemStoreGroupPage.url}}" stepKey="navigateToNewStoreGroup"/>
         <waitForPageLoad stepKey="waitForStoreGroupPageLoad" />
