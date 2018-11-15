@@ -1534,7 +1534,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Add attribute to filter
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|string $attribute
+     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|string|array $attribute
      * @param array $condition
      * @param string $joinType
      * @return $this

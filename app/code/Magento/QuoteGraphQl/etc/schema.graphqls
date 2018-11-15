@@ -95,7 +95,7 @@ type Cart {
     cart_id: String
     items: [CartItemInterface]
     applied_coupon: AppliedCoupon
-    addresses: [CartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddress")
+    addresses: [CartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddresses")
 }
 
 type CartAddress {
