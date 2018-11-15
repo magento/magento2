@@ -13,18 +13,25 @@ define([
 
     return Form.extend({
         defaults: {
-            confirmationMessage: '',
+            deleteConfirmationMessage: '',
             ajaxSettings: {
                 method: 'POST',
                 dataType: 'json'
             }
         },
 
+        /**
+         * Delete customer address by provided url.
+         * Will call confirmation message to be sure that user is really wants to delete this address
+         *
+         * @param {String} url - ajax url
+         */
         deleteAddress: function (url) {
+            console.log(url);
             var that = this;
 
             uiConfirm({
-                content: this.confirmationMessage,
+                content: this.deleteConfirmationMessage,
                 actions: {
                     /** @inheritdoc */
                     confirm: function () {

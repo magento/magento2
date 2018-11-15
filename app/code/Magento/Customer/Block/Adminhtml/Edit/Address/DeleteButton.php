@@ -23,7 +23,6 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
     public function getButtonData()
     {
         $data = [];
-        $confirm = __('Are you sure you want to delete this address?');
         if ($this->getAddressId()) {
             $data = [
                 'label' => __('Delete'),
@@ -56,7 +55,7 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getDeleteUrl(): string
+    private function getDeleteUrl(): string
     {
         return $this->getUrl(
             Actions::CUSTOMER_ADDRESS_PATH_DELETE,
