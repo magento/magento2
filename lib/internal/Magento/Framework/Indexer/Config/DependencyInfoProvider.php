@@ -49,7 +49,7 @@ class DependencyInfoProvider implements DependencyInfoProviderInterface
             if (array_search($indexerId, $indexerData['dependencies']) !== false) {
                 $result[] = $id;
             }
-        };
+        }
 
         return $result;
     }

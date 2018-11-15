@@ -11,5 +11,6 @@
         <element name="delete" type="button" selector="#delete" timeout="30"/>
         <element name="resetButton" type="button" selector="#reset" timeout="30"/>
         <element name="saveButton" type="button" selector="#save" timeout="60"/>
+        <element name="loadingMask" type="text" selector=".loading-mask"/>
     </section>
 </sections>

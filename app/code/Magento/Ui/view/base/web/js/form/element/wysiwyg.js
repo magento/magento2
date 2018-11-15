@@ -21,7 +21,6 @@ define([
         defaults: {
             elementSelector: 'textarea',
             suffixRegExpPattern: '\\${ \\$.wysiwygUniqueSuffix }',
-            value: '',
             $wysiwygEditorButton: '',
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
