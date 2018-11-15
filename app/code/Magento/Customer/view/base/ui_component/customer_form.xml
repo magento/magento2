@@ -467,6 +467,7 @@
                     </exports>
                     <imports>
                         <link name="parentId">${ $.provider}:data.customer_id</link>
+                        <link name="onAddressDelete">${ $.ns }.${ $.ns }:deleteAddressAction</link>
                     </imports>
                 </settings>
             </insertForm>

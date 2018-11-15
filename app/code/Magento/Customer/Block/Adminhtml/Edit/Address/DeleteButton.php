@@ -26,11 +26,24 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
         if ($this->getAddressId()) {
             $data = [
                 'label' => __('Delete'),
-                'class' => 'delete',
-                'on_click' => 'deleteConfirm(\'' . __(
-                    'Are you sure you want to delete this address?'
-                ) . '\', \'' . $this->getDeleteUrl() . '\')',
-                'sort_order' => 15,
+                'on_click' => '',
+                'data_attribute' => [
+                    'mage-init' => [
+                        'Magento_Ui/js/form/button-adapter' => [
+                            'actions' => [
+                                [
+                                    'targetName' => 'customer_address_form.customer_address_form',
+                                    'actionName' => 'deleteAddress',
+                                    'params' => [
+                                        $this->getDeleteUrl(),
+                                    ],
+
+                                ]
+                            ],
+                        ],
+                    ],
+                ],
+                'sort_order' => 20
             ];
         }
         return $data;
@@ -42,7 +55,7 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getDeleteUrl(): string
+    private function getDeleteUrl(): string
     {
         return $this->getUrl(
             Actions::CUSTOMER_ADDRESS_PATH_DELETE,

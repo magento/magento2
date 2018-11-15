@@ -50,6 +50,20 @@ define([
             ) {
                 this.source.set('data.default_shipping_address', []);
             }
+        },
+
+        /**
+         * Event method that closes "Edit customer address" modal and refreshes grid after customer address
+         * was removed through "Delete" button on the "Edit customer address" modal
+         *
+         * @param {string} id - customer address ID to delete
+         */
+        onAddressDelete: function (id) {
+            this.addressModal().closeModal();
+            this.addressListing().reload({
+                refresh: true
+            });
+            this.addressListing()._delete([parseFloat(id)]);
         }
     });
 });
