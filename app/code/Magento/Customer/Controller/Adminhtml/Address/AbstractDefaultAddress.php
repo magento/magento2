@@ -9,7 +9,7 @@ namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Phrase;
@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Abstract class for customer default addresses changing
  */
-abstract class AbstractDefaultAddress extends Action implements HttpGetActionInterface
+abstract class AbstractDefaultAddress extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
