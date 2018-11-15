@@ -358,6 +358,7 @@ interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGrap
     title: String @doc(description: "The display name for this option")
     required: Boolean @doc(description: "Indicates whether the option is required")
     sort_order: Int @doc(description: "The order in which the option is displayed")
+    option_id: Int @doc(description: "Option ID")
 }
 
 interface CustomizableProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "CustomizableProductInterface contains information about customizable product options.") {
