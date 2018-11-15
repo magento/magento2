@@ -77,5 +77,4 @@ class InvalidateLogger
     {
         $this->logger->warning($message, $this->makeParams($params));
     }
-
 }
