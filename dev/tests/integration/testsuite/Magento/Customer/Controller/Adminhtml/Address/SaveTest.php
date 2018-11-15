@@ -89,18 +89,8 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        /**
-         * Check that customer data were cleaned after it was saved successfully
-         */
+        /** Check that customer data were cleaned after it was saved successfully*/
         $this->assertEmpty($this->objectManager->get(\Magento\Backend\Model\Session::class)->getCustomerData());
-
-        /**
-         * Check that success message is set
-         */
-        $this->assertSessionMessages(
-            $this->logicalNot($this->isEmpty()),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
 
         $customer = $this->customerRepository->getById($customerId);
 
@@ -147,14 +137,6 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
          * Check that customer data were cleaned after it was saved successfully
          */
         $this->assertEmpty($this->objectManager->get(\Magento\Backend\Model\Session::class)->getCustomerData());
-
-        /**
-         * Check that success message is set
-         */
-        $this->assertSessionMessages(
-            $this->logicalNot($this->isEmpty()),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
 
         /**
          * Remove stored customer from registry
@@ -204,50 +186,10 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
          */
         $this->assertEmpty($this->objectManager->get(\Magento\Backend\Model\Session::class)->getCustomerData());
 
-        /**
-         * Check that success message is set
-         */
-        $this->assertSessionMessages(
-            $this->logicalNot($this->isEmpty()),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
-
         $customer = $this->customerRepository->getById($customerId);
 
         $this->assertEquals('test firstname', $customer->getFirstname());
         $addresses = $customer->getAddresses();
         $this->assertCount(4, $addresses);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     */
-    public function testValidateCustomerWithAddressFailure()
-    {
-        $customer = $this->customerRepository->get('customer@example.com');
-        $customerId = $customer->getId();
-        $post = [
-            'parent_id' => $customerId,
-            'firstname' => '',
-            'lastname' => '',
-            'street' => ['update street'],
-            'city' => 'update city',
-            'postcode' => '01001',
-            'telephone' => '',
-        ];
-        $this->getRequest()->setPostValue($post)->setMethod(HttpRequest::METHOD_POST);
-
-        $this->objectManager->get(\Magento\Backend\Model\Session::class)->setCustomerFormData($post);
-
-        $this->customerAddress->execute();
-
-        /**
-         * Check that errors was generated and set to session
-         */
-        $this->assertSessionMessages(
-            $this->equalTo(['One or more input exceptions have occurred.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
-        );
     }
 }
