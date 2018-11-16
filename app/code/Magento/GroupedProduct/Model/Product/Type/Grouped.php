@@ -24,11 +24,11 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     const TYPE_CODE = 'grouped';
 
     /**
-     * Cache key for Associated Product Ids
+     * Cache key for Associated Products that are in stock
      *
      * @var string
      */
-    const CACHE_KEY_IN_STOCK_PRODUCTS = '_cache_instance_associated_product_ids';
+    const CACHE_KEY_IN_STOCK_PRODUCTS = '_cache_instance_in_stock_associated_products';
 
     /**
      * Cache key for Associated Products
@@ -36,6 +36,13 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @var string
      */
     protected $_keyAssociatedProducts = '_cache_instance_associated_products';
+
+    /**
+     * Cache key for Associated Product Ids
+     *
+     * @var string
+     */
+    protected $_keyAssociatedProductIds = '_cache_instance_associated_product_ids';
 
     /**
      * Cache key for Status Filters
@@ -93,13 +100,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @var \Magento\CatalogInventory\Helper\Stock|null
      */
     private $stockHelper;
-
-    /**
-     * Cache key for Associated Products that are in stock
-     *
-     * @var string
-     */
-    private $_keyInStockAssociatedProducts = '_cache_instance_in_stock_associated_products';
 
     /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -295,15 +295,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getAssociatedProductIds($product)
     {
-        if (!$product->hasData(self::CACHE_KEY_IN_STOCK_PRODUCTS)) {
+        if (!$product->hasData($this->_keyAssociatedProductIds)) {
             $associatedProductIds = [];
             /** @var $item \Magento\Catalog\Model\Product */
             foreach ($this->getAssociatedProducts($product) as $item) {
                 $associatedProductIds[] = $item->getId();
             }
-            $product->setData(self::CACHE_KEY_IN_STOCK_PRODUCTS, $associatedProductIds);
+            $product->setData($this->_keyAssociatedProductIds, $associatedProductIds);
         }
-        return $product->getData(self::CACHE_KEY_IN_STOCK_PRODUCTS);
+        return $product->getData($this->_keyAssociatedProductIds);
     }
 
     /**
@@ -519,10 +519,10 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     private function getInStockAssociatedProducts($product)
     {
-        if (!$product->hasData($this->_keyInStockAssociatedProducts)) {
+        if (!$product->hasData(self::CACHE_KEY_IN_STOCK_PRODUCTS)) {
             $this->assignAssociatedProducts($product, false);
         }
-        return $product->getData($this->_keyInStockAssociatedProducts);
+        return $product->getData(self::CACHE_KEY_IN_STOCK_PRODUCTS);
     }
 
     /**
@@ -556,7 +556,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $associatedProducts[] = $item;
         }
 
-        $cacheKey = $includeOutOfStock ? $this->_keyAssociatedProducts : $this->_keyInStockAssociatedProducts;
+        $cacheKey = $includeOutOfStock ? $this->_keyAssociatedProducts : self::CACHE_KEY_IN_STOCK_PRODUCTS;
 
         $product->setData($cacheKey, $associatedProducts);
     }
