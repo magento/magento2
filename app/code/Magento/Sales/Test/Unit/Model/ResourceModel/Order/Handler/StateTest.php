@@ -53,127 +53,91 @@ class StateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * test check order - order without id
+     * @param bool $isCanceled
+     * @param bool $canUnhold
+     * @param bool $canInvoice
+     * @param bool $canShip
+     * @param int $callCanSkipNum
+     * @param bool $canCreditmemo
+     * @param int $callCanCreditmemoNum
+     * @param string $currentState
+     * @param string $expectedState
+     * @param int $callSetStateNum
+     * @dataProvider stateCheckDataProvider
      */
-    public function testCheckOrderEmpty()
-    {
+    public function testCheck(
+        bool $canCreditmemo,
+        int $callCanCreditmemoNum,
+        bool $canShip,
+        int $callCanSkipNum,
+        string $currentState,
+        string $expectedState = '',
+        int $callSetStateNum = 0,
+        bool $isInProcess = false,
+        int $callGetIsInProcessNum = 0,
+        bool $isCanceled = false,
+        bool $canUnhold = false,
+        bool $canInvoice = false
+    ) {
+        $this->orderMock->expects($this->any())
+            ->method('isCanceled')
+            ->willReturn($isCanceled);
+        $this->orderMock->expects($this->any())
+            ->method('canUnhold')
+            ->willReturn($canUnhold);
+        $this->orderMock->expects($this->any())
+            ->method('canInvoice')
+            ->willReturn($canInvoice);
+        $this->orderMock->expects($this->exactly($callCanSkipNum))
+            ->method('canShip')
+            ->willReturn($canShip);
+        $this->orderMock->expects($this->exactly($callCanCreditmemoNum))
+            ->method('canCreditmemo')
+            ->willReturn($canCreditmemo);
         $this->orderMock->expects($this->once())
-            ->method('getBaseGrandTotal')
-            ->willReturn(100);
-        $this->orderMock->expects($this->never())
-            ->method('setState');
-
+            ->method('getState')
+            ->willReturn($currentState);
+        $this->orderMock->expects($this->exactly($callGetIsInProcessNum))
+            ->method('getIsInProcess')
+            ->willReturn($isInProcess);
+        $this->orderMock->expects($this->exactly($callSetStateNum))
+            ->method('setState')
+            ->with($expectedState)
+            ->will($this->returnSelf());
         $this->state->check($this->orderMock);
     }
 
-    /**
-     * test check order - set state complete
-     */
-    public function testCheckSetStateComplete()
+    public function stateCheckDataProvider()
     {
-        $this->orderMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(1));
-        $this->orderMock->expects($this->once())
-            ->method('isCanceled')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canUnhold')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canInvoice')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canShip')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('getBaseGrandTotal')
-            ->will($this->returnValue(100));
-        $this->orderMock->expects($this->once())
-            ->method('canCreditmemo')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->exactly(2))
-            ->method('getState')
-            ->will($this->returnValue(Order::STATE_PROCESSING));
-        $this->orderMock->expects($this->once())
-            ->method('setState')
-            ->with(Order::STATE_COMPLETE)
-            ->will($this->returnSelf());
-        $this->assertEquals($this->state, $this->state->check($this->orderMock));
-    }
-
-    /**
-     * test check order - set state closed
-     */
-    public function testCheckSetStateClosed()
-    {
-        $this->orderMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(1));
-        $this->orderMock->expects($this->once())
-            ->method('isCanceled')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canUnhold')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canInvoice')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canShip')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('getBaseGrandTotal')
-            ->will($this->returnValue(100));
-        $this->orderMock->expects($this->once())
-            ->method('canCreditmemo')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->exactly(2))
-            ->method('getTotalRefunded')
-            ->will($this->returnValue(null));
-        $this->orderMock->expects($this->once())
-            ->method('hasForcedCanCreditmemo')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->exactly(2))
-            ->method('getState')
-            ->will($this->returnValue(Order::STATE_PROCESSING));
-        $this->orderMock->expects($this->once())
-            ->method('setState')
-            ->with(Order::STATE_CLOSED)
-            ->will($this->returnSelf());
-        $this->assertEquals($this->state, $this->state->check($this->orderMock));
-    }
-
-    /**
-     * test check order - set state processing
-     */
-    public function testCheckSetStateProcessing()
-    {
-        $this->orderMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(1));
-        $this->orderMock->expects($this->once())
-            ->method('isCanceled')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canUnhold')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canInvoice')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canShip')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->once())
-            ->method('getState')
-            ->will($this->returnValue(Order::STATE_NEW));
-        $this->orderMock->expects($this->once())
-            ->method('getIsInProcess')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->once())
-            ->method('setState')
-            ->with(Order::STATE_PROCESSING)
-            ->will($this->returnSelf());
-        $this->assertEquals($this->state, $this->state->check($this->orderMock));
+        return [
+            'processing - !canCreditmemo!canShip -> closed' =>
+                [false, 1, false, 0, Order::STATE_PROCESSING, Order::STATE_CLOSED, 1],
+            'complete - !canCreditmemo,!canShip -> closed' =>
+                [false, 1, false, 0, Order::STATE_COMPLETE, Order::STATE_CLOSED, 1],
+            'processing - !canCreditmemo,canShip -> closed' =>
+                [false, 1, true, 0, Order::STATE_PROCESSING, Order::STATE_CLOSED, 1],
+            'complete - !canCreditmemo,canShip -> closed' =>
+                [false, 1, true, 0, Order::STATE_COMPLETE, Order::STATE_CLOSED, 1],
+            'processing - canCreditmemo,!canShip -> complete' =>
+                [true, 1, false, 1, Order::STATE_PROCESSING, Order::STATE_COMPLETE, 1],
+            'complete - canCreditmemo,!canShip -> complete' =>
+                [true, 1, false, 0, Order::STATE_COMPLETE],
+            'processing - canCreditmemo, canShip -> processing' =>
+                [true, 1, true, 1, Order::STATE_PROCESSING],
+            'complete - canCreditmemo, canShip -> complete' =>
+                [true, 1, true, 0, Order::STATE_COMPLETE],
+            'new - canCreditmemo, canShip, IsInProcess -> processing' =>
+                [true, 0, true, 0, Order::STATE_NEW, Order::STATE_PROCESSING, 1, true, 1],
+            'new - canCreditmemo, canShip, !IsInProcess -> new' =>
+                [true, 0, true, 0, Order::STATE_NEW, '', 0, false, 1],
+            'hold - canUnhold -> hold' =>
+                [true, 0, true, 0, Order::STATE_HOLDED, '', 0, false, 0, false, true, false],
+            'payment_review - canUnhold -> payment_review' =>
+                [true, 0, true, 0, Order::STATE_PAYMENT_REVIEW, '', 0, false, 0, false, false, false],
+            'pending_payment - canUnhold -> pending_payment' =>
+                [true, 0, true, 0, Order::STATE_PENDING_PAYMENT, '', 0, false, 0, false, false, false],
+            'cancelled - isCanceled -> cancelled' =>
+                [true, 0, true, 0, Order::STATE_HOLDED, '', 0, false, 0, true, false, false],
+        ];
     }
 }
