@@ -25,8 +25,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Cache key for Associated Products that are in stock
-     *
-     * @var string
      */
     const CACHE_KEY_IN_STOCK_PRODUCTS = '_cache_instance_in_stock_associated_products';
 
