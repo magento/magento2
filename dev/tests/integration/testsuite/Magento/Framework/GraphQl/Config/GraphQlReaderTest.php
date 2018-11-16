@@ -191,6 +191,16 @@ QUERY;
         $mergedSchemaResponseFields = array_merge($schemaResponseFieldsFirstHalf, $schemaResponseFieldsSecondHalf);
 
         foreach ($expectedOutput as $searchTerm) {
+            $sortFields = ['inputFields', 'fields'];
+            foreach ($sortFields as $sortField) {
+                isset($searchTerm[$sortField]) && is_array($searchTerm[$sortField])
+                    ? usort($searchTerm[$sortField], function ($a, $b) {
+                        $cmpField = 'name';
+                        return isset($a[$cmpField]) && isset($b[$cmpField])
+                            ? strcmp($a[$cmpField], $b[$cmpField]) : 0;
+                    }) : null;
+            }
+
             $this->assertTrue(
                 (in_array($searchTerm, $mergedSchemaResponseFields)),
                 'Missing type in the response'

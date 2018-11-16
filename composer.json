@@ -201,6 +201,7 @@
         "magento/module-rule": "*",
         "magento/module-sales": "*",
         "magento/module-sales-analytics": "*",
+        "magento/module-sales-graph-ql": "*",
         "magento/module-sales-inventory": "*",
         "magento/module-sales-rule": "*",
         "magento/module-sales-sequence": "*",
