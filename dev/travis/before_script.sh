@@ -152,17 +152,17 @@ case $TEST_SUITE in
             --admin-use-security-key=0 \
             --admin-password="123123q"
 
-        echo "Enabling production mode"
-        php bin/magento deploy:mode:set production
-
         echo "Prepare api-functional tests for running"
         cd dev/tests/api-functional
-        cp -r _files/Magento/* ../../../app/code/Magento # Deploy and enable test modules before running tests
+        cp -r _files/Magento/TestModuleGraphQl* ../../../app/code/Magento # Deploy and enable test modules before running tests
 
         cp ./phpunit_graphql.xml.dist ./phpunit.xml
         sed -e "s?magento.url?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
 
         cd ../../..
         php bin/magento setup:upgrade
+
+        echo "Enabling production mode"
+        php bin/magento deploy:mode:set production
         ;;
 esac
