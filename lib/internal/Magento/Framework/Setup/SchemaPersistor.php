@@ -6,6 +6,7 @@
 namespace Magento\Framework\Setup;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Setup\Declaration\Schema\Sharding;
 use Magento\Framework\Shell;
 
 /**
@@ -74,7 +75,7 @@ class SchemaPersistor
                 $tableData = $this->handleDefinition($tableData);
                 $table = $dom->addChild('table');
                 $table->addAttribute('name', $tableName);
-                $table->addAttribute('resource', $tableData['resource']);
+                $table->addAttribute('resource', $tableData['resource']?: Sharding::DEFAULT_CONNECTION);
                 if (isset($tableData['engine']) && $tableData['engine'] !== null) {
                     $table->addAttribute('engine', $tableData['engine']);
                 }
@@ -161,7 +162,7 @@ class SchemaPersistor
             foreach ($tableData['indexes'] as $indexName => $indexData) {
                 $indexData = $this->handleDefinition($indexData);
                 $domIndex = $table->addChild('index');
-                $domIndex->addAttribute('name', $indexName);
+                $domIndex->addAttribute('referenceId', $indexName);
 
                 if (isset($indexData['disabled']) && $indexData['disabled']) {
                     $domIndex->addAttribute('disabled', true);
@@ -195,7 +196,7 @@ class SchemaPersistor
                         $constraintData = $this->handleDefinition($constraintData);
                         $constraintDom = $table->addChild('constraint');
                         $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
-                        $constraintDom->addAttribute('name', $name);
+                        $constraintDom->addAttribute('referenceId', $name);
 
                         foreach ($constraintData as $attributeKey => $attributeValue) {
                             $constraintDom->addAttribute($attributeKey, $attributeValue);
@@ -206,7 +207,7 @@ class SchemaPersistor
                         $constraintData = $this->handleDefinition($constraintData);
                         $constraintDom = $table->addChild('constraint');
                         $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
-                        $constraintDom->addAttribute('name', $name);
+                        $constraintDom->addAttribute('referenceId', $name);
                         $constraintData['columns'] = $constraintData['columns'] ?? [];
 
                         if (isset($constraintData['disabled'])) {
