@@ -387,22 +387,26 @@ define([
 
             if (this.checkForNewAttributes()) {
                 this.formSaveParams = arguments;
-                this.attributeSetHandlerModal().openModal();
+                this.attributeSetHandlerModal().openModal().then(_.bind(this.unserializeData, this));
             } else {
                 this.formElement().save(arguments[0], arguments[1]);
+
+                if (this.source.params['invalid']) {
+                    this.unserializeData();
+                }
             }
         },
 
         /**
          * Serialize data for specific form fields
          *
-         * Get data from outdated fields, serialize it and produce new form fields.
+         * Serializes some complex data fields
          *
-         * Outdated fields:
+         * Original fields:
          *   - configurable-matrix;
          *   - associated_product_ids.
          *
-         * New fields:
+         * Serialized fields in request:
          *   - configurable-matrix-serialized;
          *   - associated_product_ids_serialized.
          */
@@ -417,6 +421,25 @@ define([
                 this.source.data['associated_product_ids_serialized'] =
                     JSON.stringify(this.source.data['associated_product_ids']);
                 delete this.source.data['associated_product_ids'];
+            }
+        },
+
+        /**
+         * Unserialize data for specific form fields
+         *
+         * Unserializes some fields that were serialized this.serializeData
+         */
+        unserializeData: function () {
+            if (this.source.data['configurable-matrix-serialized']) {
+                this.source.data['configurable-matrix'] =
+                    JSON.parse(this.source.data['configurable-matrix-serialized']);
+                delete this.source.data['configurable-matrix-serialized'];
+            }
+
+            if (this.source.data['associated_product_ids_serialized']) {
+                this.source.data['associated_product_ids'] =
+                    JSON.parse(this.source.data['associated_product_ids_serialized']);
+                delete this.source.data['associated_product_ids_serialized'];
             }
         },
 
