@@ -166,8 +166,8 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
                 $creditmemo->getOrder(),
                 !$offlineRequested
             );
-            $this->getOrderRepository()->save($order);
             $this->creditmemoRepository->save($creditmemo);
+            $this->getOrderRepository()->save($order);
             $connection->commit();
         } catch (\Exception $e) {
             $connection->rollBack();
@@ -178,6 +178,8 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
+     * Validates if credit memo is available for refund.
+     *
      * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -208,8 +210,9 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * @return \Magento\Sales\Model\Order\RefundAdapterInterface
+     * Gets the instance of RefundAdapterInterface
      *
+     * @return \Magento\Sales\Model\Order\RefundAdapterInterface
      * @deprecated 100.1.3
      */
     private function getRefundAdapter()
@@ -222,8 +225,9 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * @return \Magento\Framework\App\ResourceConnection|mixed
+     * Gets instance of ResourceConnection.
      *
+     * @return \Magento\Framework\App\ResourceConnection|mixed
      * @deprecated 100.1.3
      */
     private function getResource()
@@ -236,8 +240,9 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * @return \Magento\Sales\Api\OrderRepositoryInterface
+     * Gets instance of OrderRepositoryInterface.
      *
+     * @return \Magento\Sales\Api\OrderRepositoryInterface
      * @deprecated 100.1.3
      */
     private function getOrderRepository()
@@ -250,8 +255,9 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * @return \Magento\Sales\Api\InvoiceRepositoryInterface
+     * Gets instance of InvoiceRepositoryInterface
      *
+     * @return \Magento\Sales\Api\InvoiceRepositoryInterface
      * @deprecated 100.1.3
      */
     private function getInvoiceRepository()

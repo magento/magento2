@@ -23,6 +23,11 @@ class Elasticsearch
     const BULK_ACTION_UPDATE = 'update';
     /**#@-*/
 
+    /**
+     * Buffer for total fields limit in mapping.
+     */
+    private const MAPPING_TOTAL_FIELDS_BUFFER_LIMIT = 1000;
+
     /**#@-*/
     protected $connectionManager;
 
@@ -197,7 +202,7 @@ class Elasticsearch
 
         // prepare new index name and increase version
         $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $mappedIndexerId);
-        $version = intval(str_replace($indexPattern, '', $indexName));
+        $version = (int)(str_replace($indexPattern, '', $indexName));
         $newIndexName = $indexPattern . ++$version;
 
         // remove index if already exists
@@ -279,8 +284,9 @@ class Elasticsearch
      * Checks whether Elasticsearch index and alias exists.
      *
      * @param int $storeId
-     * @param bool $checkAlias
      * @param string $mappedIndexerId
+     * @param bool $checkAlias
+     *
      * @return $this
      */
     public function checkIndex(
@@ -347,13 +353,32 @@ class Elasticsearch
     protected function prepareIndex($storeId, $indexName, $mappedIndexerId)
     {
         $this->indexBuilder->setStoreId($storeId);
-        $this->client->createIndex($indexName, ['settings' => $this->indexBuilder->build()]);
+        $settings = $this->indexBuilder->build();
+        $allAttributeTypes = $this->fieldMapper->getAllAttributesTypes([
+            'entityType' => $mappedIndexerId,
+            // Use store id instead of website id from context for save existing fields mapping.
+            // In future websiteId will be eliminated due to index stored per store
+            'websiteId' => $storeId
+        ]);
+        $settings['index']['mapping']['total_fields']['limit'] = $this->getMappingTotalFieldsLimit($allAttributeTypes);
+        $this->client->createIndex($indexName, ['settings' => $settings]);
         $this->client->addFieldsMapping(
-            $this->fieldMapper->getAllAttributesTypes(['entityType' => $mappedIndexerId]),
+            $allAttributeTypes,
             $indexName,
             $this->clientConfig->getEntityType()
         );
         $this->preparedIndex[$storeId] = $indexName;
         return $this;
+    }
+
+    /**
+     * Get total fields limit for mapping.
+     *
+     * @param array $allAttributeTypes
+     * @return int
+     */
+    private function getMappingTotalFieldsLimit(array $allAttributeTypes): int
+    {
+        return count($allAttributeTypes) + self::MAPPING_TOTAL_FIELDS_BUFFER_LIMIT;
     }
 }

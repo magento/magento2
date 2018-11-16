@@ -6,12 +6,30 @@ type Query {
 }
 
 type Mutation {
-    generateCustomerToken(email: String!, password: String!): CustomerToken @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\Customer\\Account\\GenerateCustomerToken") @doc(description:"Retrieve Customer token")
-    changeCustomerPassword(currentPassword: String!, newPassword: String!): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\Customer\\Account\\ChangePassword") @doc(description:"Changes password for logged in customer")
+    generateCustomerToken(email: String!, password: String!): CustomerToken @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\GenerateCustomerToken") @doc(description:"Retrieve the customer token")
+    changeCustomerPassword(currentPassword: String!, newPassword: String!): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ChangePassword") @doc(description:"Changes the password for the logged-in customer")
+    updateCustomer (input: UpdateCustomerInput!): UpdateCustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Update the customer's personal information")
+    revokeCustomerToken: RevokeCustomerTokenOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RevokeCustomerToken") @doc(description:"Revoke the customer token")
 }
 
 type CustomerToken {
     token: String @doc(description: "The customer token")
+}
+
+input UpdateCustomerInput {
+    firstname: String
+    lastname: String
+    email: String
+    password: String
+    is_subscribed: Boolean
+}
+
+type UpdateCustomerOutput {
+    customer: Customer!
+}
+
+type RevokeCustomerTokenOutput {
+    result: Boolean!
 }
 
 type Customer @doc(description: "Customer defines the customer name and address and other details") {
@@ -28,9 +46,9 @@ type Customer @doc(description: "Customer defines the customer name and address 
     dob: String @doc(description: "The customer's date of birth")
     taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
     id: Int @doc(description: "The ID assigned to the customer")
-    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
     addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses")
-} 
+}
 
 type CustomerAddress @doc(description: "CustomerAddress contains detailed information about a customer's billing and shipping addresses"){
     id: Int @doc(description: "The ID assigned to the address object")
@@ -59,4 +77,3 @@ type CustomerAddressRegion @doc(description: "CustomerAddressRegion defines the 
     region: String @doc(description: "The state or province name")
     region_id: Int @doc(description: "Uniquely identifies the region")
 }
-
