@@ -74,7 +74,6 @@
             <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToTaxConfigPage"/>
             <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.taxClasses}}" dependentSelector="{{AdminConfigureTaxSection.taxClassesCondition}}" visible="false"/>
             <selectOption selector="{{AdminConfigureTaxSection.productTaxClass}}" userInput="Taxable Goods" stepKey="selectClass"/>
-            <click selector="{{AdminConfigureTaxSection.useSystemValue}}" stepKey="UncheckUseSystemValue"/>
             <click selector="{{AdminConfigureTaxSection.save}}" stepKey="saveConfig"/>
             <!-- Go to the tax rule page and delete the row we created-->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
