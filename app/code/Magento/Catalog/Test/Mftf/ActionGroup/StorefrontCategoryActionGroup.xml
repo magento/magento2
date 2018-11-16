@@ -47,4 +47,19 @@
         <!-- Go to storefront category page -->
         <amOnPage url="{{StorefrontCategoryPage.url(category)}}?product_list_mode={{mode}}&amp;product_list_order={{sortBy}}&amp;product_list_dir={{sort}}" stepKey="onCategoryPage"/>
     </actionGroup>
+
+    <actionGroup name="VerifyCategoryPageParameters">
+        <arguments>
+            <argument name="categoryName" type="string"/>
+            <argument name="mode" type="string"/>
+            <argument name="numOfProductsPerPage" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+        </arguments>
+        <amOnPage url="{{StorefrontCategoryPage.url(categoryName)}}" stepKey="navigateToCategoryPage"/>
+        <seeInTitle userInput="{{categoryName}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{categoryName}}" selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryName"/>
+        <see userInput="{{mode}}" selector="{{StorefrontCategoryPagerSection.modeGridIsActive}}" stepKey="assertViewMode"/>
+        <see userInput="{{numOfProductsPerPage}}" selector="{{StorefrontCategoryPagerSection.perPageSelected}}" stepKey="assertNumberOfProductsPerPage"/>
+        <see userInput="{{sortBy}}" selector="{{StorefrontCategoryPagerSection.sortedBy}}" stepKey="assertSortedBy"/>
+    </actionGroup>
 </actionGroups>
