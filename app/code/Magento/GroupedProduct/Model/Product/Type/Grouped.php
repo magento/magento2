@@ -24,18 +24,18 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     const TYPE_CODE = 'grouped';
 
     /**
+     * Cache key for Associated Product Ids
+     *
+     * @var string
+     */
+    const CACHE_KEY_IN_STOCK_PRODUCTS = '_cache_instance_associated_product_ids';
+
+    /**
      * Cache key for Associated Products
      *
      * @var string
      */
     protected $_keyAssociatedProducts = '_cache_instance_associated_products';
-
-    /**
-     * Cache key for Associated Product Ids
-     *
-     * @var string
-     */
-    protected $_keyAssociatedProductIds = '_cache_instance_associated_product_ids';
 
     /**
      * Cache key for Status Filters
@@ -295,15 +295,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getAssociatedProductIds($product)
     {
-        if (!$product->hasData($this->_keyAssociatedProductIds)) {
+        if (!$product->hasData(self::CACHE_KEY_IN_STOCK_PRODUCTS)) {
             $associatedProductIds = [];
             /** @var $item \Magento\Catalog\Model\Product */
             foreach ($this->getAssociatedProducts($product) as $item) {
                 $associatedProductIds[] = $item->getId();
             }
-            $product->setData($this->_keyAssociatedProductIds, $associatedProductIds);
+            $product->setData(self::CACHE_KEY_IN_STOCK_PRODUCTS, $associatedProductIds);
         }
-        return $product->getData($this->_keyAssociatedProductIds);
+        return $product->getData(self::CACHE_KEY_IN_STOCK_PRODUCTS);
     }
 
     /**
