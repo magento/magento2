@@ -546,7 +546,7 @@ class Uploader
 
             preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
 
-            if (is_array($file) && count($file) > 0 && !empty($file[0]) && (isset($file[1]) && !empty($file[1]))) {
+            if (is_array($file) && count($file) > 0 && !empty($file[0]) && !empty($file[1])) {
                 array_shift($file);
                 $this->_uploadType = self::MULTIPLE_STYLE;
 
