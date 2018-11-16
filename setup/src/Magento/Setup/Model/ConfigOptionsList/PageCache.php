@@ -83,7 +83,7 @@ class PageCache implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptions()
     {
