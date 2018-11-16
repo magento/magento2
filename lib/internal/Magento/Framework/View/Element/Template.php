@@ -28,7 +28,7 @@ use Magento\Framework\Filesystem;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Template extends AbstractBlock
+class Template extends AbstractBlock implements IdentityInterface
 {
     /**
      * Config path to 'Allow Symlinks' template settings
@@ -366,5 +366,24 @@ class Template extends AbstractBlock
             $this->mediaDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
         }
         return $this->mediaDirectory;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Merges the identities of all child elements so ViewModels may alter the cache identifier.
+     *
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        $childIdentities = [];
+        foreach ($this->getData() as $datum) {
+            if ($datum instanceof IdentityInterface) {
+                $childIdentities[] = $datum->getIdentities();
+            }
+        }
+
+        return array_merge_recursive(...$childIdentities);
     }
 }
