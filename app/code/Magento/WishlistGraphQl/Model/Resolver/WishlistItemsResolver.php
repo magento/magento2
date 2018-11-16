@@ -77,6 +77,8 @@ class WishlistItemsResolver implements ResolverInterface
     }
 
     /**
+     * Get wishlist items
+     *
      * @param Wishlist $wishlist
      * @return Item[]
      */
