@@ -164,7 +164,6 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
-
     /**
      * testCreateConfigCacheRedis
      */
