@@ -79,7 +79,7 @@ class Cache implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptions()
     {
