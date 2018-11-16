@@ -1007,4 +1007,7 @@
     <preference
             for="Magento\Sales\Api\OrderCustomerDelegateInterface"
             type="Magento\Sales\Model\Order\OrderCustomerDelegate" />
+    <type name="\Magento\Framework\Locale\ResolverInterface">
+        <plugin name="mage_localeresolver_reload" type="Magento\Framework\Translate\Locale\Resolver\Plugin" sortOrder="1" disabled="false"/>
+    </type> 
 </config>
