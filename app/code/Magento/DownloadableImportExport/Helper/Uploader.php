@@ -51,8 +51,6 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\Filesystem $filesystem
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
