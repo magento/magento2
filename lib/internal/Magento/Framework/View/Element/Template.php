@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Element;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Filesystem;
 
 /**
@@ -369,7 +371,7 @@ class Template extends AbstractBlock implements IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Return unique ID(s) for each object in system
      *
      * Merges the identities of all child elements so ViewModels may alter the cache identifier.
      *

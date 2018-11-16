@@ -8,7 +8,7 @@ namespace Magento\Framework\DataObject;
 /**
  * Interface for
  * 1. models which require cache refresh when it is created/updated/deleted
- * 2. blocks which render this information to front-end
+ * 2. blocks/viewmodels which render this information to front-end
  */
 interface IdentityInterface
 {
