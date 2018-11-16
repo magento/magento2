@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate;
+use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
@@ -61,6 +62,11 @@ class ValidateTest extends AttributeTest
      */
     protected $layoutMock;
 
+    /**
+     * @var FormData|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $formDataSerializerMock;
+
     protected function setUp()
     {
         parent::setUp();
@@ -86,6 +92,9 @@ class ValidateTest extends AttributeTest
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->getMockForAbstractClass();
+        $this->formDataSerializerMock = $this->getMockBuilder(FormData::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
@@ -100,25 +109,28 @@ class ValidateTest extends AttributeTest
         return $this->objectManager->getObject(
             Validate::class,
             [
-            'context' => $this->contextMock,
-            'attributeLabelCache' => $this->attributeLabelCacheMock,
-            'coreRegistry' => $this->coreRegistryMock,
-            'resultPageFactory' => $this->resultPageFactoryMock,
-            'resultJsonFactory' => $this->resultJsonFactoryMock,
-            'layoutFactory' => $this->layoutFactoryMock,
-            'multipleAttributeList' => ['select' => 'option']
+                'context' => $this->contextMock,
+                'attributeLabelCache' => $this->attributeLabelCacheMock,
+                'coreRegistry' => $this->coreRegistryMock,
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'resultJsonFactory' => $this->resultJsonFactoryMock,
+                'layoutFactory' => $this->layoutFactoryMock,
+                'multipleAttributeList' => ['select' => 'option'],
+                'formDataSerializer' => $this->formDataSerializerMock,
             ]
         );
     }
 
     public function testExecute()
     {
+        $serializedOptions = '{"key":"value"}';
         $this->requestMock->expects($this->any())
             ->method('getParam')
             ->willReturnMap([
                 ['frontend_label', null, 'test_frontend_label'],
                 ['attribute_code', null, 'test_attribute_code'],
                 ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                ['serialized_options', '[]', $serializedOptions],
             ]);
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
@@ -160,6 +172,7 @@ class ValidateTest extends AttributeTest
      */
     public function testUniqueValidation(array $options, $isError)
     {
+        $serializedOptions = '{"key":"value"}';
         $countFunctionCalls = ($isError) ? 6 : 5;
         $this->requestMock->expects($this->exactly($countFunctionCalls))
             ->method('getParam')
@@ -167,9 +180,15 @@ class ValidateTest extends AttributeTest
                 ['frontend_label', null, null],
                 ['attribute_code', null, "test_attribute_code"],
                 ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['option', null, $options],
-                ['message_key', null, Validate::DEFAULT_MESSAGE_KEY]
+                ['message_key', null, Validate::DEFAULT_MESSAGE_KEY],
+                ['serialized_options', '[]', $serializedOptions],
             ]);
+
+        $this->formDataSerializerMock
+            ->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedOptions)
+            ->willReturn($options);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -203,67 +222,77 @@ class ValidateTest extends AttributeTest
         return [
             'no values' => [
                 [
-                    'delete' => [
-                        "option_0" => "",
-                        "option_1" => "",
-                        "option_2" => "",
-                    ]
+                    'option' => [
+                        'delete' => [
+                            "option_0" => "",
+                            "option_1" => "",
+                            "option_2" => "",
+                        ],
+                    ],
                 ], false
             ],
             'valid options' => [
                 [
-                    'value' => [
-                        "option_0" => [1, 0],
-                        "option_1" => [2, 0],
-                        "option_2" => [3, 0],
+                    'option' => [
+                        'value' => [
+                            "option_0" => [1, 0],
+                            "option_1" => [2, 0],
+                            "option_2" => [3, 0],
+                        ],
+                        'delete' => [
+                            "option_0" => "",
+                            "option_1" => "",
+                            "option_2" => "",
+                        ],
                     ],
-                    'delete' => [
-                        "option_0" => "",
-                        "option_1" => "",
-                        "option_2" => "",
-                    ]
                 ], false
             ],
             'duplicate options' => [
                 [
-                    'value' => [
-                        "option_0" => [1, 0],
-                        "option_1" => [1, 0],
-                        "option_2" => [3, 0],
+                    'option' => [
+                        'value' => [
+                            "option_0" => [1, 0],
+                            "option_1" => [1, 0],
+                            "option_2" => [3, 0],
+                        ],
+                        'delete' => [
+                            "option_0" => "",
+                            "option_1" => "",
+                            "option_2" => "",
+                        ],
                     ],
-                    'delete' => [
-                        "option_0" => "",
-                        "option_1" => "",
-                        "option_2" => "",
-                    ]
                 ], true
             ],
             'duplicate and deleted' => [
                 [
-                    'value' => [
-                        "option_0" => [1, 0],
-                        "option_1" => [1, 0],
-                        "option_2" => [3, 0],
+                    'option' => [
+                        'value' => [
+                            "option_0" => [1, 0],
+                            "option_1" => [1, 0],
+                            "option_2" => [3, 0],
+                        ],
+                        'delete' => [
+                            "option_0" => "",
+                            "option_1" => "1",
+                            "option_2" => "",
+                        ],
                     ],
-                    'delete' => [
-                        "option_0" => "",
-                        "option_1" => "1",
-                        "option_2" => "",
-                    ]
                 ], false
             ],
             'empty and deleted' => [
                 [
-                    'value' => [
-                        "option_0" => [1, 0],
-                        "option_1" => [2, 0],
-                        "option_2" => ["", ""],
+                    'option' => [
+                        'value' => [
+                            "option_0" => [1, 0],
+                            "option_1" => [2, 0],
+                            "option_2" => ["", ""],
+                        ],
+                        'delete' => [
+                            "option_0" => "",
+                            "option_1" => "",
+                            "option_2" => "1",
+                        ],
                     ],
-                    'delete' => [
-                        "option_0" => "",
-                        "option_1" => "",
-                        "option_2" => "1",
-                    ]
                 ], false
             ],
         ];
@@ -278,6 +307,7 @@ class ValidateTest extends AttributeTest
      */
     public function testEmptyOption(array $options, $result)
     {
+        $serializedOptions = '{"key":"value"}';
         $this->requestMock->expects($this->any())
             ->method('getParam')
             ->willReturnMap([
@@ -285,9 +315,15 @@ class ValidateTest extends AttributeTest
                 ['frontend_input', 'select', 'multipleselect'],
                 ['attribute_code', null, "test_attribute_code"],
                 ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['option', null, $options],
                 ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                ['serialized_options', '[]', $serializedOptions],
             ]);
+
+        $this->formDataSerializerMock
+            ->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedOptions)
+            ->willReturn($options);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -320,8 +356,10 @@ class ValidateTest extends AttributeTest
         return [
             'empty admin scope options' => [
                 [
-                    'value' => [
-                        "option_0" => [''],
+                    'option' => [
+                        'value' => [
+                            "option_0" => [''],
+                        ],
                     ],
                 ],
                 (object) [
@@ -331,8 +369,10 @@ class ValidateTest extends AttributeTest
             ],
             'not empty admin scope options' => [
                 [
-                    'value' => [
-                        "option_0" => ['asdads'],
+                    'option' => [
+                        'value' => [
+                            "option_0" => ['asdads'],
+                        ],
                     ],
                 ],
                 (object) [
@@ -341,11 +381,13 @@ class ValidateTest extends AttributeTest
             ],
             'empty admin scope options and deleted' => [
                 [
-                    'value' => [
-                        "option_0" => [''],
-                    ],
-                    'delete' => [
-                        'option_0' => '1',
+                    'option' => [
+                        'value' => [
+                            "option_0" => [''],
+                        ],
+                        'delete' => [
+                            'option_0' => '1',
+                        ],
                     ],
                 ],
                 (object) [
@@ -354,11 +396,13 @@ class ValidateTest extends AttributeTest
             ],
             'empty admin scope options and not deleted' => [
                 [
-                    'value' => [
-                        "option_0" => [''],
-                    ],
-                    'delete' => [
-                        'option_0' => '0',
+                    'option' => [
+                        'value' => [
+                            "option_0" => [''],
+                        ],
+                        'delete' => [
+                            'option_0' => '0',
+                        ],
                     ],
                 ],
                 (object) [
@@ -367,5 +411,56 @@ class ValidateTest extends AttributeTest
                 ],
             ],
         ];
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\NotFoundException
+     */
+    public function testExecuteWithOptionsDataError()
+    {
+        $serializedOptions = '{"key":"value"}';
+        $message = "The attribute couldn't be validated due to an error. Verify your information and try again. "
+            . "If the error persists, please try again later.";
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap([
+                ['frontend_label', null, 'test_frontend_label'],
+                ['attribute_code', null, 'test_attribute_code'],
+                ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                ['serialized_options', '[]', $serializedOptions],
+            ]);
+
+        $this->formDataSerializerMock
+            ->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedOptions)
+            ->willThrowException(new \InvalidArgumentException('Some exception'));
+
+        $this->objectManagerMock
+            ->method('create')
+            ->willReturnMap([
+                [\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], $this->attributeMock],
+                [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
+            ]);
+
+        $this->attributeMock
+            ->method('loadByCode')
+            ->willReturnSelf();
+        $this->attributeSetMock
+            ->method('setEntityTypeId')
+            ->willReturnSelf();
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+        $this->resultJson->expects($this->once())
+            ->method('setJsonData')
+            ->with(json_encode([
+                'error' => true,
+                'message' => $message
+            ]))
+            ->willReturnSelf();
+
+        $this->getModel()->execute();
     }
 }

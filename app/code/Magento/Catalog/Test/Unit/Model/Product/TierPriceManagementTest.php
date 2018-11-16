@@ -195,7 +195,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @message The product doesn't exist. Verify and try again.
+     * @expectedExceptionMessage No such entity.
      */
     public function testDeleteTierPriceFromNonExistingProduct()
     {

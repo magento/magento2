@@ -15,7 +15,6 @@ use Magento\Widget\Block\BlockInterface;
 /**
  * Catalog Products List widget block
  *
- * Class ProductsList
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements BlockInterface, IdentityInterface
@@ -131,7 +130,9 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * @inheritdoc
+     * Internal constructor, that is called from real constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -197,7 +198,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             ? $arguments['display_minimal_price']
             : true;
 
-            /** @var \Magento\Framework\Pricing\Render $priceRender */
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
         if (!$priceRender) {
             $priceRender = $this->getLayout()->createBlock(
@@ -212,7 +213,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             $product,
             $arguments
         );
-        
+
         return $price;
     }
 
@@ -255,7 +256,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * Returns conditions
+     * Get conditions
      *
      * @return \Magento\Rule\Model\Condition\Combine
      */
@@ -346,7 +347,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             if (!$this->pager) {
                 $this->pager = $this->getLayout()->createBlock(
                     \Magento\Catalog\Block\Product\Widget\Html\Pager::class,
-                    'widget.products.list.pager'
+                    $this->getWidgetPagerBlockName()
                 );
 
                 $this->pager->setUseContainer(true)
@@ -394,7 +395,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * Returns PriceCurrencyInterface instance
+     * Get currency of product
      *
      * @return PriceCurrencyInterface
      * @deprecated 100.2.0
@@ -406,5 +407,22 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
                 ->get(PriceCurrencyInterface::class);
         }
         return $this->priceCurrency;
+    }
+
+    /**
+     * Get widget block name
+     *
+     * @return string
+     */
+    private function getWidgetPagerBlockName()
+    {
+        $pageName = $this->getData('page_var_name');
+        $pagerBlockName = 'widget.products.list.pager';
+
+        if (!$pageName) {
+            return $pagerBlockName;
+        }
+
+        return $pagerBlockName . '.' . $pageName;
     }
 }
