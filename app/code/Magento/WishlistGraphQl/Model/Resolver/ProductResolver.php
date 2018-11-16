@@ -48,6 +48,6 @@ class ProductResolver implements ResolverInterface
         /** @var Item $wishlistItem */
         $wishlistItem = $value['model'];
 
-        return $this->productDataProvider->getProductDataById($wishlistItem->getProductId());
+        return $this->productDataProvider->getProductDataById((int)$wishlistItem->getProductId());
     }
 }
