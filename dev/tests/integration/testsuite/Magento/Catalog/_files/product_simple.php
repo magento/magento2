@@ -65,7 +65,7 @@ $tierPrices[] = $tierPriceFactory->create(
         'data' => [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 3.2,
-            'value' => 6
+            'value' => 6,
         ]
     ]
 )->setExtensionAttributes($tierPriceExtensionAttributes1);
