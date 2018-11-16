@@ -13,6 +13,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 
+/**
+ * Controller responsible for validating the import process and showing the results
+ */
 class Validate extends ImportResultController implements HttpPostActionInterface
 {
     /**
@@ -111,6 +114,8 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     }
 
     /**
+     * Get the import class
+     *
      * @return Import
      * @deprecated 100.1.0
      */
