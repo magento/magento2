@@ -258,7 +258,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getToolbarHtml()
     {
-        return $this->getChildHtml('toolbar');
+        return $this->getToolbarBlock()->toHtml();
     }
 
     /**
@@ -506,6 +506,5 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         }
         // set collection to toolbar and apply sort
         $toolbar->setCollection($collection);
-        $this->setChild('toolbar', $toolbar);
     }
 }
