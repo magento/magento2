@@ -16,6 +16,7 @@
                 <min_query_length>1</min_query_length>
                 <max_query_length>128</max_query_length>
                 <max_count_cacheable_search_terms>100</max_count_cacheable_search_terms>
+                <enable_eav_indexer>1</enable_eav_indexer>
             </search>
         </catalog>
     </default>

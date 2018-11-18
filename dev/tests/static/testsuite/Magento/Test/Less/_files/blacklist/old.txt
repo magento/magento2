@@ -23,3 +23,4 @@ app/design/adminhtml/Magento/backend/web/mui/clearless/_sprites.less
 app/design/adminhtml/Magento/backend/web/mui/styles/_abstract.less
 app/design/adminhtml/Magento/backend/web/mui/styles/_table.less
 app/design/adminhtml/Magento/backend/web/mui/styles/_vars.less
+app/design/frontend/Magento/blank/web/css/source/_email-base.less

@@ -56,39 +56,36 @@ class Indexer
      * @return \Magento\Catalog\Model\Indexer\Product\Flat
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function write($storeId, $productId, $valueFieldSuffix = '')
     {
         $flatTable = $this->_productIndexerHelper->getFlatTableName($storeId);
+        $entityTableName = $this->_productIndexerHelper->getTable('catalog_product_entity');
 
         $attributes = $this->_productIndexerHelper->getAttributes();
         $eavAttributes = $this->_productIndexerHelper->getTablesStructure($attributes);
         $updateData = [];
         $describe = $this->_connection->describeTable($flatTable);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
 
         foreach ($eavAttributes as $tableName => $tableColumns) {
             $columnsChunks = array_chunk($tableColumns, self::ATTRIBUTES_CHUNK_SIZE, true);
 
             foreach ($columnsChunks as $columns) {
                 $select = $this->_connection->select();
-                $selectValue = $this->_connection->select();
-                $keyColumns = [
-                    'entity_id' => 'e.entity_id',
-                    'attribute_id' => 't.attribute_id',
-                    'value' => $this->_connection->getIfNullSql('`t2`.`value`', '`t`.`value`'),
-                ];
 
-                if ($tableName != $this->_productIndexerHelper->getTable('catalog_product_entity')) {
+                if ($tableName != $entityTableName) {
                     $valueColumns = [];
                     $ids = [];
                     $select->from(
-                        ['e' => $this->_productIndexerHelper->getTable('catalog_product_entity')],
-                        $keyColumns
-                    );
-
-                    $selectValue->from(
-                        ['e' => $this->_productIndexerHelper->getTable('catalog_product_entity')],
-                        $keyColumns
+                        ['e' => $entityTableName],
+                        [
+                            'entity_id' => 'e.entity_id',
+                            'attribute_id' => 't.attribute_id',
+                            'value' => $this->_connection->getIfNullSql('`t2`.`value`', '`t`.`value`'),
+                        ]
                     );
 
                     /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
@@ -97,8 +94,7 @@ class Indexer
                             $ids[$attribute->getId()] = $columnName;
                         }
                     }
-                    $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
-                    $select->joinLeft(
+                    $select->joinInner(
                         ['t' => $tableName],
                         sprintf('e.%s = t.%s ', $linkField, $linkField) . $this->_connection->quoteInto(
                             ' AND t.attribute_id IN (?)',
@@ -116,8 +112,6 @@ class Indexer
                         []
                     )->where(
                         'e.entity_id = ' . $productId
-                    )->where(
-                        't.attribute_id IS NOT NULL'
                     );
                     $cursor = $this->_connection->query($select);
                     while ($row = $cursor->fetch(\Zend_Db::FETCH_ASSOC)) {
@@ -157,7 +151,7 @@ class Indexer
                     $columnNames[] = 'attribute_set_id';
                     $columnNames[] = 'type_id';
                     $select->from(
-                        ['e' => $this->_productIndexerHelper->getTable('catalog_product_entity')],
+                        ['e' => $entityTableName],
                         $columnNames
                     )->where(
                         'e.entity_id = ' . $productId
@@ -175,7 +169,9 @@ class Indexer
 
         if (!empty($updateData)) {
             $updateData += ['entity_id' => $productId];
-            $updateData += ['row_id' => $productId];
+            if ($linkField !== $metadata->getIdentifierField()) {
+                $updateData += [$linkField => $productId];
+            }
             $updateFields = [];
             foreach ($updateData as $key => $value) {
                 $updateFields[$key] = $key;

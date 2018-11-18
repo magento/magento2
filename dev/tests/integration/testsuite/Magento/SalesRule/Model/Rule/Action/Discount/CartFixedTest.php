@@ -91,6 +91,36 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests that coupon with wildcard symbols in code can be successfully applied.
+     *
+     * @magentoDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     */
+    public function testCouponCodeWithWildcard()
+    {
+        $expectedDiscount = '-5.00';
+        $couponCode =  '2?ds5!2d';
+        $cartId = $this->cartManagement->createEmptyCart();
+        $productPrice = 10;
+
+        $product = $this->createProduct($productPrice);
+
+        /** @var CartItemInterface $quoteItem */
+        $quoteItem = Bootstrap::getObjectManager()->create(CartItemInterface::class);
+        $quoteItem->setQuoteId($cartId);
+        $quoteItem->setProduct($product);
+        $quoteItem->setQty(1);
+        $this->cartItemRepository->save($quoteItem);
+
+        $this->couponManagement->set($cartId, $couponCode);
+
+        /** @var GuestCartTotalRepositoryInterface $cartTotalRepository */
+        $cartTotalRepository = Bootstrap::getObjectManager()->get(GuestCartTotalRepositoryInterface::class);
+        $total = $cartTotalRepository->get($cartId);
+
+        $this->assertEquals($expectedDiscount, $total->getBaseDiscountAmount());
+    }
+
+    /**
      * Returns simple product with given price.
      *
      * @param float $price

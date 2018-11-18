@@ -25,14 +25,14 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $model->load($id);
 
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This attribute no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('catalog/*/');
             }
 
             // entity type check
             if ($model->getEntityTypeId() != $this->_entityTypeId) {
-                $this->messageManager->addError(__('This attribute cannot be edited.'));
+                $this->messageManager->addErrorMessage(__('This attribute cannot be edited.'));
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('catalog/*/');
             }

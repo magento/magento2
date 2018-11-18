@@ -23,8 +23,6 @@
     <entity name="CustomAttributeProductAttribute" type="custom_attribute">
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
         <var key="value" entityKey="value" entityType="ProductAttributeOption"/>
-        <data key="value">test product attribute</data>
-        <data key="attribute_code">test_product_attribute</data>
     </entity>
     <entity name="ApiProductDescription" type="custom_attribute">
         <data key="attribute_code">description</data>

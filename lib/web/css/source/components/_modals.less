@@ -100,6 +100,12 @@
     left: 0;
     overflow-y: auto;
 
+    &.confirm {
+        .modal-inner-wrap {
+            .lib-css(width, @modal-popup-confirm__width);
+        }
+    }
+
     &._show {
         .modal-inner-wrap {
             -webkit-transform: translateY(0);

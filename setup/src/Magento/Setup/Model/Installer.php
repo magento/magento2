@@ -316,7 +316,9 @@ class Installer
                 [$request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX]],
             ];
         }
-        $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
+        if ($this->isAdminDataSet($request)) {
+            $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
+        }
         $script[] = ['Caches clearing:', 'cleanCaches', []];
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
@@ -755,9 +757,15 @@ class Installer
      * Installs DB schema
      *
      * @return void
+     * @throws \Exception
      */
     public function installSchema()
     {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        //For backward compatibility in install and upgrade scripts with enabled parallelization.
+        $registry->register('setup-mode-enabled', true);
+
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->setupFactory->create();
@@ -765,6 +773,8 @@ class Installer
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
         $this->handleDBSchemaData($setup, 'schema');
+
+        $registry->unregister('setup-mode-enabled');
     }
 
     /**
@@ -775,12 +785,19 @@ class Installer
      */
     public function installDataFixtures()
     {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        //For backward compatibility in install and upgrade scripts with enabled parallelization.
+        $registry->register('setup-mode-enabled', true);
+
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
         $this->handleDBSchemaData($setup, 'data');
+
+        $registry->unregister('setup-mode-enabled');
     }
 
     /**
@@ -1302,5 +1319,28 @@ class Installer
         foreach ($messages as $message) {
             $this->log->log($message);
         }
+    }
+
+    /**
+     * Checks that admin data is not empty in request array
+     *
+     * @param \ArrayObject|array $request
+     * @return bool
+     */
+    private function isAdminDataSet($request)
+    {
+        $adminData = array_filter($request, function ($value, $key) {
+            return in_array(
+                $key,
+                [
+                    AdminAccount::KEY_EMAIL,
+                    AdminAccount::KEY_FIRST_NAME,
+                    AdminAccount::KEY_LAST_NAME,
+                    AdminAccount::KEY_USER,
+                    AdminAccount::KEY_PASSWORD,
+                ]
+            ) && $value !== null;
+        }, ARRAY_FILTER_USE_BOTH);
+        return !empty($adminData);
     }
 }

@@ -640,11 +640,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             return 0;
         }
 
-        if ($a['sort_order'] == $b['sort_order']) {
-            return 0;
-        }
-
-        return $a['sort_order'] > $b['sort_order'] ? 1 : -1;
+        return $a['sort_order'] <=> $b['sort_order'];
     }
 
     /**

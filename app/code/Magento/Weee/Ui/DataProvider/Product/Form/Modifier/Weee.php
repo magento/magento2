@@ -180,6 +180,7 @@ class Weee extends AbstractModifier
                                         'component' => 'Magento_Weee/js/fpt-group',
                                         'visible' => true,
                                         'label' => __('Country/State'),
+                                        'showLabel' => false,
                                     ],
                                 ],
                             ],
@@ -197,6 +198,7 @@ class Weee extends AbstractModifier
                                                 'validation' => [
                                                     'required-entry' => true,
                                                 ],
+                                                'showLabel' => false,
                                             ],
                                         ],
                                     ],
@@ -216,6 +218,7 @@ class Weee extends AbstractModifier
                                                 ],
                                                 'caption' => '*',
                                                 'visible' => true,
+                                                'showLabel' => false,
                                             ],
                                         ],
                                     ],
@@ -233,6 +236,7 @@ class Weee extends AbstractModifier
                                                 'validation' => [
                                                     'validate-fpt-group' => true
                                                 ],
+                                                'showLabel' => false,
                                             ],
                                         ],
                                     ],
@@ -252,6 +256,7 @@ class Weee extends AbstractModifier
                                         'validation' => [
                                             'required-entry' => true
                                         ],
+                                        'showLabel' => false,
                                     ],
                                 ],
                             ],
@@ -267,6 +272,7 @@ class Weee extends AbstractModifier
                                         'label' => __('Website'),
                                         'visible' => $this->websiteManager->isMultiWebsites(),
                                         'options' => $this->websiteManager->getWebsites($product, $eavAttribute),
+                                        'showLabel' => false,
                                     ],
                                 ],
                             ],

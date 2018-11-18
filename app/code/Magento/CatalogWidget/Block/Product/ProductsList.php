@@ -164,7 +164,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             $this->_storeManager->getStore()->getId(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),
-            intval($this->getRequest()->getParam($this->getData('page_var_name'), 1)),
+            (int)$this->getRequest()->getParam($this->getData('page_var_name'), 1),
             $this->getProductsPerPage(),
             $conditions,
             $this->json->serialize($this->getRequest()->getParams()),
@@ -196,7 +196,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             ? $arguments['display_minimal_price']
             : true;
 
-            /** @var \Magento\Framework\Pricing\Render $priceRender */
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
 
         $price = '';
@@ -338,7 +338,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             if (!$this->pager) {
                 $this->pager = $this->getLayout()->createBlock(
                     \Magento\Catalog\Block\Product\Widget\Html\Pager::class,
-                    'widget.products.list.pager'
+                    $this->getWidgetPagerBlockName()
                 );
 
                 $this->pager->setUseContainer(true)
@@ -397,5 +397,20 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
                 ->get(PriceCurrencyInterface::class);
         }
         return $this->priceCurrency;
+    }
+
+    /**
+     * @return string
+     */
+    private function getWidgetPagerBlockName()
+    {
+        $pageName = $this->getData('page_var_name');
+        $pagerBlockName = 'widget.products.list.pager';
+
+        if (!$pageName) {
+            return $pagerBlockName;
+        }
+
+        return $pagerBlockName . '.' . $pageName;
     }
 }

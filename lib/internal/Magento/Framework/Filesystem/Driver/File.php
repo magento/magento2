@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -13,6 +14,7 @@ use Magento\Framework\Filesystem\Glob;
 
 /**
  * Class File
+ *
  * @package Magento\Framework\Filesystem\Driver
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -395,17 +397,36 @@ class File implements DriverInterface
      */
     public function deleteDirectory($path)
     {
+        $exceptionMessages = [];
         $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
         $iterator = new \FilesystemIterator($path, $flags);
         /** @var \FilesystemIterator $entity */
         foreach ($iterator as $entity) {
-            if ($entity->isDir()) {
-                $this->deleteDirectory($entity->getPathname());
-            } else {
-                $this->deleteFile($entity->getPathname());
+            try {
+                if ($entity->isDir()) {
+                    $this->deleteDirectory($entity->getPathname());
+                } else {
+                    $this->deleteFile($entity->getPathname());
+                }
+            } catch (FileSystemException $exception) {
+                $exceptionMessages[] = $exception->getMessage();
             }
         }
-        $result = @rmdir($this->getScheme() . $path);
+        if (!empty($exceptionMessages)) {
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase(
+                    \implode(' ', $exceptionMessages)
+                )
+            );
+        }
+
+        $fullPath = $this->getScheme() . $path;
+        if (is_link($fullPath)) {
+            $result = @unlink($fullPath);
+        } else {
+            $result = @rmdir($fullPath);
+        }
+
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -836,6 +857,8 @@ class File implements DriverInterface
     }
 
     /**
+     * Returns an absolute path for the given one.
+     *
      * @param string $basePath
      * @param string $path
      * @param string|null $scheme
@@ -872,7 +895,8 @@ class File implements DriverInterface
     }
 
     /**
-     * Fixes path separator
+     * Fixes path separator.
+     *
      * Utility method.
      *
      * @param string $path

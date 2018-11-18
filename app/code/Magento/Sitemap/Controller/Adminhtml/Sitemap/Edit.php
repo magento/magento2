@@ -41,7 +41,7 @@ class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         if ($id) {
             $model->load($id);
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This sitemap no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This sitemap no longer exists.'));
                 $this->_redirect('adminhtml/*/');
                 return;
             }

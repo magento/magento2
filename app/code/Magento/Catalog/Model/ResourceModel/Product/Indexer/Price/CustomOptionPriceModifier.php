@@ -93,7 +93,7 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     {
         // no need to run all queries if current products have no custom options
         if (!$this->checkIfCustomOptionsExist($priceTable)) {
-            return ;
+            return;
         }
 
         $connection = $this->getConnection();

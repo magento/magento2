@@ -214,7 +214,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      */
     public function getCalculateSubtotal()
     {
-        return (bool) $this->getData(self::KEY_CALCULATE_SUBTOTAL);
+        return (bool)$this->getData(self::KEY_CALCULATE_SUBTOTAL);
     }
 
     /**

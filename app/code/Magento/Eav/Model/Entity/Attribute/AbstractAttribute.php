@@ -392,7 +392,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * @return string|int|bool|float
+     * @return string|null
      * @codeCoverageIgnore
      */
     public function getDefaultValue()
@@ -594,9 +594,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         if (empty($this->_source)) {
             if (!$this->getSourceModel()) {
-                $this->setSourceModel($this->_getDefaultSourceModel());
+                $this->_source = $this->_getDefaultSourceModel();
+            } else {
+                $this->_source = $this->getSourceModel();
             }
-            $source = $this->_universalFactory->create($this->getSourceModel());
+            $source = $this->_universalFactory->create($this->_source);
             if (!$source) {
                 throw new LocalizedException(
                     __(

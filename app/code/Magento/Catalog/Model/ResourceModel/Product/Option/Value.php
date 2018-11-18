@@ -160,19 +160,22 @@ class Value extends AbstractDb
             && isset($objectPrice)
             && $object->getStoreId() != Store::DEFAULT_STORE_ID
         ) {
-            $baseCurrency = $this->_config->getValue(
+            $website  = $this->_storeManager->getStore($object->getStoreId())->getWebsite();
+
+            $websiteBaseCurrency = $this->_config->getValue(
                 Currency::XML_PATH_CURRENCY_BASE,
-                'default'
+                ScopeInterface::SCOPE_WEBSITE,
+                $website
             );
 
-            $storeIds = $this->_storeManager->getStore($object->getStoreId())->getWebsite()->getStoreIds();
+            $storeIds = $website->getStoreIds();
             if (is_array($storeIds)) {
                 foreach ($storeIds as $storeId) {
                     if ($priceType == 'fixed') {
                         $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
                         /** @var $currencyModel Currency */
                         $currencyModel = $this->_currencyFactory->create();
-                        $currencyModel->load($baseCurrency);
+                        $currencyModel->load($websiteBaseCurrency);
                         $rate = $currencyModel->getRate($storeCurrency);
                         if (!$rate) {
                             $rate = 1;
@@ -256,7 +259,8 @@ class Value extends AbstractDb
                 $object->unsetData('title');
             }
 
-            if ($object->getTitle()) {
+            /*** Checking whether title is not null ***/
+            if ($object->getTitle()!= null) {
                 if ($existInCurrentStore) {
                     if ($storeId == $object->getStoreId()) {
                         $where = [
@@ -300,7 +304,7 @@ class Value extends AbstractDb
     }
 
     /**
-     * Get first col from from first row for option table
+     * Get first col from first row for option table
      *
      * @param string $tableName
      * @param int $optionId

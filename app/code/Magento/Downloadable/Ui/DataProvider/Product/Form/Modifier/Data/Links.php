@@ -97,7 +97,7 @@ class Links
      */
     public function isProductLinksCanBePurchasedSeparately()
     {
-        return (bool) $this->locator->getProduct()->getData('links_purchased_separately');
+        return (bool)$this->locator->getProduct()->getData('links_purchased_separately');
     }
 
     /**

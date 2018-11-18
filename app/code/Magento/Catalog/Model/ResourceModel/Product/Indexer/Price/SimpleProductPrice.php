@@ -64,7 +64,7 @@ class SimpleProductPrice implements DimensionalIndexerInterface
     /**
      * {@inheritdoc}
      */
-    public function executeByDimension(array $dimensions, \Traversable $entityIds = null)
+    public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {
         $this->tableMaintainer->createMainTmpTable($dimensions);
 

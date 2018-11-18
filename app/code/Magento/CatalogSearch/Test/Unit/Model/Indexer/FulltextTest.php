@@ -94,7 +94,9 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['switchIndex'])
             ->getMock();
 
-        $this->processManager = new \Magento\Indexer\Model\ProcessManager();
+        $this->processManager = new \Magento\Indexer\Model\ProcessManager(
+            $this->getClassMock(\Magento\Framework\App\ResourceConnection::class)
+        );
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(

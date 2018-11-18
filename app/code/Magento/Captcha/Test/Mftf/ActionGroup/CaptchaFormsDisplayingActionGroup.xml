@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CaptchaFormsDisplayingActionGroup">
+        <click selector="{{AdminCaptchaFormsDisplayingSection.store}}" stepKey="clickToGoStores"/>
+        <waitForPageLoad stepKey="waitForStoresLoaded"/>
+        <click selector="{{AdminCaptchaFormsDisplayingSection.config}}" stepKey="clickToGoConfiguration"/>
+        <waitForPageLoad stepKey="waitForConfigurationsLoaded"/>
+        <scrollTo selector="{{AdminCaptchaFormsDisplayingSection.customer}}" x="0" y="-100" stepKey="scrollToCustomers"/>
+        <click selector="{{AdminCaptchaFormsDisplayingSection.customer}}" stepKey="clickToCustomers"/>
+        <waitForPageLoad stepKey="waitForCustomerConfigurationsLoaded"/>
+        <click selector="{{AdminCaptchaFormsDisplayingSection.customerConfig}}" stepKey="clickToGoCustomerConfiguration"/>
+        <scrollTo selector="{{AdminCaptchaFormsDisplayingSection.captcha}}" stepKey="scrollToCaptcha"/>
+        <conditionalClick selector="{{AdminCaptchaFormsDisplayingSection.captcha}}" dependentSelector="{{AdminCaptchaFormsDisplayingSection.dependent}}" visible="false" stepKey="clickToOpenCaptcha"/>
+    </actionGroup>
+</actionGroups>

@@ -7,7 +7,6 @@ namespace Magento\Framework\Encryption\Test\Unit;
 
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\Crypt;
-use Magento\Framework\App\DeploymentConfig;
 
 class EncryptorTest extends \PHPUnit\Framework\TestCase
 {
