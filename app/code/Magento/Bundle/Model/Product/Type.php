@@ -827,7 +827,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             if (is_array($value)) {
                 $flatArray = array_merge($flatArray, $this->multiToFlatArray($value));
             } else {
-                $flatArray[$key] = $value;
+                $flatArray[] = $value;
             }
         }
 
