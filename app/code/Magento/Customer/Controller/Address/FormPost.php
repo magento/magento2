@@ -6,7 +6,8 @@
 
 namespace Magento\Customer\Controller\Address;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
@@ -17,13 +18,13 @@ use Magento\Directory\Helper\Data as HelperData;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -50,6 +51,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @param Session $customerSession
      * @param FormKeyValidator $formKeyValidator
      * @param FormFactory $formFactory
+     * @param AddressRepositoryInterface $addressRepository
      * @param CustomerRepositoryInterface $customerRepository
      * @param AddressInterfaceFactory $addressDataFactory
      * @param RegionInterfaceFactory $regionDataFactory
@@ -66,7 +68,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         Session $customerSession,
         FormKeyValidator $formKeyValidator,
         FormFactory $formFactory,
-        CustomerRepositoryInterface $customerRepository,
+        AddressRepositoryInterface $addressRepository,
         AddressInterfaceFactory $addressDataFactory,
         RegionInterfaceFactory $regionDataFactory,
         DataObjectProcessor $dataProcessor,
@@ -74,7 +76,8 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory,
         RegionFactory $regionFactory,
-        HelperData $helperData
+        HelperData $helperData,
+        ?CustomerRepositoryInterface $customerRepository
     ) {
         $this->regionFactory = $regionFactory;
         $this->helperData = $helperData;
@@ -83,13 +86,14 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             $customerSession,
             $formKeyValidator,
             $formFactory,
-            $customerRepository,
+            $addressRepository,
             $addressDataFactory,
             $regionDataFactory,
             $dataProcessor,
             $dataObjectHelper,
             $resultForwardFactory,
-            $resultPageFactory
+            $resultPageFactory,
+            $customerRepository
         );
     }
 
@@ -102,22 +106,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      */
     protected function _extractAddress($customer = null)
     {
-        $existingAddressData = [];
-        $addressId = $this->getRequest()->getParam('id');
-
-        if ($customer === null) {
-            $customer = $this->_customerRepository->getById($this->_getSession()->getCustomerId());
-        }
-
-        foreach ($customer->getAddresses() as $customerAddress) {
-            if ($customerAddress->getId() == $addressId) {
-                $existingAddressData = $this->getCustomerAddressMapper()->toFlatArray($customerAddress);
-            }
-        }
-
-        if (empty($existingAddressData) && $addressId) {
-            throw new \Exception();
-        }
+        $existingAddressData = $this->getExistingAddressData($customer);
 
         /** @var \Magento\Customer\Model\Metadata\Form $addressForm */
         $addressForm = $this->_formFactory->create(
@@ -136,11 +125,48 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             array_merge($existingAddressData, $attributeValues),
             \Magento\Customer\Api\Data\AddressInterface::class
         );
-        $addressDataObject->setCustomerId($this->_getSession()->getCustomerId());
-        $addressDataObject->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false));
-        $addressDataObject->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
+        $addressDataObject->setCustomerId($this->_getSession()->getCustomerId())
+            ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
+            ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
 
         return $addressDataObject;
+    }
+
+    /**
+     * Retrieve existing address data
+     * @param $customer
+     *
+     * @return array
+     * @throws \Exception
+     */
+    protected function getExistingAddressData($customer = null)
+    {
+        $existingAddressData = [];
+        $addressId = $this->getRequest()->getParam('id');
+
+        if ($customer) {
+            foreach ($customer->getAddresses() as $customerAddress) {
+                if ($customerAddress->getId() == $addressId) {
+                    $existingAddressData = $this->getCustomerAddressMapper()->toFlatArray($customerAddress);
+                }
+            }
+
+            if (empty($existingAddressData) && $addressId) {
+                throw new \Exception();
+            }
+
+            return $existingAddressData;
+        }
+
+        if ($addressId) {
+            $existingAddress = $this->_addressRepository->getById($addressId);
+            if ($existingAddress->getCustomerId() !== $this->_getSession()->getCustomerId()) {
+                throw new \Exception();
+            }
+
+            $existingAddressData = $this->getCustomerAddressMapper()->toFlatArray($existingAddress);
+        }
+        return $existingAddressData;
     }
 
     /**
@@ -198,15 +224,21 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             $addressId = $this->getRequest()->getParam('id');
             $customerId = $this->_getSession()->getCustomerId();
 
-            $customer = $this->_customerRepository->getById($customerId);
+            if ($this->customerRepository) {
+                $customer = $this->customerRepository->getById($customerId);
 
-            $addresses = array_filter($customer->getAddresses(), function ($customerAddress) use ($addressId) {
-                return $customerAddress->getId() !== $addressId;
-            });
+                $addresses = array_filter($customer->getAddresses(), function ($customerAddress) use ($addressId) {
+                    return $customerAddress->getId() !== $addressId;
+                });
 
-            $addresses[] = $this->_extractAddress($customer);
-            $customer->setAddresses($addresses);
-            $this->_customerRepository->save($customer);
+                $currentAddress = $this->_extractAddress($customer);
+                $addresses[] = $currentAddress;
+                $customer->setAddresses($addresses);
+                $this->customerRepository->save($customer);
+            } else {
+                $currentAddress = $this->_extractAddress();
+                $this->_addressRepository->save($currentAddress);
+            }
 
             $this->messageManager->addSuccessMessage(__('You saved the address.'));
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);

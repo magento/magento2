@@ -18,6 +18,7 @@ class Index extends \Magento\Customer\Controller\Address implements HttpGetActio
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
+     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory
      * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory
@@ -32,26 +33,28 @@ class Index extends \Magento\Customer\Controller\Address implements HttpGetActio
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
     ) {
         parent::__construct(
             $context,
             $customerSession,
             $formKeyValidator,
             $formFactory,
-            $customerRepository,
+            $addressRepository,
             $addressDataFactory,
             $regionDataFactory,
             $dataProcessor,
             $dataObjectHelper,
             $resultForwardFactory,
-            $resultPageFactory
+            $resultPageFactory,
+            $customerRepository
         );
     }
 
@@ -62,7 +65,7 @@ class Index extends \Magento\Customer\Controller\Address implements HttpGetActio
      */
     public function execute()
     {
-        $addresses = $this->_customerRepository->getById($this->_getSession()->getCustomerId())->getAddresses();
+        $addresses = $this->customerRepository->getById($this->_getSession()->getCustomerId())->getAddresses();
         if (count($addresses)) {
             /** @var \Magento\Framework\View\Result\Page $resultPage */
             $resultPage = $this->resultPageFactory->create();

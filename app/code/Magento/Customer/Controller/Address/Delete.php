@@ -16,7 +16,7 @@ class Delete extends \Magento\Customer\Controller\Address
         $addressId = $this->getRequest()->getParam('id', false);
 
         if ($addressId && $this->_formKeyValidator->validate($this->getRequest())) {
-            $customer = $this->_customerRepository->getById($this->_getSession()->getCustomerId());
+            $customer = $this->customerRepository->getById($this->_getSession()->getCustomerId());
             $addresses = $customer->getAddresses();
 
             try {
@@ -25,7 +25,7 @@ class Delete extends \Magento\Customer\Controller\Address
                 });
                 if (count($addresses) !== count($addressesFiltered)) {
                     $customer->setAddresses($addressesFiltered);
-                    $this->_customerRepository->save($customer);
+                    $this->customerRepository->save($customer);
                     $this->messageManager->addSuccess(__('You deleted the address.'));
                 } else {
                     $this->messageManager->addError(__('We can\'t delete the address right now.'));
