@@ -352,7 +352,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $clone = clone $object;
                 $clone->setCount(0);
                 $clone->setSum(0);
-                $clone->setStoreId($store->getId());
+                $clone->setStoreId((int)$store->getId());
                 $result[$store->getId()] = $clone;
             }
         }
@@ -479,7 +479,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $clone = clone $object;
                 $clone->setCount(0);
                 $clone->setSum(0);
-                $clone->setStoreId($store->getId());
+                $clone->setStoreId((int)$store->getId());
                 $result[$store->getId()] = $clone;
             }
         }
@@ -524,5 +524,29 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $this;
+    }
+
+    /**
+     * Get rating id by name
+     *
+     * @param string $ratingName
+     * @param int $storeId
+     * @return int
+     */
+    public function getRatingIdByName($ratingName, $storeId)
+    {
+        $select = $this->getConnection()->select()->from(
+            ['rating' => $this->getMainTable()],
+            ['rating_id']
+        )->joinInner(
+            ['rating_store' => $this->getTable('rating_store')],
+            'rating_store.rating_id = rating.rating_id AND store_id = :store_id',
+            []
+        )->where(
+            'rating_code = :rating_code'
+        )->where(
+            'is_active = 1'
+        )->limit(1);
+        return (int)$this->getConnection()->fetchOne($select, [':rating_code' => $ratingName, ':store_id' => $storeId]);
     }
 }

@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Review\Controller\Adminhtml\Product;
 
-use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Review\Controller\Adminhtml\Product as ProductController;
 
 class Delete extends ProductController
 {
@@ -17,9 +18,12 @@ class Delete extends ProductController
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $reviewId = $this->getRequest()->getParam('id', false);
+        $reviewId = (int)$this->getRequest()->getParam('id', false);
         try {
-            $this->reviewFactory->create()->setId($reviewId)->aggregate()->delete();
+            $review = $this->reviewFactory->create(
+                ['data' => ['review_id' => $reviewId]]
+            );
+            $review->delete();
 
             $this->messageManager->addSuccess(__('The review has been deleted.'));
             if ($this->getRequest()->getParam('ret') == 'pending') {

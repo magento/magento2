@@ -7,6 +7,25 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Block\Product\ReviewRendererInterface" type="Magento\Review\Block\Product\ReviewRenderer" />
+
+    <preference for="Magento\ReviewApi\Api\Data\ReviewInterface" type="Magento\Review\Model\Review" />
+    <preference for="Magento\ReviewApi\Api\Data\ReviewStatusInterface" type="Magento\Review\Model\Review\Status" />
+    <preference for="Magento\ReviewApi\Api\Data\ReviewSummaryInterface" type="Magento\Review\Model\Review\Summary" />
+    <preference for="Magento\ReviewApi\Api\Data\ReviewSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\ReviewApi\Api\Data\RatingInterface" type="Magento\Review\Model\Rating" />
+    <preference for="Magento\ReviewApi\Api\Data\RatingEntityInterface" type="Magento\Review\Model\Rating\Entity" />
+    <preference for="Magento\ReviewApi\Api\Data\RatingOptionInterface" type="Magento\Review\Model\Rating\Option" />
+    <preference for="Magento\ReviewApi\Api\Data\RatingOptionVoteInterface" type="Magento\Review\Model\Rating\Option\Vote" />
+    <preference for="Magento\ReviewApi\Api\Data\RatingSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\ReviewApi\Api\Data\RatingOptionSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+
+    <preference for="Magento\ReviewApi\Api\GetReviewsInterface" type="Magento\Review\Model\Command\GetReviews" />
+    <preference for="Magento\ReviewApi\Api\CreateReviewsInterface" type="Magento\Review\Model\Command\CreateReviews" />
+    <preference for="Magento\ReviewApi\Api\UpdateReviewsInterface" type="Magento\Review\Model\Command\UpdateReviews" />
+    <preference for="Magento\ReviewApi\Api\DeleteReviewsInterface" type="Magento\Review\Model\Command\DeleteReviews" />
+
+    <preference for="Magento\Review\Model\Review\RatingsProcessorInterface" type="Magento\Review\Model\Review\RatingsProcessor" />
+
     <type name="Magento\Framework\Model\ActionValidator\RemoveAction">
         <arguments>
             <argument name="protectedModels" xsi:type="array">
@@ -35,6 +54,49 @@
         <arguments>
             <argument name="productProviders" xsi:type="array">
                 <item name="review" xsi:type="object">\Magento\Review\Ui\DataProvider\Product\Listing\Collector\Review</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\Review\Model\Api\SearchCriteria\CollectionProcessor\ProductFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="sku" xsi:type="object">Magento\Review\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ReviewSkuFilter</item>
+                <item name="customer_id" xsi:type="object">Magento\Review\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ReviewCustomerFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Review\Model\Api\SearchCriteria\ReviewCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Review\Model\Api\SearchCriteria\CollectionProcessor\ProductFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Review\Model\Command\GetReviews">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Review\Model\Api\SearchCriteria\ReviewCollectionProcessor</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\ReviewApi\Model\ReviewValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="title" xsi:type="object">Magento\Review\Model\Validator\Title</item>
+                <item name="customer_nickname" xsi:type="object">Magento\Review\Model\Validator\CustomerNickname</item>
+                <item name="review_text" xsi:type="object">Magento\Review\Model\Validator\ReviewText</item>
+                <item name="store_id" xsi:type="object">Magento\Review\Model\Validator\Store</item>
+                <item name="ratings" xsi:type="object">Magento\Review\Model\Validator\Ratings</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ReviewApi\Model\Aggregator">
+        <arguments>
+            <argument name="aggregators" xsi:type="array">
+                <item name="review" xsi:type="object">Magento\Review\Model\Aggregator\Review</item>
+                <item name="ratings" xsi:type="object">Magento\Review\Model\Aggregator\Ratings</item>
             </argument>
         </arguments>
     </type>

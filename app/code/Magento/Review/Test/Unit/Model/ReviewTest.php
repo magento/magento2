@@ -51,6 +51,18 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Review\Model\ResourceModel\Review|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
 
+    /** @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $extensionFactoryMock;
+
+    /** @var \Magento\Framework\Api\ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject */
+    private $customAttributeFactoryMock;
+
+    /** @var \Magento\ReviewApi\Model\AggregatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $reviewAggregatorMock;
+
+    /** @var \Magento\ReviewApi\Model\ReviewValidatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $reviewValidatorMock;
+
     /** @var int  */
     protected $reviewId = 8;
 
@@ -77,6 +89,14 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->urlInterfaceMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->resource = $this->createMock(\Magento\Review\Model\ResourceModel\Review::class);
+        $this->extensionFactoryMock = $this->createMock(
+            \Magento\Framework\Api\ExtensionAttributesFactory::class
+        );
+        $this->customAttributeFactoryMock = $this->createMock(
+            \Magento\Framework\Api\AttributeValueFactory::class
+        );
+        $this->reviewAggregatorMock = $this->createMock(\Magento\ReviewApi\Model\AggregatorInterface::class);
+        $this->reviewValidatorMock = $this->createMock(\Magento\ReviewApi\Model\ReviewValidatorInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->review = $this->objectManagerHelper->getObject(
@@ -92,7 +112,11 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
                 'storeManager' => $this->storeManagerMock,
                 'urlModel' => $this->urlInterfaceMock,
                 'resource' => $this->resource,
-                'data' => ['review_id' => $this->reviewId, 'status_id' => 1, 'stores' => [2, 3, 4]]
+                'data' => ['review_id' => $this->reviewId, 'status_id' => 1, 'stores' => [2, 3, 4]],
+                'extensionFactory' => $this->extensionFactoryMock,
+                'customAttributeFactory' => $this->customAttributeFactoryMock,
+                'reviewAggregator' => $this->reviewAggregatorMock,
+                'reviewValidator' => $this->reviewValidatorMock
             ]
         );
     }
@@ -129,7 +153,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
 
     public function testAggregate()
     {
-        $this->resource->expects($this->once())->method('aggregate')
+        $this->reviewAggregatorMock->expects($this->once())->method('aggregate')
             ->with($this->equalTo($this->review))
             ->will($this->returnValue($this->review));
         $this->assertSame($this->review, $this->review->aggregate());

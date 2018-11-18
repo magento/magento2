@@ -14,7 +14,8 @@
         "magento/module-newsletter": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-review-api": "*"
     },
     "suggest": {
         "magento/module-cookie": "*",

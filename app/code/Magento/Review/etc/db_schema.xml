@@ -28,6 +28,8 @@
                 comment="Review id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Review create date"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Review update date"/>
         <column xsi:type="smallint" name="entity_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity id"/>
         <column xsi:type="int" name="entity_pk_value" padding="10" unsigned="true" nullable="false" identity="false"

@@ -15,6 +15,13 @@ use Magento\Framework\Model\AbstractModel;
  */
 class Review extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+    /**#@+
+     * Constants related to specific db layer
+     */
+    const TABLE_NAME_REVIEW = 'review';
+    const TABLE_NAME_REVIEW_DETAIL = 'review_detail';
+    const TABLE_NAME_REVIEW_STORE = 'review_store';
+
     /**
      * Review table
      *
@@ -375,7 +382,7 @@ class Review extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->setEntityPkValue($object->getEntityPkValue())
             ->setEntityType($object->getEntityId())
             ->setRatingSummary($ratingSummary > 0 ? $ratingSummary : 0)
-            ->setStoreId($ratingSummaryObject->getStoreId());
+            ->setStoreId((int)$ratingSummaryObject->getStoreId());
 
         $this->writeReviewSummary($oldData, $data);
     }
