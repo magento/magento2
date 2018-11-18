@@ -425,7 +425,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $data = $connection->fetchAll($select, [':review_id' => $object->getReviewId()]);
 
-        $currentStore = ($this->_storeManager->isSingleStoreMode()) ? $this->_storeManager->getStore()->getId() : null ;
+        $currentStore = $this->_storeManager->isSingleStoreMode() ? $this->_storeManager->getStore()->getId() : null;
 
         if ($onlyForCurrentStore) {
             foreach ($data as $row) {
