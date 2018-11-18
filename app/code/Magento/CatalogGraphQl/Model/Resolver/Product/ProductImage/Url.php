@@ -9,11 +9,11 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\ProductImage;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\ImageFactory;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image\Placeholder as PlaceholderProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\View\Asset\Repository as AssetRepository;
 
 /**
  * Returns product's image url
@@ -25,21 +25,22 @@ class Url implements ResolverInterface
      */
     private $productImageFactory;
     /**
-     * @var AssetRepository
+     * @var PlaceholderProvider
      */
-    private $assetRepository;
+    private $_placeholderProvider;
 
     /**
      * Url constructor.
      * @param ImageFactory $productImageFactory
-     * @param AssetRepository $assetRepository
+     * @param PlaceholderProvider $placeholderProvider
      */
     public function __construct(
         ImageFactory $productImageFactory,
-        AssetRepository $assetRepository
+        PlaceholderProvider $placeholderProvider
+
     ) {
         $this->productImageFactory = $productImageFactory;
-        $this->assetRepository = $assetRepository;
+        $this->_placeholderProvider = $placeholderProvider;
     }
 
     /**
@@ -68,11 +69,12 @@ class Url implements ResolverInterface
     }
 
     /**
-     * Get image url
+     * Get image URL
      *
      * @param string $imageType
-     * @param string|null $imagePath Null if image is not set
+     * @param string|null $imagePath
      * @return string
+     * @throws \Exception
      */
     private function getImageUrl(string $imageType, ?string $imagePath): string
     {
@@ -80,14 +82,10 @@ class Url implements ResolverInterface
         $image->setDestinationSubdir($imageType)
             ->setBaseFile($imagePath);
 
-        $imageUrl = $image->isBaseFilePlaceholder()
-            ? $this->assetRepository->createAsset(
-                "Magento_Catalog::images/product/placeholder/{$imageType}.jpg",
-                ['area' => \Magento\Framework\App\Area::AREA_FRONTEND]
-            )
-                ->getUrl()
-            : $image->getUrl();
+        if ($image->isBaseFilePlaceholder()) {
+            return $this->_placeholderProvider->getPlaceholder($imageType);
+        }
 
-        return $imageUrl;
+        return $image->getUrl();
     }
 }

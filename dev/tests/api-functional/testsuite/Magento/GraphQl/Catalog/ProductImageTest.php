@@ -51,7 +51,6 @@ QUERY;
      */
     public function testProductWithoutBaseImage()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/239');
         $productSku = 'simple';
         $query = <<<QUERY
 {
