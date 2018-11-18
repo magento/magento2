@@ -29,12 +29,13 @@ class DeleteCustomerUsage
      */
     public function execute($ruleId, $customerId, $updatedTimeUsed)
     {
-        $connection = $this->customerRuleDetails->getConnection();
-        if ($updatedTimeUsed === 0) {
-            $connection->delete(
-                $this->customerRuleDetails->getTable('salesrule_customer'),
-                ['rule_id = ?' => $ruleId, 'customer_id = ?' => $customerId]
-            );
+        if ($updatedTimeUsed !== 0) {
+            return;
         }
+        $connection = $this->customerRuleDetails->getConnection();
+        $connection->delete(
+            $this->customerRuleDetails->getTable('salesrule_customer'),
+            ['rule_id = ?' => $ruleId, 'customer_id = ?' => $customerId]
+        );
     }
 }
