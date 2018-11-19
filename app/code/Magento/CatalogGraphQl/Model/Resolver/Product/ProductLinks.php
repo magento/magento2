@@ -16,7 +16,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  *
  * Format the product links information to conform to GraphQL schema representation
  */
