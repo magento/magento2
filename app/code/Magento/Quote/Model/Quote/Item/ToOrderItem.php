@@ -64,7 +64,14 @@ class ToOrderItem
             $item
         );
         if ($item instanceof \Magento\Quote\Model\Quote\Address\Item) {
-            $orderItemData['quote_item_id'] = $item->getQuoteItemId();
+            $data = array_merge(
+                $data,
+                $this->objectCopyService->getDataFromFieldset(
+                    'quote_convert_item',
+                    'to_order_item_id',
+                    $item
+                )
+            );
         }
         if (!$item->getNoDiscount()) {
             $data = array_merge(
