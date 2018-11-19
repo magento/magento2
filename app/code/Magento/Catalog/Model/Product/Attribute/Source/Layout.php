@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Catalog product landing page attribute source
@@ -42,7 +42,7 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     ) {
         $this->pageLayoutBuilder = $pageLayoutBuilder;
         $this->layoutCache = $layoutCache ?? ObjectManager::getInstance()->get(LayoutCache::class);
-        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Serialize::class);
+        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -59,11 +59,11 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
                 return $this->_options = $this->serializer->unserialize($data);
             } else {
                 $this->_options = $this->pageLayoutBuilder->getPageLayoutsConfig()->toOptionArray();
-                array_unshift($this->_options, ['value' => '', 'label' => __('No layout updates')]);
                 $this->layoutCache->save($this->serializer->serialize($this->_options), $layoutCacheKey);
             }
 
         }
+        array_unshift($this->_options, ['value' => '', 'label' => __('No layout updates')]);
         return $this->_options;
     }
 }

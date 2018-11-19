@@ -8,7 +8,7 @@ namespace Magento\Framework\Config;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * View configuration files handler
@@ -79,7 +79,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
             $defaultScope
         );
         $this->layoutCache = $layoutCache ?? ObjectManager::getInstance()->get(LayoutCache::class);
-        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Serialize::class);
+        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
