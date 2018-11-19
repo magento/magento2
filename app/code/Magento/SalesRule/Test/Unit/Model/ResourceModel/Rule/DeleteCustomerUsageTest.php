@@ -36,7 +36,6 @@ class DeleteCustomerUsageTest extends \PHPUnit\Framework\TestCase
 
         $this->customerRuleMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->method('getConnection')
             ->getMock();
     }
 
