@@ -16,7 +16,6 @@ class ProductOnlyXLeftInStockTest extends GraphQlAbstract
      */
     public function testQueryProductOnlyXLeftInStockDisabled()
     {
-        $this->cleanCache();
         $productSku = 'simple';
 
         $query = <<<QUERY
@@ -43,6 +42,7 @@ QUERY;
      */
     public function testQueryProductOnlyXLeftInStockEnabled()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
         $productSku = 'simple';
 
         $query = <<<QUERY

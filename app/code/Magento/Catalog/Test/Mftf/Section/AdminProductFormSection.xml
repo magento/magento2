@@ -6,20 +6,24 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
         <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
         <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input" timeout="30"/>
         <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
+        <element name="attributeSetFilterResultByName" type="text" selector="//label/span[text() = '{{var}}']" timeout="30" parameterized="true"/>
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
+        <element name="RequiredNameIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
+        <element name="RequiredSkuIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=sku]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
-        <element name="enableProductAttributeLabel" type="text" selector="//label[text()='Enable Product']"/>
-        <element name="enableProductAttributeLabelWrapper" type="text" selector="//label[text()='Enable Product']/parent::span"/>
+        <element name="enableProductAttributeLabel" type="text" selector="//span[text()='Enable Product']/parent::label"/>
+        <element name="enableProductAttributeLabelWrapper" type="text" selector="//span[text()='Enable Product']/parent::label/parent::div"/>
         <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
         <element name="enableProductLabel" type="checkbox" selector="input[name='product[status]']+label"/>
         <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
         <element name="productNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
+        <element name="productTaxClass" type="select" selector="//*[@name='product[tax_class_id]']"/>
         <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
         <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
@@ -41,7 +45,10 @@
         <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
         <element name="divByDataIndex" type="input" selector="div[data-index='{{var}}']" parameterized="true"/>
-        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//label[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="setProductAsNewFrom" type="input" selector="input[name='product[news_from_date]']"/>
+        <element name="setProductAsNewTo" type="input" selector="input[name='product[news_to_date]']"/>
+        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
@@ -99,24 +106,24 @@
         <element name="Numlist" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-bullist']" />
         <element name="Bullet" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-numlist']" />
         <element name="InsertLink" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-link']" />
-        <element name="InsertImageIcon" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-image']" />
+        <element name="InsertImageIcon" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-image']" timeout="30"/>
         <element name="InsertTable" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-table']" />
         <element name="SpecialCharacter" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-charmap']" />
-        <element name="Browse" type="button" selector=".mce-i-browse"/>
-        <element name="BrowseUploadImage" type="file" selector=".fileupload" />
+        <element name="Browse" type="button" selector=".mce-i-browse" timeout="30"/>
+        <element name="BrowseUploadImage" type="file" selector=".fileupload" timeout="30"/>
         <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
         <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
         <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open" />
         <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last" />
         <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first" />
         <element name="UploadImage" type="file" selector=".fileupload" />
-        <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
-        <element name="InsertFile" type="text" selector="#insert_files"/>
-        <element name="CreateFolder" type="button" selector="#new_folder" />
-        <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
-        <element name="CancelBtn" type="button" selector="#cancel" />
+        <element name="OkBtn" type="button" selector="//button//span[text()='Ok']"/>
+        <element name="InsertFile" type="text" selector="#insert_files" timeout="30"/>
+        <element name="CreateFolder" type="button" selector="#new_folder" timeout="30"/>
+        <element name="DeleteSelectedBtn" type="text" selector="#delete_files" timeout="30"/>
+        <element name="CancelBtn" type="button" selector=".page-actions #cancel" />
         <element name="FolderName" type="button" selector="input[data-role='promptField']" />
-        <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
+        <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" timeout="30"/>
         <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
         <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
         <element name="WysiwygArrow" type="button" selector="#d3lzaXd5Zw-- > .jstree-icon" />
@@ -137,21 +144,21 @@
         <element name="Numlist" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-bullist']" />
         <element name="Bullet" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-numlist']" />
         <element name="InsertLink" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-link']" />
-        <element name="InsertImageIcon" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-image']" />
+        <element name="InsertImageIcon" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-image']" timeout="30"/>
         <element name="InsertTable" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-table']" />
         <element name="SpecialCharacter" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-charmap']"/>
         <element name="Browse" type="button" selector=".mce-i-browse"/>
-        <element name="BrowseUploadImage" type="file" selector=".fileupload" />
+        <element name="BrowseUploadImage" type="file" selector=".fileupload" timeout="30" />
         <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
         <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
         <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open" />
         <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last" />
         <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first" />
         <element name="UploadImage" type="file" selector=".fileupload" />
-        <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
+        <element name="OkBtn" type="button" selector="//span[text()='Ok']" timeout="30"/>
         <element name="InsertFile" type="text" selector="#insert_files"/>
         <element name="CreateFolder" type="button" selector="#new_folder" />
-        <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
+        <element name="DeleteSelectedBtn" type="text" selector="#delete_files" timeout="30"/>
         <element name="CancelBtn" type="button" selector="#cancel" />
         <element name="FolderName" type="button" selector="input[data-role='promptField']" />
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />

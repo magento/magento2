@@ -253,7 +253,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__("The quote can't be created."));
         }
-        return $quote->getId();
+        return (int)$quote->getId();
     }
 
     /**
@@ -564,6 +564,10 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 //Make provided address as default shipping address
                 $shippingAddress->setIsDefaultShipping(true);
                 $hasDefaultShipping = true;
+                if (!$hasDefaultBilling && !$billing->getSaveInAddressBook()) {
+                    $shippingAddress->setIsDefaultBilling(true);
+                    $hasDefaultBilling = true;
+                }
             }
             //save here new customer address
             $shippingAddress->setCustomerId($quote->getCustomerId());

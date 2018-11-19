@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\AsynchronousOperations\Api\Data\ItemStatusInterfaceFactory;
@@ -18,9 +19,12 @@ use Magento\Framework\Bulk\BulkManagementInterface;
 use Magento\Framework\Exception\BulkException;
 use Psr\Log\LoggerInterface;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepository;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Class MassSchedule used for adding multiple entities as Operations to Bulk Management with the status tracking
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Suppressed without refactoring to not introduce BiC
  */
 class MassSchedule
 {
@@ -55,6 +59,11 @@ class MassSchedule
     private $operationRepository;
 
     /**
+     * @var \Magento\Authorization\Model\UserContextInterface
+     */
+    private $userContext;
+
+    /**
      * Initialize dependencies.
      *
      * @param IdentityGeneratorInterface $identityService
@@ -63,6 +72,7 @@ class MassSchedule
      * @param BulkManagementInterface $bulkManagement
      * @param LoggerInterface $logger
      * @param OperationRepository $operationRepository
+     * @param UserContextInterface $userContext
      */
     public function __construct(
         IdentityGeneratorInterface $identityService,
@@ -70,7 +80,8 @@ class MassSchedule
         AsyncResponseInterfaceFactory $asyncResponseFactory,
         BulkManagementInterface $bulkManagement,
         LoggerInterface $logger,
-        OperationRepository $operationRepository
+        OperationRepository $operationRepository,
+        UserContextInterface $userContext = null
     ) {
         $this->identityService = $identityService;
         $this->itemStatusInterfaceFactory = $itemStatusInterfaceFactory;
@@ -78,15 +89,16 @@ class MassSchedule
         $this->bulkManagement = $bulkManagement;
         $this->logger = $logger;
         $this->operationRepository = $operationRepository;
+        $this->userContext = $userContext ?: ObjectManager::getInstance()->get(UserContextInterface::class);
     }
 
     /**
      * Schedule new bulk operation based on the list of entities
      *
-     * @param $topicName
-     * @param $entitiesArray
-     * @param null $groupId
-     * @param null $userId
+     * @param string $topicName
+     * @param array $entitiesArray
+     * @param string $groupId
+     * @param string $userId
      * @return AsyncResponseInterface
      * @throws BulkException
      * @throws LocalizedException
@@ -94,6 +106,10 @@ class MassSchedule
     public function publishMass($topicName, array $entitiesArray, $groupId = null, $userId = null)
     {
         $bulkDescription = __('Topic %1', $topicName);
+
+        if ($userId == null) {
+            $userId = $this->userContext->getUserId();
+        }
 
         if ($groupId == null) {
             $groupId = $this->identityService->generateId();

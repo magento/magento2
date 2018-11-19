@@ -9,8 +9,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
@@ -18,11 +16,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
  */
 class SortFields implements ResolverInterface
 {
-    /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
     /**
      * @var \Magento\Catalog\Model\Config
      */
@@ -39,27 +32,24 @@ class SortFields implements ResolverInterface
     private $sortbyAttributeSource;
 
     /**
-     * @param ValueFactory $valueFactory
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @oaram \Magento\Catalog\Model\Category\Attribute\Source\Sortby $sortbyAttributeSource
      */
     public function __construct(
-        ValueFactory $valueFactory,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Category\Attribute\Source\Sortby $sortbyAttributeSource
     ) {
-        $this->valueFactory = $valueFactory;
         $this->catalogConfig = $catalogConfig;
         $this->storeManager = $storeManager;
         $this->sortbyAttributeSource = $sortbyAttributeSource;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $sortFieldsOptions = $this->sortbyAttributeSource->getAllOptions();
         array_walk(
@@ -73,10 +63,6 @@ class SortFields implements ResolverInterface
             'options' => $sortFieldsOptions,
         ];
         
-        $result = function () use ($data) {
-            return $data;
-        };
-
-        return $this->valueFactory->create($result);
+        return $data;
     }
 }

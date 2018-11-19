@@ -5,7 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultStore" type="store">
         <data key="name">Default Store View</data>
         <data key="code">default</data>
@@ -41,12 +41,28 @@
     </entity>
     <entity name="staticStore" type="store">
         <!--data key="group_id">customStoreGroup.id</data-->
-        <data key="name" >Second Store View</data>
-        <data key="code" >store123</data>
+        <data key="name">Second Store View</data>
+        <data key="code">store123</data>
         <data key="is_active">1</data>
         <data key="store_id">null</data>
         <data key="store_action">add</data>
         <data key="store_type">store</data>
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="staticSecondStore" extends="staticStore">
+        <data key="name">Store View</data>
+        <data key="code">store2</data>
+    </entity>
+    <entity name="NewStoreData" type="store">
+        <data key="name" unique="suffix">Store</data>
+        <data key="code" unique="suffix">StoreCode</data>
+    </entity>
+    <entity name="NewWebSiteData" type="webSite">
+        <data key="name" unique="suffix">WebSite</data>
+        <data key="code" unique="suffix">WebSiteCode</data>
+    </entity>
+    <entity name="NewStoreViewData">
+        <data key="name" unique="suffix">StoreView</data>
+        <data key="code" unique="suffix">StoreViewCode</data>
     </entity>
 </entities>

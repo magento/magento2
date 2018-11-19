@@ -4,7 +4,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<sections xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<sections xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <section name="PriceRuleConditionsSection">
         <element name="conditionsTab" type="text" selector="//div[@data-index='conditions']//span[contains(.,'Conditions')][1]"/>
         <element name="createNewRule" type="text" selector="span.rule-param.rule-param-new-child"/>

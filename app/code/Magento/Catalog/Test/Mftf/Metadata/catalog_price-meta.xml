@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CatalogPriceConfigState" dataType="catalog_price_config_state" type="create" auth="adminFormKey" url="/admin/system_config/save/section/catalog/" method="POST">
+        <object key="groups" dataType="catalog_price_config_state">
+            <object key="price" dataType="catalog_price_config_state">
+                <object key="fields" dataType="catalog_price_config_state">
+                    <object key="scope" dataType="scope">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="default_product_price" dataType="default_product_price">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

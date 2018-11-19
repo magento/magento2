@@ -102,6 +102,13 @@ class Address extends AbstractCustomer
     protected $_entityTable;
 
     /**
+     * Region collection instance
+     *
+     * @var \Magento\Directory\Model\ResourceModel\Region\Collection
+     */
+    private $_regionCollection;
+
+    /**
      * Countries and regions
      *
      * Example array: array(
@@ -781,7 +788,7 @@ class Address extends AbstractCustomer
     }
 
     /**
-     * check if address for import is empty (for customer composite mode)
+     * Check if address for import is empty (for customer composite mode)
      *
      * @param array $rowData
      * @return array
@@ -940,7 +947,7 @@ class Address extends AbstractCustomer
     }
 
     /**
-     * set customer attributes
+     * Set customer attributes
      *
      * @param array $customerAttributes
      * @return $this

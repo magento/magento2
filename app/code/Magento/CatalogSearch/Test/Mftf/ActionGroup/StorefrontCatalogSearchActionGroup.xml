@@ -7,14 +7,13 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Quick search the phrase and check if the result page contains correct information -->
     <actionGroup name="StorefrontCheckQuickSearchActionGroup">
         <arguments>
             <argument name="phrase"/>
         </arguments>
-        <fillField userInput="{{phrase}}" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillQuickSearch"/>
-        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickQuickSearchButton" />
+        <submitForm selector="#search_mini_form" parameterArray="['q' => '{{phrase}}']" stepKey="fillQuickSearch" />
         <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
         <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
         <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>

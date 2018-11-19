@@ -13,12 +13,11 @@ use Magento\BundleGraphQl\Model\Resolver\Options\Collection;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class BundleItems implements ResolverInterface
 {
@@ -35,21 +34,21 @@ class BundleItems implements ResolverInterface
     /**
      * @var MetadataPool
      */
-    private $metdataPool;
+    private $metadataPool;
 
     /**
      * @param Collection $bundleOptionCollection
      * @param ValueFactory $valueFactory
-     * @param MetadataPool $metdataPool
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Collection $bundleOptionCollection,
         ValueFactory $valueFactory,
-        MetadataPool $metdataPool
+        MetadataPool $metadataPool
     ) {
         $this->bundleOptionCollection = $bundleOptionCollection;
         $this->valueFactory = $valueFactory;
-        $this->metdataPool = $metdataPool;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -57,9 +56,9 @@ class BundleItems implements ResolverInterface
      *
      * {@inheritDoc}
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $linkField = $this->metdataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         if ($value['type_id'] !== Type::TYPE_CODE
             || !isset($value[$linkField])
             || !isset($value[ProductInterface::SKU])

@@ -21,13 +21,13 @@
     <input name="form_key" type="hidden" value="<?= $block->escapeHtml($block->getFormKey()) ?>" />
     <?= $block->getChildHtml('form') ?>
 </form>
-
-
-<script>
-require(['jquery', "mage/mage"], function(jQuery){
-
-    jQuery('#edit_form').mage('form').mage('validation', {validationUrl: '<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>'});
-
-});
+<script type="text/x-magento-init">
+    {
+        "#edit_form": {
+            "Magento_Catalog/catalog/product/edit/attribute": {
+                "validationUrl": "<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>"
+            }
+        }
+    }
 </script>
 <?= /* @escapeNotVerified */ $block->getFormScripts() ?>

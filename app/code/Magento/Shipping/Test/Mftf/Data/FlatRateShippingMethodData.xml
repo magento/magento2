@@ -5,13 +5,20 @@
   * See COPYING.txt for license details.
   */
 -->
-<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <!-- Enable Flat Rate Shipping method config -->
     <entity name="FlatRateShippingMethodConfig" type="flat_rate_shipping_method">
         <requiredEntity type="active">flatRateActiveEnable</requiredEntity>
     </entity>
     <entity name="flatRateActiveEnable" type="active">
         <data key="value">1</data>
+    </entity>
+    <!-- Disable Flat Rate Shipping method config -->
+    <entity name="DisableFlatRateShippingMethodConfig" type="flat_rate_shipping_method">
+        <requiredEntity type="active">flatRateActiveDisable</requiredEntity>
+    </entity>
+    <entity name="flatRateActiveDisable" type="active">
+        <data key="value">0</data>
     </entity>
     <!-- Flat Rate Shipping method default setup -->
     <entity name="FlatRateShippingMethodDefault" type="flat_rate_shipping_method">

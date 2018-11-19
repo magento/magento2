@@ -16,6 +16,7 @@ use Magento\Framework\Search\Request\Dimension;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * @api
@@ -48,11 +49,16 @@ class Index extends AbstractDb
     private $dimensionCollectionFactory;
 
     /**
+     * @var int|null
+     */
+    private $websiteId;
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param MetadataPool $metadataPool
-     * @param null $connectionName
+     * @param string|null $connectionName
      * @param TableResolver|null $tableResolver
      * @param DimensionCollectionFactory|null $dimensionCollectionFactory
      */
@@ -94,12 +100,17 @@ class Index extends AbstractDb
         $catalogProductIndexPriceSelect = [];
 
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
-            $catalogProductIndexPriceSelect[] = $connection->select()->from(
-                $this->tableResolver->resolve('catalog_product_index_price', $dimensions),
-                ['entity_id', 'customer_group_id', 'website_id', 'min_price']
-            );
-            if ($productIds) {
-                current($catalogProductIndexPriceSelect)->where('entity_id IN (?)', $productIds);
+            if (!isset($dimensions[WebsiteDimensionProvider::DIMENSION_NAME]) ||
+                $this->websiteId === null ||
+                $dimensions[WebsiteDimensionProvider::DIMENSION_NAME]->getValue() === $this->websiteId) {
+                $select = $connection->select()->from(
+                    $this->tableResolver->resolve('catalog_product_index_price', $dimensions),
+                    ['entity_id', 'customer_group_id', 'website_id', 'min_price']
+                );
+                if ($productIds) {
+                    $select->where('entity_id IN (?)', $productIds);
+                }
+                $catalogProductIndexPriceSelect[] = $select;
             }
         }
 
@@ -123,9 +134,12 @@ class Index extends AbstractDb
      */
     public function getPriceIndexData($productIds, $storeId)
     {
-        $priceProductsIndexData = $this->_getCatalogProductPriceData($productIds);
-
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
+
+        $this->websiteId = $websiteId;
+        $priceProductsIndexData = $this->_getCatalogProductPriceData($productIds);
+        $this->websiteId = null;
+
         if (!isset($priceProductsIndexData[$websiteId])) {
             return [];
         }

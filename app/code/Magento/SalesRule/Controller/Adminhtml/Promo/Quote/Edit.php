@@ -6,7 +6,9 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

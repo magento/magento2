@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="Option1Store0" type="StoreLabel">
         <data key="store_id">0</data>
         <data key="label">option1</data>
@@ -55,5 +55,21 @@
     <entity name="Option6Store1" type="StoreLabel">
         <data key="store_id">1</data>
         <data key="label">option6</data>
+    </entity>
+    <entity name="Option7Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">Green</data>
+    </entity>
+    <entity name="Option8Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">Green</data>
+    </entity>
+    <entity name="Option9Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">Red</data>
+    </entity>
+    <entity name="Option10Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">Red</data>
     </entity>
 </entities>

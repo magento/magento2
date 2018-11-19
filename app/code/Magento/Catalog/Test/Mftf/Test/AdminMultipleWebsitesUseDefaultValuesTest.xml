@@ -7,10 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMultipleWebsitesUseDefaultValuesTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Create websites"/>
             <title value="Use Default Value checkboxes should be checked for new website scope"/>
             <description value="Use Default Value checkboxes for product attribute should be checked for new website scope"/>
             <severity value="MAJOR"/>

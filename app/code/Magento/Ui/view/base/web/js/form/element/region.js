@@ -78,13 +78,12 @@ define([
          * @param {String} field
          */
         filter: function (value, field) {
-            var country = registry.get(this.parentName + '.' + 'country_id'),
-                option;
+            var superFn = this._super;
 
-            if (country) {
-                option = country.indexedOptions[value];
+            registry.get(this.parentName + '.' + 'country_id', function (country) {
+                var option = country.indexedOptions[value];
 
-                this._super(value, field);
+                superFn.call(this, value, field);
 
                 if (option && option['is_region_visible'] === false) {
                     // hide select and corresponding text input field if region must not be shown for selected country
@@ -94,7 +93,7 @@ define([
                         this.toggleInput(false);
                     }
                 }
-            }
+            }.bind(this));
         }
     });
 });

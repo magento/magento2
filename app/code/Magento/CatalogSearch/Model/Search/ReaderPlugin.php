@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogSearch\Model\Search;
 
+/**
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class ReaderPlugin
 {
     /**
