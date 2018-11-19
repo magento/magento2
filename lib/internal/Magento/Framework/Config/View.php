@@ -28,6 +28,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @var array
      */
     protected $data;
+
     /**
      * @var LayoutCache
      */
@@ -43,7 +44,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @param ConverterInterface $converter
      * @param SchemaLocatorInterface $schemaLocator
      * @param ValidationStateInterface $validationState
-     * @param $fileName
+     * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
