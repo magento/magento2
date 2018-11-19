@@ -19,6 +19,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login" />
+            <createData entity="CurrencySettingWithEuroAndUSD" stepKey="configureCurrencyOptions"/>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="SimpleProduct" stepKey="createPreReqSimpleProduct1">
                 <requiredEntity createDataKey="createPreReqCategory"/>
@@ -26,19 +27,20 @@
             <createData entity="SimpleProduct2" stepKey="createPreReqSimpleProduct2">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="createPreReqSimpleProduct1" stepKey="deletePreReqSimpleProduct1"/>
             <deleteData createDataKey="createPreReqSimpleProduct2" stepKey="deletePreReqSimpleProduct2"/>
+            <createData entity="DefaultCurrencySetting" stepKey="restoreCurrencyOptions"/>
             <!-- Delete the bundled product -->
             <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProductOnProductsGridPageByName">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
             <!--Clear Configs-->
-            <actionGroup ref="SetAllowedCurrencies" stepKey="restoreCurrencyOptions"/>
             <actionGroup ref="logout" stepKey="logout"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache2"/>
         </after>
         <!-- Navigate to the Products>Inventory>Catalog -->
         <!-- Click on "+" dropdown and select Bundle Product type -->
@@ -51,10 +53,6 @@
         </actionGroup>
         <!-- Save product -->
         <actionGroup ref="SaveProductOnProductPageOnAdmin" stepKey="saveProductOnProductPageOnAdmin"/>
-        <actionGroup ref="SetAllowedCurrencies" stepKey="configureCurrencyOptions">
-            <argument name="allowedCurrencies" value="['Euro', 'US Dollar']"/>
-        </actionGroup>
-        <magentoCLI command="cache:flush" stepKey="flushCache2"/>
         <!-- Go to storefront BundleProduct -->
         <amOnPage url="{{StorefrontProductPage.url(BundleProduct.name)}}" stepKey="goToStorefrontProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontProductPage"/>

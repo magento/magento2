@@ -13,9 +13,9 @@
             <argument name="allowedCurrencies" type="string" defaultValue="['US Dollar']"/>
         </arguments>
         <amOnPage url="{{AdminConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage"/>
-        <conditionalClick selector="{{CurrencySetupSection.currencyOptions}}" dependentSelector="{{CurrencySetupSection.allowCurrencies}}" visible="false" stepKey="openOptions"/>
+        <conditionalClick selector="{{AdminCurrencySetupSection.currencyOptions}}" dependentSelector="{{CurrencySetupSection.allowCurrencies}}" visible="false" stepKey="openOptions"/>
         <waitForPageLoad stepKey="waitForOptions"/>
-        <selectOption selector="{{CurrencySetupSection.allowCurrencies}}" parameterArray="{{allowedCurrencies}}" stepKey="selectCurrencies"/>
+        <selectOption selector="{{AdminCurrencySetupSection.allowCurrencies}}" parameterArray="{{allowedCurrencies}}" stepKey="selectCurrencies"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigs"/>
         <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
     </actionGroup>
