@@ -271,7 +271,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Return configuration array
+     * Return configuration array.
      *
      * @return array|mixed
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -542,13 +542,13 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Create address data appropriate to fill checkout address form
+     * Create address data appropriate to fill checkout address form.
      *
      * @param AddressInterface $address
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getAddressFromData(AddressInterface $address)
+    private function getAddressFromData(AddressInterface $address): array
     {
         $addressData = [];
         $attributesMetadata = $this->addressMetadata->getAllAttributesMetadata();
