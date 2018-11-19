@@ -10,6 +10,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutCartSummarySection">
         <element name="subtotal" type="text" selector="//*[@id='cart-totals']//tr[@class='totals sub']//td//span[@class='price']"/>
+        <element name="shippingMethodForm" type="text" selector="#co-shipping-method-form"/>
         <element name="shippingMethod" type="text" selector="//*[@id='cart-totals']//tr[@class='totals shipping excl']//th//span[@class='value']"/>
         <element name="shipping" type="text" selector="//*[@id='cart-totals']//tr[@class='totals shipping excl']//td//span[@class='price']"/>
         <element name="total" type="text" selector="//*[@id='cart-totals']//tr[@class='grand totals']//td//span[@class='price']"/>
