@@ -7,38 +7,60 @@ declare(strict_types=1);
 
 namespace Magento\SendFriendGraphQl\Model\Resolver;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObjectFactory;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\SendFriend\Model\SendFriend;
+use Magento\SendFriend\Model\SendFriendFactory;
 
+/**
+ * @inheritdoc
+ */
 class SendEmailToFriend implements ResolverInterface
 {
     /**
-     * @var SendFriend
+     * @var SendFriendFactory
      */
-    private $sendFriend;
+    private $sendFriendFactory;
+
     /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
+
     /**
      * @var DataObjectFactory
      */
     private $dataObjectFactory;
 
+    /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
+     * @param SendFriendFactory $sendFriendFactory
+     * @param ProductRepositoryInterface $productRepository
+     * @param DataObjectFactory $dataObjectFactory
+     * @param ManagerInterface $eventManager
+     */
     public function __construct(
-        SendFriend $sendFriend,
+        SendFriendFactory $sendFriendFactory,
         ProductRepositoryInterface $productRepository,
-        DataObjectFactory $dataObjectFactory
+        DataObjectFactory $dataObjectFactory,
+        ManagerInterface $eventManager
     ) {
-        $this->sendFriend = $sendFriend;
+        $this->sendFriendFactory = $sendFriendFactory;
         $this->productRepository = $productRepository;
         $this->dataObjectFactory = $dataObjectFactory;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -46,102 +68,131 @@ class SendEmailToFriend implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if ($this->sendFriend->getMaxSendsToFriend() && $this->sendFriend->isExceedLimit()) {
+        /** @var SendFriend $sendFriend */
+        $sendFriend = $this->sendFriendFactory->create();
+
+        if ($sendFriend->getMaxSendsToFriend() && $sendFriend->isExceedLimit()) {
             throw new GraphQlInputException(__('You can\'t send messages more than %1 times an hour.',
-                $this->sendFriend->getMaxSendsToFriend()
+                $sendFriend->getMaxSendsToFriend()
             ));
         }
 
-        $product = $this->getProductFromRepository($args['input']['params']['product_id']);
-        $senderArray = $this->getSenderArrayFromArgs($args);
-        $recipientsArray = $this->getRecipientsArray($args);
-        //@todo clarify if event should be dispatched
-        //$this->_eventManager->dispatch('sendfriend_product', ['product' => $product]);
-        $this->sendFriend->setSender($senderArray);
-        $this->sendFriend->setRecipients($recipientsArray);
-        $this->sendFriend->setProduct($product);
+        $product = $this->getProduct($args['input']['product_id']);
+        $this->eventManager->dispatch('sendfriend_product', ['product' => $product]);
+        $sendFriend->setProduct($product);
 
-        $this->prepareDataForValidation($args, $recipientsArray);
-        $validationResult = $this->sendFriend->validate();
-        $this->addRecipientNameValidation($args);
+        $senderData = $this->extractSenderData($args);
+        $sendFriend->setSender($senderData);
+
+        $recipientsData = $this->extractRecipientsData($args);
+        $sendFriend->setRecipients($recipientsData);
+
+        $this->validateSendFriendModel($sendFriend, $senderData, $recipientsData);
+        $sendFriend->send();
+
+        return array_merge($senderData, $recipientsData);
+    }
+
+    /**
+     * Validate send friend model
+     *
+     * @param SendFriend $sendFriend
+     * @param array $senderData
+     * @param array $recipientsData
+     * @return void
+     * @throws GraphQlInputException
+     */
+    private function validateSendFriendModel(SendFriend $sendFriend, array $senderData, array $recipientsData): void
+    {
+        $sender = $this->dataObjectFactory->create()->setData($senderData['sender']);
+        $sendFriend->setData('_sender', $sender);
+
+        $emails = array_column($recipientsData['recipients'], 'email');
+        $recipients = $this->dataObjectFactory->create()->setData('emails', $emails);
+        $sendFriend->setData('_recipients', $recipients);
+
+        $validationResult = $sendFriend->validate();
         if ($validationResult !== true) {
             throw new GraphQlInputException(__(implode($validationResult)));
         }
-
-        $this->sendFriend->send();
-
-        return array_merge($senderArray, $recipientsArray);
-    }
-
-    private function prepareDataForValidation(array $args, array $recipientsArray): void
-    {
-        $sender = $this->dataObjectFactory->create()->setData([
-            'name' => $args['input']['sender']['name'],
-            'email'=> $args['input']['sender']['email'],
-            'message' => $args['input']['sender']['message'],
-        ]);
-        $emails = [];
-        foreach ($recipientsArray['recipients'] as $recipient) {
-            $emails[] = $recipient['email'];
-        }
-        $recipients = $this->dataObjectFactory->create()->setData('emails', $emails);
-
-        $this->sendFriend->setData('_sender', $sender);
-        $this->sendFriend->setData('_recipients', $recipients);
     }
 
     /**
-     * @param array $args
-     * @throws GraphQlInputException
-     */
-    private function addRecipientNameValidation(array $args): void
-    {
-        foreach ($args['input']['recipients'] as $recipient) {
-            if (empty($recipient['name'])) {
-                throw new GraphQlInputException(
-                    __('Please Provide Name for Recipient with this Email Address: ' . $recipient['email']
-                ));
-            }
-        }
-    }
-
-    /**
+     * Get product
+     *
      * @param int $productId
-     * @return bool|\Magento\Catalog\Api\Data\ProductInterface
+     * @return ProductInterface
+     * @throws GraphQlNoSuchEntityException
      */
-    private function getProductFromRepository(int $productId)
+    private function getProduct(int $productId): ProductInterface
     {
         try {
             $product = $this->productRepository->getById($productId);
             if (!$product->isVisibleInCatalog()) {
-                return false;
+                throw new GraphQlNoSuchEntityException(
+                    __("The product that was requested doesn't exist. Verify the product and try again.")
+                );
             }
-        } catch (NoSuchEntityException $noEntityException) {
-            return false;
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }
-
         return $product;
     }
 
-    private function getRecipientsArray(array $args): array
+    /**
+     * Extract recipients data
+     *
+     * @param array $args
+     * @return array
+     * @throws GraphQlInputException
+     */
+    private function extractRecipientsData(array $args): array
     {
-        $recipientsArray = [];
+        $recipients = [];
         foreach ($args['input']['recipients'] as $recipient) {
-            $recipientsArray[] = [
+            if (empty($recipient['name'])) {
+                throw new GraphQlInputException(__('Please provide Name for all of recipients.'));
+            }
+
+            if (empty($recipient['email'])) {
+                throw new GraphQlInputException(__('Please provide Email for all of recipients.'));
+            }
+
+            $recipients[] = [
                 'name' => $recipient['name'],
                 'email' => $recipient['email'],
             ];
         }
-        return ['recipients' => $recipientsArray];
+        return ['recipients' => $recipients];
     }
 
-    private function getSenderArrayFromArgs(array $args): array
+    /**
+     * Extract sender data
+     *
+     * @param array $args
+     * @return array
+     * @throws GraphQlInputException
+     */
+    private function extractSenderData(array $args): array
     {
-        return ['sender' => [
-                    'name' => $args['input']['sender']['name'],
-                    'email' => $args['input']['sender']['email'],
-                    'message' => $args['input']['sender']['message'],
-                    ]
-            ];
+        if (empty($args['input']['sender']['name'])) {
+            throw new GraphQlInputException(__('Please provide Name of sender.'));
+        }
+
+        if (empty($args['input']['sender']['email'])) {
+            throw new GraphQlInputException(__('Please provide Email of sender.'));
+        }
+
+        if (empty($args['input']['sender']['message'])) {
+            throw new GraphQlInputException(__('Please provide Message.'));
+        }
+
+        return [
+            'sender' => [
+                'name' => $args['input']['sender']['name'],
+                'email' => $args['input']['sender']['email'],
+                'message' => $args['input']['sender']['message'],
+            ],
+        ];
     }
 }

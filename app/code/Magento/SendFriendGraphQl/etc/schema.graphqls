@@ -6,9 +6,9 @@ type Mutation {
 }
 
 input SendEmailToFriendSenderInput {
+   product_id: Int!
    sender: Sender!
-   params: Params!
-   recipients: [Recipient]
+   recipients: [Recipient!]!
 }
 
 type Sender {
@@ -16,16 +16,11 @@ type Sender {
     email: String!
     message: String!
 }
-type Params {
-    product_id: Int!
-    category_id: Int!
-}
 
 type Recipient {
     name: String!
     email: String!
 }
-
 
 type SendEmailToFriendOutput {
     sender: Sender
