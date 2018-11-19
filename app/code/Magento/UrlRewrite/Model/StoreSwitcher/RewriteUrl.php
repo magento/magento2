@@ -40,6 +40,8 @@ class RewriteUrl implements StoreSwitcherInterface
     }
 
     /**
+     * Switch to another store.
+     *
      * @param StoreInterface $fromStore
      * @param StoreInterface $targetStore
      * @param string $redirectUrl
@@ -72,6 +74,14 @@ class RewriteUrl implements StoreSwitcherInterface
                 UrlRewrite::STORE_ID => $targetStore->getId(),
             ]);
             if (null === $currentRewrite) {
+                /** @var \Magento\Framework\App\Response\Http $response */
+                $targetUrl = $targetStore->getBaseUrl();
+            }
+        } else {
+            $existingRewrite = $this->urlFinder->findOneByData([
+                UrlRewrite::REQUEST_PATH => $urlPath
+            ]);
+            if ($existingRewrite) {
                 /** @var \Magento\Framework\App\Response\Http $response */
                 $targetUrl = $targetStore->getBaseUrl();
             }
