@@ -7,20 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
-use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use Psr\Log\LoggerInterface;
-use Psr\Log\Test\LoggerInterfaceTest;
+use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Create customer data resolver
@@ -51,7 +49,7 @@ class CreateCustomer implements ResolverInterface
      */
     private $storeManager;
     /**
-     * @var Magento\Newsletter\Model\SubscriberFactory
+     * @var SubscriberFactory
      */
     private $subscriberFactory;
 
@@ -93,16 +91,8 @@ class CreateCustomer implements ResolverInterface
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
         try {
-            $customerDataObject = $this->customerFactory->create();
-            $this->dataObjectHelper->populateWithArray(
-                $customerDataObject,
-                $args['input'],
-                \Magento\Customer\Api\Data\CustomerInterface::class
-            );
-            $store = $this->storeManager->getStore();
-            $customerDataObject->setWebsiteId($store->getWebsiteId());
-            $customerDataObject->setStoreId($store->getId());
-            $customer = $this->accountManagement->createAccount($customerDataObject, $args['input']['password']);
+            $customer = $this->createUserAccount($args);
+            $this->setUpUserContext($context, $customer);
             if (array_key_exists('is_subscribed', $args['input'])) {
                 if ($args['input']['is_subscribed']) {
                     $this->subscriberFactory->create()->subscribeCustomerById($customer->getId());
@@ -113,5 +103,28 @@ class CreateCustomer implements ResolverInterface
             throw new GraphQlInputException(__($e->getMessage()));
         }
         return ['customer' => $data];
+    }
+
+    private function createUserAccount($args)
+    {
+        $customerDataObject = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $customerDataObject,
+            $args['input'],
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        $store = $this->storeManager->getStore();
+        $customerDataObject->setWebsiteId($store->getWebsiteId());
+        $customerDataObject->setStoreId($store->getId());
+
+        $password = array_key_exists('password', $args['input']) ? $args['input']['password'] : null;
+
+        return $this->accountManagement->createAccount($customerDataObject, $password);
+    }
+
+    private function setUpUserContext($context, $customer)
+    {
+        $context->setUserId((int)$customer->getId());
+        $context->setUserType(UserContextInterface::USER_TYPE_CUSTOMER);
     }
 }
