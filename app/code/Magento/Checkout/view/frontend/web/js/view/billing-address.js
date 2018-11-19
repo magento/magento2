@@ -38,7 +38,6 @@ function (
     'use strict';
 
     var lastSelectedBillingAddress = null,
-        toCheck = true,
         newAddressOption = {
             /**
              * Get new address label
@@ -91,14 +90,9 @@ function (
                 if (quote.isVirtual()) {
                     this.isAddressSameAsShipping(false);
                 } else {
-                    if (window.isbothAddressSame === false) {
-                        toCheck = false;
-                    } else {
-                        toCheck = true;
-                    }
                     this.isAddressSameAsShipping(
                         newAddress != null &&
-                        toCheck &&
+                        window.isbothAddressSame &&
                         newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() //eslint-disable-line eqeqeq
                     );
                 }
