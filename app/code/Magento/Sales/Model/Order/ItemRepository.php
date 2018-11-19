@@ -95,7 +95,7 @@ class ItemRepository implements OrderItemRepositoryInterface
     }
 
     /**
-     * load entity
+     * Load entity
      *
      * @param int $id
      * @return OrderItemInterface
@@ -228,6 +228,14 @@ class ItemRepository implements OrderItemRepositoryInterface
     {
         if ($parentId = $orderItem->getParentItemId()) {
             $orderItem->setParentItem($this->get($parentId));
+        } else {
+            $orderCollection = $orderItem->getOrder()->getItemsCollection()->filterByParent($orderItem->getItemId());
+
+            foreach ($orderCollection->getItems() as $item) {
+                if ($item->getParentItemId() === $orderItem->getItemId()) {
+                    $item->setParentItem($orderItem);
+                }
+            }
         }
     }
 
