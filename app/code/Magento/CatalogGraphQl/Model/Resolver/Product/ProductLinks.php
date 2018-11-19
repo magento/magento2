@@ -28,7 +28,7 @@ class ProductLinks implements ResolverInterface
     private $linkTypes = ['related', 'upsell', 'crosssell'];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Format product links data to conform to GraphQL schema
      *

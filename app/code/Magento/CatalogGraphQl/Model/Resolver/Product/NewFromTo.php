@@ -14,12 +14,14 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
+ * @inheritdoc
+ *
  * Format the new from and to typo of legacy fields news_from_date and news_to_date
  */
 class NewFromTo implements ResolverInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Transfer data from legacy news_from_date and news_to_date to new names corespondent fields
      *

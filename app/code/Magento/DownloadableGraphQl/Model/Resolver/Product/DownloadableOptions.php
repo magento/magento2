@@ -21,7 +21,7 @@ use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  *
  * Format for downloadable product types
  */
@@ -66,7 +66,7 @@ class DownloadableOptions implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Add downloadable options to configurable types
      *

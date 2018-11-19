@@ -48,7 +48,7 @@ class Price implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Format product's tier price data to conform to GraphQL schema
      *

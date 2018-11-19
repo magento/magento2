@@ -16,14 +16,14 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  *
  * Format a product's tier price information to conform to GraphQL schema representation
  */
 class TierPrices implements ResolverInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Format product's tier price data to conform to GraphQL schema
      *

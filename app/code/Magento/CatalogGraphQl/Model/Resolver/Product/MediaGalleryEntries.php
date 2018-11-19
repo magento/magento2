@@ -15,12 +15,14 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
+ * @inheritdoc
+ *
  * Format a product's media gallery information to conform to GraphQL schema representation
  */
 class MediaGalleryEntries implements ResolverInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Format product's media gallery entry data to conform to GraphQL schema
      *

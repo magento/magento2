@@ -21,7 +21,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class Options implements ResolverInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Format product's option data to conform to GraphQL schema
      *
