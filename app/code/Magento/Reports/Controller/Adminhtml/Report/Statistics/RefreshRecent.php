@@ -6,7 +6,12 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Statistics;
 
-class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+/**
+ * Refresh recent stats.
+ */
+class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statistics implements HttpPostActionInterface
 {
     /**
      * Refresh statistics for last 25 hours

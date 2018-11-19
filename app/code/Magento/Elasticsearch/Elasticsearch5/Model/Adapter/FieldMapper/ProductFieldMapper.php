@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Config;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
@@ -19,33 +23,49 @@ use \Magento\Customer\Model\Session as CustomerSession;
 class ProductFieldMapper implements FieldMapperInterface
 {
     /**
+     * @deprecated
      * @var Config
      */
     protected $eavConfig;
 
     /**
+     * @deprecated
      * @var FieldType
      */
     protected $fieldType;
 
     /**
+     * @deprecated
      * @var CustomerSession
      */
     protected $customerSession;
 
     /**
-     * Store manager
-     *
+     * @deprecated
      * @var StoreManager
      */
     protected $storeManager;
 
     /**
-     * Core registry
-     *
+     * @deprecated
      * @var Registry
      */
     protected $coreRegistry;
+
+    /**
+     * @var AttributeProvider
+     */
+    private $attributeAdapterProvider;
+
+    /**
+     * @var ResolverInterface
+     */
+    private $fieldNameResolver;
+
+    /**
+     * @var FieldProviderInterface
+     */
+    private $fieldProvider;
 
     /**
      * @param Config $eavConfig
@@ -53,188 +73,54 @@ class ProductFieldMapper implements FieldMapperInterface
      * @param CustomerSession $customerSession
      * @param StoreManager $storeManager
      * @param Registry $coreRegistry
+     * @param ResolverInterface|null $fieldNameResolver
+     * @param AttributeProvider|null $attributeAdapterProvider
+     * @param FieldProviderInterface|null $fieldProvider
      */
     public function __construct(
         Config $eavConfig,
         FieldType $fieldType,
         CustomerSession $customerSession,
         StoreManager $storeManager,
-        Registry $coreRegistry
+        Registry $coreRegistry,
+        ResolverInterface $fieldNameResolver = null,
+        AttributeProvider $attributeAdapterProvider = null,
+        FieldProviderInterface $fieldProvider = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->fieldType = $fieldType;
         $this->customerSession = $customerSession;
         $this->storeManager = $storeManager;
         $this->coreRegistry = $coreRegistry;
+        $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
+            ->get(ResolverInterface::class);
+        $this->attributeAdapterProvider = $attributeAdapterProvider ?: ObjectManager::getInstance()
+            ->get(AttributeProvider::class);
+        $this->fieldProvider = $fieldProvider ?: ObjectManager::getInstance()
+            ->get(FieldProviderInterface::class);
     }
 
     /**
+     * Get field name.
+     *
      * @param string $attributeCode
      * @param array $context
      * @return string
      */
     public function getFieldName($attributeCode, $context = [])
     {
-        $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
-        if (!$attribute || in_array($attributeCode, ['id', 'sku', 'store_id', 'visibility'], true)) {
-            return $attributeCode;
-        }
-        if ($attributeCode === 'price') {
-            return $this->getPriceFieldName($context);
-        }
-        if ($attributeCode === 'position') {
-            return $this->getPositionFiledName($context);
-        }
-        $fieldType = $this->fieldType->getFieldType($attribute);
-        $frontendInput = $attribute->getFrontendInput();
-        if (empty($context['type'])) {
-            $fieldName = $attributeCode;
-        } elseif ($context['type'] === FieldMapperInterface::TYPE_FILTER) {
-            if ($fieldType === FieldType::ES_DATA_TYPE_TEXT) {
-                return $this->getFieldName(
-                    $attributeCode,
-                    array_merge($context, ['type' => FieldMapperInterface::TYPE_QUERY])
-                );
-            }
-            $fieldName = $attributeCode;
-        } elseif ($context['type'] === FieldMapperInterface::TYPE_QUERY) {
-            $fieldName = $this->getQueryTypeFieldName($frontendInput, $fieldType, $attributeCode);
-        } else {
-            $fieldName = 'sort_' . $attributeCode;
-        }
-
-        return $fieldName;
+        $attributeAdapter = $this->attributeAdapterProvider->getByAttributeCode($attributeCode);
+        return $this->fieldNameResolver->getFieldName($attributeAdapter, $context);
     }
 
     /**
+     * Get all attributes types.
+     *
      * @param array $context
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAllAttributesTypes($context = [])
     {
-        $attributeCodes = $this->eavConfig->getEntityAttributeCodes(ProductAttributeInterface::ENTITY_TYPE_CODE);
-        $allAttributes = [];
-        // List of attributes which are required to be indexable
-        $alwaysIndexableAttributes = [
-            'category_ids',
-            'visibility',
-        ];
-
-        foreach ($attributeCodes as $attributeCode) {
-            $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
-
-            $allAttributes[$attributeCode] = [
-                'type' => $this->fieldType->getFieldType($attribute),
-            ];
-
-            if (!$attribute->getIsSearchable() && !$this->isAttributeUsedInAdvancedSearch($attribute)
-                && !in_array($attributeCode, $alwaysIndexableAttributes, true)
-            ) {
-                if ($attribute->getIsFilterable() || $attribute->getIsFilterableInSearch()) {
-                    $allAttributes[$attributeCode]['type'] = FieldType::ES_DATA_TYPE_KEYWORD;
-                } else if ($allAttributes[$attributeCode]['type'] === FieldType::ES_DATA_TYPE_TEXT) {
-                    $allAttributes[$attributeCode]['index'] = 'no';
-                }
-            } else if ($attributeCode == "category_ids") {
-                $allAttributes[$attributeCode] = [
-                    'type' => FieldType::ES_DATA_TYPE_INT,
-                ];
-            }
-
-            if ($attribute->usesSource()
-                || $attribute->getFrontendInput() === 'select'
-                || $attribute->getFrontendInput() === 'multiselect'
-            ) {
-                $allAttributes[$attributeCode]['type'] = FieldType::ES_DATA_TYPE_KEYWORD;
-
-                $allAttributes[$attributeCode . '_value'] = [
-                    'type' => FieldType::ES_DATA_TYPE_TEXT,
-                ];
-            }
-        }
-
-        return $allAttributes;
-    }
-
-    /**
-     * @param Object $attribute
-     * @return bool
-     */
-    protected function isAttributeUsedInAdvancedSearch($attribute)
-    {
-        return $attribute->getIsVisibleInAdvancedSearch()
-        || $attribute->getIsFilterable()
-        || $attribute->getIsFilterableInSearch();
-    }
-
-    /**
-     * @param string $frontendInput
-     * @param string $fieldType
-     * @param string $attributeCode
-     * @return string
-     */
-    protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode)
-    {
-        switch ($frontendInput) {
-            case 'select':
-                return in_array($fieldType, ['text','integer'], true) ? $attributeCode . '_value' : $attributeCode;
-            case 'boolean':
-                return $fieldType === 'integer' ? $attributeCode . '_value' : $attributeCode;
-            default:
-                return $attributeCode;
-        }
-    }
-
-    /**
-     * @param string $frontendInput
-     * @param string $fieldType
-     * @param string $attributeCode
-     * @return string
-     */
-    protected function getQueryTypeFieldName($frontendInput, $fieldType, $attributeCode)
-    {
-        if ($attributeCode === '*') {
-            $fieldName = '_all';
-        } else {
-            $fieldName = $this->getRefinedFieldName($frontendInput, $fieldType, $attributeCode);
-        }
-        return $fieldName;
-    }
-
-    /**
-     * Get "position" field name
-     *
-     * @param array $context
-     * @return string
-     */
-    protected function getPositionFiledName($context)
-    {
-        if (isset($context['categoryId'])) {
-            $category = $context['categoryId'];
-        } else {
-            $category = $this->coreRegistry->registry('current_category')
-                ? $this->coreRegistry->registry('current_category')->getId()
-                : $this->storeManager->getStore()->getRootCategoryId();
-        }
-        return 'position_category_' . $category;
-    }
-
-    /**
-     * Prepare price field name for search engine
-     *
-     * @param array $context
-     * @return string
-     */
-    protected function getPriceFieldName($context)
-    {
-        $customerGroupId = !empty($context['customerGroupId'])
-            ? $context['customerGroupId']
-            : $this->customerSession->getCustomerGroupId();
-        $websiteId = !empty($context['websiteId'])
-            ? $context['websiteId']
-            : $this->storeManager->getStore()->getWebsiteId();
-        return 'price_' . $customerGroupId . '_' . $websiteId;
+        return $this->fieldProvider->getFields($context);
     }
 }

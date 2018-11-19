@@ -5,12 +5,15 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Sales\Controller\Adminhtml\Order\Create as CreateAction;
 
-class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
+class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var RawFactory

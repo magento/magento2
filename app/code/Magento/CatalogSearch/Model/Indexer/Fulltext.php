@@ -19,8 +19,6 @@ use Magento\Indexer\Model\ProcessManager;
  *
  * @api
  * @since 100.0.2
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
  */
 class Fulltext implements
     \Magento\Framework\Indexer\ActionInterface,
@@ -119,7 +117,8 @@ class Fulltext implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws \InvalidArgumentException
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds = null)
@@ -147,8 +146,10 @@ class Fulltext implements
             $productIds = array_unique(
                 array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
             );
-            $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
-            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+            if ($saveHandler->isAvailable($dimensions)) {
+                $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
+                $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+            }
         }
     }
 
