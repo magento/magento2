@@ -28,12 +28,12 @@ class Source extends AbstractEav
     /**
      * @var \Magento\Eav\Api\AttributeRepositoryInterface
      */
-    protected $_attributeRepository;
+    private $attributeRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private $criteriaBuilder;
 
     /**
      * Construct
@@ -44,7 +44,7 @@ class Source extends AbstractEav
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
      * @param null|string $connectionName
      */
     public function __construct(
@@ -54,7 +54,7 @@ class Source extends AbstractEav
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder,
         $connectionName = null
     ) {
         parent::__construct(
@@ -65,8 +65,8 @@ class Source extends AbstractEav
             $connectionName
         );
         $this->_resourceHelper = $resourceHelper;
-        $this->_attributeRepository = $attributeRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->attributeRepository = $attributeRepository;
+        $this->criteriaBuilder = $criteriaBuilder;
     }
 
     /**
@@ -252,7 +252,7 @@ class Source extends AbstractEav
         }
 
         // Include custom source model options
-        $options = $this->_getMultiSelectAttributeWithSourceModels($attrIds, $options);
+        $options = $this->getMultiSelectAttributeWithSourceModels($attrIds, $options);
 
         // prepare get multiselect values query
         $productValueExpression = $connection->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
@@ -327,13 +327,13 @@ class Source extends AbstractEav
      *
      * @return array
      */
-    protected function _getMultiSelectAttributeWithSourceModels($attrIds, $options)
+    private function getMultiSelectAttributeWithSourceModels($attrIds, $options)
     {
         // Add options from custom source models
-        $this->searchCriteriaBuilder
+        $this->criteriaBuilder
                 ->addFilter('attribute_id', $attrIds, 'in')
                 ->addFilter('source_model', true, 'notnull');
-        $criteria = $this->searchCriteriaBuilder->create();
+        $criteria = $this->criteriaBuilder->create();
         $attributes = $this->_attributeRepository->getList(
             ProductAttributeInterface::ENTITY_TYPE_CODE,
             $criteria
