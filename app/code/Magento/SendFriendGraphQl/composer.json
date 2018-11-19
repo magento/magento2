@@ -20,7 +20,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\SendFriendGraphGl\\": ""
+            "Magento\\SendFriendGraphQl\\": ""
         }
     }
 }
