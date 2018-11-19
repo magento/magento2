@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
+
 /**
  * View configuration files handler
  *
@@ -23,17 +28,28 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @var array
      */
     protected $data;
+    /**
+     * @var LayoutCache
+     */
+    private $layoutCache;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * @param FileResolverInterface $fileResolver
      * @param ConverterInterface $converter
      * @param SchemaLocatorInterface $schemaLocator
      * @param ValidationStateInterface $validationState
-     * @param string $fileName
+     * @param $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
      * @param array $xpath
+     * @param LayoutCache|null $layoutCache
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         FileResolverInterface $fileResolver,
@@ -44,10 +60,13 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         $idAttributes = [],
         $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global',
-        $xpath = []
+        $xpath = [],
+        LayoutCache $layoutCache = null,
+        SerializerInterface $serializer = null
     ) {
         $this->xpath = $xpath;
         $idAttributes = $this->getIdAttributes();
+
         parent::__construct(
             $fileResolver,
             $converter,
@@ -58,6 +77,8 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
             $domDocumentClass,
             $defaultScope
         );
+        $this->layoutCache = $layoutCache ?? ObjectManager::getInstance()->get(LayoutCache::class);
+        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Serialize::class);
     }
 
     /**
@@ -190,11 +211,18 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * Initialize data array
      *
      * @return void
+     * @throws \InvalidArgumentException
      */
     protected function initData()
     {
         if ($this->data === null) {
-            $this->data = $this->read();
+            $layoutCacheKey = __CLASS__;
+            if ($data = $this->layoutCache->load($layoutCacheKey)) {
+                $this->data = $this->serializer->unserialize($data);
+            } else {
+                $this->data = $this->read();
+                $this->layoutCache->save($this->serializer->serialize($this->data), $layoutCacheKey);
+            }
         }
     }
 

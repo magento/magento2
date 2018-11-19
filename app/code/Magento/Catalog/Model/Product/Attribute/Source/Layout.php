@@ -5,10 +5,13 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
+use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
+
 /**
  * Catalog product landing page attribute source
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
@@ -18,21 +21,48 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     protected $pageLayoutBuilder;
 
     /**
-     * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
+     * @var LayoutCache
      */
-    public function __construct(\Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder)
-    {
+    private $layoutCache;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
+     * @param LayoutCache|null $layoutCache
+     * @param SerializerInterface|null $serializer
+     */
+    public function __construct(
+        \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder,
+        LayoutCache $layoutCache = null,
+        SerializerInterface $serializer = null
+    ) {
         $this->pageLayoutBuilder = $pageLayoutBuilder;
+        $this->layoutCache = $layoutCache ?? ObjectManager::getInstance()->get(LayoutCache::class);
+        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Serialize::class);
     }
 
     /**
+     * Get list of available layouts
+     *
      * @return array
+     * @throws \InvalidArgumentException
      */
     public function getAllOptions()
     {
         if (!$this->_options) {
-            $this->_options = $this->pageLayoutBuilder->getPageLayoutsConfig()->toOptionArray();
-            array_unshift($this->_options, ['value' => '', 'label' => __('No layout updates')]);
+            $layoutCacheKey = __CLASS__;
+            if ($data = $this->layoutCache->load($layoutCacheKey)) {
+                return $this->_options = $this->serializer->unserialize($data);
+            } else {
+                $this->_options = $this->pageLayoutBuilder->getPageLayoutsConfig()->toOptionArray();
+                array_unshift($this->_options, ['value' => '', 'label' => __('No layout updates')]);
+                $this->layoutCache->save($this->serializer->serialize($this->_options), $layoutCacheKey);
+            }
+
         }
         return $this->_options;
     }
