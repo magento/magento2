@@ -164,6 +164,13 @@
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
     </actionGroup>
+    <!--Delete all products by filtering grid and using mass delete action-->
+    <actionGroup name="deleteAllDuplicateProductUsingProductGrid" extends="deleteProductUsingProductGrid">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <remove keyForRemoval="seeProductSkuInGrid"/>
+    </actionGroup>
 
     <!--Delete a product by filtering grid and using delete action-->
     <actionGroup name="deleteProductBySku">
