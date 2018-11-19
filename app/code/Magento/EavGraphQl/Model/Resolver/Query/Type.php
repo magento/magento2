@@ -36,7 +36,7 @@ class Type
     /**
      * @param CustomAttributeTypeLocatorInterface $typeLocator
      * @param TypeProcessor $typeProcessor
-     * @param $customTypes
+     * @param array $customTypes
      */
     public function __construct(
         CustomAttributeTypeLocatorInterface $typeLocator,

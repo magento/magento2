@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
@@ -47,9 +48,17 @@ class Price implements ResolverInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
      * Format product's tier price data to conform to GraphQL schema
      *
-     * {@inheritdoc}
+     * @param \Magento\Framework\GraphQl\Config\Element\Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @throws \Exception
+     * @return array
      */
     public function resolve(
         Field $field,

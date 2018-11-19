@@ -47,7 +47,7 @@ class AttributeOptions implements ResolverInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -67,6 +67,8 @@ class AttributeOptions implements ResolverInterface
     }
 
     /**
+     * Get entity type
+     *
      * @param array $value
      * @return int
      * @throws LocalizedException
@@ -81,6 +83,8 @@ class AttributeOptions implements ResolverInterface
     }
 
     /**
+     * Get attribute code
+     *
      * @param array $value
      * @return string
      * @throws LocalizedException
@@ -95,6 +99,8 @@ class AttributeOptions implements ResolverInterface
     }
 
     /**
+     * Get attribute options data
+     *
      * @param int $entityType
      * @param string $attributeCode
      * @return array

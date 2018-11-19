@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class ProductLinkTypeResolverComposite implements TypeResolverInterface
 {

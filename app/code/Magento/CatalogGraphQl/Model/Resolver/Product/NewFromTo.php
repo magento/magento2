@@ -19,9 +19,17 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class NewFromTo implements ResolverInterface
 {
     /**
+     * {@inheritdoc}
+     *
      * Transfer data from legacy news_from_date and news_to_date to new names corespondent fields
      *
-     * {@inheritdoc}
+     * @param \Magento\Framework\GraphQl\Config\Element\Field $field
+     * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @throws \Exception
+     * @return null|array
      */
     public function resolve(
         Field $field,
