@@ -412,7 +412,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @return string[]
+     * @inheritdoc
      */
     public function __sleep()
     {
@@ -786,7 +786,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     public function isUrlSecure()
     {
@@ -1338,6 +1338,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Get store path
+     *
      * @return string
      */
     public function getStorePath()
@@ -1347,8 +1349,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
-     * @since 100.1.0
+     * @inheritdoc
      */
     public function getScopeType()
     {
@@ -1356,8 +1357,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
-     * @since 100.1.0
+     * @inheritdoc
      */
     public function getScopeTypeName()
     {
@@ -1365,7 +1365,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -1373,8 +1373,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @param \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
-     * @return $this
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
