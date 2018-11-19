@@ -63,10 +63,15 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $option = $this->getOption();
         $value = $this->getUserValue();
 
-        if (empty($value) && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
+        if (!$option->getIsRequire()) {
+            return $this;
+        }
+
+        if (empty($value) && !$this->getSkipCheckRequiredOption()) {
             $this->setIsValid(false);
             throw new LocalizedException(
-                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
+                __('The product\'s required option(s) weren\'t entered. '
+                    . 'Make sure the options are entered and try again.')
             );
         }
         if (!$this->_isSingleSelection()) {
@@ -75,10 +80,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             if ($valuesCollection->count() != $valueCount) {
                 $this->setIsValid(false);
                 throw new LocalizedException(
-                    __(
-                        "The product's required option(s) weren't entered. "
-                        . "Make sure the options are entered and try again."
-                    )
+                    __('The product\'s required option(s) weren\'t entered. '
+                        . 'Make sure the options are entered and try again.')
                 );
             }
         }
