@@ -53,4 +53,16 @@
         <data key="name">Store View</data>
         <data key="code">store2</data>
     </entity>
+    <entity name="NewStoreData" type="store">
+        <data key="name" unique="suffix">Store</data>
+        <data key="code" unique="suffix">StoreCode</data>
+    </entity>
+    <entity name="NewWebSiteData" type="webSite">
+        <data key="name" unique="suffix">WebSite</data>
+        <data key="code" unique="suffix">WebSiteCode</data>
+    </entity>
+    <entity name="NewStoreViewData">
+        <data key="name" unique="suffix">StoreView</data>
+        <data key="code" unique="suffix">StoreViewCode</data>
+    </entity>
 </entities>

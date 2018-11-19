@@ -49,7 +49,7 @@
         <observer name="persistent" instance="Magento\Persistent\Observer\SetQuotePersistentDataObserver" />
     </event>
     <event name="custom_quote_process">
-        <observer name="persistent" instance="Magento\Persistent\Observer\SetLoadPersistentQuoteObserver" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\SetCheckoutSessionPersistentDataObserver" />
     </event>
     <event name="customer_register_success">
         <observer name="persistent" instance="Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver" />

@@ -8,13 +8,14 @@ namespace Magento\CatalogUrlRewrite\Observer;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Event\Observer;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\Store;
 
 /**
- * Class observer to initiate generation category url_path
+ * Class for set or update url path.
  */
 class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
 {
@@ -34,22 +35,30 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     protected $storeViewService;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
+     * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
         ChildrenCategoriesProvider $childrenCategoriesProvider,
-        StoreViewService $storeViewService
+        StoreViewService $storeViewService,
+        CategoryRepositoryInterface $categoryRepository
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->storeViewService = $storeViewService;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
-     * Generate Category Url Path
+     * Method for update/set url path.
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
@@ -94,29 +103,29 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     }
 
     /**
-     * Update URL path for children
+     * Update url path for children category.
      *
      * @param Category $category
      * @return void
      */
     protected function updateUrlPathForChildren(Category $category)
     {
-        $children = $this->childrenCategoriesProvider->getChildren($category, true);
-
         if ($this->isGlobalScope($category->getStoreId())) {
-            foreach ($children as $child) {
+            $childrenIds = $this->childrenCategoriesProvider->getChildrenIds($category, true);
+            foreach ($childrenIds as $childId) {
                 foreach ($category->getStoreIds() as $storeId) {
                     if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
                         $storeId,
-                        $child->getId(),
+                        $childId,
                         Category::ENTITY
                     )) {
-                        $child->setStoreId($storeId);
+                        $child = $this->categoryRepository->get($childId, $storeId);
                         $this->updateUrlPathForCategory($child);
                     }
                 }
             }
         } else {
+            $children = $this->childrenCategoriesProvider->getChildren($category, true);
             foreach ($children as $child) {
                 /** @var Category $child */
                 $child->setStoreId($category->getStoreId());
@@ -141,7 +150,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     }
 
     /**
-     * Update URL path for category
+     * Update url path for category.
      *
      * @param Category $category
      * @param Category|null $parentCategory
