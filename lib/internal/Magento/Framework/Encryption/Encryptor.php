@@ -274,10 +274,10 @@ class Encryptor implements EncryptorInterface
      */
     public function encrypt($data)
     {
-        $crypt = new SodiumChachaIetf($this->keys[$this->keyVersion]);
+        $crypt = $this->getCrypt();
 
         return $this->keyVersion .
-            ':' . self::CIPHER_AEAD_CHACHA20POLY1305 .
+            ':' . $this->getCipherVersion() .
             ':' . base64_encode($crypt->encrypt($data));
     }
 
@@ -391,7 +391,7 @@ class Encryptor implements EncryptorInterface
         string $initVector = null
     ): ?EncryptionAdapterInterface {
         if (null === $key && null === $cipherVersion) {
-            $cipherVersion = self::CIPHER_RIJNDAEL_256;
+            $cipherVersion = $this->getCipherVersion();
         }
 
         if (null === $key) {
@@ -413,15 +413,27 @@ class Encryptor implements EncryptorInterface
 
         if ($cipherVersion === self::CIPHER_RIJNDAEL_128) {
             $cipher = MCRYPT_RIJNDAEL_128;
-            $mode = MCRYPT_MODE_ECB;
         } elseif ($cipherVersion === self::CIPHER_RIJNDAEL_256) {
             $cipher = MCRYPT_RIJNDAEL_256;
-            $mode = MCRYPT_MODE_CBC;
         } else {
             $cipher = MCRYPT_BLOWFISH;
-            $mode = MCRYPT_MODE_ECB;
         }
 
-        return new Mcrypt($key, $cipher, $mode, $initVector);
+        return new Mcrypt($key, $cipher, MCRYPT_MODE_ECB, $initVector);
+    }
+
+    /**
+     * Get cipher Version
+     *
+     *
+     * @return int
+     */
+    private function getCipherVersion()
+    {
+        if (extension_loaded('sodium')) {
+            return $this->cipher;
+        } else {
+            return self::CIPHER_RIJNDAEL_256;
+        }
     }
 }

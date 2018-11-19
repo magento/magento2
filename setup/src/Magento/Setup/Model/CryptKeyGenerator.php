@@ -39,7 +39,7 @@ class CryptKeyGenerator implements CryptKeyGeneratorInterface
      */
     public function generate()
     {
-        return md5($this->getRandomString());
+        return $this->getRandomString();
     }
 
     /**

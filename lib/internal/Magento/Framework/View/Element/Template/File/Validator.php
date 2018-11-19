@@ -135,8 +135,9 @@ class Validator
         if (!is_array($directories)) {
             $directories = (array)$directories;
         }
+        $realPath = $this->fileDriver->getRealPath($path);
         foreach ($directories as $directory) {
-            if (0 === strpos($this->fileDriver->getRealPath($path), $directory)) {
+            if (0 === strpos($realPath, $directory)) {
                 return true;
             }
         }
