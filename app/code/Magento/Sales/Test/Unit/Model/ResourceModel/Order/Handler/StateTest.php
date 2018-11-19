@@ -24,7 +24,9 @@ class StateTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->orderMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
+        $this->orderMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order::class,
+            [
                 '__wakeup',
                 'getId',
                 'hasCustomerNoteNotify',
@@ -41,7 +43,8 @@ class StateTest extends \PHPUnit\Framework\TestCase
                 'hasForcedCanCreditmemo',
                 'getIsInProcess',
                 'getConfig',
-            ]);
+            ]
+        );
         $this->orderMock->expects($this->any())
             ->method('getConfig')
             ->willReturnSelf();
@@ -64,6 +67,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedState
      * @param int $callSetStateNum
      * @dataProvider stateCheckDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testCheck(
         bool $canCreditmemo,
