@@ -111,7 +111,6 @@ class Queue implements QueueInterface
             while ($envelope = $this->dequeue()) {
                 try {
                     call_user_func($callback, $envelope);
-                    $this->acknowledge($envelope);
                 } catch (\Exception $e) {
                     $this->reject($envelope);
                 }
