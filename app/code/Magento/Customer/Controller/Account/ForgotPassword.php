@@ -40,7 +40,7 @@ class ForgotPassword extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Forgot customer password page
      *
-     * @return \Magento\Framework\View\Result\Page
+     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
     public function execute()
     {
