@@ -221,25 +221,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         }
 
         try {
-            $addressId = $this->getRequest()->getParam('id');
-            $customerId = $this->_getSession()->getCustomerId();
-
-            if ($this->customerRepository) {
-                $customer = $this->customerRepository->getById($customerId);
-
-                $addresses = array_filter($customer->getAddresses(), function ($customerAddress) use ($addressId) {
-                    return $customerAddress->getId() !== $addressId;
-                });
-
-                $currentAddress = $this->_extractAddress($customer);
-                $addresses[] = $currentAddress;
-                $customer->setAddresses($addresses);
-                $this->customerRepository->save($customer);
-            } else {
-                $currentAddress = $this->_extractAddress();
-                $this->_addressRepository->save($currentAddress);
-            }
-
+            $this->saveAddress();
             $this->messageManager->addSuccessMessage(__('You saved the address.'));
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->success($url));
@@ -260,6 +242,31 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         }
 
         return $this->resultRedirectFactory->create()->setUrl($this->_redirect->error($url));
+    }
+
+    /**
+     * process address save, based on two repositories
+     */
+    protected function saveAddress()
+    {
+        $addressId = $this->getRequest()->getParam('id');
+        $customerId = $this->_getSession()->getCustomerId();
+
+        if ($this->customerRepository) {
+            $customer = $this->customerRepository->getById($customerId);
+
+            $addresses = array_filter($customer->getAddresses(), function ($customerAddress) use ($addressId) {
+                return $customerAddress->getId() !== $addressId;
+            });
+
+            $addresses[] = $this->_extractAddress($customer);
+            $customer->setAddresses($addresses);
+            $this->customerRepository->save($customer);
+
+            return;
+        }
+
+        $this->_addressRepository->save($this->_extractAddress());
     }
 
     /**
