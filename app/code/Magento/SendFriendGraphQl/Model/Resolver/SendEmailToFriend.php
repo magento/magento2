@@ -72,7 +72,8 @@ class SendEmailToFriend implements ResolverInterface
         $sendFriend = $this->sendFriendFactory->create();
 
         if ($sendFriend->getMaxSendsToFriend() && $sendFriend->isExceedLimit()) {
-            throw new GraphQlInputException(__('You can\'t send messages more than %1 times an hour.',
+            throw new GraphQlInputException(
+                __('You can\'t send messages more than %1 times an hour.',
                 $sendFriend->getMaxSendsToFriend()
             ));
         }
