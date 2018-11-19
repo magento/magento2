@@ -74,7 +74,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
                 'getOrder',
                 'getMode',
                 'getLimit',
-                'isMemorizingAllowed'
+                'isMemorizingAllowed',
             ]
         );
         $this->layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getChildName', 'getBlock']);

@@ -136,7 +136,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     private $httpContext;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey
+     * @var FormKey
      */
     private $formKey;
 
@@ -150,8 +150,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
      * @param ToolbarMemorizer|null $toolbarMemorizer
-     * @param \Magento\Framework\App\Http\Context|null $httpContext
-     * @param \Magento\Framework\Data\Form\FormKey|null $formKey
+     * @param Context|null $httpContext
+     * @param FormKey|null $formKey
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -178,10 +178,10 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             ToolbarMemorizer::class
         );
         $this->httpContext = $httpContext ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\App\Http\Context::class
+            Context::class
         );
         $this->formKey = $formKey ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Data\Form\FormKey::class
+            FormKey::class
         );
         parent::__construct($context, $data);
     }

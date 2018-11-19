@@ -170,9 +170,9 @@ class ToolbarMemorizer
      *
      * @param string $param parameter name
      * @param mixed $value parameter value
-     * @return $this
+     * @return ToolbarMemorizer
      */
-    private function memorizeParam(string $param, $value)
+    private function memorizeParam(string $param, $value): ToolbarMemorizer
     {
         if ($value && $this->catalogSession->getData($param) != $value) {
             $this->catalogSession->setData($param, $value);

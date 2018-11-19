@@ -18,7 +18,7 @@ use Magento\Framework\App\Http\Context as HttpContext;
 class ContextPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ContextPlugin
+     * @var ContextPlugin
      */
     private $model;
 

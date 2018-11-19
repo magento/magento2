@@ -23,7 +23,7 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Toolbar
+     * @var Toolbar
      */
     private $toolbarMock;
 
@@ -168,6 +168,8 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test memorizing parameters.
+     *
+     * @return void
      */
     public function testMemorizeParams()
     {
