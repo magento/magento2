@@ -9,7 +9,8 @@
         "magento/module-checkout": "*",
         "magento/module-catalog": "*",
         "magento/module-store": "*",
-        "magento/module-customer": "*"
+        "magento/module-customer": "*",
+        "magento/module-customer-graph-ql": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*"
