@@ -93,7 +93,7 @@ class SetShippingAddressesOnCart implements ResolverInterface
         return [
             'cart' => [
                 'cart_id' => $maskedCartId,
-                'model' => $cart
+                'model' => $cart,
             ]
         ];
     }
