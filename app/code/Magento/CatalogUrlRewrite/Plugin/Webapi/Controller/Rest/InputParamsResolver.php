@@ -47,7 +47,7 @@ class InputParamsResolver
         $requestBodyParams = $this->request->getBodyParams();
 
         if ($this->isProductSaveCalled($serviceClassName, $serviceMethodName)
-            && $this->isCustomOptionExists($requestBodyParams)) {
+            && $this->isCustomAttributesExists($requestBodyParams)) {
             foreach ($requestBodyParams['product']['custom_attributes'] as $attribute) {
                 if ($attribute['attribute_code'] === 'save_rewrites_history') {
                     foreach ($result as $resultItem) {
@@ -56,6 +56,7 @@ class InputParamsResolver
                             break 2;
                         }
                     }
+                    break;
                 }
             }
         }
@@ -80,7 +81,7 @@ class InputParamsResolver
      * @param array $requestBodyParams
      * @return bool
      */
-    private function isCustomOptionExists(array $requestBodyParams): bool
+    private function isCustomAttributesExists(array $requestBodyParams): bool
     {
         return !empty($requestBodyParams['product']['custom_attributes']);
     }
