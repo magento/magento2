@@ -391,7 +391,7 @@ define([
             } else {
                 this.formElement().save(arguments[0], arguments[1]);
 
-                if (this.source.params['invalid']) {
+                if (this.source.params.invalid) {
                     this.unserializeData();
                 }
             }
