@@ -26,7 +26,8 @@ class InputParamsResolver
     /**
      * @param RestRequest $request
      */
-    public function __construct(RestRequest $request) {
+    public function __construct(RestRequest $request)
+    {
         $this->request = $request;
     }
 
@@ -47,7 +48,6 @@ class InputParamsResolver
 
         if ($this->isProductSaveCalled($serviceClassName, $serviceMethodName)
             && $this->isCustomOptionExists($requestBodyParams)) {
-
             foreach ($requestBodyParams['product']['custom_attributes'] as $attribute) {
                 if ($attribute['attribute_code'] === 'save_rewrites_history') {
                     foreach ($result as $resultItem) {
