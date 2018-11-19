@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 /**
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model
@@ -30,6 +31,16 @@ class Source extends AbstractEav
     protected $_attributeRepository;
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -38,6 +49,8 @@ class Source extends AbstractEav
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Psr\Log\LoggerInterface $logger
      * @param null|string $connectionName
      */
     public function __construct(
@@ -47,6 +60,8 @@ class Source extends AbstractEav
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Psr\Log\LoggerInterface $logger,
         $connectionName = null
     ) {
         parent::__construct(
@@ -58,6 +73,8 @@ class Source extends AbstractEav
         );
         $this->_resourceHelper = $resourceHelper;
         $this->_attributeRepository = $attributeRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->logger = $logger;
     }
 
     /**
@@ -310,39 +327,31 @@ class Source extends AbstractEav
 
     /**
      * Get options for multiselect attributes using custom source models
-     * @maderlock's fix from: https://github.com/magento/magento2/issues/417#issuecomment-265146285
+     * Based on @maderlock's fix from: 
+     * https://github.com/magento/magento2/issues/417#issuecomment-265146285
      *
      * @param array $attrIds
      * @param array $options
      *
      * @return array
-     * @throws \Zend_Db_Statement_Exception
      */
     protected function _getMultiSelectAttributeWithSourceModels($attrIds, $options)
     {
         // Add options from custom source models
-        $select = $this->getConnection()->select()
-            ->from(
-                ['ea' => $this->getTable('eav_attribute')],
-                ['attribute_id','entity_type_id', 'attribute_code']
-            )
-            ->where('attribute_id IN(?)', $attrIds)
-            ->where('source_model is not null');
-        $query = $select->query();
-
-        while ($row = $query->fetch()) {
-            try {
-                /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-                $attribute = $this->_attributeRepository->get($row['entity_type_id'], $row['attribute_code']);
-                $sourceModelOptions = $attribute->getOptions();
-                // Add options to list used below
-                foreach ($sourceModelOptions as $o) {
-                    $options[$row['attribute_id']][$o->getValue()] = true;
-                }
-            } catch (\BadMethodCallException $e) {
-                // Skip
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                // skip
+        $this->searchCriteriaBuilder
+                ->addFilter('attribute_id', $attrIds, 'in')
+                ->addFilter('source_model', true, 'notnull');
+        $criteria = $this->searchCriteriaBuilder->create();
+        $attributes = $this->_attributeRepository->getList(
+            ProductAttributeInterface::ENTITY_TYPE_CODE,
+            $criteria
+        )->getItems();
+        
+        foreach ($attributes as $attribute) {
+            $sourceModelOptions = $attribute->getOptions();
+            // Add options to list used below
+            foreach ($sourceModelOptions as $o) {
+                $options[$attribute->getAttributeId()][$o->getValue()] = true;
             }
         }
 
