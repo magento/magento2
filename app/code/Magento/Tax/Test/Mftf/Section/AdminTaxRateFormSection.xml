@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminTaxRateFormSection">
+       <element name="taxIdentifier" type="input" selector="//*[@id = 'rate-form']//*[@name = 'code']" />
+       <element name="labelForZipCode" type="text" selector="//*[@id = 'rate-form']//*[@name = 'code']" />
+        <element name="deleteRate" type="button" selector="#delete"/>
+        <element name="ok" type="button" selector="button.action-primary.action-accept"/>
+
+        <element name="country" type="select" selector="#tax_country_id"/>
+        <element name="state" type="select" selector="#tax_region_id"/>
+        <element name="rate" type="text" selector="#rate"/>
+    </section>
+</sections>
