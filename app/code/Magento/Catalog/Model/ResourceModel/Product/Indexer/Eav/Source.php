@@ -36,11 +36,6 @@ class Source extends AbstractEav
     private $searchCriteriaBuilder;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -50,7 +45,6 @@ class Source extends AbstractEav
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Psr\Log\LoggerInterface $logger
      * @param null|string $connectionName
      */
     public function __construct(
@@ -61,7 +55,6 @@ class Source extends AbstractEav
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Psr\Log\LoggerInterface $logger,
         $connectionName = null
     ) {
         parent::__construct(
@@ -74,7 +67,6 @@ class Source extends AbstractEav
         $this->_resourceHelper = $resourceHelper;
         $this->_attributeRepository = $attributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->logger = $logger;
     }
 
     /**
