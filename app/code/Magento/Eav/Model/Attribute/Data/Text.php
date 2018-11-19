@@ -51,12 +51,12 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
     /**
      * Validate data
+     *
      * Return true or array of errors
      *
      * @param array|string $value
      * @return bool|array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateValue($value)
     {
@@ -68,13 +68,13 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             $value = $this->getEntity()->getDataUsingMethod($attribute->getAttributeCode());
         }
 
-        if ($attribute->getIsRequired() && empty($value) && $value !== '0') {
-            $label = __($attribute->getStoreLabel());
-            $errors[] = __('"%1" is a required value.', $label);
+        if (!$attribute->getIsRequired() && empty($value)) {
+            return true;
         }
 
-        if (!$errors && !$attribute->getIsRequired() && empty($value)) {
-            return true;
+        if (empty($value) && $value !== '0') {
+            $label = __($attribute->getStoreLabel());
+            $errors[] = __('"%1" is a required value.', $label);
         }
 
         $result = $this->validateLength($attribute, $value);
