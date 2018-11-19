@@ -148,7 +148,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function testSaveProductWithGalleryImage(): void
+    public function testSaveProductWithGalleryImage()
     {
         /** @var $mediaConfig \Magento\Catalog\Model\Product\Media\Config */
         $mediaConfig = Bootstrap::getObjectManager()
