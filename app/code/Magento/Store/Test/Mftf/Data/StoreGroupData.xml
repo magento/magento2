@@ -27,4 +27,8 @@
         <data key="root_category_id">2</data>
         <data key="website_id">1</data>
     </entity>
+    <entity name="staticFirstStoreGroup" extends="staticStoreGroup">
+        <data key="name">NewStore</data>
+        <data key="code">Base1</data>
+    </entity>
 </entities>

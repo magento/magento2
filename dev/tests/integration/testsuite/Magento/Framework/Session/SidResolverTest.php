@@ -114,7 +114,7 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects(
             $this->any()
         )->method(
-            'getValue'
+            'isSetFlag'
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -195,7 +195,7 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects(
             $this->any()
         )->method(
-            'getValue'
+            'isSetFlag'
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE

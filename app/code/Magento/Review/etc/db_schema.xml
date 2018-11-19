@@ -95,7 +95,7 @@
         <column xsi:type="smallint" name="rating_summary" padding="6" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Summarized rating"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store id"/>
+                default="0" comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="primary_id"/>
         </constraint>
@@ -108,9 +108,9 @@
     </table>
     <table name="review_store" resource="default" engine="innodb" comment="Review Store">
         <column xsi:type="bigint" name="review_id" padding="20" unsigned="true" nullable="false" identity="false"
-                comment="Review Id"/>
+                comment="Review ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="review_id"/>
             <column name="store_id"/>
@@ -125,7 +125,7 @@
     </table>
     <table name="rating_entity" resource="default" engine="innodb" comment="Rating entities">
         <column xsi:type="smallint" name="entity_id" padding="5" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="varchar" name="entity_code" nullable="false" length="64" comment="Entity Code"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -136,9 +136,9 @@
     </table>
     <table name="rating" resource="default" engine="innodb" comment="Ratings">
         <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="true"
-                comment="Rating Id"/>
+                comment="Rating ID"/>
         <column xsi:type="smallint" name="entity_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="varchar" name="rating_code" nullable="false" length="64" comment="Rating Code"/>
         <column xsi:type="smallint" name="position" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Rating Position On Storefront"/>
