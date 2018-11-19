@@ -7,7 +7,6 @@ namespace Magento\Framework\Setup;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Setup\Declaration\Schema\Sharding;
-use Magento\Framework\Shell;
 
 /**
  * Persist listened schema to db_schema.xml file.
@@ -25,8 +24,6 @@ class SchemaPersistor
     private $xmlPersistor;
 
     /**
-     * Constructor.
-     *
      * @param ComponentRegistrar $componentRegistrar
      * @param XmlPersistor $xmlPersistor
      */
@@ -91,6 +88,7 @@ class SchemaPersistor
 
     /**
      * If disabled attribute is set to false it remove it at all.
+     *
      * Also handle other generic attributes.
      *
      * @param array $definition
@@ -125,24 +123,30 @@ class SchemaPersistor
      */
     private function processColumns(array $tableData, \SimpleXMLElement $table)
     {
-        if (isset($tableData['columns'])) {
-            foreach ($tableData['columns'] as $columnData) {
-                $columnData = $this->handleDefinition($columnData);
-                $domColumn = $table->addChild('column');
+        if (!isset($tableData['columns'])) {
+            return $table;
+        }
+
+        foreach ($tableData['columns'] as $columnName => $columnData) {
+            $columnData = $this->handleDefinition($columnData);
+            $domColumn = $table->addChild('column');
+            if (empty($columnData['disabled'])) {
                 $domColumn->addAttribute('xsi:type', $columnData['xsi:type'], 'xsi');
                 unset($columnData['xsi:type']);
+            } else {
+                $domColumn->addAttribute('name', $columnName);
+            }
 
-                foreach ($columnData as $attributeKey => $attributeValue) {
-                    if ($attributeValue === null) {
-                        continue;
-                    }
-
-                    if (is_bool($attributeValue)) {
-                        $attributeValue = $this->castBooleanToString($attributeValue);
-                    }
-
-                    $domColumn->addAttribute($attributeKey, $attributeValue);
+            foreach ($columnData as $attributeKey => $attributeValue) {
+                if ($attributeValue === null) {
+                    continue;
                 }
+
+                if (is_bool($attributeValue)) {
+                    $attributeValue = $this->castBooleanToString($attributeValue);
+                }
+
+                $domColumn->addAttribute($attributeKey, $attributeValue);
             }
         }
 
@@ -189,35 +193,31 @@ class SchemaPersistor
      */
     private function processConstraints(array $tableData, \SimpleXMLElement $table)
     {
-        if (isset($tableData['constraints'])) {
-            foreach ($tableData['constraints'] as $constraintType => $constraints) {
-                if ($constraintType === 'foreign') {
-                    foreach ($constraints as $name => $constraintData) {
-                        $constraintData = $this->handleDefinition($constraintData);
-                        $constraintDom = $table->addChild('constraint');
-                        $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
-                        $constraintDom->addAttribute('referenceId', $name);
+        if (!isset($tableData['constraints'])) {
+            return $table;
+        }
 
-                        foreach ($constraintData as $attributeKey => $attributeValue) {
-                            $constraintDom->addAttribute($attributeKey, $attributeValue);
-                        }
+        foreach ($tableData['constraints'] as $constraintType => $constraints) {
+            foreach ($constraints as $name => $constraintData) {
+                $constraintData = $this->handleDefinition($constraintData);
+                $constraintDom = $table->addChild('constraint');
+                $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
+                $constraintDom->addAttribute('referenceId', $name);
+
+                if ($constraintType === 'foreign') {
+                    foreach ($constraintData as $attributeKey => $attributeValue) {
+                        $constraintDom->addAttribute($attributeKey, $attributeValue);
                     }
                 } else {
-                    foreach ($constraints as $name => $constraintData) {
-                        $constraintData = $this->handleDefinition($constraintData);
-                        $constraintDom = $table->addChild('constraint');
-                        $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
-                        $constraintDom->addAttribute('referenceId', $name);
-                        $constraintData['columns'] = $constraintData['columns'] ?? [];
+                    $constraintData['columns'] = $constraintData['columns'] ?? [];
 
-                        if (isset($constraintData['disabled'])) {
-                            $constraintDom->addAttribute('disabled', (bool) $constraintData['disabled']);
-                        }
+                    if (isset($constraintData['disabled'])) {
+                        $constraintDom->addAttribute('disabled', (bool) $constraintData['disabled']);
+                    }
 
-                        foreach ($constraintData['columns'] as $column) {
-                            $columnXml = $constraintDom->addChild('column');
-                            $columnXml->addAttribute('name', $column);
-                        }
+                    foreach ($constraintData['columns'] as $column) {
+                        $columnXml = $constraintDom->addChild('column');
+                        $columnXml->addAttribute('name', $column);
                     }
                 }
             }
