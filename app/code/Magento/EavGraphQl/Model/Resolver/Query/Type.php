@@ -9,7 +9,6 @@ namespace Magento\EavGraphQl\Model\Resolver\Query;
 
 use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
@@ -71,7 +70,7 @@ class Type
             try {
                 $type = $this->typeProcessor->translateTypeName($type);
             } catch (\InvalidArgumentException $exception) {
-                throw new \LogicException('Cannot resolve EAV type');
+                throw new GraphQlInputException(__('Cannot resolve EAV type'));
             }
         } else {
             $type = $type === 'double' ? 'float' : $type;

@@ -29,8 +29,7 @@ class ProductLinkTypeResolverComposite implements TypeResolverInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @throws GraphQlInputException
+     * @inheritdoc
      */
     public function resolveType(array $data) : string
     {
@@ -48,9 +47,6 @@ class ProductLinkTypeResolverComposite implements TypeResolverInterface
                 return $resolvedType;
             }
         }
-
-        if (!$resolvedType) {
-            throw new \LogicException('Cannot resolve type');
-        }
+        throw new GraphQlInputException(__('Cannot resolve type'));
     }
 }
