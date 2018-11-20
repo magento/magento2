@@ -171,12 +171,12 @@
     </actionGroup>
 
     <!--Check tier price with a discount percentage on product-->
-    <actionGroup name="AssertDiscountsPercentageOfProducts">
+    <actionGroup name="AssertDiscountsPercentageOfProduct">
         <arguments>
             <argument name="amount" type="string" defaultValue="45"/>
         </arguments>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
         <grabValueFrom selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" stepKey="grabProductTierPriceInput"/>
         <assertEquals stepKey="assertProductTierPriceInput">
             <expectedResult type="string">{{amount}}</expectedResult>
