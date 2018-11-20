@@ -56,13 +56,17 @@ define([
                 }
             }
 
-            // rewrite jQuery contents()
-            contents = function (element) {
-                return $.map(element, function (elem) {
+            /**
+             * Rewrite jQuery contents().
+             *
+             * @param {jQuery} elem
+             */
+            contents = function (elem) {
+                return $.map(elem, function (el) {
                     try {
-                        return $.nodeName(elem, "iframe") ?
-                            elem.contentDocument || (elem.contentWindow ? elem.contentWindow.document : []) :
-                            $.merge([], elem.childNodes);
+                        return $.nodeName(el, "iframe") ?
+                            el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
+                            $.merge([], el.childNodes);
                     } catch (e) {
                         consoleLogger.error(e);
                         return [];

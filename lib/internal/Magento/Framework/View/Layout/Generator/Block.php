@@ -103,9 +103,7 @@ class Block implements Layout\GeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getType()
     {
