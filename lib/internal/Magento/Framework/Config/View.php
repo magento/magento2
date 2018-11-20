@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * View configuration files handler
  *
@@ -25,6 +30,21 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     protected $data;
 
     /**
+     * @var LayoutCache
+     */
+    private $layoutCache;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @var array
+     */
+    private $scopedLayoutCache;
+
+    /**
      * @param FileResolverInterface $fileResolver
      * @param ConverterInterface $converter
      * @param SchemaLocatorInterface $schemaLocator
@@ -34,6 +54,8 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @param string $domDocumentClass
      * @param string $defaultScope
      * @param array $xpath
+     * @param LayoutCache|null $layoutCache
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         FileResolverInterface $fileResolver,
@@ -44,10 +66,13 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         $idAttributes = [],
         $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global',
-        $xpath = []
+        $xpath = [],
+        LayoutCache $layoutCache = null,
+        SerializerInterface $serializer = null
     ) {
         $this->xpath = $xpath;
         $idAttributes = $this->getIdAttributes();
+
         parent::__construct(
             $fileResolver,
             $converter,
@@ -58,6 +83,8 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
             $domDocumentClass,
             $defaultScope
         );
+        $this->layoutCache = $layoutCache ?? ObjectManager::getInstance()->get(LayoutCache::class);
+        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -200,21 +227,34 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
 
     /**
      * {@inheritdoc}
+     * @throws \InvalidArgumentException
      * @since 100.1.0
      */
     public function read($scope = null)
     {
         $scope = $scope ?: $this->_defaultScope;
-        $result = [];
+        $layoutCacheKey = __CLASS__ . '-'. $scope . '-' . $this->_fileName;
+        if (!isset($this->scopedLayoutCache[$layoutCacheKey])) {
+            if ($data = $this->layoutCache->load($layoutCacheKey)) {
+                $this->scopedLayoutCache[$layoutCacheKey] = $this->serializer->unserialize($data);
+            } else {
+                $result = [];
 
-        $parents = (array)$this->_fileResolver->getParents($this->_fileName, $scope);
-        // Sort parents desc
-        krsort($parents);
+                $parents = (array)$this->_fileResolver->getParents($this->_fileName, $scope);
+                // Sort parents desc
+                krsort($parents);
 
-        foreach ($parents as $parent) {
-            $result = array_replace_recursive($result, $this->_readFiles([$parent]));
+                foreach ($parents as $parent) {
+                    $result = array_replace_recursive($result, $this->_readFiles([$parent]));
+                }
+
+                $this->scopedLayoutCache[$layoutCacheKey] = array_replace_recursive($result, parent::read($scope));
+                $this->layoutCache->save(
+                    $this->serializer->serialize($this->scopedLayoutCache[$layoutCacheKey]),
+                    $layoutCacheKey
+                );
+            }
         }
-
-        return array_replace_recursive($result, parent::read($scope));
+        return $this->scopedLayoutCache[$layoutCacheKey];
     }
 }
