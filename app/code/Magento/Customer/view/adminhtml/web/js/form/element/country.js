@@ -16,6 +16,11 @@ define([
             countryScope: 'data.country'
         },
 
+        /**
+         * Set country to customer address form
+         *
+         * @param {String} value - country
+         */
         setDifferedFromDefault: function (value) {
             this._super();
 

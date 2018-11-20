@@ -38,6 +38,11 @@ define([
             this._super();
         },
 
+        /**
+         * Change visibility of the default address shipping/billing blocks
+         *
+         * @param {Object} entity - customer address
+         */
         changeVisibility: function (entity) {
             this.visible(!_.isEmpty(entity));
         }

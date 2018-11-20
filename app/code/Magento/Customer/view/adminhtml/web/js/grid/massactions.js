@@ -26,6 +26,11 @@ define([
             }
         },
 
+        /**
+         * Reload customer addresses listing
+         *
+         * @param {Object} data
+         */
         onAction: function (data) {
             if (data.action === 'delete') {
                 this.source.reload({
@@ -34,6 +39,13 @@ define([
             }
         },
 
+        /**
+         * Default action callback. Send selections data
+         * via POST request.
+         *
+         * @param {Object} action - Action data.
+         * @param {Object} data - Selections data.
+         */
         defaultCallback: function (action, data) {
             var itemsType, selections;
 
@@ -49,7 +61,6 @@ define([
 
                 _.extend(selections, data.params || {});
 
-                console.log(selections);
                 this.request(action.url, selections).done(function (response) {
                     if (!response.error) {
                         this.trigger('massaction', {
@@ -64,6 +75,12 @@ define([
             }
         },
 
+        /**
+         * Send customer address listing mass action ajax request
+         *
+         * @param {String} href
+         * @param {Object} data
+         */
         request: function (href, data) {
             var settings = _.extend({}, this.ajaxSettings, {
                 url: href,

@@ -6,6 +6,7 @@
 namespace Magento\Customer\Ui\Component\Listing\Address;
 
 use Magento\Customer\Model\ResourceModel\Address\Grid\CollectionFactory;
+use Magento\Directory\Model\CountryFactory;
 
 /**
  * Custom DataProvider for customer addresses listing
@@ -18,7 +19,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $request;
 
     /**
-     * @var \Magento\Directory\Model\CountryFactory
+     * @var CountryFactory
      */
     private $countryDirectory;
 
@@ -28,7 +29,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Directory\Model\CountryFactory $countryFactory,
+     * @param CountryFactory $countryFactory
      * @param array $meta
      * @param array $data
      */
@@ -38,7 +39,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $requestFieldName,
         CollectionFactory $collectionFactory,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Directory\Model\CountryFactory $countryFactory,
+        CountryFactory $countryFactory,
         array $meta = [],
         array $data = []
     ) {

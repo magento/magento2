@@ -16,6 +16,11 @@ define([
             regionScope: 'data.region'
         },
 
+        /**
+         * Set region to customer address form
+         *
+         * @param {String} value - region
+         */
         setDifferedFromDefault: function (value) {
             this._super();
 
