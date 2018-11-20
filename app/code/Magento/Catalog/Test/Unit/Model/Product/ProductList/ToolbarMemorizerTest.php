@@ -33,7 +33,7 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
     private $catalogSessionMock;
 
     /**
-     * @var ScopeConfigInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|ScopeConfigInterface
      */
     private $scopeConfigMock;
 
