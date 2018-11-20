@@ -27,7 +27,6 @@
             <createData entity="SimpleProduct2" stepKey="createPreReqSimpleProduct2">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
@@ -40,7 +39,6 @@
             </actionGroup>
             <!--Clear Configs-->
             <actionGroup ref="logout" stepKey="logout"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache2"/>
         </after>
         <!-- Navigate to the Products>Inventory>Catalog -->
         <!-- Click on "+" dropdown and select Bundle Product type -->
