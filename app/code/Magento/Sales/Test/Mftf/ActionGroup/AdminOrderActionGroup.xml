@@ -311,7 +311,7 @@
         <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
     </actionGroup>
 
-    <actionGroup name="CreateOrderInStoreActionGroup">
+    <actionGroup name="CreateOrderInStoreChoosingPaymentMethodActionGroup">
         <arguments>
             <argument name="product"/>
             <argument name="customer"/>
