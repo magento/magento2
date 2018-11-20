@@ -47,11 +47,13 @@ class SaveHandlerTest extends TestCase
      */
     protected function setUp()
     {
-        $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $metadataPool = Bootstrap::getObjectManager()->create(MetadataPool::class);
-        $this->productLinkField = $metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        $this->categoryLinkFactory = Bootstrap::getObjectManager()->create(CategoryLinkInterfaceFactory::class);
-        $this->saveHandler = Bootstrap::getObjectManager()->create(SaveHandler::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->productRepository = $objectManager->create(ProductRepositoryInterface::class);
+        $metadataPool = $objectManager->create(MetadataPool::class);
+        $this->productLinkField = $metadataPool->getMetadata(ProductInterface::class)
+            ->getLinkField();
+        $this->categoryLinkFactory = $objectManager->create(CategoryLinkInterfaceFactory::class);
+        $this->saveHandler = $objectManager->create(SaveHandler::class);
     }
 
     /**
@@ -92,22 +94,14 @@ class SaveHandlerTest extends TestCase
             $categoryLinks[] = $categoryLink;
         }
         $categoryLinks = $this->updateCategoryLinks($product, $categoryLinks);
-        foreach ($categoryLinks as $categoryLink) {
-            $categoryPosition = $categoryPositions[$categoryLink->getCategoryId()];
-            $this->assertEquals($categoryPosition['category_id'], $categoryLink->getCategoryId());
-            $this->assertEquals($categoryPosition['position'], $categoryLink->getPosition());
-        }
+        $this->assertPositions($categoryPositions, $categoryLinks);
 
         $categoryPositions[4]['position'] = 2;
         $categoryLink = $this->categoryLinkFactory->create()
             ->setCategoryId(4)
             ->setPosition($categoryPositions[4]['position']);
         $categoryLinks = $this->updateCategoryLinks($product, [$categoryLink]);
-        foreach ($categoryLinks as $categoryLink) {
-            $categoryPosition = $categoryPositions[$categoryLink->getCategoryId()];
-            $this->assertEquals($categoryPosition['category_id'], $categoryLink->getCategoryId());
-            $this->assertEquals($categoryPosition['position'], $categoryLink->getPosition());
-        }
+        $this->assertPositions($categoryPositions, $categoryLinks);
     }
 
     /**
@@ -123,8 +117,25 @@ class SaveHandlerTest extends TestCase
         $arguments = [$this->productLinkField => $product->getData($this->productLinkField)];
         $this->saveHandler->execute($product, $arguments);
         $product = $this->productRepository->get($product->getSku(), false, null, true);
-        $categoryLinks = $product->getExtensionAttributes()->getCategoryLinks();
+        $categoryLinks = $product->getExtensionAttributes()
+            ->getCategoryLinks();
 
         return $categoryLinks;
+    }
+
+    /**
+     * Assert positions
+     *
+     * @param array $categoryPositions
+     * @param array $categoryLinks
+     * @return void
+     */
+    private function assertPositions(array $categoryPositions, array $categoryLinks): void
+    {
+        foreach ($categoryLinks as $categoryLink) {
+            $categoryPosition = $categoryPositions[$categoryLink->getCategoryId()];
+            $this->assertEquals($categoryPosition['category_id'], $categoryLink->getCategoryId());
+            $this->assertEquals($categoryPosition['position'], $categoryLink->getPosition());
+        }
     }
 }
