@@ -13,6 +13,7 @@
             <stories value="Create tax rate"/>
             <title value="Create tax rate, all postcodes"/>
             <description value="Tests log into Create tax rate and create all postcodes"/>
+            <testCaseId value="MC-5318"/>
             <severity value="CRITICAL"/>
             <group value="tax"/>
             <group value="mtf_migrated"/>
@@ -23,25 +24,23 @@
         </before>
         <after>
             <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex"/>
-            <click selector="{{AdminTaxRateGridSection.clearFilters}}" stepKey="clickClearFilters2"/>
+            <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
             <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillNameFilter"/>
             <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch"/>
             <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
             <click selector="{{AdminTaxRateFormSection.deleteRate}}" stepKey="clickDeleteRate"/>
             <click selector="{{AdminTaxRateFormSection.ok}}" stepKey="clickOk"/>
-            <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the tax rate." stepKey="seeSuccess"/>
         </after>
 
         <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex1"/>
         <waitForPageLoad stepKey="waitForTaxRateIndex1"/>
-
         <!-- Create a tax rate with * for postcodes -->
-        <click selector="{{AdminTaxRateGridSection.add}}" stepKey="clickAddButton"/>
-        <fillField selector="{{AdminTaxRateFormSection.ruleName}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillRuleName"/>
-        <fillField selector="{{AdminTaxRateSection.zipCode}}" userInput="*" stepKey="fillPostCode"/>
-        <selectOption selector="{{AdminTaxRateSection.country}}" userInput="Australia" stepKey="selectCountry"/>
-        <fillField selector="{{AdminTaxRateSection.rate}}" userInput="20" stepKey="fillRate"/>
-        <click selector="{{AdminTaxRateSection.saveRule}}" stepKey="clickSave"/>
+        <click selector="{{AdminTaxRateGridSection.add}}" stepKey="clickAddNewTaxRateButton"/>
+        <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillRuleName"/>
+        <fillField selector="{{AdminTaxRateGridSection.zipCode}}" userInput="*" stepKey="fillPostCode"/>
+        <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="Australia" stepKey="selectCountry1"/>
+        <fillField selector="{{AdminTaxRateFormSection.rate}}" userInput="20" stepKey="fillRate"/>
+        <click selector="{{AdminTaxRateFormSection.save}}" stepKey="clickSave"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rate." stepKey="seeSuccess"/>
 
         <!-- Verify the tax rate grid page shows the tax rate we just created -->
@@ -65,10 +64,10 @@
         <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
 
         <!-- Verify we see expected values on the tax rate edit page -->
-        <seeInField selector="{{AdminTaxRateFormSection.ruleName}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeRuleName2"/>
-        <seeInField selector="{{AdminTaxRateSection.zipCode}}" userInput="*" stepKey="seeZipCode"/>
-        <seeOptionIsSelected selector="{{AdminTaxRateSection.country}}" userInput="Australia" stepKey="seeCountry2"/>
-        <seeInField selector="{{AdminTaxRateSection.rate}}" userInput="20" stepKey="seeRate"/>
+        <seeInField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeRuleName2"/>
+        <seeInField selector="{{AdminTaxRateGridSection.zipCode}}" userInput="*" stepKey="seeZipCode"/>
+        <seeOptionIsSelected selector="{{AdminTaxRateGridSection.country}}" userInput="Australia" stepKey="seeCountry2"/>
+        <seeInField selector="{{AdminTaxRateFormSection.rate}}" userInput="20" stepKey="seeRate"/>
 
         <!-- Go to the tax rule grid page and verify our tax rate can be used in the rule -->
         <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>

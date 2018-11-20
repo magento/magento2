@@ -9,13 +9,16 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminTaxRateFormSection">
-       <element name="taxIdentifier" type="input" selector="//*[@id = 'rate-form']//*[@name = 'code']" />
-       <element name="labelForZipCode" type="text" selector="//*[@id = 'rate-form']//*[@name = 'code']" />
+        <element name="taxIdentifier" type="input" selector="#code" />
+        <element name="labelForZipCode" type="text" selector="//*[@id = 'rate-form']//*[@name = 'code']" />
         <element name="deleteRate" type="button" selector="#delete"/>
         <element name="ok" type="button" selector="button.action-primary.action-accept"/>
-
+        <element name="save" type="button" selector="#save"/>
         <element name="country" type="select" selector="#tax_country_id"/>
         <element name="state" type="select" selector="#tax_region_id"/>
         <element name="rate" type="text" selector="#rate"/>
+        <element name="success" type="text" selector="#messages-message-success"/>
+        <element name="successMessage" type="text" selector=".message-success"/>
+        <element name="errorMessage" type="text" selector=".message.message-error.error"/>
     </section>
 </sections>
