@@ -155,7 +155,7 @@ define([
          * @return {*}
          */
         postcodeValidation: function (postcodeElement) {
-            var countryId = $('#checkoutSteps > :visible select[name="country_id"]').val(),
+            var countryId = $('select[name="country_id"]:visible').val(),
                 validationResult,
                 warnMessage;
 
