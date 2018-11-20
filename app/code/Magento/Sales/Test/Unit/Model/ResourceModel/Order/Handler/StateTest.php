@@ -37,8 +37,6 @@ class StateTest extends \PHPUnit\Framework\TestCase
                 'canShip',
                 'getBaseGrandTotal',
                 'canCreditmemo',
-//                'getState',
-//                'setState',
                 'getTotalRefunded',
                 'hasForcedCanCreditmemo',
                 'getIsInProcess',
@@ -131,13 +129,13 @@ class StateTest extends \PHPUnit\Framework\TestCase
             'new - canCreditmemo, canShip, !IsInProcess -> new' =>
                 [true, 0, true, 0, Order::STATE_NEW, Order::STATE_NEW, false, 1],
             'hold - canUnhold -> hold' =>
-                [true, 0, true, 0, Order::STATE_HOLDED, Order::STATE_HOLDED, false, 0, false, true, false],
+                [true, 0, true, 0, Order::STATE_HOLDED, Order::STATE_HOLDED, false, 0, false, true],
             'payment_review - canUnhold -> payment_review' =>
-                [true, 0, true, 0, Order::STATE_PAYMENT_REVIEW, Order::STATE_PAYMENT_REVIEW, false, 0, false, false, false],
+                [true, 0, true, 0, Order::STATE_PAYMENT_REVIEW, Order::STATE_PAYMENT_REVIEW, false, 0, false, true],
             'pending_payment - canUnhold -> pending_payment' =>
-                [true, 0, true, 0, Order::STATE_PENDING_PAYMENT, Order::STATE_PENDING_PAYMENT, false, 0, false, false, false],
+                [true, 0, true, 0, Order::STATE_PENDING_PAYMENT, Order::STATE_PENDING_PAYMENT, false, 0, false, true],
             'cancelled - isCanceled -> cancelled' =>
-                [true, 0, true, 0, Order::STATE_HOLDED, Order::STATE_HOLDED, false, 0, true, false, false],
+                [true, 0, true, 0, Order::STATE_HOLDED, Order::STATE_HOLDED, false, 0, true],
         ];
     }
 }
