@@ -8,6 +8,13 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="EnableMessageForOrder" type="gift_message_config_state">
+        <requiredEntity type="allow_item">MessageForOrder</requiredEntity>
+    </entity>
+    <entity name="DisableGiftMessage" type="gift_message_config_state">
+        <requiredEntity type="allow_order">AllowOrder</requiredEntity>
+        <requiredEntity type="allow_items">AllowItems</requiredEntity>
+    </entity>
     <entity name="AllowOrder" type="allow_order">
         <data key="value">0</data>
     </entity>
@@ -17,12 +24,14 @@
     <entity name="MessageForOrder" type="allow_items">
         <data key="value">1</data>
     </entity>
-    <entity name="DefaultConfigGiftOptions" type="gift_options_config_state">
-        <requiredEntity type="wrapping_allow_order">DefaultWrappingAllowOrder</requiredEntity>
-        <requiredEntity type="allow_gift_receipt">AllowGiftReceiptDefault</requiredEntity>
-        <requiredEntity type="allow_printed_card">AllowPrintedCardDefault</requiredEntity>
+    <entity name="DefaultConfigGiftMessageOptions" type="gift_message_config_state">
+        <requiredEntity type="allow_order">AllowOrderDefault</requiredEntity>
+        <requiredEntity type="allow_items">AllowItemsDefault</requiredEntity>
     </entity>
-    <entity name="DefaultMessageForOrder" type="wrapping_allow_order">
+    <entity name="AllowOrderDefault" type="allow_order">
+        <data key="value">0</data>
+    </entity>
+    <entity name="AllowItemsDefault" type="allow_items">
         <data key="value">0</data>
     </entity>
 </entities>
