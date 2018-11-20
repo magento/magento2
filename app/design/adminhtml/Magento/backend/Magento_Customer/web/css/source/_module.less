@@ -18,34 +18,25 @@
     *,
     *:after,
     *:before {
-        box-sizing: border-box;
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
+        box-sizing: border-box;
     }
 
     address {
         font-style: normal;
+        max-width: 250px;
     }
 
-    .customer-default-billing-address-content,
-    .customer-default-shipping-address-content {
+    .customer-default-address-wrapper {
+        align-items: flex-start;
+        display: flex;
         float: left;
-        width: 550px;
-    }
+        width: 50%;
 
-    .edit-default-billing-address-button,
-    .edit-default-shipping-address-button {
-        float: left;
-        position: relative;
-        top: 2px;
-    }
-
-    .edit-default-billing-address-button {
-        left: -336px;
-    }
-
-    .edit-default-shipping-address-button {
-        left: -315px;
+        .action-additional {
+            margin: 3px 0 0 15px;
+        }
     }
 
     .customer_form_areas_address_address_customer_address_listing {
