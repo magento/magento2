@@ -12,7 +12,7 @@
         <annotations>
             <stories value="Delete customer address from storefront"/>
             <title value="User should be able to delete Customer address successfully from storefront"/>
-            <description value="Admin should be able to reset customer password"/>
+            <description value="User should be able to delete Customer address successfully from storefront"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5713"/>
             <group value="Customer"/>
