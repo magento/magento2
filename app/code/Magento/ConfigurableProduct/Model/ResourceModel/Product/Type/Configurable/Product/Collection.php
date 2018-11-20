@@ -41,6 +41,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * Init select
+     *
      * @return $this|\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
      */
     protected function _initSelect()
@@ -88,8 +89,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Retrieve is flat enabled flag
-     * Return always false if magento run admin
+     * Retrieve is flat enabled flag. Return always false if magento run admin
      *
      * @return bool
      */
