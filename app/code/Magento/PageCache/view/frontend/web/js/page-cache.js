@@ -36,7 +36,9 @@ define([
      * @returns {Array}
      */
     $.fn.comments = function () {
-        var elements = [];
+        var elements = [],
+            contents,
+            elementContents;
 
         /**
          * @param {jQuery} element - Comment holder
@@ -55,7 +57,7 @@ define([
             }
 
             // rewrite jQuery contents()
-            var contents = function (element) {
+            contents = function (element) {
                 return $.map(element, function (elem) {
                     try {
                         return $.nodeName(elem, "iframe") ?
@@ -68,7 +70,7 @@ define([
                 });
             };
 
-            var elementContents = contents($(element));
+            elementContents = contents($(element));
 
             $.each(elementContents, function (index, el) {
                 switch (el.nodeType) {
