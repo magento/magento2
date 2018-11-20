@@ -15,8 +15,6 @@ use Magento\Catalog\Api\Data\CategoryInterface;
  */
 class ExtractDataFromCategoryTree
 {
-    const START_CATEGORY_FETCH_LEVEL = 1;
-
     /**
      * @var Hydrator
      */
@@ -26,6 +24,11 @@ class ExtractDataFromCategoryTree
      * @var CategoryInterface;
      */
     private $iteratingCategory;
+
+    /**
+     * @var int
+     */
+    private $startCategoryFetchLevel = 1;
 
     /**
      * @param Hydrator $categoryHydrator
@@ -51,9 +54,12 @@ class ExtractDataFromCategoryTree
             $iterator->next();
 
             $pathElements = explode("/", $category->getPath());
-            $this->iteratingCategory = $category;
+            if (empty($tree)){
+                $this->startCategoryFetchLevel = count($pathElements) - 1;
+            }
 
-            $currentLevelTree = $this->explodePathToArray($pathElements, self::START_CATEGORY_FETCH_LEVEL);
+            $this->iteratingCategory = $category;
+            $currentLevelTree = $this->explodePathToArray($pathElements, $this->startCategoryFetchLevel);
             if (empty($tree)) {
                 $tree = $currentLevelTree;
             }
