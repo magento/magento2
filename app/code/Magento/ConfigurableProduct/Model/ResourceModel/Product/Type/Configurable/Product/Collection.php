@@ -73,9 +73,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @return $this
      */
-    protected function _beforeLoad()
+    protected function _renderFilters()
     {
-        parent::_beforeLoad();
+        parent::_renderFilters();
         $metadata = $this->getProductEntityMetadata();
         $parentIds = [];
         foreach ($this->products as $product) {
