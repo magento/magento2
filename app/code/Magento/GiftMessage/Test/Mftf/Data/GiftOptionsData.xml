@@ -9,29 +9,29 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="EnableMessageForOrder" type="gift_message_config_state">
-        <requiredEntity type="allow_item">MessageForOrder</requiredEntity>
+        <requiredEntity type="allow_order">MessageForOrder</requiredEntity>
     </entity>
     <entity name="DisableGiftMessage" type="gift_message_config_state">
-        <requiredEntity type="allow_order">AllowOrder</requiredEntity>
-        <requiredEntity type="allow_items">AllowItems</requiredEntity>
+        <requiredEntity type="allow_order">DisableOrder</requiredEntity>
+        <requiredEntity type="allow_items">DisableItems</requiredEntity>
     </entity>
-    <entity name="AllowOrder" type="allow_order">
+    <entity name="DisableOrder" type="allow_order">
         <data key="value">0</data>
     </entity>
-    <entity name="AllowItems" type="allow_items">
+    <entity name="DisableItems" type="allow_items">
         <data key="value">0</data>
     </entity>
-    <entity name="MessageForOrder" type="allow_items">
+    <entity name="MessageForOrder" type="allow_order">
         <data key="value">1</data>
     </entity>
     <entity name="DefaultConfigGiftMessageOptions" type="gift_message_config_state">
-        <requiredEntity type="allow_order">AllowOrderDefault</requiredEntity>
-        <requiredEntity type="allow_items">AllowItemsDefault</requiredEntity>
+        <requiredEntity type="allow_order">OrderDefault</requiredEntity>
+        <requiredEntity type="allow_items">ItemsDefault</requiredEntity>
     </entity>
-    <entity name="AllowOrderDefault" type="allow_order">
+    <entity name="OrderDefault" type="allow_order">
         <data key="value">0</data>
     </entity>
-    <entity name="AllowItemsDefault" type="allow_items">
+    <entity name="ItemsDefault" type="allow_items">
         <data key="value">0</data>
     </entity>
 </entities>
