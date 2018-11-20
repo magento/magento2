@@ -56,6 +56,7 @@ class Hydrator
         $categoryData['id'] = $category->getId();
         $categoryData['children'] = [];
         $categoryData['available_sort_by'] = $category->getAvailableSortBy();
+        $categoryData['model'] = $category;
         return $this->flattener->flatten($categoryData);
     }
 }
