@@ -11,7 +11,10 @@ use Magento\Framework\GraphQl\Config\Data\WrappedTypeProcessor;
 use Magento\Framework\GraphQl\Config\Element\Argument;
 use Magento\Framework\GraphQl\ConfigInterface;
 use Magento\Framework\GraphQl\Schema\Type\ScalarTypes;
+use Magento\Framework\GraphQl\Schema\Type\InputTypeInterface;
 use Magento\Framework\GraphQl\Schema\TypeFactory;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Phrase;
 
 class InputMapper
 {
@@ -34,6 +37,11 @@ class InputMapper
      * @var ScalarTypes
      */
     private $scalarTypes;
+
+    /**
+     * @var InputTypeInterface[]
+     */
+    private $inputTypes;
 
     /**
      * @var WrappedTypeProcessor
@@ -100,5 +108,27 @@ class InputMapper
         }
 
         return $calculatedArgument;
+    }
+
+    /**
+     * Get GraphQL input type object by type name.
+     *
+     * @param string $typeName
+     * @return InputTypeInterface
+     * @throws GraphQlInputException
+     */
+    public function getInputType($typeName)
+    {
+        if (!isset($this->inputTypes[$typeName])) {
+            $configElement = $this->config->getConfigElement($typeName);
+            $this->inputTypes[$typeName] = $this->inputFactory->create($configElement);
+            if (!($this->inputTypes[$typeName] instanceof InputTypeInterface)) {
+                throw new GraphQlInputException(
+                    new Phrase("Type '{$typeName}' was requested but is not declared in the GraphQL schema.")
+                );
+            }
+        }
+
+        return $this->inputTypes[$typeName];
     }
 }

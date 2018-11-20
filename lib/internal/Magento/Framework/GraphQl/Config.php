@@ -77,18 +77,24 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Return all type names declared in a GraphQL schema's configuration.
+     * Return all type names declared in a GraphQL schema's configuration and their type.
      *
-     * @return string[]
+     * @return array $types
+     *  name string
+     *  type string
      */
     public function getDeclaredTypeNames() : array
     {
         $types = [];
         foreach ($this->configData->get(null) as $item) {
-            if (isset($item['type']) && $item['type'] == 'graphql_type') {
-                $types[] = $item['name'];
+            if (isset($item['type'])) {
+                $types[] = [
+                    'name' => $item['name'],
+                    'type' => $item['type'],
+                ];
             }
         }
+
         return $types;
     }
 }

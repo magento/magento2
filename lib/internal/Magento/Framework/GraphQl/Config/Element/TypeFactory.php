@@ -92,6 +92,7 @@ class TypeFactory implements ConfigElementFactoryInterface
                 'name' => $typeData['name'],
                 'fields' => $fields,
                 'interfaces' => isset($typeData['implements']) ? $typeData['implements'] : [],
+                'type' => isset($typeData['type']) ? $typeData['type'] : '',
                 'description' => isset($typeData['description']) ? $typeData['description'] : ''
             ]
         );

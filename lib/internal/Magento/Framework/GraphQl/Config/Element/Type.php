@@ -30,23 +30,31 @@ class Type implements TypeInterface
     /**
      * @var string
      */
+    private $type;
+
+    /**
+     * @var string
+     */
     private $description;
 
     /**
      * @param string $name
      * @param Field[] $fields
      * @param string[] $interfaces
+     * @param string $type
      * @param string $description
      */
     public function __construct(
         string $name,
         array $fields,
         array $interfaces,
+        string $type,
         string $description
     ) {
         $this->name = $name;
         $this->fields = $fields;
         $this->interfaces = $interfaces;
+        $this->type = $type;
         $this->description = $description;
     }
 
@@ -88,5 +96,15 @@ class Type implements TypeInterface
     public function getDescription() : string
     {
         return $this->description;
+    }
+
+    /**
+     * Get a type.
+     *
+     * @return string
+     */
+    public function getType() : string
+    {
+        return $this->type;
     }
 }

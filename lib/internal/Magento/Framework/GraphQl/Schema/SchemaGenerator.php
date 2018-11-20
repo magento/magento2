@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQl\Schema;
 
 use Magento\Framework\GraphQl\ConfigInterface;
-use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
-use Magento\Framework\GraphQl\Schema\Type\Output\OutputMapper;
 use Magento\Framework\GraphQl\Schema;
+use Magento\Framework\GraphQl\Schema\Type\Input\InputMapper;
+use Magento\Framework\GraphQl\Schema\Type\Output\OutputMapper;
 use Magento\Framework\GraphQl\SchemaFactory;
 
 /**
@@ -29,6 +29,11 @@ class SchemaGenerator implements SchemaGeneratorInterface
     private $outputMapper;
 
     /**
+     * @var InputMapper
+     */
+    private $inputMapper;
+
+    /**
      * @var ConfigInterface
      */
     private $config;
@@ -36,15 +41,18 @@ class SchemaGenerator implements SchemaGeneratorInterface
     /**
      * @param SchemaFactory $schemaFactory
      * @param OutputMapper $outputMapper
+     * @param InputMapper $inputMapper
      * @param ConfigInterface $config
      */
     public function __construct(
         SchemaFactory $schemaFactory,
         OutputMapper $outputMapper,
+        InputMapper $inputMapper,
         ConfigInterface $config
     ) {
         $this->schemaFactory = $schemaFactory;
         $this->outputMapper = $outputMapper;
+        $this->inputMapper = $inputMapper;
         $this->config = $config;
     }
 
@@ -60,16 +68,30 @@ class SchemaGenerator implements SchemaGeneratorInterface
                 'typeLoader' => function ($name) {
                     return $this->outputMapper->getOutputType($name);
                 },
-                'types' => function () {
-                    //all types should be generated only on introspection
-                    $typesImplementors = [];
-                    foreach ($this->config->getDeclaredTypeNames() as $name) {
-                        $typesImplementors [] = $this->outputMapper->getOutputType($name);
-                    }
-                    return $typesImplementors;
-                }
+                'types' => $this->getTypes()
             ]
         );
         return $schema;
+    }
+
+    /**
+     * @return array
+     * @throws \Magento\Framework\GraphQl\Exception\GraphQlInputException
+     */
+    private function getTypes()
+    {
+        $typesImplementors = [];
+        foreach ($this->config->getDeclaredTypeNames() as $type) {
+            switch ($type['type']) {
+                case 'graphql_type' :
+                    $typesImplementors [] = $this->outputMapper->getOutputType($type['name']);
+                    break;
+                case 'graphql_input' :
+                    $typesImplementors [] = $this->inputMapper->getInputType($type['name']);
+                    break;
+            }
+        }
+
+        return $typesImplementors;
     }
 }

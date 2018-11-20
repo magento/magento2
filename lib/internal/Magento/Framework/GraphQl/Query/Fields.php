@@ -24,9 +24,11 @@ class Fields
      * Set Query for extracting list of fields.
      *
      * @param string $query
+     * @param array|null $variables
+     *
      * @return void
      */
-    public function setQuery($query)
+    public function setQuery($query, $variables = null)
     {
         $queryFields = [];
         try {
@@ -48,6 +50,9 @@ class Fields
             // It must be possible to query any fields during introspection query
             $queryFields = [];
         }
+        if (isset($variables)) {
+            $queryFields = array_merge($queryFields, $this->getVariables($variables));
+        }
         $this->fieldsUsedInQuery = $queryFields;
     }
 
@@ -61,5 +66,25 @@ class Fields
     public function getFieldsUsedInQuery()
     {
         return $this->fieldsUsedInQuery;
+    }
+
+    /**
+     * Extract and return list of all used fields in GraphQL query's variables
+     *
+     * @param array $variables
+     *
+     * @return string[]
+     */
+    private function getVariables($variables)
+    {
+        $fields = [];
+        foreach ($variables as $key => $value){
+            if (is_array($value)){
+                $fields = array_merge($fields, $this->getVariables($value));
+            }
+            $fields[$key] = $key;
+        }
+
+        return $fields;
     }
 }
