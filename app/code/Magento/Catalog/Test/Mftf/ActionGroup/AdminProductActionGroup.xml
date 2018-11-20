@@ -97,11 +97,10 @@
             <argument name="website"/>
         </arguments>
         <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
-        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickToOpenProductInWebsite"/>
+        <conditionalClick selector="{{ProductInWebsitesSection.sectionHeader}}" dependentSelector="{{ProductInWebsitesSection.website(website.name)}}" visible="false" stepKey="clickToOpenProductInWebsite"/>
         <waitForPageLoad stepKey="waitForPageOpened"/>
         <click selector="{{ProductInWebsitesSection.website(website.name)}}" stepKey="selectWebsite"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
-        <waitForPageLoad time='60' stepKey="waitForPageOpened1"/>
     </actionGroup>
 
     <actionGroup name="ProductSetAdvancedPricing">
@@ -149,7 +148,6 @@
         </arguments>
         <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickToOpenProductInWebsite"/>
-        <waitForPageLoad stepKey="waitForPageOpened"/>
         <checkOption selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
     </actionGroup>
 
@@ -171,7 +169,7 @@
     </actionGroup>
 
     <!--Create simple product and assign to category in Admin-->
-    <actionGroup name="FillAdminSimpleProductForm">
+    <actionGroup name="AdminCreateSimpleProductAndAssignToCategory">
         <arguments>
             <argument name="category"/>
             <argument name="simpleProduct"/>
@@ -187,7 +185,7 @@
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="{{simpleProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="assertSaveMessageSuccess"/>
         <seeInField userInput="{{simpleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="assertFieldName"/>
         <seeInField userInput="{{simpleProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="assertFieldSku"/>
         <seeInField userInput="{{simpleProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="assertFieldPrice"/>

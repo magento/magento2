@@ -91,7 +91,7 @@
     <!-- Save category form -->
     <actionGroup name="saveCategoryForm">
         <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="assertSuccess"/>
     </actionGroup>
 </actionGroups>
