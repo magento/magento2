@@ -5,7 +5,6 @@
  */
 namespace Magento\Search\Model;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Search\Model\ResourceModel\Query\Collection as QueryCollection;
 use Magento\Search\Model\ResourceModel\Query\CollectionFactory as QueryCollectionFactory;
 use Magento\Search\Model\SearchCollectionInterface as Collection;
@@ -296,8 +295,7 @@ class Query extends AbstractModel implements QueryInterface
     }
 
     /**
-     * @return string
-     * @codeCoverageIgnore
+     * @inheritdoc
      */
     public function getQueryText()
     {
@@ -305,6 +303,8 @@ class Query extends AbstractModel implements QueryInterface
     }
 
     /**
+     * Check if query maximum length exceeded.
+     *
      * @return bool
      * @codeCoverageIgnore
      */
@@ -314,6 +314,8 @@ class Query extends AbstractModel implements QueryInterface
     }
 
     /**
+     * Check if minimum query length reached.
+     *
      * @return bool
      * @codeCoverageIgnore
      * @since 100.1.0
