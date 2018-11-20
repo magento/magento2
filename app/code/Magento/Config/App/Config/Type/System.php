@@ -23,6 +23,7 @@ use Magento\Framework\Encryption\Encryptor;
  *
  * @api
  * @since 100.1.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class System implements ConfigTypeInterface
 {
@@ -88,6 +89,7 @@ class System implements ConfigTypeInterface
      * @param Encryptor|null $encryptorFilter
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
      */
     public function __construct(
         ConfigSourceInterface $source,

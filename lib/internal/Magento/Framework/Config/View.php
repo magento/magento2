@@ -226,7 +226,8 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws \InvalidArgumentException
      * @since 100.1.0
      */
