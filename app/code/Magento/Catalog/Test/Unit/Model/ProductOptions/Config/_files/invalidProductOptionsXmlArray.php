@@ -28,13 +28,23 @@ return [
             "'uniqueInputTypeName'.\nLine: 1\n"
         ],
     ],
-    'renderer_attribute_with_invalid_value' => [
+    'renderer_attribute_with_invalid_value_starting_with_lowercase' => [
         '<?xml version="1.0"?><config><option name="name_one" renderer="true12"><inputType name="name_one"/>' .
         '</option></config>',
         [
             "Element 'option', attribute 'renderer': [facet 'pattern'] The value 'true12' is not accepted by the " .
-            "pattern '[a-zA-Z_\\\\]+'.\nLine: 1\n",
+            "pattern '[A-Z]+[a-zA-Z0-9_\\\\]+'.\nLine: 1\n",
             "Element 'option', attribute 'renderer': 'true12' is not a valid value of the atomic" .
+            " type 'modelName'.\nLine: 1\n"
+        ],
+    ],
+    'renderer_attribute_with_invalid_value_starting_with_number' => [
+        '<?xml version="1.0"?><config><option name="name_one" renderer="12true"><inputType name="name_one"/>' .
+        '</option></config>',
+        [
+            "Element 'option', attribute 'renderer': [facet 'pattern'] The value '12true' is not accepted by the " .
+            "pattern '[A-Z]+[a-zA-Z0-9_\\\\]+'.\nLine: 1\n",
+            "Element 'option', attribute 'renderer': '12true' is not a valid value of the atomic" .
             " type 'modelName'.\nLine: 1\n"
         ],
     ],

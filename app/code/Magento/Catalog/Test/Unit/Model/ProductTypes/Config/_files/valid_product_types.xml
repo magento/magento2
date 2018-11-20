@@ -15,4 +15,13 @@
             <type name="second_type" />
         </allowedSelectionTypes>
     </type>
+    <type name="some_name2" label="label_name" modelInstance="Test_Instance_With_Number_1" composite='true' indexPriority="40">
+        <priceModel instance="Second_Test" />
+        <indexerModel instance="Test_Instance_Name" />
+        <stockIndexerModel instance="Test_Instance_Name" />
+        <allowedSelectionTypes>
+            <type name="first_type" />
+            <type name="second_type" />
+        </allowedSelectionTypes>
+    </type>
 </config>

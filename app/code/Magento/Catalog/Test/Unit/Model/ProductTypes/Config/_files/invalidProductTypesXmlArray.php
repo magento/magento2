@@ -19,12 +19,21 @@ return [
         '<?xml version="1.0"?><config><type name="some_name"  notallowed="text"/></config>',
         ["Element 'type', attribute 'notallowed': The attribute 'notallowed' is not allowed.\nLine: 1\n"],
     ],
-    'type_modelinstance_invalid_value' => [
+    'type_modelinstance_invalid_value_starting_with_number' => [
         '<?xml version="1.0"?><config><type name="some_name" modelInstance="123" /></config>',
         [
             "Element 'type', attribute 'modelInstance': [facet 'pattern'] The value '123' is not accepted by the" .
-            " pattern '[a-zA-Z_\\\\]+'.\nLine: 1\n",
+            " pattern '[A-Z]+[a-zA-Z0-9_\\\\]+'.\nLine: 1\n",
             "Element 'type', attribute 'modelInstance': '123' is not a valid value of the atomic type" .
+            " 'modelName'.\nLine: 1\n"
+        ],
+    ],
+    'type_modelinstance_invalid_value_starting_with_lowercase_letter' => [
+        '<?xml version="1.0"?><config><type name="some_name" modelInstance="model_name" /></config>',
+        [
+            "Element 'type', attribute 'modelInstance': [facet 'pattern'] The value 'model_name'" .
+            " is not accepted by the pattern '[A-Z]+[a-zA-Z0-9_\\\\]+'.\nLine: 1\n",
+            "Element 'type', attribute 'modelInstance': 'model_name' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],
     ],
@@ -57,7 +66,7 @@ return [
         '<?xml version="1.0"?><config><type name="some_name"><priceModel instance="123123" /></type></config>',
         [
             "Element 'priceModel', attribute 'instance': [facet 'pattern'] The value '123123' is not accepted " .
-            "by the pattern '[a-zA-Z_\\\\]+'.\nLine: 1\n",
+            "by the pattern '[A-Z]+[a-zA-Z0-9_\\\\]+'.\nLine: 1\n",
             "Element 'priceModel', attribute 'instance': '123123' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],
@@ -66,7 +75,7 @@ return [
         '<?xml version="1.0"?><config><type name="some_name"><indexerModel instance="123" /></type></config>',
         [
             "Element 'indexerModel', attribute 'instance': [facet 'pattern'] The value '123' is not accepted by " .
-            "the pattern '[a-zA-Z_\\\\]+'.\nLine: 1\n",
+            "the pattern '[A-Z]+[a-zA-Z0-9_\\\\]+'.\nLine: 1\n",
             "Element 'indexerModel', attribute 'instance': '123' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],
@@ -83,7 +92,7 @@ return [
         '<?xml version="1.0"?><config><type name="some_name"><stockIndexerModel instance="1234"/></type></config>',
         [
             "Element 'stockIndexerModel', attribute 'instance': [facet 'pattern'] The value '1234' is not " .
-            "accepted by the pattern '[a-zA-Z_\\\\]+'.\nLine: 1\n",
+            "accepted by the pattern '[A-Z]+[a-zA-Z0-9_\\\\]+'.\nLine: 1\n",
             "Element 'stockIndexerModel', attribute 'instance': '1234' is not a valid value of the atomic " .
             "type 'modelName'.\nLine: 1\n"
         ],
