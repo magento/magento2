@@ -109,7 +109,6 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      * @param mixed $key
      *
      * @dataProvider encryptWithEmptyKeyDataProvider
-     * @expectedException \SodiumException
      */
     public function testEncryptWithEmptyKey($key)
     {
@@ -164,10 +163,10 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $actual = $this->_model->encrypt($data);
 
         // Extract the initialization vector and encrypted data
-        $parts = explode(':', $actual, 3);
+        $parts = explode(':', $actual, 4);
         list(, , $encryptedData) = $parts;
-
-        $crypt = new SodiumChachaIetf(self::CRYPT_KEY_1);
+        // Decrypt returned data with RIJNDAEL_256 cipher, cbc mode
+        $crypt = new Mcrypt(self::CRYPT_KEY_1, MCRYPT_RIJNDAEL_256);
         // Verify decrypted matches original data
         $this->assertEquals($data, $crypt->decrypt(base64_decode((string)$encryptedData)));
     }
@@ -193,7 +192,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         list(, , $iv, $encrypted) = $parts;
 
         // Decrypt returned data with RIJNDAEL_256 cipher, cbc mode
-        $crypt = new Crypt(self::CRYPT_KEY_1, MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC, $iv);
+        $crypt = new Crypt(self::CRYPT_KEY_1, MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB, $iv);
         // Verify decrypted matches original data
         $this->assertEquals($encrypted, base64_encode($crypt->encrypt($actual)));
     }
@@ -224,7 +223,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateKey()
     {
-        $this->_model->validateKey(self::CRYPT_KEY_1);
+        $this->assertNull($this->_model->validateKey(self::CRYPT_KEY_1));
     }
 
     /**
@@ -238,7 +237,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function testUseSpecifiedHashingAlgoDataProvider()
+    public function useSpecifiedHashingAlgoDataProvider()
     {
         return [
             ['password', 'salt', Encryptor::HASH_VERSION_MD5,
@@ -253,7 +252,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider testUseSpecifiedHashingAlgoDataProvider
+     * @dataProvider useSpecifiedHashingAlgoDataProvider
      *
      * @param $password
      * @param $salt

@@ -275,7 +275,9 @@ class Encryptor implements EncryptorInterface
     public function encrypt($data)
     {
         $crypt = $this->getCrypt();
-
+        if (null === $crypt) {
+            return $data;
+        }
         return $this->keyVersion .
             ':' . $this->getCipherVersion() .
             ':' . base64_encode($crypt->encrypt($data));
