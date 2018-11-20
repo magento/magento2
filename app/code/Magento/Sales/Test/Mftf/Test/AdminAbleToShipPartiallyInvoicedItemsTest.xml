@@ -128,6 +128,7 @@
         <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="seeSubmitRefundBtn"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="submitRefundOffline"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeCreditMemoSuccessMsg" after="submitRefundOffline"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
 
         <!--Create invoice for rest of the ordered items-->
         <comment userInput="Admin creates invoice for rest of the items" stepKey="adminCreateInvoiceComment2" />
@@ -159,6 +160,7 @@
         <!--Submit Shipment-->
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment2" after="fillRestOfItemsToShip"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="successfullyCreatedShipment" after="submitShipment2"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="seeOrderComplete"/>
 
         <!--Verify Items Status and Shipped Qty in the Items Ordered section-->
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToItemsOrdered2"/>
