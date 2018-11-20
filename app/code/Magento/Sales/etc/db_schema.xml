@@ -769,7 +769,7 @@
         <column xsi:type="varchar" name="order_increment_id" nullable="false" length="32" comment="Order Increment Id"/>
         <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Order Id"/>
-        <column xsi:type="timestamp" name="order_created_at" on_update="true" nullable="true"
+        <column xsi:type="timestamp" name="order_created_at" on_update="true" nullable="false"
                 default="CURRENT_TIMESTAMP" comment="Order Increment Id"/>
         <column xsi:type="varchar" name="customer_name" nullable="false" length="128" comment="Customer Name"/>
         <column xsi:type="decimal" name="total_qty" scale="4" precision="12" unsigned="false" nullable="true"
