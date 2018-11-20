@@ -118,6 +118,7 @@ class SetupInstallTest extends SetupTestCase
     {
         $schemaDocument = new \DOMDocument();
         $schemaDocument->preserveWhiteSpace = false;
+        $schemaDocument->formatOutput = true;
         $schemaDocument->loadXML(file_get_contents($schemaFileName));
 
         return $schemaDocument;

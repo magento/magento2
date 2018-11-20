@@ -47,6 +47,7 @@ class InstallSchema implements InstallSchemaInterface
         $mainTableName = $installer->getTable(self::MAIN_TABLE);
         $this->dropTableIfExists($installer, $mainTableName);
         $mainTable = $installer->getConnection()->newTable($mainTableName);
+        $mainTable->setComment('Main Test Table for Module9');
         $this->addColumnsToMainTable($mainTable);
         $this->addIndexesToMainTable($mainTable);
         $installer->getConnection()->createTable($mainTable);
@@ -87,7 +88,7 @@ class InstallSchema implements InstallSchemaInterface
                     'unsigned' => true,
                     'nullable' => false
                 ],
-                'Primary Key'
+                'Entity ID'
             )->addColumn(
                 'module9_is_guest',
                 Table::TYPE_SMALLINT,

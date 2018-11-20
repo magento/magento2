@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\TestSetupDeclarationModule8\Setup;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -19,9 +20,14 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
-     * The name of the main table of Module8.
+     * The name of the main table of the Module8.
      */
     const UPDATE_TABLE = 'module8_test_update_table';
+
+    /**
+     * The name of the temporary table of the Module8.
+     */
+    const TEMP_TABLE = 'module8_test_temp_table';
 
     /**
      * @inheritdoc
@@ -34,11 +40,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '1.0.0', '<')) {
             $tableName = $setup->getTable(self::UPDATE_TABLE);
             $table = $setup->getConnection()->newTable($tableName);
+            $table->setComment('Update Test Table for Module8');
 
             $this->addColumns($setup, $table);
             $this->addIndexes($table);
             $this->addConstraints($table);
             $setup->getConnection()->createTable($table);
+
+            $this->createSimpleTable($setup, $setup->getTable(self::TEMP_TABLE));
         }
 
 
@@ -61,13 +70,19 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 10,
                 [
                     'primary' => true,
-                    'identity' => true,
                     'unsigned' => true,
                     'nullable' => false
                 ],
-                'Primary Key'
-            )
-            ->addColumn(
+                'Entity ID'
+            )->addColumn(
+                'module8_entity_row_id',
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'nullable' => false
+                ]
+            )->addColumn(
                 'module8_is_guest',
                 Table::TYPE_SMALLINT,
                 null,
@@ -122,6 +137,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'module8_is_guest'
                 ]
             )->addIndex(
+                'MODULE8_UPDATE_UNIQUE_INDEX_TEMP',
+                [
+                    'module8_entity_id',
+                    'module8_is_guest',
+
+                ],
+                ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
+            )->addIndex(
                 'MODULE8_UPDATE_TEMP_INDEX',
                 [
                     'module8_column_for_remove',
@@ -152,6 +175,42 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'module8_is_guest',
                 Table::ACTION_CASCADE
             );
+    }
+
+    /**
+     * Create a simple table.
+     *
+     * @param SchemaSetupInterface $setup
+     * @param $tableName
+     * @throws \Zend_Db_Exception
+     */
+    private function createSimpleTable(SchemaSetupInterface $setup, $tableName): void
+    {
+        $table = $setup->getConnection()->newTable($tableName);
+        $table
+            ->addColumn(
+                'module8_entity_id',
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'primary' => true,
+                    'identity' => true,
+                    'nullable' => false,
+                    'unsigned' => true,
+                ],
+                'Entity ID'
+            )->addColumn(
+                'module8_counter',
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'nullable' => true,
+                    'default' => 100
+                ],
+                'Counter'
+            );
+        $setup->getConnection()->createTable($table);
     }
 
 }

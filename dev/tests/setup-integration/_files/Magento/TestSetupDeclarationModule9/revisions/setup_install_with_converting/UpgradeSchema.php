@@ -39,7 +39,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->addConstraints($setup);
             $this->removeColumns($setup);
             $this->removeIndexes($setup);
-            //$this->removeConstraints($setup);
+            $this->removeConstraints($setup);
+            $this->removeTables($setup);
             $replicaTable = $setup->getConnection()
                 ->createTableByDdl(Module8InstallSchema::SECOND_TABLE, self::REPLICA_TABLE);
             $setup->getConnection()->createTable($replicaTable);
@@ -133,10 +134,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function removeIndexes(SchemaSetupInterface $setup): void
     {
-        $setup->getConnection()
+        $connection = $setup->getConnection();
+        $connection
             ->dropIndex(
                 Module8InstallSchema::SECOND_TABLE,
-                'MODULE8_INSTALL_SECOND_TABLE_INDEX_3_TMP'
+                'MODULE8_INSTALL_SECOND_TABLE_INDEX_3_TEMP'
             );
     }
 
@@ -149,9 +151,24 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $setup->getConnection()
             ->dropForeignKey(
-                Module8InstallSchema::MAIN_TABLE,
+                Module8InstallSchema::SECOND_TABLE,
                 'MODULE8_INSTALL_FK_ADDRESS_TEST_MAIN_TABLE_CONTACT_ID'
+            )->dropIndex(
+                Module8UpgradeSchema::UPDATE_TABLE,
+                'MODULE8_UPDATE_UNIQUE_INDEX_TEMP'
             );
     }
 
+    /**
+     * Remove tables.
+     *
+     * @param SchemaSetupInterface $setup
+     */
+    private function removeTables(SchemaSetupInterface $setup): void
+    {
+        $setup->getConnection()
+            ->dropTable(
+                Module8UpgradeSchema::TEMP_TABLE
+            );
+    }
 }

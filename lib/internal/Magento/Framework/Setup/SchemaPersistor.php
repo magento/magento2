@@ -62,28 +62,49 @@ class SchemaPersistor
                 continue;
             }
             $schemaPatch = sprintf('%s/etc/db_schema.xml', $path);
-            if (file_exists($schemaPatch)) {
-                $dom = new \SimpleXMLElement(file_get_contents($schemaPatch));
-            } else {
-                $dom = $this->initEmptyDom();
-            }
-
-            foreach ($tablesData as $tableName => $tableData) {
-                $tableData = $this->handleDefinition($tableData);
-                $table = $dom->addChild('table');
-                $table->addAttribute('name', $tableName);
-                $table->addAttribute('resource', $tableData['resource']?: Sharding::DEFAULT_CONNECTION);
-                if (isset($tableData['engine']) && $tableData['engine'] !== null) {
-                    $table->addAttribute('engine', $tableData['engine']);
-                }
-
-                $this->processColumns($tableData, $table);
-                $this->processConstraints($tableData, $table);
-                $this->processIndexes($tableData, $table);
-            }
-
+            $dom = $this->processTables($schemaPatch, $tablesData);
             $this->persistModule($dom, $schemaPatch);
         }
+    }
+
+    /**
+     * Convert tables data into XML document.
+     *
+     * @param string $schemaPatch
+     * @param array $tablesData
+     * @return \SimpleXMLElement
+     */
+    private function processTables(string $schemaPatch, array $tablesData): \SimpleXMLElement
+    {
+        if (file_exists($schemaPatch)) {
+            $dom = new \SimpleXMLElement(file_get_contents($schemaPatch));
+        } else {
+            $dom = $this->initEmptyDom();
+        }
+
+        foreach ($tablesData as $tableName => $tableData) {
+            $tableData = $this->handleDefinition($tableData);
+            $table = $dom->addChild('table');
+            $table->addAttribute('name', $tableName);
+            if (!empty($tableData['disabled'])) {
+                $table->addAttribute('disabled', true);
+                continue;
+            }
+
+            $table->addAttribute('resource', $tableData['resource'] ?: Sharding::DEFAULT_CONNECTION);
+            if (isset($tableData['engine']) && $tableData['engine'] !== null) {
+                $table->addAttribute('engine', $tableData['engine']);
+            }
+            if (!empty($tableData['comment'])) {
+                $table->addAttribute('comment', $tableData['comment']);
+            }
+
+            $this->processColumns($tableData, $table);
+            $this->processConstraints($tableData, $table);
+            $this->processIndexes($tableData, $table);
+        }
+
+        return $dom;
     }
 
     /**
@@ -130,13 +151,14 @@ class SchemaPersistor
         foreach ($tableData['columns'] as $columnName => $columnData) {
             $columnData = $this->handleDefinition($columnData);
             $domColumn = $table->addChild('column');
-            if (empty($columnData['disabled'])) {
-                $domColumn->addAttribute('xsi:type', $columnData['xsi:type'], 'xsi');
-                unset($columnData['xsi:type']);
-            } else {
+            if (!empty($columnData['disabled'])) {
                 $domColumn->addAttribute('name', $columnName);
+                $domColumn->addAttribute('disabled', true);
+                continue;
             }
 
+            $domColumn->addAttribute('xsi:type', $columnData['xsi:type'], 'xsi');
+            unset($columnData['xsi:type']);
             foreach ($columnData as $attributeKey => $attributeValue) {
                 if ($attributeValue === null) {
                     continue;
@@ -168,15 +190,15 @@ class SchemaPersistor
                 $domIndex = $table->addChild('index');
                 $domIndex->addAttribute('referenceId', $indexName);
 
-                if (isset($indexData['disabled']) && $indexData['disabled']) {
+                if (!empty($indexData['disabled'])) {
                     $domIndex->addAttribute('disabled', true);
-                } else {
-                    $domIndex->addAttribute('indexType', $indexData['indexType']);
+                    continue;
+                }
 
-                    foreach ($indexData['columns'] as $column) {
-                        $columnXml = $domIndex->addChild('column');
-                        $columnXml->addAttribute('name', $column);
-                    }
+                $domIndex->addAttribute('indexType', $indexData['indexType']);
+                foreach ($indexData['columns'] as $column) {
+                    $columnXml = $domIndex->addChild('column');
+                    $columnXml->addAttribute('name', $column);
                 }
             }
         }
@@ -204,17 +226,17 @@ class SchemaPersistor
                 $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
                 $constraintDom->addAttribute('referenceId', $name);
 
+                if (!empty($constraintData['disabled'])) {
+                    $constraintDom->addAttribute('disabled', (bool) $constraintData['disabled']);
+                    continue;
+                }
+
                 if ($constraintType === 'foreign') {
                     foreach ($constraintData as $attributeKey => $attributeValue) {
                         $constraintDom->addAttribute($attributeKey, $attributeValue);
                     }
                 } else {
                     $constraintData['columns'] = $constraintData['columns'] ?? [];
-
-                    if (isset($constraintData['disabled'])) {
-                        $constraintDom->addAttribute('disabled', (bool) $constraintData['disabled']);
-                    }
-
                     foreach ($constraintData['columns'] as $column) {
                         $columnXml = $constraintDom->addChild('column');
                         $columnXml->addAttribute('name', $column);

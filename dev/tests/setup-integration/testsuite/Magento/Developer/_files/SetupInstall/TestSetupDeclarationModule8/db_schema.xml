@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="module8_test_main_table" resource="default" engine="innodb">
+    <table name="module8_test_main_table" resource="default" engine="innodb" comment="Main Test Table for Module8">
         <column xsi:type="int" name="module8_email_contact_id" padding="10" unsigned="true" nullable="false"
-                identity="true"/>
+                identity="true" comment="Email Contact ID"/>
         <column xsi:type="smallint" name="module8_is_guest" padding="5" unsigned="true" nullable="true"
-                identity="false"/>
-        <column xsi:type="varchar" name="module8_contact_id" nullable="true" length="15"/>
+                identity="false" comment="Is Guest"/>
+        <column xsi:type="varchar" name="module8_contact_id" nullable="true" length="15" comment="Contact ID"/>
         <column xsi:type="int" name="module8_update_column" padding="11" unsigned="false" nullable="false"
-                identity="false"/>
+                identity="false" comment="Module_8 Update Column"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="module8_email_contact_id"/>
         </constraint>
@@ -26,12 +26,16 @@
             <column name="module8_contact_id"/>
         </index>
     </table>
-    <table name="module8_test_second_table" resource="default" engine="innodb">
-        <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <table name="module8_test_second_table" resource="default" engine="innodb" comment="Second Test Table for Module8">
+        <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
         <column xsi:type="int" name="module8_contact_id" padding="11" unsigned="false" nullable="true"
-                identity="false"/>
-        <column xsi:type="varchar" name="module8_address" nullable="true" length="15"/>
-        <column xsi:type="varchar" name="module8_second_address" nullable="true" length="15"/>
+                identity="false" comment="Contact ID"/>
+        <column xsi:type="varchar" name="module8_address" nullable="true" length="15" comment="Address"/>
+        <column xsi:type="smallint" name="module8_counter_with_multiline_comment" padding="5" unsigned="true"
+                nullable="true" identity="false" default="0"
+                comment="Empty&#10;                Counter&#10;                Multiline&#10;                Comment"/>
+        <column xsi:type="varchar" name="module8_second_address" nullable="true" length="15" comment="Second Address"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="module8_entity_id"/>
         </constraint>
@@ -48,18 +52,21 @@
         <index referenceId="MODULE8_INSTALL_SECOND_TABLE_INDEX_2" indexType="btree">
             <column name="module8_address"/>
         </index>
-        <index referenceId="MODULE8_INSTALL_SECOND_TABLE_INDEX_3_TMP" indexType="btree">
+        <index referenceId="MODULE8_INSTALL_SECOND_TABLE_INDEX_3_TEMP" indexType="btree">
             <column name="module8_second_address"/>
         </index>
     </table>
-    <table name="module8_test_update_table" resource="default" engine="innodb">
-        <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <table name="module8_test_update_table" resource="default" engine="innodb" comment="Update Test Table for Module8">
+        <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="module8_entity_row_id" padding="10" unsigned="true" nullable="false"
+                identity="false" comment="Module8_entity_row_id"/>
         <column xsi:type="smallint" name="module8_is_guest" padding="5" unsigned="true" nullable="true"
-                identity="false"/>
+                identity="false" comment="Is Guest"/>
         <column xsi:type="smallint" name="module8_guest_browser_id" padding="5" unsigned="true" nullable="true"
-                identity="false"/>
+                identity="false" comment="Guest Browser ID"/>
         <column xsi:type="smallint" name="module8_column_for_remove" padding="5" unsigned="true" nullable="true"
-                identity="false"/>
+                identity="false" comment="For remove"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="module8_entity_id"/>
         </constraint>
@@ -69,6 +76,10 @@
         <constraint xsi:type="foreign" referenceId="MODULE8_UPDATE_FK_TEMP" table="module8_test_update_table"
                     column="module8_column_for_remove" referenceTable="module8_test_main_table"
                     referenceColumn="module8_is_guest" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="MODULE8_UPDATE_UNIQUE_INDEX_TEMP">
+            <column name="module8_entity_id"/>
+            <column name="module8_is_guest"/>
+        </constraint>
         <index referenceId="MODULE8_UPDATE_IS_GUEST_INDEX" indexType="btree">
             <column name="module8_is_guest"/>
         </index>
@@ -76,5 +87,14 @@
             <column name="module8_column_for_remove"/>
             <column name="module8_guest_browser_id"/>
         </index>
+    </table>
+    <table name="module8_test_temp_table" resource="default" engine="innodb" comment="module8_test_temp_table">
+        <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="module8_counter" padding="10" unsigned="true" nullable="true" identity="false"
+                default="100" comment="Counter"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="module8_entity_id"/>
+        </constraint>
     </table>
 </schema>

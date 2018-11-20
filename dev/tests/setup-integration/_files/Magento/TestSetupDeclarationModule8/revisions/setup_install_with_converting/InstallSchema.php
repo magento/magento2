@@ -52,6 +52,7 @@ class InstallSchema implements InstallSchemaInterface
         $mainTableName = $installer->getTable(self::MAIN_TABLE);
         $this->dropTableIfExists($installer, $mainTableName);
         $mainTable = $installer->getConnection()->newTable($mainTableName);
+        $mainTable->setComment('Main Test Table for Module8');
         $this->addColumnsToMainTable($mainTable);
         $this->addIndexesToMainTable($mainTable);
         $installer->getConnection()->createTable($mainTable);
@@ -59,6 +60,7 @@ class InstallSchema implements InstallSchemaInterface
         $secondTableName = $installer->getTable(self::SECOND_TABLE);
         $this->dropTableIfExists($installer, $secondTableName);
         $secondTable = $installer->getConnection()->newTable($secondTableName);
+        $secondTable->setComment('Second Test Table for Module8');
         $this->addColumnsToSecondTable($secondTable);
         $this->addIndexesToSecondTable($secondTable);
         $this->addConstraintsToSecondTable($secondTable);
@@ -100,7 +102,7 @@ class InstallSchema implements InstallSchemaInterface
                     'unsigned' => true,
                     'nullable' => false
                 ],
-                'Primary Key'
+                'Email Contact ID'
             )
             ->addColumn(
                 'module8_is_guest',
@@ -120,7 +122,7 @@ class InstallSchema implements InstallSchemaInterface
                     'unsigned' => true,
                     'nullable' => true
                 ],
-                'Connector Contact ID'
+                'Contact ID'
             );
     }
 
@@ -169,7 +171,7 @@ class InstallSchema implements InstallSchemaInterface
                     'unsigned' => true,
                     'nullable' => false
                 ],
-                'Primary Key'
+                'Entity ID'
             )
             ->addColumn(
                 'module8_contact_id',
@@ -187,6 +189,19 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => true
                 ],
                 'Address'
+            )->addColumn(
+                'module8_counter_with_multiline_comment',
+                Table::TYPE_SMALLINT,
+                null,
+                [
+                    'unsigned' => true,
+                    'nullable' => true,
+                    'default' => 0
+                ],
+                'Empty
+                Counter
+                Multiline
+                Comment'
             )->addColumn(
                 'module8_second_address',
                 Table::TYPE_TEXT,
@@ -215,7 +230,7 @@ class InstallSchema implements InstallSchemaInterface
                 'MODULE8_INSTALL_SECOND_TABLE_INDEX_2',
                 ['module8_address']
             )->addIndex(
-                'MODULE8_INSTALL_SECOND_TABLE_INDEX_3_TMP',
+                'MODULE8_INSTALL_SECOND_TABLE_INDEX_3_TEMP',
                 ['module8_second_address']
             );
     }
