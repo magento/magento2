@@ -9,6 +9,7 @@ use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\DesignInterface;
 
 /**
  * View configuration files handler
@@ -45,6 +46,11 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     private $scopedLayoutCache;
 
     /**
+     * @var DesignInterface
+     */
+    private $design;
+
+    /**
      * @param FileResolverInterface $fileResolver
      * @param ConverterInterface $converter
      * @param SchemaLocatorInterface $schemaLocator
@@ -56,6 +62,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $xpath
      * @param LayoutCache|null $layoutCache
      * @param SerializerInterface|null $serializer
+     * @param DesignInterface|null $design
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -69,7 +76,8 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         $defaultScope = 'global',
         $xpath = [],
         LayoutCache $layoutCache = null,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        DesignInterface $design = null
     ) {
         $this->xpath = $xpath;
         $idAttributes = $this->getIdAttributes();
@@ -86,6 +94,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         );
         $this->layoutCache = $layoutCache ?? ObjectManager::getInstance()->get(LayoutCache::class);
         $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Json::class);
+        $this->design = $design ?? ObjectManager::getInstance()->get(DesignInterface::class);
     }
 
     /**
@@ -235,7 +244,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function read($scope = null)
     {
         $scope = $scope ?: $this->_defaultScope;
-        $layoutCacheKey = __CLASS__ . '-'. $scope . '-' . $this->_fileName;
+        $layoutCacheKey = __CLASS__ . '-'. $scope . '-' . $this->_fileName . '-' . $this->design->getArea();
         if (!isset($this->scopedLayoutCache[$layoutCacheKey])) {
             if ($data = $this->layoutCache->load($layoutCacheKey)) {
                 $this->scopedLayoutCache[$layoutCacheKey] = $this->serializer->unserialize($data);
