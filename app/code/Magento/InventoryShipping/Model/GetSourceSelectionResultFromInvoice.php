@@ -9,7 +9,8 @@ namespace Magento\InventoryShipping\Model;
 
 use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
+use Magento\InventorySourceSelection\Exception\UndefinedInventoryRequestBuilderException;
+use Magento\InventorySourceSelection\Model\GetInventoryRequestFromOrderBuilder;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\Sales\Api\Data\InvoiceInterface;
@@ -57,12 +58,18 @@ class GetSourceSelectionResultFromInvoice
     private $sourceSelectionService;
 
     /**
+     * @var GetInventoryRequestFromOrderBuilder
+     */
+    private $getInventoryRequestFromOrderBuilder;
+
+    /**
      * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceSelectionServiceInterface $sourceSelectionService
+     * @param GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder
      */
     public function __construct(
         GetSkuFromOrderItemInterface $getSkuFromOrderItem,
@@ -70,7 +77,8 @@ class GetSourceSelectionResultFromInvoice
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
-        SourceSelectionServiceInterface $sourceSelectionService
+        SourceSelectionServiceInterface $sourceSelectionService,
+        GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder
     ) {
         $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
@@ -78,23 +86,28 @@ class GetSourceSelectionResultFromInvoice
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getSkuFromOrderItem = $getSkuFromOrderItem;
+        $this->getInventoryRequestFromOrderBuilder = $getInventoryRequestFromOrderBuilder;
     }
 
     /**
      * @param InvoiceInterface $invoice
      * @return SourceSelectionResultInterface
+     * @throws UndefinedInventoryRequestBuilderException
      */
     public function execute(InvoiceInterface $invoice): SourceSelectionResultInterface
     {
         $order = $invoice->getOrder();
-        $websiteId = $order->getStore()->getWebsiteId();
-        $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
+        $websiteId = (int) $order->getStore()->getWebsiteId();
+        $stockId = (int) $this->stockByWebsiteIdResolver->execute($websiteId)->getStockId();
 
-        /** @var InventoryRequestInterface $inventoryRequest */
-        $inventoryRequest = $this->inventoryRequestFactory->create([
-            'stockId' => $stockId,
-            'items' => $this->getSelectionRequestItems($invoice->getItems())
-        ]);
+        $selectionAlgorithmCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
+        $inventoryRequestBuilder = $this->getInventoryRequestFromOrderBuilder->execute($selectionAlgorithmCode);
+
+        $inventoryRequest = $inventoryRequestBuilder->execute(
+            $stockId,
+            $order,
+            $this->getSelectionRequestItems($invoice->getItems())
+        );
 
         $selectionAlgorithmCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
         return $this->sourceSelectionService->execute($inventoryRequest, $selectionAlgorithmCode);

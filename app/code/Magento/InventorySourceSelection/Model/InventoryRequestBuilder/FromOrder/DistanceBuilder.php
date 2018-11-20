@@ -5,28 +5,22 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilder;
+namespace Magento\InventorySourceSelection\Model\InventoryRequestBuilder\FromOrder;
 
-use Magento\Framework\App\RequestInterface;
-use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilderFromOrderInterface;
 use Magento\InventorySourceSelection\Model\GetAddressRequestFromOrder;
+use Magento\InventorySourceSelection\Model\InventoryRequestFromOrderBuilderInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 
 /**
  * @inheritdoc
  */
-class DistanceInventoryRequestBuilderFromOrder implements InventoryRequestBuilderFromOrderInterface
+class DistanceBuilder implements InventoryRequestFromOrderBuilderInterface
 {
-    /**
-     * @var StockByWebsiteIdResolverInterface
-     */
-    private $stockByWebsiteIdResolver;
-
     /**
      * @var ItemRequestInterfaceFactory
      */
@@ -53,23 +47,22 @@ class DistanceInventoryRequestBuilderFromOrder implements InventoryRequestBuilde
     private $inventoryRequestExtensionInterfaceFactory;
 
     /**
-     * Priority constructor.
-     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
+     * DistanceBuilder constructor.
+     *
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param OrderItemRepositoryInterface $orderItemRepository
      * @param GetAddressRequestFromOrder $getAddressRequestFromOrder
      * @param InventoryRequestExtensionInterfaceFactory $inventoryRequestExtensionInterfaceFactory
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
         ItemRequestInterfaceFactory $itemRequestFactory,
         OrderItemRepositoryInterface $orderItemRepository,
         GetAddressRequestFromOrder $getAddressRequestFromOrder,
         InventoryRequestExtensionInterfaceFactory $inventoryRequestExtensionInterfaceFactory
     ) {
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->getAddressRequestFromOrder = $getAddressRequestFromOrder;
@@ -80,27 +73,9 @@ class DistanceInventoryRequestBuilderFromOrder implements InventoryRequestBuilde
     /**
      * @inheritdoc
      */
-    public function execute(RequestInterface $request): InventoryRequestInterface
+    public function execute(int $stockId, OrderInterface $order, array $requestItems): InventoryRequestInterface
     {
-        $postRequest = $request->getPost()->toArray();
-        $requestData = $postRequest['requestData'];
-
-        //TODO: maybe need to add exception when websiteId empty
-        $websiteId = $postRequest['websiteId'] ?? 1;
-        $stockId = (int) $this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
-
-        $requestItems = [];
-        foreach ($requestData as $data) {
-            $requestItems[] = $this->itemRequestFactory->create([
-                'sku' => $data['sku'],
-                'qty' => $data['qty']
-            ]);
-        }
-
-        $orderItemId = (int) $requestData[0]['orderItem'];
-        $orderItem = $this->orderItemRepository->get($orderItemId);
-
-        $address = $this->getAddressRequestFromOrder->execute((int) $orderItem->getOrderId());
+        $address = $this->getAddressRequestFromOrder->execute((int) $order->getEntityId());
 
         $inventoryRequest = $this->inventoryRequestFactory->create([
             'stockId' => $stockId,

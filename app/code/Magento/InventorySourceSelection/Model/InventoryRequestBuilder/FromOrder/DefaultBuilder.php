@@ -5,11 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilder\FromOrder;
+namespace Magento\InventorySourceSelection\Model\InventoryRequestBuilder\FromOrder;
 
-use Magento\Framework\App\RequestInterface;
-use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilderFromOrderInterface;
+use Magento\InventorySourceSelection\Model\InventoryRequestFromOrderBuilderInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
@@ -18,13 +16,8 @@ use Magento\Sales\Api\Data\OrderInterface;
 /**
  * @inheritdoc
  */
-class DefaultBuilder implements InventoryRequestBuilderFromOrderInterface
+class DefaultBuilder implements InventoryRequestFromOrderBuilderInterface
 {
-    /**
-     * @var StockByWebsiteIdResolverInterface
-     */
-    private $stockByWebsiteIdResolver;
-
     /**
      * @var ItemRequestInterfaceFactory
      */
@@ -36,17 +29,16 @@ class DefaultBuilder implements InventoryRequestBuilderFromOrderInterface
     private $inventoryRequestFactory;
 
     /**
-     * Priority constructor.
-     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
+     * Default request builder constructor
+     *
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param ItemRequestInterfaceFactory $itemRequestFactory
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
         ItemRequestInterfaceFactory $itemRequestFactory
     ) {
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
     }
@@ -55,22 +47,8 @@ class DefaultBuilder implements InventoryRequestBuilderFromOrderInterface
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(OrderInterface $order): InventoryRequestInterface
+    public function execute(int $stockId, OrderInterface $order, array $requestItems): InventoryRequestInterface
     {
-        $postRequest = $request->getPost()->toArray();
-        $requestData = $postRequest['requestData'];
-
-        //TODO: maybe need to add exception when websiteId empty
-        $websiteId = $postRequest['websiteId'] ?? 1;
-        $stockId = (int) $this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
-
-        $requestItems = [];
-        foreach ($requestData as $data) {
-            $requestItems[] = $this->itemRequestFactory->create([
-                'sku' => $data['sku'],
-                'qty' => $data['qty']
-            ]);
-        }
         $inventoryRequest = $this->inventoryRequestFactory->create([
             'stockId' => $stockId,
             'items'   => $requestItems

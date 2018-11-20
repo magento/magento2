@@ -110,7 +110,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     public function getData()
     {
         $data = [];
-        $orderId = $this->request->getParam('order_id');
+        $orderId = (int) $this->request->getParam('order_id');
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->orderRepository->get($orderId);
         $websiteId = $order->getStore()->getWebsiteId();
@@ -132,7 +132,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
                 'sku' => $sku,
                 'product' => $this->getProductName($orderItem),
                 'qtyToShip' => $qty,
-                'sources' => $this->getSources($stockId, $sku, $qty),
+                'sources' => $this->getSources($orderId, $stockId, $sku, $qty),
                 'isManageStock' => $this->isManageStock($sku, $stockId)
             ];
         }
@@ -149,15 +149,18 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     }
 
     /**
+     * Get sources
+     *
+     * @param int $orderId
      * @param int $stockId
      * @param string $sku
      * @param float $qty
      * @return array
      * @throws NoSuchEntityException
      */
-    private function getSources(int $stockId, string $sku, float $qty): array
+    private function getSources(int $orderId, int $stockId, string $sku, float $qty): array
     {
-        $sources = $this->getSourcesByStockIdSkuAndQty->execute($stockId, $sku, $qty);
+        $sources = $this->getSourcesByStockIdSkuAndQty->execute($orderId, $stockId, $sku, $qty);
         foreach ($sources as $source) {
             $this->sources[$source['sourceCode']] = $source['sourceName'];
         }

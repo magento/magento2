@@ -13,11 +13,15 @@ use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventoryShippingAdminUi\Model\InventoryRequestBuilder;
+use Magento\InventorySourceSelection\Exception\UndefinedInventoryRequestBuilderException;
+use Magento\InventorySourceSelection\Model\GetInventoryRequestFromOrderBuilder;
+use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * ProcessAlgorithm Controller
@@ -45,14 +49,24 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
     private $sourceRepository;
 
     /**
-     * @var InventoryRequestBuilder
-     */
-    private $inventoryRequestBuilder;
-
-    /**
      * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
+
+    /**
+     * @var GetInventoryRequestFromOrderBuilder
+     */
+    private $getInventoryRequestFromOrderBuilder;
+
+    /**
+     * @var ItemRequestInterfaceFactory
+     */
+    private $itemRequestInterfaceFactory;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
 
     /**
      * @var array
@@ -63,31 +77,57 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
      * ProcessAlgorithm constructor.
      *
      * @param Context $context
+     * @param ItemRequestInterfaceFactory $itemRequestInterfaceFactory
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param SourceSelectionServiceInterface $sourceSelectionService
+     * @param GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceRepositoryInterface $sourceRepository
-     * @param InventoryRequestBuilder $inventoryRequestBuilder
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         Context $context,
+        ItemRequestInterfaceFactory $itemRequestInterfaceFactory,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         SourceSelectionServiceInterface $sourceSelectionService,
+        GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
         SourceRepositoryInterface $sourceRepository,
-        InventoryRequestBuilder $inventoryRequestBuilder
+        OrderRepositoryInterface $orderRepository
     ) {
         parent::__construct($context);
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
         $this->sourceRepository = $sourceRepository;
-        $this->inventoryRequestBuilder = $inventoryRequestBuilder;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
+        $this->getInventoryRequestFromOrderBuilder = $getInventoryRequestFromOrderBuilder;
+        $this->itemRequestInterfaceFactory = $itemRequestInterfaceFactory;
+        $this->orderRepository = $orderRepository;
+    }
+
+    /**
+     * Get request items
+     *
+     * @param array $requestData
+     * @return array
+     */
+    private function getRequestItems(array $requestData): array
+    {
+        $requestItems = [];
+        foreach ($requestData as $data) {
+            $requestItems[] = $this->itemRequestInterfaceFactory->create([
+                'sku' => $data['sku'],
+                'qty' => $data['qty']
+            ]);
+        }
+
+        return $requestItems;
     }
 
     /**
      * @inheritdoc
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
+     * @throws UndefinedInventoryRequestBuilderException
      */
     public function execute(): ResultInterface
     {
@@ -95,6 +135,7 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $request = $this->getRequest();
         $postRequest = $request->getPost()->toArray();
+        $orderId = (int) $postRequest['orderId'];
 
         if (!empty($postRequest['requestData'])) {
             $requestData = $postRequest['requestData'];
@@ -102,10 +143,15 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
             $algorithmCode = !empty($postRequest['algorithmCode']) ? $postRequest['algorithmCode'] : $defaultCode;
 
             //TODO: maybe need to add exception when websiteId empty
-            $websiteId = $postRequest['websiteId'] ?? 1;
-            $stockId = (int) $this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
+            $websiteId = (int) $postRequest['websiteId'] ?? 1;
+            $stockId = (int) $this->stockByWebsiteIdResolver->execute($websiteId)->getStockId();
 
-            $inventoryRequest = $this->inventoryRequestBuilder->execute($stockId, $requestData);
+            $requestItems = $this->getRequestItems($requestData);
+
+            $order = $this->orderRepository->get($orderId);
+
+            $inventoryRequestBuilder = $this->getInventoryRequestFromOrderBuilder->execute($algorithmCode);
+            $inventoryRequest = $inventoryRequestBuilder->execute($stockId, $order, $requestItems);
 
             $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest, $algorithmCode);
 
@@ -140,7 +186,7 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
      *
      * @param string $sourceCode
      * @return mixed
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getSourceName(string $sourceCode): string
     {

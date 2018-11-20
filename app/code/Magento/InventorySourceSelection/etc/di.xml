@@ -73,6 +73,17 @@
         </arguments>
     </type>
 
+    <type name="Magento\InventorySourceSelection\Model\GetInventoryRequestFromOrderBuilder">
+        <arguments>
+            <argument name="buildersByAlgorithm" xsi:type="array">
+                <item name="priority"
+                      xsi:type="object">Magento\InventorySourceSelection\Model\InventoryRequestBuilder\FromOrder\DefaultBuilder</item>
+                <item name="distance"
+                      xsi:type="object">Magento\InventorySourceSelection\Model\InventoryRequestBuilder\FromOrder\DistanceBuilder</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
@@ -84,7 +95,6 @@
         </arguments>
     </type>
 
-
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -92,5 +102,4 @@
             </argument>
         </arguments>
     </type>
-
 </config>
