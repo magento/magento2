@@ -40,7 +40,7 @@ class Footer extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {

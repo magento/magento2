@@ -61,7 +61,6 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
                 $this->_options = $this->pageLayoutBuilder->getPageLayoutsConfig()->toOptionArray();
                 $this->layoutCache->save($this->serializer->serialize($this->_options), $layoutCacheKey);
             }
-
         }
         array_unshift($this->_options, ['value' => '', 'label' => __('No layout updates')]);
         return $this->_options;

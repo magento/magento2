@@ -228,6 +228,8 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Split password hash into parts: hash, salt, version
+     *
      * @param string $hash
      * @return array
      */
@@ -243,6 +245,8 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Get password hash
+     *
      * @return string
      */
     private function getPasswordHash()
@@ -251,6 +255,8 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Get password salt
+     *
      * @return string
      */
     private function getPasswordSalt()
@@ -259,6 +265,8 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Get password version
+     *
      * @return array
      */
     private function getPasswordVersion()
@@ -425,8 +433,7 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
-     * Get cipher Version
-     *
+     * Get cipher version
      *
      * @return int
      */

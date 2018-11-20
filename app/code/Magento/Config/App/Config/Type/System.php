@@ -110,6 +110,8 @@ class System implements ConfigTypeInterface
     }
 
     /**
+     * Get configuration value by path
+     *
      * System configuration is separated by scopes (default, websites, stores). Configuration of a scope is inherited
      * from its parent scope (store inherits website).
      *
@@ -244,7 +246,7 @@ class System implements ConfigTypeInterface
             }
             $data = $this->readData();
             $this->cacheData($data);
-       } else {
+        } else {
             $serializedCachedData = $this->encriptFilter->decrypt($cachedData);
             $data = [$scopeType => [$scopeId => $this->serializer->unserialize($serializedCachedData)]];
         }
@@ -253,7 +255,8 @@ class System implements ConfigTypeInterface
     }
 
     /**
-     * Cache configuration data.
+     * Cache configuration data
+     *
      * Caches data per scope to avoid reading data for all scopes on every request
      *
      * @param array $data
