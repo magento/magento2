@@ -74,6 +74,11 @@ class Design implements \Magento\Framework\View\DesignInterface
     protected $_appState;
 
     /**
+     * @var \Magento\Store\Model\App\EmulationInterface
+     */
+    private $appEmulation;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -81,6 +86,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
      * @param array $themes
+     * @param \Magento\Store\Model\App\EmulationInterface $appEmulation
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -89,7 +95,8 @@ class Design implements \Magento\Framework\View\DesignInterface
         \Magento\Theme\Model\ThemeFactory $themeFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\State $appState,
-        array $themes
+        array $themes,
+        \Magento\Store\Model\App\EmulationInterface $appEmulation = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_flyweightFactory = $flyweightFactory;
@@ -98,6 +105,8 @@ class Design implements \Magento\Framework\View\DesignInterface
         $this->_appState = $appState;
         $this->_themes = $themes;
         $this->objectManager = $objectManager;
+        $this->appEmulation = $appEmulation
+            ?? $objectManager->get(\Magento\Store\Model\App\EmulationInterface::class);
     }
 
     /**
@@ -117,11 +126,13 @@ class Design implements \Magento\Framework\View\DesignInterface
      * Retrieve package area
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getArea()
     {
-        // In order to support environment emulation of area, if area is set, return it
-        if ($this->_area && !$this->_appState->isAreaCodeEmulated()) {
+        if ($this->_area
+            && (!$this->_appState->isAreaCodeEmulated() || $this->appEmulation->isEnvironmentEmulated())
+        ) {
             return $this->_area;
         }
         return $this->_appState->getAreaCode();

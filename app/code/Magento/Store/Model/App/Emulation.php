@@ -4,16 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Emulation model
- */
 namespace Magento\Store\Model\App;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Translate\Inline\ConfigInterface;
 
 /**
+ * Emulation model
+ *
  * @api
  * @since 100.0.2
+ * @deprecated because additional public functionality needed to be added. Used only for backward compatibility.
+ * @see \Magento\Store\Model\App\EmulationInterface
  */
 class Emulation extends \Magento\Framework\DataObject
 {
@@ -55,16 +58,9 @@ class Emulation extends \Magento\Framework\DataObject
     protected $inlineTranslation;
 
     /**
-     * Ini
-     *
-     * @var \Magento\Framework\DataObject
+     * @var \Magento\Store\Model\App\EmulationInterface
      */
-    private $initialEnvironmentInfo;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
+    private $appEmulation;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -77,7 +73,9 @@ class Emulation extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
+     * @param \Magento\Store\Model\App\EmulationInterface $appEmulation
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -89,7 +87,8 @@ class Emulation extends \Magento\Framework\DataObject
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Psr\Log\LoggerInterface $logger,
-        array $data = []
+        array $data = [],
+        \Magento\Store\Model\App\EmulationInterface $appEmulation = null
     ) {
         $this->_localeResolver = $localeResolver;
         parent::__construct($data);
@@ -100,7 +99,8 @@ class Emulation extends \Magento\Framework\DataObject
         $this->_scopeConfig = $scopeConfig;
         $this->inlineConfig = $inlineConfig;
         $this->inlineTranslation = $inlineTranslation;
-        $this->logger = $logger;
+        $this->appEmulation = $appEmulation ?? ObjectManager::getInstance()
+                ->get(\Magento\Store\Model\App\EmulationInterface::class);
     }
 
     /**
@@ -113,50 +113,9 @@ class Emulation extends \Magento\Framework\DataObject
      * @param bool $force A true value will ensure that environment is always emulated, regardless of current store
      * @return void
      */
-    public function startEnvironmentEmulation(
-        $storeId,
-        $area = \Magento\Framework\App\Area::AREA_FRONTEND,
-        $force = false
-    ) {
-        // Only allow a single level of emulation
-        if ($this->initialEnvironmentInfo !== null) {
-            $this->logger->error(__('Environment emulation nesting is not allowed.'));
-            return;
-        }
-
-        if ($storeId == $this->_storeManager->getStore()->getStoreId() && !$force) {
-            return;
-        }
-        $this->storeCurrentEnvironmentInfo();
-
-        // emulate inline translations
-        $this->inlineTranslation->suspend($this->inlineConfig->isActive($storeId));
-
-        // emulate design
-        $storeTheme = $this->_viewDesign->getConfigurationDesignTheme($area, ['store' => $storeId]);
-        $this->_viewDesign->setDesignTheme($storeTheme, $area);
-
-        if ($area == \Magento\Framework\App\Area::AREA_FRONTEND) {
-            $designChange = $this->_design->loadChange($storeId);
-            if ($designChange->getData()) {
-                $this->_viewDesign->setDesignTheme($designChange->getDesign(), $area);
-            }
-        }
-
-        // Current store needs to be changed right before locale change and after design change
-        $this->_storeManager->setCurrentStore($storeId);
-
-        // emulate locale
-        $newLocaleCode = $this->_scopeConfig->getValue(
-            $this->_localeResolver->getDefaultLocalePath(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-        $this->_localeResolver->setLocale($newLocaleCode);
-        $this->_translate->setLocale($newLocaleCode);
-        $this->_translate->loadData($area);
-
-        return;
+    public function startEnvironmentEmulation($storeId, $area = Area::AREA_FRONTEND, $force = false)
+    {
+        $this->appEmulation->startEnvironmentEmulation($storeId, $area, $force);
     }
 
     /**
@@ -164,22 +123,12 @@ class Emulation extends \Magento\Framework\DataObject
      *
      * Function restores initial store environment
      *
-     * @return \Magento\Store\Model\App\Emulation
+     * @return $this
      */
     public function stopEnvironmentEmulation()
     {
-        if ($this->initialEnvironmentInfo === null) {
-            return $this;
-        }
+        $this->appEmulation->stopEnvironmentEmulation();
 
-        $this->_restoreInitialInlineTranslation($this->initialEnvironmentInfo->getInitialTranslateInline());
-        $initialDesign = $this->initialEnvironmentInfo->getInitialDesign();
-        $this->_restoreInitialDesign($initialDesign);
-        // Current store needs to be changed right before locale change and after design change
-        $this->_storeManager->setCurrentStore($initialDesign['store']);
-        $this->_restoreInitialLocale($this->initialEnvironmentInfo->getInitialLocaleCode(), $initialDesign['area']);
-
-        $this->initialEnvironmentInfo = null;
         return $this;
     }
 
@@ -190,18 +139,7 @@ class Emulation extends \Magento\Framework\DataObject
      */
     public function storeCurrentEnvironmentInfo()
     {
-        $this->initialEnvironmentInfo = new \Magento\Framework\DataObject();
-        $this->initialEnvironmentInfo->setInitialTranslateInline(
-            $this->inlineTranslation->isEnabled()
-        )->setInitialDesign(
-            [
-                'area' => $this->_viewDesign->getArea(),
-                'theme' => $this->_viewDesign->getDesignTheme(),
-                'store' => $this->_storeManager->getStore()->getStoreId(),
-            ]
-        )->setInitialLocaleCode(
-            $this->_localeResolver->getLocale()
-        );
+        $this->appEmulation->storeCurrentEnvironmentInfo();
     }
 
     /**

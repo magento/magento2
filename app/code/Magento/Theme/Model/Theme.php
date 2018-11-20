@@ -90,6 +90,11 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     protected $inheritanceSequence;
 
     /**
+     * @var \Magento\Store\Model\App\EmulationInterface
+     */
+    private $appEmulation;
+
+    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\Model\Context $context
@@ -103,6 +108,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $resourceCollection
      * @param array $data
      * @param ThemeFactory $themeModelFactory
+     * @param \Magento\Store\Model\App\EmulationInterface $appEmulation
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -116,7 +122,8 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         \Magento\Theme\Model\ResourceModel\Theme $resource = null,
         ThemeCollection $resourceCollection = null,
         array $data = [],
-        ThemeFactory $themeModelFactory = null
+        ThemeFactory $themeModelFactory = null,
+        \Magento\Store\Model\App\EmulationInterface $appEmulation = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_themeFactory = $themeFactory;
@@ -124,7 +131,9 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         $this->_imageFactory = $imageFactory;
         $this->_validator = $validator;
         $this->_customFactory = $customizationFactory;
-        $this->themeModelFactory = $themeModelFactory ?: ObjectManager::getInstance()->get(ThemeFactory::class);
+        $this->themeModelFactory = $themeModelFactory ?? ObjectManager::getInstance()->get(ThemeFactory::class);
+        $this->appEmulation = $appEmulation ?? ObjectManager::getInstance()
+                ->get(\Magento\Store\Model\App\EmulationInterface::class);
         $this->addData(['type' => self::TYPE_VIRTUAL]);
     }
 
@@ -216,7 +225,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function hasChildThemes()
     {
-        return (bool)$this->getCollection()->addTypeFilter(
+        return (bool) $this->getCollection()->addTypeFilter(
             self::TYPE_VIRTUAL
         )->addFieldToFilter(
             'parent_id',
@@ -265,8 +274,9 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function getArea()
     {
-        // In order to support environment emulation of area, if area is set, return it
-        if ($this->getData('area') && !$this->_appState->isAreaCodeEmulated()) {
+        if ($this->getData('area')
+            && (!$this->_appState->isAreaCodeEmulated() || $this->appEmulation->isEnvironmentEmulated())
+        ) {
             return $this->getData('area');
         }
         return $this->_appState->getAreaCode();
@@ -298,7 +308,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function getCode()
     {
-        return (string)$this->getData('code');
+        return (string) $this->getData('code');
     }
 
     /**
