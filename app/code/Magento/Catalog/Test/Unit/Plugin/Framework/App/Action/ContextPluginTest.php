@@ -33,7 +33,7 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
     private $catalogSessionMock;
 
     /**
-     * @var HttpContext
+     * @var \PHPUnit_Framework_MockObject_MockObject|HttpContext
      */
     private $httpContextMock;
 

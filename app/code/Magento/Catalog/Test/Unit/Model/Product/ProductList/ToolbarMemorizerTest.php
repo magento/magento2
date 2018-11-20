@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\ProductList;
 
 use Magento\Catalog\Model\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\Session as CatalogSession;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
@@ -18,12 +18,12 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ToolbarMemorizer
+     * @var ToolbarMemorizer
      */
     private $model;
 
     /**
-     * @var Toolbar
+     * @var \PHPUnit_Framework_MockObject_MockObject|Toolbar
      */
     private $toolbarMock;
 
@@ -36,6 +36,11 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
      * @var ScopeConfigInterface
      */
     private $scopeConfigMock;
+
+    /**
+     * @var ObjectManager $objectManager
+     */
+    private $objectManager;
 
     /**
      * @inheritdoc
@@ -54,8 +59,8 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->model = $objectManagerHelper->getObject(
+        $this->objectManager = new ObjectManager($this);
+        $this->model = $this->objectManager->getObject(
             ToolbarMemorizer::class,
             [
                 'toolbarModel' => $this->toolbarMock,
@@ -92,8 +97,7 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetOrder($variable, $variableValue, $flag, $data, $expected)
     {
-        $this->setPropertyValue($this->model, 'order', $variable);
-
+        $this->objectManager->setBackwardCompatibleProperty($this->model, 'order', $variable);
         $this->toolbarMock->method('getOrder')->willReturn($variableValue);
         $this->scopeConfigMock->method('isSetFlag')->willReturn($flag);
         $this->catalogSessionMock->method('getData')->willReturn($data);
@@ -114,8 +118,7 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDirection($variable, $variableValue, $flag, $data, $expected)
     {
-        $this->setPropertyValue($this->model, 'direction', $variable);
-
+        $this->objectManager->setBackwardCompatibleProperty($this->model, 'direction', $variable);
         $this->toolbarMock->method('getDirection')->willReturn($variableValue);
         $this->scopeConfigMock->method('isSetFlag')->willReturn($flag);
         $this->catalogSessionMock->method('getData')->willReturn($data);
@@ -136,8 +139,7 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMode($variable, $variableValue, $flag, $data, $expected)
     {
-        $this->setPropertyValue($this->model, 'mode', $variable);
-
+        $this->objectManager->setBackwardCompatibleProperty($this->model, 'mode', $variable);
         $this->toolbarMock->method('getMode')->willReturn($variableValue);
         $this->scopeConfigMock->method('isSetFlag')->willReturn($flag);
         $this->catalogSessionMock->method('getData')->willReturn($data);
@@ -158,8 +160,7 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetLimit($variable, $variableValue, $flag, $data, $expected)
     {
-        $this->setPropertyValue($this->model, 'limit', $variable);
-
+        $this->objectManager->setBackwardCompatibleProperty($this->model, 'limit', $variable);
         $this->toolbarMock->method('getLimit')->willReturn($variableValue);
         $this->scopeConfigMock->method('isSetFlag')->willReturn($flag);
         $this->catalogSessionMock->method('getData')->willReturn($data);
@@ -174,7 +175,7 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
     public function testMemorizeParams()
     {
         $this->catalogSessionMock->method('getParamsMemorizeDisabled')->willReturn(false);
-        $this->setPropertyValue($this->model, 'isMemorizingAllowed', true);
+        $this->objectManager->setBackwardCompatibleProperty($this->model, 'isMemorizingAllowed', true);
         $this->model->memorizeParams();
     }
 
@@ -205,27 +206,8 @@ class ToolbarMemorizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsMemorizingAllowed($variableValue, bool $flag, bool $expected)
     {
-        $this->setPropertyValue($this->model, 'isMemorizingAllowed', $variableValue);
+        $this->objectManager->setBackwardCompatibleProperty($this->model, 'isMemorizingAllowed', $variableValue);
         $this->scopeConfigMock->method('isSetFlag')->willReturn($flag);
         $this->assertEquals($expected, $this->model->isMemorizingAllowed());
-    }
-
-    /**
-     * Set object property value.
-     *
-     * @param object $object
-     * @param string $property
-     * @param string|bool|null $value
-     *
-     * @return object
-     */
-    private function setPropertyValue(&$object, string $property, $value)
-    {
-        $reflection = new \ReflectionClass(get_class($object));
-        $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($object, $value);
-
-        return $object;
     }
 }

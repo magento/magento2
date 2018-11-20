@@ -131,7 +131,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     protected $_postDataHelper;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var Context
      */
     private $httpContext;
 
