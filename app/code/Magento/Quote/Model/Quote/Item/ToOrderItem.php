@@ -64,7 +64,7 @@ class ToOrderItem
             $item
         );
         if ($item instanceof \Magento\Quote\Model\Quote\Address\Item) {
-            $orderItemData= array_merge(
+            $orderItemData = array_merge(
                 $orderItemData,
                $this->objectCopyService->getDataFromFieldset(
                    'quote_convert_address_item',
