@@ -89,7 +89,7 @@ class System implements ConfigTypeInterface
      * @param Encryptor|null $encryptorFilter
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ConfigSourceInterface $source,

@@ -56,6 +56,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $xpath
      * @param LayoutCache|null $layoutCache
      * @param SerializerInterface|null $serializer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FileResolverInterface $fileResolver,
