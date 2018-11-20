@@ -37,8 +37,8 @@ class StateTest extends \PHPUnit\Framework\TestCase
                 'canShip',
                 'getBaseGrandTotal',
                 'canCreditmemo',
-                'getState',
-                'setState',
+//                'getState',
+//                'setState',
                 'getTotalRefunded',
                 'hasForcedCanCreditmemo',
                 'getIsInProcess',
@@ -76,13 +76,13 @@ class StateTest extends \PHPUnit\Framework\TestCase
         int $callCanSkipNum,
         string $currentState,
         string $expectedState = '',
-        int $callSetStateNum = 0,
         bool $isInProcess = false,
         int $callGetIsInProcessNum = 0,
         bool $isCanceled = false,
         bool $canUnhold = false,
         bool $canInvoice = false
     ) {
+        $this->orderMock->setState($currentState);
         $this->orderMock->expects($this->any())
             ->method('isCanceled')
             ->willReturn($isCanceled);
@@ -98,50 +98,46 @@ class StateTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->exactly($callCanCreditmemoNum))
             ->method('canCreditmemo')
             ->willReturn($canCreditmemo);
-        $this->orderMock->expects($this->once())
-            ->method('getState')
-            ->willReturn($currentState);
         $this->orderMock->expects($this->exactly($callGetIsInProcessNum))
             ->method('getIsInProcess')
             ->willReturn($isInProcess);
-        $this->orderMock->expects($this->exactly($callSetStateNum))
-            ->method('setState')
-            ->with($expectedState)
-            ->will($this->returnSelf());
         $this->state->check($this->orderMock);
+        $this->assertEquals($expectedState, $this->orderMock->getState());
     }
 
     public function stateCheckDataProvider()
     {
         return [
             'processing - !canCreditmemo!canShip -> closed' =>
-                [false, 1, false, 0, Order::STATE_PROCESSING, Order::STATE_CLOSED, 1],
+                [false, 1, false, 0, Order::STATE_PROCESSING, Order::STATE_CLOSED],
             'complete - !canCreditmemo,!canShip -> closed' =>
-                [false, 1, false, 0, Order::STATE_COMPLETE, Order::STATE_CLOSED, 1],
+                [false, 1, false, 0, Order::STATE_COMPLETE, Order::STATE_CLOSED],
             'processing - !canCreditmemo,canShip -> closed' =>
-                [false, 1, true, 0, Order::STATE_PROCESSING, Order::STATE_CLOSED, 1],
+                [false, 1, true, 0, Order::STATE_PROCESSING, Order::STATE_CLOSED],
             'complete - !canCreditmemo,canShip -> closed' =>
-                [false, 1, true, 0, Order::STATE_COMPLETE, Order::STATE_CLOSED, 1],
+                [false, 1, true, 0, Order::STATE_COMPLETE, Order::STATE_CLOSED],
             'processing - canCreditmemo,!canShip -> complete' =>
-                [true, 1, false, 1, Order::STATE_PROCESSING, Order::STATE_COMPLETE, 1],
+                [true, 1, false, 1, Order::STATE_PROCESSING, Order::STATE_COMPLETE],
             'complete - canCreditmemo,!canShip -> complete' =>
-                [true, 1, false, 0, Order::STATE_COMPLETE],
+                [true, 1, false, 0, Order::STATE_COMPLETE, Order::STATE_COMPLETE],
             'processing - canCreditmemo, canShip -> processing' =>
-                [true, 1, true, 1, Order::STATE_PROCESSING],
+                [true, 1, true, 1, Order::STATE_PROCESSING, Order::STATE_PROCESSING],
             'complete - canCreditmemo, canShip -> complete' =>
-                [true, 1, true, 0, Order::STATE_COMPLETE],
+                [true, 1, true, 0, Order::STATE_COMPLETE, Order::STATE_COMPLETE],
             'new - canCreditmemo, canShip, IsInProcess -> processing' =>
-                [true, 0, true, 0, Order::STATE_NEW, Order::STATE_PROCESSING, 1, true, 1],
+                [true, 1, true, 1, Order::STATE_NEW, Order::STATE_PROCESSING, true, 1],
+            'new - canCreditmemo, !canShip, IsInProcess -> processing' =>
+                [true, 1, false, 1, Order::STATE_NEW, Order::STATE_COMPLETE, true, 1],
             'new - canCreditmemo, canShip, !IsInProcess -> new' =>
-                [true, 0, true, 0, Order::STATE_NEW, '', 0, false, 1],
+                [true, 0, true, 0, Order::STATE_NEW, Order::STATE_NEW, false, 1],
             'hold - canUnhold -> hold' =>
-                [true, 0, true, 0, Order::STATE_HOLDED, '', 0, false, 0, false, true, false],
+                [true, 0, true, 0, Order::STATE_HOLDED, Order::STATE_HOLDED, false, 0, false, true, false],
             'payment_review - canUnhold -> payment_review' =>
-                [true, 0, true, 0, Order::STATE_PAYMENT_REVIEW, '', 0, false, 0, false, false, false],
+                [true, 0, true, 0, Order::STATE_PAYMENT_REVIEW, Order::STATE_PAYMENT_REVIEW, false, 0, false, false, false],
             'pending_payment - canUnhold -> pending_payment' =>
-                [true, 0, true, 0, Order::STATE_PENDING_PAYMENT, '', 0, false, 0, false, false, false],
+                [true, 0, true, 0, Order::STATE_PENDING_PAYMENT, Order::STATE_PENDING_PAYMENT, false, 0, false, false, false],
             'cancelled - isCanceled -> cancelled' =>
-                [true, 0, true, 0, Order::STATE_HOLDED, '', 0, false, 0, true, false, false],
+                [true, 0, true, 0, Order::STATE_HOLDED, Order::STATE_HOLDED, false, 0, true, false, false],
         ];
     }
 }
