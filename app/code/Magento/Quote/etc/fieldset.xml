@@ -186,6 +186,11 @@
                 <aspect name="to_order_address" />
             </field>
         </fieldset>
+        <fieldset id="quote_convert_address_item">
+            <field name="quote_item_id">
+                <aspect name="to_order_item" />
+            </field>
+        </fieldset>
         <fieldset id="quote_convert_item">
             <field name="sku">
                 <aspect name="to_order_item" />
@@ -204,9 +209,6 @@
             </field>
             <field name="qty">
                 <aspect name="to_order_item" targetField="qty_ordered" />
-            </field>
-            <field name="quote_item_id">
-                <aspect name="to_order_item_id" targetField="quote_item_id" />
             </field>
             <field name="id">
                 <aspect name="to_order_item" targetField="quote_item_id" />
