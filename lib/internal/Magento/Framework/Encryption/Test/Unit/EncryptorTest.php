@@ -161,14 +161,8 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $data = 'Mares eat oats and does eat oats, but little lambs eat ivy.';
 
         $actual = $this->_model->encrypt($data);
-
-        // Extract the initialization vector and encrypted data
-        $parts = explode(':', $actual, 4);
-        list(, , $encryptedData) = $parts;
-        // Decrypt returned data with RIJNDAEL_256 cipher, cbc mode
-        $crypt = new Mcrypt(self::CRYPT_KEY_1, MCRYPT_RIJNDAEL_256);
         // Verify decrypted matches original data
-        $this->assertEquals($data, $crypt->decrypt(base64_decode((string)$encryptedData)));
+        $this->assertEquals($data, $this->_model->decrypt($actual));
     }
 
     public function testDecrypt()
