@@ -92,13 +92,12 @@ class ExtractDataFromCategoryTree
     /**
      * Recursive method to generate tree for one category path
      *
-     * @param $pathElements
-     * @param $index
+     * @param array $pathElements
+     * @param int $index
      * @return array
      */
-    private function explodePathToArray($pathElements, $index): array
+    private function explodePathToArray(array $pathElements, int $index): array
     {
-
         $tree = [];
         $tree[$pathElements[$index]]['id'] = $pathElements[$index];
         if ($index === count($pathElements) - 1) {
