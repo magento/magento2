@@ -663,10 +663,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private function canCreditmemoForZeroTotalRefunded(float $totalRefunded): bool
     {
         $isRefundZero = abs($totalRefunded) < .0001;
-        // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
+        // Case when Adjustment Fee (adjustment_negative) has been used for first credit memo
         $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
-        $hasActinFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
-        if ($isRefundZero || $hasAdjustmentFee || $hasActinFlag) {
+        $hasActionFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
+        if ($isRefundZero || $hasAdjustmentFee || $hasActionFlag) {
             return false;
         }
 
@@ -682,15 +682,15 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private function canCreditmemoForZeroTotal(float $totalRefunded): bool
     {
         $totalPaid = $this->getTotalPaid();
-        //check if total paid is less than grandtotal
+        //check if total paid is less than grand total
         $checkAmtTotalPaid = $totalPaid <= $this->getGrandTotal();
         //case when amount is due for invoice
-        $dueAmountCondition = $this->canInvoice() && $checkAmtTotalPaid;
-        //case when paid amount is refunded and order has creditmemo created
-        $creditmemos = ($this->getCreditmemosCollection() === false) ?
+        $hasDueAmount = $this->canInvoice() && $checkAmtTotalPaid;
+        //case when paid amount is refunded and order has credit memo created
+        $creditMemos = ($this->getCreditmemosCollection() === false) ?
             true : (count($this->getCreditmemosCollection()) > 0);
-        $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
-        if (($dueAmountCondition || $paidAmtIsRefunded)
+        $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditMemos;
+        if (($hasDueAmount || $paidAmtIsRefunded)
             || (!$checkAmtTotalPaid && abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)
         ) {
             return false;
