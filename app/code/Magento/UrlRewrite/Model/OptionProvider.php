@@ -7,12 +7,12 @@
  */
 namespace Magento\UrlRewrite\Model;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * @codeCoverageIgnore
  */
-class OptionProvider implements ArrayInterface
+class OptionProvider implements OptionSourceInterface
 {
     /**
      * Permanent redirect code

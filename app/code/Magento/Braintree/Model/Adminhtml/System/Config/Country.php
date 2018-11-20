@@ -6,12 +6,12 @@
 namespace Magento\Braintree\Model\Adminhtml\System\Config;
 
 use Magento\Directory\Model\ResourceModel\Country\Collection;
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class Country
  */
-class Country implements ArrayInterface
+class Country implements OptionSourceInterface
 {
     /**
      * @var array

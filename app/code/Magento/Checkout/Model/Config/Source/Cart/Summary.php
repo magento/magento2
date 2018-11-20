@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Model\Config\Source\Cart;
 
-class Summary implements \Magento\Framework\Option\ArrayInterface
+class Summary implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @return array

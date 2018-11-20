@@ -9,7 +9,7 @@ use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInte
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\App\ObjectManager;
 
-class Multiselect implements \Magento\Framework\Option\ArrayInterface
+class Multiselect implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Customer groups options array

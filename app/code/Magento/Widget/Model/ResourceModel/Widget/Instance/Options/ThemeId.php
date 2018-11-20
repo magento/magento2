@@ -12,7 +12,7 @@ namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
  * @deprecated 100.2.0 created new class that correctly loads theme options and whose name follows naming convention
  * @see \Magento\Widget\Model\ResourceModel\Widget\Instance\Options\Themes
  */
-class ThemeId implements \Magento\Framework\Option\ArrayInterface
+class ThemeId implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Widget\Model\Widget\Instance

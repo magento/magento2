@@ -11,7 +11,7 @@
  */
 namespace Magento\Customer\Model\Config\Source\Address;
 
-class Type implements \Magento\Framework\Option\ArrayInterface
+class Type implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Retrieve possible customer address types

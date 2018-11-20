@@ -11,7 +11,7 @@ namespace Magento\Directory\Model\Config\Source;
  * @api
  * @since 100.0.2
  */
-class WeightUnit implements \Magento\Framework\Option\ArrayInterface
+class WeightUnit implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * {@inheritdoc}

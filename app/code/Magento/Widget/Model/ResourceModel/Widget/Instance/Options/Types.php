@@ -9,7 +9,7 @@ namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
 /**
  * Widget Instance Types Options
  */
-class Types implements \Magento\Framework\Option\ArrayInterface
+class Types implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Widget\Model\Widget\Instance

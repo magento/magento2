@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Model\Layout\Source;
 
-class Layout implements \Magento\Framework\Option\ArrayInterface
+class Layout implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Theme\Model\Layout\Config

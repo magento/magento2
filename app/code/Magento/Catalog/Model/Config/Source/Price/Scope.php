@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Config\Source\Price;
 
-class Scope implements \Magento\Framework\Option\ArrayInterface
+class Scope implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * {@inheritdoc}

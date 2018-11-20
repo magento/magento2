@@ -9,7 +9,7 @@
  */
 namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 
-class Storage implements \Magento\Framework\Option\ArrayInterface
+class Storage implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Options getter

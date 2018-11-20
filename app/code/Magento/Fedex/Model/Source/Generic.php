@@ -5,7 +5,7 @@
  */
 namespace Magento\Fedex\Model\Source;
 
-class Generic implements \Magento\Framework\Option\ArrayInterface
+class Generic implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Fedex\Model\Carrier

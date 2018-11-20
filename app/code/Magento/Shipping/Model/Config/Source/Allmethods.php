@@ -5,7 +5,7 @@
  */
 namespace Magento\Shipping\Model\Config\Source;
 
-class Allmethods implements \Magento\Framework\Option\ArrayInterface
+class Allmethods implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Core store config

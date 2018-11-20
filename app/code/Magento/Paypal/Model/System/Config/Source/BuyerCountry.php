@@ -8,7 +8,7 @@ namespace Magento\Paypal\Model\System\Config\Source;
 /**
  * Source model for buyer countries supported by PayPal
  */
-class BuyerCountry implements \Magento\Framework\Option\ArrayInterface
+class BuyerCountry implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Paypal\Model\ConfigFactory

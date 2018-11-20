@@ -5,7 +5,7 @@
  */
 namespace Magento\Developer\Model\Config\Source;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class WorkflowType
@@ -13,7 +13,7 @@ use Magento\Framework\Option\ArrayInterface;
  * @api
  * @since 100.0.2
  */
-class WorkflowType implements ArrayInterface
+class WorkflowType implements OptionSourceInterface
 {
     /**
      * Constant for

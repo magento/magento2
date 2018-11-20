@@ -9,7 +9,7 @@ namespace Magento\Config\Model\Config\Source\Email;
  * @api
  * @since 100.0.2
  */
-class Template extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
+class Template extends \Magento\Framework\DataObject implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Framework\Registry

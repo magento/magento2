@@ -5,12 +5,12 @@
  */
 namespace Magento\Braintree\Model\Adminhtml\Source;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class Environment
  */
-class Environment implements ArrayInterface
+class Environment implements OptionSourceInterface
 {
     const ENVIRONMENT_PRODUCTION = 'production';
     const ENVIRONMENT_SANDBOX = 'sandbox';

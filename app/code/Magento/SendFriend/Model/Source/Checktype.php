@@ -11,7 +11,7 @@
  */
 namespace Magento\SendFriend\Model\Source;
 
-class Checktype implements \Magento\Framework\Option\ArrayInterface
+class Checktype implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Retrieve Check Type Option array

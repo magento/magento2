@@ -6,7 +6,7 @@
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Data collection
@@ -15,7 +15,7 @@ use Magento\Framework\Option\ArrayInterface;
  *
  * @api
  */
-class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
+class Collection implements \IteratorAggregate, \Countable, OptionSourceInterface, CollectionDataSourceInterface
 {
     const SORT_ORDER_ASC = 'ASC';
 

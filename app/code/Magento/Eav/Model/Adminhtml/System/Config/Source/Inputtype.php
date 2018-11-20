@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Model\Adminhtml\System\Config\Source;
 
-class Inputtype implements \Magento\Framework\Option\ArrayInterface
+class Inputtype implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var array

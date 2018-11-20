@@ -9,7 +9,7 @@ namespace Magento\OfflineShipping\Model\Config\Source;
  * @api
  * @since 100.0.2
  */
-class Tablerate implements \Magento\Framework\Option\ArrayInterface
+class Tablerate implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\OfflineShipping\Model\Carrier\Tablerate

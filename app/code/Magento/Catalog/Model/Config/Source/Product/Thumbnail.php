@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model\Config\Source\Product;
  * Catalog products per page on Grid mode source
  *
  */
-class Thumbnail implements \Magento\Framework\Option\ArrayInterface
+class Thumbnail implements \Magento\Framework\Data\OptionSourceInterface
 {
     const OPTION_USE_PARENT_IMAGE = 'parent';
 

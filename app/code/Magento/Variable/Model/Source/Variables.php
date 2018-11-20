@@ -8,7 +8,7 @@ namespace Magento\Variable\Model\Source;
 /**
  * Store Contact Information source model.
  */
-class Variables implements \Magento\Framework\Option\ArrayInterface
+class Variables implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Variable types

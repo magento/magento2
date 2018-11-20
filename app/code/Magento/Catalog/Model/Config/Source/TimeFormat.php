@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Config\Source;
 
-class TimeFormat implements \Magento\Framework\Option\ArrayInterface
+class TimeFormat implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * {@inheritdoc}

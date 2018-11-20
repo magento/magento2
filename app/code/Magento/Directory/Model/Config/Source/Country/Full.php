@@ -13,7 +13,7 @@ namespace Magento\Directory\Model\Config\Source\Country;
  * @codeCoverageIgnore
  * @since 100.0.2
  */
-class Full extends \Magento\Directory\Model\Config\Source\Country implements \Magento\Framework\Option\ArrayInterface
+class Full extends \Magento\Directory\Model\Config\Source\Country implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @inheritdoc

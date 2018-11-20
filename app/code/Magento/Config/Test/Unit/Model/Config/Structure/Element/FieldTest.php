@@ -308,7 +308,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     public function testGetOptionsUsesOptionsInterfaceIfNoMethodIsProvided()
     {
         $this->_model->setData(['source_model' => 'Source_Model_Name'], 'scope');
-        $sourceModelMock = $this->createMock(\Magento\Framework\Option\ArrayInterface::class);
+        $sourceModelMock = $this->createMock(\Magento\Framework\Data\OptionSourceInterface::class);
         $this->_sourceFactoryMock->expects(
             $this->once()
         )->method(

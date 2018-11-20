@@ -16,8 +16,8 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  *
  */
 class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Framework\Option\ArrayInterface,
     \Magento\Bundle\Api\Data\OptionTypeInterface
+    \Magento\Framework\Data\OptionSourceInterface
 {
     /**#@+
      * Constants

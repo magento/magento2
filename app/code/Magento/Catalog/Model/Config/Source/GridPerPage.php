@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\Config\Source;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class GridPerPage implements \Magento\Framework\Option\ArrayInterface
+class GridPerPage implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Options

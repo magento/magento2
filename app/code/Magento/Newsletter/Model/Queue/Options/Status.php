@@ -11,7 +11,7 @@
  */
 namespace Magento\Newsletter\Model\Queue\Options;
 
-class Status implements \Magento\Framework\Option\ArrayInterface
+class Status implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Return statuses option array

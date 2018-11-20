@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\View\Design\Theme\Label;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
-class Options implements ArrayInterface
+class Options implements OptionSourceInterface
 {
     /**
      * @var ListInterface

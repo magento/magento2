@@ -5,7 +5,7 @@
  */
 namespace Magento\Directory\Model\Currency\Import\Source;
 
-class Service implements \Magento\Framework\Option\ArrayInterface
+class Service implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Directory\Model\Currency\Import\Config

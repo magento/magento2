@@ -10,7 +10,7 @@ namespace Magento\Downloadable\Model\System\Config\Source;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Orderitemstatus implements \Magento\Framework\Option\ArrayInterface
+class Orderitemstatus implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @return array

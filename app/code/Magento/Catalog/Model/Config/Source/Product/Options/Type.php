@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Config\Source\Product\Options;
 /**
  * Product option types mode source
  */
-class Type implements \Magento\Framework\Option\ArrayInterface
+class Type implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Product Option Config

@@ -5,13 +5,13 @@
  */
 namespace Magento\Braintree\Model\Adminhtml\Source;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Payment\Model\MethodInterface;
 
 /**
  * Class PaymentAction
  */
-class PaymentAction implements ArrayInterface
+class PaymentAction implements OptionSourceInterface
 {
     /**
      * Possible actions on order place
