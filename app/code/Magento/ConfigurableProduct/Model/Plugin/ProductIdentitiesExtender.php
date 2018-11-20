@@ -37,7 +37,7 @@ class ProductIdentitiesExtender
     }
 
     /**
-     * Add parent identities to product identities
+     * Add child identities to product identities
      *
      * @param Product $subject
      * @param array $identities
@@ -48,9 +48,10 @@ class ProductIdentitiesExtender
     {
         $identities = (array) $identities;
 
-        foreach ($this->configurableType->getParentIdsByChild($subject->getId()) as $parentId) {
-            $parentProduct = $this->productRepository->getById($parentId);
-            $identities = array_merge($identities, (array) $parentProduct->getIdentities());
+        foreach ($this->configurableType->getChildrenIds($subject->getId()) as $key => $childIds) {
+            foreach ($childIds as $childId) {
+                $identities[] = Product::CACHE_TAG . '_' . $childId;
+            }
         }
 
         return array_unique($identities);
