@@ -70,6 +70,8 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <!--Delete customer-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Reset admin order filter -->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
             <!--Roll Back configuration-->
             <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToTaxConfigPage"/>
             <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.taxClasses}}" dependentSelector="{{AdminConfigureTaxSection.taxClassesCondition}}" visible="false"/>
