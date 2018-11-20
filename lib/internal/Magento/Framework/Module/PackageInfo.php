@@ -283,6 +283,6 @@ class PackageInfo
     public function getVersion($moduleName)
     {
         $this->load();
-        return isset($this->modulePackageVersionMap[$moduleName]) ? $this->modulePackageVersionMap[$moduleName] : '';
+        return $this->modulePackageVersionMap[$moduleName] ?? '';
     }
 }

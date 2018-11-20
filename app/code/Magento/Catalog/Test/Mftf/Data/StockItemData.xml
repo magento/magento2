@@ -12,4 +12,8 @@
         <data key="qty">1000</data>
         <data key="is_in_stock">true</data>
     </entity>
+    <entity name="Qty_1" type="stock_item">
+        <data key="qty">1</data>
+        <data key="is_in_stock">true</data>
+    </entity>
 </entities>

@@ -17,7 +17,7 @@
         <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
         <element name="newFromDateFilter" type="input" selector="input.admin__control-text[name='news_from_date[from]']"/>
         <element name="skuFilter" type="input" selector="input.admin__control-text[name='sku']"/>
-        <element name="name" type="input" selector="input.admin__control-text[name='name']"/>
+        <element name="nameFilter" type="input" selector="input.admin__control-text[name='name']"/>
         <element name="viewBookmark" type="button" selector="//div[contains(@class, 'admin__data-grid-action-bookmarks')]/ul/li/div/a[text() = '{{label}}']" parameterized="true" timeout="30"/>
         <element name="viewDropdown" type="button" selector=".admin__data-grid-action-bookmarks button.admin__action-dropdown"/>
         <element name="name" type="input" selector="input.admin__control-text[name='name']"/>

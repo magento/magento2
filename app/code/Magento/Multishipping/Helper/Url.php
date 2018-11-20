@@ -68,6 +68,16 @@ class Url extends \Magento\Framework\Url\Helper\Data
      *
      * @return string
      */
+    public function getMSNewShippingUrl()
+    {
+        return $this->_getUrl('multishipping/checkout_address/newShipping');
+    }
+
+    /**
+     * Retrieve register url
+     *
+     * @return string
+     */
     public function getMSRegisterUrl()
     {
         return $this->_getUrl('multishipping/checkout/register');

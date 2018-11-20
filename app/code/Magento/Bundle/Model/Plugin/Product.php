@@ -24,6 +24,8 @@ class Product
     }
 
     /**
+     * Add child identities to product identities
+     *
      * @param CatalogProduct $product
      * @param array $identities
      * @return string[]
@@ -32,9 +34,12 @@ class Product
         CatalogProduct $product,
         array $identities
     ) {
-        foreach ($this->type->getParentIdsByChild($product->getEntityId()) as $parentId) {
-            $identities[] = CatalogProduct::CACHE_TAG . '_' . $parentId;
+        foreach ($this->type->getChildrenIds($product->getEntityId()) as $optionId => $childIds) {
+            foreach ($childIds as $childId) {
+                $identities[] = CatalogProduct::CACHE_TAG . '_' . $childId;
+            }
         }
-        return $identities;
+
+        return array_unique($identities);
     }
 }

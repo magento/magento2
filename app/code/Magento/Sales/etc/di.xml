@@ -354,43 +354,43 @@
 
     <virtualType name="SalesOrderSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderInvoiceSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderInvoiceSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderInvoiceSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderShipmentSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderShipmentSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderShipmentSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderCreditmemoSendEmailsObserver" type="Magento\Sales\Observer\Virtual\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderCreditmemoSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderCreditmemoSendEmails</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="SalesOrderSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesInvoiceSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderInvoiceSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderInvoiceSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesShipmentSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderShipmentSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderShipmentSendEmails</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesCreditmemoSendEmailsCron" type="Magento\Sales\Cron\SendEmails">
         <arguments>
-            <argument name="emailSenderHandler" xsi:type="object">SalesOrderCreditmemoSendEmails</argument>
+            <argument name="emailSenderHandler" xsi:type="object" shared="false">SalesOrderCreditmemoSendEmails</argument>
         </arguments>
     </virtualType>
     <type name="Magento\SalesSequence\Model\EntityPool">

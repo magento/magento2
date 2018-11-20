@@ -20,7 +20,6 @@
         <data key="urlKey" unique="suffix">bundleproduct</data>
         <data key="visibility">4</data>
         <data key="option_title" unique="suffix">TestOption</data>
-        <data key="input_type" >Drop-down</data>
         <data key="default_quantity1" >10</data>
         <data key="default_quantity2" >20</data>
         <data key="input_type" >Drop-down</data>

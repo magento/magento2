@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminNewWidgetSection">
+        <element name="widgetType" type="select" selector="#code"/>
+        <element name="widgetDesignTheme" type="select" selector="#theme_id"/>
+        <element name="continue" type="button" selector="#continue_button"/>
+        <element name="widgetTitle" type="input" selector="#title"/>
+        <element name="widgetStoreIds" type="select" selector="#store_ids"/>
+        <element name="addLayoutUpdate" type="button" selector=".action-default.scalable.action-add"/>
+        <element name="selectDisplayOn" type="select" selector="#widget_instance[0][page_group]"/>
+        <element name="selectContainer" type="select" selector="#all_pages_0>table>tbody>tr>td:nth-child(1)>div>div>select"/>
+        <element name="widgetOptions" type="select" selector="#widget_instace_tabs_properties_section"/>
+        <element name="addNewCondition" type="select" selector=".rule-param.rule-param-new-child"/>
+        <element name="selectCondition" type="input" selector="#conditions__1__new_child"/>
+        <element name="ruleParameter" type="select" selector="#conditions__1__children>li:nth-child(1)>span:nth-child(4)>a"/>
+        <element name="setRuleParameter" type="input" selector="#conditions__1--1__value"/>
+        <element name="applyParameter" type="button" selector=".rule-param-apply"/>
+        <element name="openChooser" type="button" selector=".rule-chooser-trigger"/>
+        <element name="selectAll" type="checkbox" selector=".admin__control-checkbox"/>
+        <element name="sortById" type="button" selector="th.data-grid-th._sortable.not-sort.col-entity_id"/>
+        <element name="sortByIdAscend" type="button" selector="th.data-grid-th._sortable._ascend.col-entity_id"/>
+    </section>
+</sections>

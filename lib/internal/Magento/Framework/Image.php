@@ -261,7 +261,7 @@ class Image
      */
     public function setImageBackgroundColor($color)
     {
-        $this->_adapter->imageBackgroundColor = intval($color);
+        $this->_adapter->imageBackgroundColor = (int)$color;
     }
 
     /**

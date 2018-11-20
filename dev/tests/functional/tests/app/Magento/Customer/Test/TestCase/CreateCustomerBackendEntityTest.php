@@ -6,9 +6,6 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Config\Test\Fixture\ConfigData;
-use Magento\Customer\Test\Constraint\AssertChangingWebsiteChangeCountries;
-use Magento\Framework\App\ObjectManager;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;

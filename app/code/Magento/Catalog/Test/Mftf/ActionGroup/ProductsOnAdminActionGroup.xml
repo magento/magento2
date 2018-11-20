@@ -35,7 +35,7 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickOnFiltersButton"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clearFilters"/>
-        <fillField selector="{{AdminProductGridFilterSection.name}}" userInput="{{product.name}}" stepKey="fillNameFieldInFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{product.name}}" stepKey="fillNameFieldInFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="applyFilters"/>
         <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="clickMulticheckDropDown"/>
         <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllFilteredProducts"/>

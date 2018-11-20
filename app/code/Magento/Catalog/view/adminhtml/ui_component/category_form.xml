@@ -42,7 +42,7 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <fieldset name="general">
+    <fieldset name="general" sortOrder="5">
         <settings>
             <collapsible>false</collapsible>
             <label/>

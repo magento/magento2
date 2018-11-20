@@ -1,0 +1,3 @@
+sku,product_type,store_view_code,name,price,attribute_set_code,url_key
+simple1,simple,,"simple1",50,Default,url key with spaces1
+simple2,simple,,"simple2",55,Default,url key with spaces2

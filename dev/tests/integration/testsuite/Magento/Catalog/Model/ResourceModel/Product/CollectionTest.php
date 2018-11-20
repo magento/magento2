@@ -128,6 +128,36 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoDbIsolation disabled
+     */
+    public function testGetProductsWithSpecialPrice()
+    {
+        $product = $this->productRepository->get('simple');
+        $originalFinalPrice = $product->getFinalPrice();
+
+        $specialPrice = 9;
+        $product->setSpecialPrice($specialPrice);
+        $product = $this->productRepository->save($product);
+        /** @var \Magento\Catalog\Model\Product $item */
+        $item = $this->collection->addIdFilter($product->getId())
+            ->addPriceData()
+            ->getFirstItem();
+        $item->setPriceCalculation(false);
+        $this->assertEquals($specialPrice, $item->getFinalPrice());
+
+        $product->setSpecialPrice(null);
+        $product = $this->productRepository->save($product);
+        /** @var \Magento\Catalog\Model\Product $item */
+        $item = $this->collection->clear()
+            ->addIdFilter($product->getId())
+            ->addPriceData()
+            ->getFirstItem();
+        $item->setPriceCalculation(false);
+        $this->assertEquals($originalFinalPrice, $item->getFinalPrice());
+    }
+
+    /**
      * Test addAttributeToSort() with attribute 'is_saleable' works properly on frontend.
      *
      * @dataProvider addAttributeToSortDataProvider
@@ -186,5 +216,16 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             . ' AND (alias.entity_type = \'product\')';
 
         self::assertContains($expected, str_replace(PHP_EOL, '', $sql));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
+     * @magentoDbIsolation enabled
+     */
+    public function testAddAttributeToFilterAffectsGetSize()
+    {
+        $this->assertEquals(10, $this->collection->getSize());
+        $this->collection->addAttributeToFilter('sku', 'Product1');
+        $this->assertEquals(1, $this->collection->getSize());
     }
 }

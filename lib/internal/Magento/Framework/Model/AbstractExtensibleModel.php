@@ -151,9 +151,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     public function getCustomAttribute($attributeCode)
     {
         $this->initializeCustomAttributes();
-        return isset($this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode])
-            ? $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]
-            : null;
+        return $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode] ?? null;
     }
 
     /**

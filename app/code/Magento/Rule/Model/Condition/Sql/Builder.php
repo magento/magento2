@@ -154,8 +154,22 @@ class Builder
             $this->_conditionOperatorMap[$conditionOperator]
         );
 
+        $bindValue = $condition->getBindArgumentValue();
+        $expression = $value . $this->_connection->quoteInto($sql, $bindValue);
+
+        // values for multiselect attributes can be saved in comma separated format
+        // below is a solution for matching such conditions with selected values
+        if (in_array($conditionOperator, ['()', '{}']) && is_array($bindValue)) {
+            foreach ($bindValue as $item) {
+                $expression .= $this->_connection->quoteInto(
+                    " OR (FIND_IN_SET (?, {$this->_connection->quoteIdentifier($argument)}) > 0)",
+                    $item
+                );
+            }
+        }
+
         return $this->_expressionFactory->create(
-            ['expression' => $value . $this->_connection->quoteInto($sql, $condition->getBindArgumentValue())]
+            ['expression' => $expression]
         );
     }
 

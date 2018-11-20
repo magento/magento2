@@ -67,12 +67,12 @@ class SelectBuilderTest extends \PHPUnit\Framework\TestCase
             ['link-type' => 'right', 'table' => 'attribute', 'condition' => 'neq'],
         ];
         $groups = ['id', 'name'];
-        $this->selectBuilder->setConnectionName($connectionName);
-        $this->selectBuilder->setFrom($from);
-        $this->selectBuilder->setColumns($columns);
-        $this->selectBuilder->setFilters([$filter]);
-        $this->selectBuilder->setJoins($joins);
-        $this->selectBuilder->setGroup($groups);
+        $this->selectBuilder->setConnectionName($connectionName)
+            ->setFrom($from)
+            ->setColumns($columns)
+            ->setFilters([$filter])
+            ->setJoins($joins)
+            ->setGroup($groups);
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->with($connectionName)

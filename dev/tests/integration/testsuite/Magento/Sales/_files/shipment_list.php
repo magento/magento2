@@ -19,6 +19,7 @@ $shipments = [
         'shipping_address_id' => 1,
         'shipment_status' => \Magento\Sales\Model\Order\Shipment::STATUS_NEW,
         'store_id' => 1,
+        'shipping_label' => 'shipping_label_100000001',
     ],
     [
         'increment_id' => '100000002',
@@ -26,6 +27,7 @@ $shipments = [
         'shipping_address_id' => 3,
         'shipment_status' => \Magento\Sales\Model\Order\Shipment::STATUS_NEW,
         'store_id' => 1,
+        'shipping_label' => 'shipping_label_100000002',
     ],
     [
         'increment_id' => '100000003',
@@ -33,6 +35,7 @@ $shipments = [
         'shipping_address_id' => 3,
         'status' => \Magento\Sales\Model\Order\Shipment::STATUS_NEW,
         'store_id' => 1,
+        'shipping_label' => 'shipping_label_100000003',
     ],
     [
         'increment_id' => '100000004',
@@ -40,6 +43,7 @@ $shipments = [
         'shipping_address_id' => 4,
         'shipment_status' => 'closed',
         'store_id' => 1,
+        'shipping_label' => 'shipping_label_100000004',
     ],
 ];
 

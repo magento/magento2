@@ -69,14 +69,9 @@ class ImageUploader
     /**
      * List of allowed image mime types
      *
-     * @var array
+     * @var string[]
      */
-    private $allowedMimeTypes = [
-        'image/jpg',
-        'image/jpeg',
-        'image/gif',
-        'image/png'
-    ];
+    private $allowedMimeTypes;
 
     /**
      * ImageUploader constructor
@@ -89,6 +84,7 @@ class ImageUploader
      * @param string $baseTmpPath
      * @param string $basePath
      * @param string[] $allowedExtensions
+     * @param string[] $allowedMimeTypes
      */
     public function __construct(
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
@@ -98,7 +94,8 @@ class ImageUploader
         \Psr\Log\LoggerInterface $logger,
         $baseTmpPath,
         $basePath,
-        $allowedExtensions
+        $allowedExtensions,
+        $allowedMimeTypes = []
     ) {
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
@@ -108,6 +105,7 @@ class ImageUploader
         $this->baseTmpPath = $baseTmpPath;
         $this->basePath = $basePath;
         $this->allowedExtensions = $allowedExtensions;
+        $this->allowedMimeTypes = $allowedMimeTypes;
     }
 
     /**
@@ -167,7 +165,7 @@ class ImageUploader
     }
 
     /**
-     * Retrieve base path
+     * Retrieve allowed extensions
      *
      * @return string[]
      */

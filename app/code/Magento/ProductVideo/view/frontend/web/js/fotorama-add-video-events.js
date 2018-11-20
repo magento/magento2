@@ -450,7 +450,7 @@ define([
                 scriptTag = document.getElementsByTagName('script')[0];
 
             element.async = true;
-            element.src = 'https://secure-a.vimeocdn.com/js/froogaloop2.min.js';
+            element.src = 'https://f.vimeocdn.com/js/froogaloop2.min.js';
 
             /**
              * Vimeo js framework on load callback.

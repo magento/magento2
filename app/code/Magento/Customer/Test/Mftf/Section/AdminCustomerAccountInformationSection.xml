@@ -1,0 +1,20 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerAccountInformationSection">
+        <element name="accountInformationTitle" type="text" selector=".admin__page-nav-title"/>
+        <element name="accountInformationButton" type="text" selector="//a/span[text()='Account Information']"/>
+        <element name="firstName" type="input" selector="input[name='customer[firstname]']"/>
+        <element name="lastName" type="input" selector="input[name='customer[lastname]']"/>
+        <element name="email" type="input" selector="input[name='customer[email]']"/>
+        <element name="group" type="select" selector="[name='customer[group_id]']"/>
+        <element name="groupValue" type="button" selector="//span[text()='{{groupValue}}']" parameterized="true"/>
+        <element name="associateToWebsite" type="select" selector="select[name='customer[website_id]']"/>
+        <element name="storeView" type="select" selector="select[name='customer[sendemail_store_id]']"/>
+    </section>
+</sections>
