@@ -11,8 +11,6 @@ use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
 
 /**
  * Get distance between two LatLngRequest points
- *
- * @api
  */
 interface GetDistanceInterface
 {
