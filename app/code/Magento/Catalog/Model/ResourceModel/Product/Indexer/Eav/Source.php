@@ -319,7 +319,7 @@ class Source extends AbstractEav
 
     /**
      * Get options for multiselect attributes using custom source models
-     * Based on @maderlock's fix from: 
+     * Based on @maderlock's fix from:
      * https://github.com/magento/magento2/issues/417#issuecomment-265146285
      *
      * @param array $attrIds
@@ -334,7 +334,7 @@ class Source extends AbstractEav
                 ->addFilter('attribute_id', $attrIds, 'in')
                 ->addFilter('source_model', true, 'notnull');
         $criteria = $this->criteriaBuilder->create();
-        $attributes = $this->_attributeRepository->getList(
+        $attributes = $this->attributeRepository->getList(
             ProductAttributeInterface::ENTITY_TYPE_CODE,
             $criteria
         )->getItems();
