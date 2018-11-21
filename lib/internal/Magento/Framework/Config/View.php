@@ -244,7 +244,16 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function read($scope = null)
     {
         $scope = $scope ?: $this->_defaultScope;
-        $layoutCacheKey = __CLASS__ . '-'. $scope . '-' . $this->_fileName . '-' . $this->design->getArea();
+        $layoutCacheKey = implode(
+            '-',
+            [
+                __CLASS__,
+                $scope,
+                $this->_fileName,
+                $this->design->getArea(),
+                $this->serializer->serialize($this->xpath)
+            ]
+        );
         if (!isset($this->scopedLayoutCache[$layoutCacheKey])) {
             if ($data = $this->layoutCache->load($layoutCacheKey)) {
                 $this->scopedLayoutCache[$layoutCacheKey] = $this->serializer->unserialize($data);
