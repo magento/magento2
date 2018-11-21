@@ -27,19 +27,19 @@
                 identity="false" comment="Module_9 Update Column"/>
     </table>
     <table name="module8_test_update_table" resource="default">
-        <column name="module8_column_for_remove" disabled="1"/>
-        <constraint xsi:type="foreign" referenceId="MODULE8_UPDATE_FK_TEMP" disabled="1"/>
+        <column name="module8_column_for_remove" disabled="true"/>
+        <constraint xsi:type="foreign" referenceId="MODULE8_UPDATE_FK_TEMP" disabled="true"/>
         <index referenceId="MODULE9_UPDATE_MODULE8_GUEST_BROWSER_ID" indexType="btree">
             <column name="module8_guest_browser_id"/>
         </index>
-        <index referenceId="MODULE8_UPDATE_UNIQUE_INDEX_TEMP" disabled="1"/>
+        <index referenceId="MODULE8_UPDATE_UNIQUE_INDEX_TEMP" disabled="true"/>
     </table>
     <table name="module8_test_second_table" resource="default">
         <constraint xsi:type="foreign" referenceId="MODULE8_INSTALL_FK_ADDRESS_TEST_MAIN_TABLE_CONTACT_ID"
-                    disabled="1"/>
-        <index referenceId="MODULE8_INSTALL_SECOND_TABLE_INDEX_3_TEMP" disabled="1"/>
+                    disabled="true"/>
+        <index referenceId="MODULE8_INSTALL_SECOND_TABLE_INDEX_3_TEMP" disabled="true"/>
     </table>
-    <table name="module8_test_temp_table" disabled="1"/>
+    <table name="module8_test_temp_table" disabled="true"/>
     <table name="module9_test_update_replica_table" resource="default" engine="innodb"
            comment="Module9 Test Update Replica Table">
         <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="true"

@@ -87,7 +87,7 @@ class SchemaPersistor
             $table = $dom->addChild('table');
             $table->addAttribute('name', $tableName);
             if (!empty($tableData['disabled'])) {
-                $table->addAttribute('disabled', true);
+                $table->addAttribute('disabled', $this->castBooleanToString((bool)$tableData['disabled']));
                 continue;
             }
 
@@ -153,7 +153,7 @@ class SchemaPersistor
             $domColumn = $table->addChild('column');
             if (!empty($columnData['disabled'])) {
                 $domColumn->addAttribute('name', $columnName);
-                $domColumn->addAttribute('disabled', true);
+                $domColumn->addAttribute('disabled', $this->castBooleanToString((bool)$columnData['disabled']));
                 continue;
             }
 
@@ -191,7 +191,7 @@ class SchemaPersistor
                 $domIndex->addAttribute('referenceId', $indexName);
 
                 if (!empty($indexData['disabled'])) {
-                    $domIndex->addAttribute('disabled', true);
+                    $domIndex->addAttribute('disabled', $this->castBooleanToString((bool)$indexData['disabled']));
                     continue;
                 }
 
@@ -227,7 +227,10 @@ class SchemaPersistor
                 $constraintDom->addAttribute('referenceId', $name);
 
                 if (!empty($constraintData['disabled'])) {
-                    $constraintDom->addAttribute('disabled', (bool) $constraintData['disabled']);
+                    $constraintDom->addAttribute(
+                        'disabled',
+                        $this->castBooleanToString((bool)$constraintData['disabled'])
+                    );
                     continue;
                 }
 
