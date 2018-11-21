@@ -5,12 +5,6 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\View\DesignInterface;
-
 /**
  * View configuration files handler
  *
@@ -31,26 +25,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     protected $data;
 
     /**
-     * @var LayoutCache
-     */
-    private $layoutCache;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @var array
-     */
-    private $scopedLayoutCache;
-
-    /**
-     * @var DesignInterface
-     */
-    private $design;
-
-    /**
      * @param FileResolverInterface $fileResolver
      * @param ConverterInterface $converter
      * @param SchemaLocatorInterface $schemaLocator
@@ -60,10 +34,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      * @param string $domDocumentClass
      * @param string $defaultScope
      * @param array $xpath
-     * @param LayoutCache|null $layoutCache
-     * @param SerializerInterface|null $serializer
-     * @param DesignInterface|null $design
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FileResolverInterface $fileResolver,
@@ -74,14 +44,10 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         $idAttributes = [],
         $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global',
-        $xpath = [],
-        LayoutCache $layoutCache = null,
-        SerializerInterface $serializer = null,
-        DesignInterface $design = null
+        $xpath = []
     ) {
         $this->xpath = $xpath;
         $idAttributes = $this->getIdAttributes();
-
         parent::__construct(
             $fileResolver,
             $converter,
@@ -92,9 +58,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
             $domDocumentClass,
             $defaultScope
         );
-        $this->layoutCache = $layoutCache ?? ObjectManager::getInstance()->get(LayoutCache::class);
-        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Json::class);
-        $this->design = $design ?? ObjectManager::getInstance()->get(DesignInterface::class);
     }
 
     /**
@@ -236,45 +199,22 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     }
 
     /**
-     * @inheritdoc
-     *
-     * @throws \InvalidArgumentException
+     * {@inheritdoc}
      * @since 100.1.0
      */
     public function read($scope = null)
     {
         $scope = $scope ?: $this->_defaultScope;
-        $layoutCacheKey = implode(
-            '-',
-            [
-                __CLASS__,
-                $scope,
-                $this->_fileName,
-                $this->design->getArea(),
-                $this->serializer->serialize($this->xpath)
-            ]
-        );
-        if (!isset($this->scopedLayoutCache[$layoutCacheKey])) {
-            if ($data = $this->layoutCache->load($layoutCacheKey)) {
-                $this->scopedLayoutCache[$layoutCacheKey] = $this->serializer->unserialize($data);
-            } else {
-                $result = [];
+        $result = [];
 
-                $parents = (array)$this->_fileResolver->getParents($this->_fileName, $scope);
-                // Sort parents desc
-                krsort($parents);
+        $parents = (array)$this->_fileResolver->getParents($this->_fileName, $scope);
+        // Sort parents desc
+        krsort($parents);
 
-                foreach ($parents as $parent) {
-                    $result = array_replace_recursive($result, $this->_readFiles([$parent]));
-                }
-
-                $this->scopedLayoutCache[$layoutCacheKey] = array_replace_recursive($result, parent::read($scope));
-                $this->layoutCache->save(
-                    $this->serializer->serialize($this->scopedLayoutCache[$layoutCacheKey]),
-                    $layoutCacheKey
-                );
-            }
+        foreach ($parents as $parent) {
+            $result = array_replace_recursive($result, $this->_readFiles([$parent]));
         }
-        return $this->scopedLayoutCache[$layoutCacheKey];
+
+        return array_replace_recursive($result, parent::read($scope));
     }
 }
