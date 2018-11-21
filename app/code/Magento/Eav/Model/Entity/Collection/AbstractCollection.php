@@ -394,7 +394,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
-        return $this->addAttributeToFilter($attribute, $condition,'left');
+        return $this->addAttributeToFilter($attribute, $condition);
     }
 
     /**
