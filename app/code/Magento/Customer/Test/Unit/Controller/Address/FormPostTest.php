@@ -818,14 +818,14 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
     public function dataProviderTestExecute(): array
     {
         return [
-           // [1, 1, 1, null, '', null, '', null, ''],
-           // [1, 1, 1, '', null, '', null, '', null],
+            [1, 1, 1, null, '', null, '', null, ''],
+            [1, 1, 1, '', null, '', null, '', null],
 
-           // [1, 1, 1, null, null, null, 12, null, null],
-           // [1, 1, 1, null, null, null, 1, 'California', null],
+            [1, 1, 1, null, null, null, 12, null, null],
+            [1, 1, 1, null, null, null, 1, 'California', null],
             [1, 1, 1, null, null, null, 1, 'California', 'CA'],
 
-            /*[1, 1, 1, null, null, null, 1, null, 'CA'],
+            [1, 1, 1, null, null, null, 1, null, 'CA'],
             [1, 1, 1, null, null, null, null, null, 'CA'],
 
             [1, 1, 1, 2, null, null, null, null, null],
@@ -842,7 +842,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
 
             [1, 1, 1, 2, null, null, 12, null, null],
             [1, 1, 1, 2, 'Alaska', null, 12, null, 'CA'],
-            [1, 1, 1, 2, 'Alaska', 'AK', 12, 'California', null],*/
+            [1, 1, 1, 2, 'Alaska', 'AK', 12, 'California', null],
         ];
     }
 
