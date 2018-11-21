@@ -13,7 +13,7 @@
         <column xsi:type="varchar" name="city" nullable="false" length="64"/>
         <column xsi:type="varchar" name="region" nullable="false" length="64"/>
         <column xsi:type="varchar" name="province" nullable="false" length="64"/>
-        <column xsi:type="double" name="latitude" nullable="false" length="64"/>
-        <column xsi:type="double" name="longitude" nullable="false" length="64"/>
+        <column xsi:type="double" name="latitude" nullable="false" />
+        <column xsi:type="double" name="longitude" nullable="false"/>
     </table>
 </schema>
