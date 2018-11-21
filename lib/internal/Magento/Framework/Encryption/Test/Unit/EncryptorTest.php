@@ -109,6 +109,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      * @param mixed $key
      *
      * @dataProvider encryptWithEmptyKeyDataProvider
+     * @expectedException \SodiumException
      */
     public function testEncryptWithEmptyKey($key)
     {
@@ -161,8 +162,14 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $data = 'Mares eat oats and does eat oats, but little lambs eat ivy.';
 
         $actual = $this->_model->encrypt($data);
+
+        // Extract the initialization vector and encrypted data
+        $parts = explode(':', $actual, 3);
+        list(, , $encryptedData) = $parts;
+
+        $crypt = new SodiumChachaIetf(self::CRYPT_KEY_1);
         // Verify decrypted matches original data
-        $this->assertEquals($data, $this->_model->decrypt($actual));
+        $this->assertEquals($data, $crypt->decrypt(base64_decode((string)$encryptedData)));
     }
 
     public function testDecrypt()
@@ -186,7 +193,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         list(, , $iv, $encrypted) = $parts;
 
         // Decrypt returned data with RIJNDAEL_256 cipher, cbc mode
-        $crypt = new Crypt(self::CRYPT_KEY_1, MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB, $iv);
+        $crypt = new Crypt(self::CRYPT_KEY_1, MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC, $iv);
         // Verify decrypted matches original data
         $this->assertEquals($encrypted, base64_encode($crypt->encrypt($actual)));
     }
@@ -217,7 +224,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateKey()
     {
-        $this->assertNull($this->_model->validateKey(self::CRYPT_KEY_1));
+        $this->_model->validateKey(self::CRYPT_KEY_1);
     }
 
     /**
@@ -259,3 +266,4 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $hash);
     }
 }
+
