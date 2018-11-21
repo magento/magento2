@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\MysqlMq\Model;
+namespace Magento\TestModuleMysqlMq\Model;
 
 class DataObject extends \Magento\Framework\Api\AbstractExtensibleObject
 {
@@ -39,5 +39,22 @@ class DataObject extends \Magento\Framework\Api\AbstractExtensibleObject
     public function setEntityId($entityId)
     {
         return $this->setData('entity_id', $entityId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOutputPath()
+    {
+        return $this->_get('outputPath');
+    }
+
+    /**
+     * @param string $path
+     * @return $this
+     */
+    public function setOutputPath($path)
+    {
+        return $this->setData('outputPath', $path);
     }
 }

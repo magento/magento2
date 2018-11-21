@@ -73,7 +73,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function dequeue()
     {
@@ -92,7 +92,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function acknowledge(EnvelopeInterface $envelope)
     {
@@ -103,7 +103,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function subscribe($callback)
     {
@@ -120,7 +120,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
     {
@@ -138,7 +138,7 @@ class Queue implements QueueInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function push(EnvelopeInterface $envelope)
     {
