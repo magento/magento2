@@ -64,7 +64,7 @@ class ConfigGeneratorTest extends TestCase
     {
         $returnValue = $this->configGeneratorObject->createCryptConfig([]);
         $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
-        $this->assertEquals(['crypt' => ['key' => ('key')]], $returnValue->getData());
+        $this->assertEquals(['crypt' => ['key' => md5('key')]], $returnValue->getData());
     }
 
     public function testCreateSessionConfigWithInput()
