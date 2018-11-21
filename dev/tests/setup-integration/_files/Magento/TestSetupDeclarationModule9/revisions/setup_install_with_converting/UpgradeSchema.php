@@ -46,7 +46,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getConnection()->createTable($replicaTable);
         }
 
-
         $setup->endSetup();
     }
 

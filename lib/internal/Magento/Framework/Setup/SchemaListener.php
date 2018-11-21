@@ -451,6 +451,7 @@ class SchemaListener
      * @param array $foreignKeys
      * @param array $indexes
      * @param string $tableName
+     * @param string $engine
      */
     private function prepareConstraintsAndIndexes(array $foreignKeys, array $indexes, $tableName, $engine)
     {

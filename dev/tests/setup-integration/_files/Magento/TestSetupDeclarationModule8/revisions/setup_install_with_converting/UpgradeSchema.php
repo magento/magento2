@@ -50,7 +50,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->createSimpleTable($setup, $setup->getTable(self::TEMP_TABLE));
         }
 
-
         $setup->endSetup();
     }
 
@@ -212,5 +211,4 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
         $setup->getConnection()->createTable($table);
     }
-
 }
