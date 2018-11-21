@@ -103,6 +103,7 @@
         <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <!-- Disabled child configurable product -->
+        <scrollToTopOfPage stepKey="scrollToShowEnableDisableControl"/>
         <click selector="{{AdminProductFormSection.enableProductAttributeLabel}}" stepKey="clickDisableProduct"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <waitForPageLoad stepKey="waitForProductPageSaved"/>
