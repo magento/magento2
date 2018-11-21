@@ -87,11 +87,11 @@ class Table extends GenericElement implements
      * @param string $engine
      * @param string $charset
      * @param string $collation
+     * @param string $onCreate
      * @param string|null $comment
      * @param array $columns
      * @param array $indexes
      * @param array $constraints
-     * @param string $onCreate
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -123,6 +123,7 @@ class Table extends GenericElement implements
 
     /**
      * Return different table constraints.
+     *
      * It can be constraint like unique key or reference to another table, etc
      *
      * @return Constraint[]
@@ -133,6 +134,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Provides constraint by name.
+     *
      * @param string $name
      * @return Constraint | bool
      */
@@ -191,6 +194,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Provides index by name.
+     *
      * @param string $name
      * @return Index | bool
      */
@@ -201,6 +206,7 @@ class Table extends GenericElement implements
 
     /**
      * Return all columns.
+     *
      * Note, table always must have columns
      *
      * @return Column[]
@@ -280,6 +286,7 @@ class Table extends GenericElement implements
 
     /**
      * Retrieve elements by specific type
+     *
      * Allowed types: columns, constraints, indexes...
      *
      * @param  string $type
@@ -296,6 +303,7 @@ class Table extends GenericElement implements
 
     /**
      * This is workaround, as any DTO object couldnt be changed after instantiation.
+     *
      * However there is case, when we depends on column definition we need modify our indexes
      *
      * @param array $indexes
@@ -314,6 +322,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Retrieve engine name.
+     *
      * @return string
      */
     public function getEngine(): string
@@ -356,6 +366,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Retrieve the table name which is calculated without table prefix.
+     *
      * @return string
      */
     public function getNameWithoutPrefix(): string
@@ -364,6 +376,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Retrieve table comment.
+     *
      * @return null|string
      */
     public function getComment()

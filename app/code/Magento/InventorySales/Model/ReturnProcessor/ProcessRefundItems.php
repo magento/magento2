@@ -102,7 +102,8 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(
         OrderInterface $order,
@@ -115,23 +116,27 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
 
         foreach ($itemsToRefund as $item) {
             $sku = $item->getSku();
-            $qtyBackToSource = $item->getQuantity();
-            $originalProcessedQty = $item->getProcessedQuantity() + $item->getQuantity();
+
+            $totalDeductedQty = $this->getTotalDeductedQty($item, $deductedItems);
+            $processedQty = $item->getProcessedQuantity() - $totalDeductedQty;
+            $qtyBackToSource = ($processedQty > 0) ? $item->getQuantity() - $processedQty : $item->getQuantity();
+            $qtyBackToStock = ($qtyBackToSource > 0) ? $item->getQuantity() - $qtyBackToSource : $item->getQuantity();
+
+            if ($qtyBackToStock > 0) {
+                $itemToSell[] = $this->itemsToSellFactory->create([
+                    'sku' => $sku,
+                    'qty' => (float)$qtyBackToStock
+                ]);
+            }
 
             foreach ($deductedItems as $deductedItemResult) {
                 $sourceCode = $deductedItemResult->getSourceCode();
                 foreach ($deductedItemResult->getItems() as $deductedItem) {
-                    if ($sku != $deductedItem->getSku()) {
+                    if ($sku != $deductedItem->getSku() || $this->isZero((float)$qtyBackToSource)) {
                         continue;
                     }
 
-                    $availableQtyToBack = $deductedItem->getQuantity() + $originalProcessedQty;
-                    $backQty = min($availableQtyToBack, $qtyBackToSource);
-                    $originalProcessedQty += $deductedItem->getQuantity();
-
-                    if ($this->isZero((float)$availableQtyToBack)) {
-                        continue;
-                    }
+                    $backQty = min($deductedItem->getQuantity(), $qtyBackToSource);
 
                     $backItemsPerSource[$sourceCode][] = $this->itemToDeductFactory->create([
                         'sku' => $deductedItem->getSku(),
@@ -139,13 +144,6 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
                     ]);
                     $qtyBackToSource -= $backQty;
                 }
-            }
-
-            if ($qtyBackToSource > 0) {
-                $itemToSell[] = $this->itemsToSellFactory->create([
-                    'sku' => $sku,
-                    'qty' => (float)$qtyBackToSource
-                ]);
             }
         }
 
@@ -167,6 +165,27 @@ class ProcessRefundItems implements ProcessRefundItemsInterface
         }
 
         $this->placeReservationsForSalesEvent->execute($itemToSell, $salesChannel, $salesEvent);
+    }
+
+    /**
+     * @param $item
+     * @param array $deductedItems
+     * @return float
+     */
+    private function getTotalDeductedQty($item, array $deductedItems): float
+    {
+        $result = 0;
+
+        foreach ($deductedItems as $deductedItemResult) {
+            foreach ($deductedItemResult->getItems() as $deductedItem) {
+                if ($item->getSku() != $deductedItem->getSku()) {
+                    continue;
+                }
+                $result += $deductedItem->getQuantity();
+            }
+        }
+
+        return $result;
     }
 
     /**

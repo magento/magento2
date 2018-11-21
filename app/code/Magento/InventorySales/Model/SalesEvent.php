@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model;
 
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\InventorySalesApi\Api\Data\SalesEventExtensionInterface;
 
 /**
  * @inheritdoc
  */
-class SalesEvent implements SalesEventInterface
+class SalesEvent extends AbstractExtensibleModel implements SalesEventInterface
 {
     /**
      * @var string
@@ -30,12 +32,41 @@ class SalesEvent implements SalesEventInterface
     private $objectId;
 
     /**
+     * SalesEvent constructor.
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param string $type
      * @param string $objectType
      * @param string $objectId
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-    public function __construct(string $type, string $objectType, string $objectId)
-    {
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+        string $type,
+        string $objectType,
+        string $objectId,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
+
         $this->type = $type;
         $this->objectType = $objectType;
         $this->objectId = $objectId;
@@ -68,12 +99,21 @@ class SalesEvent implements SalesEventInterface
     /**
      * @inheritdoc
      */
-    public function toArray(): array
+    public function getExtensionAttributes(): ?SalesEventExtensionInterface
     {
-        return [
-            'event_type' => $this->getType(),
-            'object_type' => $this->getObjectType(),
-            'object_id' => $this->getObjectId(),
-        ];
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(SalesEventInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(SalesEventExtensionInterface $extensionAttributes): void
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

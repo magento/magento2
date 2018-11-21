@@ -235,6 +235,12 @@ class SalesChannelManagementTest extends WebapiAbstract
                                 'field' => SalesChannelInterface::CODE,
                             ],
                         ],
+                        [
+                            'message' => 'The website with code "%code" does not exist.',
+                            'parameters' => [
+                                'code' => '',
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -252,6 +258,12 @@ class SalesChannelManagementTest extends WebapiAbstract
                             'message' => '"%field" can not be empty.',
                             'parameters' => [
                                 'field' => SalesChannelInterface::CODE,
+                            ],
+                        ],
+                        [
+                            'message' => 'The website with code "%code" does not exist.',
+                            'parameters' => [
+                                'code' => '',
                             ],
                         ],
                     ],

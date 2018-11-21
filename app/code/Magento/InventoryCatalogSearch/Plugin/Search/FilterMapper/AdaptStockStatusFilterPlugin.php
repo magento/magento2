@@ -193,7 +193,7 @@ class AdaptStockStatusFilterPlugin
     private function getStockTableName(): string
     {
         $website = $this->storeManager->getWebsite();
-        $stock = $this->stockResolver->get(
+        $stock = $this->stockResolver->execute(
             SalesChannelInterface::TYPE_WEBSITE,
             $website->getCode()
         );

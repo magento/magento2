@@ -70,7 +70,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\InventorySalesApi\Api\StockResolverInterface">
+    <type name="Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface">
         <plugin name="adapt_stock_resolver_to_admin_website"
                 type="Magento\InventoryCatalog\Plugin\InventorySalesApi\StockResolver\AdaptStockResolverToAdminWebsitePlugin"/>
     </type>

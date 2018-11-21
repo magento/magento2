@@ -11,7 +11,7 @@
         <column xsi:type="varchar" name="source_code" nullable="false" length="255"/>
         <column xsi:type="varchar" name="sku" nullable="false" length="64"/>
         <column xsi:type="decimal" name="notify_stock_qty" scale="4" precision="12" unsigned="false" nullable="true"/>
-        <constraint xsi:type="primary" name="IDX_PRIMARY">
+        <constraint xsi:type="primary" referenceId="IDX_PRIMARY">
             <column name="source_code"/>
             <column name="sku"/>
         </constraint>

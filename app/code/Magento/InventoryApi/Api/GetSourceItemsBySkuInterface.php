@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api;
 
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-
 /**
  * Sugar service for find SourceItems by SKU
  *
@@ -18,7 +16,7 @@ interface GetSourceItemsBySkuInterface
 {
     /**
      * @param string $sku
-     * @return SourceItemInterface[]
+     * @return \Magento\InventoryApi\Api\Data\SourceItemInterface[]
      */
     public function execute(string $sku): array;
 }

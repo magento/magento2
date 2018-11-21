@@ -19,11 +19,12 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryAdminUi\Model\Stock\StockSaveProcessor;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Save Controller
  */
-class Save extends Action
+class Save extends Action implements HttpPostActionInterface
 {
     /**
      * @see _isAllowed()

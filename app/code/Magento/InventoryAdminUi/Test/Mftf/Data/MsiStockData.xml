@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <!-- DO NOT use '_defaultStock' in <createData> or it will break other Tests. -->
     <entity name="_defaultStock" type="stock">
         <data key="name">Default Stock</data>
@@ -42,5 +42,9 @@
     <!-- Please don't use this entity in your tests otherwise AdminPaginationWorkedInManageStocksGridTest will fail -->
     <entity name="SpecialStockForAdminPaginationWorkedInManageStocksGridTest" type="stock">
         <data key="name" unique="suffix">Special Stock </data>
+    </entity>
+    <!-- Please don't use this entity in your tests otherwise AdminSelectDeselectManipulationsInManageStocksGridTest will fail -->
+    <entity name="SpecialStockForAdminSelectDeselectManipulationsInManageStocksGridTest" type="stock">
+        <data key="name" unique="suffix">Unique Stock </data>
     </entity>
 </entities>

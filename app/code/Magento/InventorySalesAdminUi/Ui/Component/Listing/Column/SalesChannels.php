@@ -48,7 +48,9 @@ class SalesChannels extends Column
      */
     public function prepareDataSource(array $dataSource)
     {
-        if ($dataSource['data']['totalRecords'] > 0) {
+        if (isset($dataSource['data']['totalRecords'])
+            && $dataSource['data']['totalRecords'] > 0
+        ) {
             foreach ($dataSource['data']['items'] as &$row) {
                 $row['sales_channels'] = isset($row['sales_channels'])
                     ? $this->prepareSalesChannelData($row['sales_channels']) : [];

@@ -12,7 +12,7 @@ namespace Magento\InventorySalesApi\Api\Data;
  *
  * @api
  */
-interface ProductSalableResultInterface
+interface ProductSalableResultInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return bool
@@ -20,7 +20,24 @@ interface ProductSalableResultInterface
     public function isSalable(): bool;
 
     /**
-     * @return ProductSalabilityErrorInterface[]
+     * @return \Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface[]
      */
     public function getErrors(): array;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * @return \Magento\InventorySalesApi\Api\Data\ProductSalableResultExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?ProductSalableResultExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventorySalesApi\Api\Data\ProductSalableResultExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(
+        \Magento\InventorySalesApi\Api\Data\ProductSalableResultExtensionInterface $extensionAttributes
+    ): void;
 }

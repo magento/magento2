@@ -13,6 +13,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
 use Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinksValidator;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Psr\Log\LoggerInterface;
 
@@ -52,12 +53,12 @@ class StockSourceLinksSave implements StockSourceLinksSaveInterface
     }
 
     /**
-     * @param StockSourceLink[] $links
+     * @param StockSourceLinkInterface[] $links
      * @throws CouldNotSaveException
      * @throws InputException
      * @throws ValidationException
      */
-    public function execute(array $links)
+    public function execute(array $links): void
     {
         if (empty($links)) {
             throw new InputException(__('Input data is empty'));

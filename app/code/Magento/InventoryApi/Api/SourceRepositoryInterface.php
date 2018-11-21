@@ -7,10 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
-
 /**
  * In Magento 2 Repository considered as an implementation of Facade pattern which provides a simplified interface
  * to a larger body of code responsible for Domain Entity management
@@ -40,7 +36,7 @@ interface SourceRepositoryInterface
      * @throws \Magento\Framework\Validation\ValidationException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(SourceInterface $source);
+    public function save(\Magento\InventoryApi\Api\Data\SourceInterface $source): void;
 
     /**
      * Get Source data by given code. If you want to create plugin on get method, also you need to create separate
@@ -50,7 +46,7 @@ interface SourceRepositoryInterface
      * @return \Magento\InventoryApi\Api\Data\SourceInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get(string $sourceCode): SourceInterface;
+    public function get(string $sourceCode): \Magento\InventoryApi\Api\Data\SourceInterface;
 
     /**
      * Find Sources by SearchCriteria
@@ -59,5 +55,7 @@ interface SourceRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\SourceSearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null): SourceSearchResultsInterface;
+    public function getList(
+        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null
+    ): \Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 }

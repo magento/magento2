@@ -24,7 +24,7 @@ class StockExtension extends \Magento\Framework\Api\AbstractSimpleObject impleme
     /**
      * @inheritdoc
      */
-    public function setSalesChannels($salesChannels): void
+    public function setSalesChannels(?array $salesChannels): void
     {
         $this->setData('sales_channels', $salesChannels);
     }

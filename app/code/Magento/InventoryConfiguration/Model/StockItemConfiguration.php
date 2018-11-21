@@ -8,13 +8,22 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface;
 
 /**
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @inheritdoc
  */
-class StockItemConfiguration implements StockItemConfigurationInterface
+class StockItemConfiguration extends AbstractExtensibleModel implements StockItemConfigurationInterface
 {
     /**
      * @var StockItemInterface
@@ -27,12 +36,36 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     private $scopeConfig;
 
     /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param StockItemInterface $stockItem
+     * @param ScopeConfigInterface $scopeConfig
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
+     * @param array $data
      */
     public function __construct(
+        Context $context,
+        Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         StockItemInterface $stockItem,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->stockItem = $stockItem;
         $this->scopeConfig = $scopeConfig;
     }
@@ -379,5 +412,26 @@ class StockItemConfiguration implements StockItemConfigurationInterface
             \Magento\CatalogInventory\Model\Configuration::XML_PATH_STOCK_THRESHOLD_QTY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes(): ?StockItemConfigurationExtensionInterface
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(StockItemConfigurationInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(StockItemConfigurationExtensionInterface $extensionAttributes): void
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

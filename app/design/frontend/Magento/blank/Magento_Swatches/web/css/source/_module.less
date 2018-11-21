@@ -26,7 +26,7 @@
 @swatch-option-text__background: @swatch-option__background;
 @swatch-option-text__color: #686868;
 
-@swatch-option-text__selected__background-color: @color-white !important;
+@swatch-option-text__selected__background-color: @color-white;
 
 //  Size and Manufacturer attributes
 @attr-swatch-option__background: @swatch-option__background;
@@ -143,7 +143,7 @@
                 margin-right: 7px;
 
                 &.selected {
-                    .lib-css(background-color, @swatch-option-text__selected__background-color);
+                    .lib-css(background-color, @swatch-option-text__selected__background-color) !important;
                 }
             }
 

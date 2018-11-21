@@ -65,9 +65,11 @@ class Reservation implements ReservationInterface
     /**
      * @inheritdoc
      */
-    public function getReservationId()
+    public function getReservationId(): ?int
     {
-        return $this->reservationId;
+        return $this->reservationId === null ?
+            null:
+            (int)$this->reservationId;
     }
 
     /**
@@ -97,7 +99,7 @@ class Reservation implements ReservationInterface
     /**
      * @inheritdoc
      */
-    public function getMetadata()
+    public function getMetadata(): ?string
     {
         return $this->metadata;
     }

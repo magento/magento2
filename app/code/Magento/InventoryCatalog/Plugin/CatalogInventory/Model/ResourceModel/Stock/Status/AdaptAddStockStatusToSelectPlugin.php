@@ -62,7 +62,7 @@ class AdaptAddStockStatusToSelectPlugin
             throw new LocalizedException(__('Website code is empty'));
         }
 
-        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+        $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $stockId = (int)$stock->getStockId();
 
         $this->addStockStatusToSelect->execute($select, $stockId);

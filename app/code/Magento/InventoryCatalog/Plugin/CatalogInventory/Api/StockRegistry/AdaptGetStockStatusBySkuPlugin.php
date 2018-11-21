@@ -76,7 +76,7 @@ class AdaptGetStockStatusBySkuPlugin
         $websiteCode = null === $scopeId
             ? $this->storeManager->getWebsite()->getCode()
             : $this->storeManager->getWebsite($scopeId)->getCode();
-        $stockId = (int)$this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
+        $stockId = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode)->getStockId();
 
         $status = (int)$this->isProductSalable->execute($productSku, $stockId);
         try {

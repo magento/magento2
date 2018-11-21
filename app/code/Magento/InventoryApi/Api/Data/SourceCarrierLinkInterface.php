@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Represents relation between some physical storage and shipping method
  *
@@ -16,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface SourceCarrierLinkInterface extends ExtensibleDataInterface
+interface SourceCarrierLinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -31,7 +29,7 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      *
      * @return string|null
      */
-    public function getCarrierCode();
+    public function getCarrierCode(): ?string;
 
     /**
      * Set carrier code
@@ -39,14 +37,14 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      * @param string|null $carrierCode
      * @return void
      */
-    public function setCarrierCode($carrierCode);
+    public function setCarrierCode(?string $carrierCode): void;
 
     /**
      * Get position
      *
      * @return int|null
      */
-    public function getPosition();
+    public function getPosition(): ?int;
 
     /**
      * Set position
@@ -54,16 +52,14 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      * @param int|null $position
      * @return void
      */
-    public function setPosition($position);
+    public function setPosition(?int $position): void;
 
     /**
      * Retrieve existing extension attributes object
      *
-     * Null for return is specified for proper work SOAP requests parser
-     *
      * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?\Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface;
 
     /**
      * Set an extension attributes object
@@ -71,5 +67,7 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SourceCarrierLinkExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(
+        \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface $extensionAttributes
+    ): void;
 }

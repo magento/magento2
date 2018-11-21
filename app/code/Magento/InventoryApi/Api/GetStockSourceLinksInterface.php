@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
-
 /**
  * Find StockSourceLink list by SearchCriteria API
  *
@@ -25,5 +22,7 @@ interface GetStockSourceLinksInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface
      */
-    public function execute(SearchCriteriaInterface $searchCriteria): StockSourceLinkSearchResultsInterface;
+    public function execute(
+        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+    ): \Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
 }

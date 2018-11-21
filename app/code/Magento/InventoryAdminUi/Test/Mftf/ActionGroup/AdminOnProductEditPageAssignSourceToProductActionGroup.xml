@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOnProductEditPageAssignSourceToProduct">
         <arguments>
             <argument name="filter_selector"/>
@@ -15,13 +15,13 @@
         </arguments>
 
         <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources1"/>
-        <waitForLoadingMaskToDisappear stepKey="waitLoadingMask" />
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearTheFiltersIfPresent"/>
-        <waitForPageLoad stepKey="waitForPageLoad" time="5"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
         <fillField userInput="{{filter_value}}" selector="{{filter_selector}}" stepKey="fillCodeField2"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
 
         <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByCode(filter_value)}}" stepKey="clickOnCheckbox1"/>
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone1"/>

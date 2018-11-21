@@ -71,6 +71,10 @@
 
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
 
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" stepKey="selectFlatShippingMethod"/>
+
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForShippingPage"/>
+
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
 
         <!-- Place Order -->

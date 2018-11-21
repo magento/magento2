@@ -43,7 +43,7 @@ class GetStockItemData implements GetStockItemDataInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $sku, int $stockId)
+    public function execute(string $sku, int $stockId): ?array
     {
         $stockItemTableName = $this->stockIndexTableNameResolver->execute($stockId);
 

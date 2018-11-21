@@ -11,11 +11,12 @@ use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Index Controller
  */
-class Index extends Action
+class Index extends Action implements HttpGetActionInterface
 {
     /**
      * @see _isAllowed()

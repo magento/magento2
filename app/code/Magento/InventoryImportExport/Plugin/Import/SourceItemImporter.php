@@ -78,9 +78,9 @@ class SourceItemImporter
             $qty = (isset($stockDatum['qty'])) ? $stockDatum['qty'] : 0;
             /** @var SourceItemInterface $sourceItem */
             $sourceItem = $this->sourceItemFactory->create();
-            $sourceItem->setSku($sku);
+            $sourceItem->setSku((string)$sku);
             $sourceItem->setSourceCode($this->defaultSource->getCode());
-            $sourceItem->setQuantity($qty);
+            $sourceItem->setQuantity((float)$qty);
             $sourceItem->setStatus($inStock);
             $sourceItems[] = $sourceItem;
         }

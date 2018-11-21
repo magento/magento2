@@ -28,15 +28,23 @@ class SourceHydrator
     private $sourceRegionDataProcessor;
 
     /**
+     * @var SourceCoordinatesDataProcessor
+     */
+    private $sourceCoordinatesDataProcessor;
+
+    /**
      * @param DataObjectHelper $dataObjectHelper
      * @param SourceRegionDataProcessor $sourceRegionDataProcessor
+     * @param SourceCoordinatesDataProcessor $sourceCoordinatesDataProcessor
      */
     public function __construct(
         DataObjectHelper $dataObjectHelper,
-        SourceRegionDataProcessor $sourceRegionDataProcessor
+        SourceRegionDataProcessor $sourceRegionDataProcessor,
+        SourceCoordinatesDataProcessor $sourceCoordinatesDataProcessor
     ) {
         $this->dataObjectHelper = $dataObjectHelper;
         $this->sourceRegionDataProcessor = $sourceRegionDataProcessor;
+        $this->sourceCoordinatesDataProcessor = $sourceCoordinatesDataProcessor;
     }
 
     /**
@@ -47,7 +55,8 @@ class SourceHydrator
      */
     public function hydrate(SourceInterface $source, array $data): SourceInterface
     {
-        $data['general'] = $this->sourceRegionDataProcessor->process($data['general']);
+        $data['general'] = $this->sourceRegionDataProcessor->execute($data['general']);
+        $data['general'] = $this->sourceCoordinatesDataProcessor->execute($data['general']);
 
         $this->dataObjectHelper->populateWithArray($source, $data['general'], SourceInterface::class);
 

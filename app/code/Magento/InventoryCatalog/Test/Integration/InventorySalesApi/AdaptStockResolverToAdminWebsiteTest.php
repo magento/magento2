@@ -35,7 +35,10 @@ class AdaptStockResolverToAdminWebsiteTest extends TestCase
     public function testAdaptStockResolverToAdminWebsite()
     {
         $defaultStockId = $this->defaultStockProvider->getId();
-        $currentStock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, WebsiteInterface::ADMIN_CODE);
+        $currentStock = $this->stockResolver->execute(
+            SalesChannelInterface::TYPE_WEBSITE,
+            WebsiteInterface::ADMIN_CODE
+        );
 
         self::assertEquals($defaultStockId, $currentStock->getStockId());
     }

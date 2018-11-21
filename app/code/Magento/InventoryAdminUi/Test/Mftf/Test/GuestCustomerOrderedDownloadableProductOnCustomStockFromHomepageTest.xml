@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="GuestCustomerOrderedDownloadableProductOnCustomStockFromHomepageTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Order"/>
             <title value="Create an Order with a Downloadable Product assigned to Custom Stock via the Storefront as Guest"/>
             <description value="You should be able to create an Order with a Downloadable Product from the Storefront as Guest."/>
-            <testCaseId value="1300"/>
+            <testCaseId value="MSI-1300"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -118,7 +117,6 @@
 
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose"/>
         </before>
-
         <after>
             <!-- Assign Sales Channel to Default Stock -->
             <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPage"/>

@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminOrderCreatedWithSimpleProductViaTheAdminTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Order"/>
             <title value="Create an Order with a Simple Product via the Admin"/>
             <description value="You should be able to place an Order using a Simple Product that is assigned to a Source with a Stock."/>
-            <testCaseId value="1008"/>
+            <testCaseId value="MSI-1008"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -66,10 +65,6 @@
             <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
         </actionGroup>
-
-        <conditionalClick selector="//*[contains(@class,'admin__collapsible-title')]//span[contains(text(), 'Content')]" dependentSelector="//span[contains(@data-bind, 'label')][contains(text(),'Content')]/../../..//div[contains(@class, '_show')]" visible="false" stepKey="clickOnTheContentHeaderIfClosed1"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <fillField selector="#product_form_description" userInput="Best Product" stepKey="fillDescriptionField1"/>
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultQuantityField1"/>
         <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillDefaultQuantityField2"/>
@@ -160,8 +155,7 @@
             <argument name="value" value="$$simpleProduct1.product[sku]$$"/>
         </actionGroup>
 
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[sku]$$" stepKey="seeUpdatedQuantity1"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[name]$$" stepKey="seeUpdatedQuantity2"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="95" stepKey="seeUpdatedQuantity3"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[name]$$" stepKey="seeStockName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="95" stepKey="seeUpdatedQuantity1"/>
     </test>
 </tests>

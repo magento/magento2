@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminManageSourceGridColumnsSortingTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Columns sorting order changed by Admin user"/>
             <title value="Columns sorting order changed in Manage Source grid by Admin user"/>
             <description value="You should be able to Change Columns Sorting Order in Manage Source grid."/>
-            <testCaseId value="862"/>
+            <testCaseId value="MSI-862"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="sort_order_test"/>
@@ -29,7 +28,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <!-- Disable source as it can broke single source mode tests. -->            
+            <!-- Disable source as it can broke single source mode tests. -->
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSourceToDisableCustomSource1"/>
             <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSourcesToDisableCustomSource1">
                 <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
@@ -39,7 +38,7 @@
             <waitForPageLoad time="30" stepKey="waitForSourceEditPageLoadToDisableCustomSource1"/>
             <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="clickIsEnabledToDisableCustomSource1"/>
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCustomSourceToDisableCustomSource1"/>
-            
+
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersForSourceToDisableCustomSource2"/>
             <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResultsForSourcesToDisableCustomSource2">
                 <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>

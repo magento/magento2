@@ -21,7 +21,7 @@ class IntFilter implements FilterProcessorInterface
      * @param array|string $value
      * @return void
      */
-    public function process(Collection $collection, $columnName, $value)
+    public function process(Collection $collection, string $columnName, $value): void
     {
         if (is_array($value)) {
             $from = $value[0] ?? null;

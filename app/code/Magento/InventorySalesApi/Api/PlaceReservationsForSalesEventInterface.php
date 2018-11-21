@@ -7,13 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesApi\Api;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
-
 /**
  * This service is responsible for creating reservations upon a sale event.
  *
@@ -22,14 +15,18 @@ use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
 interface PlaceReservationsForSalesEventInterface
 {
     /**
-     * @param ItemToSellInterface[] $items
-     * @param SalesChannelInterface $salesChannel
-     * @param SalesEventInterface $salesEvent
+     * @param \Magento\InventorySalesApi\Api\Data\ItemToSellInterface[] $items
+     * @param \Magento\InventorySalesApi\Api\Data\SalesChannelInterface $salesChannel
+     * @param \Magento\InventorySalesApi\Api\Data\SalesEventInterface $salesEvent
      * @return void
      *
-     * @throws LocalizedException
-     * @throws InputException
-     * @throws CouldNotSaveException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(array $items, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent);
+    public function execute(
+        array $items,
+        \Magento\InventorySalesApi\Api\Data\SalesChannelInterface $salesChannel,
+        \Magento\InventorySalesApi\Api\Data\SalesEventInterface $salesEvent
+    ): void;
 }

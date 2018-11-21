@@ -43,27 +43,21 @@ class Products implements ResolverInterface
     private $searchFilter;
 
     /**
-     * @var Layer\DataProvider\Filters
-     */
-    private $filtersDataProvider;
-
-    /**
      * @param Builder $searchCriteriaBuilder
      * @param Search $searchQuery
      * @param Filter $filterQuery
+     * @param SearchFilter $searchFilter
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
         Search $searchQuery,
         Filter $filterQuery,
-        SearchFilter $searchFilter,
-        \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
+        SearchFilter $searchFilter
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
         $this->filterQuery = $filterQuery;
         $this->searchFilter = $searchFilter;
-        $this->filtersDataProvider = $filtersDataProvider;
     }
 
     /**
@@ -115,7 +109,7 @@ class Products implements ResolverInterface
                 'page_size' => $searchCriteria->getPageSize(),
                 'current_page' => $currentPage
             ],
-            'filters' => $this->filtersDataProvider->getData($layerType)
+            'layer_type' => $layerType
         ];
 
         return $data;

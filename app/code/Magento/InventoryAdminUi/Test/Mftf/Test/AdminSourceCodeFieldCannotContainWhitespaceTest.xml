@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminSourceCodeFieldCannotContainWhitespaceTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Field Validation"/>
             <title value="Source Code cannot contain Whitespace"/>
             <description value="You should NOT be able to Save a Source with a Source Code that contains Whitespace."/>
-            <testCaseId value="939"/>
+            <testCaseId value="MSI-939"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

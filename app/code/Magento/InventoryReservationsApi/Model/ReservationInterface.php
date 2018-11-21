@@ -31,7 +31,7 @@ interface ReservationInterface
      *
      * @return int|null
      */
-    public function getReservationId();
+    public function getReservationId(): ?int;
 
     /**
      * Get Stock Id
@@ -67,5 +67,5 @@ interface ReservationInterface
      *
      * @return string|null
      */
-    public function getMetadata();
+    public function getMetadata(): ?string;
 }

@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddRemoveSourceColumnsTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add/Remove Grid Columns"/>
             <title value="Add/Remove Source Grid Columns"/>
             <description value="You should be able to toggle Columns on/off in the Source Grid."/>
-            <testCaseId value="627"/>
+            <testCaseId value="MSI-627"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

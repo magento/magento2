@@ -12,7 +12,8 @@
     "magento/module-inventory": "*",
     "magento/module-inventory-configuration-api": "*",
     "magento/module-inventory-indexer": "*",
-    "magento/module-inventory-sales-api": "*"
+    "magento/module-inventory-sales-api": "*",
+    "magento/module-inventory-configuration": "*"
   },
   "suggest": {
     "magento/module-inventory-reservations-api": "*"

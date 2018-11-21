@@ -53,7 +53,7 @@ class SalesChannels
                 }
             }
             unset($stockData);
-        } elseif ($data['totalRecords'] > 0) {
+        } elseif (isset($data['totalRecords']) && $data['totalRecords'] > 0) {
             foreach ($data['items'] as &$stockData) {
                 $salesChannelsData = $this->getSalesChannelsDataForStock($stockData);
                 if (count($salesChannelsData)) {

@@ -94,7 +94,7 @@ class SuggestQtyPlugin
             $productSku = $skus[$productId];
 
             $websiteCode = $this->storeManager->getWebsite()->getCode();
-            $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+            $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
             $stockId = (int)$stock->getStockId();
 
             $stockItemConfiguration = $this->getStockItemConfiguration->execute($productSku, $stockId);

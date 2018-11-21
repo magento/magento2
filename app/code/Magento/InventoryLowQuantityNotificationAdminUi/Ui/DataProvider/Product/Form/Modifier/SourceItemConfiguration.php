@@ -15,6 +15,8 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface;
 
 /**
  * Product form modifier. Add to form source item configuration data
@@ -42,21 +44,37 @@ class SourceItemConfiguration extends AbstractModifier
     private $scopeConfig;
 
     /**
+     * @var ArrayManager
+     */
+    private $arrayManager;
+
+    /**
+     * @var IsSingleSourceModeInterface
+     */
+    private $isSingleSourceMode;
+
+    /**
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
      * @param LocatorInterface $locator
      * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
      * @param ScopeConfigInterface $scopeConfig
+     * @param ArrayManager $arrayManager
+     * @param IsSingleSourceModeInterface $isSingleSourceMode
      */
     public function __construct(
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
         LocatorInterface $locator,
         GetSourceItemConfigurationInterface $getSourceItemConfiguration,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        ArrayManager $arrayManager,
+        IsSingleSourceModeInterface $isSingleSourceMode
     ) {
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->locator = $locator;
         $this->getSourceItemConfiguration = $getSourceItemConfiguration;
         $this->scopeConfig = $scopeConfig;
+        $this->arrayManager = $arrayManager;
+        $this->isSingleSourceMode = $isSingleSourceMode;
     }
 
     /**
@@ -116,6 +134,27 @@ class SourceItemConfiguration extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
+        $stockDataPath = $this->arrayManager->findPath(
+            'stock_data',
+            $meta,
+            null,
+            'children'
+        );
+
+        if (null === $stockDataPath || $this->isSingleSourceMode->execute()) {
+            return $meta;
+        }
+
+        $backordersPath = $stockDataPath . '/children/container_notify_stock_qty/arguments/data/config';
+        $meta = $this->arrayManager->set(
+            $backordersPath,
+            $meta,
+            [
+                'visible' => 0,
+                'imports' => '',
+            ]
+        );
+
         return $meta;
     }
 

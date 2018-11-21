@@ -23,6 +23,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Replace legacy quote item check
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CheckQuoteItemQtyPlugin
 {
@@ -123,7 +124,7 @@ class CheckQuoteItemQtyPlugin
         $productSku = $skus[$productId];
 
         $websiteCode = $this->storeManager->getWebsite()->getCode();
-        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+        $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $stockId = $stock->getStockId();
 
         $isSalableResult = $this->isProductSalableForRequestedQty->execute($productSku, (int)$stockId, $qty);

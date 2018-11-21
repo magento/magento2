@@ -18,11 +18,12 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * InlineEdit Controller
  */
-class InlineEdit extends Action
+class InlineEdit extends Action implements HttpPostActionInterface
 {
     /**
      * @see _isAllowed()

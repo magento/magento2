@@ -363,14 +363,7 @@ define([
             this.modal.data('active', false);
 
             if (this.overlay) {
-                // In cases when one modal is closed but there is another modal open (e.g. admin notifications)
-                // to avoid collisions between overlay and modal zIndexes
-                // overlay zIndex is set to be less than modal one
-                if (this._getVisibleCount() === 1) {
-                    this.overlay.zIndex(this.prevOverlayIndex - 1);
-                } else {
-                    this.overlay.zIndex(this.prevOverlayIndex);
-                }
+                this.overlay.zIndex(this.prevOverlayIndex - 1);
             }
         },
 

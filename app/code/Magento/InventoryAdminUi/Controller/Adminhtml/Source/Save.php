@@ -19,11 +19,12 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryAdminUi\Model\Source\SourceHydrator;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Save Controller
  */
-class Save extends Action
+class Save extends Action implements HttpPostActionInterface
 {
     /**
      * @see _isAllowed()

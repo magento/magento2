@@ -21,16 +21,16 @@
                 default="0" comment="Flag if notification read"/>
         <column xsi:type="smallint" name="is_remove" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Flag if notification might be removed"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="notification_id"/>
         </constraint>
-        <index name="ADMINNOTIFICATION_INBOX_SEVERITY" indexType="btree">
+        <index referenceId="ADMINNOTIFICATION_INBOX_SEVERITY" indexType="btree">
             <column name="severity"/>
         </index>
-        <index name="ADMINNOTIFICATION_INBOX_IS_READ" indexType="btree">
+        <index referenceId="ADMINNOTIFICATION_INBOX_IS_READ" indexType="btree">
             <column name="is_read"/>
         </index>
-        <index name="ADMINNOTIFICATION_INBOX_IS_REMOVE" indexType="btree">
+        <index referenceId="ADMINNOTIFICATION_INBOX_IS_REMOVE" indexType="btree">
             <column name="is_remove"/>
         </index>
     </table>
@@ -40,7 +40,7 @@
                 default="0" comment="Problem type"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Create date"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="identity"/>
         </constraint>
     </table>

@@ -10,6 +10,7 @@ namespace Magento\InventorySourceDeductionApi\Model;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Retrieve source item from specific source by given SKU.
@@ -43,9 +44,10 @@ class GetSourceItemBySourceCodeAndSku
      *
      * @param string $sourceCode
      * @param string $sku
-     * @return SourceItemInterface|null
+     * @return SourceItemInterface
+     * @throws NoSuchEntityException
      */
-    public function execute(string $sourceCode, string $sku)
+    public function execute(string $sourceCode, string $sku): SourceItemInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)
@@ -53,6 +55,12 @@ class GetSourceItemBySourceCodeAndSku
             ->create();
         $sourceItemsResult = $this->sourceItemRepository->getList($searchCriteria);
 
-        return $sourceItemsResult->getTotalCount() > 0 ? current($sourceItemsResult->getItems()) : null;
+        if ($sourceItemsResult->getTotalCount() === 0) {
+            throw new NoSuchEntityException(
+                __('Source item not found by source code: %1 and sku: %2.', $sourceCode, $sku)
+            );
+        }
+
+        return current($sourceItemsResult->getItems());
     }
 }

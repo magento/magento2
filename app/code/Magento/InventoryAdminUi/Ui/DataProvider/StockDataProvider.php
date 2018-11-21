@@ -147,8 +147,6 @@ class StockDataProvider extends DataProvider
                 foreach ($data['items'] as $index => $stock) {
                     $data['items'][$index]['assigned_sources'] = $this->getAssignedSourcesById($stock['stock_id']);
                 }
-            } else {
-                $data = [];
             }
         }
 

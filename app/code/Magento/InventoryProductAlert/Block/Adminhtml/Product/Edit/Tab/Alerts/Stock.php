@@ -67,7 +67,7 @@ class Stock extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Sto
         foreach ($this->getCollection()->getItems() as $item) {
             /** @var WebsiteInterface $website */
             $website = $this->_storeManager->getWebsite($item->getWebsiteId());
-            $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $website->getCode());
+            $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $website->getCode());
             $item->setStockName($stock->getName());
         }
     }

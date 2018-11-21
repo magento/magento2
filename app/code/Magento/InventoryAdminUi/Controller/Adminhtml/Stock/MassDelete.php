@@ -13,11 +13,12 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryAdminUi\Ui\Component\MassAction\Filter;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * MassDelete Controller
  */
-class MassDelete extends Action
+class MassDelete extends Action implements HttpPostActionInterface
 {
     /**
      * @see _isAllowed()

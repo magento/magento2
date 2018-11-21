@@ -12,7 +12,7 @@ namespace Magento\InventorySourceSelectionApi\Api\Data;
  *
  * @api
  */
-interface ItemRequestInterface
+interface ItemRequestInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Requested SKU
@@ -43,4 +43,21 @@ interface ItemRequestInterface
      * @return void
      */
     public function setQty(float $qty): void;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * @return \Magento\InventorySourceSelectionApi\Api\Data\ItemRequestExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?ItemRequestExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventorySourceSelectionApi\Api\Data\ItemRequestExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(
+        \Magento\InventorySourceSelectionApi\Api\Data\ItemRequestExtensionInterface $extensionAttributes
+    ): void;
 }

@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminAddedProductsToGroupGrid">
         <element name="inputByProductName" type="input" selector="//div[@data-index='grouped']//table//tr[td[@data-index='name']//span[text()='{{productName}}']]//td[@data-index='qty']//input" parameterized="true"/>
     </section>

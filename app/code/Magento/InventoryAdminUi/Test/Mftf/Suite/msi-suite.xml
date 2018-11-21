@@ -23,7 +23,6 @@
             <group name="multi_mode"/>
         </exclude>
         <after>
-            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled"/>
             <magentoCLI stepKey="dbRollback" command="setup:rollback" arguments="--db-file%3D%24%28ls%20..%2F..%2F..%2F..%2Fvar%2Fbackups%29%20-n" />
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
         </after>
@@ -42,7 +41,6 @@
             <group name="single_mode"/>
         </exclude>
         <after>
-            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled"/>
             <magentoCLI stepKey="dbRollback" command="setup:rollback" arguments="--db-file%3D%24%28ls%20..%2F..%2F..%2F..%2Fvar%2Fbackups%29%20-n" />
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
         </after>
@@ -62,7 +60,6 @@
             <group name="multi_mode"/>
         </exclude>
         <after>
-            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled"/>
             <magentoCLI stepKey="dbRollback" command="setup:rollback" arguments="--db-file%3D%24%28ls%20..%2F..%2F..%2F..%2Fvar%2Fbackups%29%20-n" />
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
         </after>

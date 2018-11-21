@@ -36,7 +36,7 @@ class DeleteSalesChannelToStockLink implements DeleteSalesChannelToStockLinkInte
     /**
      * @inheritdoc
      */
-    public function execute(string $type, string $code)
+    public function execute(string $type, string $code): void
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('inventory_stock_sales_channel');

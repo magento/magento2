@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotificationApi\Api;
 
-use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
-
 /**
  * Get the source item configuration
  * Firstly try to load Source Item configuration if configuration isn't exist then load global configuration value
@@ -27,5 +25,8 @@ interface GetSourceItemConfigurationInterface
      * @return \Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(string $sourceCode, string $sku): SourceItemConfigurationInterface;
+    public function execute(
+        string $sourceCode,
+        string $sku
+    ): \Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 }

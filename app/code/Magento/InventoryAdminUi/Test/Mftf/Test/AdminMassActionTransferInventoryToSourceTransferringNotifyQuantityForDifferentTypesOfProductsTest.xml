@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMassActionTransferInventoryToSourceTransferringNotifyQuantityForDifferentTypesOfProductsTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Transfer inventory to source"/>
             <title value="Notify Quantity transferring when admin user apply mass action 'Transfer Inventory To Source' on Products grid to different types of products"/>
             <description value="You should be able use mass action 'Transfer inventory to source' to transfer notify quantity via mass action on products grid"/>
-            <testCaseId value="1523"/>
+            <testCaseId value="MSI-1523"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -22,6 +21,7 @@
                 <issueId value="MSI-1509"/>
             </skip>
         </annotations>
+
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="BasicMsiStock1" stepKey="createStock"/>
@@ -107,7 +107,6 @@
             <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
         </before>
-
         <after>
             <comment userInput="Delete all products after test" stepKey="deleteAllProductsViaGridAfterTestComment"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductsGridForDeleteAllProductsComment"/>

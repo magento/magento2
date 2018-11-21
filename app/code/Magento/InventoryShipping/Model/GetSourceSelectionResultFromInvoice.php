@@ -7,16 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
-use Magento\Sales\Model\Order\Invoice\Item as InvoiceItemModel;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
@@ -30,9 +27,9 @@ use Traversable;
 class GetSourceSelectionResultFromInvoice
 {
     /**
-     * @var GetSkusByProductIdsInterface
+     * @var GetSkuFromOrderItemInterface
      */
-    private $getSkusByProductIds;
+    private $getSkuFromOrderItem;
 
     /**
      * @var ItemRequestInterfaceFactory
@@ -60,7 +57,7 @@ class GetSourceSelectionResultFromInvoice
     private $sourceSelectionService;
 
     /**
-     * @param GetSkusByProductIdsInterface $getSkusByProductIds
+     * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
@@ -68,25 +65,24 @@ class GetSourceSelectionResultFromInvoice
      * @param SourceSelectionServiceInterface $sourceSelectionService
      */
     public function __construct(
-        GetSkusByProductIdsInterface $getSkusByProductIds,
+        GetSkuFromOrderItemInterface $getSkuFromOrderItem,
         ItemRequestInterfaceFactory $itemRequestFactory,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
         SourceSelectionServiceInterface $sourceSelectionService
     ) {
-        $this->getSkusByProductIds = $getSkusByProductIds;
         $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
         $this->sourceSelectionService = $sourceSelectionService;
+        $this->getSkuFromOrderItem = $getSkuFromOrderItem;
     }
 
     /**
      * @param InvoiceInterface $invoice
      * @return SourceSelectionResultInterface
-     * @throws InputException
      */
     public function execute(InvoiceInterface $invoice): SourceSelectionResultInterface
     {
@@ -107,7 +103,6 @@ class GetSourceSelectionResultFromInvoice
     /**
      * @param InvoiceItemInterface[]|Traversable $invoiceItems
      * @return array
-     * @throws NoSuchEntityException
      */
     private function getSelectionRequestItems(Traversable $invoiceItems): array
     {
@@ -119,9 +114,7 @@ class GetSourceSelectionResultFromInvoice
                 continue;
             }
 
-            $itemSku = $invoiceItem->getSku() ?: $this->getSkusByProductIds->execute(
-                [$invoiceItem->getProductId()]
-            )[$invoiceItem->getProductId()];
+            $itemSku = $this->getSkuFromOrderItem->execute($orderItem);
             $qty = $this->castQty($invoiceItem->getOrderItem(), $invoiceItem->getQty());
 
             $selectionRequestItems[] = $this->itemRequestFactory->create([

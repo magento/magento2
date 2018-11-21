@@ -13,8 +13,8 @@ use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
 use Magento\InventorySalesApi\Api\Data\ItemToSellInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesEventInterface;
+use Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
-use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 
@@ -34,9 +34,9 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
     private $appendReservations;
 
     /**
-     * @var StockResolverInterface
+     * @var GetStockBySalesChannelInterface
      */
-    private $stockResolver;
+    private $getStockBySalesChannel;
 
     /**
      * @var GetProductTypesBySkusInterface
@@ -54,38 +54,47 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
     private $serializer;
 
     /**
+     * @var SalesEventToArrayConverter
+     */
+    private $salesEventToArrayConverter;
+
+    /**
      * @param ReservationBuilderInterface $reservationBuilder
      * @param AppendReservationsInterface $appendReservations
-     * @param StockResolverInterface $stockResolver
+     * @param GetStockBySalesChannelInterface $getStockBySalesChannel
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
+     * @param SerializerInterface $serializer
+     * @param SalesEventToArrayConverter $salesEventToArrayConverter
      */
     public function __construct(
         ReservationBuilderInterface $reservationBuilder,
         AppendReservationsInterface $appendReservations,
-        StockResolverInterface $stockResolver,
+        GetStockBySalesChannelInterface $getStockBySalesChannel,
         GetProductTypesBySkusInterface $getProductTypesBySkus,
         IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        SalesEventToArrayConverter $salesEventToArrayConverter
     ) {
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
-        $this->stockResolver = $stockResolver;
+        $this->getStockBySalesChannel = $getStockBySalesChannel;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
         $this->serializer = $serializer;
+        $this->salesEventToArrayConverter = $salesEventToArrayConverter;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(array $items, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent)
+    public function execute(array $items, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent): void
     {
         if (empty($items)) {
             return;
         }
 
-        $stockId = (int)$this->stockResolver->get($salesChannel->getType(), $salesChannel->getCode())->getStockId();
+        $stockId = $this->getStockBySalesChannel->execute($salesChannel)->getStockId();
 
         $skus = [];
         /** @var ItemToSellInterface $item */
@@ -105,7 +114,7 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
                     ->setSku($item->getSku())
                     ->setQuantity((float)$item->getQuantity())
                     ->setStockId($stockId)
-                    ->setMetadata($this->serializer->serialize($salesEvent->toArray()))
+                    ->setMetadata($this->serializer->serialize($this->salesEventToArrayConverter->execute($salesEvent)))
                     ->build();
             }
         }

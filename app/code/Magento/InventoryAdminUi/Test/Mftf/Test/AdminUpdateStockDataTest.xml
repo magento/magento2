@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminUpdateStockDataTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Update Stock"/>
             <title value="Stock data updated by Admin user"/>
             <description value="You should be able to update a Stocks data via the Admin."/>
-            <testCaseId value="516"/>
+            <testCaseId value="MSI-516"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreatePartialShipmentForOrderWithSimpleProductFromCustomSourceTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Sales-Shipments"/>
             <title value="Admin user created partial shipment for order with Simple product from Test source and Main Website"/>
             <description value="You should be able to create partial shipment from Custom Source."/>
-            <testCaseId value="1138"/>
+            <testCaseId value="MSI-1138"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -72,7 +71,6 @@
                        stepKey="fillSourceQtyField"/>
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose"/>
         </before>
-
         <after>
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>

@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateNewStockWithNoSourceOrSalesChannelTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Add Stock"/>
             <title value="New Stock created by Admin user with no Source and Sales Channel assigned"/>
             <description value="You should be able to create a New Stock, via the Admin, without adding a Source or Sales Channel."/>
-            <testCaseId value="513"/>
+            <testCaseId value="MSI-513"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

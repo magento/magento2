@@ -7,14 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminApplyDataViewsOnManageSourcesGridPageTest">
         <annotations>
-            <features value="Multi-Source Inventory"/>
             <stories value="Save and Load Admin Grid Views"/>
             <title value="Save and Load Admin Source Grid Views"/>
             <description value="You should be able to Save and Load a Grid View for the Sources Grid."/>
-            <testCaseId value="915"/>
+            <testCaseId value="MSI-915"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

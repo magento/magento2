@@ -12,7 +12,7 @@ namespace Magento\InventorySourceSelectionApi\Api\Data;
  *
  * @api
  */
-interface SourceSelectionAlgorithmInterface
+interface SourceSelectionAlgorithmInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @return string
@@ -28,4 +28,23 @@ interface SourceSelectionAlgorithmInterface
      * @return string
      */
     public function getDescription(): string;
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?SourceSelectionAlgorithmExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @codingStandardsIgnoreStart
+     * @param \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmExtensionInterface $extensionAttributes
+     * @codingStandardsIgnoreEnd
+     * @return void
+     */
+    public function setExtensionAttributes(
+        \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmExtensionInterface $extensionAttributes
+    ): void;
 }
