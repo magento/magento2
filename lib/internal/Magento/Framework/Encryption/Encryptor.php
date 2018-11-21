@@ -295,7 +295,7 @@ class Encryptor implements EncryptorInterface
      * @param string $data
      * @return string
      */
-    public function encryptWithFastestAlgorithm($data)
+    public function encryptWithFastestAvailableAlgorithm($data)
     {
         $crypt = $this->getCrypt();
         if (null === $crypt) {
