@@ -50,6 +50,8 @@ class PriorityBasedAlgorithm implements SourceSelectionInterface
     private $sourceItemRepository;
 
     /**
+     * PriorityBasedAlgorithm constructor.
+     *
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      * @param SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory
      * @param SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory
@@ -89,7 +91,7 @@ class PriorityBasedAlgorithm implements SourceSelectionInterface
                     continue;
                 }
 
-                if ($sourceItem->getStatus() != SourceItemInterface::STATUS_IN_STOCK) {
+                if ($sourceItem->getStatus() !== SourceItemInterface::STATUS_IN_STOCK) {
                     continue;
                 }
 
@@ -163,7 +165,7 @@ class PriorityBasedAlgorithm implements SourceSelectionInterface
      * @param string $sku
      * @return SourceItemInterface|null
      */
-    private function getSourceItemBySourceCodeAndSku(string $sourceCode, string $sku)
+    private function getSourceItemBySourceCodeAndSku(string $sourceCode, string $sku): ?SourceItemInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)

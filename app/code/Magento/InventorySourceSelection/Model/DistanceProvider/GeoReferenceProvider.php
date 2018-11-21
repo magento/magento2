@@ -12,12 +12,12 @@ use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
 use Magento\InventorySourceSelection\Model\Request\LatLngRequestFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterfaceFactory;
-use Magento\InventorySourceSelectionApi\Model\DistanceProviderInterface;
+use Magento\InventorySourceSelectionApi\Model\GeoReferenceProviderInterface;
 
 /**
  * @inheritdoc
  */
-class DistanceProvider implements DistanceProviderInterface
+class GeoReferenceProvider implements GeoReferenceProviderInterface
 {
     /**
      * @var GetLatLngRequestFromAddressInterface
@@ -62,12 +62,28 @@ class DistanceProvider implements DistanceProviderInterface
     }
 
     /**
-     * Get latitude and longitude from address
-     *
-     * @param SourceInterface $source
-     * @return LatLngRequest
+     * @inheritdoc
      */
-    private function getSourceLatLng(SourceInterface $source): LatLngRequest
+    public function getDistance(SourceInterface $source, AddressRequestInterface $destination): float
+    {
+        $sourceLatLng = $this->getSourceLatLng($source);
+        $destinationLatLng = $this->getLatLngRequestFromAddress->execute($destination);
+
+        return $this->getDistance->execute($sourceLatLng, $destinationLatLng);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAddressLatLng(AddressRequestInterface $destination): LatLngRequest
+    {
+        return $this->getLatLngRequestFromAddress->execute($destination);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSourceLatLng(SourceInterface $source): LatLngRequest
     {
         if (!$source->getLatitude() || !$source->getLongitude()) {
             $sourceAddress = $this->addressRequestInterfaceFactory->create([
@@ -78,23 +94,12 @@ class DistanceProvider implements DistanceProviderInterface
                 'city' => $source->getCity() ?? ''
             ]);
 
-            return $this->getLatLngRequestFromAddress->execute($sourceAddress);
+            return $this->getAddressLatLng($sourceAddress);
         }
 
         return $this->latLngRequestFactory->create([
             'lat' => (float) $source->getLatitude(),
             'lng' => (float) $source->getLongitude()
         ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function execute(SourceInterface $source, AddressRequestInterface $destination): float
-    {
-        $sourceLatLng = $this->getSourceLatLng($source);
-        $destinationLatLng = $this->getLatLngRequestFromAddress->execute($destination);
-
-        return $this->getDistance->execute($sourceLatLng, $destinationLatLng);
     }
 }

@@ -38,11 +38,6 @@ class GetSourceSelectionResultFromInvoice
     private $itemRequestFactory;
 
     /**
-     * @var InventoryRequestInterfaceFactory
-     */
-    private $inventoryRequestFactory;
-
-    /**
      * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
@@ -63,10 +58,11 @@ class GetSourceSelectionResultFromInvoice
     private $getInventoryRequestFromOrderBuilder;
 
     /**
+     * GetSourceSelectionResultFromInvoice constructor.
+     *
      * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
-     * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder
@@ -75,13 +71,11 @@ class GetSourceSelectionResultFromInvoice
         GetSkuFromOrderItemInterface $getSkuFromOrderItem,
         ItemRequestInterfaceFactory $itemRequestFactory,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
-        InventoryRequestInterfaceFactory $inventoryRequestFactory,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
         SourceSelectionServiceInterface $sourceSelectionService,
         GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder
     ) {
         $this->itemRequestFactory = $itemRequestFactory;
-        $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
         $this->sourceSelectionService = $sourceSelectionService;
@@ -90,6 +84,8 @@ class GetSourceSelectionResultFromInvoice
     }
 
     /**
+     * Get source selection result from invoice
+     *
      * @param InvoiceInterface $invoice
      * @return SourceSelectionResultInterface
      * @throws UndefinedInventoryRequestBuilderException
@@ -114,6 +110,8 @@ class GetSourceSelectionResultFromInvoice
     }
 
     /**
+     * Get selection request items
+     *
      * @param InvoiceItemInterface[]|Traversable $invoiceItems
      * @return array
      */
@@ -139,16 +137,18 @@ class GetSourceSelectionResultFromInvoice
     }
 
     /**
+     * Cast qty value
+     *
      * @param OrderItemInterface $item
      * @param string|int|float $qty
-     * @return float|int
+     * @return float
      */
-    private function castQty(OrderItemInterface $item, $qty)
+    private function castQty(OrderItemInterface $item, $qty): float
     {
         if ($item->getIsQtyDecimal()) {
-            $qty = (double)$qty;
+            $qty = (float) $qty;
         } else {
-            $qty = (int)$qty;
+            $qty = (int) $qty;
         }
 
         return $qty > 0 ? $qty : 0;

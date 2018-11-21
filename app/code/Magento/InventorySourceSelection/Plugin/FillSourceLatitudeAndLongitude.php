@@ -10,28 +10,28 @@ namespace Magento\InventorySourceSelection\Plugin;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventorySourceSelection\Model\DistanceProvider\GoogleMap\GetLatLngRequestFromSource;
+use Magento\InventorySourceSelectionApi\Model\GetGeoReferenceProvider;
 
 /**
  * Compute latitude and longitude for a source if none is defined
  */
-class ComputeSourceLatitudeAndLongitude
+class FillSourceLatitudeAndLongitude
 {
     /**
-     * @var GetLatLngRequestFromSource
+     * @var GetGeoReferenceProvider
      */
-    private $getLatLngRequestFromSource;
+    private $getGeoReferenceProvider;
 
     /**
      * ComputeSourceLatitudeAndLongitude constructor.
      *
-     * @param GetLatLngRequestFromSource $getLatLngRequestFromSource
+     * @param GetGeoReferenceProvider $getGeoReferenceProvider
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        GetLatLngRequestFromSource $getLatLngRequestFromSource
+        GetGeoReferenceProvider $getGeoReferenceProvider
     ) {
-        $this->getLatLngRequestFromSource = $getLatLngRequestFromSource;
+        $this->getGeoReferenceProvider = $getGeoReferenceProvider;
     }
 
     /**
@@ -46,9 +46,11 @@ class ComputeSourceLatitudeAndLongitude
         SourceRepositoryInterface $subject,
         SourceInterface $source
     ): array {
-        if (!$source->getLongitude() && !$source->getLongitude()) {
+        if (!$source->getLatitude() && !$source->getLongitude()) {
             try {
-                $latLng = $this->getLatLngRequestFromSource->execute($source);
+                $geoReferenceProvider = $this->getGeoReferenceProvider->execute();
+                $latLng = $geoReferenceProvider->getSourceLatLng($source);
+
                 $source->setLatitude($latLng->getLat());
                 $source->setLongitude($latLng->getLng());
             } catch (\Exception $e) {

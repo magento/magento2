@@ -17,8 +17,7 @@ use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterfaceFactory;
-use Magento\InventorySourceSelectionApi\Api\GetDistanceProviderCodeInterface;
-use Magento\InventorySourceSelectionApi\Model\DistanceProviderPool;
+use Magento\InventorySourceSelectionApi\Model\GetGeoReferenceProvider;
 use Magento\InventorySourceSelectionApi\Model\SourceSelectionInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
@@ -54,23 +53,19 @@ class DistanceBasedAlgorithm implements SourceSelectionInterface
     private $sourceItemRepository;
 
     /**
-     * @var DistanceProviderPool
+     * @var GetGeoReferenceProvider
      */
-    private $distanceProviderPool;
+    private $getGeoReferenceProvider;
 
     /**
-     * @var GetDistanceProviderCodeInterface
-     */
-    private $getDistanceProviderCode;
-
-    /**
+     * DistanceBasedAlgorithm constructor.
+     *
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      * @param SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory
      * @param SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceItemRepositoryInterface $sourceItemRepository
-     * @param DistanceProviderPool $distanceProviderPool
-     * @param GetDistanceProviderCodeInterface $getDistanceProviderCode
+     * @param GetGeoReferenceProvider $getGeoReferenceProvider
      */
     public function __construct(
         GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
@@ -78,16 +73,14 @@ class DistanceBasedAlgorithm implements SourceSelectionInterface
         SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SourceItemRepositoryInterface $sourceItemRepository,
-        DistanceProviderPool $distanceProviderPool,
-        GetDistanceProviderCodeInterface $getDistanceProviderCode
+        GetGeoReferenceProvider $getGeoReferenceProvider
     ) {
         $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
         $this->sourceSelectionItemFactory = $sourceSelectionItemFactory;
         $this->sourceSelectionResultFactory = $sourceSelectionResultFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceItemRepository = $sourceItemRepository;
-        $this->distanceProviderPool = $distanceProviderPool;
-        $this->getDistanceProviderCode = $getDistanceProviderCode;
+        $this->getGeoReferenceProvider = $getGeoReferenceProvider;
     }
 
     /**
@@ -118,7 +111,7 @@ class DistanceBasedAlgorithm implements SourceSelectionInterface
                     continue;
                 }
 
-                if ($sourceItem->getStatus() != SourceItemInterface::STATUS_IN_STOCK) {
+                if ($sourceItem->getStatus() !== SourceItemInterface::STATUS_IN_STOCK) {
                     continue;
                 }
 
@@ -187,15 +180,14 @@ class DistanceBasedAlgorithm implements SourceSelectionInterface
             return $source->isEnabled();
         });
 
-        $distanceProviderCode = $this->getDistanceProviderCode->execute();
-        $distanceProvider = $this->distanceProviderPool->getProvider($distanceProviderCode);
+        $geoReferenceProvider = $this->getGeoReferenceProvider->execute();
 
         // Sort sources by distance
         uasort(
             $sources,
-            function (SourceInterface $a, SourceInterface $b) use ($distanceProvider, $addressRequest) {
-                $distanceFromA = $distanceProvider->execute($a, $addressRequest);
-                $distanceFromB = $distanceProvider->execute($b, $addressRequest);
+            function (SourceInterface $a, SourceInterface $b) use ($geoReferenceProvider, $addressRequest) {
+                $distanceFromA = $geoReferenceProvider->getDistance($a, $addressRequest);
+                $distanceFromB = $geoReferenceProvider->getDistance($b, $addressRequest);
 
                 return ($distanceFromA < $distanceFromB) ? -1 : 1;
             }
@@ -211,7 +203,7 @@ class DistanceBasedAlgorithm implements SourceSelectionInterface
      * @param string $sku
      * @return SourceItemInterface|null
      */
-    private function getSourceItemBySourceCodeAndSku(string $sourceCode, string $sku)
+    private function getSourceItemBySourceCodeAndSku(string $sourceCode, string $sku): ?SourceItemInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)

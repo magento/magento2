@@ -7,23 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelection\Test\Integration;
 
-use Magento\InventorySourceSelectionApi\Api\GetDistanceProviderCodeInterface;
+use Magento\InventorySourceSelectionApi\Api\GetGeoReferenceProviderCodeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class GetDistanceProviderCodeTest extends TestCase
+class GetGeoReferenceProviderCodeTest extends TestCase
 {
     /**
-     * @var GetDistanceProviderCodeInterface
+     * @var GetGeoReferenceProviderCodeInterface
      */
-    private $getDistanceProviderCode;
+    private $getGeoReferenceProviderCode;
 
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->getDistanceProviderCode = Bootstrap::getObjectManager()->get(GetDistanceProviderCodeInterface::class);
+        $this->getGeoReferenceProviderCode =
+            Bootstrap::getObjectManager()->get(GetGeoReferenceProviderCodeInterface::class);
     }
 
     /**
@@ -33,6 +34,6 @@ class GetDistanceProviderCodeTest extends TestCase
      */
     public function testGetDistanceProviderCode()
     {
-        self::assertEquals('test_provider', $this->getDistanceProviderCode->execute());
+        self::assertEquals('test_provider', $this->getGeoReferenceProviderCode->execute());
     }
 }

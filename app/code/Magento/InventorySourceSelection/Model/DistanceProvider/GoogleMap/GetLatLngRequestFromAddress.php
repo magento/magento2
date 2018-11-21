@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelection\Model\DistanceProvider\GoogleMap;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -21,19 +20,17 @@ use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
  */
 class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterface
 {
-    const GOOGLE_ENDPOINT = 'https://maps.google.com/maps/api/geocode/json';
+    public const GOOGLE_ENDPOINT = 'https://maps.google.com/maps/api/geocode/json';
 
+    /**
+     * @var array
+     */
     private $latLngCache = [];
 
     /**
      * @var ClientInterface
      */
     private $client;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
 
     /**
      * @var LatLngRequestFactory
@@ -56,18 +53,15 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
      * @param ClientInterface $client
      * @param LatLngRequestFactory $latLngRequestFactory
      * @param Json $json
-     * @param ScopeConfigInterface $scopeConfig
      * @param GetApiKey $getApiKey
      */
     public function __construct(
         ClientInterface $client,
         LatLngRequestFactory $latLngRequestFactory,
         Json $json,
-        ScopeConfigInterface $scopeConfig,
         GetApiKey $getApiKey
     ) {
         $this->client = $client;
-        $this->scopeConfig = $scopeConfig;
         $this->latLngRequestFactory = $latLngRequestFactory;
         $this->json = $json;
         $this->getApiKey = $getApiKey;

@@ -10,6 +10,6 @@
 
     <type name="Magento\InventoryApi\Api\SourceRepositoryInterface">
         <plugin sortOrder="10" name="updateSourceLatitudeAndLongitude"
-                type="Magento\InventorySourceSelection\Plugin\ComputeSourceLatitudeAndLongitude"/>
+                type="Magento\InventorySourceSelection\Plugin\FillSourceLatitudeAndLongitude"/>
     </type>
 </config>

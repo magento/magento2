@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\InventorySourceSelection\Model\Config\Source;
 
 use Magento\Framework\Option\ArrayInterface;
-use Magento\InventorySourceSelectionApi\Model\DistanceProviderPool;
+use Magento\InventorySourceSelectionApi\Model\GeoReferenceProviderPool;
 
 class DistanceProvider implements ArrayInterface
 {
     /**
-     * @var DistanceProviderPool
+     * @var GeoReferenceProviderPool
      */
     private $distanceProviderPool;
 
@@ -25,11 +25,11 @@ class DistanceProvider implements ArrayInterface
     /**
      * DistanceProvider constructor.
      *
-     * @param DistanceProviderPool $distanceProviderPool
+     * @param GeoReferenceProviderPool $distanceProviderPool
      * @param string[] $distanceProviderDescriptions
      */
     public function __construct(
-        DistanceProviderPool $distanceProviderPool,
+        GeoReferenceProviderPool $distanceProviderPool,
         array $distanceProviderDescriptions = []
     ) {
         $this->distanceProviderPool = $distanceProviderPool;
