@@ -15,7 +15,7 @@
                 + '</span>'
             + '</span>'; %>
         <li class="item">
-            <%= $t('<?= $block->escapeHtml(__('Buy %1 for %2 each and')) ?>').replace('%1', item.qty).replace('%2', priceStr) %>
+            <%= '<?= $block->escapeHtml(__('Buy %1 for %2 each and')) ?>'.replace('%1', item.qty).replace('%2', priceStr) %>
                 <strong class="benefit">
                     <?= $block->escapeHtml(__('save')) ?><span class="percent tier-<%= key %>">&nbsp;<%= item.percentage %></span>%
                 </strong>
