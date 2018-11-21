@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Block\Category;
 
-use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 

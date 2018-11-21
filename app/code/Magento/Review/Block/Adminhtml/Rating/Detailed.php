@@ -5,7 +5,6 @@
  */
 namespace Magento\Review\Block\Adminhtml\Rating;
 
-use Magento\Review\Model\Rating;
 use Magento\Review\Model\Rating\Option;
 use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
 use Magento\Review\Model\ResourceModel\Rating\Option\Vote\Collection as VoteCollection;

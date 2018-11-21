@@ -7,8 +7,6 @@ namespace Magento\Framework\App\Test\Unit\PageCache;
 
 use \Magento\Framework\App\PageCache\Version;
 
-use Magento\TestFramework\ObjectManager;
-
 class VersionTest extends \PHPUnit\Framework\TestCase
 {
     /**

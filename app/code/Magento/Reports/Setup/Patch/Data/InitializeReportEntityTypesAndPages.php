@@ -7,7 +7,6 @@
 namespace Magento\Reports\Setup\Patch\Data;
 
 use Magento\Cms\Model\PageFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 

@@ -6,7 +6,6 @@
 
 namespace Magento\Backend\Test\TestCase;
 
-use Magento\Backend\Test\Fixture\GlobalSearch;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\TestCase\Injectable;
 

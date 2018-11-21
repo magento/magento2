@@ -5,7 +5,6 @@
  */
 namespace Magento\Ui\Component\Layout;
 
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;

@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Customer\Block\Account;
 
 use \Magento\Framework\View\Element\Html\Links;
-use \Magento\Customer\Block\Account\SortLinkInterface;
 
 /**
  * Class for sorting links in navigation panels.

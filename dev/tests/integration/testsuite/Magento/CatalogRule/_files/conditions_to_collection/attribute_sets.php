@@ -27,7 +27,6 @@ $dataObjectHelper->populateWithArray(
 );
 $attributeSetManagement->create('catalog_product', $attributeSet, $defaultAttributeSet)->save();
 
-
 $attributeSet = $attributeSetFactory->create();
 $dataObjectHelper->populateWithArray(
     $attributeSet,

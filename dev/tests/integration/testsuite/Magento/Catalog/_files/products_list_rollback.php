@@ -37,6 +37,5 @@ try {
     //Product already removed
 }
 
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

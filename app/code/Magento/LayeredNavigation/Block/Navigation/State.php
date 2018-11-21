@@ -5,8 +5,6 @@
  */
 namespace Magento\LayeredNavigation\Block\Navigation;
 
-use Magento\Framework\View\Element\Template;
-
 /**
  * Layered navigation state
  *

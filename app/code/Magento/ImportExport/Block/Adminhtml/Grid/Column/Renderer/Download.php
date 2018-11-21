@@ -5,8 +5,6 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer;
 
-use Magento\ImportExport\Model\Import;
-
 /**
  * Backup grid item renderer
  */

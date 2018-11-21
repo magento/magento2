@@ -167,7 +167,6 @@ fragment TypeRef on __Type {
   }
 }
 
-
 QUERY;
         $postData = [
             'query'         => $query,

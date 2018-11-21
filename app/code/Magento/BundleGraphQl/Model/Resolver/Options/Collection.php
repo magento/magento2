@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\BundleGraphQl\Model\Resolver\Options;
 
 use Magento\Bundle\Model\OptionFactory;

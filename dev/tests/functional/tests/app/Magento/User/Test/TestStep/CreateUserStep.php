@@ -6,7 +6,6 @@
 namespace Magento\User\Test\TestStep;
 
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\User\Test\Fixture\User;
 
 /**
  * Create new user.

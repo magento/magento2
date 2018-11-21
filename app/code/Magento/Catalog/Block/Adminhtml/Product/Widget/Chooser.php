@@ -11,7 +11,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Widget;
 
-use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Framework\Data\Form\Element\AbstractElement;

@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\Config\Provider\Component;
 
-use Magento\Framework\Phrase;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\Config\Converter;

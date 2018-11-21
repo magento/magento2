@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**

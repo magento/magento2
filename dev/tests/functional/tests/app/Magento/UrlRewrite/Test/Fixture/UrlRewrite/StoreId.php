@@ -7,7 +7,6 @@
 namespace Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 
 use Magento\Mtf\Fixture\DataSource;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**

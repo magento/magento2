@@ -5,8 +5,6 @@
  */
 namespace Magento\TestModule1\Controller\CookieTester;
 
-use \Magento\Framework\App\RequestInterface;
-
 /**
  * Controller to test deletion of a cookie
  */

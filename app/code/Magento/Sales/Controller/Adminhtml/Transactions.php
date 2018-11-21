@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml;
 
-use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\View\Result\LayoutFactory;

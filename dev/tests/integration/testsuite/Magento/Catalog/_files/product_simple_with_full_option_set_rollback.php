@@ -4,5 +4,4 @@
  * See COPYING.txt for license details.
  */
 
-
 include __DIR__ . '/product_simple_rollback.php';

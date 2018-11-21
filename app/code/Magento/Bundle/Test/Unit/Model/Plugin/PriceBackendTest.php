@@ -7,7 +7,6 @@
 namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
 use \Magento\Bundle\Model\Plugin\PriceBackend;
-
 use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

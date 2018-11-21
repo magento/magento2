@@ -6,7 +6,6 @@
 namespace Magento\Setup\Test\Unit\Mvc\Bootstrap;
 
 use \Magento\Setup\Mvc\Bootstrap\InitParamListener;
-
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Zend\Mvc\MvcEvent;

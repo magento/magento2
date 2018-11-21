@@ -8,7 +8,6 @@ namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\ParametersForm;
-use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**

@@ -6,8 +6,6 @@
 
 namespace Magento\Widget\Test\TestCase;
 
-use Magento\Widget\Test\Fixture\Widget;
-
 /**
  * Steps:
  * 1. Login to the backend.

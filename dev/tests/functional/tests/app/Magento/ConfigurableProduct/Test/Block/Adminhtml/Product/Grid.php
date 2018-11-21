@@ -6,8 +6,6 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-
 /**
  * Backend catalog product grid.
  */

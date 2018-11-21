@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View;
 
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\InjectableFixture;

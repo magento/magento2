@@ -11,7 +11,6 @@ use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Place order with Paypal in one page checkout.

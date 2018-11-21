@@ -14,7 +14,6 @@ use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
 use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\Indexer\StateFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 

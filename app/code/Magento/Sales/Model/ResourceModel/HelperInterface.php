@@ -5,8 +5,6 @@
  */
 namespace Magento\Sales\Model\ResourceModel;
 
-use Magento\Sales\Model\ResourceModel\Report\Bestsellers as BestsellersReport;
-
 /**
  * Sales resource helper interface
  *

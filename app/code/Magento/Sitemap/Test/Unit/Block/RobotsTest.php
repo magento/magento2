@@ -5,8 +5,6 @@
  */
 namespace Magento\Sitemap\Test\Unit\Block;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

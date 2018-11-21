@@ -6,7 +6,6 @@
 
 namespace Magento\GroupedProduct\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\GroupedProduct\Test\Fixture\GroupedProduct;

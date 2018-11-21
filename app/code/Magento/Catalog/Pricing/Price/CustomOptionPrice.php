@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product\Option\Value;
-use Magento\Catalog\Pricing\Price;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;

@@ -5,7 +5,6 @@
  */
 namespace Magento\Paypal\Model\Hostedpro;
 
-use Magento\Paypal\Model\Hostedpro\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Sales\Model\Order;
 

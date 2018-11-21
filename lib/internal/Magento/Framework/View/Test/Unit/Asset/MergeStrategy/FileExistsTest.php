@@ -6,7 +6,6 @@
 namespace Magento\Framework\View\Test\Unit\Asset\MergeStrategy;
 
 use \Magento\Framework\View\Asset\MergeStrategy\FileExists;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class FileExistsTest extends \PHPUnit\Framework\TestCase

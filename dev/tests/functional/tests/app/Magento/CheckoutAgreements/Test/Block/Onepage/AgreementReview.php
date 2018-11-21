@@ -7,7 +7,6 @@
 namespace Magento\CheckoutAgreements\Test\Block\Onepage;
 
 use Magento\Checkout\Test\Block\Onepage\Payment;
-use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 use Magento\Mtf\Client\Locator;
 
 /**

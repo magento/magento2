@@ -8,7 +8,6 @@ namespace Magento\ConfigurableProduct\Test\TestStep;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
 

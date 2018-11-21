@@ -6,7 +6,6 @@
 
 namespace Magento\Integration\Model;
 
-use Magento\Framework\Exception\InputException;
 use Magento\Integration\Model\Oauth\Token as TokenModel;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;

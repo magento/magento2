@@ -6,7 +6,6 @@
 namespace Magento\Shipping\Test\Unit\Model;
 
 use \Magento\Shipping\Model\Shipping;
-
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 

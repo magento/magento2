@@ -6,7 +6,6 @@
 
 namespace Magento\Config\Test\TestStep;
 
-use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Mtf\Util\Command\Cli\Cache;

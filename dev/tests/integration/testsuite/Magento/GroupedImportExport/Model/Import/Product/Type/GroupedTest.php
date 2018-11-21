@@ -6,7 +6,6 @@
 namespace Magento\GroupedImportExport\Model\Import\Product\Type;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\ImportExport\Model\Import;
 
 class GroupedTest extends \PHPUnit\Framework\TestCase
 {

@@ -6,7 +6,6 @@
 namespace Magento\Framework\Config\Test\Unit;
 
 use Magento\Framework\App\Config\Reader\Source\SourceInterface;
-use Magento\Framework\App\Config\Scope\Converter;
 use Magento\Framework\Config\Reader;
 use Magento\Framework\Stdlib\ArrayUtils;
 

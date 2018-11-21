@@ -8,7 +8,6 @@ namespace Magento\Mtf\Troubleshooting;
 
 use Magento\Mtf\ObjectManagerInterface;
 use Magento\Mtf\Troubleshooting\Helper\UrlAnalyzer;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

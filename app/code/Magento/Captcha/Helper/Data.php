@@ -7,7 +7,6 @@ namespace Magento\Captcha\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Captcha image model

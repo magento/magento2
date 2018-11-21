@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Category;
 
 use Magento\Backend\Test\Block\Template;
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;

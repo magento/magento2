@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
-use Magento\Backend\Block\Widget\Form;
-
 class Formset extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

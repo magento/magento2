@@ -7,7 +7,6 @@ namespace Magento\ConfigurableProduct\Test\Block\Product;
 
 use Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions;
 use Magento\Mtf\Client\Locator;
-use Magento\ConfigurableProduct\Test\Block\Product\Price;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 

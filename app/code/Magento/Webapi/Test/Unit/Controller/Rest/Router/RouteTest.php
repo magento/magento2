@@ -8,7 +8,6 @@
 namespace Magento\Webapi\Test\Unit\Controller\Rest\Router;
 
 use \Magento\Webapi\Controller\Rest\Router\Route;
-
 use Magento\Framework\App\RequestInterface as Request;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

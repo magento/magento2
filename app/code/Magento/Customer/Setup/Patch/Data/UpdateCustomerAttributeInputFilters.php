@@ -7,7 +7,6 @@
 namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Customer\Setup\CustomerSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;

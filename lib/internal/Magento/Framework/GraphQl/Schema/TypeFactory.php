@@ -13,7 +13,6 @@ use Magento\Framework\GraphQl\Schema\Type\InputObjectType;
 use Magento\Framework\GraphQl\Schema\Type\EnumType;
 use Magento\Framework\GraphQl\Schema\Type\ListOfType;
 use Magento\Framework\GraphQl\Schema\Type\NonNull;
-use Magento\Framework\GraphQl\Schema\TypeInterface;
 
 /**
  * Factory for @see TypeInterface implementations

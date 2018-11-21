@@ -8,7 +8,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
-use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\LayoutFactory;
 
 class AlertsStockGrid extends \Magento\Catalog\Controller\Adminhtml\Product

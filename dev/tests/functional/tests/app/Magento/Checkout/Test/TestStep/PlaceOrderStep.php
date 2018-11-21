@@ -13,7 +13,6 @@ use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Place order in one page checkout.

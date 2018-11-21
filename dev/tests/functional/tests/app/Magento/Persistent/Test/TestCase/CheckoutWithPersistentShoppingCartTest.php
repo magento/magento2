@@ -6,7 +6,6 @@
 
 namespace Magento\Persistent\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Cms\Test\Page\CmsIndex;

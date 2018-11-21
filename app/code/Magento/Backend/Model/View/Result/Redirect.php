@@ -7,7 +7,6 @@ namespace Magento\Backend\Model\View\Result;
 
 use Magento\Backend\App\AbstractAction;
 use Magento\Backend\Model\Session;
-use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;

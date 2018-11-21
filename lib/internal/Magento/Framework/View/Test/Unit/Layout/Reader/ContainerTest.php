@@ -7,7 +7,6 @@
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
 use \Magento\Framework\View\Layout\Reader\Container;
-
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 

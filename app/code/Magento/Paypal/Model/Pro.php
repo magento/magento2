@@ -8,7 +8,6 @@ namespace Magento\Paypal\Model;
 
 use Magento\Paypal\Model\Api\AbstractApi;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-use Magento\Paypal\Model\Info;
 
 /**
  * PayPal Website Payments Pro implementation for payment method instances

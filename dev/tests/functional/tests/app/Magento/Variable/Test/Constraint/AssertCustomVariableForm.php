@@ -9,7 +9,6 @@ namespace Magento\Variable\Test\Constraint;
 use Magento\Variable\Test\Fixture\SystemVariable;
 use Magento\Variable\Test\Page\Adminhtml\SystemVariableIndex;
 use Magento\Variable\Test\Page\Adminhtml\SystemVariableNew;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**

@@ -9,7 +9,6 @@ use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Framework\Registry;
 use Magento\Customer\Model\Customer;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Customer\Model\Address;
 
 //Clearing websites.
 include __DIR__ . '/../../Store/_files/websites_different_countries_rollback.php';

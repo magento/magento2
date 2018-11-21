@@ -6,7 +6,6 @@
 
 namespace Magento\Bundle\Test\Constraint;
 
-use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;

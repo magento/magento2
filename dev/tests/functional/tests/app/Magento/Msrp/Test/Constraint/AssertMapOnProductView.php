@@ -10,7 +10,6 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**

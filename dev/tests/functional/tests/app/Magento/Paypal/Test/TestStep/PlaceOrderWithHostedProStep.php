@@ -12,7 +12,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Payment\Test\Fixture\CreditCard;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Place order using PayPal Payments Pro Hosted Solution during one page checkout.

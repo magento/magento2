@@ -7,7 +7,6 @@
 namespace Magento\Framework\Setup\Patch;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Filesystem\Glob;
 use Magento\Framework\Module\Dir;
 

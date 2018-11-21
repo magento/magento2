@@ -8,8 +8,6 @@ namespace Magento\Store\Model\Config\Processor;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\App\Config\Type\Scopes;
 use Magento\Store\Model\ResourceModel\Store;
 use Magento\Store\Model\ResourceModel\Store\AllStoresCollectionFactory;

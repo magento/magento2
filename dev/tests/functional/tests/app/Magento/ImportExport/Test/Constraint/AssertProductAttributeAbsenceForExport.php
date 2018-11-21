@@ -7,7 +7,6 @@
 namespace Magento\ImportExport\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Magento\ImportExport\Test\Fixture\ExportData;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 

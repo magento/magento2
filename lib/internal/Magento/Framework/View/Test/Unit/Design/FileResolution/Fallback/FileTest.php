@@ -7,7 +7,6 @@
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback;
 
 use \Magento\Framework\View\Design\FileResolution\Fallback\File;
-
 use Magento\Framework\View\Design\Fallback\RulePool;
 
 class FileTest extends \PHPUnit\Framework\TestCase

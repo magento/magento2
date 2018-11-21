@@ -5,7 +5,6 @@
  */
 namespace Magento\Multishipping\Test\TestStep;
 
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Multishipping\Test\Page\MultishippingCheckoutShipping;
 use Magento\Mtf\TestStep\TestStepInterface;
 

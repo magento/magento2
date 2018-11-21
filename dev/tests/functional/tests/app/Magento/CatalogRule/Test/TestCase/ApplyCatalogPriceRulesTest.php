@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogRule\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Util\Command\Cli\Cron;

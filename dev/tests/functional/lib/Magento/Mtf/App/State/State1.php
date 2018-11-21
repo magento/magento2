@@ -8,7 +8,6 @@ namespace Magento\Mtf\App\State;
 
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Util\Protocol\CurlInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
  * Example Application State class.

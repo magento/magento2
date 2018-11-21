@@ -6,7 +6,6 @@
 
 namespace Magento\Cms\Test\Constraint;
 
-use Magento\Cms\Test\Fixture\CmsPage;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 

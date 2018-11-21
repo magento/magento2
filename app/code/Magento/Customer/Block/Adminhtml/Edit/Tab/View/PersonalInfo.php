@@ -9,7 +9,6 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Model\Customer;
 
 /**
  * Adminhtml customer view personal information sales block.

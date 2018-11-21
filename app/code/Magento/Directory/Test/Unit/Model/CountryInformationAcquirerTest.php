@@ -5,8 +5,6 @@
  */
 namespace Magento\Directory\Test\Unit\Model;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-
 /**
  * Class CountryInformationAcquirerTest
  */

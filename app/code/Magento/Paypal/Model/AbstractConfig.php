@@ -9,7 +9,6 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Paypal\Model\Config;
 use Magento\Framework\App\ObjectManager;
 
 /**

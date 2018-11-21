@@ -12,7 +12,6 @@ use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Weee\Helper\Data;
-use Magento\Tax\Helper\Data as TaxHelper;
 
 class CustomerLoggedIn implements ObserverInterface
 {

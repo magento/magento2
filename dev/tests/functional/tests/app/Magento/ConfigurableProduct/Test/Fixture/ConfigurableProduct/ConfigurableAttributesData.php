@@ -6,7 +6,6 @@
 
 namespace Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 
-use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;

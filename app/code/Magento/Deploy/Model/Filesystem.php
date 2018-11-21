@@ -6,8 +6,6 @@
 namespace Magento\Deploy\Model;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validator\Locale;

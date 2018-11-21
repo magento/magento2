@@ -6,7 +6,6 @@
 
 namespace Magento\Cms\Test\TestCase;
 
-use Magento\Cms\Test\Fixture\CmsPage;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageIndex;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageNew;
 use Magento\Mtf\Fixture\FixtureFactory;

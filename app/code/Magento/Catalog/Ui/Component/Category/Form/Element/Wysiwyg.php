@@ -5,10 +5,8 @@
  */
 namespace Magento\Catalog\Ui\Component\Category\Form\Element;
 
-use Magento\Backend\Block\Widget\Button;
 use Magento\Backend\Helper\Data as DataHelper;
 use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
-use Magento\Catalog\Model\Category;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;

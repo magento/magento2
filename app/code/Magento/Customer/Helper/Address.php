@@ -10,7 +10,6 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Directory\Model\Country\Format;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\View\Element\BlockInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**

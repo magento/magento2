@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 include __DIR__ . '/product_simple_with_full_option_set.php';
 
 /** @var \Magento\TestFramework\ObjectManager $objectManager */

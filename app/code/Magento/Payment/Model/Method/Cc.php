@@ -7,7 +7,6 @@ namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\DataObject;
 use Magento\Quote\Api\Data\PaymentInterface;
-use Magento\Quote\Model\Quote\Payment;
 
 /**
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()

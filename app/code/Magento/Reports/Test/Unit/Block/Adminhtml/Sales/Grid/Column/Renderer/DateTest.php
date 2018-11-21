@@ -6,8 +6,6 @@
 
 namespace Magento\Reports\Test\Unit\Block\Adminhtml\Sales\Grid\Column\Renderer;
 
-use Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date;
-
 class DateTest extends \PHPUnit\Framework\TestCase
 {
     /**

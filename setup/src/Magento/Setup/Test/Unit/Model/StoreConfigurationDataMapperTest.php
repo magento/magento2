@@ -7,7 +7,6 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use \Magento\Setup\Model\StoreConfigurationDataMapper;
-
 use Magento\Backend\Model\Url;
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\Currency;

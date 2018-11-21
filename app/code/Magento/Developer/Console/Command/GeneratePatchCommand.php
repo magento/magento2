@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Developer\Console\Command;
 
-use Magento\Developer\Model\Di\Information;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;

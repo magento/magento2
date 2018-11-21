@@ -5,7 +5,6 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Handler;
 
-use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\FraudHandler;
 use Magento\Paypal\Model\Info;

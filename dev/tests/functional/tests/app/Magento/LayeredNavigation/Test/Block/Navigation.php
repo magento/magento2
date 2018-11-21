@@ -6,7 +6,6 @@
 
 namespace Magento\LayeredNavigation\Test\Block;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 

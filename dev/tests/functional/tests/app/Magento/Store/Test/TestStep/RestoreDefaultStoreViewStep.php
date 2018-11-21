@@ -7,7 +7,6 @@
 namespace Magento\Store\Test\TestStep;
 
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Store\Test\Fixture\Store;
 
 /**
  * Restore DefaultStore view.

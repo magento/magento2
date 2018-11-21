@@ -6,7 +6,6 @@
 
 namespace Magento\Mtf\Util\Generate\Fixture;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\DB\Adapter\AdapterInterface;

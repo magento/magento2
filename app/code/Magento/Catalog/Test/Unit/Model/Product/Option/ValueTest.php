@@ -6,10 +6,8 @@
 namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
 use \Magento\Catalog\Model\Product\Option\Value;
-
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
-use Magento\Framework\Model\ActionValidator\RemoveAction;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ValueTest extends \PHPUnit\Framework\TestCase

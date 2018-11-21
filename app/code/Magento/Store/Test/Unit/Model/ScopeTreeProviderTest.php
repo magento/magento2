@@ -5,9 +5,6 @@
  */
 namespace Magento\Store\Test\Unit\Model;
 
-use Magento\Store\Api\Data\WebsiteInterface;
-use Magento\Store\Api\Data\GroupInterface;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\ScopeTreeProvider;
 use Magento\Store\Model\Store;

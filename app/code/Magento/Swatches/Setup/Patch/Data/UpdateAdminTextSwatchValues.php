@@ -10,7 +10,6 @@ use Magento\Store\Model\Store;
 use Magento\Swatches\Model\Swatch;
 use Zend_Db;
 use Zend_Db_Expr;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 

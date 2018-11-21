@@ -8,8 +8,6 @@ namespace Magento\Integration\Model;
 
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Integration\Model\CredentialsValidator;
-use Magento\Integration\Model\Oauth\Token as Token;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as TokenCollectionFactory;
 use Magento\User\Model\User as UserModel;

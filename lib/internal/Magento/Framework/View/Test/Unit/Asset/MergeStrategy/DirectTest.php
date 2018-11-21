@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Test\Unit\Asset\MergeStrategy;
 
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use \Magento\Framework\View\Asset\MergeStrategy\Direct;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class DirectTest extends \PHPUnit\Framework\TestCase

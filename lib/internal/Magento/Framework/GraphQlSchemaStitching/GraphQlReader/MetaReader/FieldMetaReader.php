@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader;
 
-use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\TypeMetaWrapperReader;
-
 /**
  * Reads fields and possible arguments from a meta field
  */

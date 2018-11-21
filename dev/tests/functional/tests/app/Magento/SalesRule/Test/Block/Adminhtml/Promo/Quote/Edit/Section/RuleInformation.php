@@ -6,7 +6,6 @@
 
 namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section;
 
-use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Ui\Test\Block\Adminhtml\Section;
 

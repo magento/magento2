@@ -7,7 +7,6 @@ namespace Magento\Framework\Api\ExtensionAttribute;
 
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\Api\ExtensionAttribute\Config\Reader;
-use Magento\Framework\Api\ExtensionAttribute\JoinData;
 use Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\App\ResourceConnection as AppResource;

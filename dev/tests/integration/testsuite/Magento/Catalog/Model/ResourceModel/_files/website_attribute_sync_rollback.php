@@ -30,7 +30,6 @@ $connection = $resourceConnection->getConnection();
 $registry = $objectManager->get(Registry::class);
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
-
 /**
  * Marks area as secure so Product repository would allow product removal
  */

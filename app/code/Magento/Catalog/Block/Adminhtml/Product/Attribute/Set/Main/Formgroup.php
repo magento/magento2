@@ -9,8 +9,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
-use Magento\Backend\Block\Widget\Form;
-
 /**
  * Form group for attribute set
  */

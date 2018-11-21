@@ -8,7 +8,6 @@ namespace Magento\Customer\Test\Fixture\Customer;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Customer\Test\Fixture\CustomerGroup;
 
 /**
  * Addresses source for customer fixture.

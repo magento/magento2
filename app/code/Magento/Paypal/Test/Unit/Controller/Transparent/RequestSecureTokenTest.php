@@ -9,7 +9,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Session\SessionManager;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Controller\Transparent\RequestSecureToken;
 use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 use Magento\Paypal\Model\Payflow\Transparent;

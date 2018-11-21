@@ -7,7 +7,6 @@
 namespace Magento\Theme\Setup\Patch\Data;
 
 use Magento\Theme\Model\Theme\Registration;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 

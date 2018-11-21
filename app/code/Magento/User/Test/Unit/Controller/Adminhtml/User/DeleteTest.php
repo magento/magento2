@@ -7,7 +7,6 @@
 namespace Magento\User\Test\Unit\Controller\Adminhtml\User;
 
 use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Test class for \Magento\User\Controller\Adminhtml\User\Delete testing

@@ -10,8 +10,6 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product;
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
-    as FieldTypeConverterInterface;
 
 /**
  * @SuppressWarnings(PHPMD)

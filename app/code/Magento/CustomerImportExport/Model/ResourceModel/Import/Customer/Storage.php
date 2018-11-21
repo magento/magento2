@@ -5,7 +5,6 @@
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
-use Magento\CustomerImportExport\Test\Unit\Model\Import\CustomerCompositeTest;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;

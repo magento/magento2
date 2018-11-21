@@ -6,8 +6,6 @@
  */
 namespace Magento\Persistent\Observer;
 
-use Magento\Framework\Event\ObserverInterface;
-
 class ClearExpiredCronJobObserver
 {
     /**

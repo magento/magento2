@@ -6,7 +6,6 @@
 namespace Magento\TestFramework\Deploy;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Shell;
 use Magento\Setup\Console\Command\InstallCommand;
 
 /**

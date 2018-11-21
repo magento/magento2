@@ -6,7 +6,6 @@
  */
 namespace Magento\SalesRule\Api;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class RuleRepositoryTest extends WebapiAbstract

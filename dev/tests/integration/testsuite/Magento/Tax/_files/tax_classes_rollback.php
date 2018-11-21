@@ -20,7 +20,6 @@ $taxClasses = [
     'CustomerTaxClass2',
 ];
 
-
 $taxRuleResource = $objectManager->get(\Magento\Tax\Model\ResourceModel\Calculation\Rule::class);
 foreach ($taxRules as $taxRuleCode) {
     $taxRule = $objectManager->create(\Magento\Tax\Model\Calculation\Rule::class);

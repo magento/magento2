@@ -6,7 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
-use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\Layout;
 
 class Grid extends \Magento\Sales\Controller\Adminhtml\Transactions

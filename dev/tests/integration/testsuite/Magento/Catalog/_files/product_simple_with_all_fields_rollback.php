@@ -4,9 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-
 include __DIR__ . '/product_simple_rollback.php';
-
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Framework\Registry $registry */

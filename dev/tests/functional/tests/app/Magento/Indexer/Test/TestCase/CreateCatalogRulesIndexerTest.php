@@ -8,7 +8,6 @@ namespace Magento\Indexer\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Util\Command\Cli\Cron;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Mtf\Util\Command\Cli\Indexer;

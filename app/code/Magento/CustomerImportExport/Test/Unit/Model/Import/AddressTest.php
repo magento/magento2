@@ -9,7 +9,6 @@ namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 use Magento\Customer\Model\ResourceModel\Address\Attribute as AddressAttribute;
 use Magento\CustomerImportExport\Model\Import\Address;
 use Magento\ImportExport\Model\Import\AbstractEntity;
-use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;

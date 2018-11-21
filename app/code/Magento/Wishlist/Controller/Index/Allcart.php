@@ -6,7 +6,6 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\Data\Form\FormKey\Validator;
-use Magento\Framework\App\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\ItemCarrier;

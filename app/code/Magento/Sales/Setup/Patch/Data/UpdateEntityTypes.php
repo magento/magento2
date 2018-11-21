@@ -7,7 +7,6 @@
 namespace Magento\Sales\Setup\Patch\Data;
 
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Setup\SalesSetupFactory;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;

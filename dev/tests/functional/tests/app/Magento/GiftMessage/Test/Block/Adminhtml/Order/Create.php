@@ -6,8 +6,6 @@
 
 namespace Magento\GiftMessage\Test\Block\Adminhtml\Order;
 
-use Magento\GiftMessage\Test\Fixture\GiftMessage;
-
 /**
  * Class Create
  * Adminhtml GiftMessage order create block.

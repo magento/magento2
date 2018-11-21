@@ -8,7 +8,6 @@ namespace Magento\Translation\Test\Unit\Model\Js;
 
 use Magento\Framework\App\State;
 use Magento\Framework\App\Utility\Files;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\File\ReadInterface;
 use Magento\Translation\Model\Js\DataProvider;
 use Magento\Translation\Model\Js\Config;

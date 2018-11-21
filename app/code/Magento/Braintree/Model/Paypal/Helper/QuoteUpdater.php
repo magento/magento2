@@ -7,7 +7,6 @@ namespace Magento\Braintree\Model\Paypal\Helper;
 
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Framework\Exception\LocalizedException;

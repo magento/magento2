@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\View\Design\FileResolution\Fallback;
 
-use Magento\Framework\View\Design\FileResolution\Fallback;
 use Magento\Framework\View\Design\ThemeInterface;
 
 /**

@@ -6,7 +6,6 @@
 namespace Magento\AdvancedPricingImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\ImportExport\Model\Import;
 
 /**
  * @magentoAppArea adminhtml

@@ -7,7 +7,6 @@ namespace Magento\Ui\DataProvider;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
-use Magento\Ui\DataProvider\Modifier\Pool;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 class ModifierPoolDataProvider extends AbstractDataProvider

@@ -6,12 +6,9 @@
 
 namespace Magento\Webapi\Controller;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Webapi\ErrorProcessor;
-use Magento\Framework\Webapi\Request;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\ServiceInputProcessor;

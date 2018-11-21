@@ -25,7 +25,6 @@ foreach ($generatorPool->getGenerators() as $generator) {
 
 \Magento\Mtf\Util\Generate\GenerateResult::displayResults();
 
-
 function deleteDirectory($dir)
 {
     if (!file_exists($dir)) {

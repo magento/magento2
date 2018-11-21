@@ -7,7 +7,6 @@ namespace Magento\Swatches\Helper;
 
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product as ModelProduct;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;

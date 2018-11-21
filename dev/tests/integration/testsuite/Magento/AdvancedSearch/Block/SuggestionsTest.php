@@ -8,7 +8,6 @@ namespace Magento\AdvancedSearch\Block;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Search\Model\QueryResult;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
-use Magento\Framework\View\LayoutInterface;
 
 /**
  * @magentoAppArea frontend

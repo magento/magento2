@@ -6,7 +6,6 @@
 
 namespace Magento\CurrencySymbol\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity;

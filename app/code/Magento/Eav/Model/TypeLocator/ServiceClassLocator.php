@@ -7,7 +7,6 @@
 namespace Magento\Eav\Model\TypeLocator;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;

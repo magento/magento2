@@ -6,7 +6,6 @@
 
 namespace Magento\Customer\Test\Block\Form;
 
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 

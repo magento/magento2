@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Catalog product related items block

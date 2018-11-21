@@ -7,7 +7,6 @@
 namespace Magento\Authorization\Test\Unit\Model\Acl;
 
 use Magento\Authorization\Model\Acl\AclRetriever;
-
 use Magento\Authorization\Model\ResourceModel\Role\Collection as RoleCollection;
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleCollectionFactory;
 use Magento\Authorization\Model\ResourceModel\Rules\Collection as RulesCollection;

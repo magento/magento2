@@ -5,8 +5,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Backend\App\Action;
-
 class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

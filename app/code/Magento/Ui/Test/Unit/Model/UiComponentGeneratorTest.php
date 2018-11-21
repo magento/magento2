@@ -6,7 +6,6 @@
 namespace Magento\Ui\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 class UiComponentGeneratorTest extends \PHPUnit\Framework\TestCase

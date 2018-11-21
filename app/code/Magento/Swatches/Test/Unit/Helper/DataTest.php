@@ -6,7 +6,6 @@
 
 namespace Magento\Swatches\Test\Unit\Helper;
 
-use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Swatches\Model\ResourceModel\Swatch\Collection;

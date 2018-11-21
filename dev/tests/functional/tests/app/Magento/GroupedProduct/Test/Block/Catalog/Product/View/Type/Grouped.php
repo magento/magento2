@@ -6,7 +6,6 @@
 
 namespace Magento\GroupedProduct\Test\Block\Catalog\Product\View\Type;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;

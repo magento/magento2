@@ -7,7 +7,6 @@
  */
 namespace Magento\Store\Test\Block;
 
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 

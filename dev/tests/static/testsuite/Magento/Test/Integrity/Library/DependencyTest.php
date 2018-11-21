@@ -6,7 +6,6 @@
 namespace Magento\Test\Integrity\Library;
 
 use Magento\Framework\App\Utility\Files;
-use Magento\Framework\App\Utility\AggregateInvoker;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Integrity\Library\Injectable;
 use Magento\TestFramework\Integrity\Library\PhpParser\ParserFactory;

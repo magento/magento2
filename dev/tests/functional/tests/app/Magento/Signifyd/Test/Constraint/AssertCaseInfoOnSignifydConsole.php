@@ -6,7 +6,6 @@
 namespace Magento\Signifyd\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Signifyd\Test\Fixture\SignifydAddress;
 use Magento\Signifyd\Test\Fixture\SignifydData;
 use Magento\Signifyd\Test\Page\SignifydConsole\SignifydCases;
 

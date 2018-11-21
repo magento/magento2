@@ -8,7 +8,6 @@ namespace Magento\Cms\Test\Fixture\CmsPage;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Store\Test\Fixture\Store;
 
 /**
  * Cms Page store id scope.

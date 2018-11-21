@@ -7,7 +7,6 @@
 namespace Magento\Framework\Event\Test\Unit;
 
 use \Magento\Framework\Event\Config;
-
 use Magento\Framework\Event\Config\Data;
 
 /**

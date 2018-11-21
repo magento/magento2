@@ -6,7 +6,6 @@
 namespace Magento\Payment\Gateway\Command;
 
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface;
 use Magento\Payment\Model\InfoInterface;

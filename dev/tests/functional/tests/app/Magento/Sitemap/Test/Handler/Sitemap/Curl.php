@@ -7,7 +7,6 @@
 namespace Magento\Sitemap\Test\Handler\Sitemap;
 
 use Magento\Backend\Test\Handler\Extractor;
-use Magento\Sitemap\Test\Handler\Sitemap;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlTransport;

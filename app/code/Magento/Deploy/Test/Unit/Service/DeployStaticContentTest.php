@@ -16,12 +16,9 @@ use Magento\Deploy\Service\DeployTranslationsDictionary;
 use Magento\Deploy\Service\MinifyTemplates;
 use Magento\Deploy\Strategy\CompactDeploy;
 use Magento\Deploy\Strategy\DeployStrategyFactory;
-
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Magento\Framework\ObjectManagerInterface;
-
 use Psr\Log\LoggerInterface;
-
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**

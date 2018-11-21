@@ -6,7 +6,6 @@
 namespace Magento\Authorizenet\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Simplexml\Element;
 use Magento\Authorizenet\Model\TransactionService;
 
 class TransactionServiceTest extends \PHPUnit\Framework\TestCase

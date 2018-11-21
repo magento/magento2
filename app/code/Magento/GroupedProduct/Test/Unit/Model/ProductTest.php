@@ -7,7 +7,6 @@
 namespace Magento\GroupedProduct\Test\Unit\Model;
 
 use \Magento\Catalog\Model\Product;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**

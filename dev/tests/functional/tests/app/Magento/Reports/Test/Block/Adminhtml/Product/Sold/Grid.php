@@ -6,7 +6,6 @@
 
 namespace Magento\Reports\Test\Block\Adminhtml\Product\Sold;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\ObjectManager;
 

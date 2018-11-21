@@ -7,7 +7,6 @@
 namespace Magento\User\Setup\Patch\Data;
 
 use Magento\Framework\Encryption\Encryptor;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 

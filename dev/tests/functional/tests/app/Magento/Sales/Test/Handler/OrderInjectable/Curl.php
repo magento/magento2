@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\Handler\OrderInjectable;
 
-use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Downloadable\Test\Fixture\DownloadableProduct;

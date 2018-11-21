@@ -5,8 +5,6 @@
  */
 namespace Magento\CatalogRule\Test\Unit\Block\Adminhtml\Edit;
 
-use Magento\CatalogRule\Controller\RegistryConstants;
-
 class DeleteButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**

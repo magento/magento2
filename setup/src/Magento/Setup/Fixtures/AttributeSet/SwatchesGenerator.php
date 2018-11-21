@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Fixtures\AttributeSet;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Swatches\Model\Swatch;
 
 /**

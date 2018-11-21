@@ -6,7 +6,6 @@
 
 namespace Magento\Customer\Test\Handler\CustomerGroup;
 
-use Magento\Backend\Test\Handler\Extractor;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlInterface;

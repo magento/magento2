@@ -6,7 +6,6 @@
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Quote\Model\Quote\TotalsCollector;
-use Magento\Tax\Model\Calculation;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require_once __DIR__ . '/SetupUtil.php';

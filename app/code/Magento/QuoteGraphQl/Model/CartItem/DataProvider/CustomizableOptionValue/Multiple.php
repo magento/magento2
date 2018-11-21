@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue;
 
 use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\Quote\Item\Option as SelectedOption;
 use Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValueInterface;

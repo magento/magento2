@@ -5,7 +5,6 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
-use Magento\Backend\App\Action;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller;
 

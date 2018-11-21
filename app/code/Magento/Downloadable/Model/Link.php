@@ -6,7 +6,6 @@
 namespace Magento\Downloadable\Model;
 
 use Magento\Downloadable\Api\Data\LinkInterface;
-use Magento\Downloadable\Model\ResourceModel\Link as Resource;
 
 /**
  * Downloadable link model

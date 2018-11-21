@@ -7,7 +7,6 @@
 namespace Magento\ConfigurableProduct\Test\Block\Product\View;
 
 use Magento\Catalog\Test\Block\Product\View\CustomOptions;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Client\Element\SimpleElement;

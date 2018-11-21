@@ -8,7 +8,6 @@ namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 
 /**
  * @magentoAppArea adminhtml

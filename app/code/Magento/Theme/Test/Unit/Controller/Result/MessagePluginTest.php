@@ -7,7 +7,6 @@ namespace Magento\Theme\Test\Unit\Controller\Result;
 
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\Redirect;
-use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;

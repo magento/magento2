@@ -8,7 +8,6 @@ namespace Magento\Paypal\Gateway\Payflowpro\Command;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;

@@ -6,7 +6,6 @@
 
 namespace Magento\Widget\Test\Fixture\Widget;
 
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\DataSource;
 

@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\Fixture\OrderInjectable;
 
-use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\DataSource;
 

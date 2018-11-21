@@ -6,7 +6,6 @@
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps;
 
 use Magento\Catalog\Helper\Image;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductFactory;

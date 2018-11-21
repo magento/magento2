@@ -9,8 +9,6 @@
  */
 namespace Magento\Theme\Test\Unit\Helper;
 
-use Magento\Theme\Helper\Storage;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

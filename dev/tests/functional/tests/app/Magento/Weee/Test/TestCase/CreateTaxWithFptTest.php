@@ -6,7 +6,6 @@
 
 namespace Magento\Weee\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Fixture\FixtureFactory;

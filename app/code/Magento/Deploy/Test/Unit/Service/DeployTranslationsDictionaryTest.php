@@ -7,10 +7,8 @@ namespace Magento\Deploy\Test\Unit\Service;
 
 use Magento\Deploy\Service\DeployTranslationsDictionary;
 use Magento\Deploy\Service\DeployStaticFile;
-
 use Magento\Framework\App\State;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
-
 use Psr\Log\LoggerInterface;
 
 use PHPUnit_Framework_MockObject_MockObject as Mock;

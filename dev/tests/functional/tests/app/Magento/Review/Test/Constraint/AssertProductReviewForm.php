@@ -7,7 +7,6 @@
 namespace Magento\Review\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractAssertForm;
-use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
 

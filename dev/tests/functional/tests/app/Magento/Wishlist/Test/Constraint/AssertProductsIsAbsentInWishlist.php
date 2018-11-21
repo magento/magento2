@@ -6,7 +6,6 @@
 
 namespace Magento\Wishlist\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;

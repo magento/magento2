@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\EntityManager\Operation;
 
-use Magento\Framework\EntityManager\Operation\DeleteInterface;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\EntityManager\Operation\Delete\DeleteMain;
 use Magento\Framework\EntityManager\Operation\Delete\DeleteAttributes;

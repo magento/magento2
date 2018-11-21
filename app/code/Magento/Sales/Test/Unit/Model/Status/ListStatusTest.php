@@ -6,7 +6,6 @@
 namespace Magento\Sales\Test\Unit\Model\Status;
 
 use \Magento\Sales\Model\Status\ListStatus;
-
 use Magento\CatalogInventory\Helper\Data;
 
 class ListStatusTest extends \PHPUnit\Framework\TestCase

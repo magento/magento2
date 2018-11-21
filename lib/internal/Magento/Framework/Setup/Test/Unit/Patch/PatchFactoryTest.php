@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Setup\Test\Unit\Patch;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

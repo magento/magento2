@@ -5,7 +5,6 @@
  */
 namespace Magento\CustomerImportExport\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\ImportExport\Test\Fixture\ExportData;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
 use Magento\Mtf\Fixture\FixtureFactory;

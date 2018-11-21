@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config\Validator;
 
-use Magento\Framework\MessageQueue\Consumer;
 use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
 use Magento\Framework\MessageQueue\ConsumerInterface;
 

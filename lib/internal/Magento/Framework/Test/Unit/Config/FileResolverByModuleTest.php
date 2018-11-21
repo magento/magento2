@@ -6,7 +6,6 @@
 namespace Magento\Framework\Test\Unit\Config;
 
 use Magento\Framework\Config\FileIterator;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase

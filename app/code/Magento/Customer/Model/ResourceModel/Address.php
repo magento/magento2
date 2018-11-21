@@ -7,7 +7,6 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
-use Magento\Customer\Controller\Adminhtml\Group\Delete;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Address\DeleteRelation;
 use Magento\Framework\App\ObjectManager;

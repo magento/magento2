@@ -6,7 +6,6 @@
 
 namespace Magento\Reports\Test\Block\Adminhtml\Shopcart\Product;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\Client\Locator;
 
 /**

@@ -10,7 +10,6 @@ use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 
 /**
  * Unit test for \Magento\Integration\Model\Oauth\Nonce

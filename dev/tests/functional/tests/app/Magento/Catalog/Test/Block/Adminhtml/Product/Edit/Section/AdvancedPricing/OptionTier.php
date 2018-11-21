@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedPricing;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\AbstractOptions;
-use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 

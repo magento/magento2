@@ -6,7 +6,6 @@
 namespace Magento\Elasticsearch\SearchAdapter\Query;
 
 use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elasticsearch5Builder;
 
 /**

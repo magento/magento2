@@ -5,7 +5,6 @@
  */
 namespace Magento\Authorizenet\Model;
 
-use Magento\Authorizenet\Model\TransactionService;
 use Magento\Framework\HTTP\ZendClientFactory;
 
 /**

@@ -6,8 +6,6 @@
 
 namespace Magento\Theme\Model\Config;
 
-use Magento\Email\Model\Template;
-
 /**
  * Class ValidatorTest to test \Magento\Theme\Model\Design\Config\Validator
  */

@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

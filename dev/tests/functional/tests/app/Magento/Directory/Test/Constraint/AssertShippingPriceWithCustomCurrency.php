@@ -10,7 +10,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity;
 
 /**

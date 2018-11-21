@@ -13,7 +13,6 @@ namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Image;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Framework\Data\Collection;

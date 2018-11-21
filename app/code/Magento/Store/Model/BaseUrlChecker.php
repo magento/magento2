@@ -5,8 +5,6 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Store\Model\ScopeInterface;
-
 /**
  * Verifies that the requested URL matches to base URL of store.
  */

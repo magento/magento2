@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Handler\Category;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\System\Event\EventManagerInterface;

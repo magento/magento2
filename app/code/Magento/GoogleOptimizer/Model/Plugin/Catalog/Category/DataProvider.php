@@ -6,7 +6,6 @@
 
 namespace Magento\GoogleOptimizer\Model\Plugin\Catalog\Category;
 
-use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
 class DataProvider

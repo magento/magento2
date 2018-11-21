@@ -17,7 +17,6 @@ $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Ma
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 //$productRepository->deleteById('p002');

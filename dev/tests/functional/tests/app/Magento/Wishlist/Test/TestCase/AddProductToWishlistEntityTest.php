@@ -6,8 +6,6 @@
 
 namespace Magento\Wishlist\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\Customer;
-
 /**
  * Test Flow:
  *

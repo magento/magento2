@@ -6,7 +6,6 @@
 namespace Magento\CatalogRuleConfigurable\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;

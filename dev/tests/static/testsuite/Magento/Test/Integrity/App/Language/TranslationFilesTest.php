@@ -5,7 +5,6 @@
  */
 namespace Magento\Test\Integrity\App\Language;
 
-use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory;
 use Magento\Setup\Module\I18n\Locale;

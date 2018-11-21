@@ -12,7 +12,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Grid as AbstractGrid;
-use Magento\Sales\Model\ResourceModel\Order\Grid;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 

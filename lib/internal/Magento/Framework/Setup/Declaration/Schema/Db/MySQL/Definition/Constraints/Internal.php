@@ -8,7 +8,6 @@ namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Constra
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbDefinitionProcessorInterface;
-use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 
 /**

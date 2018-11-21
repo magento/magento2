@@ -9,7 +9,6 @@ use Magento\Deploy\Strategy\CompactDeploy;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackagePool;
 use Magento\Deploy\Process\Queue;
-
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**

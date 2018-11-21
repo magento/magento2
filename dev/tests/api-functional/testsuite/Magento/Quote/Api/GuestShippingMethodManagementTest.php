@@ -5,7 +5,6 @@
  */
 namespace Magento\Quote\Api;
 
-use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 

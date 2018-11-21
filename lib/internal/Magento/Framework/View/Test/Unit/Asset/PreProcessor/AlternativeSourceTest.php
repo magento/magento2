@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Asset\LocalInterface;

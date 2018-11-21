@@ -6,7 +6,6 @@
 
 namespace Magento\Bundle\Test\TestCase;
 
-use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\TestCase\Injectable;

@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Handler\CatalogProductSimple;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;

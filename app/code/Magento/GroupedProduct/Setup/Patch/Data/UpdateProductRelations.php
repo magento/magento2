@@ -9,7 +9,6 @@ namespace Magento\GroupedProduct\Setup\Patch\Data;
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 

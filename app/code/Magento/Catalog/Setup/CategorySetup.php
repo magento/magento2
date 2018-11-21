@@ -48,7 +48,6 @@ use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Theme\Model\Theme\Source\Theme;

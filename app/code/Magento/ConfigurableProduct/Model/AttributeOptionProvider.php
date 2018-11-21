@@ -10,7 +10,6 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilde
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
-use Magento\Framework\DB\Select;
 
 /**
  * Provider for retrieving configurable options.

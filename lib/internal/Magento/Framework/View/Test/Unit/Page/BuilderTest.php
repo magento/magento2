@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\View\Test\Unit\Page;
 
-use Magento\Framework;
-
 /**
  * Class BuilderTest
  * @covers \Magento\Framework\View\Page\Builder

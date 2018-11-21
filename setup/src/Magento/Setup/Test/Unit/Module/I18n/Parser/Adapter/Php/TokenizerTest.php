@@ -6,7 +6,6 @@
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter\Php;
 
 use \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**

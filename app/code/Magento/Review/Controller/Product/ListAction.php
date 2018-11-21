@@ -6,7 +6,6 @@
 namespace Magento\Review\Controller\Product;
 
 use Magento\Review\Controller\Product as ProductController;
-use Magento\Review\Model\Review;
 use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Framework\Controller\ResultFactory;
 

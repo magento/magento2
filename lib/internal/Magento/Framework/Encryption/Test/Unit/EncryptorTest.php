@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Encryption\Test\Unit;
 
-use Magento\Framework\Encryption\Adapter\Mcrypt;
 use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\Crypt;

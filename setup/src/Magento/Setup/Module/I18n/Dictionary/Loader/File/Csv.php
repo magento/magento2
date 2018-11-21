@@ -5,8 +5,6 @@
  */
 namespace Magento\Setup\Module\I18n\Dictionary\Loader\File;
 
-use Magento\Setup\Module\I18n\Dictionary;
-
 /**
  *  Dictionary loader from csv
  */

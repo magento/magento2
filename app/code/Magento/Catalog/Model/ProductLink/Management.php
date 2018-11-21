@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Model\ProductLink;
 
-use Magento\Catalog\Api\Data;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;

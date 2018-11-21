@@ -10,7 +10,6 @@ use Magento\Checkout\Block\Checkout\LayoutProcessor;
 use Magento\Checkout\Helper\Data;
 use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Options;
-
 use Magento\Ui\Component\Form\AttributeMapper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 

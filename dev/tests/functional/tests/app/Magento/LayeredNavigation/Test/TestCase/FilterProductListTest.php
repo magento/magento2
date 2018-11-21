@@ -6,7 +6,6 @@
 
 namespace Magento\LayeredNavigation\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Util\Command\Cli\Indexer;
 

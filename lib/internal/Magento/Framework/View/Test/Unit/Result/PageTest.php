@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Test\Unit\Result;
 
-use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\View\EntitySpecificHandlesList;
 
 /**

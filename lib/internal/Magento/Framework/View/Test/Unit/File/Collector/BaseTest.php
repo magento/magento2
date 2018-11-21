@@ -6,7 +6,6 @@
 namespace Magento\Framework\View\Test\Unit\File\Collector;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\View\File;
 
 class BaseTest extends \PHPUnit\Framework\TestCase
 {

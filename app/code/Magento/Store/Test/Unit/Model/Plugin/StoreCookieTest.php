@@ -7,7 +7,6 @@
 namespace Magento\Store\Test\Unit\Model\Plugin;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreIsInactiveException;
 use \InvalidArgumentException;

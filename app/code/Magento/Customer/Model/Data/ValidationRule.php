@@ -5,8 +5,6 @@
  */
 namespace Magento\Customer\Model\Data;
 
-use Magento\Customer\Api\Data\ValidationRuleInterface;
-
 class ValidationRule extends \Magento\Framework\Api\AbstractSimpleObject implements
     \Magento\Customer\Api\Data\ValidationRuleInterface
 {

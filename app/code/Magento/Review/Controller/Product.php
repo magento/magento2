@@ -8,7 +8,6 @@ namespace Magento\Review\Controller;
 use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Review\Model\Review;
 
 /**
  * Review controller

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Cache;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\GraphQl\Config\Config;

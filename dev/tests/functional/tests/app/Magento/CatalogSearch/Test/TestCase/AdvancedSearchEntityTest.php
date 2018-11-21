@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogSearch\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CatalogSearch\Test\Page\AdvancedSearch;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Fixture\FixtureFactory;

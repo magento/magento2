@@ -8,7 +8,6 @@
 namespace Magento\Catalog\Test\Unit\Controller\Product\Compare;
 
 use Magento\Catalog\Controller\Product\Compare\Index;
-
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item;
 
 /**

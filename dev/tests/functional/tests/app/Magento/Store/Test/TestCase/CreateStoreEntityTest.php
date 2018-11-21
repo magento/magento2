@@ -8,7 +8,6 @@ namespace Magento\Store\Test\TestCase;
 
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Backend\Test\Page\Adminhtml\StoreNew;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\TestCase\Injectable;
 
 /**

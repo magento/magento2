@@ -9,7 +9,6 @@ namespace Magento\Amqp\Test\Unit\Setup;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Amqp\Setup\ConfigOptionsList;
 use Magento\Framework\Setup\Option\TextConfigOption;
-use Magento\Framework\App\DeploymentConfig;
 
 class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
 {

@@ -8,7 +8,6 @@ namespace Magento\User\Test\Block\Adminhtml\User\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\User\Test\Block\Adminhtml\User\Edit\Tab\Roles;
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 
 /**

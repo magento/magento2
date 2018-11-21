@@ -5,7 +5,6 @@
  */
 namespace Magento\TestFramework\TestCase;
 
-use Magento\Framework\App\DesignInterface;
 use Magento\Framework\View\DesignExceptions;
 
 /**

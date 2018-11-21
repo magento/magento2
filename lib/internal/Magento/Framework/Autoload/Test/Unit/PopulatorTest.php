@@ -6,7 +6,6 @@
 namespace Magento\Framework\Autoload\Test\Unit;
 
 use \Magento\Framework\Autoload\Populator;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class PopulatorTest extends \PHPUnit\Framework\TestCase

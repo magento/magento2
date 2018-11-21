@@ -7,7 +7,6 @@
 namespace Magento\Authorization\Test\Unit\Model;
 
 use \Magento\Authorization\Model\CompositeUserContext;
-
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

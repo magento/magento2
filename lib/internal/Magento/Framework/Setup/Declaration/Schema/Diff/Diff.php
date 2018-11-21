@@ -8,7 +8,6 @@ namespace Magento\Framework\Setup\Declaration\Schema\Diff;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
-use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;

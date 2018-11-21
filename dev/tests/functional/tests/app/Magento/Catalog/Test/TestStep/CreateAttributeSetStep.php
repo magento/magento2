@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\TestStep;
 
-use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**

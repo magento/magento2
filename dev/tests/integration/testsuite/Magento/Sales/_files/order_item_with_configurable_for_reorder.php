@@ -28,7 +28,6 @@ $product = $productRepository->getById(1);
 /** @var \Magento\Catalog\Model\Product $productSimple */
 $simpleProduct = $productRepository->getById(20);
 
-
 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');

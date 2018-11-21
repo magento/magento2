@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Block\Category\Plugin;
 
-use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;

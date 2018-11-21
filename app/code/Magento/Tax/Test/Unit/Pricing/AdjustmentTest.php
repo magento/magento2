@@ -8,8 +8,6 @@ namespace Magento\Tax\Test\Unit\Pricing;
 
 use \Magento\Tax\Pricing\Adjustment;
 
-use Magento\Framework\Pricing\SaleableInterface;
-
 class AdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**

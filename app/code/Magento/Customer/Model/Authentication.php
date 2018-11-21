@@ -6,8 +6,6 @@
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\ResourceModel\CustomerRepository;
-use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;

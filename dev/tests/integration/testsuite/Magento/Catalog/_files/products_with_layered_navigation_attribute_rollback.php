@@ -46,6 +46,5 @@ if ($attribute instanceof \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
 }
 $eavConfig->clear();
 
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

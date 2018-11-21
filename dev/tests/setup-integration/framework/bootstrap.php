@@ -32,7 +32,6 @@ if (!defined('MAGENTO_MODULES_PATH')) {
 }
 $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 
-
 try {
     setCustomErrorHandler();
     $installConfigFile = $settings->getAsConfigFile('TESTS_INSTALL_CONFIG_FILE');

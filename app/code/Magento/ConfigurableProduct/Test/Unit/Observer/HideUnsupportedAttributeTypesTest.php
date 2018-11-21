@@ -6,7 +6,6 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Observer;
 
-use Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main as MainBlock;
 use Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Observer as EventObserver;

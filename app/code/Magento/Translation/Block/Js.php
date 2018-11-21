@@ -8,7 +8,6 @@ namespace Magento\Translation\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Translation\Model\Js\Config;
-use Magento\Framework\Escaper;
 
 /**
  * @api

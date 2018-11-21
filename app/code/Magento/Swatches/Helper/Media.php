@@ -6,7 +6,6 @@
 namespace Magento\Swatches\Helper;
 
 use Magento\Catalog\Helper\Image;
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**

@@ -5,10 +5,8 @@
  */
 namespace Magento\SalesRule\Model;
 
-use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SortOrder;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 
 /**

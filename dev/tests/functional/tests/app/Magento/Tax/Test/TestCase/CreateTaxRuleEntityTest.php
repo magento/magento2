@@ -6,7 +6,6 @@
 
 namespace Magento\Tax\Test\TestCase;
 
-use Magento\Tax\Test\Fixture\TaxRule;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleNew;
 use Magento\Mtf\TestCase\Injectable;

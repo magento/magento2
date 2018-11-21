@@ -6,7 +6,6 @@
 
 namespace Magento\Checkout\Test\TestCase;
 
-use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\TestCase\Scenario;
 use Magento\Mtf\Fixture\FixtureFactory;
 

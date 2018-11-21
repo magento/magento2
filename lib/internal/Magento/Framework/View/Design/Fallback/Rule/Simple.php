@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Module\Dir\Reader;
 

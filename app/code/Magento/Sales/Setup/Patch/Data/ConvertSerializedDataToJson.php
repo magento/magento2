@@ -7,17 +7,11 @@
 namespace Magento\Sales\Setup\Patch\Data;
 
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\State;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldToConvert;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Sales\Model\OrderFactory;
-use Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory as AddressCollectionFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Setup\SalesOrderPaymentDataConverter;
 use Magento\Sales\Setup\SalesSetup;
 use Magento\Sales\Setup\SalesSetupFactory;

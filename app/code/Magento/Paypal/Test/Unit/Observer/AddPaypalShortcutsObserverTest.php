@@ -9,7 +9,6 @@ use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Layout;
 use Magento\Paypal\Block\Express\InContext\Minicart\Button;
 use Magento\Paypal\Helper\Shortcut\Factory;

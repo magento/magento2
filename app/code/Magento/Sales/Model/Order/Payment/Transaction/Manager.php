@@ -7,7 +7,6 @@
 namespace Magento\Sales\Model\Order\Payment\Transaction;
 
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
 class Manager implements ManagerInterface

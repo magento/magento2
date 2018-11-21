@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Handler\CatalogAttributeSet;
 
-use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlInterface;

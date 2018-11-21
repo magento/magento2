@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\App\Language;
 
-use Magento\Framework\Config\Dom;
-
 /**
  * Language pack configuration file
  */

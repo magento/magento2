@@ -6,8 +6,6 @@
 
 namespace Magento\MessageQueue\Model\Plugin\ResourceModel;
 
-use Magento\TestFramework\Event\Magento;
-
 class LockTest extends \PHPUnit\Framework\TestCase
 {
     /**

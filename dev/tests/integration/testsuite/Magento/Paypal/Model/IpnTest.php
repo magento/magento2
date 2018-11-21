@@ -5,7 +5,6 @@
  */
 namespace Magento\Paypal\Model;
 
-use Magento\Paypal\Model\IpnFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;

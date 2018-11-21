@@ -7,7 +7,6 @@
 namespace Magento\CheckoutAgreements\Test\Block\Multishipping;
 
 use \Magento\Multishipping\Test\Block\Checkout\Overview;
-use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 use Magento\Mtf\Client\Locator;
 
 /**

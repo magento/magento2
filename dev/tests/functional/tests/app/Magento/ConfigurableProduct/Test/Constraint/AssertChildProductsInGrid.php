@@ -7,7 +7,6 @@
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**

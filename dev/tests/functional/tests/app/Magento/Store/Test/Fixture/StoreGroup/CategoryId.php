@@ -8,7 +8,6 @@ namespace Magento\Store\Test\Fixture\StoreGroup;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Prepare CategoryId for Store Group.

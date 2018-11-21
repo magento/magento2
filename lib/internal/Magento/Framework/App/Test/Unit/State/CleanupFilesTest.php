@@ -7,7 +7,6 @@
 namespace Magento\Framework\App\Test\Unit\State;
 
 use \Magento\Framework\App\State\CleanupFiles;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 

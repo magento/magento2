@@ -5,7 +5,6 @@
  */
 namespace Magento\TestFixture\Controller\Adminhtml;
 
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
 /**

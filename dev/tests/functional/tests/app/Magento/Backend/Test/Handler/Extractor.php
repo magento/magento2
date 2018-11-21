@@ -8,7 +8,6 @@
 namespace Magento\Backend\Test\Handler;
 
 use Magento\Mtf\Util\Protocol\CurlInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**

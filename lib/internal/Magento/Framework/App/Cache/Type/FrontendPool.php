@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\App\Cache\Type;
 
-use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\DeploymentConfig;
 
 /**

@@ -6,7 +6,6 @@
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
 
 use \Magento\Framework\HTTP\PhpEnvironment\Request;
-
 use Zend\Stdlib\Parameters;
 
 class RequestTest extends \PHPUnit\Framework\TestCase

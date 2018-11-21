@@ -6,7 +6,6 @@
 
 namespace Magento\GiftMessage\Test\Constraint;
 
-use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;

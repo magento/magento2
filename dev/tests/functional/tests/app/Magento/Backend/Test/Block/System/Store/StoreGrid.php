@@ -7,7 +7,6 @@
 namespace Magento\Backend\Test\Block\System\Store;
 
 use Magento\Backend\Test\Block\Widget\Grid;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Store\Test\Fixture\StoreGroup;
 use Magento\Store\Test\Fixture\Website;
 use Magento\Mtf\Client\Locator;

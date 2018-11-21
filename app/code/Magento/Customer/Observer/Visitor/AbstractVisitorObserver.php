@@ -7,7 +7,6 @@
 namespace Magento\Customer\Observer\Visitor;
 
 use Magento\Customer\Model\Visitor;
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**

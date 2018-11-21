@@ -6,7 +6,6 @@
 
 namespace Magento\CheckoutAgreements\Test\Constraint;
 
-use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 

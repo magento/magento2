@@ -6,7 +6,6 @@
 
 namespace Magento\Customer\Test\Handler\Customer;
 
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlInterface;

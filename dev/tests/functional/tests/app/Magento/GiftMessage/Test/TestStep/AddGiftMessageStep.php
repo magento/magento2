@@ -7,7 +7,6 @@
 namespace Magento\GiftMessage\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**

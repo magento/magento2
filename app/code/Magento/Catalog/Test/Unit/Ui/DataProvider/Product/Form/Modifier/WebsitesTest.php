@@ -10,7 +10,6 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\Store as StoreView;
 use Magento\Store\Model\Group;

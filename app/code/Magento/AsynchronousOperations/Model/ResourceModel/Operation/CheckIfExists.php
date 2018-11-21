@@ -6,7 +6,6 @@
 namespace Magento\AsynchronousOperations\Model\ResourceModel\Operation;
 
 use Magento\Framework\EntityManager\Operation\CheckIfExistsInterface;
-use Magento\Framework\App\ResourceConnection;
 
 /**
  * CheckIfExists operation for list of bulk operations.

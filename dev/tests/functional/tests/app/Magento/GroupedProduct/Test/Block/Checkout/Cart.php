@@ -6,7 +6,6 @@
 
 namespace Magento\GroupedProduct\Test\Block\Checkout;
 
-use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**

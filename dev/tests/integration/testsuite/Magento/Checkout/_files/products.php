@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 require __DIR__ . '/../../../Magento/Sales/_files/default_rollback.php';
 require 'rollback_quote.php';
 

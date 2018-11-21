@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Block\Form;
 
 /**

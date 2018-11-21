@@ -5,7 +5,6 @@
  */
 namespace Magento\CheckoutAgreements\Test\TestStep;
 
-use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**

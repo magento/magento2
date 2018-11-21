@@ -7,7 +7,6 @@ namespace Magento\Signifyd\Test\Unit\Model\PaymentMethodMapper;
 
 use Magento\Signifyd\Model\PaymentMethodMapper\XmlToArrayConfigConverter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Config\Dom\ValidationSchemaException;
 
 class XmlToArrayConfigConverterTest extends \PHPUnit\Framework\TestCase
 {

@@ -11,7 +11,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\AbstractModel;
-use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class Builder build transaction

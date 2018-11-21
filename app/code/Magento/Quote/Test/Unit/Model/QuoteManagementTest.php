@@ -7,7 +7,6 @@
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-
 use Magento\Quote\Model\CustomerManagement;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 

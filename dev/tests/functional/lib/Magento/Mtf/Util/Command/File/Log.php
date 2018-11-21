@@ -6,8 +6,6 @@
 
 namespace Magento\Mtf\Util\Command\File;
 
-use Magento\Mtf\Util\Protocol\CurlTransport;
-
 /**
  * Get content of log file in var/log folder.
  */

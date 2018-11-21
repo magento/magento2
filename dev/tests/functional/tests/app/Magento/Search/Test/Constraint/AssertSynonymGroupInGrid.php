@@ -6,7 +6,6 @@
 
 namespace Magento\Search\Test\Constraint;
 
-use Magento\Search\Test\Fixture\SynonymGroup;
 use Magento\Search\Test\Page\Adminhtml\SynonymGroupIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 

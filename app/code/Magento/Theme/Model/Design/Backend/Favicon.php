@@ -5,8 +5,6 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
-use Magento\Framework\Filesystem;
-
 class Favicon extends Image
 {
     /**

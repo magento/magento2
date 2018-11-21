@@ -5,7 +5,6 @@
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel;
 
-use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\ResourceModel\Page as PageResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

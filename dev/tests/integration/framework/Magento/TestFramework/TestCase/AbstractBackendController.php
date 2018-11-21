@@ -5,8 +5,6 @@
  */
 namespace Magento\TestFramework\TestCase;
 
-use Magento\Framework\App\Request\Http as HttpRequest;
-
 /**
  * A parent class for backend controllers - contains directives for admin user creation and authentication.
  *

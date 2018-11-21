@@ -59,7 +59,6 @@ $order->setIncrementId(
 $order->isObjectNew(true);
 $order->save();
 
-
 $order->setIncrementId(
     '100000002'
 )->setState(
@@ -91,7 +90,6 @@ $order->setIncrementId(
 );
 $order->isObjectNew(true);
 $order->save();
-
 
 $order->setIncrementId(
     '100000003'

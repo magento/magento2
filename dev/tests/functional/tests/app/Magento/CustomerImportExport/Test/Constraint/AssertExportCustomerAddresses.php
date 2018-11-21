@@ -6,7 +6,6 @@
 namespace Magento\CustomerImportExport\Test\Constraint;
 
 use Magento\Customer\Test\Fixture\Address;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Util\Command\File\Export;
 use Magento\Mtf\Util\Command\File\Export\Data;

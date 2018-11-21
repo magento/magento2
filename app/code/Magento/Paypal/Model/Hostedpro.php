@@ -7,7 +7,6 @@ namespace Magento\Paypal\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\InfoInterface;
-use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Hostedpro\Request;
 use Magento\Sales\Model\Order;
 

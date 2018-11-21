@@ -6,7 +6,6 @@
 
 namespace Magento\LayeredNavigation\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;

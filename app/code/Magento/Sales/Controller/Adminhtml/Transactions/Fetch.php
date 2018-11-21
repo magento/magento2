@@ -6,7 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
-use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 

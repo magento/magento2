@@ -7,8 +7,6 @@
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Directory\Model\AllowedCountries;
-use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
 use Magento\Quote\Model\QuoteValidator;
 

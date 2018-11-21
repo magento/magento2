@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

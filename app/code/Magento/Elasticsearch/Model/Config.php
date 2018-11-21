@@ -7,7 +7,6 @@ namespace Magento\Elasticsearch\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\EngineResolverInterface;
-use Magento\Search\Model\EngineResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;

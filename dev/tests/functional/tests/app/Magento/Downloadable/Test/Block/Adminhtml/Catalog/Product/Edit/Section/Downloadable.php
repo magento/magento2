@@ -6,7 +6,6 @@
 
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section;
 
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Ui\Test\Block\Adminhtml\Section;

@@ -6,7 +6,6 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\SalesRule\Model\CouponGenerator;
 
 class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote

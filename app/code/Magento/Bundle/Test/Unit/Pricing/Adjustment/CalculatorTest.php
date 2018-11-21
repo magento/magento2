@@ -6,7 +6,6 @@
 
 namespace Magento\Bundle\Test\Unit\Pricing\Adjustment;
 
-use Magento\Bundle\Model\ResourceModel\Selection\Collection;
 use \Magento\Bundle\Pricing\Adjustment\Calculator;
 use Magento\Bundle\Model\Product\Price as ProductPrice;
 use Magento\Bundle\Pricing\Price;

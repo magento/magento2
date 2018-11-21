@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
-use Magento\Setup\Module\Di\App\Task\Operation\ProxyGenerator;
 use Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 

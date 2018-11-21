@@ -7,7 +7,6 @@
 namespace Magento\Swatches\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 

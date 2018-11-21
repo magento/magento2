@@ -9,7 +9,6 @@ namespace Magento\Variable\Test\TestCase;
 use Magento\Variable\Test\Fixture\SystemVariable;
 use Magento\Variable\Test\Page\Adminhtml\SystemVariableIndex;
 use Magento\Variable\Test\Page\Adminhtml\SystemVariableNew;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;

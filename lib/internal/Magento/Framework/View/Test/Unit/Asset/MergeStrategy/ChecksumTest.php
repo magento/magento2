@@ -6,7 +6,6 @@
 namespace Magento\Framework\View\Test\Unit\Asset\MergeStrategy;
 
 use \Magento\Framework\View\Asset\MergeStrategy\Checksum;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\Source;
 

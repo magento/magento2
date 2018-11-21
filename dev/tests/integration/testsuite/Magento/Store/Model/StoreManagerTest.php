@@ -6,7 +6,6 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 

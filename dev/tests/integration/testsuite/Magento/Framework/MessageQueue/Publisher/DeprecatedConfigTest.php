@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\Publisher;
 
-use Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface;
-
 /**
  * Test access to publisher configuration declared in deprecated queue.xml configs using Publisher\ConfigInterface.
  *

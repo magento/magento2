@@ -7,8 +7,6 @@
  */
 namespace Magento\Eav\Model\Entity\Setup;
 
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-
 class PropertyMapper extends PropertyMapperAbstract
 {
     /**

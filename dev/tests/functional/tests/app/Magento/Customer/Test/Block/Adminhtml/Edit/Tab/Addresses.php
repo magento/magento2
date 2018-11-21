@@ -11,7 +11,6 @@ use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Block\BlockFactory;
 use Magento\Mtf\Block\Mapper;
 use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;

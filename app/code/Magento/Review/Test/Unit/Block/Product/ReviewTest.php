@@ -8,7 +8,6 @@ namespace Magento\Review\Test\Unit\Block\Product;
 
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Element\Template\Context;
 use Magento\Catalog\Model\Product;
 use Magento\Review\Block\Product\Review as ReviewBlock;
 use Magento\Review\Model\ResourceModel\Review\Collection;

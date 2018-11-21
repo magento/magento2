@@ -11,7 +11,6 @@ use Magento\Framework\App\State;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory as AddressCollectionFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Setup\SalesSetupFactory;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;

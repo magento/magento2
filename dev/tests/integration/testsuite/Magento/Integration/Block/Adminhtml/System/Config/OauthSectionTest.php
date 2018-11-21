@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Integration\Block\Adminhtml\System\Config;
 
 class OauthSectionTest extends \Magento\TestFramework\TestCase\AbstractBackendController

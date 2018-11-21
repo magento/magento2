@@ -8,7 +8,6 @@ namespace Magento\Catalog\Block\Product\Compare;
 
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Context;
-use Magento\Framework\App\Action\Action;
 
 /**
  * Catalog products compare block

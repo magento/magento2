@@ -7,7 +7,6 @@
 namespace Magento\Paypal\Model\Report;
 
 use DateTime;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 
 /**

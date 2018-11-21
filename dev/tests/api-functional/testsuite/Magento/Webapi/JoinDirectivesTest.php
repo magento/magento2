@@ -9,7 +9,6 @@ namespace Magento\Webapi;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\FilterBuilder;
 
 class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract

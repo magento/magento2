@@ -5,7 +5,6 @@
  */
 namespace Magento\Signifyd\Test\TestStep;
 
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\TestStep\CreateCustomerStep;
 use Magento\Customer\Test\TestStep\DeleteCustomerStep;
 use Magento\Mtf\TestStep\TestStepFactory;

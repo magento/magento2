@@ -7,7 +7,6 @@
 namespace Magento\Framework\View\Test\Unit\Layout\Generator;
 
 use \Magento\Framework\View\Layout\Generator\Container;
-
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;

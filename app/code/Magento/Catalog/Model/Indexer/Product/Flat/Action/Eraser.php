@@ -7,7 +7,6 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Store\Model\Store;
 

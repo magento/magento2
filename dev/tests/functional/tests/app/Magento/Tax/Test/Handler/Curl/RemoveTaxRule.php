@@ -9,7 +9,6 @@ namespace Magento\Tax\Test\Handler\Curl;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl;
 use Magento\Mtf\Util\Protocol\CurlInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**

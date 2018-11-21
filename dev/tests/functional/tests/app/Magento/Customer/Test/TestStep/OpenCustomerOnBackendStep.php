@@ -6,7 +6,6 @@
 
 namespace Magento\Customer\Test\TestStep;
 
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 

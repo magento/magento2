@@ -6,7 +6,6 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Setup\Model\Cron\ReadinessCheck;
 use Zend\Mvc\Controller\AbstractActionController;
 

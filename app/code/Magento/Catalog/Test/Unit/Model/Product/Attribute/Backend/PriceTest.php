@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
 
-use Magento\Store\Model\Store;
-
 /**
  * Class PriceTest
  */

@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Model\ResourceModel;
 
-use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Math\Random;
 use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;

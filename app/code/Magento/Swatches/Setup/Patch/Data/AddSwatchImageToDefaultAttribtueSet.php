@@ -8,7 +8,6 @@ namespace Magento\Swatches\Setup\Patch\Data;
 
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 

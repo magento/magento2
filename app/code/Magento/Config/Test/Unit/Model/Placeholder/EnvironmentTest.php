@@ -8,7 +8,6 @@ namespace Magento\Config\Test\Unit\Model\Placeholder;
 use Magento\Config\Model\Placeholder\Environment;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 use \PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**

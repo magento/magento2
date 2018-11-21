@@ -7,7 +7,6 @@
 namespace Magento\Persistent\Model\Checkout;
 
 use Magento\Checkout\Model\GuestPaymentInformationManagement;
-use Magento\Checkout\Model\Session;
 
 /**
  * Plugin to convert shopping cart from persistent cart to guest cart before order save when customer not logged in

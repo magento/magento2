@@ -8,7 +8,6 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
-use Magento\CatalogUrlRewrite\Model\CategoryBasedProductRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;

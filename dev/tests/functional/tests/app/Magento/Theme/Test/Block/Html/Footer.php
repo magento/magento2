@@ -8,7 +8,6 @@ namespace Magento\Theme\Test\Block\Html;
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
-use Magento\Store\Test\Fixture\Store;
 
 /**
  * Footer block

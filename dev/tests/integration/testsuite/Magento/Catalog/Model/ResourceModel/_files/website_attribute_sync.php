@@ -48,7 +48,6 @@ $website->setName('custom website for av test')
 $website->isObjectNew(true);
 $websiteResourceModel->save($website);
 
-
 /**
  * Create store group
  */
@@ -130,7 +129,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
 
 $product = $productRepository->save($product);
-
 
 /**
  * createProductStoreValues

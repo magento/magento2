@@ -7,7 +7,6 @@
 namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\Exception\MailException;
-
 use Magento\Sales\Model\OrderNotifier;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 

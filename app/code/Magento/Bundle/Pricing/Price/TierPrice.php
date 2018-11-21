@@ -7,7 +7,6 @@
 namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Catalog\Pricing\Price\RegularPrice;
-use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**

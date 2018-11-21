@@ -7,7 +7,6 @@
 namespace Magento\Vault\Test\TestStep;
 
 use Magento\Customer\Test\Fixture\Address;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;

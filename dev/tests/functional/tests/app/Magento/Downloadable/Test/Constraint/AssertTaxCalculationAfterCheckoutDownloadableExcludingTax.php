@@ -6,8 +6,6 @@
 
 namespace Magento\Downloadable\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\Customer;
-
 /**
  * Checks that prices excl tax on order review and customer order pages are equal to specified in dataset.
  */

@@ -6,7 +6,6 @@
 
 namespace Magento\Shipping\Test\TestCase;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\TestCase\Injectable;
 
 /**

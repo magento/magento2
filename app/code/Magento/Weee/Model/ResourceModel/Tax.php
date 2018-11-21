@@ -5,9 +5,6 @@
  */
 namespace Magento\Weee\Model\ResourceModel;
 
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Condition\ConditionInterface;
-
 /**
  * Wee tax resource model
  *

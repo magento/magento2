@@ -7,7 +7,6 @@ namespace Magento\AdminNotification\Model;
 
 use Magento\Framework\Notification\MessageInterface;
 use Magento\Framework\Notification\NotifierInterface;
-use Magento\AdminNotification\Model\InboxInterface;
 
 /**
  * AdminNotification Inbox model

@@ -6,7 +6,6 @@
 namespace Magento\InstantPurchase\Model\ShippingAddressChoose;
 
 use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\Address;
 
 /**
  * Shipping address chooser implementation to choose customer default shipping address.

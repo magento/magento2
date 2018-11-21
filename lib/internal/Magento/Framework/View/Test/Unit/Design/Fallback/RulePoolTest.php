@@ -7,7 +7,6 @@
 namespace Magento\Framework\View\Test\Unit\Design\Fallback;
 
 use \Magento\Framework\View\Design\Fallback\RulePool;
-use Magento\Framework\Filesystem;
 
 class RulePoolTest extends \PHPUnit\Framework\TestCase
 {

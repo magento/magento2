@@ -7,7 +7,6 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Exception\MailException;
-
 use Magento\Sales\Model\Order\CreditmemoNotifier;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 

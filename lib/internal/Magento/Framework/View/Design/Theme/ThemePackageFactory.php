@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
-use Magento\Framework\View\Design\Theme\ThemePackage;
-
 /**
  * Factory for theme packages
  */

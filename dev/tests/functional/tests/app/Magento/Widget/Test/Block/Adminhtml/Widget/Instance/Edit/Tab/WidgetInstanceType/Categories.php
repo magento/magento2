@@ -6,7 +6,6 @@
 
 namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
 

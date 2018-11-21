@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\Communication\Config;
 

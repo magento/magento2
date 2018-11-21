@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\TestCase\ProductAttribute;
 
-use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex;
 use Magento\Mtf\Fixture\FixtureFactory;

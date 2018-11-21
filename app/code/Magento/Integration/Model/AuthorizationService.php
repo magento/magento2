@@ -12,7 +12,6 @@ use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\RulesFactory;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\Acl;
 use Magento\Framework\Acl\Builder as AclBuilder;
 use Magento\Framework\Acl\RootResource as RootAclResource;
 use Magento\Framework\Exception\LocalizedException;

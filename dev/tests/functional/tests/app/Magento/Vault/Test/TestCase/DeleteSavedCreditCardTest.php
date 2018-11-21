@@ -6,7 +6,6 @@
 namespace Magento\Vault\Test\TestCase;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Vault\Test\Constraint\AssertCreditCardNotPresentOnCheckout;

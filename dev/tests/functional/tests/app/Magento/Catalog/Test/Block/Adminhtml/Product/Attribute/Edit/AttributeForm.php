@@ -9,7 +9,6 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit;
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 

@@ -6,7 +6,6 @@
 
 namespace Magento\Backend\Test\Block\Dashboard\Tab;
 
-use Magento\Mtf\Client\Element;
 use Magento\Backend\Test\Block\Widget\Tab;
 
 class Products extends Tab

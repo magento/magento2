@@ -10,7 +10,6 @@ namespace Magento\WebapiAsync\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Webapi\Model\Cache\Type\Webapi as WebapiCache;
-use Magento\WebapiAsync\Model\ServiceConfig\Converter;
 use Magento\WebapiAsync\Model\ServiceConfig\Reader;
 
 /**

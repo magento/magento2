@@ -7,7 +7,6 @@
 namespace Magento\Review\Test\Handler\Review;
 
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Review\Test\Fixture\Rating;
 use Magento\Backend\Test\Handler\Extractor;
 use Magento\Review\Test\Fixture\Review;

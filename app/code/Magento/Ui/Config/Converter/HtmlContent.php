@@ -5,7 +5,6 @@
  */
 namespace Magento\Ui\Config\Converter;
 
-use Magento\Framework\View\Element\UiComponent\Config\Converter;
 use Magento\Ui\Config\ConverterInterface;
 
 /**

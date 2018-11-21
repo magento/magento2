@@ -7,7 +7,6 @@
 namespace Magento\Framework\View\Test\Unit\Page\Config;
 
 use \Magento\Framework\View\Page\Config\Structure;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**

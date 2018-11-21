@@ -11,7 +11,6 @@
  */
 namespace Magento\Tax\Controller\Adminhtml;
 
-use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
 abstract class Rule extends \Magento\Backend\App\Action

@@ -7,7 +7,6 @@
 namespace Magento\Widget\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Widget\Test\Fixture\Widget;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceIndex;
 
 /**

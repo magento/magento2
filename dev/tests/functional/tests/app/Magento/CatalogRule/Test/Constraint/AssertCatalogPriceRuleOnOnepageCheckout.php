@@ -7,7 +7,6 @@
 namespace Magento\CatalogRule\Test\Constraint;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**

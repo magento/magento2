@@ -9,7 +9,6 @@ namespace Magento\ReleaseNotification\Mtf\App\State;
 use Magento\Mtf\App\State\AbstractState;
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\App\State\StateHandlerInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**

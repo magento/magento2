@@ -7,7 +7,6 @@
 namespace Magento\Framework\View\Test\Unit\Page\Config\Generator;
 
 use \Magento\Framework\View\Page\Config\Generator\Body;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**

@@ -11,8 +11,6 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 
-use Magento\Store\Model\ResourceModel\Store\Collection;
-
 /**
  * @api
  * @since 100.0.2

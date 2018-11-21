@@ -9,7 +9,6 @@ namespace Magento\Reports\Test\TestCase;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Reports\Test\Page\Adminhtml\SalesReport;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Preconditions:

@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section;
 
-use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**

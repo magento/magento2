@@ -7,7 +7,6 @@
 namespace Magento\Mtf\Util\Command;
 
 use Magento\Mtf\Util\Protocol\CurlInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
  * Perform Website folder creation for functional tests executions.

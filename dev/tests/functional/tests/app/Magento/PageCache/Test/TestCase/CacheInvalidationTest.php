@@ -7,7 +7,6 @@
 namespace Magento\PageCache\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureFactory;

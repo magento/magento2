@@ -6,7 +6,6 @@
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db\MySQL\Definition\Columns;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Nullable;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\OnUpdate;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Boolean;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Boolean as BooleanColumnDto;

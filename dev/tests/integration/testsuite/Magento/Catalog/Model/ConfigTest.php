@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\Config;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;

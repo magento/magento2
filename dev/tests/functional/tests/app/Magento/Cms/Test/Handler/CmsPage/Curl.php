@@ -10,7 +10,6 @@ use Magento\Backend\Test\Handler\Conditions;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\System\Event\EventManagerInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**

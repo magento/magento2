@@ -6,7 +6,6 @@
 
 namespace Magento\Bundle\Test\Block\Catalog\Product\View\Type;
 
-use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option;
 use Magento\Mtf\Client\Element\SimpleElement;

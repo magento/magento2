@@ -5,7 +5,6 @@
  */
 namespace Magento\Paypal\Gateway\Payflowpro\Command;
 
-use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;

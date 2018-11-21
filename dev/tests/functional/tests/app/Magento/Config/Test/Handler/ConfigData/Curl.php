@@ -9,7 +9,6 @@ namespace Magento\Config\Test\Handler\ConfigData;
 use Magento\Config\Test\Fixture\ConfigData\Section;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Store\Test\Fixture\Website;

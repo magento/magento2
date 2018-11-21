@@ -8,7 +8,6 @@ namespace Magento\Store\Test\Fixture\Store;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Store\Test\Fixture\StoreGroup;
 
 /**
  * Prepare StoreGroup for Store.
