@@ -162,7 +162,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($customerMock);
 
         $customerAddressFormMock = $this->createMock(\Magento\Customer\Model\Metadata\Form::class);
-
         $customerAddressFormMock->expects($this->atLeastOnce())
             ->method('extractData')
             ->with($this->requestMock)
@@ -180,9 +179,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->addressDataFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($addressMock);
+        $this->addressDataFactoryMock->expects($this->once())->method('create')->willReturn($addressMock);
 
         $this->dataObjectHelperMock->expects($this->atLeastOnce())
             ->method('populateWithArray')
@@ -193,13 +190,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                     $this->dataObjectHelperMock,
                 ]
             );
-
-        $this->addressRepositoryMock->expects($this->once())
-            ->method('save')
-            ->willReturn($this->address);
-        $this->address->expects($this->once())
-            ->method('getId')
-            ->willReturn($addressId);
+        $this->addressRepositoryMock->expects($this->once())->method('save')->willReturn($this->address);
+        $this->address->expects($this->once())->method('getId')->willReturn($addressId);
 
         $this->resultJsonFactory->expects($this->once())
             ->method('create')
