@@ -127,6 +127,12 @@ abstract class AbstractAction
     private $queryGenerator;
 
     /**
+     * Current store id.
+     * @var int
+     */
+    private $currentStoreId = 0;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
@@ -167,6 +173,7 @@ abstract class AbstractAction
     {
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
+                $this->currentStoreId = $store->getId();
                 $this->reindexRootCategory($store);
                 $this->reindexAnchorCategories($store);
                 $this->reindexNonAnchorCategories($store);
@@ -594,7 +601,7 @@ abstract class AbstractAction
         if (empty($this->tempTreeIndexTableName)) {
             $this->tempTreeIndexTableName = $this->connection->getTableName('temp_catalog_category_tree_index')
                 . '_'
-                . substr(md5(time() . random_int(0, 999999999)), 0, 8);
+                . substr(sha1(time() . random_int(0, 999999999)), 0, 8);
         }
 
         return $this->tempTreeIndexTableName;
@@ -649,30 +656,47 @@ abstract class AbstractAction
     }
 
     /**
-     * Populate the temporary category tree index table
+     * Populate the temporary category tree index table.
      *
      * @param string $temporaryName
+     * @return void
      * @since 101.0.0
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {
-        $offset = 0;
-        $limit = 500;
+        $isActiveAttributeId = $this->config->getAttribute(
+            \Magento\Catalog\Model\Category::ENTITY,
+            'is_active'
+        )->getId();
+        $categoryMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $categoryLinkField = $categoryMetadata->getLinkField();
+        $selects = $this->prepareSelectsByRange(
+            $this->connection->select()
+                ->from(
+                    ['c' => $this->getTable('catalog_category_entity')],
+                    ['entity_id', 'path']
+                )->joinInner(
+                    ['ccacd' => $this->getTable('catalog_category_entity_int')],
+                    'ccacd.' . $categoryLinkField . ' = c.' . $categoryLinkField
+                    . ' AND ccacd.store_id = 0' . ' AND ccacd.attribute_id = ' . $isActiveAttributeId,
+                    []
+                )->joinLeft(
+                    ['ccacs' => $this->getTable('catalog_category_entity_int')],
+                    'ccacs.' . $categoryLinkField . ' = c.' . $categoryLinkField
+                    . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = '
+                    . $this->currentStoreId,
+                    []
+                )->where(
+                    $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
+                    1
+                ),
+            'entity_id'
+        );
 
-        $categoryTable = $this->getTable('catalog_category_entity');
-
-        $categoriesSelect = $this->connection->select()
-            ->from(
-                ['c' => $categoryTable],
-                ['entity_id', 'path']
-            )->limit($limit, $offset);
-
-        $categories = $this->connection->fetchAll($categoriesSelect);
-
-        while ($categories) {
+        foreach ($selects as $select) {
             $values = [];
 
-            foreach ($categories as $category) {
+            foreach ($this->connection->fetchAll($select) as $category) {
                 foreach (explode('/', $category['path']) as $parentId) {
                     if ($parentId !== $category['entity_id']) {
                         $values[] = [$parentId, $category['entity_id']];
@@ -683,15 +707,6 @@ abstract class AbstractAction
             if (count($values) > 0) {
                 $this->connection->insertArray($temporaryName, ['parent_id', 'child_id'], $values);
             }
-
-            $offset += $limit;
-            $categoriesSelect = $this->connection->select()
-                ->from(
-                    ['c' => $categoryTable],
-                    ['entity_id', 'path']
-                )->limit($limit, $offset);
-
-            $categories = $this->connection->fetchAll($categoriesSelect);
         }
     }
 
