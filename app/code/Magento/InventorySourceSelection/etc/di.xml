@@ -25,6 +25,8 @@
                 type="Magento\InventorySourceSelection\Model\DistanceProvider\GetGeoReferenceProviderCode"/>
     <preference for="Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface"
                 type="Magento\InventorySourceSelection\Model\Request\AddressRequest"/>
+    <preference for="Magento\InventorySourceSelectionApi\Model\Request\LatLngRequestInterface"
+                type="Magento\InventorySourceSelection\Model\Request\LatLngRequest"/>
 
     <type name="Magento\InventorySourceSelection\Model\SourceSelectionService">
         <arguments>

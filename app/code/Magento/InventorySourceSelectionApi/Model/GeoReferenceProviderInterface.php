@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventorySourceSelectionApi\Model;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
 use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
+use Magento\InventorySourceSelectionApi\Model\Request\LatLngRequestInterface;
 
 /**
  * Geo reference provider
@@ -31,15 +31,15 @@ interface GeoReferenceProviderInterface
      * Get latitude and longitude for one address
      *
      * @param AddressRequestInterface $destination
-     * @return LatLngRequest
+     * @return LatLngRequestInterface
      */
-    public function getAddressLatLng(AddressRequestInterface $destination): LatLngRequest;
+    public function getAddressLatLng(AddressRequestInterface $destination): LatLngRequestInterface;
 
     /**
      * Get latitude and longitude for one source
      *
      * @param SourceInterface $source
-     * @return LatLngRequest
+     * @return LatLngRequestInterface
      */
-    public function getSourceLatLng(SourceInterface $source): LatLngRequest;
+    public function getSourceLatLng(SourceInterface $source): LatLngRequestInterface;
 }

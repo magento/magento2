@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelection\Model\DistanceProvider;
 
-use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
+use Magento\InventorySourceSelectionApi\Model\Request\LatLngRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
 
 /**
@@ -19,7 +19,7 @@ interface GetLatLngRequestFromAddressInterface
      * Get latitude and longitude from address
      *
      * @param AddressRequestInterface $addressRequest
-     * @return LatLngRequest
+     * @return LatLngRequestInterface
      */
-    public function execute(AddressRequestInterface $addressRequest): LatLngRequest;
+    public function execute(AddressRequestInterface $addressRequest): LatLngRequestInterface;
 }

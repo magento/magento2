@@ -9,8 +9,8 @@ namespace Magento\InventorySourceSelection\Model\DistanceProvider\Offline;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventorySourceSelection\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
-use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
-use Magento\InventorySourceSelection\Model\Request\LatLngRequestFactory;
+use Magento\InventorySourceSelectionApi\Model\Request\LatLngRequestInterface;
+use Magento\InventorySourceSelectionApi\Model\Request\LatLngRequestInterfaceFactory;
 use Magento\InventorySourceSelection\Model\ResourceModel\GetGeoNameDataByAddressRequest;
 use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
 
@@ -22,9 +22,9 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
     private $latLngCache = [];
 
     /**
-     * @var LatLngRequestFactory
+     * @var LatLngRequestInterfaceFactory
      */
-    private $latLngRequestFactory;
+    private $latLngRequestInterfaceFactory;
 
     /**
      * @var GetGeoNameDataByAddressRequest
@@ -35,28 +35,28 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
      * GetLatLngRequestFromAddress constructor.
      *
      * @param GetGeoNameDataByAddressRequest $getGeoNameDataByAddressRequest
-     * @param LatLngRequestFactory $latLngRequestFactory
+     * @param LatLngRequestFactory $latLngRequestInterfaceFactory
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         GetGeoNameDataByAddressRequest $getGeoNameDataByAddressRequest,
-        LatLngRequestFactory $latLngRequestFactory
+        LatLngRequestInterfaceFactory $latLngRequestInterfaceFactory
     ) {
         $this->getGeoNameDataByAddressRequest = $getGeoNameDataByAddressRequest;
-        $this->latLngRequestFactory = $latLngRequestFactory;
+        $this->latLngRequestInterfaceFactory = $latLngRequestInterfaceFactory;
     }
 
     /**
      * @inheritdoc
      * @throws LocalizedException
      */
-    public function execute(AddressRequestInterface $addressRequest): LatLngRequest
+    public function execute(AddressRequestInterface $addressRequest): LatLngRequestInterface
     {
         $cacheKey = $addressRequest->getAsString();
         if (!isset($this->latLngCache[$cacheKey])) {
             $geoNameData = $this->getGeoNameDataByAddressRequest->execute($addressRequest);
 
-            $this->latLngCache[$cacheKey] = $this->latLngRequestFactory->create([
+            $this->latLngCache[$cacheKey] = $this->latLngRequestInterfaceFactory->create([
                 'lat' => (float)$geoNameData['latitude'],
                 'lng' => (float)$geoNameData['longitude'],
             ]);

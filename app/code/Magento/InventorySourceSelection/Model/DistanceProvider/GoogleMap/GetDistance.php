@@ -13,17 +13,20 @@ use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventorySourceSelection\Model\Config\Source\GoogleDistanceProvider\Value;
 use Magento\InventorySourceSelection\Model\DistanceProvider\GetDistanceInterface;
-use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
+use Magento\InventorySourceSelectionApi\Model\Request\LatLngRequestInterface;
 
 /**
  * @inheritdoc
  */
 class GetDistance implements GetDistanceInterface
 {
-    const GOOGLE_ENDPOINT = 'https://maps.googleapis.com/maps/api/distancematrix/json';
-    const XML_PATH_MODE = 'cataloginventory/source_selection_distance_based_google/mode';
-    const XML_PATH_VALUE = 'cataloginventory/source_selection_distance_based_google/value';
+    private const GOOGLE_ENDPOINT = 'https://maps.googleapis.com/maps/api/distancematrix/json';
+    private const XML_PATH_MODE = 'cataloginventory/source_selection_distance_based_google/mode';
+    private const XML_PATH_VALUE = 'cataloginventory/source_selection_distance_based_google/value';
 
+    /**
+     * @var array
+     */
     private $distanceCache = [];
 
     /**
@@ -70,7 +73,7 @@ class GetDistance implements GetDistanceInterface
      * @inheritdoc
      * @throws LocalizedException
      */
-    public function execute(LatLngRequest $source, LatLngRequest $destination): float
+    public function execute(LatLngRequestInterface $source, LatLngRequestInterface $destination): float
     {
         $key = $source->getAsString() . '|' . $destination->getAsString();
 

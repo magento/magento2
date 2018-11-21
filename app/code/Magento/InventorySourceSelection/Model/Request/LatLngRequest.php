@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelection\Model\Request;
 
+use Magento\InventorySourceSelectionApi\Model\Request\LatLngRequestInterface;
+
 /**
- * Latitude and longitude DTO
+ * @inheritdoc
  */
-class LatLngRequest
+class LatLngRequest implements LatLngRequestInterface
 {
     /**
      * @var float
@@ -35,9 +37,7 @@ class LatLngRequest
     }
 
     /**
-     * Get latitude
-     *
-     * @return float
+     * @inheritdoc
      */
     public function getLat(): float
     {
@@ -45,9 +45,7 @@ class LatLngRequest
     }
 
     /**
-     * Get longitude
-     *
-     * @return float
+     * @inheritdoc
      */
     public function getLng(): float
     {
@@ -55,9 +53,7 @@ class LatLngRequest
     }
 
     /**
-     * Get as string
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getAsString(): string
     {

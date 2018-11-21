@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelection\Model\InventoryRequestBuilder\FromOrder;
 
-use Magento\InventorySourceSelection\Model\InventoryRequestFromOrderBuilderInterface;
+use Magento\InventorySourceSelectionApi\Model\InventoryRequestFromOrderBuilderInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;

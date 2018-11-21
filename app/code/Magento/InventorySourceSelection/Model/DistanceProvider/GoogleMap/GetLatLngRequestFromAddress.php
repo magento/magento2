@@ -11,8 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventorySourceSelection\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
-use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
-use Magento\InventorySourceSelection\Model\Request\LatLngRequestFactory;
+use Magento\InventorySourceSelectionApi\Model\Request\LatLngRequestInterface;
+use Magento\InventorySourceSelectionApi\Model\Request\LatLngRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
 
 /**
@@ -33,9 +33,9 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
     private $client;
 
     /**
-     * @var LatLngRequestFactory
+     * @var LatLngRequestInterfaceFactory
      */
-    private $latLngRequestFactory;
+    private $latLngRequestInterfaceFactory;
 
     /**
      * @var Json
@@ -51,18 +51,18 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
      * GetLatLngRequestFromAddress constructor.
      *
      * @param ClientInterface $client
-     * @param LatLngRequestFactory $latLngRequestFactory
+     * @param LatLngRequestInterfaceFactory $latLngRequestInterfaceFactory
      * @param Json $json
      * @param GetApiKey $getApiKey
      */
     public function __construct(
         ClientInterface $client,
-        LatLngRequestFactory $latLngRequestFactory,
+        LatLngRequestInterfaceFactory $latLngRequestInterfaceFactory,
         Json $json,
         GetApiKey $getApiKey
     ) {
         $this->client = $client;
-        $this->latLngRequestFactory = $latLngRequestFactory;
+        $this->latLngRequestInterfaceFactory = $latLngRequestInterfaceFactory;
         $this->json = $json;
         $this->getApiKey = $getApiKey;
     }
@@ -71,7 +71,7 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
      * @inheritdoc
      * @throws LocalizedException
      */
-    public function execute(AddressRequestInterface $addressRequest): LatLngRequest
+    public function execute(AddressRequestInterface $addressRequest): LatLngRequestInterface
     {
         $cacheKey = $addressRequest->getAsString();
         if (!isset($this->latLngCache[$cacheKey])) {
@@ -92,7 +92,7 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
             }
 
             $location = $res['results'][0]['geometry']['location'];
-            $this->latLngCache[$cacheKey] = $this->latLngRequestFactory->create([
+            $this->latLngCache[$cacheKey] = $this->latLngRequestInterfaceFactory->create([
                 'lat' => (float)$location['lat'],
                 'lng' => (float)$location['lng'],
             ]);

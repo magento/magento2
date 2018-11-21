@@ -8,23 +8,19 @@ declare(strict_types=1);
 namespace Magento\InventorySourceSelection\Model\DistanceProvider\Offline;
 
 use Magento\InventorySourceSelection\Model\DistanceProvider\GetDistanceInterface;
-use Magento\InventorySourceSelection\Model\Request\LatLngRequest;
+use Magento\InventorySourceSelectionApi\Model\Request\LatLngRequestInterface;
 
 /**
  * @inheritdoc
  */
 class GetDistance implements GetDistanceInterface
 {
-    const EARTH_RADIUS = 6371000.0;
+    private const EARTH_RADIUS = 6371000.0;
 
     /**
-     * Get distance between two points
-     *
-     * @param LatLngRequest $source
-     * @param LatLngRequest $destination
-     * @return float
+     * @inheritdoc
      */
-    public function execute(LatLngRequest $source, LatLngRequest $destination): float
+    public function execute(LatLngRequestInterface $source, LatLngRequestInterface $destination): float
     {
         $latFrom = deg2rad($source->getLat());
         $lonFrom = deg2rad($source->getLng());
