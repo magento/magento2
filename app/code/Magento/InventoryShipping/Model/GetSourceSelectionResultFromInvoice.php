@@ -14,7 +14,7 @@ use Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrderBuilde
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
@@ -91,6 +91,7 @@ class GetSourceSelectionResultFromInvoice
      */
     public function execute(InvoiceInterface $invoice): SourceSelectionResultInterface
     {
+        /** @var OrderInterface $order */
         $order = $invoice->getOrder();
         $websiteId = (int) $order->getStore()->getWebsiteId();
         $stockId = (int) $this->stockByWebsiteIdResolver->execute($websiteId)->getStockId();
@@ -100,7 +101,7 @@ class GetSourceSelectionResultFromInvoice
 
         $inventoryRequest = $inventoryRequestBuilder->execute(
             $stockId,
-            $order,
+            (int) $order->getEntityId(),
             $this->getSelectionRequestItems($invoice->getItems())
         );
 

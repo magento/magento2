@@ -12,20 +12,13 @@ use Magento\InventorySourceSelectionApi\Model\InventoryRequestFromOrderBuilderIn
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
-use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\OrderItemRepositoryInterface;
 
 /**
  * @inheritdoc
  */
 class DistanceBuilder implements InventoryRequestFromOrderBuilderInterface
 {
-    /**
-     * @var ItemRequestInterfaceFactory
-     */
-    private $itemRequestFactory;
-
     /**
      * @var InventoryRequestInterfaceFactory
      */
@@ -37,11 +30,6 @@ class DistanceBuilder implements InventoryRequestFromOrderBuilderInterface
     private $getAddressRequestFromOrder;
 
     /**
-     * @var OrderItemRepositoryInterface
-     */
-    private $orderItemRepository;
-
-    /**
      * @var InventoryRequestExtensionInterfaceFactory
      */
     private $inventoryRequestExtensionInterfaceFactory;
@@ -50,32 +38,26 @@ class DistanceBuilder implements InventoryRequestFromOrderBuilderInterface
      * DistanceBuilder constructor.
      *
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
-     * @param ItemRequestInterfaceFactory $itemRequestFactory
-     * @param OrderItemRepositoryInterface $orderItemRepository
      * @param GetAddressRequestFromOrder $getAddressRequestFromOrder
      * @param InventoryRequestExtensionInterfaceFactory $inventoryRequestExtensionInterfaceFactory
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
-        ItemRequestInterfaceFactory $itemRequestFactory,
-        OrderItemRepositoryInterface $orderItemRepository,
         GetAddressRequestFromOrder $getAddressRequestFromOrder,
         InventoryRequestExtensionInterfaceFactory $inventoryRequestExtensionInterfaceFactory
     ) {
-        $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->getAddressRequestFromOrder = $getAddressRequestFromOrder;
-        $this->orderItemRepository = $orderItemRepository;
         $this->inventoryRequestExtensionInterfaceFactory = $inventoryRequestExtensionInterfaceFactory;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(int $stockId, OrderInterface $order, array $requestItems): InventoryRequestInterface
+    public function execute(int $stockId, int $orderId, array $requestItems): InventoryRequestInterface
     {
-        $address = $this->getAddressRequestFromOrder->execute((int) $order->getEntityId());
+        $address = $this->getAddressRequestFromOrder->execute($orderId);
 
         $inventoryRequest = $this->inventoryRequestFactory->create([
             'stockId' => $stockId,

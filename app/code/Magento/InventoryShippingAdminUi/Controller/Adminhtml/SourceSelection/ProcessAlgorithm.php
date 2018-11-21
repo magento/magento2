@@ -21,7 +21,6 @@ use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * ProcessAlgorithm Controller
@@ -64,11 +63,6 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
     private $itemRequestInterfaceFactory;
 
     /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
      * @var array
      */
     private $sources = [];
@@ -83,7 +77,6 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
      * @param GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceRepositoryInterface $sourceRepository
-     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         Context $context,
@@ -92,8 +85,7 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
         SourceSelectionServiceInterface $sourceSelectionService,
         GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
-        SourceRepositoryInterface $sourceRepository,
-        OrderRepositoryInterface $orderRepository
+        SourceRepositoryInterface $sourceRepository
     ) {
         parent::__construct($context);
         $this->sourceSelectionService = $sourceSelectionService;
@@ -102,7 +94,6 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getInventoryRequestFromOrderBuilder = $getInventoryRequestFromOrderBuilder;
         $this->itemRequestInterfaceFactory = $itemRequestInterfaceFactory;
-        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -148,10 +139,8 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
 
             $requestItems = $this->getRequestItems($requestData);
 
-            $order = $this->orderRepository->get($orderId);
-
             $inventoryRequestBuilder = $this->getInventoryRequestFromOrderBuilder->execute($algorithmCode);
-            $inventoryRequest = $inventoryRequestBuilder->execute($stockId, $order, $requestItems);
+            $inventoryRequest = $inventoryRequestBuilder->execute($stockId, $orderId, $requestItems);
 
             $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest, $algorithmCode);
 

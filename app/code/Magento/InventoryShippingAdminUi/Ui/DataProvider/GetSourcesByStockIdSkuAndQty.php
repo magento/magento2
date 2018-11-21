@@ -14,7 +14,6 @@ use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * Class GetSourcesByStockIdSkuAndQty
@@ -48,11 +47,6 @@ class GetSourcesByStockIdSkuAndQty
     private $getInventoryRequestFromOrderBuilder;
 
     /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
      * @var array
      */
     private $sources = [];
@@ -65,7 +59,6 @@ class GetSourcesByStockIdSkuAndQty
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder
      * @param SourceRepositoryInterface $sourceRepository
-     * @param OrderRepositoryInterface $orderRepository
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
@@ -73,15 +66,13 @@ class GetSourcesByStockIdSkuAndQty
         SourceSelectionServiceInterface $sourceSelectionService,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
         GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder,
-        SourceRepositoryInterface $sourceRepository,
-        OrderRepositoryInterface $orderRepository
+        SourceRepositoryInterface $sourceRepository
     ) {
         $this->itemRequestFactory = $itemRequestFactory;
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
         $this->sourceRepository = $sourceRepository;
         $this->getInventoryRequestFromOrderBuilder = $getInventoryRequestFromOrderBuilder;
-        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -105,10 +96,8 @@ class GetSourcesByStockIdSkuAndQty
             'qty' => $qty
         ]);
 
-        $order = $this->orderRepository->get($orderId);
-
         $inventoryRequestBuilder = $this->getInventoryRequestFromOrderBuilder->execute($algorithmCode);
-        $inventoryRequest = $inventoryRequestBuilder->execute($stockId, $order, [$requestItem]);
+        $inventoryRequest = $inventoryRequestBuilder->execute($stockId, $orderId, [$requestItem]);
 
         $sourceSelectionResult = $this->sourceSelectionService->execute(
             $inventoryRequest,

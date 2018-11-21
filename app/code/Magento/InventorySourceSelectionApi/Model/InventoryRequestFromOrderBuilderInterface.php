@@ -9,7 +9,6 @@ namespace Magento\InventorySourceSelectionApi\Model;
 
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface;
-use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Interface InventoryRequestFromOrderBuilderInterface
@@ -22,9 +21,9 @@ interface InventoryRequestFromOrderBuilderInterface
      * Create an inventory request from one order and a set of items
      *
      * @param int $stockId
-     * @param OrderInterface $order
+     * @param int $orderId
      * @param ItemRequestInterface[] $requestItems
      * @return InventoryRequestInterface
      */
-    public function execute(int $stockId, OrderInterface $order, array $requestItems): InventoryRequestInterface;
+    public function execute(int $stockId, int $orderId, array $requestItems): InventoryRequestInterface;
 }

@@ -10,19 +10,12 @@ namespace Magento\InventorySourceSelection\Model\InventoryRequestBuilder\FromOrd
 use Magento\InventorySourceSelectionApi\Model\InventoryRequestFromOrderBuilderInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
-use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
-use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * @inheritdoc
  */
 class DefaultBuilder implements InventoryRequestFromOrderBuilderInterface
 {
-    /**
-     * @var ItemRequestInterfaceFactory
-     */
-    private $itemRequestFactory;
-
     /**
      * @var InventoryRequestInterfaceFactory
      */
@@ -32,14 +25,11 @@ class DefaultBuilder implements InventoryRequestFromOrderBuilderInterface
      * Default request builder constructor
      *
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
-     * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        InventoryRequestInterfaceFactory $inventoryRequestFactory,
-        ItemRequestInterfaceFactory $itemRequestFactory
+        InventoryRequestInterfaceFactory $inventoryRequestFactory
     ) {
-        $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
     }
 
@@ -47,7 +37,7 @@ class DefaultBuilder implements InventoryRequestFromOrderBuilderInterface
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(int $stockId, OrderInterface $order, array $requestItems): InventoryRequestInterface
+    public function execute(int $stockId, int $orderId, array $requestItems): InventoryRequestInterface
     {
         $inventoryRequest = $this->inventoryRequestFactory->create([
             'stockId' => $stockId,
