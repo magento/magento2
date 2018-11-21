@@ -86,7 +86,7 @@ class System implements ConfigTypeInterface
      * @param int $cachingNestedLevel
      * @param string $configType
      * @param Reader|null $reader
-     * @param Encryptor|null $encryptorFilter
+     * @param Encryptor|null $encryptor
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -101,14 +101,14 @@ class System implements ConfigTypeInterface
         $cachingNestedLevel = 1,
         $configType = self::CONFIG_TYPE,
         Reader $reader = null,
-        Encryptor $encryptorFilter = null
+        Encryptor $encryptor = null
     ) {
         $this->postProcessor = $postProcessor;
         $this->cache = $cache;
         $this->serializer = $serializer;
         $this->configType = $configType;
         $this->reader = $reader ?: ObjectManager::getInstance()->get(Reader::class);
-        $this->encryptor = ObjectManager::getInstance()->get(\Magento\Framework\Encryption\Encryptor::class);
+        $this->encryptor = $encryptor ?: ObjectManager::getInstance()->get(\Magento\Framework\Encryption\Encryptor::class);
     }
 
     /**
