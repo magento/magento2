@@ -93,19 +93,6 @@ class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
         @mcrypt_module_close($handle);
         // @codingStandardsIgnoreEnd
 
-        return '0:' . $this->getCipherVersion() . ':' . base64_encode($encrpted);
-    }
-
-    /**
-     * Get cipher version
-     *
-     * @return int
-     */
-    private function getCipherVersion()
-    {
-        if (extension_loaded('sodium')) {
-            return Encryptor::CIPHER_LATEST;
-        }
-        return Encryptor::CIPHER_RIJNDAEL_256;
+        return '0:' . Encryptor::CIPHER_RIJNDAEL_256 . ':' . base64_encode($encrpted);
     }
 }
