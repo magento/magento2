@@ -670,8 +670,8 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->getAuthentication()->unlock($customer->getId());
-        $this->sessionManager->destroy();
         $this->destroyCustomerSessions($customer->getId());
+        $this->sessionManager->destroy();
         $this->customerRepository->save($customer);
 
         return true;
