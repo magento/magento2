@@ -25,9 +25,19 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected $_optionsCfg = [];
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
      * @var \Magento\Catalog\Helper\Product\ConfigurationPool
      */
     protected $_helperPool;
+
+    /**
+     * @var  \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     */
+    protected $_collection;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
@@ -63,6 +73,8 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         $this->_helperPool = $helperPool;
         $this->currentCustomer = $currentCustomer;
         $this->postDataHelper = $postDataHelper;
+        $this->_scopeConfig = $context->getScopeConfig();
+        $this->getWishlistItems();
     }
 
     /**
@@ -78,14 +90,66 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     }
 
     /**
+     * Retrieve Wishlist Product Items collection
+     *
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     */
+    public function getWishlistItems()
+    {
+        $page = ($this->getRequest()->getParam("p")) ? $this->getRequest()->getParam("p") : 1;
+        $limit = ($this->getRequest()->getParam("limit")) ? $this->getRequest()->getParam("limit") : 10;
+        if ($this->_collection === null) {
+            $this->_collection = $this->_createWishlistItemCollection();
+            $this->_prepareCollection($this->_collection);
+        }
+        $this->_collection
+            ->setPageSize($limit)
+            ->setCurPage($page);
+        return $this->_collection;
+    }
+
+    /**
      * Preparing global layout
      *
-     * @return void
+     * @return $this
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
         $this->pageConfig->getTitle()->set(__('My Wish List'));
+        $pager = $this->getLayout()
+            ->createBlock('Magento\Theme\Block\Html\Pager', 'wishlist_item_pager')
+            ->setUseContainer(
+                true
+            )->setShowAmounts(
+                true
+            )->setFrameLength(
+                $this->_scopeConfig->getValue(
+                    'design/pagination/pagination_frame',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )->setJump(
+                $this->_scopeConfig->getValue(
+                    'design/pagination/pagination_frame_skip',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )->setLimit(
+                $this->getLimit()
+            )
+            ->setCollection($this->_collection);
+        $this->setChild("pager", $pager);
+        $this->_collection->load();
+        return $this;
+    }
+
+    /**
+     * Render pagination HTML
+     *
+     * @return string
+     */
+    public function getPagerHtml()
+    {
+        return $this->getChildHtml('pager');
     }
 
     /**
