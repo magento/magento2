@@ -26,6 +26,8 @@ use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
  * @method \Magento\ProductAlert\Model\Price setSendCount(int $value)
  * @method int getStatus()
  * @method \Magento\ProductAlert\Model\Price setStatus(int $value)
+ * @method int getStoreId()
+ * @method \Magento\ProductAlert\Model\Stock setStoreId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  *
@@ -60,6 +62,8 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Create customer collection.
+     *
      * @return void
      */
     protected function _construct()
@@ -68,6 +72,8 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Create customer collection.
+     *
      * @return Collection
      */
     public function getCustomerCollection()
@@ -76,6 +82,8 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Load by param.
+     *
      * @return $this
      */
     public function loadByParam()
@@ -87,6 +95,8 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Method for deleting customer from website.
+     *
      * @param int $customerId
      * @param int $websiteId
      * @return $this
