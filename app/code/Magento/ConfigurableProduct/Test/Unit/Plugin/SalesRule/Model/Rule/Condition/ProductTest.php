@@ -219,10 +219,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->method('getProduct')
             ->willReturn($simpleProductMock);
 
-        $item->expects($this->once())
-            ->method('setProduct')
-            ->with($this->identicalTo($simpleProductMock));
-
         $this->validator->setAttribute('special_price');
 
         $this->validatorPlugin->beforeValidate($this->validator, $item);
