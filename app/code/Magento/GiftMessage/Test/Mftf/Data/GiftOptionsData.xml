@@ -9,9 +9,9 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="EnableGiftMessageForOrder" type="gift_message_config_state">
-        <requiredEntity type="allow_order">MessageForOrder</requiredEntity>
+        <requiredEntity type="allow_order">AllowGiftMessageForOrder</requiredEntity>
     </entity>
-    <entity name="MessageForOrder" type="allow_order">
+    <entity name="AllowGiftMessageForOrder" type="allow_order">
         <data key="value">1</data>
     </entity>
     <entity name="DefaultConfigGiftMessageOptions" type="gift_message_config_state">
