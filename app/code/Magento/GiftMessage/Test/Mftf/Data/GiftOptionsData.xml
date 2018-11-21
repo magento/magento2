@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <entity name="allowGiftReceipt" type="allow_gift_receipt">
+        <data key="value">0</data>
+    </entity>
+    <entity name="allowPrintedCard" type="allow_printed_card">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="DefaultConfigGiftOptions" type="gift_options_config_state">
+        <requiredEntity type="wrapping_allow_order">defaultWrappingAllowOrder</requiredEntity>
+        <requiredEntity type="allow_gift_receipt">defaultAllowGiftReceipt</requiredEntity>
+        <requiredEntity type="allow_printed_card">defaultAllowPrintedCard</requiredEntity>
+    </entity>
+    <entity name="defaultAllowGiftReceipt" type="allow_gift_receipt">
+        <data key="value">1</data>
+    </entity>
+    <entity name="defaultAllowPrintedCard" type="allow_printed_card">
+        <data key="value">1</data>
+    </entity>
+</entities>
