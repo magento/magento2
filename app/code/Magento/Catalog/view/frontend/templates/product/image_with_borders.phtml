@@ -10,7 +10,7 @@
       style="width:<?= /* @escapeNotVerified */ $block->getWidth() ?>px;">
     <span class="product-image-wrapper"
           style="padding-bottom: <?= /* @escapeNotVerified */ ($block->getRatio() * 100) ?>%;">
-        <img class="product-image-photo"
+        <img class="<?= /* @escapeNotVerified */ $block->getClass() ?>"
             <?= /* @escapeNotVerified */ $block->getCustomAttributes() ?>
             src="<?= /* @escapeNotVerified */ $block->getImageUrl() ?>"
             max-width="<?= /* @escapeNotVerified */ $block->getWidth() ?>"

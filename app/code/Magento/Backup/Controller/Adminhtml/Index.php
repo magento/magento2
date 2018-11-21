@@ -5,6 +5,9 @@
  */
 namespace Magento\Backup\Controller\Adminhtml;
 
+use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
 /**
  * Backup admin controller
  *
@@ -12,14 +15,14 @@ namespace Magento\Backup\Controller\Adminhtml;
  * @api
  * @since 100.0.2
  */
-abstract class Index extends \Magento\Backend\App\Action
+abstract class Index extends Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::backup';
+    const ADMIN_RESOURCE = 'Magento_Backup::backup';
 
     /**
      * Core registry

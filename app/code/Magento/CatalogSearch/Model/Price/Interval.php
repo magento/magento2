@@ -8,8 +8,7 @@ namespace Magento\CatalogSearch\Model\Price;
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Catalog search price interval.
  */
 class Interval implements IntervalInterface
 {
@@ -27,7 +26,7 @@ class Interval implements IntervalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load($limit, $offset = null, $lower = null, $upper = null)
     {
@@ -36,7 +35,7 @@ class Interval implements IntervalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadPrevious($data, $index, $lower = null)
     {
@@ -45,7 +44,7 @@ class Interval implements IntervalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadNext($data, $rightIndex, $upper = null)
     {
@@ -54,6 +53,8 @@ class Interval implements IntervalInterface
     }
 
     /**
+     * Convert to float values.
+     *
      * @param array $prices
      * @return array
      */
