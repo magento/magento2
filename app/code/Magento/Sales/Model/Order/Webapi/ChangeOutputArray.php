@@ -5,17 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Sales\Plugin;
+namespace Magento\Sales\Model\Order\Webapi;
 
-use Magento\Framework\Reflection\DataObjectProcessor as Subject;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 
 /**
  * Class for changing row total in response.
  */
-class DataObjectProcessor
+class ChangeOutputArray
 {
     /**
      * @var DefaultColumn
@@ -34,21 +32,16 @@ class DataObjectProcessor
     /**
      * Changing row total for webapi order item response.
      *
-     * @param Subject $subject
+     * @param OrderItemInterface $dataObject
      * @param array $result
-     * @param mixed $dataObject
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterBuildOutputDataArray(
-        Subject $subject,
-        $result,
-        $dataObject
-    ) {
-        if ($dataObject instanceof OrderItem) {
-            $result[OrderItemInterface::ROW_TOTAL] = $this->priceRenderer->getTotalAmount($dataObject);
-            $result[OrderItemInterface::BASE_ROW_TOTAL] = $this->priceRenderer->getBaseTotalAmount($dataObject);
-        }
+    public function execute(
+        OrderItemInterface $dataObject,
+        array $result
+    ): array {
+        $result[OrderItemInterface::ROW_TOTAL] = $this->priceRenderer->getTotalAmount($dataObject);
+        $result[OrderItemInterface::BASE_ROW_TOTAL] = $this->priceRenderer->getBaseTotalAmount($dataObject);
 
         return $result;
     }
