@@ -10,6 +10,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
@@ -69,6 +70,14 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
                 $product->unsUrlPath();
                 $product->setUrlPath($this->productUrlPathGenerator->getUrlPath($product));
                 $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
+            } else {
+                $this->urlPersist->deleteByData(
+                    [
+                        UrlRewrite::ENTITY_ID => $product->getId(),
+                        UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                        UrlRewrite::STORE_ID => $product->getStoreId()
+                    ]
+                );
             }
         }
     }
