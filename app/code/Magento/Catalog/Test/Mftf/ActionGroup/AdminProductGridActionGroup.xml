@@ -234,6 +234,7 @@
         <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickChangeStatusAction"/>
         <click selector="{{AdminProductGridSection.changeStatus('status')}}" stepKey="clickChangeStatusDisabled" parameterized="true"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) have been updated." stepKey="seeSuccessMessage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForMaskToDisappear"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
     </actionGroup>
 </actionGroups>
