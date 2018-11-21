@@ -282,6 +282,21 @@ class Encryptor implements EncryptorInterface
      */
     public function encrypt($data)
     {
+        $crypt = new SodiumChachaIetf($this->keys[$this->keyVersion]);
+
+        return $this->keyVersion .
+            ':' . self::CIPHER_AEAD_CHACHA20POLY1305 .
+            ':' . base64_encode($crypt->encrypt($data));
+    }
+
+    /**
+     * Encrypt data using the fastest available algorithm
+     *
+     * @param string $data
+     * @return string
+     */
+    public function encryptWithFastestAlgorithm($data)
+    {
         $crypt = $this->getCrypt();
         if (null === $crypt) {
             return $data;
@@ -290,7 +305,6 @@ class Encryptor implements EncryptorInterface
             ':' . $this->getCipherVersion() .
             ':' . base64_encode($crypt->encrypt($data));
     }
-
     /**
      * Look for key and crypt versions in encrypted data before decrypting
      *
@@ -423,13 +437,16 @@ class Encryptor implements EncryptorInterface
 
         if ($cipherVersion === self::CIPHER_RIJNDAEL_128) {
             $cipher = MCRYPT_RIJNDAEL_128;
+            $mode = MCRYPT_MODE_ECB;
         } elseif ($cipherVersion === self::CIPHER_RIJNDAEL_256) {
             $cipher = MCRYPT_RIJNDAEL_256;
+            $mode = MCRYPT_MODE_CBC;
         } else {
             $cipher = MCRYPT_BLOWFISH;
+            $mode = MCRYPT_MODE_ECB;
         }
 
-        return new Mcrypt($key, $cipher, MCRYPT_MODE_ECB, $initVector);
+        return new Mcrypt($key, $cipher, $mode, $initVector);
     }
 
     /**

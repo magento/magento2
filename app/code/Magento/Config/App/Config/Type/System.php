@@ -267,12 +267,12 @@ class System implements ConfigTypeInterface
     private function cacheData(array $data)
     {
         $this->cache->save(
-            $this->encriptFilter->encrypt($this->serializer->serialize($data)),
+            $this->encriptFilter->encryptWithFastestAlgorithm($this->serializer->serialize($data)),
             $this->configType,
             [self::CACHE_TAG]
         );
         $this->cache->save(
-            $this->encriptFilter->encrypt($this->serializer->serialize($data['default'])),
+            $this->encriptFilter->encryptWithFastestAlgorithm($this->serializer->serialize($data['default'])),
             $this->configType . '_default',
             [self::CACHE_TAG]
         );
@@ -281,14 +281,14 @@ class System implements ConfigTypeInterface
             foreach ($data[$curScopeType] ?? [] as $curScopeId => $curScopeData) {
                 $scopes[$curScopeType][$curScopeId] = 1;
                 $this->cache->save(
-                    $this->encriptFilter->encrypt($this->serializer->serialize($curScopeData)),
+                    $this->encriptFilter->encryptWithFastestAlgorithm($this->serializer->serialize($curScopeData)),
                     $this->configType . '_' . $curScopeType . '_' . $curScopeId,
                     [self::CACHE_TAG]
                 );
             }
         }
         $this->cache->save(
-            $this->encriptFilter->encrypt($this->serializer->serialize($scopes)),
+            $this->encriptFilter->encryptWithFastestAlgorithm($this->serializer->serialize($scopes)),
             $this->configType . '_scopes',
             [self::CACHE_TAG]
         );
