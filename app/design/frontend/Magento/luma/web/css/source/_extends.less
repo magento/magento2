@@ -1503,8 +1503,8 @@
 
         .toolbar-amount,
         .limiter {
-            position: relative;
             z-index: 1;
+            display: inline-block;
         }
 
         .toolbar-amount {
@@ -1512,9 +1512,12 @@
             padding: 0;
         }
 
+        .limiter {
+            float: right;
+        }
+
         .pages {
-            position: absolute;
-            width: 100%;
+            display: inline-block;
             z-index: 0;
         }
     }

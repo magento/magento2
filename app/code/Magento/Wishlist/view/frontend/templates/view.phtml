@@ -10,6 +10,9 @@
 ?>
 
 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="toolbar"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
     <?= ($block->getChildHtml('wishlist.rss.link')) ?>
     <form class="form-wishlist-items" id="wishlist-view-form"
           data-mage-init='{"wishlist":{
@@ -51,5 +54,8 @@
           <input name="entity" value="<%- data.entity %>">
           <% } %>
       </form>
-  </script>
+    </script>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="toolbar"><br><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
 <?php endif ?>
