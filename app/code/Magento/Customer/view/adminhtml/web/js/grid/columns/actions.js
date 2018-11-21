@@ -3,9 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @api
- */
 define([
     'Magento_Ui/js/grid/columns/actions',
     'Magento_Ui/js/modal/alert',
