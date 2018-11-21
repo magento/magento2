@@ -67,8 +67,8 @@
     <type name="Magento\InventorySourceSelection\Model\Config\Source\DistanceProvider">
         <arguments>
             <argument name="distanceProviderDescriptions" xsi:type="array">
-                <item name="google" xsi:type="string">Google MAP distance</item>
-                <item name="offline" xsi:type="string">Offline distance calculation</item>
+                <item name="google" xsi:type="string">Google MAP</item>
+                <item name="offline" xsi:type="string">Offline calculation</item>
             </argument>
         </arguments>
     </type>
