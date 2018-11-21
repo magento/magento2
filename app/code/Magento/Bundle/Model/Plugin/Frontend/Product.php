@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Model\Plugin\Frontend;
 
 use Magento\Bundle\Model\Product\Type;
@@ -28,13 +30,11 @@ class Product
      *
      * @param CatalogProduct $product
      * @param array $identities
-     * @return string[]
+     * @return array
      */
-    public function afterGetIdentities(
-        CatalogProduct $product,
-        array $identities
-    ) {
-        foreach ($this->type->getChildrenIds($product->getEntityId()) as $optionId => $childIds) {
+    public function afterGetIdentities(CatalogProduct $product, array $identities): array
+    {
+        foreach ($this->type->getChildrenIds($product->getEntityId()) as $childIds) {
             foreach ($childIds as $childId) {
                 $identities[] = CatalogProduct::CACHE_TAG . '_' . $childId;
             }

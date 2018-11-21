@@ -42,11 +42,10 @@ class ProductIdentitiesExtender
      * @param Product $subject
      * @param array $identities
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetIdentities(Product $subject, array $identities): array
     {
-        foreach ($this->configurableType->getChildrenIds($subject->getId()) as $key => $childIds) {
+        foreach ($this->configurableType->getChildrenIds($subject->getId()) as $childIds) {
             foreach ($childIds as $childId) {
                 $identities[] = Product::CACHE_TAG . '_' . $childId;
             }
