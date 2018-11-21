@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class for saving of customer address
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends Action implements HttpPostActionInterface
 {
