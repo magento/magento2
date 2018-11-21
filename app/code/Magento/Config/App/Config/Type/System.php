@@ -74,7 +74,7 @@ class System implements ConfigTypeInterface
     /**
      * @var \Magento\Framework\Filter\Encrypt\AdapterInterface
      */
-    private $encriptFilter;
+    private $encryptorFilter;
 
     /**
      * @param ConfigSourceInterface $source
@@ -108,7 +108,7 @@ class System implements ConfigTypeInterface
         $this->serializer = $serializer;
         $this->configType = $configType;
         $this->reader = $reader ?: ObjectManager::getInstance()->get(Reader::class);
-        $this->encriptFilter = ObjectManager::getInstance()->get(\Magento\Framework\Encryption\Encryptor::class);
+        $this->encryptorFilter = ObjectManager::getInstance()->get(\Magento\Framework\Encryption\Encryptor::class);
     }
 
     /**
@@ -198,7 +198,7 @@ class System implements ConfigTypeInterface
         if ($cachedData === false) {
             $data = $this->readData();
         } else {
-            $data = $this->serializer->unserialize($this->encriptFilter->decrypt($cachedData));
+            $data = $this->serializer->unserialize($this->encryptorFilter->decrypt($cachedData));
         }
 
         return $data;
@@ -218,7 +218,7 @@ class System implements ConfigTypeInterface
             $data = $this->readData();
             $this->cacheData($data);
         } else {
-            $data = [$scopeType => $this->serializer->unserialize($this->encriptFilter->decrypt($cachedData))];
+            $data = [$scopeType => $this->serializer->unserialize($this->encryptorFilter->decrypt($cachedData))];
         }
 
         return $data;
@@ -239,7 +239,7 @@ class System implements ConfigTypeInterface
             if ($this->availableDataScopes === null) {
                 $cachedScopeData = $this->cache->load($this->configType . '_scopes');
                 if ($cachedScopeData !== false) {
-                    $serializedCachedData = $this->encriptFilter->decrypt($cachedScopeData);
+                    $serializedCachedData = $this->encryptorFilter->decrypt($cachedScopeData);
                     $this->availableDataScopes = $this->serializer->unserialize($serializedCachedData);
                 }
             }
@@ -249,7 +249,7 @@ class System implements ConfigTypeInterface
             $data = $this->readData();
             $this->cacheData($data);
         } else {
-            $serializedCachedData = $this->encriptFilter->decrypt($cachedData);
+            $serializedCachedData = $this->encryptorFilter->decrypt($cachedData);
             $data = [$scopeType => [$scopeId => $this->serializer->unserialize($serializedCachedData)]];
         }
 
@@ -267,12 +267,12 @@ class System implements ConfigTypeInterface
     private function cacheData(array $data)
     {
         $this->cache->save(
-            $this->encriptFilter->encryptWithFastestAlgorithm($this->serializer->serialize($data)),
+            $this->encryptorFilter->encryptWithFastestAlgorithm($this->serializer->serialize($data)),
             $this->configType,
             [self::CACHE_TAG]
         );
         $this->cache->save(
-            $this->encriptFilter->encryptWithFastestAlgorithm($this->serializer->serialize($data['default'])),
+            $this->encryptorFilter->encryptWithFastestAlgorithm($this->serializer->serialize($data['default'])),
             $this->configType . '_default',
             [self::CACHE_TAG]
         );
@@ -281,14 +281,14 @@ class System implements ConfigTypeInterface
             foreach ($data[$curScopeType] ?? [] as $curScopeId => $curScopeData) {
                 $scopes[$curScopeType][$curScopeId] = 1;
                 $this->cache->save(
-                    $this->encriptFilter->encryptWithFastestAlgorithm($this->serializer->serialize($curScopeData)),
+                    $this->encryptorFilter->encryptWithFastestAlgorithm($this->serializer->serialize($curScopeData)),
                     $this->configType . '_' . $curScopeType . '_' . $curScopeId,
                     [self::CACHE_TAG]
                 );
             }
         }
         $this->cache->save(
-            $this->encriptFilter->encryptWithFastestAlgorithm($this->serializer->serialize($scopes)),
+            $this->encryptorFilter->encryptWithFastestAlgorithm($this->serializer->serialize($scopes)),
             $this->configType . '_scopes',
             [self::CACHE_TAG]
         );
