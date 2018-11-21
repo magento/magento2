@@ -225,6 +225,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getId',
                 'getEmail',
                 'getWebsiteId',
+                'getAddresses',
+                'setAddresses'
             ]
         );
         $customerSecureData = $this->createPartialMock(\Magento\Customer\Model\Data\CustomerSecure::class, [
@@ -238,6 +240,9 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
+        $this->customer->expects($this->atLeastOnce())
+            ->method('__toArray')
+            ->willReturn([]);
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieve')
             ->with($customerId)
@@ -403,6 +408,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getId',
                 'getEmail',
                 'getWebsiteId',
+                'getAddresses',
+                'setAddresses'
             ]
         );
         $customerModel->expects($this->atLeastOnce())
@@ -444,6 +451,9 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
+        $this->customer->expects($this->atLeastOnce())
+            ->method('__toArray')
+            ->willReturn([]);
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieve')
             ->with($customerId)
