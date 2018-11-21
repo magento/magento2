@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Model;
 
-use Magento\InventorySourceSelection\Exception\NoSuchGeoReferenceProviderException;
+use Magento\InventorySourceSelectionApi\Exception\NoSuchGeoReferenceProviderException;
 
 /**
  * Geo reference provider pool for distance based source selection

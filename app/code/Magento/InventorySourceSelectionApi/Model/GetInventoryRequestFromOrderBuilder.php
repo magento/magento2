@@ -5,10 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceSelection\Model;
+namespace Magento\InventorySourceSelectionApi\Model;
 
-use Magento\InventorySourceSelection\Exception\UndefinedInventoryRequestBuilderException;
+use Magento\InventorySourceSelectionApi\Exception\UndefinedInventoryRequestBuilderException;
 
+/**
+ * Get inventory request builder for one algorithm
+ *
+ * @api
+ */
 class GetInventoryRequestFromOrderBuilder
 {
     /**

@@ -73,7 +73,7 @@
         </arguments>
     </type>
 
-    <type name="Magento\InventorySourceSelection\Model\GetInventoryRequestFromOrderBuilder">
+    <type name="Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrderBuilder">
         <arguments>
             <argument name="buildersByAlgorithm" xsi:type="array">
                 <item name="priority"

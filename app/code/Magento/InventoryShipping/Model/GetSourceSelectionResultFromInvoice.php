@@ -9,9 +9,8 @@ namespace Magento\InventoryShipping\Model;
 
 use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventorySourceSelection\Exception\UndefinedInventoryRequestBuilderException;
-use Magento\InventorySourceSelection\Model\GetInventoryRequestFromOrderBuilder;
-use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
+use Magento\InventorySourceSelectionApi\Exception\UndefinedInventoryRequestBuilderException;
+use Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrderBuilder;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;

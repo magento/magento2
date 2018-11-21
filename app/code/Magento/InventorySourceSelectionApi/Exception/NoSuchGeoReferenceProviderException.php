@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceSelection\Exception;
+namespace Magento\InventorySourceSelectionApi\Exception;
 
 use Magento\Framework\Exception\LocalizedException;
 
-class UndefinedInventoryRequestBuilderException extends LocalizedException
+class NoSuchGeoReferenceProviderException extends LocalizedException
 {
 
 }

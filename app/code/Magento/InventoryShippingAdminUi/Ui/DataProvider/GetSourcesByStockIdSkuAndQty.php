@@ -8,14 +8,18 @@ declare(strict_types=1);
 namespace Magento\InventoryShippingAdminUi\Ui\DataProvider;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventorySourceSelection\Exception\UndefinedInventoryRequestBuilderException;
-use Magento\InventorySourceSelection\Model\GetInventoryRequestFromOrderBuilder;
+use Magento\InventorySourceSelectionApi\Exception\UndefinedInventoryRequestBuilderException;
+use Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrderBuilder;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
+/**
+ * Class GetSourcesByStockIdSkuAndQty
+ * @package Magento\InventoryShippingAdminUi\Ui\DataProvider
+ */
 class GetSourcesByStockIdSkuAndQty
 {
     /**
