@@ -96,7 +96,7 @@ abstract class Address extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        ?\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+        ?\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository = null
     ) {
         $this->_customerSession = $customerSession;
         $this->_formKeyValidator = $formKeyValidator;

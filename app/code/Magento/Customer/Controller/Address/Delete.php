@@ -5,8 +5,10 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Address;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
-class Delete extends \Magento\Customer\Controller\Address
+class Delete extends \Magento\Customer\Controller\Address implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @return \Magento\Framework\Controller\Result\Redirect

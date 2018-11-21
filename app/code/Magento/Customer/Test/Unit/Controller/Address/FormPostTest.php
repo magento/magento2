@@ -259,8 +259,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             $this->resultForwardFactory,
             $this->resultPageFactory,
             $this->regionFactory,
-            $this->helperData,
-            null
+            $this->helperData
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
