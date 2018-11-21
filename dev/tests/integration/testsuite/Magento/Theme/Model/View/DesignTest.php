@@ -203,6 +203,8 @@ class DesignTest extends \PHPUnit\Framework\TestCase
                 <view><vars  module="Namespace_Module"><var name="customVar">custom value</var></vars></view>'
             );
 
+            \Magento\TestFramework\Helper\CacheCleaner::cleanAll();
+
             $config = $this->_viewConfig->getViewConfig();
             $this->assertInstanceOf(\Magento\Framework\Config\View::class, $config);
             $this->assertEquals(['customVar' => 'custom value'], $config->getVars('Namespace_Module'));
