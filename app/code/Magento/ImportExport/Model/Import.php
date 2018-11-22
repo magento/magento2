@@ -181,7 +181,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param Source\Import\Behavior\Factory $behaviorFactory
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param History $importHistoryModel
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $localeDate
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -443,6 +443,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
+     * Processing of import.
+     *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -462,6 +464,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
+     * Get error aggregator instance.
+     *
      * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -585,6 +589,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $this->addLogComment($messages);
 
         $result = !$errorAggregator->getErrorsCount();
+        $validationStrategy = $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY);
+        if ($validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS) {
+            $result = true;
+        }
+
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         }
@@ -710,9 +719,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Create history report
      *
+     * @param string $sourceFileRelative
      * @param string $entity
      * @param string $extension
-     * @param string $sourceFileRelative
      * @param array $result
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
