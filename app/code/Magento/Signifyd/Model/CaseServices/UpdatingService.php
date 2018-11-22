@@ -5,8 +5,8 @@
  */
 namespace Magento\Signifyd\Model\CaseServices;
 
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
@@ -73,7 +73,6 @@ class UpdatingService implements UpdatingServiceInterface
      * @param CaseInterface $case
      * @param array $data
      * @return void
-     * @throws NotFoundException
      * @throws LocalizedException
      */
     public function update(CaseInterface $case, array $data)
@@ -111,7 +110,7 @@ class UpdatingService implements UpdatingServiceInterface
             'orderId'
         ];
         foreach ($data as $key => $value) {
-            $methodName = 'set' . ucfirst($key);
+            $methodName = 'set' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
             if (!in_array($key, $notResolvedKeys) && method_exists($case, $methodName)) {
                 call_user_func([$case, $methodName], $value);
             }

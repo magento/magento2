@@ -6,12 +6,14 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
 /**
  * Class Add Category
  *
  * @package Magento\Catalog\Controller\Adminhtml\Category
  */
-class Add extends \Magento\Catalog\Controller\Adminhtml\Category
+class Add extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpGetActionInterface
 {
     /**
      * Forward factory for result

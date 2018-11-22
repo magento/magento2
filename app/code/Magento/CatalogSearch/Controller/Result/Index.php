@@ -6,20 +6,19 @@
  */
 namespace Magento\CatalogSearch\Controller\Result;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\PopularSearchTerms;
 
 /**
- * Catalog search result
- *
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Search result.
  */
-class Index extends \Magento\Framework\App\Action\Action
+class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     const DEFAULT_NO_RESULT_HANDLE = 'catalogsearch_result_index_noresults';
 

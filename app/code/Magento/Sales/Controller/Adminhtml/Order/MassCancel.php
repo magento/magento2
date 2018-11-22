@@ -5,13 +5,14 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Api\OrderManagementInterface;
 
-class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
+class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
