@@ -22,6 +22,11 @@ input SendEmailToFriendRecipientInput {
     email: String!
 }
 
+type SendEmailToFriendOutput {
+    sender: SendEmailToFriendSender
+    recipients: [SendEmailToFriendRecipient]
+}
+
 type SendEmailToFriendSender {
     name: String!
     email: String!
@@ -31,9 +36,4 @@ type SendEmailToFriendSender {
 type SendEmailToFriendRecipient {
     name: String!
     email: String!
-}
-
-type SendEmailToFriendOutput {
-    sender: SendEmailToFriendSender
-    recipients: [SendEmailToFriendRecipient]
 }
