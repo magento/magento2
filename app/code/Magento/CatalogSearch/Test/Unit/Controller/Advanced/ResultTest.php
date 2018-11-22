@@ -10,6 +10,11 @@ namespace Magento\CatalogSearch\Test\Unit\Controller\Advanced;
  */
 class ResultTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Test result action filters set before load layout scenario
+     *
+     * @return void
+     */
     public function testResultActionFiltersSetBeforeLoadLayout()
     {
         $filters = null;
@@ -61,6 +66,11 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $instance->execute();
     }
 
+    /**
+     * Test url set on exception scenario
+     *
+     * @return void
+     */
     public function testUrlSetOnException()
     {
         $redirectResultMock = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
@@ -148,6 +158,11 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($redirectResultMock, $instance->execute());
     }
 
+    /**
+     * Test no result handle scenario
+     *
+     * @return void
+     */
     public function testNoResultsHandle()
     {
         $expectedQuery = 'notExistTerm';
