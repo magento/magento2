@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,6 +7,9 @@ namespace Magento\Framework\ObjectManager\Profiler;
 
 use Magento\Framework\ObjectManager\Profiler\Tree\Item as Item;
 
+/**
+ * Class Log
+ */
 class Log
 {
     /**

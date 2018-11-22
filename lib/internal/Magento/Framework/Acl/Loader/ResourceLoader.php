@@ -12,6 +12,9 @@ use Magento\Framework\Acl\AclResource as AclResource;
 use Magento\Framework\Acl\AclResource\ProviderInterface;
 use Magento\Framework\Acl\AclResourceFactory;
 
+/**
+ * ACL Loader
+ */
 class ResourceLoader implements \Magento\Framework\Acl\LoaderInterface
 {
     /**

@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Framework\DataObject;
+
 /**
  * Utility class for copying data sets between objects
  */
-namespace Magento\Framework\DataObject;
-
 class Copy
 {
     /**
@@ -116,8 +116,7 @@ class Copy
     }
 
     /**
-     * Get data from object|array to object|array containing fields
-     * from fieldset matching an aspect.
+     * Get data from object|array to object|array containing fields from fieldset matching an aspect.
      *
      * @param string $fieldset
      * @param string $aspect a field name

@@ -9,6 +9,9 @@ namespace Magento\Framework\App\Utility;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
+/**
+ * Utility for class names processing
+ */
 class Classes
 {
     /**

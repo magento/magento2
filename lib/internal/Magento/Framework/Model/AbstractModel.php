@@ -216,6 +216,8 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     }
 
     /**
+     * Remove unneeded properties from serialization
+     *
      * @return string[]
      */
     public function __sleep()
@@ -337,8 +339,8 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * If $key is an array, it will overwrite all the data in the object.
      *
-     * @param string|array  $key
-     * @param mixed         $value
+     * @param string|array $key
+     * @param mixed $value
      * @return $this
      */
     public function setData($key, $value = null)
@@ -616,6 +618,8 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     }
 
     /**
+     * Check if save is allowed
+     *
      * @return bool
      */
     public function isSaveAllowed()

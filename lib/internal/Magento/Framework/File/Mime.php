@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\File;
 
+/**
+ * Utility for mime type retrieval
+ */
 class Mime
 {
     /**

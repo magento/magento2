@@ -11,6 +11,9 @@ use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
+/**
+ * Base stream handler
+ */
 class Base extends StreamHandler
 {
     /**
@@ -32,6 +35,7 @@ class Base extends StreamHandler
      * @param DriverInterface $filesystem
      * @param string $filePath
      * @param string $fileName
+     * @throws \Exception
      */
     public function __construct(
         DriverInterface $filesystem,
@@ -71,11 +75,7 @@ class Base extends StreamHandler
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @param array $record
-     *
-     * @return void
+     * @inheritDoc
      */
     public function write(array $record)
     {
