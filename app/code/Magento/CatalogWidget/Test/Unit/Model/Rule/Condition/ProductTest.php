@@ -9,6 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {

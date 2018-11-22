@@ -35,12 +35,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      *
      * @return string
      */
-    public function getAttribute()
+    public function getAttribute(): string
     {
         $attribute = $this->getData('attribute');
         if (strpos($attribute, '::') !== false) {
-            list (, $attribute) = explode('::', $attribute);
+            list(, $attribute) = explode('::', $attribute);
         }
+
         return $attribute;
     }
 
@@ -53,6 +54,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         if ($this->getAttributeScope()) {
             $attribute = $this->getAttributeScope() . '::' . $attribute;
         }
+
         return $this->getAttributeOption($attribute);
     }
 
@@ -92,6 +94,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $html = parent::getAttributeElementHtml() .
                 $this->getAttributeScopeElement()->getHtml();
+
         return $html;
     }
 
@@ -100,7 +103,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      *
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
-    private function getAttributeScopeElement()
+    private function getAttributeScopeElement(): \Magento\Framework\Data\Form\Element\AbstractElement
     {
         return $this->getForm()->addField(
             $this->getPrefix() . '__' . $this->getId() . '__attribute_scope',
@@ -110,7 +113,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 'value' => $this->getAttributeScope(),
                 'no_span' => true,
                 'class' => 'hidden',
-                'data-form-part' => $this->getFormName()
+                'data-form-part' => $this->getFormName(),
             ]
         );
     }
@@ -119,8 +122,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Set attribute value
      *
      * @param string $value
+     * @return void
      */
-    public function setAttribute($value)
+    public function setAttribute(string $value)
     {
         if (strpos($value, '::') !== false) {
             list($scope, $attribute) = explode('::', $value);
@@ -137,7 +141,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function loadArray($arr)
     {
         parent::loadArray($arr);
-        $this->setAttributeScope(isset($arr['attribute_scope']) ? $arr['attribute_scope'] : null);
+        $this->setAttributeScope($arr['attribute_scope'] ?? null);
+
         return $this;
     }
 
@@ -148,6 +153,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $out = parent::asArray($arrAttributes);
         $out['attribute_scope'] = $this->getAttributeScope();
+
         return $out;
     }
 
@@ -155,7 +161,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Validate Product Rule Condition
      *
      * @param \Magento\Framework\Model\AbstractModel $model
+     *
      * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
