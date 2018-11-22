@@ -298,6 +298,46 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Add row size depends on page layout
+     *
+     * @param string $pageLayout
+     * @param int $columnCount
+     * @return $this
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function addColumnCountLayoutDepend($pageLayout, $columnCount)
+    {
+        return $this;
+    }
+
+    /**
+     * Remove row size depends on page layout
+     *
+     * @param string $pageLayout
+     * @return $this
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function removeColumnCountLayoutDepend($pageLayout)
+    {
+        return $this;
+    }
+
+    /**
+     * Retrieve row size depends on page layout
+     *
+     * @param string $pageLayout
+     * @return false
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getColumnCountLayoutDepend($pageLayout)
+    {
+        return false;
+    }
+
+    /**
      * Retrieve current page layout
      *
      * @return string
