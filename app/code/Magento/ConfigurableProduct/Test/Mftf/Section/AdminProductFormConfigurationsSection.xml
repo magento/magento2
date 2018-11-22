@@ -22,6 +22,7 @@
         <element name="removeProductBtn" type="button" selector="//a[text()='Remove Product']"/>
         <element name="disableProductBtn" type="button" selector="//a[text()='Disable Product']"/>
         <element name="enableProductBtn" type="button" selector="//a[text()='Enable Product']"/>
+        <element name="firstSKUInConfigurableProductsGrid" type="input" selector="//input[@name='configurable-matrix[0][sku]']"/>
     </section>
     <section name="AdminConfigurableProductFormSection">
         <element name="productWeight" type="input" selector=".admin__control-text[name='product[weight]']"/>
