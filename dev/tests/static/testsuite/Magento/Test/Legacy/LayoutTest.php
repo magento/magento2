@@ -242,7 +242,6 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         return [
             'addBodyClass',
             'addButtons',
-            'addColumnCountLayoutDepend',
             'addCrumb',
             'addDatabaseBlock',
             'addInputTypeTemplate',

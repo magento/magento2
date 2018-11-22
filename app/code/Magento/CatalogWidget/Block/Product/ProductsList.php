@@ -137,11 +137,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     protected function _construct()
     {
         parent::_construct();
-        $this->addColumnCountLayoutDepend('empty', 6)
-            ->addColumnCountLayoutDepend('1column', 5)
-            ->addColumnCountLayoutDepend('2columns-left', 4)
-            ->addColumnCountLayoutDepend('2columns-right', 4)
-            ->addColumnCountLayoutDepend('3columns', 3);
 
         $this->addData([
             'cache_lifetime' => 86400,

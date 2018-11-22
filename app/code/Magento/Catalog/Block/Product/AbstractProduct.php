@@ -35,13 +35,6 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     protected $_defaultColumnCount = 3;
 
     /**
-     * Product amount per row depending on custom page layout of category
-     *
-     * @var array
-     */
-    protected $_columnCountLayoutDepend = [];
-
-    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -299,57 +292,9 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     public function getColumnCount()
     {
         if (!$this->_getData('column_count')) {
-            $pageLayout = $this->getPageLayout();
-            if ($pageLayout && $this->getColumnCountLayoutDepend($pageLayout->getCode())) {
-                $this->setData('column_count', $this->getColumnCountLayoutDepend($pageLayout->getCode()));
-            } else {
-                $this->setData('column_count', $this->_defaultColumnCount);
-            }
+            $this->setData('column_count', $this->_defaultColumnCount);
         }
         return (int) $this->_getData('column_count');
-    }
-
-    /**
-     * Add row size depends on page layout
-     *
-     * @param string $pageLayout
-     * @param int $columnCount
-     * @return \Magento\Catalog\Block\Product\ListProduct
-     */
-    public function addColumnCountLayoutDepend($pageLayout, $columnCount)
-    {
-        $this->_columnCountLayoutDepend[$pageLayout] = $columnCount;
-        return $this;
-    }
-
-    /**
-     * Remove row size depends on page layout
-     *
-     * @param string $pageLayout
-     * @return \Magento\Catalog\Block\Product\ListProduct
-     */
-    public function removeColumnCountLayoutDepend($pageLayout)
-    {
-        if (isset($this->_columnCountLayoutDepend[$pageLayout])) {
-            unset($this->_columnCountLayoutDepend[$pageLayout]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Retrieve row size depends on page layout
-     *
-     * @param string $pageLayout
-     * @return int|boolean
-     */
-    public function getColumnCountLayoutDepend($pageLayout)
-    {
-        if (isset($this->_columnCountLayoutDepend[$pageLayout])) {
-            return $this->_columnCountLayoutDepend[$pageLayout];
-        }
-
-        return false;
     }
 
     /**

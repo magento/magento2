@@ -154,11 +154,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals(3, $this->block->getColumnCount());
         /* default column count */
-
-        $this->block->addColumnCountLayoutDepend('test', 10);
-        $this->assertEquals(10, $this->block->getColumnCountLayoutDepend('test'));
-        $this->block->removeColumnCountLayoutDepend('test');
-        $this->assertFalse($this->block->getColumnCountLayoutDepend('test'));
     }
 
     public function testGetCanShowProductPrice()
