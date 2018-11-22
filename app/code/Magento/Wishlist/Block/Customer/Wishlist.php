@@ -68,7 +68,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         $this->_helperPool = $helperPool;
         $this->currentCustomer = $currentCustomer;
         $this->postDataHelper = $postDataHelper;
-        $this->getWishlistItems();
     }
 
     /**
@@ -120,6 +119,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     protected function _prepareLayout()
     {
+        $this->getWishlistItems();
         parent::_prepareLayout();
         $this->pageConfig->getTitle()->set(__('My Wish List'));
         $this->getChildBlock('wishlist_item_pager')
