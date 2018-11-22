@@ -40,6 +40,8 @@ class Block
     }
 
     /**
+     * Get block data
+     *
      * @param string $blockIdentifier
      * @return array
      * @throws NoSuchEntityException

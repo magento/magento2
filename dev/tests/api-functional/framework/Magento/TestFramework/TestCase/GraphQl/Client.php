@@ -29,8 +29,6 @@ class Client
     private $json;
 
     /**
-     * CurlClient constructor.
-     *
      * @param CurlClient|null $curlClient
      * @param JsonSerializer|null $json
      */
@@ -81,6 +79,8 @@ class Client
     }
 
     /**
+     * Process errors
+     *
      * @param array $responseBodyArray
      * @throws \Exception
      */

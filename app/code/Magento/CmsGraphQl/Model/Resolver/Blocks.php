@@ -55,6 +55,8 @@ class Blocks implements ResolverInterface
     }
 
     /**
+     * Get block identifiers
+     *
      * @param array $args
      * @return string[]
      * @throws GraphQlInputException
@@ -69,6 +71,8 @@ class Blocks implements ResolverInterface
     }
 
     /**
+     * Get blocks data
+     *
      * @param array $blockIdentifiers
      * @return array
      * @throws GraphQlNoSuchEntityException
