@@ -14,7 +14,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use PHPUnit\Framework\TestResult;
 
-class CustomerAddressDeleteTest extends GraphQlAbstract
+class DeleteCustomerAddressTest extends GraphQlAbstract
 {
     /**
      * Verify customers with valid credentials with a customer bearer token
@@ -38,7 +38,7 @@ class CustomerAddressDeleteTest extends GraphQlAbstract
         $mutation
             = <<<MUTATION
 mutation {
-  customerAddressDelete(id: {$addressId})
+  deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
         /** @var CustomerTokenServiceInterface $customerTokenService */
@@ -46,8 +46,8 @@ MUTATION;
         $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($mutation, [], '', $headerMap);
-        $this->assertArrayHasKey('customerAddressDelete', $response);
-        $this->assertEquals(true, $response['customerAddressDelete']);
+        $this->assertArrayHasKey('deleteCustomerAddress', $response);
+        $this->assertEquals(true, $response['deleteCustomerAddress']);
     }
 
     /**
@@ -71,7 +71,7 @@ MUTATION;
         $mutation
             = <<<MUTATION
 mutation {
-  customerAddressDelete(id: {$addressId})
+  deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
         $this->expectException(\Exception::class);
@@ -105,7 +105,7 @@ MUTATION;
         $mutation
             = <<<MUTATION
 mutation {
-  customerAddressDelete(id: {$addressId})
+  deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
         /** @var CustomerTokenServiceInterface $customerTokenService */
@@ -143,7 +143,7 @@ MUTATION;
         $mutation
             = <<<MUTATION
 mutation {
-  customerAddressDelete(id: {$addressId})
+  deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
         /** @var CustomerTokenServiceInterface $customerTokenService */
@@ -169,7 +169,7 @@ MUTATION;
         $mutation
             = <<<MUTATION
 mutation {
-  customerAddressDelete(id: 9999)
+  deleteCustomerAddress(id: 9999)
 }
 MUTATION;
         /** @var CustomerTokenServiceInterface $customerTokenService */

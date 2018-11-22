@@ -12,11 +12,9 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use PHPUnit\Framework\TestResult;
 
-class CustomerAddressCreateTest extends GraphQlAbstract
+class CreateCustomerAddressTest extends GraphQlAbstract
 {
-
     /**
      * Verify customers with valid credentials create new address
      *
@@ -53,7 +51,7 @@ class CustomerAddressCreateTest extends GraphQlAbstract
         $mutation
             = <<<MUTATION
 mutation {
-  customerAddressCreate(input: {
+  createCustomerAddress(input: {
     region: {
         region: "{$newAddress['region']['region']}"
         region_id: {$newAddress['region']['region_id']}
@@ -112,16 +110,16 @@ MUTATION;
         $customerRepository = ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->get($userName);
         $response = $this->graphQlQuery($mutation, [], '', $headerMap);
-        $this->assertArrayHasKey('customerAddressCreate', $response);
-        $this->assertArrayHasKey('customer_id', $response['customerAddressCreate']);
-        $this->assertEquals($customer->getId(), $response['customerAddressCreate']['customer_id']);
-        $this->assertArrayHasKey('id', $response['customerAddressCreate']);
+        $this->assertArrayHasKey('createCustomerAddress', $response);
+        $this->assertArrayHasKey('customer_id', $response['createCustomerAddress']);
+        $this->assertEquals($customer->getId(), $response['createCustomerAddress']['customer_id']);
+        $this->assertArrayHasKey('id', $response['createCustomerAddress']);
         /** @var AddressRepositoryInterface $addressRepository */
         $addressRepository = ObjectManager::getInstance()->get(AddressRepositoryInterface::class);
-        $addressId = $response['customerAddressCreate']['id'];
+        $addressId = $response['createCustomerAddress']['id'];
         $address = $addressRepository->getById($addressId);
-        $this->assertEquals($address->getId(), $response['customerAddressCreate']['id']);
-        $this->assertCustomerAddressesFields($address, $response['customerAddressCreate']);
+        $this->assertEquals($address->getId(), $response['createCustomerAddress']['id']);
+        $this->assertCustomerAddressesFields($address, $response['createCustomerAddress']);
         $this->assertCustomerAddressesFields($address, $newAddress);
     }
 
@@ -136,8 +134,8 @@ MUTATION;
         $mutation
             = <<<MUTATION
 mutation{
-  customerAddressCreate(input: {
-  	prefix: "Mr."
+  createCustomerAddress(input: {
+    prefix: "Mr."
     firstname: "John"
     middlename: "A"
     lastname: "Smith"
@@ -175,7 +173,7 @@ MUTATION;
         $mutation
             = <<<MUTATION
 mutation {
-  customerAddressCreate(input: {
+  createCustomerAddress(input: {
     region_id: 4
     country_id: US
     street: ["Line 1 Street","Line 2"]

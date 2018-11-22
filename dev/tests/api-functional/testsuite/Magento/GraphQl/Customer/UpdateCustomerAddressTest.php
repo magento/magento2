@@ -14,7 +14,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use PHPUnit\Framework\TestResult;
 
-class CustomerAddressUpdateTest extends GraphQlAbstract
+class UpdateCustomerAddressTest extends GraphQlAbstract
 {
     /**
      * Verify customers with valid credentials update address
@@ -63,7 +63,7 @@ class CustomerAddressUpdateTest extends GraphQlAbstract
         $mutation
             = <<<MUTATION
 mutation {
-  customerAddressUpdate(id: {$addressId}, input: {
+  updateCustomerAddress(id: {$addressId}, input: {
     region: {
         region: "{$updateAddress['region']['region']}"
         region_id: {$updateAddress['region']['region_id']}
@@ -120,15 +120,15 @@ MUTATION;
         $customerRepository = ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->get($userName);
         $response = $this->graphQlQuery($mutation, [], '', $headerMap);
-        $this->assertArrayHasKey('customerAddressUpdate', $response);
-        $this->assertArrayHasKey('customer_id', $response['customerAddressUpdate']);
-        $this->assertEquals($customer->getId(), $response['customerAddressUpdate']['customer_id']);
-        $this->assertArrayHasKey('id', $response['customerAddressUpdate']);
+        $this->assertArrayHasKey('updateCustomerAddress', $response);
+        $this->assertArrayHasKey('customer_id', $response['updateCustomerAddress']);
+        $this->assertEquals($customer->getId(), $response['updateCustomerAddress']['customer_id']);
+        $this->assertArrayHasKey('id', $response['updateCustomerAddress']);
         /** @var AddressRepositoryInterface $addressRepository */
         $addressRepository = ObjectManager::getInstance()->get(AddressRepositoryInterface::class);
         $address = $addressRepository->getById($addressId);
-        $this->assertEquals($address->getId(), $response['customerAddressUpdate']['id']);
-        $this->assertCustomerAddressesFields($address, $response['customerAddressUpdate']);
+        $this->assertEquals($address->getId(), $response['updateCustomerAddress']['id']);
+        $this->assertCustomerAddressesFields($address, $response['updateCustomerAddress']);
         $this->assertCustomerAddressesFields($address, $updateAddress);
     }
 
@@ -153,7 +153,7 @@ MUTATION;
         $mutation
             = <<<MUTATION
 mutation {
-  customerAddressUpdate(id:{$addressId}, input: {
+  updateCustomerAddress(id:{$addressId}, input: {
   	city: "New City"
     postcode: "5555"
   }) {
@@ -192,7 +192,7 @@ MUTATION;
         $mutation
             = <<<MUTATION
 mutation {
-  customerAddressUpdate(id: {$addressId}, input: {
+  updateCustomerAddress(id: {$addressId}, input: {
     firstname: ""
     lastname: "Phillis"
   }) {
