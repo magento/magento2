@@ -141,19 +141,8 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
                 $this->getLimit()
             )
             ->setCollection($this->_collection);
-        $this->setChild("pager", $pager);
         $this->_collection->load();
         return $this;
-    }
-
-    /**
-     * Render pagination HTML
-     *
-     * @return string
-     */
-    public function getPagerHtml()
-    {
-        return $this->getChildHtml('pager');
     }
 
     /**
