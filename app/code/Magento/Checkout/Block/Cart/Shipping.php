@@ -25,6 +25,11 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
+    
+    /**
+     * @var \Magento\Checkout\Block\Cart\Helper\ConfigProvider
+     */
+    private $cartConfig;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -43,7 +48,8 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        \Magento\Checkout\Block\Cart\Helper\ConfigProvider $cartConfig = null
     ) {
         $this->configProvider = $configProvider;
         $this->layoutProcessors = $layoutProcessors;
@@ -51,6 +57,8 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         $this->_isScopePrivate = true;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->cartConfig = $cartConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Checkout\Block\Cart\Helper\ConfigProvider::class);
     }
 
     /**
@@ -61,7 +69,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getCheckoutConfig()
     {
-        return $this->configProvider->getConfig();
+        return $this->cartConfig->getCheckoutConfig();
     }
 
     /**
@@ -95,6 +103,6 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getSerializedCheckoutConfig()
     {
-        return json_encode($this->getCheckoutConfig(), JSON_HEX_TAG);
+        return $this->cartConfig->getSerializedCheckoutConfig();
     }
 }

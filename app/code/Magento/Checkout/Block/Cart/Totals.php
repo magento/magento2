@@ -37,12 +37,18 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      * @var LayoutProcessorInterface[]
      */
     protected $layoutProcessors;
+    
+    /**
+     * @var \Magento\Checkout\Block\Cart\Helper\ConfigProvider
+     */
+    protected $cartConfig;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\Config $salesConfig
+     * @param \Magento\Checkout\Block\Cart\Helper\Config $cartConfig
      * @param array $layoutProcessors
      * @param array $data
      * @codeCoverageIgnore
@@ -53,12 +59,15 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\Config $salesConfig,
         array $layoutProcessors = [],
-        array $data = []
+        array $data = [],
+        \Magento\Checkout\Block\Cart\Helper\ConfigProvider $cartConfig = null
     ) {
         $this->_salesConfig = $salesConfig;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
         $this->layoutProcessors = $layoutProcessors;
+        $this->cartConfig = $cartConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Checkout\Block\Cart\Helper\ConfigProvider::class);
     }
 
     /**
@@ -206,5 +215,13 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
             $this->_quote = $this->_checkoutSession->getQuote();
         }
         return $this->_quote;
+    }
+    
+    /**
+     * @return bool|string
+     */
+    public function getSerializedCheckoutConfig()
+    {
+        return $this->cartConfig->getSerializedCheckoutConfig();
     }
 }
