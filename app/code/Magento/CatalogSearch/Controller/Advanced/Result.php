@@ -17,6 +17,9 @@ use Magento\Framework\UrlFactory;
  */
 class Result extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
+    /**
+     * No results default handle.
+     */
     const DEFAULT_NO_RESULT_HANDLE = 'catalogsearch_advanced_result_noresults';
 
     /**

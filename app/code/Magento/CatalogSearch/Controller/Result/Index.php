@@ -20,6 +20,9 @@ use Magento\Search\Model\PopularSearchTerms;
  */
 class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
+    /**
+     * No results default handle.
+     */
     const DEFAULT_NO_RESULT_HANDLE = 'catalogsearch_result_index_noresults';
 
     /**
