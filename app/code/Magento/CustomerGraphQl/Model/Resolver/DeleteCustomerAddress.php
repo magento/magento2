@@ -7,11 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\Authorization\Model\UserContextInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -22,20 +20,28 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Customers address delete, used for GraphQL request processing.
  */
-class AddressDelete implements ResolverInterface
+class DeleteCustomerAddress implements ResolverInterface
 {
+    /**
+     * @var CheckCustomerAccount
+     */
+    private $checkCustomerAccount;
+
     /**
      * @var AddressRepositoryInterface
      */
-    private $addressRepositoryInterface;
+    private $addressRepository;
 
     /**
-     * @param AddressRepositoryInterface $addressRepositoryInterface
+     * @param CheckCustomerAccount $checkCustomerAccount
+     * @param AddressRepositoryInterface $addressRepository
      */
     public function __construct(
-        AddressRepositoryInterface $addressRepositoryInterface
+        CheckCustomerAccount $checkCustomerAccount,
+        AddressRepositoryInterface $addressRepository
     ) {
-        $this->addressRepositoryInterface = $addressRepositoryInterface;
+        $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->addressRepository = $addressRepository;
     }
 
     /**
@@ -48,17 +54,12 @@ class AddressDelete implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $context */
-        if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
-            throw new GraphQlAuthorizationException(
-                __(
-                    'Current customer does not have access to the resource "%1"',
-                    [AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS]
-                )
-            );
-        }
-        $customerId = $context->getUserId();
-        return $this->processCustomerAddressDelete($customerId, $args['id']);
+        $currentUserId = $context->getUserId();
+        $currentUserType = $context->getUserType();
+
+        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
+
+        return $this->processCustomerAddressDelete($currentUserId, $args['id']);
     }
 
     /**
@@ -74,7 +75,7 @@ class AddressDelete implements ResolverInterface
     {
         try {
             /** @var AddressInterface $address */
-            $address = $this->addressRepositoryInterface->getById($addressId);
+            $address = $this->addressRepository->getById($addressId);
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(
                 __('Address id %1 does not exist.', [$addressId])
@@ -95,6 +96,6 @@ class AddressDelete implements ResolverInterface
                 __('Customer Address %1 is set as default shipping address and can not be deleted', [$addressId])
             );
         }
-        return $this->addressRepositoryInterface->delete($address);
+        return $this->addressRepository->delete($address);
     }
 }

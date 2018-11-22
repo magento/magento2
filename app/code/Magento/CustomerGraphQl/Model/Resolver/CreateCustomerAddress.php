@@ -7,28 +7,33 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\CustomerGraphQl\Model\Customer\AddressDataProvider;
+use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
+use Magento\Eav\Model\Config;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\CustomerGraphQl\Model\Resolver\Address\AddressDataProvider;
-use Magento\CustomerGraphQl\Model\Resolver\Address\AddressConfigProvider;
 
 /**
  * Customers address create, used for GraphQL request processing.
  */
-class AddressCreate implements ResolverInterface
+class CreateCustomerAddress implements ResolverInterface
 {
+    /**
+     * @var CheckCustomerAccount
+     */
+    private $checkCustomerAccount;
+
     /**
      * @var AddressRepositoryInterface
      */
-    private $addressRepositoryInterface;
+    private $addressRepository;
 
     /**
      * @var AddressInterfaceFactory
@@ -41,26 +46,37 @@ class AddressCreate implements ResolverInterface
     private $addressDataProvider;
 
     /**
-     * @var AddressConfigProvider
+     * @var Config
      */
-    public $addressConfigProvider;
+    private $eavConfig;
 
     /**
-     * @param AddressRepositoryInterface $addressRepositoryInterface
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
+     * @param CheckCustomerAccount $checkCustomerAccount
+     * @param AddressRepositoryInterface $addressRepository
      * @param AddressInterfaceFactory $addressInterfaceFactory
      * @param AddressDataProvider $addressDataProvider
-     * @param AddressConfigProvider $addressConfigProvider
+     * @param Config $eavConfig
+     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        AddressRepositoryInterface $addressRepositoryInterface,
+        CheckCustomerAccount $checkCustomerAccount,
+        AddressRepositoryInterface $addressRepository,
         AddressInterfaceFactory $addressInterfaceFactory,
         AddressDataProvider $addressDataProvider,
-        AddressConfigProvider $addressConfigProvider
+        Config $eavConfig,
+        DataObjectHelper $dataObjectHelper
     ) {
-        $this->addressRepositoryInterface = $addressRepositoryInterface;
+        $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->addressRepository = $addressRepository;
         $this->addressInterfaceFactory = $addressInterfaceFactory;
         $this->addressDataProvider = $addressDataProvider;
-        $this->addressConfigProvider = $addressConfigProvider;
+        $this->eavConfig = $eavConfig;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -73,18 +89,13 @@ class AddressCreate implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $context */
-        if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
-            throw new GraphQlAuthorizationException(
-                __(
-                    'Current customer does not have access to the resource "%1"',
-                    [AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS]
-                )
-            );
-        }
-        $customerId = $context->getUserId();
+        $currentUserId = $context->getUserId();
+        $currentUserType = $context->getUserType();
+
+        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
+
         return $this->addressDataProvider->processCustomerAddress(
-            $this->processCustomerAddressCreate($customerId, $args['input'])
+            $this->processCustomerAddressCreate($currentUserId, $args['input'])
         );
     }
 
@@ -94,9 +105,11 @@ class AddressCreate implements ResolverInterface
      * @param array $addressInput
      * @return bool|string
      */
-    public function getInputError(array $addressInput)
+    private function getInputError(array $addressInput)
     {
-        $attributes = $this->addressConfigProvider->getAddressAttributes();
+        $attributes = $this->eavConfig->getEntityAttributes(
+            AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS
+        );
         foreach ($attributes as $attributeName => $attributeInfo) {
             if ($attributeInfo->getIsRequired()
                 && (!isset($addressInput[$attributeName]) || empty($addressInput[$attributeName]))) {
@@ -123,11 +136,13 @@ class AddressCreate implements ResolverInterface
             );
         }
         /** @var AddressInterface $newAddress */
-        $newAddress = $this->addressConfigProvider->fillAddress(
-            $this->addressInterfaceFactory->create(),
-            $addressInput
+        $newAddress = $this->addressInterfaceFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $newAddress,
+            $addressInput,
+            AddressInterface::class
         );
         $newAddress->setCustomerId($customerId);
-        return $this->addressRepositoryInterface->save($newAddress);
+        return $this->addressRepository->save($newAddress);
     }
 }
