@@ -6,14 +6,20 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\History;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class Download extends \Magento\ImportExport\Controller\Adminhtml\History
+class Download extends \Magento\ImportExport\Controller\Adminhtml\History implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
     protected $resultRawFactory;
+
+    /**
+     * @var \Magento\Framework\App\Response\Http\FileFactory
+     */
+    private $fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
