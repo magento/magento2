@@ -108,7 +108,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
             $this->_prepareCollection($this->_collection);
             $this->paginateCollection();
         }
-
         return $this->_collection;
     }
 
@@ -119,7 +118,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     protected function _prepareLayout()
     {
-        $this->getWishlistItems();
         parent::_prepareLayout();
         $this->pageConfig->getTitle()->set(__('My Wish List'));
         $this->getChildBlock('wishlist_item_pager')
@@ -140,8 +138,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
             )->setLimit(
                 $this->getLimit()
             )
-            ->setCollection($this->_collection);
-        $this->_collection->load();
+            ->setCollection($this->getWishlistItems());
         return $this;
     }
 
