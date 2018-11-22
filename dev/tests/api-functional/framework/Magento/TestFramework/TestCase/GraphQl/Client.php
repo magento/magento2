@@ -102,7 +102,10 @@ class Client
                     }
                 }
 
-                throw new \Exception('GraphQL response contains errors: ' . $errorMessage);
+                throw new ResponseContainsErrorsException(
+                    'GraphQL response contains errors: ' . $errorMessage,
+                    $responseBodyArray
+                );
             }
             throw new \Exception('GraphQL responded with an unknown error: ' . json_encode($responseBodyArray));
         }
