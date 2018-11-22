@@ -25,11 +25,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected $_optionsCfg = [];
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * @var \Magento\Catalog\Helper\Product\ConfigurationPool
      */
     protected $_helperPool;
@@ -73,7 +68,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         $this->_helperPool = $helperPool;
         $this->currentCustomer = $currentCustomer;
         $this->postDataHelper = $postDataHelper;
-        $this->_scopeConfig = $context->getScopeConfig();
         $this->getWishlistItems();
     }
 
@@ -90,21 +84,32 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     }
 
     /**
+     * Paginate Wishlist Product Items collection
+     *
+     * @return void
+     */
+    public function paginateCollection()
+    {
+        $page = $this->getRequest()->getParam("p", 1);
+        $limit = $this->getRequest()->getParam("limit", 10);
+        $this->_collection
+            ->setPageSize($limit)
+            ->setCurPage($page);
+    }
+
+    /**
      * Retrieve Wishlist Product Items collection
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     public function getWishlistItems()
     {
-        $page = ($this->getRequest()->getParam("p")) ? $this->getRequest()->getParam("p") : 1;
-        $limit = ($this->getRequest()->getParam("limit")) ? $this->getRequest()->getParam("limit") : 10;
         if ($this->_collection === null) {
             $this->_collection = $this->_createWishlistItemCollection();
             $this->_prepareCollection($this->_collection);
+            $this->paginateCollection();
         }
-        $this->_collection
-            ->setPageSize($limit)
-            ->setCurPage($page);
+
         return $this->_collection;
     }
 
@@ -117,8 +122,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     {
         parent::_prepareLayout();
         $this->pageConfig->getTitle()->set(__('My Wish List'));
-        $pager = $this->getLayout()
-            ->createBlock('Magento\Theme\Block\Html\Pager', 'wishlist_item_pager')
+        $pager = $this->getChildBlock('wishlist_item_pager')
             ->setUseContainer(
                 true
             )->setShowAmounts(
