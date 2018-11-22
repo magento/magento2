@@ -122,7 +122,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     {
         parent::_prepareLayout();
         $this->pageConfig->getTitle()->set(__('My Wish List'));
-        $pager = $this->getChildBlock('wishlist_item_pager')
+        $this->getChildBlock('wishlist_item_pager')
             ->setUseContainer(
                 true
             )->setShowAmounts(
