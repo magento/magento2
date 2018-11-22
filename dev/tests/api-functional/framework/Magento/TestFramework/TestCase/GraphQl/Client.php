@@ -112,6 +112,8 @@ class Client
     }
 
     /**
+     * Get endpoint url
+     *
      * @return string resource URL
      * @throws \Exception
      */
