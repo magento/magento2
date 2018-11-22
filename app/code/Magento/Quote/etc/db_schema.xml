@@ -352,6 +352,8 @@
                 comment="Super Product Id"/>
         <column xsi:type="int" name="parent_product_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Parent Product Id"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+                comment="Store Id"/>
         <column xsi:type="varchar" name="sku" nullable="true" length="255" comment="Sku"/>
         <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Image"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
@@ -394,6 +396,8 @@
         <constraint xsi:type="foreign" referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID_QUOTE_ITEM_ITEM_ID"
                     table="quote_address_item" column="quote_item_id" referenceTable="quote_item"
                     referenceColumn="item_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="QUOTE_ADDRESS_ITEM_STORE_ID_STORE_STORE_ID" table="quote_address_item" column="store_id"
+                    referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
         <index referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID" indexType="btree">
             <column name="quote_address_id"/>
         </index>
@@ -402,6 +406,9 @@
         </index>
         <index referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID" indexType="btree">
             <column name="quote_item_id"/>
+        </index>
+        <index referenceId="QUOTE_ADDRESS_ITEM_STORE_ID" indexType="btree">
+            <column name="store_id"/>
         </index>
     </table>
     <table name="quote_item_option" resource="checkout" engine="innodb" comment="Sales Flat Quote Item Option">

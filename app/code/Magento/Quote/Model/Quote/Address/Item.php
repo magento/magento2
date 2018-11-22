@@ -46,6 +46,8 @@ use Magento\Quote\Model\Quote;
  * @method \Magento\Quote\Model\Quote\Address\Item setSuperProductId(int $value)
  * @method int getParentProductId()
  * @method \Magento\Quote\Model\Quote\Address\Item setParentProductId(int $value)
+ * @method int getStoreId()
+ * @method \Magento\Quote\Model\Quote\Address\Item setStoreId(int $value)
  * @method string getSku()
  * @method \Magento\Quote\Model\Quote\Address\Item setSku(string $value)
  * @method string getImage()
@@ -168,6 +170,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
             $quoteItem->getProductId()
         )->setProduct(
             $quoteItem->getProduct()
+        )->setStoreId(
+            $quoteItem->getStoreId()
         )->setSku(
             $quoteItem->getSku()
         )->setName(
