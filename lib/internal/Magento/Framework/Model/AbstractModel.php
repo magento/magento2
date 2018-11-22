@@ -42,7 +42,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Data changes flag (true after setData|unsetData call)
-     * @var $_hasDataChange bool
+     * @var bool
      */
     protected $_hasDataChanges = false;
 

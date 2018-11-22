@@ -37,7 +37,7 @@ class Queue implements QueueInterface
     private $envelopeFactory;
 
     /**
-     * @var LoggerInterface $logger
+     * @var LoggerInterface
      */
     private $logger;
 

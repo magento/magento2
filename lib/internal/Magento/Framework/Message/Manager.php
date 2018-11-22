@@ -67,7 +67,7 @@ class Manager implements ManagerInterface
      * @param Event\ManagerInterface $eventManager
      * @param LoggerInterface $logger
      * @param string $defaultGroup
-     * @param ExceptionMessageFactoryInterface|null exceptionMessageFactory
+     * @param ExceptionMessageFactoryInterface|null $exceptionMessageFactory exceptionMessageFactory
      */
     public function __construct(
         Session $session,

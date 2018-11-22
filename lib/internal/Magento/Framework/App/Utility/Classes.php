@@ -236,7 +236,7 @@ class Classes
     /**
      * Check if instance is virtual type
      *
-     * @param $className string
+     * @param string $className
      * @return bool
      */
     public static function isVirtual($className)

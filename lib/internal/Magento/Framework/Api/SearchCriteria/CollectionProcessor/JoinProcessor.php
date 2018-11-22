@@ -28,7 +28,7 @@ class JoinProcessor implements CollectionProcessorInterface
     private $appliedFields = [];
 
     /**
-     * @param CustomJoinInterface[] $customFilters
+     * @param CustomJoinInterface[] $customJoins
      * @param array $fieldMapping
      */
     public function __construct(

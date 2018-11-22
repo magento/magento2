@@ -107,7 +107,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Psr\Log\LoggerInterface $logger
+     * @return \Psr\Log\LoggerInterface
      */
     public function getLogger()
     {

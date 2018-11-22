@@ -123,7 +123,7 @@ class Copy
      * @param string $aspect a field name
      * @param array|\Magento\Framework\DataObject $source
      * @param string $root
-     * @return array $data
+     * @return array
      *
      * @api
      */
@@ -232,7 +232,7 @@ class Copy
     /**
      * Access the extension get method
      *
-     * @param \Magento\Framework\Api\ExtensibleDataInterface $object
+     * @param \Magento\Framework\Api\ExtensibleDataInterface $source
      * @param string $code
      *
      * @return mixed
@@ -265,7 +265,7 @@ class Copy
     /**
      * Access the extension set method
      *
-     * @param \Magento\Framework\Api\ExtensibleDataInterface $object
+     * @param \Magento\Framework\Api\ExtensibleDataInterface $target
      * @param string $code
      * @param mixed $value
      *
