@@ -32,7 +32,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var Database $database
+     * @var Database
      */
     private $database;
 

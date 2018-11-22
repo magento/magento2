@@ -53,7 +53,7 @@ class ResourceConnection
     protected $connectionFactory;
 
     /**
-     * @var DeploymentConfig $deploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
 

@@ -61,7 +61,7 @@ class Mime
     /**
      * List of mime types that can be defined by file extension.
      *
-     * @var array $defineByExtensionList
+     * @var array
      */
     private $defineByExtensionList = [
         'txt'  => 'text/plain',

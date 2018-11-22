@@ -143,7 +143,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     /**
      * Deployment config
      *
-     * @var DeploymentConfig $deploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
 

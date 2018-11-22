@@ -73,7 +73,7 @@ class Base extends StreamHandler
     /**
      * {@inheritDoc}
      *
-     * @param $record array
+     * @param array $record
      *
      * @return void
      */

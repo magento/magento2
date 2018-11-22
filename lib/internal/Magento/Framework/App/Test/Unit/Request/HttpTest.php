@@ -246,8 +246,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $serverVariables array
-     * @param $expectedResult string
+     * @param array $serverVariables
+     * @param string $expectedResult
      * @dataProvider serverVariablesProvider
      */
     public function testGetDistroBaseUrl($serverVariables, $expectedResult)
@@ -374,7 +374,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider httpSafeMethodProvider
      * @backupGlobals enabled
-     * @param string $method value of $_SERVER['REQUEST_METHOD']
+     * @param string $httpMethod value of $_SERVER['REQUEST_METHOD']
      */
     public function testIsSafeMethodTrue($httpMethod)
     {
@@ -386,7 +386,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider httpNotSafeMethodProvider
      * @backupGlobals enabled
-     * @param string $method value of $_SERVER['REQUEST_METHOD']
+     * @param string $httpMethod value of $_SERVER['REQUEST_METHOD']
      */
     public function testIsSafeMethodFalse($httpMethod)
     {

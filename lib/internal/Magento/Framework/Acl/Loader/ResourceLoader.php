@@ -17,7 +17,7 @@ class ResourceLoader implements \Magento\Framework\Acl\LoaderInterface
     /**
      * Acl resource config
      *
-     * @var ProviderInterface $resourceProvider
+     * @var ProviderInterface
      */
     protected $_resourceProvider;
 

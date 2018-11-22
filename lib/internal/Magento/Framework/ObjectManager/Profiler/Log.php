@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManager\Profiler\Tree\Item as Item;
 class Log
 {
     /**
-     * @var $this
+     * @var self
      */
     protected static $instance;
 
