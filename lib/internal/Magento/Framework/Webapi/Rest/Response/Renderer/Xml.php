@@ -111,8 +111,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
             /** Without the following transformation boolean values are rendered incorrectly */
             $value = $value ? 'true' : 'false';
         }
-        $replacementMap = ['&' => '&amp;'];
-        return str_replace(array_keys($replacementMap), array_values($replacementMap), $value);
+        return (string) $value;
     }
 
     /**
@@ -166,3 +165,4 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
         return $key;
     }
 }
+
