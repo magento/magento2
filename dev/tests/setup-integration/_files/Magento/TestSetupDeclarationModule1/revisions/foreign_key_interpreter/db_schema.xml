@@ -12,7 +12,7 @@
     </table>
     <table name="test_table" resource="default">
         <column xsi:type="tinyint" name="tinyint" default="0" padding="7" nullable="true" unsigned="false"/>
-        <constraint xsi:type="foreign" name="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
+        <constraint xsi:type="foreign" referenceId="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
                     column="tinyint" table="test_table"
                     referenceTable="reference_table" referenceColumn="tinyint_ref"/>
     </table>

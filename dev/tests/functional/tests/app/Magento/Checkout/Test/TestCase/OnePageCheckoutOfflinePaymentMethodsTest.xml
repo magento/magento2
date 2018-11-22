@@ -22,7 +22,6 @@
             <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
         </variation>
         <variation name="OnePageCheckoutUsingRegisterLink" summary="Customer is redirected to checkout on login if guest is disabled, flow with registration new Customer" ticketId="MAGETWO-49917">
-            <data name="issue" xsi:type="string">MAGETWO-59816: Redirect works improperly in a browser incognito mode</data>
             <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">register_customer</data>
@@ -57,7 +56,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation2" summary="US customer during checkout using coupon for all customer groups">
-            <data name="tag" xsi:type="string">stable:no, severity:S0</data>
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
             <data name="customer/dataset" xsi:type="string">default</data>
@@ -79,7 +78,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation3" summary="Checkout as UK guest with simple product" ticketId="MAGETWO-42603, MAGETWO-43282, MAGETWO-43318">
-            <data name="tag" xsi:type="string">severity:S1, stable:no</data>
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_with_qty_25</data>
             <data name="expectedQty/0" xsi:type="string">0</data>
             <data name="expectedStockStatus/0" xsi:type="string">out of stock</data>
@@ -92,7 +91,7 @@
                 <item name="grandTotal" xsi:type="string">375.00</item>
             </data>
             <data name="payment/method" xsi:type="string">banktransfer</data>
-            <data name="status" xsi:type="string">Precessing</data>
+            <data name="status" xsi:type="string">Processing</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Cancel, Hold, Invoice, Edit</data>
             <data name="configData" xsi:type="string">banktransfer_specificcountry_gb, can_subtract_and_can_back_in_stock</data>
             <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
@@ -102,7 +101,6 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <data name="issue" xsi:type="string">MAGETWO-66737: Magento\Checkout\Test\TestCase\OnePageCheckoutTest with OnePageCheckoutTestVariation3 and 4 is not stable</data>
         </variation>
         <variation name="OnePageCheckoutTestVariation4" summary="One Page Checkout Products with Special Prices" ticketId="MAGETWO-12429">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S0</data>
@@ -125,7 +123,6 @@
             <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
-            <data name="issue" xsi:type="string">MAGETWO-66737: Magento\Checkout\Test\TestCase\OnePageCheckoutTest with OnePageCheckoutTestVariation3 and 4 is not stable</data>
         </variation>
         <variation name="OnePageCheckoutTestVariation5" summary="Guest Checkout using Check/Money Order and Free Shipping with Prices/Taxes Verifications" ticketId="MAGETWO-12412">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S0</data>
@@ -211,7 +208,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation9" summary="One Page Checkout Products with different shipping/billing address and Tier Prices" ticketId="MAGETWO-42604">
-            <data name="tag" xsi:type="string">stable:no, severity:S1</data>
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_order_qty_3</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">login</data>

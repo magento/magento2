@@ -41,7 +41,7 @@ class CustomerChangePasswordTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
-    public function testCustomerChangeValidPassword()
+    public function testChangePassword()
     {
         $customerEmail = 'customer@example.com';
         $oldCustomerPassword = 'password';
@@ -62,14 +62,13 @@ class CustomerChangePasswordTest extends GraphQlAbstract
         }
     }
 
-    public function testGuestUserCannotChangePassword()
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current customer isn't authorized.
+     */
+    public function testChangePasswordIfUserIsNotAuthorizedTest()
     {
         $query = $this->getChangePassQuery('currentpassword', 'newpassword');
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'GraphQL response contains errors: Current customer' . ' ' .
-            'does not have access to the resource "customer"'
-        );
         $this->graphQlQuery($query);
     }
 
@@ -94,10 +93,11 @@ class CustomerChangePasswordTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The password doesn't match this account. Verify the password and try again.
      */
-    public function testCannotChangeWithIncorrectPassword()
+    public function testChangePasswordIfPasswordIsInvalid()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/190');
         $customerEmail = 'customer@example.com';
         $oldCustomerPassword = 'password';
         $newCustomerPassword = 'anotherPassword1';
@@ -105,13 +105,7 @@ class CustomerChangePasswordTest extends GraphQlAbstract
 
         $query = $this->getChangePassQuery($incorrectPassword, $newCustomerPassword);
 
-        // acquire authentication with correct password
         $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/The password doesn\'t match this account. Verify the password.*/');
-
-        // but try to change with incorrect 'old' password
         $this->graphQlQuery($query, [], '', $headerMap);
     }
 
