@@ -415,6 +415,7 @@ class File implements DriverInterface
                 $exceptionMessages[] = $exception->getMessage();
             }
         }
+
         if (!empty($exceptionMessages)) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -422,7 +423,13 @@ class File implements DriverInterface
                 )
             );
         }
-        $result = @rmdir($this->getScheme() . $path);
+
+        $fullPath = $this->getScheme() . $path;
+        if (is_link($fullPath)) {
+            $result = @unlink($fullPath);
+        } else {
+            $result = @rmdir($fullPath);
+        }
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -856,7 +863,7 @@ class File implements DriverInterface
     }
 
     /**
-     * Retrieves absolute path
+     * Returns an absolute path for the given one.
      *
      * @param string $basePath
      * @param string $path
@@ -894,7 +901,7 @@ class File implements DriverInterface
     }
 
     /**
-     * Fixes path separator
+     * Fixes path separator.
      *
      * Utility method.
      *

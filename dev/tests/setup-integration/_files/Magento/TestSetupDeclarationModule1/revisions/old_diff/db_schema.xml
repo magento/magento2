@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="reference_table" resource="default" comment="Reference table">
         <column xsi:type="smallint" name="smallint_ref" padding="6" nullable="false" unsigned="false" identity="true" comment="Smallint"/>
-        <constraint xsi:type="primary" name="tinyint_primary">
+        <constraint xsi:type="primary" referenceId="tinyint_primary">
             <column name="smallint_ref"/>
         </constraint>
     </table>
@@ -22,14 +22,14 @@
         <column xsi:type="mediumtext" name="mediumtext" comment="Mediumtext"/>
         <column xsi:type="varchar" name="varchar" length="254" nullable="true" comment="Varchar"/>
         <column xsi:type="boolean" name="boolean" comment="Boolean"/>
-        <constraint xsi:type="unique" name="TEST_TABLE_SMALLINT_BIGINT">
+        <constraint xsi:type="unique" referenceId="TEST_TABLE_SMALLINT_BIGINT">
             <column name="smallint"/>
             <column name="bigint"/>
         </constraint>
-        <constraint xsi:type="foreign" name="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
+        <constraint xsi:type="foreign" referenceId="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
                     column="smallint" table="test_table"
                     referenceTable="reference_table" referenceColumn="smallint_ref" onDelete="CASCADE"/>
-        <index name="TEST_TABLE_BIGINT" indexType="btree">
+        <index referenceId="TEST_TABLE_BIGINT" indexType="btree">
             <column name="bigint"/>
         </index>
     </table>
