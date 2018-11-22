@@ -330,37 +330,37 @@
                         <link name="address">${ $.provider}:data.default_billing_address</link>
                     </imports>
                 </settings>
-            </component>
-            <button name="edit_billing_address" component="Magento_Customer/js/address/default-address">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="buttonClasses" xsi:type="string">edit-default-billing-address-button</item>
-                        <item name="actions" xsi:type="array">
-                            <item name="0" xsi:type="array">
-                                <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>
-                                <item name="actionName" xsi:type="string">destroyInserted</item>
-                            </item>
-                            <item name="1" xsi:type="array">
-                                <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal</item>
-                                <item name="actionName" xsi:type="string">openModal</item>
-                            </item>
-                            <item name="2" xsi:type="array">
-                                <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>
-                                <item name="actionName" xsi:type="string">render</item>
+                <button name="edit_billing_address" component="Magento_Customer/js/address/default-address">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">edit-default-billing-address-button</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>
+                                    <item name="actionName" xsi:type="string">destroyInserted</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                                <item name="2" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>
+                                    <item name="actionName" xsi:type="string">render</item>
+                                </item>
                             </item>
                         </item>
-                    </item>
-                </argument>
-                <settings>
-                    <componentType>button</componentType>
-                    <title translate="true">Edit</title>
-                    <displayAsLink>true</displayAsLink>
-                    <imports>
-                        <link name="entityId">${ $.provider}:data.default_billing_address.entity_id</link>
-                        <link name="entity">${ $.provider}:data.default_billing_address</link>
-                    </imports>
-                </settings>
-            </button>
+                    </argument>
+                    <settings>
+                        <componentType>button</componentType>
+                        <title translate="true">Edit</title>
+                        <displayAsLink>true</displayAsLink>
+                        <imports>
+                            <link name="entityId">${ $.provider}:data.default_billing_address.entity_id</link>
+                            <link name="entity">${ $.provider}:data.default_billing_address</link>
+                        </imports>
+                    </settings>
+                </button>
+            </component>
         </container>
         <container name="customer_default_shipping_address_wrapper" template="Magento_Customer/default-address-wrapper">
             <component name="customer_default_shipping_address_content" template="Magento_Customer/default-address">
@@ -380,37 +380,37 @@
                         <link name="address">${ $.provider}:data.default_shipping_address</link>
                     </imports>
                 </settings>
-            </component>
-            <button name="edit_shipping_address" component="Magento_Customer/js/address/default-address">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="buttonClasses" xsi:type="string">edit-default-shipping-address-button</item>
-                        <item name="actions" xsi:type="array">
-                            <item name="0" xsi:type="array">
-                                <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>
-                                <item name="actionName" xsi:type="string">destroyInserted</item>
-                            </item>
-                            <item name="1" xsi:type="array">
-                                <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal</item>
-                                <item name="actionName" xsi:type="string">openModal</item>
-                            </item>
-                            <item name="2" xsi:type="array">
-                                <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>
-                                <item name="actionName" xsi:type="string">render</item>
+                <button name="edit_shipping_address" component="Magento_Customer/js/address/default-address">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">edit-default-shipping-address-button</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>
+                                    <item name="actionName" xsi:type="string">destroyInserted</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                                <item name="2" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>
+                                    <item name="actionName" xsi:type="string">render</item>
+                                </item>
                             </item>
                         </item>
-                    </item>
-                </argument>
-                <settings>
-                    <componentType>button</componentType>
-                    <title translate="true">Edit</title>
-                    <displayAsLink>true</displayAsLink>
-                    <imports>
-                        <link name="entityId">${ $.provider}:data.default_shipping_address.entity_id</link>
-                        <link name="entity">${ $.provider}:data.default_shipping_address</link>
-                    </imports>
-                </settings>
-            </button>
+                    </argument>
+                    <settings>
+                        <componentType>button</componentType>
+                        <title translate="true">Edit</title>
+                        <displayAsLink>true</displayAsLink>
+                        <imports>
+                            <link name="entityId">${ $.provider}:data.default_shipping_address.entity_id</link>
+                            <link name="entity">${ $.provider}:data.default_shipping_address</link>
+                        </imports>
+                    </settings>
+                </button>
+            </component>
         </container>
         <button name="add_address" component="Magento_Customer/js/address/default-address">
             <argument name="data" xsi:type="array">

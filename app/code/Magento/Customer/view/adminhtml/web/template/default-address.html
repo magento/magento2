@@ -3,6 +3,9 @@
         <address>
             <div class="address_caption">
                 <text args="title"/>
+                <each args="data: elems, as: 'element'">
+                    <render if="hasTemplate()"/>
+                </each>
             </div>
             <div class="address_details" ifnot="_.isEmpty($data.address)">
                 <text args="address.prefix" if="address.prefix"/>
