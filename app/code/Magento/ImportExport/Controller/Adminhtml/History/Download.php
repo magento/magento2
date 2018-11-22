@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,6 +8,9 @@ namespace Magento\ImportExport\Controller\Adminhtml\History;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Download history controller
+ */
 class Download extends \Magento\ImportExport\Controller\Adminhtml\History implements HttpGetActionInterface
 {
     /**

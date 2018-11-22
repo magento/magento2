@@ -77,6 +77,8 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Prepare data
+     *
      * @return $this
      */
     protected function _prepareData()
@@ -103,6 +105,8 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Before to html handler
+     *
      * @return $this
      */
     protected function _beforeToHtml()
@@ -112,6 +116,8 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get collection items
+     *
      * @return Collection
      */
     public function getItems()

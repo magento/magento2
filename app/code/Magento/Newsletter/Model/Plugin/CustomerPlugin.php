@@ -14,6 +14,9 @@ use Magento\Newsletter\Model\ResourceModel\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Newsletter Plugin for customer
+ */
 class CustomerPlugin
 {
     /**
