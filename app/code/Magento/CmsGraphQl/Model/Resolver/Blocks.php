@@ -14,7 +14,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Psr\Log\LoggerInterface;
 
 /**
  * CMS blocks field resolver, used for GraphQL request processing
@@ -27,19 +26,12 @@ class Blocks implements ResolverInterface
     private $blockDataProvider;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param BlockDataProvider $blockDataProvider
      */
     public function __construct(
-        BlockDataProvider $blockDataProvider,
-        LoggerInterface $logger
+        BlockDataProvider $blockDataProvider
     ) {
         $this->blockDataProvider = $blockDataProvider;
-        $this->logger = $logger;
     }
 
     /**
@@ -84,19 +76,12 @@ class Blocks implements ResolverInterface
     private function getBlocksData(array $blockIdentifiers): array
     {
         $blocksData = [];
-        try {
-            foreach ($blockIdentifiers as $blockIdentifier) {
-                $blockData = $this->blockDataProvider->getData($blockIdentifier);
-                if (!empty($blockData)) {
-                    $blocksData[$blockIdentifier] = $blockData;
-                } else {
-                    $this->logger->warning(
-                        sprintf('The CMS block with the "%s" Identifier is disabled.', $blockIdentifier)
-                    );
-                }
+        foreach ($blockIdentifiers as $blockIdentifier) {
+            try {
+                $blocksData[$blockIdentifier] = $this->blockDataProvider->getData($blockIdentifier);
+            } catch (NoSuchEntityException $e) {
+                $blocksData[$blockIdentifier] = new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
             }
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }
         return $blocksData;
     }
