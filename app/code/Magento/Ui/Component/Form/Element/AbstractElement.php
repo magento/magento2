@@ -44,7 +44,7 @@ abstract class AbstractElement extends AbstractComponent implements ElementInter
      */
     public function isReadonly()
     {
-        return (bool) $this->getData('readonly');
+        return (bool)$this->getData('readonly');
     }
 
     /**

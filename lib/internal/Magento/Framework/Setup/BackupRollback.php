@@ -9,11 +9,9 @@ namespace Magento\Framework\Setup;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Factory;
 use Magento\Framework\Backup\Exception\NotEnoughPermissions;
-use Magento\Framework\Backup\Filesystem;
 use Magento\Framework\Backup\Filesystem\Helper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 

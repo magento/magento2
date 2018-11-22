@@ -56,6 +56,8 @@
                 <item name="show-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerShowModeCommand</item>
                 <item name="status" xsi:type="object">Magento\Indexer\Console\Command\IndexerStatusCommand</item>
                 <item name="reset" xsi:type="object">Magento\Indexer\Console\Command\IndexerResetStateCommand</item>
+                <item name="set-dimensions-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand</item>
+                <item name="show-dimensions-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerShowDimensionsModeCommand</item>
             </argument>
         </arguments>
     </type>

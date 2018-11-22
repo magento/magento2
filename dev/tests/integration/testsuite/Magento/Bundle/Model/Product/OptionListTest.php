@@ -28,6 +28,7 @@ class OptionListTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
+     * @magentoDbIsolation disabled
      */
     public function testGetItems()
     {

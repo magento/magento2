@@ -89,7 +89,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @exectedExceptionMessage Please set resource file and link type.
+     * @expectedExceptionMessage Please set resource file and link type.
      */
     public function testGetFileSizeNoResource()
     {

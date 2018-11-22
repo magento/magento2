@@ -20,6 +20,8 @@ use Magento\Sales\Block\Adminhtml\Order\Address\Form;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Backend\Model\Session\Quote as QuoteSession;
+use Magento\Sales\Model\AdminOrder\Create;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -51,6 +53,16 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private $countriesCollection;
 
+    /**
+     * @var Create|MockObject
+     */
+    private $orderCreate;
+
+    /**
+     * @var QuoteSession|MockObject
+     */
+    private $sessionQuote;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -61,6 +73,15 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->countriesCollection = $this->createMock(
             Collection::class
         );
+        $this->sessionQuote = $this->getMockBuilder(QuoteSession::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getStoreId', 'getStore'])
+            ->getMock();
+        $this->orderCreate = $this->getMockBuilder(Create::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderCreate->method('getSession')
+            ->willReturn($this->sessionQuote);
 
         $this->addressBlock = $objectManager->getObject(
             Form::class,
@@ -69,6 +90,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 '_customerFormFactory' => $this->customerFormFactory,
                 '_coreRegistry' => $this->coreRegistry,
                 'countriesCollection' => $this->countriesCollection,
+                'sessionQuote' => $this->sessionQuote,
+                '_orderCreate' => $this->orderCreate
             ]
         );
     }
@@ -107,6 +130,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $address->method('getOrder')
             ->willReturn($order);
         $order->method('getStoreId')
+            ->willReturn($storeId);
+        $this->sessionQuote->method('getStoreId')
             ->willReturn($storeId);
         $this->countriesCollection->method('loadByStore')
             ->with($storeId)

@@ -3,6 +3,8 @@
 //  * See COPYING.txt for license details.
 //  */
 
+@_column-number: 1;
+
 //
 //  List default styles reset
 //  ---------------------------------------------
@@ -705,7 +707,7 @@
 //  ---------------------------------------------
 
 @abs-form-field-revert-column-1: {
-    .lib-form-field-column-number(@_column-number: 1);
+    .lib-form-field-column-number(@_column-number);
 };
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
@@ -760,7 +762,7 @@
                     white-space: nowrap;
                     width: 33%;
 
-                    &:before {
+                    &[data-th]:before {
                         content: attr(data-th) ':';
                         display: block;
                         font-weight: @font-weight__bold;

@@ -542,7 +542,7 @@ class Config
     public function getElementAttribute($elementType, $attribute)
     {
         $this->build();
-        return isset($this->elements[$elementType][$attribute]) ? $this->elements[$elementType][$attribute] : null;
+        return $this->elements[$elementType][$attribute] ?? null;
     }
 
     /**
@@ -552,7 +552,7 @@ class Config
     public function getElementAttributes($elementType)
     {
         $this->build();
-        return isset($this->elements[$elementType]) ? $this->elements[$elementType] : [];
+        return $this->elements[$elementType] ?? [];
     }
 
     /**

@@ -21,8 +21,7 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $outPut = "data";
-        $resultRawMock = $this->createPartialMock(\Magento\Framework\Controller\Result\Raw::class, ['setContents'])
-        ;
+        $resultRawMock = $this->createPartialMock(\Magento\Framework\Controller\Result\Raw::class, ['setContents']);
         $resultRawFactoryMock =
             $this->createPartialMock(\Magento\Framework\Controller\Result\RawFactory::class, ['create']);
         $layoutFactoryMock = $this->createPartialMock(\Magento\Framework\View\LayoutFactory::class, ['create']);

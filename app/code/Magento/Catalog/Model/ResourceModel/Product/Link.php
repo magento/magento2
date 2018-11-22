@@ -112,7 +112,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['count' => new \Zend_Db_Expr('COUNT(*)')]
         )->where(
             'product_id = :product_id'
-        ) ;
+        );
 
         return $connection->fetchOne(
             $select,

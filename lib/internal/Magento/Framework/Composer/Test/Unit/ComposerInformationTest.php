@@ -7,7 +7,6 @@ namespace Magento\Framework\Composer\Test\Unit;
 
 use Composer\Composer;
 use Composer\Package\Locker;
-use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ComposerInformationTest extends \PHPUnit\Framework\TestCase

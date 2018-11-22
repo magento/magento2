@@ -13,5 +13,6 @@
         <section name="CmsNewPagePageBasicFieldsSection"/>
         <section name="CmsNewPagePageContentSection"/>
         <section name="CmsNewPagePageSeoSection"/>
+        <section name="AdminCmsNewPagePiwSection"/>
     </page>
 </pages>

@@ -92,7 +92,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
         $MACRO_DOC_COMMENT_VALIDATE = function () use (&$docCommentIndex) {
             static $validTrailingTokens = null;
             if ($validTrailingTokens === null) {
-                $validTrailingTokens = array(T_WHITESPACE, T_FINAL, T_ABSTRACT, T_INTERFACE, T_CLASS, T_FUNCTION);
+                $validTrailingTokens = [T_WHITESPACE, T_FINAL, T_ABSTRACT, T_INTERFACE, T_CLASS, T_FUNCTION];
             }
             if ($docCommentIndex !== false && !in_array($this->tokenType, $validTrailingTokens)) {
                 $docCommentIndex = false;
@@ -134,14 +134,14 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
 
             case T_NAMESPACE:
 
-                $infos[$infoIndex] = array(
+                $infos[$infoIndex] = [
                     'type' => 'namespace',
                     'tokenStart' => $MACRO_TOKEN_LOGICAL_START_INDEX(),
                     'tokenEnd' => null,
                     'lineStart' => $token[2],
                     'lineEnd' => null,
                     'namespace' => null,
-                );
+                ];
 
                 // start processing with next token
                 if ($MACRO_TOKEN_ADVANCE() === false) {
@@ -179,16 +179,15 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
 
             case T_USE:
 
-                $infos[$infoIndex] = array(
+                $infos[$infoIndex] = [
                     'type' => 'use',
                     'tokenStart' => $MACRO_TOKEN_LOGICAL_START_INDEX(),
                     'tokenEnd' => null,
                     'lineStart' => $tokens[$tokenIndex][2],
                     'lineEnd' => null,
                     'namespace' => $namespace,
-                    'statements' => array(0 => array('use' => null,
-                        'as' => null)),
-                );
+                    'statements' => [0 => ['use' => null, 'as' => null]],
+                ];
 
                 $useStatementIndex = 0;
                 $useAsContext = false;
@@ -206,8 +205,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
                     } elseif ($tokenContent === ',') {
                         $useAsContext = false;
                         $useStatementIndex++;
-                        $infos[$infoIndex]['statements'][$useStatementIndex] = array('use' => null,
-                            'as' => null);
+                        $infos[$infoIndex]['statements'][$useStatementIndex] = ['use' => null, 'as' => null];
                     }
                 }
 
@@ -246,14 +244,14 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
             case T_REQUIRE_ONCE:
 
                 // Static for performance
-                static $includeTypes = array(
+                static $includeTypes = [
                     T_INCLUDE => 'include',
                     T_INCLUDE_ONCE => 'include_once',
                     T_REQUIRE => 'require',
                     T_REQUIRE_ONCE => 'require_once'
-                );
+                ];
 
-                $infos[$infoIndex] = array(
+                $infos[$infoIndex] = [
                     'type' => 'include',
                     'tokenStart' => $MACRO_TOKEN_LOGICAL_START_INDEX(),
                     'tokenEnd' => null,
@@ -261,7 +259,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
                     'lineEnd' => null,
                     'includeType' => $includeTypes[$tokens[$tokenIndex][0]],
                     'path' => '',
-                );
+                ];
 
                 // start processing with next token
                 if ($MACRO_TOKEN_ADVANCE() === false) {
@@ -296,7 +294,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
             case T_INTERFACE:
             case T_TRAIT:
 
-                $infos[$infoIndex] = array(
+                $infos[$infoIndex] = [
                     'type' => ($this->tokenType === T_FUNCTION) ? 'function' : 'class',
                     'tokenStart' => $MACRO_TOKEN_LOGICAL_START_INDEX(),
                     'tokenEnd' => null,
@@ -306,7 +304,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
                     'uses' => $this->getUsesNoScan($namespace),
                     'name' => null,
                     'shortName' => null,
-                );
+                ];
 
                 $classBraceCount = 0;
 

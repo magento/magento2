@@ -88,7 +88,7 @@ class AreaList
      */
     public function getFrontName($areaCode)
     {
-        return isset($this->_areas[$areaCode]['frontName']) ? $this->_areas[$areaCode]['frontName'] : null;
+        return $this->_areas[$areaCode]['frontName'] ?? null;
     }
 
     /**
@@ -111,7 +111,7 @@ class AreaList
      */
     public function getDefaultRouter($areaCode)
     {
-        return isset($this->_areas[$areaCode]['router']) ? $this->_areas[$areaCode]['router'] : null;
+        return $this->_areas[$areaCode]['router'] ?? null;
     }
 
     /**

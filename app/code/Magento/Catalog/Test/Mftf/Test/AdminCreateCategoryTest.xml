@@ -35,6 +35,6 @@
         <!-- Literal URL below, need to refactor line + StorefrontCategoryPage when support for variable URL is implemented-->
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertTitle"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="assertInfo1"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="assertInfo1"/>
     </test>
 </tests>

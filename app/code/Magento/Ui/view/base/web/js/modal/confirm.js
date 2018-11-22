@@ -9,10 +9,10 @@
 define([
     'jquery',
     'underscore',
+    'mage/translate',
     'jquery/ui',
-    'Magento_Ui/js/modal/modal',
-    'mage/translate'
-], function ($, _) {
+    'Magento_Ui/js/modal/modal'
+], function ($, _, $t) {
     'use strict';
 
     $.widget('mage.confirm', $.mage.modal, {
@@ -38,7 +38,7 @@ define([
                 cancel: function () {}
             },
             buttons: [{
-                text: $.mage.__('Cancel'),
+                text: $t('Cancel'),
                 class: 'action-secondary action-dismiss',
 
                 /**
@@ -48,7 +48,7 @@ define([
                     this.closeModal(event);
                 }
             }, {
-                text: $.mage.__('OK'),
+                text: $t('OK'),
                 class: 'action-primary action-accept',
 
                 /**

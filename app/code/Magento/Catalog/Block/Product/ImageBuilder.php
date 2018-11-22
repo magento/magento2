@@ -121,14 +121,6 @@ class ImageBuilder
      */
     public function create()
     {
-        /** @var \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface $simpleOption */
-        $simpleOption = $this->product->getCustomOption('simple_product');
-
-        if ($simpleOption !== null) {
-            $optionProduct = $simpleOption->getProduct();
-            $this->setProduct($optionProduct);
-        }
-
         /** @var \Magento\Catalog\Helper\Image $helper */
         $helper = $this->helperFactory->create()
             ->init($this->product, $this->imageId);
