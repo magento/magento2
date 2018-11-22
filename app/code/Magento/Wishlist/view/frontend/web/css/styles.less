@@ -1,14 +1,19 @@
+
 .toolbar {
+    .wishlist-toolbar {
+        .pages {
+            display: inline-block;
+            z-index: 0;
+            position: absolute;
+        }
+        .toolbar-amount, .limiter {
+            z-index: 1;
+            display: inline-block;
+        }
+    }
+}
+.toolbar.wishlist-toolbar{
     .limiter {
         float: right;
-    }
-    .wishlist-toolbar .pages {
-        display: inline-block;
-        z-index: 0;
-        position: absolute;
-    }
-    .wishlist-toolbar .toolbar-amount, .limiter {
-        z-index: 1;
-        display: inline-block;
     }
 }
