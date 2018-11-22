@@ -15,7 +15,14 @@
     <script type="text/x-magento-init">
             {
                 "#cart-totals": {
-                    "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>
+                    "Magento_Ui/js/core/app": <?= $block->getJsLayout() ?>,
+                    "Magento_Checkout/js/totals": {
+                        <?php // phpcs:disable Magento2.Security.XssTemplate?>
+                        "checkoutConfig":<?=  $block->getCartConfig()->getSerializedCheckoutConfig() ?>,
+                        "loaderFile":"<?= $block->getViewFileUrl('images/loader-1.gif') ?>",
+                        "baseUrl":"<?= $block->getBaseUrl() ?>"
+                        <?php // phpcs:enable?>
+                    }
                 }
             }
     </script>

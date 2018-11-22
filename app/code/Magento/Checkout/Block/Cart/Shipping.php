@@ -6,6 +6,8 @@
 namespace Magento\Checkout\Block\Cart;
 
 /**
+ * Cart shipping block.
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -25,6 +27,11 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
+    
+    /**
+     * @var \Magento\Checkout\Model\Cart\ConfigProvider
+     */
+    private $cartConfig;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -34,6 +41,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param array $layoutProcessors
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param \Magento\Checkout\Model\Cart\ConfigProvider|null $cartConfig
      * @throws \RuntimeException
      */
     public function __construct(
@@ -43,7 +51,8 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        \Magento\Checkout\Model\Cart\ConfigProvider $cartConfig = null
     ) {
         $this->configProvider = $configProvider;
         $this->layoutProcessors = $layoutProcessors;
@@ -51,6 +60,8 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         $this->_isScopePrivate = true;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->cartConfig = $cartConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Checkout\Model\Cart\ConfigProvider::class);
     }
 
     /**
@@ -61,7 +72,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getCheckoutConfig()
     {
-        return $this->configProvider->getConfig();
+        return $this->cartConfig->getCheckoutConfig();
     }
 
     /**
@@ -90,11 +101,13 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Get serialized checkout config.
+     *
      * @return bool|string
      * @since 100.2.0
      */
     public function getSerializedCheckoutConfig()
     {
-        return json_encode($this->getCheckoutConfig(), JSON_HEX_TAG);
+        return $this->cartConfig->getSerializedCheckoutConfig();
     }
 }

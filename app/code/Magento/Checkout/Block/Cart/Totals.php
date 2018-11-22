@@ -6,8 +6,8 @@
 
 namespace Magento\Checkout\Block\Cart;
 
-use Magento\Framework\View\Element\BlockInterface;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
+use Magento\Framework\View\Element\BlockInterface;
 
 /**
  * Totals cart block.
@@ -42,12 +42,18 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $layoutProcessors;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $layoutProcessors
      * @param array $data
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -56,12 +62,15 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\Config $salesConfig,
         array $layoutProcessors = [],
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->_salesConfig = $salesConfig;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
         $this->layoutProcessors = $layoutProcessors;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**
@@ -75,7 +84,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
             $this->jsLayout = $processor->process($this->jsLayout);
         }
 
-        return json_encode($this->jsLayout, JSON_HEX_TAG);
+        return $this->serializer->serialize($this->jsLayout);
     }
 
     /**

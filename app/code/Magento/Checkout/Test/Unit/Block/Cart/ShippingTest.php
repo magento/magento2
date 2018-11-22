@@ -5,6 +5,9 @@
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
+/**
+ * Test for Magento\Checkout\Block\Cart\Shipping class.
+ */
 class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -51,6 +54,11 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $serializer;
+    
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cartConfig;
 
     protected function setUp()
     {
@@ -69,6 +77,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->context->expects($this->once())->method('getStoreManager')->willReturn($this->storeManager);
         $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->cartConfig = $this->createMock(\Magento\Checkout\Model\Cart\ConfigProvider::class);
 
         $this->model = new \Magento\Checkout\Block\Cart\Shipping(
             $this->context,
@@ -77,14 +86,15 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             $this->configProvider,
             [$this->layoutProcessor],
             ['jsLayout' => $this->layout],
-            $this->serializer
+            $this->serializer,
+            $this->cartConfig
         );
     }
 
     public function testGetCheckoutConfig()
     {
         $config = ['param' => 'value'];
-        $this->configProvider->expects($this->once())->method('getConfig')->willReturn($config);
+        $this->cartConfig->expects($this->once())->method('getCheckoutConfig')->willReturn($config);
         $this->assertEquals($config, $this->model->getCheckoutConfig());
     }
 
@@ -117,7 +127,10 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     public function testGetSerializedCheckoutConfig()
     {
         $checkoutConfig = ['checkout', 'config'];
-        $this->configProvider->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
+        $this->cartConfig
+            ->expects($this->once())
+            ->method('getSerializedCheckoutConfig')
+            ->willReturn(json_encode($checkoutConfig));
 
         $this->assertEquals(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
     }

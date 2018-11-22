@@ -133,6 +133,7 @@
                             <container name="checkout.cart.totals.container" as="totals" label="Shopping Cart Totals">
                                 <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.cart.totals" template="Magento_Checkout::cart/totals.phtml">
                                     <arguments>
+                                        <argument name="cart_config" xsi:type="object">Magento\Checkout\Model\Cart\ConfigProvider</argument>
                                         <argument name="jsLayout" xsi:type="array">
                                             <item name="components" xsi:type="array">
                                                 <item name="block-totals" xsi:type="array">
