@@ -1,19 +1,17 @@
 
 .toolbar {
-    .wishlist-toolbar {
-        .pages {
+    &.wishlist-toolbar{
+        .limiter {
+            float: right;
+        }
+        .main .pages {
             display: inline-block;
             z-index: 0;
-            position: absolute;
+            position: relative;
         }
         .toolbar-amount, .limiter {
             z-index: 1;
             display: inline-block;
         }
-    }
-}
-.toolbar.wishlist-toolbar{
-    .limiter {
-        float: right;
     }
 }
