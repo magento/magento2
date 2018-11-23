@@ -492,6 +492,23 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $idsSelect->columns($this->getResource()->getIdFieldName(), 'main_table');
         return $this->getConnection()->fetchCol($idsSelect, $this->_bindParams);
     }
+    
+    /**
+     * Retrieve field values for collection
+     *
+     * @return array
+     */
+    public function getColumnValues($fieldName)
+    {
+        $idsSelect = clone $this->getSelect();
+        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+
+        $idsSelect->columns($fieldName, 'main_table');
+        return $this->getConnection()->fetchCol($idsSelect, $this->_bindParams);
+    }
 
     /**
      * Join table to collection select
