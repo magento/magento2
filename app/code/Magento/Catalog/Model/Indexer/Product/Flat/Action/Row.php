@@ -92,23 +92,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
                 $this->flatItemEraser->removeDeletedProducts($ids, $store->getId());
                 $this->flatItemEraser->removeDisabledProducts($ids, $store->getId());
             }
-
-            /* @var $status \Magento\Eav\Model\Entity\Attribute */
-            $status = $this->_productIndexerHelper->getAttribute(ProductInterface::STATUS);
-            $statusTable = $status->getBackend()->getTable();
-            $statusConditions = [
-                'store_id IN(0,' . (int)$store->getId() . ')',
-                'attribute_id = ' . (int)$status->getId(),
-                $linkField . ' = ' . (int)$id,
-            ];
-            $select = $this->_connection->select();
-            $select->from($statusTable, ['value'])
-                ->where(implode(' AND ', $statusConditions))
-                ->order('store_id DESC')
-                ->limit(1);
-            $result = $this->_connection->query($select);
-            $status = $result->fetchColumn(0);
-
+            $status = $this->getProductStatus($id, $store->getId());
             if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
                 if (!$tableExists) {
                     $this->_flatTableBuilder->build(
@@ -126,5 +110,36 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         }
 
         return $this;
+    }
+    
+       /**
+     * @param $id
+     * @param $storeId
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function getProductStatus($id, $storeId)
+    {
+        $meta = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $meta->getLinkField();
+        $entityIdField = $meta->getIdentifierField();
+        /* @var $status \Magento\Eav\Model\Entity\Attribute */
+        $status = $this->_productIndexerHelper->getAttribute(ProductInterface::STATUS);
+        $statusTable = $status->getBackend()->getTable();
+        $statusConditions = [
+            's.store_id IN(0,' . (int)$storeId . ')',
+            's.attribute_id = ' . (int)$status->getId(),
+            'e.' . $entityIdField . ' = ' . (int) $id,
+        ];
+        $select = $this->_connection->select();
+        $select->from(['e' => $this->_connection->getTableName('catalog_product_entity')], []);
+        $select->joinInner(
+            ['s' => $statusTable],
+            'e.' . $linkField . ' = s.' . $linkField,
+            ['value'])
+            ->where(implode(' AND ', $statusConditions))
+            ->order('s.store_id DESC')
+            ->limit(1);
+        return $this->_connection->fetchOne($select);
     }
 }
