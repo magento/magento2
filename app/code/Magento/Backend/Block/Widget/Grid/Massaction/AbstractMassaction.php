@@ -282,7 +282,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         } else {
             $massActionIdField = $this->getParentBlock()->getMassactionIdField();
         }
-        $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
+        $gridIds = $allIdsCollection->setPageSize(0)->getAllColumnValues($massActionIdField);
         
         if (!empty($gridIds)) {
             return join(",", $gridIds);
