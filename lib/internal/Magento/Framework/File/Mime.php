@@ -109,6 +109,7 @@ class Mime
 
     /**
      * Get mime type by the native mime_content_type function.
+     *
      * Search for extended mime type if mime_content_type() returned 'application/octet-stream' or 'text/plain'
      *
      * @param string $file

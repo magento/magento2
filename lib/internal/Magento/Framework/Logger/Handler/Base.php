@@ -55,8 +55,9 @@ class Base extends StreamHandler
     }
 
     /**
-     * @param string $fileName
+     * Remove dots from file name
      *
+     * @param string $fileName
      * @return string
      * @throws \InvalidArgumentException
      */

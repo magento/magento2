@@ -628,6 +628,8 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     }
 
     /**
+     * Set flag property _hasDataChanges
+     *
      * @param bool $flag
      * @return void
      */
@@ -723,6 +725,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Returns validator, which contains all rules to validate this model.
+     *
      * Returns FALSE, if no validation rules exist.
      *
      * @return \Zend_Validate_Interface|false
@@ -737,6 +740,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Creates validator for the model with all validation rules in it.
+     *
      * Returns FALSE, if no validation rules exist.
      *
      * @return \Zend_Validate_Interface|bool
@@ -774,6 +778,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Get list of cache tags applied to model object.
+     * 
      * Return false if cache tags are not supported by model
      *
      * @return array|false
