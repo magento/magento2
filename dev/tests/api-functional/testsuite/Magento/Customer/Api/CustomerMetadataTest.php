@@ -214,8 +214,7 @@ class CustomerMetadataTest extends WebapiAbstract
 
         $attributeMetadata = $this->_webApiCall($serviceInfo);
 
-        // There are no default custom attributes.
-        $this->assertCount(0, $attributeMetadata);
+        $this->assertCount(count($this->customerMetadata->getCustomAttributesMetadata()), $attributeMetadata);
     }
 
     /**
