@@ -15,11 +15,10 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
  */
 class StockStatusTest extends AbstractColumnTest
 {
-
     /**
-     * Value of  attribute 'quantity_and_stock_status' when product 'In stock'
+     * Test entity id
      */
-    const STOCK_STATUS_ID = 1;
+    const ENTITY_ID = 1;
 
     /**
      * Text for product with stock status attribute code equals 1
@@ -66,7 +65,7 @@ class StockStatusTest extends AbstractColumnTest
             'data' => [
                 'items' => [
                     [
-                        StockStatus::NAME => self::STOCK_STATUS_ID,
+                        'entity_id' => self::ENTITY_ID,
                     ]
                 ],
             ],
@@ -75,8 +74,7 @@ class StockStatusTest extends AbstractColumnTest
             'data' => [
                 'items' => [
                     [
-                        StockStatus::NAME => self::STOCK_STATUS_ID,
-                        '' => self::STOCK_STATUS_TEXT,
+                        StockStatus::NAME =>  self::STOCK_STATUS_TEXT,
                     ]
                 ],
             ],
@@ -84,7 +82,7 @@ class StockStatusTest extends AbstractColumnTest
 
         $this->statusMock->expects($this->once())
             ->method('getOptionText')
-            ->with(self::STOCK_STATUS_ID)
+            ->with( \Magento\Catalog\Model\Product\Attribute\Source\StockStatus::IN_STOCK)
             ->willReturn(self::STOCK_STATUS_TEXT);
 
         $this->assertEquals($expectedDataSource, $this->getModel()->prepareDataSource($dataSource));
