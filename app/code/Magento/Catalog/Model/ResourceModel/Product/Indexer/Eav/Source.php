@@ -43,9 +43,9 @@ class Source extends AbstractEav
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
-     * @param \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
      * @param null|string $connectionName
+     * @param \Magento\Eav\Api\AttributeRepositoryInterface|null $attributeRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder|null $criteriaBuilder
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -53,9 +53,9 @@ class Source extends AbstractEav
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository = null,
+        \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder = null
     ) {
         parent::__construct(
             $context,
@@ -65,8 +65,12 @@ class Source extends AbstractEav
             $connectionName
         );
         $this->_resourceHelper = $resourceHelper;
-        $this->attributeRepository = $attributeRepository;
-        $this->criteriaBuilder = $criteriaBuilder;
+        $this->attributeRepository = $attributeRepository
+            ?: \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Eav\Api\AttributeRepositoryInterface::class);
+        $this->criteriaBuilder = $criteriaBuilder
+            ?: \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
     }
 
     /**
@@ -251,8 +255,9 @@ class Source extends AbstractEav
             $options[$row['attribute_id']][$row['option_id']] = true;
         }
 
-        // Include custom source model options
-        $options = $this->getMultiSelectAttributeWithSourceModels($attrIds, $options);
+        // Retrieve any custom source model options
+        $sourceModelOptions = $this->getMultiSelectAttributeWithSourceModels($attrIds);
+        $options = array_replace_recursive($options, $sourceModelOptions);
 
         // prepare get multiselect values query
         $productValueExpression = $connection->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
@@ -323,11 +328,10 @@ class Source extends AbstractEav
      * https://github.com/magento/magento2/issues/417#issuecomment-265146285
      *
      * @param array $attrIds
-     * @param array $options
      *
      * @return array
      */
-    private function getMultiSelectAttributeWithSourceModels($attrIds, $options)
+    private function getMultiSelectAttributeWithSourceModels($attrIds)
     {
         // Add options from custom source models
         $this->criteriaBuilder
@@ -339,11 +343,12 @@ class Source extends AbstractEav
             $criteria
         )->getItems();
         
+        $options = [];
         foreach ($attributes as $attribute) {
             $sourceModelOptions = $attribute->getOptions();
             // Add options to list used below
-            foreach ($sourceModelOptions as $o) {
-                $options[$attribute->getAttributeId()][$o->getValue()] = true;
+            foreach ($sourceModelOptions as $option) {
+                $options[$attribute->getAttributeId()][$option->getValue()] = true;
             }
         }
 
