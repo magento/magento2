@@ -18,5 +18,7 @@
         <section name="AdminOrderFormTotalSection"/>
         <section name="AdminOrderCustomersGridSection"/>
         <section name="AdminOrderFormConfigureProductSection"/>
+        <section name="AdminOrderConfigureGroupedProductSection"/>
+        <section name="AdminOrderStoreScopeTreeSection"/>
     </page>
 </pages>
