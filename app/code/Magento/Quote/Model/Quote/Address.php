@@ -1000,11 +1000,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $request->setFreeMethodWeight($item ? 0 : $this->getFreeMethodWeight());
 
         /**
-         * Store and website identifiers specified from StoreManager
+         * Store and website identifiers specified from Quote
          */
-        $request->setQuoteStoreId($this->getQuote()->getStoreId());
-        $request->setStoreId($this->storeManager->getStore()->getId());
-        $request->setWebsiteId($this->storeManager->getWebsite()->getId());
+        $quoteStoreId = $this->getQuote()->getStoreId();
+        $store = $this->storeManager->getStore($quoteStoreId);
+
+        $request->setQuoteStoreId($store->getId());
+        $request->setStoreId($store->getId());
+        $request->setWebsiteId($store->getWebsiteId());
         $request->setFreeShipping($this->getFreeShipping());
         /**
          * Currencies need to convert in free shipping
