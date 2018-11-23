@@ -76,7 +76,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         $this->cartConfig = $cartConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Checkout\Model\Cart\ConfigProvider::class);
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);;
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**
