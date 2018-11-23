@@ -51,6 +51,11 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $serializer;
+    
+    /**
+     * @var \Magento\Checkout\Block\Cart\Helper\ConfigProvider
+     */
+    private $cartConfig;
 
     protected function setUp()
     {
@@ -69,6 +74,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->context->expects($this->once())->method('getStoreManager')->willReturn($this->storeManager);
         $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->cartConfig = $this->createMock(\Magento\Checkout\Block\Cart\Helper\ConfigProvider::class);
 
         $this->model = new \Magento\Checkout\Block\Cart\Shipping(
             $this->context,
@@ -77,7 +83,8 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             $this->configProvider,
             [$this->layoutProcessor],
             ['jsLayout' => $this->layout],
-            $this->serializer
+            $this->serializer,
+            $this->cartConfig
         );
     }
 
