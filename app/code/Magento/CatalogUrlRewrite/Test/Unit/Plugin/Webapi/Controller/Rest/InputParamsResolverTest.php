@@ -107,11 +107,9 @@ class InputParamsResolverTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterResolve()
     {
-        $this->route->expects($this->once())
-            ->method('getServiceClass')
+        $this->route->method('getServiceClass')
             ->willReturn(ProductRepositoryInterface::class);
-        $this->route->expects($this->once())
-            ->method('getServiceMethod')
+        $this->route->method('getServiceMethod')
             ->willReturn('save');
         $this->product->expects($this->once())
             ->method('setData')

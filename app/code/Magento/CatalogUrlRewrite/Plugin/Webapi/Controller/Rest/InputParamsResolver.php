@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Plugin\Webapi\Controller\Rest;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Webapi\Controller\Rest\InputParamsResolver as InputParamsResolverController;
 
@@ -52,7 +53,7 @@ class InputParamsResolver
             foreach ($requestBodyParams['product']['custom_attributes'] as $attribute) {
                 if ($attribute['attribute_code'] === 'save_rewrites_history') {
                     foreach ($result as $resultItem) {
-                        if ($resultItem instanceof \Magento\Catalog\Model\Product) {
+                        if ($resultItem instanceof Product) {
                             $resultItem->setData('save_rewrites_history', (bool)$attribute['value']);
                             break 2;
                         }
