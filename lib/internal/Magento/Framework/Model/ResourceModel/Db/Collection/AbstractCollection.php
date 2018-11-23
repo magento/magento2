@@ -494,11 +494,11 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
     
     /**
-     * Retrieve field values for collection
+     * Retrieve all values from collection for specific field
      *
      * @return array
      */
-    public function getColumnValues($fieldName)
+    public function getAllColumnValues($fieldName)
     {
         $idsSelect = clone $this->getSelect();
         $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
