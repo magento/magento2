@@ -78,7 +78,7 @@ define([
                 pricesCode = [],
                 priceValue, origin, finalPrice;
 
-            if (typeof newPrices !== 'undefined' && newPrices.hasOwnProperty("prices")) {
+            if (typeof newPrices !== 'undefined' && newPrices.hasOwnProperty('prices')) {
                 this.cache.additionalPriceObject = {};
             } else {
                 this.cache.additionalPriceObject = this.cache.additionalPriceObject || {};

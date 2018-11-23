@@ -976,7 +976,6 @@ define([
                 allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
                 optionPrices = this.options.jsonConfig.optionPrices;
                 basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount);
-                
                 if (!_.isEmpty(allowedProduct)) {
                     optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
                     optionPriceDiff = optionFinalPrice - basePrice;
