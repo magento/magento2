@@ -976,10 +976,12 @@ define([
                 allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
                 optionPrices = this.options.jsonConfig.optionPrices;
                 basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount);
+
                 if (!_.isEmpty(allowedProduct)) {
                     optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
                     optionPriceDiff = optionFinalPrice - basePrice;
                 }
+
                 if (optionPriceDiff !== 0) {
                     newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
                 } else {
@@ -988,6 +990,7 @@ define([
             }
 
             _.each(displayPrices, function (price, code) {
+
                 if (newPrices[code]) {
                     displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
                 }
@@ -1015,6 +1018,7 @@ define([
                     optionMinPrice = optionFinalPrice;
                     product = allowedProduct;
                 }
+
                 if (optionFinalPrice < optionMinPrice) {
                     product = allowedProduct;
                 }

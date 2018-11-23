@@ -499,6 +499,7 @@ define([
                         optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
                         optionPriceDiff = optionFinalPrice - basePrice;
                     }
+
                     if (optionPriceDiff !== 0) {
                         prices = {};
                         priceValue = this._calculatePriceDifference(allowedProduct);
@@ -530,6 +531,7 @@ define([
                     optionMinPrice = optionFinalPrice;
                     product = allowedProduct;
                 }
+
                 if (optionFinalPrice < optionMinPrice) {
                     product = allowedProduct;
                 }
@@ -550,6 +552,7 @@ define([
                 newPrices = this.options.spConfig.optionPrices[allowedProduct];
 
             _.each(displayPrices, function (price, code) {
+
                 if (newPrices[code]) {
                     displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
                 }
