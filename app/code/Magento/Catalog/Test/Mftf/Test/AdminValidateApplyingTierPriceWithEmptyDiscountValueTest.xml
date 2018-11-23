@@ -12,6 +12,7 @@
             <features value="Apply tier price"/>
             <title value="Apply Tier Price with empty discount value"/>
             <description value="Validate applying tier price to product"/>
+            <stories value="Apply Tier Price with empty discount value" />
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-96484"/>
             <group value="product"/>
@@ -20,14 +21,12 @@
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
-                <field key="price">100</field>
             </createData>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-            <waitForPageLoad time="30" stepKey="waitForProductIndexPageLoad"/>
             <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
@@ -39,7 +38,6 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductPage">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForProductPage"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupPrice"/>
@@ -49,7 +47,7 @@
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
         <see selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageError}}" userInput="This is a required field." stepKey="assertPercentageError"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" userInput="10" stepKey="setPercentageValue"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton2"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton1"/>
         <dontSee selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageError}}" userInput="This is a required field." stepKey="assertNoPercentageError"/>
         <actionGroup ref="SaveProductOnProductPageOnAdmin" stepKey="saveProduct"/>
     </test>
