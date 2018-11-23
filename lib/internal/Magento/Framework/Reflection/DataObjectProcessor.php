@@ -102,9 +102,9 @@ class DataObjectProcessor
                     continue;
                 }
             } else {
-                if (is_object($value) && !($value instanceof Phrase)) {
+                if (is_object($value) && !is_iterable($value) && !($value instanceof Phrase)) {
                     $value = $this->buildOutputDataArray($value, $returnType);
-                } elseif (is_array($value)) {
+                } elseif (is_iterable($value)) {
                     $valueResult = [];
                     $arrayElementType = substr($returnType, 0, -2);
                     foreach ($value as $singleValue) {
