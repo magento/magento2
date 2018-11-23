@@ -10,6 +10,7 @@ namespace Magento\CatalogUrlRewrite\Plugin\Webapi\Controller\Rest;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Webapi\Controller\Rest\InputParamsResolver as InputParamsResolverController;
 
 /**
  * Plugin for InputParamsResolver
@@ -35,11 +36,11 @@ class InputParamsResolver
      * Add 'save_rewrites_history' param to the product data
      *
      * @see \Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper
-     * @param \Magento\Webapi\Controller\Rest\InputParamsResolver $subject
+     * @param InputParamsResolverController $subject
      * @param array $result
      * @return array
      */
-    public function afterResolve(\Magento\Webapi\Controller\Rest\InputParamsResolver $subject, array $result): array
+    public function afterResolve(InputParamsResolverController $subject, array $result): array
     {
         $route = $subject->getRoute();
         $serviceMethodName = $route->getServiceMethod();

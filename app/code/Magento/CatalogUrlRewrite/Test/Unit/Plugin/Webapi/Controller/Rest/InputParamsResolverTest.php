@@ -15,6 +15,7 @@ use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Catalog\Model\Product;
 use Magento\Webapi\Controller\Rest\Router\Route;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Unit test for InputParamsResolver plugin
@@ -42,22 +43,22 @@ class InputParamsResolverTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var InputParamsResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputParamsResolver|MockObject
      */
     private $subject;
 
     /**
-     * @var RestRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var RestRequest|MockObject
      */
     private $request;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $product;
 
     /**
-     * @var Route|\PHPUnit_Framework_MockObject_MockObject
+     * @var Route|MockObject
      */
     private $route;
 
@@ -76,16 +77,21 @@ class InputParamsResolverTest extends \PHPUnit\Framework\TestCase
             'product' => [
                 'sku' => 'test',
                 'custom_attributes' => [
-                    ['attribute_code' => $this->saveRewritesHistory, 'value' => 1]
+                    [
+                        'attribute_code' => $this->saveRewritesHistory,
+                        'value' => 1
+                    ]
                 ]
             ]
         ];
 
         $this->route = $this->createPartialMock(Route::class, ['getServiceMethod', 'getServiceClass']);
         $this->request = $this->createPartialMock(RestRequest::class, ['getBodyParams']);
-        $this->request->expects($this->any())->method('getBodyParams')->willReturn($this->requestBodyParams);
+        $this->request->method('getBodyParams')
+            ->willReturn($this->requestBodyParams);
         $this->subject = $this->createPartialMock(InputParamsResolver::class, ['getRoute']);
-        $this->subject->expects($this->any())->method('getRoute')->willReturn($this->route);
+        $this->subject->method('getRoute')
+            ->willReturn($this->route);
         $this->product = $this->createPartialMock(Product::class, ['setData']);
 
         $this->result = [false, $this->product, 'test'];
