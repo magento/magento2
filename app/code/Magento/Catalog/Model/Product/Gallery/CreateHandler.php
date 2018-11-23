@@ -532,7 +532,7 @@ class CreateHandler implements ExtensionInterface
      * @param int $storeId
      * @return void
      */
-    private function processSetImagesPositionToDefault(int $entityId, int $storeId) : void
+    private function processSetImagesPositionToDefault(int $entityId, int $storeId)
     {
         $this->resourceModel->removeImagesPositionExcludeDefaultStore($entityId, $storeId);
     }
