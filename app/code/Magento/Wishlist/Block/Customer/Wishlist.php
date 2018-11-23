@@ -87,7 +87,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @return void
      */
-    public function paginateCollection()
+    private function paginateCollection()
     {
         $page = $this->getRequest()->getParam("p", 1);
         $limit = $this->getRequest()->getParam("limit", 10);
