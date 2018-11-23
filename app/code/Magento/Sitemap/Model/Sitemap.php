@@ -157,7 +157,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Model cache tag for clear cache in after save and after delete
      *
      * @var string
-     * @since 100.2.0
+     * @since 100.1.5
      */
     protected $_cacheTag = true;
 
@@ -847,7 +847,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Get unique page cache identities
      *
      * @return array
-     * @since 100.2.0
+     * @since 100.1.5
      */
     public function getIdentities()
     {

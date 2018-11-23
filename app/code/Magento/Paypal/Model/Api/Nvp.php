@@ -1461,7 +1461,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @param array $data
      * @return void
-     * @deprecated 100.2.2 typo in method name
+     * @deprecated 100.2.4 typo in method name
      * @see _exportAddresses
      */
     protected function _exportAddressses($data)

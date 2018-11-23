@@ -19,7 +19,7 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
  * Class processes values using backend model which declared in system.xml.
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class ValueProcessor
 {
@@ -83,7 +83,7 @@ class ValueProcessor
      * @param string $value The value to process
      * @param string $path The configuration path for getting backend model. E.g. scope_id/group_id/field_id
      * @return string processed value result
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function process($scope, $scopeCode, $value, $path)
     {

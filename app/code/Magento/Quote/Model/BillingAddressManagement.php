@@ -101,7 +101,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
 
     /**
      * @return \Magento\Quote\Model\ShippingAddressAssignment
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getShippingAddressAssignment()
     {

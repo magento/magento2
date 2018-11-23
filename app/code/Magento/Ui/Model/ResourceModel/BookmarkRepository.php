@@ -162,7 +162,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -176,7 +176,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

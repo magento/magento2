@@ -14,6 +14,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  * @api
  * @deprecated
  * @see \Magento\ElasticSearch
+ * @since 100.0.2
  */
 class ConditionManager
 {

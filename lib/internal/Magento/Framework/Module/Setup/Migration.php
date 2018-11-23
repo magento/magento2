@@ -15,6 +15,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  * @api
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Migration
 {

@@ -138,6 +138,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      * Get csv delimiter from request.
      *
      * @return string
+     * @since 100.2.2
      */
     public function getDelimiter()
     {

@@ -10,7 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  */
 class Unserialize
 {

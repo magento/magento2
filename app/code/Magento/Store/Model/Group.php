@@ -437,6 +437,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 100.2.5
      */
     public function afterSave()
     {

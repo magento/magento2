@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Filesystem
 {

@@ -476,6 +476,7 @@ class Price
      * @param   Product $product
      *
      * @return  array|float
+     * @since 102.0.6
      */
     public function getFormattedTierPrice($qty, $product)
     {
@@ -501,7 +502,7 @@ class Price
      *
      * @return  array|float
      *
-     * @deprecated
+     * @deprecated 102.0.6
      * @see getFormattedTierPrice()
      */
     public function getFormatedTierPrice($qty, $product)
@@ -514,6 +515,7 @@ class Price
      *
      * @param   Product $product
      * @return  array|float
+     * @since 102.0.6
      */
     public function getFormattedPrice($product)
     {
@@ -526,7 +528,7 @@ class Price
      * @param   Product $product
      * @return  array || float
      *
-     * @deprecated
+     * @deprecated 102.0.6
      * @see getFormattedPrice()
      */
     public function getFormatedPrice($product)

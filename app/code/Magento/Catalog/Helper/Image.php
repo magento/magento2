@@ -445,7 +445,7 @@ class Image extends AbstractHelper
      * @param null|string $placeholder
      * @return string
      *
-     * @deprecated 101.1.0 Returns only default placeholder.
+     * @deprecated 102.0.0 Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */
     public function getPlaceholder($placeholder = null)

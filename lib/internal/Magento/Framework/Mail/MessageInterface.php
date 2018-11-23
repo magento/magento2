@@ -11,6 +11,7 @@ namespace Magento\Framework\Mail;
  * @api
  * @deprecated in favor of MailMessageInterface to avoid temporal coupling (setMessageType + setBody)
  * @see \Magento\Framework\Mail\MailMessageInterface
+ * @since 100.0.2
  */
 interface MessageInterface
 {

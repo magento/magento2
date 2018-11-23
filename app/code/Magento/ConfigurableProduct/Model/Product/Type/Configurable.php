@@ -1210,7 +1210,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 100.1.11
      */
     public function isPossibleBuyFromList($product)
     {

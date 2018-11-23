@@ -22,6 +22,7 @@ use Psr\Log\LoggerInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Bootstrap
 {

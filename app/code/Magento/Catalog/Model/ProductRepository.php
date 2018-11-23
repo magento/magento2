@@ -721,7 +721,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -805,7 +805,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

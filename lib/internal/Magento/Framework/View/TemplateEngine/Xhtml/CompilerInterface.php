@@ -11,6 +11,7 @@ use Magento\Framework\DataObject;
  * Interface CompilerInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface CompilerInterface
 {

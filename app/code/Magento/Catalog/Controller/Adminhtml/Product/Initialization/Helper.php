@@ -366,7 +366,7 @@ class Helper
 
     /**
      * @return LinkResolver
-     * @deprecated 101.0.0
+     * @deprecated 102.0.0
      */
     private function getLinkResolver()
     {
@@ -378,7 +378,7 @@ class Helper
 
     /**
      * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     * @deprecated 101.0.0
+     * @deprecated 102.0.0
      */
     private function getDateTimeFilter()
     {

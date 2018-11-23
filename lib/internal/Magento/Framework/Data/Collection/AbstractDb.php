@@ -18,6 +18,7 @@ use Psr\Log\LoggerInterface as Logger;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractDb extends \Magento\Framework\Data\Collection
 {

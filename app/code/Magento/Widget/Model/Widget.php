@@ -86,7 +86,7 @@ class Widget
     /**
      * @return \Magento\Framework\Math\Random
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.0.10
      */
     private function getMathRandom()
     {
@@ -125,7 +125,7 @@ class Widget
      * @param string $type Widget type
      * @return null|\Magento\Framework\Simplexml\Element
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     public function getConfigAsXml($type)
     {

@@ -10,6 +10,7 @@ use Magento\Framework\Search\EngineResolverInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class IntervalFactory
 {

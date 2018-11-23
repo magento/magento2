@@ -185,7 +185,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @deprecated 100.1.7 Remove unused dependency.
+     * @deprecated 100.1.0 Remove unused dependency.
      */
     protected $productRepository;
 
@@ -1016,7 +1016,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param string $comment
      * @param bool|string $status
      * @return OrderStatusHistoryInterface
-     * @deprecated
+     * @deprecated 101.0.5
      * @see addCommentToStatusHistory
      */
     public function addStatusHistoryComment($comment, $status = false)
@@ -1033,6 +1033,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param bool|string $status
      * @param bool $isVisibleOnFront
      * @return OrderStatusHistoryInterface
+     * @since 101.0.5
      */
     public function addCommentToStatusHistory($comment, $status = false, $isVisibleOnFront = false)
     {

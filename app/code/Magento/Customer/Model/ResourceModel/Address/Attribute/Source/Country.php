@@ -67,7 +67,7 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * Retrieve Store Manager
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return StoreManagerInterface
      */
     private function getStoreManager()

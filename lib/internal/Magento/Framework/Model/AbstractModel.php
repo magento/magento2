@@ -14,6 +14,7 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 abstract class AbstractModel extends \Magento\Framework\DataObject
 {
@@ -584,7 +585,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param string $identifier
      * @param string|null $field
      * @return void
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function beforeLoad($identifier, $field = null)
     {

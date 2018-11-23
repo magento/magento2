@@ -33,7 +33,7 @@ class SwitchAction extends Action
 
     /**
      * @var HttpContext
-     * @deprecated
+     * @deprecated 100.2.5
      */
     protected $httpContext;
 
@@ -44,7 +44,7 @@ class SwitchAction extends Action
 
     /**
      * @var StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.2.5
      */
     protected $storeManager;
 

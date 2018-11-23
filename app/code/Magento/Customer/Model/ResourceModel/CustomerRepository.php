@@ -374,7 +374,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param \Magento\Customer\Model\ResourceModel\Customer\Collection $collection
      * @return void

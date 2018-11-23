@@ -11,7 +11,7 @@ use Magento\Framework\Phrase;
  * Specific exception for URL key already exists
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class UrlAlreadyExistsException extends \Magento\Framework\Exception\AlreadyExistsException
 {
@@ -39,7 +39,7 @@ class UrlAlreadyExistsException extends \Magento\Framework\Exception\AlreadyExis
      * Get URLs
      *
      * @return array
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getUrls()
     {

@@ -386,6 +386,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritdoc
+     * @since 100.2.3
      */
     protected function _beforeLoad()
     {

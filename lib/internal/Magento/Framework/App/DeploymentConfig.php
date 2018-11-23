@@ -12,6 +12,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  * Application deployment configuration
  *
  * @api
+ * @since 100.0.2
  */
 class DeploymentConfig
 {

@@ -11,6 +11,7 @@ namespace Magento\Framework\Indexer;
  * @api
  * @deprecated Facade will be split
  * @see \Magento\Framework\Indexer\ActionInterface
+ * @since 100.0.2
  */
 interface IndexerInterface
 {

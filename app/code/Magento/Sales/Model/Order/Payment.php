@@ -1454,7 +1454,7 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return OrderStateResolverInterface
      */
     private function getOrderStateResolver()

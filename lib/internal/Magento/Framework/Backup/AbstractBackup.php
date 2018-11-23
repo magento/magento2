@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
  * Class to work with archives
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractBackup implements BackupInterface, SourceFileInterface
 {

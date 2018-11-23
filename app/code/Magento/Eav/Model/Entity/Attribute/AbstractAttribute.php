@@ -128,7 +128,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Serializer Instance.
      *
      * @var Json
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected $serializer;
 
@@ -216,10 +216,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
 
     /**
      * Get Serializer instance.
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      *
      * @return Json
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function getSerializer()
     {
@@ -893,7 +893,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Retrieve flat columns definition in old format (before MMDB support)
      * Used in database compatible mode
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */

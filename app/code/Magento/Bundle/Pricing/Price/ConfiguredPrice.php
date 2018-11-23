@@ -18,6 +18,7 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 /**
  * Configured price model
  * @api
+ * @since 100.0.2
  */
 class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPriceInterface
 {

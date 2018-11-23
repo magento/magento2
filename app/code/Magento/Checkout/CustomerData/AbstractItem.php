@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote\Item;
  * Abstract item
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractItem implements ItemInterface
 {

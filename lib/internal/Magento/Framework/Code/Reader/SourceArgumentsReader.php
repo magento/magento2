@@ -87,7 +87,7 @@ class SourceArgumentsReader
      * @param string $argument
      * @param array $availableNamespaces
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @see getConstructorArgumentTypes
      */
     protected function resolveNamespaces($argument, $availableNamespaces)
@@ -118,7 +118,7 @@ class SourceArgumentsReader
      *
      * @param array $file
      * @return array
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @see getConstructorArgumentTypes
      */
     protected function getImportedNamespaces(array $file)

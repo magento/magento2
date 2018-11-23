@@ -81,6 +81,7 @@ class Recent extends \Magento\Framework\View\Element\Template
 
     /**
      * Get recently placed orders. By default they will be limited by 5.
+     * @since 101.0.4
      */
     private function getRecentOrders()
     {

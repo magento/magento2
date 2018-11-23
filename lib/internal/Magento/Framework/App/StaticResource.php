@@ -206,7 +206,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * Retrieves LoggerInterface instance
      *
      * @return LoggerInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getLogger()
     {

@@ -11,6 +11,7 @@ namespace Magento\Framework\Component;
  * @author Josh Di Fabio <joshdifabio@gmail.com>
  *
  * @api
+ * @since 100.0.2
  */
 class ComponentRegistrar implements ComponentRegistrarInterface
 {

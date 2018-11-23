@@ -154,7 +154,7 @@ abstract class AbstractAction
      * @param array $processIds
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated Used only for backward compatibility for indexer, which not support indexation by dimensions
+     * @deprecated 102.0.6 Used only for backward compatibility for indexer, which not support indexation by dimensions
      */
     protected function _syncData(array $processIds = [])
     {
@@ -422,7 +422,7 @@ abstract class AbstractAction
      * @param null|array $parentIds
      * @param array $excludeIds
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
-     * @deprecated Used only for backward compatibility for do not broke custom indexer implementation
+     * @deprecated 102.0.6 Used only for backward compatibility for do not broke custom indexer implementation
      * which do not work by dimensions.
      * For indexers, which support dimensions all composite products read data directly from main price indexer table
      * or replica table for partial or full reindex correspondingly.

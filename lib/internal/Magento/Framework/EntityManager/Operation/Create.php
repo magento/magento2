@@ -142,7 +142,7 @@ class Create implements CreateInterface
     /**
      * @return SequenceApplier
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getSequenceApplier()
     {

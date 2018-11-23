@@ -420,7 +420,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Retrieve Country With Websites Source
      *
      * @return CountryWithWebsites
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getCountryWithWebsiteSource()
     {
@@ -605,7 +605,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get FileProcessorFactory instance
      *
      * @return FileProcessorFactory
-     * @deprecated 100.1.3
+     * @deprecated 101.0.0
      */
     private function getFileProcessorFactory()
     {

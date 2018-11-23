@@ -609,7 +609,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /**
      * Unset Region from address
      * @return $this
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function unsRegion()
     {
@@ -618,7 +618,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return bool
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function isCompanyRequired()
     {
@@ -627,7 +627,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return bool
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function isTelephoneRequired()
     {
@@ -636,7 +636,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * @return bool
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function isFaxRequired()
     {

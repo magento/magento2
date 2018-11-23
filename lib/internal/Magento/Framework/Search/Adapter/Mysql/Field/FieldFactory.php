@@ -12,6 +12,7 @@ namespace Magento\Framework\Search\Adapter\Mysql\Field;
  * @api
  * @deprecated
  * @see \Magento\ElasticSearch
+ * @since 100.0.2
  */
 class FieldFactory
 {

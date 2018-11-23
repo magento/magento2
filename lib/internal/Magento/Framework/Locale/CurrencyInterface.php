@@ -9,6 +9,7 @@ namespace Magento\Framework\Locale;
  * Provides access to currency config information
  *
  * @api
+ * @since 100.0.2
  */
 interface CurrencyInterface
 {

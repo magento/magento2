@@ -11,6 +11,7 @@ namespace Magento\Framework\Math;
  * Contains methods to compare float digits.
  *
  * @api
+ * @since 101.0.6
  */
 class FloatComparator
 {
@@ -27,6 +28,7 @@ class FloatComparator
      * @param float $a
      * @param float $b
      * @return bool
+     * @since 101.0.6
      */
     public function equal(float $a, float $b): bool
     {
@@ -39,6 +41,7 @@ class FloatComparator
      * @param float $a
      * @param float $b
      * @return bool
+     * @since 101.0.6
      */
     public function greaterThan(float $a, float $b): bool
     {
@@ -51,6 +54,7 @@ class FloatComparator
      * @param float $a
      * @param float $b
      * @return bool
+     * @since 101.0.6
      */
     public function greaterThanOrEqual(float $a, float $b): bool
     {

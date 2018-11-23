@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup;
  * DB resource interface
  *
  * @api
+ * @since 100.0.2
  */
 interface SetupInterface
 {

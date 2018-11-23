@@ -13,6 +13,7 @@ namespace Magento\Framework;
  *
  * @api
  * @deprecated
+ * @since 100.0.2
  */
 class Registry
 {

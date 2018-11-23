@@ -14,12 +14,13 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Abstract resource model
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractResource
 {
     /**
      * @var Json
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected $serializer;
 
@@ -247,8 +248,8 @@ abstract class AbstractResource
      * Get serializer
      *
      * @return Json
-     * @deprecated 100.2.0
-     * @since 100.2.0
+     * @deprecated 101.0.0
+     * @since 101.0.0
      */
     protected function getSerializer()
     {

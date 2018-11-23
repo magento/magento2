@@ -16,6 +16,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Repository
 {
@@ -36,7 +37,7 @@ class Repository
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated 100.1.1
+     * @deprecated 100.0.2
      */
     private $themeList;
 

@@ -18,6 +18,7 @@ use Magento\Framework\DB\Select;
  * @api
  * @deprecated
  * @see \Magento\ElasticSearch
+ * @since 100.0.2
  */
 class TemporaryStorage
 {

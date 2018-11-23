@@ -14,7 +14,7 @@ use Magento\Signifyd\Model\CaseManagement;
  * Get Signifyd Case Info
  *
  * @api
- * @since 100.2.0
+ * @since 100.2.1
  */
 class CaseInfo extends Template
 {
@@ -75,7 +75,7 @@ class CaseInfo extends Template
      * Checks if case is exists for order
      *
      * @return bool
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function isEmptyCase()
     {
@@ -86,7 +86,7 @@ class CaseInfo extends Template
      * Gets case guarantee disposition status.
      *
      * @return string
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function getCaseGuaranteeDisposition()
     {

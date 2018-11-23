@@ -38,6 +38,7 @@ class Stock extends AbstractSource
      * @param string $dir
      *
      * @return $this
+     * @since 100.2.4
      */
     public function addValueSortToCollection($collection, $dir = \Magento\Framework\Data\Collection::SORT_ORDER_DESC)
     {

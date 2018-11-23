@@ -11,6 +11,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
  * Payment additional information provider that returns predefined value.
  *
  * @api
+ * @since 100.2.0
  */
 class StaticAdditionalInformationProvider implements PaymentAdditionalInformationProviderInterface
 {
@@ -30,6 +31,7 @@ class StaticAdditionalInformationProvider implements PaymentAdditionalInformatio
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function getAdditionalInformation(PaymentTokenInterface $paymentToken): array
     {

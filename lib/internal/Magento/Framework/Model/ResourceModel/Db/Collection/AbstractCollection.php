@@ -14,6 +14,7 @@ use \Magento\Framework\Data\Collection\AbstractDb;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
