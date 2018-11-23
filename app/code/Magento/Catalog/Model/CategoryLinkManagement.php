@@ -56,7 +56,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
         \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory $productLinkFactory,
-        \Magento\Catalog\Helper\Data $helper
+        \Magento\Catalog\Helper\Data $helper = null
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productLinkFactory = $productLinkFactory;
@@ -107,7 +107,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
             $this->getCategoryLinkRepository()->deleteByIds($categoryId, $productSku);
         }
     
-        $productPosition = $this->helper->getDefaultProductPosition();
+        $productPosition = $this->getDataHelper()->getDefaultProductPosition();
         foreach (array_diff($categoryIds, $assignedCategories) as $categoryId) {
             /** @var \Magento\Catalog\Api\Data\CategoryProductLinkInterface $categoryProductLink */
             $categoryProductLink = $this->productLinkFactory->create();
@@ -121,6 +121,19 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
             $productCategoryIndexer->reindexRow($product->getId());
         }
         return true;
+    }
+    
+    /**
+     * @return \Magento\Catalog\Helper\Data
+     */
+    private function getDataHelper()
+    {
+        if (null === $this->helper) {
+            $this->helper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Helper\Data::class);
+        }
+        
+        return $this->helper;
     }
 
     /**

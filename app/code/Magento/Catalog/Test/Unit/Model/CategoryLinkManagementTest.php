@@ -26,7 +26,7 @@ class CategoryLinkManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $catalogDataHelperMock;
+    protected $dataHelperMock;
 
     protected function setUp()
     {
@@ -38,7 +38,7 @@ class CategoryLinkManagementTest extends \PHPUnit\Framework\TestCase
         $indexerRegistry = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->catalogDataHelperMock = $this->getMockBuilder(\Magento\Catalog\Helper\Data::class)
+        $this->dataHelperMock = $this->getMockBuilder(\Magento\Catalog\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->productLinkFactoryMock = $this->createPartialMock(
@@ -49,7 +49,7 @@ class CategoryLinkManagementTest extends \PHPUnit\Framework\TestCase
         $this->model = new \Magento\Catalog\Model\CategoryLinkManagement(
             $this->categoryRepositoryMock,
             $this->productLinkFactoryMock,
-            $this->catalogDataHelperMock
+            $this->dataHelperMock
         );
 
         $this->setProperties($this->model, [

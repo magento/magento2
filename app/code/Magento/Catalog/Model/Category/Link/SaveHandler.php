@@ -40,7 +40,7 @@ class SaveHandler implements ExtensionInterface
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink,
         \Magento\Framework\EntityManager\HydratorPool $hydratorPool,
-        \Magento\Catalog\Helper\Data $helper
+        \Magento\Catalog\Helper\Data $helper = null
     ) {
         $this->productCategoryLink = $productCategoryLink;
         $this->hydratorPool = $hydratorPool;
@@ -94,7 +94,7 @@ class SaveHandler implements ExtensionInterface
         $result = [];
         $currentCategoryLinks = $this->productCategoryLink->getCategoryLinks($entity, $entity->getCategoryIds());
         
-        $productPosition = $this->helper->getDefaultProductPosition();
+        $productPosition = $this->getDataHelper()->getDefaultProductPosition();
         foreach ($entity->getCategoryIds() as $categoryId) {
             $key = array_search($categoryId, array_column($currentCategoryLinks, 'category_id'));
             if ($key === false) {
@@ -105,6 +105,19 @@ class SaveHandler implements ExtensionInterface
         }
 
         return $result;
+    }
+    
+    /**
+     * @return \Magento\Catalog\Helper\Data
+     */
+    private function getDataHelper()
+    {
+        if (null === $this->helper) {
+            $this->helper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Helper\Data::class);
+        }
+        
+        return $this->helper;
     }
 
     /**
