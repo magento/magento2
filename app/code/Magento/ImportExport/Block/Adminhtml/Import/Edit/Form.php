@@ -259,7 +259,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @return string
      */
-    protected function getImportBehaviorTooltip()
+    private function getImportBehaviorTooltip()
     {
         $html = '<div class="admin__field-tooltip tooltip">
             <a class="admin__field-tooltip-action action-help" target="_blank" title="What is this?" 
