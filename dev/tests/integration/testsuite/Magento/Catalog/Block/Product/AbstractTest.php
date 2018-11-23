@@ -146,16 +146,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->block->hasProductUrl($this->product));
     }
 
-    public function testLayoutDependColumnCount()
-    {
-        $this->block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get(\Magento\Framework\View\LayoutInterface::class)
-        );
-        $this->assertEquals(3, $this->block->getColumnCount());
-        /* default column count */
-    }
-
     public function testGetCanShowProductPrice()
     {
         $this->assertTrue($this->block->getCanShowProductPrice($this->product));
