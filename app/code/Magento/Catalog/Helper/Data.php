@@ -36,6 +36,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const CONFIG_PARSE_URL_DIRECTIVES = 'catalog/frontend/parse_url_directives';
 
     const XML_PATH_DISPLAY_PRODUCT_COUNT = 'catalog/layered_navigation/display_product_count';
+    
+    const CONFIG_DEFAULT_PRODUCT_POSITION = 'catalog/frontend/default_product_position';
 
     /**
      * Cache context
@@ -622,5 +624,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         } else {
             return $price;
         }
+    }
+    
+    /**
+     * @return int Default product position in category
+     */
+    public function getDefaultProductPosition(): int
+    {
+        return (int)$this->scopeConfig->getValue(self::CONFIG_DEFAULT_PRODUCT_POSITION);
     }
 }

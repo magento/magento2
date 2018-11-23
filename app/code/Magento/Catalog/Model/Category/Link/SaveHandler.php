@@ -19,7 +19,12 @@ class SaveHandler implements ExtensionInterface
      * @var \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
      */
     private $productCategoryLink;
-
+    
+    /**
+     * @var \Magento\Catalog\Helper\Data
+     */
+    private $helper;
+    
     /**
      * @var \Magento\Framework\EntityManager\HydratorPool
      */
@@ -30,13 +35,16 @@ class SaveHandler implements ExtensionInterface
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink
      * @param \Magento\Framework\EntityManager\HydratorPool $hydratorPool
+     * @param \Magento\Catalog\Helper\Data $helper
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink,
-        \Magento\Framework\EntityManager\HydratorPool $hydratorPool
+        \Magento\Framework\EntityManager\HydratorPool $hydratorPool,
+        \Magento\Catalog\Helper\Data $helper
     ) {
         $this->productCategoryLink = $productCategoryLink;
         $this->hydratorPool = $hydratorPool;
+        $this->helper = $helper;
     }
 
     /**
@@ -85,10 +93,12 @@ class SaveHandler implements ExtensionInterface
     {
         $result = [];
         $currentCategoryLinks = $this->productCategoryLink->getCategoryLinks($entity, $entity->getCategoryIds());
+        
+        $productPosition = $this->helper->getDefaultProductPosition();
         foreach ($entity->getCategoryIds() as $categoryId) {
             $key = array_search($categoryId, array_column($currentCategoryLinks, 'category_id'));
             if ($key === false) {
-                $result[] = ['category_id' => (int)$categoryId, 'position' => 0];
+                $result[] = ['category_id' => (int)$categoryId, 'position' => $productPosition];
             } else {
                 $result[] = $currentCategoryLinks[$key];
             }

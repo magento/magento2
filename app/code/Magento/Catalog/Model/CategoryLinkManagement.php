@@ -40,19 +40,27 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     protected $indexerRegistry;
-
+    
+    /**
+     * @var \Magento\Catalog\Helper\Data
+     */
+    protected $helper;
+    
     /**
      * CategoryLinkManagement constructor.
      *
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory $productLinkFactory
+     * @param \Magento\Catalog\Helper\Data $helper
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory $productLinkFactory
+        \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory $productLinkFactory,
+        \Magento\Catalog\Helper\Data $helper
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productLinkFactory = $productLinkFactory;
+        $this->helper = $helper;
     }
 
     /**
@@ -80,13 +88,16 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
         }
         return $links;
     }
-
+    
     /**
      * Assign product to given categories
      *
      * @param string $productSku
      * @param \int[] $categoryIds
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
      */
     public function assignProductToCategories($productSku, array $categoryIds)
     {
@@ -95,13 +106,14 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
         foreach (array_diff($assignedCategories, $categoryIds) as $categoryId) {
             $this->getCategoryLinkRepository()->deleteByIds($categoryId, $productSku);
         }
-
+    
+        $productPosition = $this->helper->getDefaultProductPosition();
         foreach (array_diff($categoryIds, $assignedCategories) as $categoryId) {
             /** @var \Magento\Catalog\Api\Data\CategoryProductLinkInterface $categoryProductLink */
             $categoryProductLink = $this->productLinkFactory->create();
             $categoryProductLink->setSku($productSku);
             $categoryProductLink->setCategoryId($categoryId);
-            $categoryProductLink->setPosition(0);
+            $categoryProductLink->setPosition($productPosition);
             $this->getCategoryLinkRepository()->save($categoryProductLink);
         }
         $productCategoryIndexer = $this->getIndexerRegistry()->get(Indexer\Product\Category::INDEXER_ID);

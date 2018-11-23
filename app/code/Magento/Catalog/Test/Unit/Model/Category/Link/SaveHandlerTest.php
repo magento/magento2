@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Category\Link\SaveHandler;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Indexer\IndexerRegistry;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -38,6 +39,11 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
      * @var HydratorPool|MockObject
      */
     private $hydratorPool;
+    
+    /**
+     * @var Data|MockObject
+     */
+    private $helper;
 
     /**
      * @inheritdoc
@@ -51,10 +57,12 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $this->hydratorPool = $this->getMockBuilder(HydratorPool::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->helper = $this->getMockBuilder(Data::class)->disableOriginalConstructor()->getMock();
 
         $this->saveHandler = new SaveHandler(
             $this->productCategoryLink,
-            $this->hydratorPool
+            $this->hydratorPool,
+            $this->helper
         );
     }
 

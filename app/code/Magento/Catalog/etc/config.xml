@@ -29,6 +29,7 @@
                 <list_per_page>10</list_per_page>
                 <flat_catalog_category>0</flat_catalog_category>
                 <default_sort_by>position</default_sort_by>
+                <default_product_position>0</default_product_position>
                 <parse_url_directives>1</parse_url_directives>
             </frontend>
             <product>
