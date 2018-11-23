@@ -14,4 +14,7 @@
         <data key="attributeGroupId">7</data>
         <data key="sortOrder">0</data>
     </entity>
+    <entity name="DefaultAttributeSet" type="ProductAttributeSet">
+        <data key="label">Default</data>
+    </entity>
 </entities>
