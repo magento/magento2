@@ -66,7 +66,6 @@ class ChildrenUrlRewriteGenerator
      * @param \Magento\Catalog\Model\Category $category
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function generate($storeId, Category $category, $rootCategoryId = null)
     {
