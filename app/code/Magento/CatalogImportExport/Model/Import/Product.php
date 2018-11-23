@@ -1355,13 +1355,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if ($categoriesData) {
             $categoriesIn = [];
             $delProductId = [];
-
+            
+            $position = $this->_catalogData->getDefaultProductPosition();
             foreach ($categoriesData as $delSku => $categories) {
                 $productId = $this->skuProcessor->getNewSku($delSku)['entity_id'];
                 $delProductId[] = $productId;
 
                 foreach (array_keys($categories) as $categoryId) {
-                    $categoriesIn[] = ['product_id' => $productId, 'category_id' => $categoryId, 'position' => 1];
+                    $categoriesIn[] = [
+                        'product_id' => $productId,
+                        'category_id' => $categoryId,
+                        'position' => $position
+                    ];
                 }
             }
             if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
