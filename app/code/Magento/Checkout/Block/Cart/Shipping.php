@@ -27,7 +27,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     private $serializer;
     
     /**
-     * @var \Magento\Checkout\Block\Cart\Helper\ConfigProvider
+     * @var \Magento\Checkout\Model\Cart\ConfigProvider
      */
     private $cartConfig;
 
@@ -39,6 +39,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param array $layoutProcessors
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param \Magento\Checkout\Model\Cart\ConfigProvider|null $cartConfig
      * @throws \RuntimeException
      */
     public function __construct(
@@ -49,7 +50,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         array $layoutProcessors = [],
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        \Magento\Checkout\Block\Cart\Helper\ConfigProvider $cartConfig = null
+        \Magento\Checkout\Model\Cart\ConfigProvider $cartConfig = null
     ) {
         $this->configProvider = $configProvider;
         $this->layoutProcessors = $layoutProcessors;
@@ -58,7 +59,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->cartConfig = $cartConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Checkout\Block\Cart\Helper\ConfigProvider::class);
+            ->get(\Magento\Checkout\Model\Cart\ConfigProvider::class);
     }
 
     /**

@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Checkout\Block\Cart\Helper;
+namespace Magento\Checkout\Model\Cart;
 
+/**
+ * Provides the checkout configuration.
+ *
+ * @api
+ */
 class ConfigProvider
 {
     /**
@@ -13,15 +19,21 @@ class ConfigProvider
      */
     private $configProvider;
     
+    /** @var \Magento\Framework\Serialize\SerializerInterface */
+    private $serializer;
+    
     /**
      * Config constructor.
      *
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      */
     public function __construct(
-        \Magento\Checkout\Model\CompositeConfigProvider $configProvider
+        \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
+        \Magento\Framework\Serialize\SerializerInterface $serializer
     ) {
         $this->configProvider = $configProvider;
+        $this->serializer = $serializer;
     }
     
     /**
@@ -36,10 +48,12 @@ class ConfigProvider
     }
     
     /**
+     * Retrieve checkout serialized configuration
+     *
      * @return bool|string
      */
     public function getSerializedCheckoutConfig()
     {
-        return json_encode($this->getCheckoutConfig(), JSON_HEX_TAG);
+        return $this->serializer->serialize($this->getCheckoutConfig());
     }
 }

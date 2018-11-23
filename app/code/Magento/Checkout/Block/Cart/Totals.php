@@ -39,18 +39,24 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $layoutProcessors;
     
     /**
-     * @var \Magento\Checkout\Block\Cart\Helper\ConfigProvider
+     * @var \Magento\Checkout\Model\Cart\ConfigProvider
      */
-    protected $cartConfig;
+    private $cartConfig;
+    
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\Config $salesConfig
-     * @param \Magento\Checkout\Block\Cart\Helper\Config $cartConfig
      * @param array $layoutProcessors
      * @param array $data
+     * @param \Magento\Checkout\Model\Cart\ConfigProvider $cartConfig
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -60,14 +66,17 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Sales\Model\Config $salesConfig,
         array $layoutProcessors = [],
         array $data = [],
-        \Magento\Checkout\Block\Cart\Helper\ConfigProvider $cartConfig = null
+        \Magento\Checkout\Model\Cart\ConfigProvider $cartConfig = null,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->_salesConfig = $salesConfig;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
         $this->layoutProcessors = $layoutProcessors;
         $this->cartConfig = $cartConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Checkout\Block\Cart\Helper\ConfigProvider::class);
+            ->get(\Magento\Checkout\Model\Cart\ConfigProvider::class);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);;
     }
 
     /**
@@ -79,7 +88,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
             $this->jsLayout = $processor->process($this->jsLayout);
         }
 
-        return json_encode($this->jsLayout, JSON_HEX_TAG);
+        return $this->serializer->serialize($this->jsLayout);
     }
 
     /**
