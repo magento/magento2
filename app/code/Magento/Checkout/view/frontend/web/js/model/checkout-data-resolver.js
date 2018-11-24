@@ -218,16 +218,31 @@ define([
          * Apply resolved billing address to quote
          */
         applyBillingAddress: function () {
-            var shippingAddress;
+            var shippingAddress,
+                isBillingAddressInitialized;
 
             if (quote.billingAddress()) {
                 selectBillingAddress(quote.billingAddress());
 
                 return;
             }
+
+            if (quote.isVirtual()) {
+                isBillingAddressInitialized = addressList.some(function (addrs) {
+                    if (addrs.isDefaultBilling()) {
+                        selectBillingAddress(addrs);
+
+                        return true;
+                    }
+
+                    return false;
+                });
+            }
+
             shippingAddress = quote.shippingAddress();
 
-            if (shippingAddress &&
+            if (!isBillingAddressInitialized &&
+                shippingAddress &&
                 shippingAddress.canUseForBilling() &&
                 (shippingAddress.isDefaultShipping() || !quote.isVirtual())
             ) {

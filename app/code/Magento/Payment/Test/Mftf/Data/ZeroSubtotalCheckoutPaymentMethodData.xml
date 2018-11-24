@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ZeroSubtotalCheckoutPaymentMethodConfig" type="zero_subtotal_checkout_payment_method">
+        <requiredEntity type="active">Active</requiredEntity>
+        <requiredEntity type="order_status">OrderStatusProcessing</requiredEntity>
+    </entity>
+
+    <entity name="Active" type="active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="OrderStatusProcessing" type="order_status">
+        <data key="value">processing</data>
+    </entity>
+    <entity name="OrderStatusPending" type="order_status">
+        <data key="value">pending</data>
+    </entity>
+
+    <entity name="ZeroSubtotalCheckoutPaymentMethodDefault" type="zero_subtotal_checkout_payment_method">
+        <requiredEntity type="active">Active</requiredEntity>
+        <requiredEntity type="order_status">OrderStatusPending</requiredEntity>
+    </entity>
+</entities>
