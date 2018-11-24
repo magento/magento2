@@ -587,10 +587,13 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             $routePath = $this->_getActionPath();
             if ($this->_getRouteParams()) {
                 foreach ($this->_getRouteParams() as $key => $value) {
-                    if ($value === null || false === $value || '' === $value || !is_scalar($value)) {
+                    if ($value === null || false === $value || !is_scalar($value)) {
                         continue;
                     }
                     $routePath .= $key . '/' . $value . '/';
+                    if ('' !== $value) {
+                        $routePath .= '/';                        
+                    }
                 }
             }
             $this->setData('route_path', $routePath);
