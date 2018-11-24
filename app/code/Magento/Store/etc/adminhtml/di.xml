@@ -16,4 +16,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Store\App\FrontController\Plugin\DefaultStore">
+        <arguments>
+            <argument name="scopeCode" xsi:type="const">Magento\Store\Model\Store::ADMIN_CODE</argument>
+        </arguments>
+    </type>
 </config>
