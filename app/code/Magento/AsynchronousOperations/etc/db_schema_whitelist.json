@@ -4,14 +4,19 @@
             "id": true,
             "uuid": true,
             "user_id": true,
+            "user_type": true,
             "description": true,
             "operation_count": true,
             "start_time": true
         },
+        "index": {
+            "MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID": true,
+            "MAGENTO_BULK_USER_ID": true
+        },
         "constraint": {
             "PRIMARY": true,
-            "MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID": true,
-            "MAGENTO_BULK_UUID": true
+            "MAGENTO_BULK_UUID": true,
+            "MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID": true
         }
     },
     "magento_operation": {
