@@ -32,6 +32,7 @@
         <data key="vat_id">vatData</data>
         <data key="default_shipping">true</data>
         <data key="default_billing">true</data>
+        <data key="region_qty">66</data>
     </entity>
     <entity name="US_Address_TX" type="address">
         <data key="firstname">John</data>
