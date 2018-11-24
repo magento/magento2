@@ -141,10 +141,10 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
-        return $this->_redirect('catalog/product_compare');
+        return $this->resultRedirectFactory->create()->setPath('catalog/product_compare');
     }
 }
