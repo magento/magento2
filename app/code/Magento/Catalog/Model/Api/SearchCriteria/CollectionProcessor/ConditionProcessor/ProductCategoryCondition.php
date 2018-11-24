@@ -102,7 +102,7 @@ class ProductCategoryCondition implements CustomConditionInterface
             }
         }
 
-        return array_unique(array_merge($categoryIds, ...$childCategoryIds));
+        return array_map('intval', array_unique(array_merge($categoryIds, ...$childCategoryIds)));
     }
 
     /**

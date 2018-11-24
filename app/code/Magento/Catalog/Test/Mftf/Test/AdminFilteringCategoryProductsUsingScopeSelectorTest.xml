@@ -113,6 +113,10 @@
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
                stepKey="clickCategoryName"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection"/>
+        <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
+                      stepKey="grabTextFromCategory"/>
+        <assertRegExp expected="/\(4\)$/" expectedType="string" actual="$grabTextFromCategory" actualType="variable"
+                      message="wrongCountProductOnAllStoreViews" stepKey="checkCountProducts"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct0.name$$)}}"
              userInput="$$createProduct0.name$$" stepKey="seeProductName"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct1.name$$)}}"
@@ -133,6 +137,10 @@
                                stepKey="waitForPopup1"/>
         <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}" stepKey="clickActionAccept"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad2"/>
+        <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
+                      stepKey="grabTextFromCategory1"/>
+        <assertRegExp expected="/\(2\)$/" expectedType="string" actual="$grabTextFromCategory1" actualType="variable"
+                      message="wrongCountProductOnWebsite1" stepKey="checkCountProducts1"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection1"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct1.name$$)}}"
              userInput="$$createProduct1.name$$" stepKey="seeProductName4"/>
@@ -143,7 +151,7 @@
         <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
                  userInput="$$createProduct2.name$$" stepKey="dontSeeProductName1"/>
 
-        <!-- Step 4: Set scope selector to Website2 ( StopreView for Website 2) -->
+        <!-- Step 4: Set scope selector to Website2 ( StoreView for Website 2) -->
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewDropdownToggle}}"
                stepKey="clickStoresList1"/>
@@ -156,6 +164,10 @@
                stepKey="clickActionAccept1"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad4"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection2"/>
+        <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
+                      stepKey="grabTextFromCategory2"/>
+        <assertRegExp expected="/\(2\)$/" expectedType="string" actual="$grabTextFromCategory2" actualType="variable"
+                      message="wrongCountProductOnWebsite2" stepKey="checkCountProducts2"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
              userInput="$$createProduct2.name$$" stepKey="seeProductName6"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct12.name$$)}}"
