@@ -7,6 +7,7 @@ namespace Magento\Downloadable\Model\Link;
 
 use Magento\Downloadable\Api\LinkRepositoryInterface as LinkRepository;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Class ReadHandler
@@ -21,9 +22,16 @@ class ReadHandler implements ExtensionInterface
     /**
      * @param LinkRepository $linkRepository
      */
-    public function __construct(LinkRepository $linkRepository)
+
+    /**
+     * @var RequestInterface
+     */
+    protected $request;
+
+    public function __construct(LinkRepository $linkRepository,RequestInterface $request)
     {
         $this->linkRepository = $linkRepository;
+        $this->request = $request;
     }
 
     /**
@@ -40,7 +48,8 @@ class ReadHandler implements ExtensionInterface
         }
         $entityExtension = $entity->getExtensionAttributes();
         $links = $this->linkRepository->getLinksByProduct($entity);
-        if ($links) {
+        $downloadable = $this->request->getPost('downloadable');
+        if ($links && isset($downloadable['link']) && is_array($downloadable['link'])) {
             $entityExtension->setDownloadableProductLinks($links);
         }
         $entity->setExtensionAttributes($entityExtension);
