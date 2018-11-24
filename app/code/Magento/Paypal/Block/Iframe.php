@@ -44,7 +44,7 @@ class Iframe extends \Magento\Payment\Block\Form
     /**
      * @var string
      */
-    protected $_template = 'hss/js.phtml';
+    protected $_template = 'Magento_Paypal::hss/js.phtml';
 
     /**
      * @var \Magento\Sales\Model\OrderFactory

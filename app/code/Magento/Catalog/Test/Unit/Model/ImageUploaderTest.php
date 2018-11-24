@@ -69,9 +69,16 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Allowed extensions
      *
-     * @var string
+     * @var array
      */
     private $allowedExtensions;
+
+    /**
+     * Allowed mime types
+     *
+     * @var array
+     */
+    private $allowedMimeTypes;
 
     protected function setUp()
     {
@@ -97,6 +104,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         $this->baseTmpPath = 'base/tmp/';
         $this->basePath =  'base/real/';
         $this->allowedExtensions = ['.jpg'];
+        $this->allowedMimeTypes = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
 
         $this->imageUploader =
             new \Magento\Catalog\Model\ImageUploader(
@@ -107,13 +115,20 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
                 $this->loggerMock,
                 $this->baseTmpPath,
                 $this->basePath,
-                $this->allowedExtensions
+                $this->allowedExtensions,
+                $this->allowedMimeTypes
             );
     }
 
     public function testSaveFileToTmpDir()
     {
         $fileId = 'file.jpg';
+        $allowedMimeTypes = [
+            'image/jpg',
+            'image/jpeg',
+            'image/gif',
+            'image/png'
+        ];
         /** @var \Magento\MediaStorage\Model\File\Uploader|\PHPUnit_Framework_MockObject_MockObject $uploader */
         $uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
         $this->uploaderFactoryMock->expects($this->once())->method('create')->willReturn($uploader);
@@ -123,6 +138,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->basePath);
         $uploader->expects($this->once())->method('save')->with($this->basePath)
             ->willReturn(['tmp_name' => $this->baseTmpPath, 'file' => $fileId, 'path' => $this->basePath]);
+        $uploader->expects($this->atLeastOnce())->method('checkMimeType')->with($allowedMimeTypes)->willReturn(true);
         $storeMock = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
             ['getBaseUrl']

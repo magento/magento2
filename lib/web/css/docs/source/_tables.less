@@ -677,7 +677,7 @@
 .example-table-5 {
     .lib-table();
     .lib-table-background-color(
-        @_table-background-color: #fff,
+        @_table-background-color: @color-white,
         @_table-head-background-color: #ccf,
         @_table-foot-background-color: #cff,
         @_table-td-background-color: #fcc,
@@ -1253,7 +1253,7 @@
     .lib-table();
     .lib-table-striped(
         @_stripped-background-color: #ffc,
-        @_stripped-color: #000,
+        @_stripped-color: @color-black,
         @_stripped-direction: horizontal,
         @_stripped-highlight: even
     );

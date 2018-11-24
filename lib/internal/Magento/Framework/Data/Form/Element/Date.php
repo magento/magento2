@@ -12,7 +12,6 @@
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
-use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class Date extends AbstractElement
@@ -147,7 +146,7 @@ class Date extends AbstractElement
      */
     public function getElementHtml()
     {
-        $this->addClass('admin__control-text  input-text');
+        $this->addClass('admin__control-text input-text input-date');
         $dateFormat = $this->getDateFormat() ?: $this->getFormat();
         $timeFormat = $this->getTimeFormat();
         if (empty($dateFormat)) {

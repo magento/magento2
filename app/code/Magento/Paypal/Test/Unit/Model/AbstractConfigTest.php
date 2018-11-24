@@ -273,6 +273,9 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
         $this->config->isMethodAvailable($methodCode);
     }
 
+    /**
+     * @return array
+     */
     public function isMethodAvailableDataProvider()
     {
         return [

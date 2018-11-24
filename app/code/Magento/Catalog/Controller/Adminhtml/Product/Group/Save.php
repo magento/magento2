@@ -29,12 +29,12 @@ class Save extends \Magento\Backend\App\Action
         );
 
         if ($model->itemExists()) {
-            $this->messageManager->addError(__('A group with the same name already exists.'));
+            $this->messageManager->addErrorMessage(__('A group with the same name already exists.'));
         } else {
             try {
                 $model->save();
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while saving this group.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while saving this group.'));
             }
         }
     }

@@ -47,6 +47,16 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     const MEDIA_CALLBACK_ACTION = 'swatches/ajax/media';
 
     /**
+     * Name of swatch image for json config
+     */
+    const SWATCH_IMAGE_NAME = 'swatchImage';
+
+    /**
+     * Name of swatch thumbnail for json config
+     */
+    const SWATCH_THUMBNAIL_NAME = 'swatchThumb';
+
+    /**
      * @var Product
      */
     protected $product;
@@ -468,5 +478,23 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         } else {
             return [];
         }
+    }
+
+    /**
+     * Get Swatch image size config data.
+     *
+     * @return string
+     */
+    public function getJsonSwatchSizeConfig(): string
+    {
+        $imageConfig = $this->swatchMediaHelper->getImageConfig();
+        $sizeConfig = [];
+
+        $sizeConfig[self::SWATCH_IMAGE_NAME]['width'] = $imageConfig[Swatch::SWATCH_IMAGE_NAME]['width'];
+        $sizeConfig[self::SWATCH_IMAGE_NAME]['height'] = $imageConfig[Swatch::SWATCH_IMAGE_NAME]['height'];
+        $sizeConfig[self::SWATCH_THUMBNAIL_NAME]['height'] = $imageConfig[Swatch::SWATCH_THUMBNAIL_NAME]['height'];
+        $sizeConfig[self::SWATCH_THUMBNAIL_NAME]['width'] = $imageConfig[Swatch::SWATCH_THUMBNAIL_NAME]['width'];
+
+        return $this->jsonEncoder->encode($sizeConfig);
     }
 }

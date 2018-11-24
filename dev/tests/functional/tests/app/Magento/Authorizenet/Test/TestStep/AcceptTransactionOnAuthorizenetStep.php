@@ -144,6 +144,7 @@ class AcceptTransactionOnAuthorizenetStep implements TestStepInterface
     public function run()
     {
         $this->assertInvoiceStatusInOrdersGrid->processAssert(
+            $this->salesOrder,
             $this->salesOrderView,
             $this->orderBeforeAccept['invoiceStatus'],
             $this->orderId

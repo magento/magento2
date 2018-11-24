@@ -135,6 +135,9 @@ class CategoryProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function getCategoryByIdDataProvider()
     {
         return [

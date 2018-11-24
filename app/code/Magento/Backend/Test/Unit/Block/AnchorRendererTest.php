@@ -141,6 +141,9 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function targetDataProvider()
     {
         return [

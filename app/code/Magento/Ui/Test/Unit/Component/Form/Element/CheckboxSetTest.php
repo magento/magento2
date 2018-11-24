@@ -22,6 +22,9 @@ class CheckboxSetTest extends AbstractElementTest
         return CheckboxSet::class;
     }
 
+    /**
+     * @return mixed|void
+     */
     public function testGetComponentName()
     {
         $this->assertSame(CheckboxSet::NAME, $this->getModel()->getComponentName());

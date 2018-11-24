@@ -35,6 +35,9 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $link->getLinkAttributes());
     }
 
+    /**
+     * @return array
+     */
     public function getLinkAttributesDataProvider()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

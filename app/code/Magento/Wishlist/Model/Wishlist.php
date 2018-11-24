@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -215,9 +216,11 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     public function getName()
     {
         $name = $this->_getData('name');
-        if (!strlen($name)) {
+
+        if ($name === null || !strlen($name)) {
             return $this->_wishlistData->getDefaultWishlistName();
         }
+
         return $name;
     }
 
@@ -579,7 +582,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getItemsCount()
     {
-        return $this->getItemCollection()->getSize();
+        return $this->getItemCollection()->count();
     }
 
     /**
@@ -637,6 +640,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         $item = null;
         if ($itemId instanceof Item) {
             $item = $itemId;
+            $itemId = $item->getId();
         } else {
             $item = $this->getItem((int)$itemId);
         }

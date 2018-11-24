@@ -138,6 +138,9 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->model->canShowBlock());
     }
 
+    /**
+     * @return array
+     */
     public function canShowBlockDataProvider()
     {
         return [

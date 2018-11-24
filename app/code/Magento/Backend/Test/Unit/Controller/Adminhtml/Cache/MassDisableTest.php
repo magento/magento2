@@ -155,7 +155,7 @@ class MassDisableTest extends \PHPUnit\Framework\TestCase
             ->willReturn(['someCache']);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Specified cache type(s) don\'t exist: someCache')
             ->willReturnSelf();
 
@@ -175,7 +175,7 @@ class MassDisableTest extends \PHPUnit\Framework\TestCase
             ->willThrowException($exception);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, 'An error occurred while disabling cache.')
             ->willReturnSelf();
 
@@ -215,7 +215,7 @@ class MassDisableTest extends \PHPUnit\Framework\TestCase
             ->method('persist');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('1 cache type(s) disabled.')
             ->willReturnSelf();
 

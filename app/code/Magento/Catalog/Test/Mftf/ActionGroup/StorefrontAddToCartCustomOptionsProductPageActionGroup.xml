@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!--Click Add to Cart button in storefront product page-->
+    <actionGroup name="StorefrontAddToCartCustomOptionsProductPageActionGroup">
+        <arguments>
+            <argument name="productName"/>
+        </arguments>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see selector="{{StorefrontProductPageSection.successMsg}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

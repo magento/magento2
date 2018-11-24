@@ -76,7 +76,7 @@ class CleanStaticFilesTest extends \PHPUnit\Framework\TestCase
             ->with('clean_static_files_cache_after');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('The static files cache has been cleaned.');
 
         $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)

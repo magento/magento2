@@ -28,6 +28,9 @@ class BackendModelTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($model, $object);
     }
 
+    /**
+     * @return array
+     */
     public function adminSessionLifetimeDataProvider()
     {
         return [

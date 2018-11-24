@@ -5,12 +5,10 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\EntityManager\EventManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
@@ -20,6 +18,7 @@ use Magento\Eav\Model\Entity\Attribute\Group;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Eav\Model\Entity\Type as EntityType;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -87,6 +86,11 @@ class EavTest extends AbstractModifierTest
      * @var EntityType|\PHPUnit_Framework_MockObject_MockObject
      */
     private $entityTypeMock;
+
+    /**
+     * @var AttributeCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeCollectionFactoryMock;
 
     /**
      * @var AttributeCollection|\PHPUnit_Framework_MockObject_MockObject
@@ -226,6 +230,10 @@ class EavTest extends AbstractModifierTest
         $this->entityTypeMock = $this->getMockBuilder(EntityType::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->attributeCollectionFactoryMock = $this->getMockBuilder(AttributeCollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->attributeCollectionMock = $this->getMockBuilder(AttributeCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -332,7 +340,7 @@ class EavTest extends AbstractModifierTest
         $this->eavAttributeMock->expects($this->any())
             ->method('load')
             ->willReturnSelf();
-        
+
         $this->eav =$this->getModel();
         $this->objectManager->setBackwardCompatibleProperty(
             $this->eav,
@@ -361,7 +369,8 @@ class EavTest extends AbstractModifierTest
             'attributeRepository' => $this->attributeRepositoryMock,
             'arrayManager' => $this->arrayManagerMock,
             'eavAttributeFactory' => $this->eavAttributeFactoryMock,
-            '_eventManager' => $this->eventManagerMock
+            '_eventManager' => $this->eventManagerMock,
+            'attributeCollectionFactory' => $this->attributeCollectionFactoryMock
         ]);
     }
 
@@ -375,84 +384,68 @@ class EavTest extends AbstractModifierTest
             ]
         ];
 
-        $this->locatorMock->expects($this->any())
-            ->method('getProduct')
+        $this->attributeCollectionFactoryMock->expects($this->once())->method('create')
+            ->willReturn($this->attributeCollectionMock);
+
+        $this->attributeCollectionMock->expects($this->any())->method('getItems')
+            ->willReturn([
+                $this->eavAttributeMock
+            ]);
+
+        $this->locatorMock->expects($this->any())->method('getProduct')
             ->willReturn($this->productMock);
 
-        $this->productMock->expects($this->any())
-            ->method('getId')
+        $this->productMock->expects($this->any())->method('getId')
             ->willReturn(1);
-        $this->productMock->expects($this->once())
-            ->method('getAttributeSetId')
+        $this->productMock->expects($this->once())->method('getAttributeSetId')
             ->willReturn(4);
-        $this->productMock->expects($this->once())
-            ->method('getData')
+        $this->productMock->expects($this->once())->method('getData')
             ->with(ProductAttributeInterface::CODE_PRICE)->willReturn('19.9900');
 
-        $this->searchCriteriaBuilderMock->expects($this->any())
-            ->method('addFilter')
+        $this->searchCriteriaBuilderMock->expects($this->any())->method('addFilter')
             ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects($this->any())
-            ->method('create')
+        $this->searchCriteriaBuilderMock->expects($this->any())->method('create')
             ->willReturn($this->searchCriteriaMock);
-        $this->attributeGroupRepositoryMock->expects($this->any())
-            ->method('getList')
+        $this->attributeGroupRepositoryMock->expects($this->any())->method('getList')
             ->willReturn($this->searchCriteriaMock);
-        $this->searchCriteriaMock->expects($this->once())
-            ->method('getItems')
+        $this->searchCriteriaMock->expects($this->once())->method('getItems')
             ->willReturn([$this->attributeGroupMock]);
-        $this->sortOrderBuilderMock->expects($this->once())
-            ->method('setField')
+        $this->sortOrderBuilderMock->expects($this->once())->method('setField')
             ->willReturnSelf();
-        $this->sortOrderBuilderMock->expects($this->once())
-            ->method('setAscendingDirection')
+        $this->sortOrderBuilderMock->expects($this->once())->method('setAscendingDirection')
             ->willReturnSelf();
         $dataObjectMock = $this->createMock(\Magento\Framework\Api\AbstractSimpleObject::class);
-        $this->sortOrderBuilderMock->expects($this->once())
-            ->method('create')
+        $this->sortOrderBuilderMock->expects($this->once())->method('create')
             ->willReturn($dataObjectMock);
 
-        $this->searchCriteriaBuilderMock->expects($this->any())
-            ->method('addFilter')
+        $this->searchCriteriaBuilderMock->expects($this->any())->method('addFilter')
             ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('addSortOrder')
+        $this->searchCriteriaBuilderMock->expects($this->once())->method('addSortOrder')
             ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects($this->any())
-            ->method('create')
+        $this->searchCriteriaBuilderMock->expects($this->any())->method('create')
             ->willReturn($this->searchCriteriaMock);
 
-        $this->attributeRepositoryMock->expects($this->once())
-            ->method('getList')
+        $this->attributeRepositoryMock->expects($this->once())->method('getList')
             ->with($this->searchCriteriaMock)
             ->willReturn($this->searchResultsMock);
-        $this->eavAttributeMock->expects($this->any())
-            ->method('getAttributeGroupCode')
+        $this->eavAttributeMock->expects($this->any())->method('getAttributeGroupCode')
             ->willReturn('product-details');
-        $this->eavAttributeMock->expects($this->once())
-            ->method('getApplyTo')
+        $this->eavAttributeMock->expects($this->once())->method('getApplyTo')
             ->willReturn([]);
-        $this->eavAttributeMock->expects($this->once())
-            ->method('getFrontendInput')
+        $this->eavAttributeMock->expects($this->once())->method('getFrontendInput')
             ->willReturn('price');
-        $this->eavAttributeMock->expects($this->any())
-            ->method('getAttributeCode')
+        $this->eavAttributeMock->expects($this->any())->method('getAttributeCode')
             ->willReturn(ProductAttributeInterface::CODE_PRICE);
-        $this->searchResultsMock->expects($this->once())
-            ->method('getItems')
+        $this->searchResultsMock->expects($this->once())->method('getItems')
             ->willReturn([$this->eavAttributeMock]);
 
-        $this->storeMock->expects(($this->once()))
-            ->method('getBaseCurrencyCode')
+        $this->storeMock->expects(($this->once()))->method('getBaseCurrencyCode')
             ->willReturn('en_US');
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
+        $this->storeManagerMock->expects($this->once())->method('getStore')
             ->willReturn($this->storeMock);
-        $this->currencyMock->expects($this->once())
-            ->method('toCurrency')
+        $this->currencyMock->expects($this->once())->method('toCurrency')
             ->willReturn('19.99');
-        $this->currencyLocaleMock->expects($this->once())
-            ->method('getCurrency')
+        $this->currencyLocaleMock->expects($this->once())->method('getCurrency')
             ->willReturn($this->currencyMock);
 
         $this->assertEquals($sourceData, $this->eav->modifyData([]));
@@ -463,15 +456,18 @@ class EavTest extends AbstractModifierTest
      * @param bool $productRequired
      * @param string|null $attrValue
      * @param array $expected
+     * @param bool $locked
+     * @return void
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      * @dataProvider setupAttributeMetaDataProvider
      */
     public function testSetupAttributeMetaDefaultAttribute(
         $productId,
-        $productRequired,
+        bool $productRequired,
         $attrValue,
-        $expected
+        array $expected,
+        bool $locked = false
     ) {
         $configPath = 'arguments/data/config';
         $groupCode = 'product-details';
@@ -491,41 +487,26 @@ class EavTest extends AbstractModifierTest
             ['value' => ['test1', 'test2'], 'label' => 'Array label']
         ];
 
-        $this->productMock->method('getId')
-            ->willReturn($productId);
-
-        $this->productAttributeMock->method('getIsRequired')
-            ->willReturn($productRequired);
-
-        $this->productAttributeMock->method('getDefaultValue')
-            ->willReturn('required_value');
-
-        $this->productAttributeMock->method('getAttributeCode')
-            ->willReturn('code');
-
-        $this->productAttributeMock->method('getValue')
-            ->willReturn('value');
+        $this->productMock->method('getId')->willReturn($productId);
+        $this->productMock->expects($this->any())->method('isLockedAttribute')->willReturn($locked);
+        $this->productAttributeMock->method('getIsRequired')->willReturn($productRequired);
+        $this->productAttributeMock->method('getDefaultValue')->willReturn('required_value');
+        $this->productAttributeMock->method('getAttributeCode')->willReturn('code');
+        $this->productAttributeMock->method('getValue')->willReturn('value');
 
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $attributeMock->method('getValue')
-            ->willReturn($attrValue);
+        $attributeMock->method('getValue')->willReturn($attrValue);
+        $this->productMock->method('getCustomAttribute')->willReturn($attributeMock);
+        $this->eavAttributeMock->method('usesSource')->willReturn(true);
 
-        $this->productMock->method('getCustomAttribute')
-            ->willReturn($attributeMock);
-        $this->eavAttributeMock->method('usesSource')
-            ->willReturn(true);
+        $attributeSource = $this->getMockBuilder(SourceInterface::class)->getMockForAbstractClass();
+        $attributeSource->method('getAllOptions')->willReturn($attributeOptions);
 
-        $attributeSource = $this->getMockBuilder(SourceInterface::class)
-            ->getMockForAbstractClass();
-        $attributeSource->method('getAllOptions')
-            ->willReturn($attributeOptions);
-
-        $this->eavAttributeMock->method('getSource')
-            ->willReturn($attributeSource);
+        $this->eavAttributeMock->method('getSource')->willReturn($attributeSource);
 
         $this->arrayManagerMock->method('set')
             ->with(
@@ -535,24 +516,22 @@ class EavTest extends AbstractModifierTest
             )
             ->willReturn($expected);
 
-        $this->arrayManagerMock->expects($this->once())
+        $this->arrayManagerMock->expects($this->any())
             ->method('merge')
             ->with(
                 $this->anything(),
                 $this->anything(),
                 $this->callback(
                     function ($value) use ($attributeOptionsExpected) {
-                        return $value['options'] === $attributeOptionsExpected;
+                        return isset($value['options']) ? $value['options'] === $attributeOptionsExpected : true;
                     }
                 )
             )
             ->willReturn($expected);
 
-        $this->arrayManagerMock->method('get')
-            ->willReturn([]);
+        $this->arrayManagerMock->method('get')->willReturn([]);
 
-        $this->arrayManagerMock->method('exists')
-            ->willReturn(true);
+        $this->arrayManagerMock->method('exists')->willReturn(true);
 
         $this->assertEquals(
             $expected,
@@ -562,84 +541,105 @@ class EavTest extends AbstractModifierTest
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setupAttributeMetaDataProvider()
     {
         return [
             'default_null_prod_not_new_and_required' => [
-                'productId' => 1,
-                'productRequired' => true,
-                'attrValue' => 'val',
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => true,
-                    'notice' => null,
-                    'default' => null,
-                    'label' => null,
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0
+                'productId'         => 1,
+                'productRequired'   => true,
+                'attrValue'         => 'val',
+                'expected'          => [
+                    'dataType'      => null,
+                    'formElement'   => null,
+                    'visible'       => null,
+                    'required'      => true,
+                    'notice'        => null,
+                    'default'       => null,
+                    'label'         => null,
+                    'code'          => 'code',
+                    'source'        => 'product-details',
+                    'scopeLabel'    => '',
+                    'globalScope'   => false,
+                    'sortOrder'     => 0
                     ],
                 ],
+            'default_null_prod_not_new_locked_and_required' => [
+                'productId'         => 1,
+                'productRequired'   => true,
+                'attrValue'         => 'val',
+                'expected'          => [
+                    'dataType'      => null,
+                    'formElement'   => null,
+                    'visible'       => null,
+                    'required'      => true,
+                    'notice'        => null,
+                    'default'       => null,
+                    'label'         => null,
+                    'code'          => 'code',
+                    'source'        => 'product-details',
+                    'scopeLabel'    => '',
+                    'globalScope'   => false,
+                    'sortOrder'     => 0,
+                ],
+                'locked' => true,
+            ],
             'default_null_prod_not_new_and_not_required' => [
-                'productId' => 1,
-                'productRequired' => false,
-                'attrValue' => 'val',
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => false,
-                    'notice' => null,
-                    'default' => null,
-                    'label' => null,
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0
+                'productId'         => 1,
+                'productRequired'   => false,
+                'attrValue'         => 'val',
+                'expected'          => [
+                    'dataType'      => null,
+                    'formElement'   => null,
+                    'visible'       => null,
+                    'required'      => false,
+                    'notice'        => null,
+                    'default'       => null,
+                    'label'         => null,
+                    'code'          => 'code',
+                    'source'        => 'product-details',
+                    'scopeLabel'    => '',
+                    'globalScope'   => false,
+                    'sortOrder'     => 0
                     ],
                 ],
             'default_null_prod_new_and_not_required' => [
-                'productId' => null,
-                'productRequired' => false,
-                'attrValue' => null,
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => false,
-                    'notice' => null,
-                    'default' => 'required_value',
-                    'label' => null,
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0
+                'productId'         => null,
+                'productRequired'   => false,
+                'attrValue'         => null,
+                'expected'          => [
+                    'dataType'      => null,
+                    'formElement'   => null,
+                    'visible'       => null,
+                    'required'      => false,
+                    'notice'        => null,
+                    'default'       => 'required_value',
+                    'label'         => null,
+                    'code'          => 'code',
+                    'source'        => 'product-details',
+                    'scopeLabel'    => '',
+                    'globalScope'   => false,
+                    'sortOrder'     => 0
                 ],
             ],
             'default_null_prod_new_and_required' => [
-                'productId' => null,
-                'productRequired' => false,
-                'attrValue' => null,
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => false,
-                    'notice' => null,
-                    'default' => 'required_value',
-                    'label' => null,
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0
+                'productId'         => null,
+                'productRequired'   => false,
+                'attrValue'         => null,
+                'expected'          => [
+                    'dataType'      => null,
+                    'formElement'   => null,
+                    'visible'       => null,
+                    'required'      => false,
+                    'notice'        => null,
+                    'default'       => 'required_value',
+                    'label'         => null,
+                    'code'          => 'code',
+                    'source'        => 'product-details',
+                    'scopeLabel'    => '',
+                    'globalScope'   => false,
+                    'sortOrder'     => 0
                 ],
             ]
         ];

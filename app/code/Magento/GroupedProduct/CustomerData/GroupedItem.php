@@ -8,6 +8,10 @@ namespace Magento\GroupedProduct\CustomerData;
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 use Magento\Checkout\CustomerData\DefaultItem;
 
+/**
+ * @deprecated moved to model because of class refactoring
+ * @see \Magento\GroupedProduct\Model\Product\Configuration\Item\ItemProductResolver
+ */
 class GroupedItem extends DefaultItem
 {
     /**

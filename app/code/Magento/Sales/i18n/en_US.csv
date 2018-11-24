@@ -686,17 +686,9 @@ General,General
 "Allow Reorder","Allow Reorder"
 "Invoice and Packing Slip Design","Invoice and Packing Slip Design"
 "Logo for PDF Print-outs (200x50)","Logo for PDF Print-outs (200x50)"
-"
-                        Your default logo will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If your pdf image is distorted, try to use larger file-size image.
-                    ","
-                        Your default logo will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If your pdf image is distorted, try to use larger file-size image.
-                    "
+"Your default logo will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If your pdf image is distorted, try to use larger file-size image.","Your default logo will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If your pdf image is distorted, try to use larger file-size image."
 "Logo for HTML Print View","Logo for HTML Print View"
-"
-                        Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)
-                    ","
-                        Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)
-                    "
+"Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)","Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)"
 Address,Address
 "Minimum Order Amount","Minimum Order Amount"
 Enable,Enable

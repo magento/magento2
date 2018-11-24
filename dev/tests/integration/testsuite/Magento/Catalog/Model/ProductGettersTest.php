@@ -217,7 +217,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         $expected = [
             'Option 2',
             'Option 3',
-            'Option 4 &quot;!@#$%^&amp;*'
+            'Option 4 "!@#$%^&*'
         ];
         self::assertEquals(
             $expected,

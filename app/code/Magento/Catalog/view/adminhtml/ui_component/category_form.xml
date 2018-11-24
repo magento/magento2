@@ -42,7 +42,7 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <fieldset name="general">
+    <fieldset name="general" sortOrder="5">
         <settings>
             <collapsible>false</collapsible>
             <label/>
@@ -256,7 +256,6 @@
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
                     <item name="breakLine" xsi:type="boolean">true</item>
-                    <item name="required" xsi:type="boolean">true</item>
                 </item>
             </argument>
             <field name="available_sort_by" formElement="multiselect">
@@ -297,7 +296,6 @@
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
                     <item name="breakLine" xsi:type="boolean">true</item>
-                    <item name="required" xsi:type="boolean">true</item>
                 </item>
             </argument>
             <field name="default_sort_by" formElement="select">

@@ -5,8 +5,10 @@
  */
 namespace Magento\Config\Model;
 
+use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Config\Model\Config\Structure\Element\Group;
 use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Backend config model
@@ -81,6 +83,11 @@ class Config extends \Magento\Framework\DataObject
     protected $_storeManager;
 
     /**
+     * @var Config\Reader\Source\Deployed\SettingChecker
+     */
+    private $settingChecker;
+
+    /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Config\Model\Config\Structure $configStructure
@@ -88,6 +95,7 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Config\Model\Config\Loader $configLoader
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Config\Reader\Source\Deployed\SettingChecker|null $settingChecker
      * @param array $data
      */
     public function __construct(
@@ -98,6 +106,7 @@ class Config extends \Magento\Framework\DataObject
         \Magento\Config\Model\Config\Loader $configLoader,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        SettingChecker $settingChecker = null,
         array $data = []
     ) {
         parent::__construct($data);
@@ -108,6 +117,7 @@ class Config extends \Magento\Framework\DataObject
         $this->_configLoader = $configLoader;
         $this->_configValueFactory = $configValueFactory;
         $this->_storeManager = $storeManager;
+        $this->settingChecker = $settingChecker ?: ObjectManager::getInstance()->get(SettingChecker::class);
     }
 
     /**
@@ -227,13 +237,14 @@ class Config extends \Magento\Framework\DataObject
      * Get field path
      *
      * @param Field $field
+     * @param string $fieldId Need for support of clone_field feature
      * @param array &$oldConfig Need for compatibility with _processGroup()
      * @param array &$extraOldGroups Need for compatibility with _processGroup()
      * @return string
      */
-    private function getFieldPath(Field $field, array &$oldConfig, array &$extraOldGroups): string
+    private function getFieldPath(Field $field, string $fieldId, array &$oldConfig, array &$extraOldGroups): string
     {
-        $path = $field->getGroupPath() . '/' . $field->getId();
+        $path = $field->getGroupPath() . '/' . $fieldId;
 
         /**
          * Look for custom defined field path
@@ -293,7 +304,7 @@ class Config extends \Magento\Framework\DataObject
         if (isset($groupData['fields'])) {
             foreach ($groupData['fields'] as $fieldId => $fieldData) {
                 $field = $this->getField($sectionId, $groupId, $fieldId);
-                $path = $this->getFieldPath($field, $oldConfig, $extraOldGroups);
+                $path = $this->getFieldPath($field, $fieldId, $oldConfig, $extraOldGroups);
                 if ($this->isValueChanged($oldConfig, $path, $fieldData)) {
                     $changedPaths[] = $path;
                 }
@@ -330,6 +341,7 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Framework\DB\Transaction $deleteTransaction
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _processGroup(
         $groupId,
@@ -351,6 +363,20 @@ class Config extends \Magento\Framework\DataObject
             // use extra memory
             $fieldsetData = [];
             foreach ($groupData['fields'] as $fieldId => $fieldData) {
+                $fieldsetData[$fieldId] = $fieldData['value'] ?? null;
+            }
+
+            foreach ($groupData['fields'] as $fieldId => $fieldData) {
+                $isReadOnly = $this->settingChecker->isReadOnly(
+                    $groupPath . '/' . $fieldId,
+                    $this->getScope(),
+                    $this->getScopeCode()
+                );
+
+                if ($isReadOnly) {
+                    continue;
+                }
+
                 $field = $this->getField($sectionPath, $groupId, $fieldId);
                 /** @var \Magento\Framework\App\Config\ValueInterface $backendModel */
                 $backendModel = $field->hasBackendModel()
@@ -360,7 +386,6 @@ class Config extends \Magento\Framework\DataObject
                 if (!isset($fieldData['value'])) {
                     $fieldData['value'] = null;
                 }
-                $fieldsetData[$fieldId] = $fieldData['value'];
                 $data = [
                     'field' => $fieldId,
                     'groups' => $groups,
@@ -374,7 +399,7 @@ class Config extends \Magento\Framework\DataObject
                 $backendModel->addData($data);
                 $this->_checkSingleStoreMode($field, $backendModel);
 
-                $path = $this->getFieldPath($field, $extraOldGroups, $oldConfig);
+                $path = $this->getFieldPath($field, $fieldId, $extraOldGroups, $oldConfig);
                 $backendModel->setPath($path)->setValue($fieldData['value']);
 
                 $inherit = !empty($fieldData['inherit']);

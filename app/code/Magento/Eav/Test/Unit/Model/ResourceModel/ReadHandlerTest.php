@@ -115,6 +115,9 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->readHandler->execute('entity_type', $entityData));
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [

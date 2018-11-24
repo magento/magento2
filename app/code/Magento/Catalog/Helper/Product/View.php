@@ -113,10 +113,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $pageConfig = $resultPage->getConfig();
 
-        $title = $product->getMetaTitle();
-        if ($title) {
-            $pageConfig->getTitle()->set($title);
-        }
+        $metaTitle = $product->getMetaTitle();
+        $pageConfig->setMetaTitle($metaTitle);
+        $pageConfig->getTitle()->set($metaTitle ?: $product->getName());
 
         $keyword = $product->getMetaKeyword();
         $currentCategory = $this->_coreRegistry->registry('current_category');

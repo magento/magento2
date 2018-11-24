@@ -120,6 +120,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($aclMock, $this->session->getAcl());
     }
 
+    /**
+     * @return array
+     */
     public function refreshAclDataProvider()
     {
         return [
@@ -234,6 +237,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->session->isAllowed('resource'));
     }
 
+    /**
+     * @return array
+     */
     public function isAllowedDataProvider()
     {
         return [
@@ -254,6 +260,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($isFirstPageAfterLogin, $this->session->isFirstPageAfterLogin());
     }
 
+    /**
+     * @return array
+     */
     public function firstPageAfterLoginDataProvider()
     {
         return [

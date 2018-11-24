@@ -154,7 +154,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap([[$helperClass, $helper], [$sessionClass, $session]]);
 
         $this->messageManagerMock->expects($this->at(0))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->withConsecutive(
                 [$messages[0]],
                 [$messages[1]]

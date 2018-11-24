@@ -120,11 +120,12 @@ class ProductUrlPathGenerator
      * Generate product url key based on url_key entered by merchant or product name
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return string
+     * @return string|null
      */
     public function getUrlKey($product)
     {
-        return $product->getUrlKey() === false ? false : $this->prepareProductUrlKey($product);
+        $generatedProductUrlKey = $this->prepareProductUrlKey($product);
+        return ($product->getUrlKey() === false || empty($generatedProductUrlKey)) ? null : $generatedProductUrlKey;
     }
 
     /**

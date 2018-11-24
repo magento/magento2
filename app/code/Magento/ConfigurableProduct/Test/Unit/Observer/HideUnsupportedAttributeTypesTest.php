@@ -59,6 +59,12 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @param $popup
+     * @param string $productTab
+     *
+     * @return MockObject
+     */
     private function createRequestMock($popup, $productTab = 'variations')
     {
         $request = $this->getMockBuilder(RequestInterface::class)
@@ -107,6 +113,9 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(null, $target->execute($event));
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [
@@ -143,11 +152,23 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @param $value
+     * @param $label
+     *
+     * @return array
+     */
     private function createFrontendInputValue($value, $label)
     {
         return ['value' => $value, 'label' => $label];
     }
 
+    /**
+     * @param array $originalValues
+     * @param array $expectedValues
+     *
+     * @return MockObject
+     */
     private function createForm(array $originalValues = [], array $expectedValues = [])
     {
         $form = $this->getMockBuilder(\Magento\Framework\Data\Form::class)

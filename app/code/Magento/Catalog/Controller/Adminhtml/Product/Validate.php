@@ -137,7 +137,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             $response->setError(true);
             $response->setMessages([$e->getMessage()]);
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $layout = $this->layoutFactory->create();
             $layout->initMessages();
             $response->setError(true);

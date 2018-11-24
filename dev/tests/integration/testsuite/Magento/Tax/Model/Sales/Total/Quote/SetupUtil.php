@@ -143,6 +143,7 @@ class SetupUtil
         'discount_amount' => 40,
         'discount_step' => 0,
         'stop_rules_processing' => 1,
+        'apply_to_shipping' => 0,
         'website_ids' => [1],
     ];
 

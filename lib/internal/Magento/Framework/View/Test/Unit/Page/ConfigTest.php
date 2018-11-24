@@ -141,8 +141,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'robots' => null,
             'name' => 'test_value',
             'html_encoded' => '&lt;title&gt;&lt;span class=&quot;test&quot;&gt;Test&lt;/span&gt;&lt;/title&gt;',
+            'title' => 'metatitle'
         ];
         $this->model->setMetadata('name', 'test_value');
+        $this->model->setMetadata('title', 'metatitle');
         $this->model->setMetadata('html_encoded', '<title><span class="test">Test</span></title>');
         $this->assertEquals($expectedMetadata, $this->model->getMetadata());
     }
@@ -287,6 +289,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function pageAssetDataProvider()
     {
         return [
@@ -326,6 +331,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function remotePageAssetDataProvider()
     {
         return [
@@ -382,6 +390,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->model->getElementAttribute($elementType, $attribute));
     }
 
+    /**
+     * @return array
+     */
     public function elementAttributeDataProvider()
     {
         return [
@@ -419,6 +430,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->model->setElementAttribute($elementType, $attribute, $value);
     }
 
+    /**
+     * @return array
+     */
     public function elementAttributeExceptionDataProvider()
     {
         return [
@@ -454,6 +468,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($attributes, $this->model->getElementAttributes($elementType));
     }
 
+    /**
+     * @return array
+     */
     public function elementAttributesDataProvider()
     {
         return [
@@ -478,6 +495,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($handle, $this->model->getPageLayout());
     }
 
+    /**
+     * @return array
+     */
     public function pageLayoutDataProvider()
     {
         return [
@@ -538,6 +558,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $model->getIncludes());
     }
 
+    /**
+     * @return array
+     */
     public function getIncludesDataProvider()
     {
         return [

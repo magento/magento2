@@ -40,11 +40,11 @@ class PaymentDataObjectTest extends \PHPUnit\Framework\TestCase
 
     public function testGetOrder()
     {
-        $this->assertSame($this->orderMock, $this->model->getOrder()) ;
+        $this->assertSame($this->orderMock, $this->model->getOrder());
     }
 
     public function testGetPayment()
     {
-        $this->assertSame($this->paymentMock, $this->model->getPayment()) ;
+        $this->assertSame($this->paymentMock, $this->model->getPayment());
     }
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCategoryMainSection">
+        <element name="modeListButton" type="button" selector="#mode-list" timeout="10"/>
+        <element name="categoryTitle" type="text" selector="#page-title-heading span"/>
+        <element name="ProductItemInfo" type="button" selector=".product-item-info"/>
+        <element name="specifiedProductItemInfo" type="button" selector="//a[@class='product-item-link'][contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="AddToCartBtn" type="button" selector="button.action.tocart.primary"/>
+        <element name="SuccessMsg" type="button" selector="div.message-success"/>
+        <element name="productCount" type="text" selector="#toolbar-amount"/>
+        <element name="CatalogDescription" type="text" selector="//div[@class='category-description']//p"/>
+        <element name="mediaDescription" type="text" selector="img[alt='{{var1}}']" parameterized="true"/>
+        <element name="productsList" type="text" selector="//ol[@class='products list items product-items']"/>
+        <element name="categoryPageProductImagePlaceholderSmall" type="text" selector=".products-grid img[src*='placeholder/small_image.jpg']"/>
+        <element name="categoryPageProductImage" type="text" selector=".products-grid img[src*='/{{var1}}']" parameterized="true"/>
+        <element name="categoryPageProductName" type="text" selector=".products.list.items.product-items li:nth-of-type({{line}}) .product-item-link" timeout="30" parameterized="true"/>
+    </section>
+</sections>

@@ -138,6 +138,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $parentId = isset($categoryPostData['parent']) ? $categoryPostData['parent'] : null;
         if ($categoryPostData) {
             $category->addData($categoryPostData);
+            if ($parentId) {
+                $category->setParentId($parentId);
+            }
             if ($isNewCategory) {
                 $parentCategory = $this->getParentCategory($parentId, $storeId);
                 $category->setPath($parentCategory->getPath());
@@ -276,7 +279,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 continue;
             }
 
-            $data[$attributeCode] = false;
+            $data[$attributeCode] = '';
         }
 
         return $data;

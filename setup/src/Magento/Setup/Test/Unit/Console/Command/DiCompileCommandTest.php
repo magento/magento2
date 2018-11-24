@@ -152,8 +152,7 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
                 [OperationFactory::INTERCEPTION, $this->anything()],
                 [OperationFactory::AREA_CONFIG_GENERATOR, $this->anything()],
                 [OperationFactory::INTERCEPTION_CACHE, $this->anything()]
-            )
-        ;
+            );
 
         $this->managerMock->expects($this->once())->method('process');
         $tester = new CommandTester($this->command);

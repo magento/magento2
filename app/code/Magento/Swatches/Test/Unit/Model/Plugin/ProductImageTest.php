@@ -98,6 +98,9 @@ class ProductImageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$this->productMock, $expected['page_handle'], []], $result);
     }
 
+    /**
+     * @param $expected
+     */
     protected function canReplaceImageWithSwatch($expected)
     {
         $this->swatchesHelperMock

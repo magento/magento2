@@ -41,24 +41,12 @@ Magento is thankful for any contribution that can improve our code base, documen
 </a>
 
 <h3>Labels applied by the Magento team</h3>
-
-| Label        | Description           | 
-| ------------- |-------------|
-| ![DOC](http://devdocs.magento.com/common/images/github_DOC.png) | Affects Documentation domain. |
-| ![PROD](http://devdocs.magento.com/common/images/github_PROD.png) | Affects the Product team (mostly feature requests or business logic change). |
-| ![TECH](http://devdocs.magento.com/common/images/github_TECH.png) | Affects Architect Group (mostly to make decisions around technology changes). |
-| ![accept](http://devdocs.magento.com/common/images/github_accept.png) | The pull request has been accepted and will be merged into mainline code. |
-| ![reject](http://devdocs.magento.com/common/images/github_reject.png) | The pull request has been rejected and will not be merged into mainline code. Possible reasons can include but are not limited to: issue has already been fixed in another code contribution, or there is an issue with the code contribution. |
-| ![bug report](http://devdocs.magento.com/common/images/github_bug.png) | The Magento Team has confirmed that this issue contains the minimum required information to reproduce. |
-| ![acknowledged](http://devdocs.magento.com/common/images/gitHub_acknowledged.png) | The Magento Team has validated the issue and an internal ticket has been created. |
-| ![in progress](http://devdocs.magento.com/common/images/github_inProgress.png) | The internal ticket is currently in progress, fix is scheduled to be delivered. |
-| ![needs update](http://devdocs.magento.com/common/images/github_needsUpdate.png) | The Magento Team needs additional information from the reporter to properly prioritize and process the issue or pull request. |
-
-To learn more about issue gate labels click [here](https://github.com/magento/magento2/wiki/Magento-Issue-Gates)
+We apply labels to public Pull Requests and Issues to help other participants retrieve additional information about current progress, component assignments, Magento release lines, and much more. 
+Please review the <a href="https://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html#labels">Code Contributions guide</a> for detailed information on labels used in Magento 2 repositories.
 
 <h2>Reporting security issues</h2>
 
-To report security vulnerabilities in Magento software or web sites, please e-mail <a href="mailto:security@magento.com">security@magento.com</a>. Please do not report security issues using GitHub. Be sure to encrypt your e-mail with our <a href="https://info2.magento.com/rs/magentoenterprise/images/security_at_magento.asc">encryption key</a> if it includes sensitive information. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
+To report security vulnerabilities in Magento software or web sites, please create a Bugcrowd researcher account <a href="https://bugcrowd.com/magento">there</a> to submit and follow-up your issue. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
 
 Stay up-to-date on the latest security news and patches for Magento by signing up for <a href="https://magento.com/security/sign-up">Security Alert Notifications</a>.
 

@@ -45,6 +45,9 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function getElementHtmlDataProvider()
     {
         return [

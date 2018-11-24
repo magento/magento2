@@ -75,7 +75,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccess', 'addError', 'addException'])
+            ->setMethods(['addSuccessMessage', 'addErrorMessage', 'addExceptionMessage'])
             ->getMockForAbstractClass();
         $this->context->expects($this->any())
             ->method('getMessageManager')
@@ -143,7 +143,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->query->expects($this->once())->method('getId')->willReturn(false);
         $this->query->expects($this->once())->method('load')->with($queryId);
 
-        $this->messageManager->expects($this->once())->method('addSuccess');
+        $this->messageManager->expects($this->once())->method('addSuccessMessage');
 
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
         $this->assertSame($this->redirect, $this->controller->execute());
@@ -161,7 +161,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->query->expects($this->once())->method('loadByQueryText')->with($queryText);
         $this->query->expects($this->any())->method('getId')->willReturn($queryId);
 
-        $this->messageManager->expects($this->once())->method('addSuccess');
+        $this->messageManager->expects($this->once())->method('addSuccessMessage');
 
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
         $this->assertSame($this->redirect, $this->controller->execute());
@@ -180,7 +180,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->query->expects($this->any())->method('getId')->willReturn(false);
         $this->query->expects($this->once())->method('load')->with($queryId);
 
-        $this->messageManager->expects($this->once())->method('addSuccess');
+        $this->messageManager->expects($this->once())->method('addSuccessMessage');
 
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
         $this->assertSame($this->redirect, $this->controller->execute());
@@ -199,7 +199,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->query->expects($this->once())->method('loadByQueryText')->with($queryText);
         $this->query->expects($this->any())->method('getId')->willReturn($anotherQueryId);
 
-        $this->messageManager->expects($this->once())->method('addError');
+        $this->messageManager->expects($this->once())->method('addErrorMessage');
         $this->session->expects($this->once())->method('setPageData');
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
         $this->assertSame($this->redirect, $this->controller->execute());
@@ -216,7 +216,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->query->expects($this->once())->method('setStoreId');
         $this->query->expects($this->once())->method('loadByQueryText')->willThrowException(new \Exception());
 
-        $this->messageManager->expects($this->once())->method('addException');
+        $this->messageManager->expects($this->once())->method('addExceptionMessage');
         $this->session->expects($this->once())->method('setPageData');
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
         $this->assertSame($this->redirect, $this->controller->execute());

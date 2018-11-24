@@ -7,21 +7,53 @@
 define([
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/form/element/ui-select',
+    'squire',
     'ko'
-], function (_, registry, Constr, ko) {
+], function (_, registry, Squire, ko) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/ui-select', function () {
+        var injector = new Squire(),
+            mocks = {
+                'Magento_Ui/js/lib/registry/registry': {
+                    /** Method stub. */
+                    get: function () {
+                        return {
+                            get: jasmine.createSpy(),
+                            set: jasmine.createSpy()
+                        };
+                    },
+                    create: jasmine.createSpy(),
+                    set: jasmine.createSpy(),
+                    async: jasmine.createSpy()
+                },
+                '/mage/utils/wrapper': jasmine.createSpy()
+            },
+            obj,
+            dataScope = 'abstract';
 
-        var obj = new Constr({
-            name: 'uiSelect',
-            dataScope: '',
-            provider: 'provider'
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Ui/js/form/element/ui-select',
+                'knockoutjs/knockout-es5'
+            ], function (Constr) {
+                obj = new Constr({
+                    provider: 'provName',
+                    name: '',
+                    index: '',
+                    dataScope: dataScope,
+                    options: {
+                        showsTime: true
+                    }
+                });
+
+                obj.value = ko.observableArray([]);
+                obj.cacheOptions.plain = [];
+
+                done();
+            });
         });
-
-        obj.value = ko.observableArray([]);
-        obj.cacheOptions.plain = [];
 
         describe('"initialize" method', function () {
             it('Check for defined ', function () {

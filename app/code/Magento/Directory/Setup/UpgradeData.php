@@ -32,7 +32,7 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
-     * Upgrades data for Directry module.
+     * Upgrades data for Directory module.
      *
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
@@ -41,10 +41,13 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $this->addCountryRegions($setup, $this->getDataForCroatia());
+            $this->addCountryRegions($setup, 'HR', $this->getDataForCroatia());
         }
         if (version_compare($context->getVersion(), '2.0.2', '<')) {
-            $this->addCountryRegions($setup, $this->getDataForIndia());
+            $this->addCountryRegions($setup, 'IN', $this->getDataForIndia());
+        }
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
+            $this->addCountryRegions($setup, 'AU', $this->getDataForAustralia());
         }
     }
 
@@ -56,27 +59,27 @@ class UpgradeData implements UpgradeDataInterface
     private function getDataForCroatia()
     {
         return [
-            ['HR', 'HR-01', 'Zagrebačka županija'],
-            ['HR', 'HR-02', 'Krapinsko-zagorska županija'],
-            ['HR', 'HR-03', 'Sisačko-moslavačka županija'],
-            ['HR', 'HR-04', 'Karlovačka županija'],
-            ['HR', 'HR-05', 'Varaždinska županija'],
-            ['HR', 'HR-06', 'Koprivničko-križevačka županija'],
-            ['HR', 'HR-07', 'Bjelovarsko-bilogorska županija'],
-            ['HR', 'HR-08', 'Primorsko-goranska županija'],
-            ['HR', 'HR-09', 'Ličko-senjska županija'],
-            ['HR', 'HR-10', 'Virovitičko-podravska županija'],
-            ['HR', 'HR-11', 'Požeško-slavonska županija'],
-            ['HR', 'HR-12', 'Brodsko-posavska županija'],
-            ['HR', 'HR-13', 'Zadarska županija'],
-            ['HR', 'HR-14', 'Osječko-baranjska županija'],
-            ['HR', 'HR-15', 'Šibensko-kninska županija'],
-            ['HR', 'HR-16', 'Vukovarsko-srijemska županija'],
-            ['HR', 'HR-17', 'Splitsko-dalmatinska županija'],
-            ['HR', 'HR-18', 'Istarska županija'],
-            ['HR', 'HR-19', 'Dubrovačko-neretvanska županija'],
-            ['HR', 'HR-20', 'Međimurska županija'],
-            ['HR', 'HR-21', 'Grad Zagreb']
+            'HR-01' => 'Zagrebačka županija',
+            'HR-02' => 'Krapinsko-zagorska županija',
+            'HR-03' => 'Sisačko-moslavačka županija',
+            'HR-04' => 'Karlovačka županija',
+            'HR-05' => 'Varaždinska županija',
+            'HR-06' => 'Koprivničko-križevačka županija',
+            'HR-07' => 'Bjelovarsko-bilogorska županija',
+            'HR-08' => 'Primorsko-goranska županija',
+            'HR-09' => 'Ličko-senjska županija',
+            'HR-10' => 'Virovitičko-podravska županija',
+            'HR-11' => 'Požeško-slavonska županija',
+            'HR-12' => 'Brodsko-posavska županija',
+            'HR-13' => 'Zadarska županija',
+            'HR-14' => 'Osječko-baranjska županija',
+            'HR-15' => 'Šibensko-kninska županija',
+            'HR-16' => 'Vukovarsko-srijemska županija',
+            'HR-17' => 'Splitsko-dalmatinska županija',
+            'HR-18' => 'Istarska županija',
+            'HR-19' => 'Dubrovačko-neretvanska županija',
+            'HR-20' => 'Međimurska županija',
+            'HR-21' => 'Grad Zagreb',
         ];
     }
 
@@ -88,42 +91,61 @@ class UpgradeData implements UpgradeDataInterface
     private function getDataForIndia()
     {
         return [
-            ['IN', 'AN', 'Andaman and Nicobar Islands'],
-            ['IN', 'AP', 'Andhra Pradesh'],
-            ['IN', 'AR', 'Arunachal Pradesh'],
-            ['IN', 'AS', 'Assam'],
-            ['IN', 'BR', 'Bihar'],
-            ['IN', 'CH', 'Chandigarh'],
-            ['IN', 'CT', 'Chhattisgarh'],
-            ['IN', 'DN', 'Dadra and Nagar Haveli'],
-            ['IN', 'DD', 'Daman and Diu'],
-            ['IN', 'DL', 'Delhi'],
-            ['IN', 'GA', 'Goa'],
-            ['IN', 'GJ', 'Gujarat'],
-            ['IN', 'HR', 'Haryana'],
-            ['IN', 'HP', 'Himachal Pradesh'],
-            ['IN', 'JK', 'Jammu and Kashmir'],
-            ['IN', 'JH', 'Jharkhand'],
-            ['IN', 'KA', 'Karnataka'],
-            ['IN', 'KL', 'Kerala'],
-            ['IN', 'LD', 'Lakshadweep'],
-            ['IN', 'MP', 'Madhya Pradesh'],
-            ['IN', 'MH', 'Maharashtra'],
-            ['IN', 'MN', 'Manipur'],
-            ['IN', 'ML', 'Meghalaya'],
-            ['IN', 'MZ', 'Mizoram'],
-            ['IN', 'NL', 'Nagaland'],
-            ['IN', 'OR', 'Odisha'],
-            ['IN', 'PY', 'Puducherry'],
-            ['IN', 'PB', 'Punjab'],
-            ['IN', 'RJ', 'Rajasthan'],
-            ['IN', 'SK', 'Sikkim'],
-            ['IN', 'TN', 'Tamil Nadu'],
-            ['IN', 'TG', 'Telangana'],
-            ['IN', 'TR', 'Tripura'],
-            ['IN', 'UP', 'Uttar Pradesh'],
-            ['IN', 'UT', 'Uttarakhand'],
-            ['IN', 'WB', 'West Bengal']
+            'AN' => 'Andaman and Nicobar Islands',
+            'AP' => 'Andhra Pradesh',
+            'AR' => 'Arunachal Pradesh',
+            'AS' => 'Assam',
+            'BR' => 'Bihar',
+            'CH' => 'Chandigarh',
+            'CT' => 'Chhattisgarh',
+            'DN' => 'Dadra and Nagar Haveli',
+            'DD' => 'Daman and Diu',
+            'DL' => 'Delhi',
+            'GA' => 'Goa',
+            'GJ' => 'Gujarat',
+            'HR' => 'Haryana',
+            'HP' => 'Himachal Pradesh',
+            'JK' => 'Jammu and Kashmir',
+            'JH' => 'Jharkhand',
+            'KA' => 'Karnataka',
+            'KL' => 'Kerala',
+            'LD' => 'Lakshadweep',
+            'MP' => 'Madhya Pradesh',
+            'MH' => 'Maharashtra',
+            'MN' => 'Manipur',
+            'ML' => 'Meghalaya',
+            'MZ' => 'Mizoram',
+            'NL' => 'Nagaland',
+            'OR' => 'Odisha',
+            'PY' => 'Puducherry',
+            'PB' => 'Punjab',
+            'RJ' => 'Rajasthan',
+            'SK' => 'Sikkim',
+            'TN' => 'Tamil Nadu',
+            'TG' => 'Telangana',
+            'TR' => 'Tripura',
+            'UP' => 'Uttar Pradesh',
+            'UT' => 'Uttarakhand',
+            'WB' => 'West Bengal',
+        ];
+    }
+
+    /**
+     * Australian states data.
+     *
+     * @return array
+     */
+    private function getDataForAustralia()
+    {
+        return [
+            'ACT' => 'Australian Capital Territory',
+            'NSW' => 'New South Wales',
+            'VIC' => 'Victoria',
+            'QLD' => 'Queensland',
+            'SA' => 'South Australia',
+            'TAS' => 'Tasmania',
+            'WA' => 'Western Australia',
+            'NT' => 'Northern Territory'
         ];
     }
 
@@ -131,30 +153,31 @@ class UpgradeData implements UpgradeDataInterface
      * Add country regions data to appropriate tables.
      *
      * @param ModuleDataSetupInterface $setup
+     * @param string $countryId
      * @param array $data
      * @return void
      */
-    private function addCountryRegions(ModuleDataSetupInterface $setup, array $data)
+    private function addCountryRegions(ModuleDataSetupInterface $setup, string $countryId, array $data)
     {
         /**
          * Fill table directory/country_region
          * Fill table directory/country_region_name for en_US locale
          */
-        foreach ($data as $row) {
-            $bind = ['country_id' => $row[0], 'code' => $row[1], 'default_name' => $row[2]];
+        foreach ($data as $code => $name) {
+            $bind = ['country_id' => $countryId, 'code' => $code, 'default_name' => $name];
             $setup->getConnection()->insert($setup->getTable('directory_country_region'), $bind);
             $regionId = $setup->getConnection()->lastInsertId($setup->getTable('directory_country_region'));
-            $bind = ['locale' => 'en_US', 'region_id' => $regionId, 'name' => $row[2]];
+            $bind = ['locale' => 'en_US', 'region_id' => $regionId, 'name' => $name];
             $setup->getConnection()->insert($setup->getTable('directory_country_region_name'), $bind);
         }
+
         /**
          * Upgrade core_config_data general/region/state_required field.
          */
-        $countries = $this->directoryData->getCountryCollection()->getCountriesWithRequiredStates();
         $setup->getConnection()->update(
             $setup->getTable('core_config_data'),
             [
-                'value' => implode(',', array_keys($countries))
+                'value' => new \Zend_Db_Expr("CONCAT(value, '," . $countryId . "')")
             ],
             [
                 'scope="default"',

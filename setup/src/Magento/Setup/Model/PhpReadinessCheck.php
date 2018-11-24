@@ -192,7 +192,7 @@ class PhpReadinessCheck
 
         $currentMemoryLimit = ini_get('memory_limit');
 
-        $currentMemoryInteger = intval($currentMemoryLimit);
+        $currentMemoryInteger = (int)$currentMemoryLimit;
 
         if ($currentMemoryInteger > 0
             && $this->dataSize->convertSizeToBytes($currentMemoryLimit)
@@ -236,6 +236,7 @@ class PhpReadinessCheck
     /**
      * Checks if xdebug.max_nesting_level is set 200 or more
      * @return array
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     private function checkXDebugNestedLevel()
     {
@@ -244,7 +245,7 @@ class PhpReadinessCheck
 
         $currentExtensions = $this->phpInformation->getCurrent();
         if (in_array('xdebug', $currentExtensions)) {
-            $currentXDebugNestingLevel = intval(ini_get('xdebug.max_nesting_level'));
+            $currentXDebugNestingLevel = (int)ini_get('xdebug.max_nesting_level');
             $minimumRequiredXDebugNestedLevel = $this->phpInformation->getRequiredMinimumXDebugNestedLevel();
 
             if ($minimumRequiredXDebugNestedLevel > $currentXDebugNestingLevel) {
@@ -286,7 +287,7 @@ class PhpReadinessCheck
 
         $data = [];
         $error = false;
-        $iniSetting = intVal(ini_get('always_populate_raw_post_data'));
+        $iniSetting = (int)ini_get('always_populate_raw_post_data');
 
         $checkVersionConstraint = $this->versionParser->parseConstraints('~5.6.0');
         $normalizedPhpVersion = $this->getNormalizedCurrentPhpVersion(PHP_VERSION);
@@ -297,12 +298,12 @@ class PhpReadinessCheck
 
         $message = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = %d.
- 	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
- 	        This will stop the installer from running.
-	        Please open your php.ini file and set always_populate_raw_post_data to -1.
- 	        If you need more help please call your hosting provider.',
+            $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
+            This will stop the installer from running.
+            Please open your php.ini file and set always_populate_raw_post_data to -1.
+            If you need more help please call your hosting provider.',
             PHP_VERSION,
-            intVal(ini_get('always_populate_raw_post_data'))
+            (int)ini_get('always_populate_raw_post_data')
         );
 
         $data['always_populate_raw_post_data'] = [

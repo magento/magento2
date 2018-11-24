@@ -16,8 +16,6 @@ use Magento\Store\Model\WebsiteFactory;
 
 /**
  * The processor for creating of new entities.
- *
- * {@inheritdoc}
  */
 class Create implements ProcessorInterface
 {
@@ -52,6 +50,10 @@ class Create implements ProcessorInterface
     /**
      * The event manager.
      *
+     * @deprecated logic moved inside of "afterSave" method
+     *             \Magento\Store\Model\Website::afterSave
+     *             \Magento\Store\Model\Group::afterSave
+     *             \Magento\Store\Model\Store::afterSave
      * @var ManagerInterface
      */
     private $eventManager;
@@ -80,7 +82,9 @@ class Create implements ProcessorInterface
     /**
      * Creates entities in application according to the data set.
      *
-     * {@inheritdoc}
+     * @param array $data The data to be processed
+     * @return void
+     * @throws RuntimeException If processor was unable to finish execution
      */
     public function run(array $data)
     {
@@ -172,8 +176,11 @@ class Create implements ProcessorInterface
             );
 
             $group = $this->groupFactory->create();
+            if (!isset($groupData['root_category_id'])) {
+                $groupData['root_category_id'] = 0;
+            }
+            
             $group->setData($groupData);
-            $group->setRootCategoryId(0);
 
             $group->getResource()->save($group);
             $group->getResource()->addCommitCallback(function () use ($data, $group, $website) {
@@ -181,8 +188,6 @@ class Create implements ProcessorInterface
                 $group->setDefaultStoreId($store->getStoreId());
                 $group->setWebsite($website);
                 $group->getResource()->save($group);
-
-                $this->eventManager->dispatch('store_group_save', ['group' => $group]);
             });
         }
     }
@@ -224,8 +229,7 @@ class Create implements ProcessorInterface
     }
 
     /**
-     * Searches through given websites and compares with current websites.
-     * Returns found website.
+     * Searches through given websites and compares with current websites and returns found website.
      *
      * @param array $data The data to be searched in
      * @param string $websiteId The website id
@@ -247,8 +251,7 @@ class Create implements ProcessorInterface
     }
 
     /**
-     * Searches through given groups and compares with current websites.
-     * Returns found group.
+     * Searches through given groups and compares with current websites and returns found group.
      *
      * @param array $data The data to be searched in
      * @param string $groupId The group id
@@ -270,8 +273,7 @@ class Create implements ProcessorInterface
     }
 
     /**
-     * Searches through given stores and compares with current stores.
-     * Returns found store.
+     * Searches through given stores and compares with current stores and returns found store.
      *
      * @param array $data The data to be searched in
      * @param string $storeId The store id

@@ -163,6 +163,9 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->_model->getMainTable());
     }
 
+    /**
+     * @return array
+     */
     public function getTableDataProvider()
     {
         return [
@@ -217,6 +220,9 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->getChecksum($checksum));
     }
 
+    /**
+     * @return array
+     */
     public function getChecksumProvider()
     {
         return [
@@ -399,6 +405,9 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->hasDataChanged($abstractModelMock));
     }
 
+    /**
+     * @return array
+     */
     public function hasDataChangedDataProvider()
     {
         return [

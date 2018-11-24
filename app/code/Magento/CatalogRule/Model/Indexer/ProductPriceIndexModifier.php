@@ -10,6 +10,8 @@ namespace Magento\CatalogRule\Model\Indexer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceModifierInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class for adding catalog rule prices to price index table.
@@ -22,11 +24,28 @@ class ProductPriceIndexModifier implements PriceModifierInterface
     private $priceResourceModel;
 
     /**
-     * @param Price $priceResourceModel
+     * @var ResourceConnection
      */
-    public function __construct(Price $priceResourceModel)
-    {
+    private $resourceConnection;
+
+    /**
+     * @var string
+     */
+    private $connectionName;
+
+    /**
+     * @param Price $priceResourceModel
+     * @param ResourceConnection $resourceConnection
+     * @param string $connectionName
+     */
+    public function __construct(
+        Price $priceResourceModel,
+        ResourceConnection $resourceConnection,
+        $connectionName = 'indexer'
+    ) {
         $this->priceResourceModel = $priceResourceModel;
+        $this->resourceConnection = $resourceConnection ?: ObjectManager::getInstance()->get(ResourceConnection::class);
+        $this->connectionName = $connectionName;
     }
 
     /**
@@ -34,7 +53,8 @@ class ProductPriceIndexModifier implements PriceModifierInterface
      */
     public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = [])
     {
-        $connection = $this->priceResourceModel->getConnection();
+        $connection = $this->resourceConnection->getConnection($this->connectionName);
+
         $select = $connection->select();
 
         $select->join(

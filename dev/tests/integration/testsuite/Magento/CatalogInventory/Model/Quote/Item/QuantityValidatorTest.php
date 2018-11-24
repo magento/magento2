@@ -5,12 +5,20 @@
  */
 namespace Magento\CatalogInventory\Model\Quote\Item;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Model\Stock\StockItemRepository;
+use Magento\CatalogInventory\Model\StockState;
+use Magento\CatalogInventory\Observer\QuantityValidatorObserver;
+use Magento\Eav\Model\Config;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
 use Magento\Framework\Event\Observer;
-use Magento\CatalogInventory\Model\StockState;
-use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator;
-use Magento\CatalogInventory\Observer\QuantityValidatorObserver;
 use Magento\Framework\Event;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
@@ -58,6 +66,9 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $observer;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         /** @var \Magento\Framework\ObjectManagerInterface objectManager */
@@ -82,8 +93,10 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
+     *
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testQuoteWithOptions()
@@ -93,7 +106,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var $product Product */
         $product = $productRepository->get('bundle-product');
         $resultMock = $this->createMock(DataObject::class);
         $this->stockState->expects($this->any())->method('checkQtyIncrements')->willReturn($resultMock);
@@ -107,8 +120,10 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
+     *
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testQuoteWithOptionsWithErrors()
@@ -117,7 +132,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $session = $this->objectManager->create(Session::class);
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var $product Product */
         $product = $productRepository->get('bundle-product');
         /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
         $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), $product->getId());
@@ -132,7 +147,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $resultMock->expects($this->any())->method('getHasError')->willReturn(true);
         $this->setMockStockStateResultToQuoteItemOptions($quoteItem, $resultMock);
         $this->observer->execute($this->observerMock);
-        $this->assertCount(2, $quoteItem->getErrorInfos(), 'Expected 2 errors in QuoteItem');
+        $this->assertCount(1, $quoteItem->getErrorInfos(), 'Expected 1 error in QuoteItem');
     }
 
     /**
@@ -156,9 +171,97 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests quantity verifications for configurable product.
+     *
+     * @param int $quantity - quantity of configurable option.
+     * @param string $errorMessage - expected error message.
+     * @return void
+     * @throws CouldNotSaveException
+     * @throws LocalizedException
+     * @dataProvider quantityDataProvider
+     * @magentoDataFixture Magento/CatalogInventory/_files/configurable_options_advanced_inventory.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testConfigurableWithOptions(int $quantity, string $errorMessage)
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        /** @var Product $product */
+        $product = $productRepository->get('configurable');
+        $product->setStatus(Status::STATUS_ENABLED)
+            ->setData('is_salable', true);
+        $productRepository->save($product);
+
+        /** @var StockItemRepository $stockItemRepository */
+        $stockItemRepository = $this->objectManager->create(StockItemRepository::class);
+
+        /** @var StockItemInterface $stockItem */
+        $stockItem = $stockItemRepository->get($product->getExtensionAttributes()
+            ->getStockItem()
+            ->getItemId());
+        $stockItem->setIsInStock(true)
+            ->setQty(1000);
+        $stockItemRepository->save($stockItem);
+
+        /** @var Config $eavConfig */
+        $eavConfig = $this->objectManager->get(Config::class);
+        /** @var  $attribute */
+        $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
+
+        $request = $this->objectManager->create(DataObject::class);
+        $request->setData(
+            [
+                'product_id' => $product->getId(),
+                'selected_configurable_option' => 1,
+                'super_attribute' => [
+                    $attribute->getAttributeId() => $attribute->getOptions()[1]->getValue()
+                ],
+                'qty' => $quantity
+            ]
+        );
+
+        if (!empty($errorMessage)) {
+            $this->expectException(LocalizedException::class);
+            $this->expectExceptionMessage($errorMessage);
+        }
+
+        /** @var Quote $cart */
+        $cart = $this->objectManager->create(CartInterface::class);
+        $result = $cart->addProduct($product, $request);
+
+        if (empty($errorMessage)) {
+            self::assertEquals('Configurable Product', $result->getName());
+        }
+    }
+
+    /**
+     * Provides request quantity for configurable option and corresponding error message.
+     *
+     * @return array
+     */
+    public function quantityDataProvider(): array
+    {
+        return [
+            [
+                'quantity' => 1,
+                'error' => 'The fewest you may purchase is 500.'
+            ],
+            [
+                'quantity' => 501,
+                'error' => 'You can buy Configurable OptionOption 1 only in quantities of 500 at a time'
+            ],
+            [
+                'quantity' => 1000,
+                'error' => ''
+            ],
+        ];
+    }
+
+    /**
      * Gets \Magento\Quote\Model\Quote\Item from \Magento\Quote\Model\Quote by product id
      *
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param Quote $quote
      * @param $productId
      * @return \Magento\Quote\Model\Quote\Item
      */
