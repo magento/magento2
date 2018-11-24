@@ -7,7 +7,7 @@ namespace Magento\Downloadable\Model\Sample;
 
 use Magento\Downloadable\Api\SampleRepositoryInterface as SampleRepository;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
-
+use Magento\Framework\App\RequestInterface;
 /**
  * Class ReadHandler
  */
@@ -21,9 +21,16 @@ class ReadHandler implements ExtensionInterface
     /**
      * @param SampleRepository $sampleRepository
      */
-    public function __construct(SampleRepository $sampleRepository)
+
+    /**
+     * @var RequestInterface
+     */
+    protected $request;
+
+    public function __construct(SampleRepository $sampleRepository,RequestInterface $request)
     {
         $this->sampleRepository = $sampleRepository;
+        $this->request = $request;
     }
 
     /**
@@ -40,7 +47,10 @@ class ReadHandler implements ExtensionInterface
         }
         $entityExtension = $entity->getExtensionAttributes();
         $samples = $this->sampleRepository->getSamplesByProduct($entity);
-        if ($samples) {
+
+        $downloadable = $this->request->getPost('downloadable');
+        
+        if ($samples && isset($downloadable['sample']) && is_array($downloadable['sample'])) {
             $entityExtension->setDownloadableProductSamples($samples);
         }
         $entity->setExtensionAttributes($entityExtension);
