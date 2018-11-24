@@ -33,7 +33,7 @@ return [
             'constraint' => [
                 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF' => [
                     'type' => 'foreign',
-                    'name' => 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF',
+                    'referenceId' => 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF',
                     'column' => 'tinyint',
                     'table' => 'test_table',
                     'referenceTable' => 'reference_table',

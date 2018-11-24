@@ -25,10 +25,10 @@
                 comment="Price"/>
         <column xsi:type="decimal" name="cost" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Cost"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="pk"/>
         </constraint>
-        <constraint xsi:type="unique" name="UNQ_D60821CDB2AFACEE1566CFC02D0D4CAA">
+        <constraint xsi:type="unique" referenceId="UNQ_D60821CDB2AFACEE1566CFC02D0D4CAA">
             <column name="website_id"/>
             <column name="dest_country_id"/>
             <column name="dest_region_id"/>
