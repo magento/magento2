@@ -147,5 +147,4 @@ abstract class Compare extends \Magento\Framework\App\Action\Action
     {
         return $this->resultRedirectFactory->create()->setPath('catalog/product_compare');
     }
-
 }
