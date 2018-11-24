@@ -23,7 +23,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method string getFirstname()
  * @method string getMiddlename()
  * @method string getLastname()
- * @method int getCountryId()
+ * @method string getCountryId()
  * @method string getCity()
  * @method string getTelephone()
  * @method string getCompany()
@@ -429,9 +429,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Return Country
+     * Get country
      *
-     * @return int
+     * @return string
      */
     public function getCountry()
     {
@@ -601,7 +601,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Create Region Instance
+     * Create region instance
      *
      * @return \Magento\Directory\Model\Region
      */
@@ -611,7 +611,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Create Country Instance
+     * Create country instance
      *
      * @return \Magento\Directory\Model\Country
      */
@@ -632,7 +632,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Is Company Required
+     * Is company required
      *
      * @return bool
      * @since 100.2.0
@@ -644,7 +644,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Is Telephone Required
+     * Is telephone required
      *
      * @return bool
      * @since 100.2.0
@@ -656,7 +656,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Is Fax Required
+     * Is fax required
      *
      * @return bool
      * @since 100.2.0

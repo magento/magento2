@@ -174,6 +174,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      *
      * @param array|string $key
      * @param array|string $value
+     *
      * @return \Magento\Framework\DataObject
      */
     public function setData($key, $value = null)
@@ -709,6 +710,8 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
 
     /**
      * @inheritdoc
+     *
+     * @return \Magento\Sales\Api\Data\OrderAddressExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -716,7 +719,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes
      *

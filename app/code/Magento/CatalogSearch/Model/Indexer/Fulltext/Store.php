@@ -12,8 +12,7 @@ use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * Catalog search indexer plugin for store.
  */
 class Store implements ObserverInterface
 {
@@ -48,6 +47,8 @@ class Store implements ObserverInterface
     }
 
     /**
+     * Reindex catalog search.
+     *
      * @param \Magento\Store\Model\Store $store
      * @return void
      */
@@ -63,6 +64,8 @@ class Store implements ObserverInterface
     }
 
     /**
+     * Reindex catalog search on store modification.
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
