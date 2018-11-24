@@ -111,7 +111,7 @@
 
     > .admin__field {
         border: 0;
-        margin: 0;
+        margin: 0 0 3rem 0;
         padding: 0;
         #mix-grid .row();
 
@@ -144,6 +144,48 @@
             &._empty {
                 &._no-header {
                     margin-top: -@indent__l;
+                }
+            }
+        }
+    }
+
+    .product-options {
+        > .admin__field {
+            border: 0;
+            margin: 0 0 3rem 0;
+            padding: 0;
+            #mix-grid .row();
+    
+            &.admin__field-wide {
+                &:extend(.abs-field-rows all);
+            }
+    
+            > .admin__field-control {
+                #mix-grid .column(@field-control-grid__column, @field-grid__columns);
+            }
+    
+            > .admin__field-label {
+                #mix-grid .column(@field-label-grid__column, @field-grid__columns);
+            }
+     
+            &:extend(.abs-field-sizes all);
+    
+            &.admin__field-no-label {
+                > .admin__field-label {
+                    display: none;
+                }
+    
+                > .admin__field-control {
+                    &:extend(.abs-field-no-label all);
+                }
+            }
+    
+            //  Field with empty table and no thead
+            + .admin__field {
+                &._empty {
+                    &._no-header {
+                        margin-top: -@indent__l;
+                    }
                 }
             }
         }
