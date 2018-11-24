@@ -35,12 +35,12 @@ class Attributes implements ResolverInterface
         $data = [];
         foreach ($value['options'] as $option) {
             $code = $option['attribute_code'];
-            if (!isset($value['product'][$code])) {
+            if (!isset($value['product']['model'][$code])) {
                 continue;
             }
 
             foreach ($option['values'] as $optionValue) {
-                if ($optionValue['value_index'] != $value['product'][$code]) {
+                if ($optionValue['value_index'] != $value['product']['model'][$code]) {
                     continue;
                 }
                 $data[] = [

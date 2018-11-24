@@ -85,7 +85,7 @@ class ConfigurableVariant implements ResolverInterface
             return $this->valueFactory->create($result);
         }
 
-        $this->variantCollection->addParentId((int)$value[$linkField]);
+        $this->variantCollection->addParentId($value['model']);
         $fields = $this->getProductFields($info);
         $matchedFields = $this->attributeCollection->getRequestAttributes($fields);
         $this->variantCollection->addEavAttributes($matchedFields);
