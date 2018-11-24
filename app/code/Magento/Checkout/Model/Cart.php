@@ -307,7 +307,7 @@ class Cart extends DataObject implements CartInterface
         } elseif (is_int($productInfo) || is_string($productInfo)) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {
-                $product = $this->productRepository->getById($productInfo, false, $storeId);
+                $product = $this->productRepository->getById($productInfo, false, $storeId, true);
             } catch (NoSuchEntityException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __("The product wasn't found. Verify the product and try again."),
