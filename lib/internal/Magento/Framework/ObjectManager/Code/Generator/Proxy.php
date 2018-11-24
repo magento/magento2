@@ -278,14 +278,15 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      * @param mixed $returnType
      * @return null|string
      */
-    private function getReturnTypeValue($returnType): ?string
+    private function getReturnTypeValue($returnType)
     {
         $returnTypeValue = null;
         if ($returnType) {
+            $returnTypeName = (string)$returnType;
             $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
-            $returnTypeValue .= ($returnType->getName() === 'self')
+            $returnTypeValue .= ($returnTypeName === 'self')
                 ? $this->getSourceClassName()
-                : $returnType->getName();
+                : $returnTypeName;
         }
         return $returnTypeValue;
     }

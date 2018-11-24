@@ -1,13 +1,13 @@
 <?php
-namespace Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace;
+namespace Magento\Framework\Code\Generator71Test\SourceClassWithNamespace;
 
 /**
- * Proxy class for @see \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
+ * Proxy class for @see \Magento\Framework\Code\Generator71Test\SourceClassWithNamespace
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace implements \Magento\Framework\ObjectManager\NoninterceptableInterface
+class Proxy extends \Magento\Framework\Code\Generator71Test\SourceClassWithNamespace implements \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance
@@ -26,7 +26,7 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * Proxied instance
      *
-     * @var \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
+     * @var \Magento\Framework\Code\Generator71Test\SourceClassWithNamespace
      */
     protected $_subject = null;
 
@@ -44,7 +44,7 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
      * @param string $instanceName
      * @param bool $shared
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = '\\Magento\\Framework\\Code\\GeneratorTest\\SourceClassWithNamespace', $shared = true)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = '\\Magento\\Framework\\Code\\Generator71Test\\SourceClassWithNamespace', $shared = true)
     {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
@@ -78,7 +78,7 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * Get proxied instance
      *
-     * @return \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
+     * @return \Magento\Framework\Code\Generator71Test\SourceClassWithNamespace
      */
     protected function _getSubject()
     {
@@ -117,7 +117,23 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
-    public function publicWithSelf($arg = false) : \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
+    public function public71($arg1, string $arg2, ?int $arg3, ?int $arg4 = null) : void
+    {
+        $this->_getSubject()->public71($arg1, $arg2, $arg3, $arg4);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function public71Another(?\DateTime $arg1, $arg2 = false) : ?string
+    {
+        return $this->_getSubject()->public71Another($arg1, $arg2);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function publicWithSelf($arg = false) : \Magento\Framework\Code\Generator71Test\SourceClassWithNamespace
     {
         return $this->_getSubject()->publicWithSelf($arg);
     }

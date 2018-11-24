@@ -41,7 +41,7 @@ class SourceClassWithNamespaceFactory
      * @param array $data
      * @return \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
      */
-    public function create(array $data = [])
+    public function create(array $data = array())
     {
         return $this->_objectManager->create($this->_instanceName, $data);
     }
