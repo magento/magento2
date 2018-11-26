@@ -6,6 +6,7 @@
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Data\CollectionDataSourceInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -102,9 +103,12 @@ class DataObjectProcessor
                     continue;
                 }
             } else {
-                if (is_object($value) && !is_iterable($value) && !($value instanceof Phrase)) {
+                if (is_object($value)
+                    && !($value instanceof CollectionDataSourceInterface)
+                    && !($value instanceof Phrase)
+                ) {
                     $value = $this->buildOutputDataArray($value, $returnType);
-                } elseif (is_iterable($value)) {
+                } elseif (is_array($value) || $value instanceof CollectionDataSourceInterface) {
                     $valueResult = [];
                     $arrayElementType = substr($returnType, 0, -2);
                     foreach ($value as $singleValue) {
