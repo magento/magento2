@@ -82,7 +82,7 @@ class AddressesGrid extends DataGrid
      *
      * @var string
      */
-    private $deleteAction = '[data-action="item-delete"]';
+    private $deleteAddress = '[data-action="item-delete"]';
 
     /**
      * Locator value for "Edit" link inside action column.
@@ -141,7 +141,7 @@ class AddressesGrid extends DataGrid
         $rowItem = $this->getRow([$filter['firstname']]);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->selectAction)->click();
-            $rowItem->find($this->deleteAction)->click();
+            $rowItem->find($this->deleteAddress)->click();
             $modalElement = $this->browser->find($this->confirmModal);
             /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
             $modal = $this->blockFactory->create(
@@ -152,6 +152,24 @@ class AddressesGrid extends DataGrid
             $this->waitLoader();
         } else {
             throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
+        }
+    }
+
+    /**
+     * Open first row from the addresses grid
+     *
+     * @throws \Exception
+     */
+    public function openFirstRow()
+    {
+        $firstRow = $this->_rootElement->find($this->firstRowSelector, \Magento\Mtf\Client\Locator::SELECTOR_XPATH);
+        if ($firstRow->isVisible()) {
+            $firstRow->find($this->selectAction)->click();
+            $firstRow->find($this->editAddress)->click();
+            $this->waitForElementVisible($this->customerAddressModalForm);
+            $this->waitLoader();
+        } else {
+            throw new \Exception("There is no any items in the grid");
         }
     }
 }

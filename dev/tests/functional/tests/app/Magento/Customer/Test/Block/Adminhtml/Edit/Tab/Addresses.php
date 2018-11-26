@@ -180,7 +180,9 @@ class Addresses extends Tab
         foreach ($addresses as $addressNumber => $address) {
             $hasData = (null !== $address) && $address->hasData();
             $customerAddressesGrid = $this->getCustomerAddressesGrid();
-            $customerAddressesGrid->search($address->getData());
+            if ($hasData) {
+                $customerAddressesGrid->search($address->getData());
+            }
             $isVisibleCustomerAddress = $this->isVisibleCustomerAddress($addressNumber);
 
             if ($hasData && !$isVisibleCustomerAddress) {
@@ -197,6 +199,25 @@ class Addresses extends Tab
         }
 
         return $data;
+    }
+
+    /**
+     * Get data from Customer addresses.
+     *
+     * @param FixtureInterface|FixtureInterface[]|null $address
+     * @return array
+     * @throws \Exception
+     */
+    public function getAddressFromFirstRow($address = null)
+    {
+        $customerAddressesGrid = $this->getCustomerAddressesGrid();
+        $customerAddressesGrid->resetFilter();
+        $customerAddressesGrid->openFirstRow();
+        $address = $this->getCustomerAddressModalForm()
+            ->getData($address, $this->browser->find($this->customerAddressModalForm));
+
+
+        return $address;
     }
 
     /**

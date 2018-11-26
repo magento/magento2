@@ -130,7 +130,7 @@
                 <item name="5" xsi:type="string">Zip/Postal Code</item>
                 <item name="6" xsi:type="string">Phone Number</item>
             </data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendRequiredFields" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressBackendRequiredFields" />
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation10" summary="Create customer with 2 websites and with different allowed countries.">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
