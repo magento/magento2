@@ -8,7 +8,7 @@ namespace Magento\Framework\Interception\Code\Generator;
 
 /**
  * Class Interceptor
- ˚*
+ *
  * @package Magento\Framework\Interception\Code\Generator
  */
 class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract

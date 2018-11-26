@@ -187,13 +187,11 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedContent, $content);
     }
 
+    /**
+     * @requires PHP 7.1
+     */
     public function testGenerateClassProxyWithNamespace71()
     {
-        if (!$this->shouldRun71()) {
-            $this->assertTrue(true);
-            return;
-        }
-
         $proxyClassName = self::CLASS_NAME_WITH_NAMESPACE_71 . '\Proxy';
         $result = false;
         $generatorResult = $this->_generator->generateClass($proxyClassName);
@@ -219,13 +217,11 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @requires PHP 7.1
+     */
     public function testGenerateClassInterceptorWithNamespace71()
     {
-        if (!$this->shouldRun71()) {
-            $this->assertTrue(true);
-            return;
-        }
-
         $interceptorClassName = self::CLASS_NAME_WITH_NAMESPACE_71 . '\Interceptor';
         $result = false;
         $generatorResult = $this->_generator->generateClass($interceptorClassName);
@@ -245,13 +241,5 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
             );
             $this->assertEquals($expectedContent, $content);
         }
-    }
-
-    /**
-     * @return bool
-     */
-    private function shouldRun71():bool
-    {
-        return version_compare(phpversion(), '7.1.0', '>=');
     }
 }
