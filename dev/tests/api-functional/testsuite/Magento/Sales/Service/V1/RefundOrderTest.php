@@ -86,11 +86,10 @@ class RefundOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'Failed asserting that proper shipping amount of the Order was refunded'
             );
 
-            //Totally refunded orders can be processed.
-            $this->assertEquals(
+            $this->assertNotEquals(
                 $existingOrder->getStatus(),
                 $updatedOrder->getStatus(),
-                'Failed asserting that order status has not changed'
+                'Failed asserting that order status was changed'
             );
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $this->fail('Failed asserting that Creditmemo was created');
