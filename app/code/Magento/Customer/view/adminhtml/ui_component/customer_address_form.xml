@@ -220,16 +220,6 @@
                 </select>
             </formElements>
         </field>
-        <field name="postcode" sortOrder="120" formElement="input">
-            <settings>
-                <dataType>text</dataType>
-                <visible>true</visible>
-                <label translate="true">Zip/Postal Code</label>
-                <validation>
-                    <rule name="required-entry" xsi:type="boolean">true</rule>
-                </validation>
-            </settings>
-        </field>
         <field name="telephone" sortOrder="130" formElement="input">
             <settings>
                 <dataType>text</dataType>
@@ -242,7 +232,7 @@
                 <dataType>text</dataType>
                 <label translate="true">VAT Number</label>
                 <validation>
-                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                    <rule name="validate-alphanum" xsi:type="boolean">true</rule>
                 </validation>
             </settings>
         </field>
