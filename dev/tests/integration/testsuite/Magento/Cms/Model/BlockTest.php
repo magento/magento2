@@ -6,10 +6,9 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\BlockRepositoryInterface;
-use Magento\Cms\Model\BlockFactory;
 use Magento\Cms\Model\ResourceModel\Block;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -58,22 +57,32 @@ class BlockTest extends TestCase
      */
     public function testUpdateTime(array $blockData)
     {
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $db */
+        $db = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class)
+            ->getConnection(ResourceConnection::DEFAULT_CONNECTION);
+
         # Prepare and save the temporary block
         $tempBlock = $this->blockFactory->create();
         $tempBlock->setData($blockData);
+        $beforeTimestamp = $db->fetchOne('SELECT UNIX_TIMESTAMP()');
         $this->blockResource->save($tempBlock);
+        $afterTimestamp = $db->fetchOne('SELECT UNIX_TIMESTAMP()');
 
         # Load previously created block and compare update_time field
         $block = $this->blockRepository->getById($tempBlock->getId());
-        $date  = $this->objectManager->get(DateTime::class)->date();
-        $this->assertEquals($date, $block->getUpdateTime());
+        $blockTimestamp = strtotime($block->getUpdateTime());
+
+        /** These checks prevent a race condition */
+        $this->assertGreaterThanOrEqual($beforeTimestamp, $blockTimestamp);
+        $this->assertLessThanOrEqual($afterTimestamp, $blockTimestamp);
     }
 
     /**
      * Data provider "testUpdateTime" method
+     *
      * @return array
      */
-    public function testUpdateTimeDataProvider()
+    public function testUpdateTimeDataProvider(): array
     {
         return [
             [
@@ -82,8 +91,8 @@ class BlockTest extends TestCase
                     'stores'     => [0],
                     'identifier' => 'test-identifier',
                     'content'    => 'Test content',
-                    'is_active'  => 1
-                ]
+                    'is_active'  => 1,
+                ],
             ]
         ];
     }
