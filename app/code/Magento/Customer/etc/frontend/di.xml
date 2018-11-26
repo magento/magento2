@@ -77,4 +77,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Controller\Address">
+        <arguments>
+            <argument name="customerRepository" xsi:type="object">Magento\Customer\Model\ResourceModel\CustomerRepository</argument>\
+        </arguments>
+    </type>
 </config>
