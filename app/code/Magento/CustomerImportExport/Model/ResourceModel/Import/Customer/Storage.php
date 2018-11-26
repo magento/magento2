@@ -13,6 +13,9 @@ use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollecti
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
 
+/**
+ * Storage to check existing customers.
+ */
 class Storage
 {
     /**
@@ -117,6 +120,8 @@ class Storage
     }
 
     /**
+     * Add a customer by an array
+     *
      * @param array $customer
      * @return $this
      */
