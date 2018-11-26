@@ -6,10 +6,11 @@
 
 namespace Magento\Customer\Test\Unit\Model;
 
-use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\AccountConfirmation;
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
@@ -148,6 +149,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     private $addressRegistryMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilderMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -199,6 +205,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->dateTimeFactory = $this->createMock(DateTimeFactory::class);
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
+        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
 
         $this->visitorCollectionFactory = $this->getMockBuilder(
             \Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory::class
@@ -245,6 +252,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'sessionManager' => $this->sessionManager,
                 'saveHandler' => $this->saveHandler,
                 'visitorCollectionFactory' => $this->visitorCollectionFactory,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'addressRegistry' => $this->addressRegistryMock,
             ]
         );
@@ -1289,11 +1297,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "" provided for the customerId field
+     * @expectedExceptionMessage Invalid value of "0" provided for the customerId field
      */
     public function testValidateResetPasswordTokenBadCustomerId()
     {
-        $this->accountManagement->validateResetPasswordLinkToken(null, '');
+        $this->accountManagement->validateResetPasswordLinkToken(0, '');
     }
 
     /**
@@ -1436,6 +1444,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'encryptor' => $this->encryptor,
                 'dataProcessor' => $this->dataObjectProcessor,
                 'storeManager' => $this->storeManager,
+                'addressRegistry' => $this->addressRegistryMock,
                 'transportBuilder' => $this->transportBuilder,
             ]
         );
@@ -1548,12 +1557,34 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         $customerEmail = 'customer@example.com';
         $customerId = '1';
+        $addressId = 5;
         $resetToken = 'newStringToken';
         $newPassword = 'new_password';
 
         $this->reInitModel();
+        /** @var \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject $addressModel */
+        $addressModel = $this->getMockBuilder(\Magento\Customer\Model\Address::class)->disableOriginalConstructor()
+            ->setMethods(['setShouldIgnoreValidation'])->getMock();
+
+        /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
+        $address = $this->createMock(\Magento\Customer\Api\Data\AddressInterface::class);
+        $address->expects($this->any())
+            ->method('getId')
+            ->willReturn($addressId);
+
+        /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
         $customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)->getMock();
         $customer->expects($this->any())->method('getId')->willReturn($customerId);
+        $customer->expects($this->any())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+        $this->addressRegistryMock->expects($this->once())
+            ->method('retrieve')
+            ->with($addressId)
+            ->willReturn($addressModel);
+        $addressModel->expects($this->once())
+            ->method('setShouldIgnoreValidation')
+            ->with(true);
         $this->customerRepository->expects($this->atLeastOnce())->method('get')->with($customerEmail)
             ->willReturn($customer);
         $this->customer->expects($this->atLeastOnce())->method('getResetPasswordLinkExpirationPeriod')
