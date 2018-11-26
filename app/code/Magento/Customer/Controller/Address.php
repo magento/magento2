@@ -102,7 +102,7 @@ abstract class Address extends \Magento\Framework\App\Action\Action
         $this->_formKeyValidator = $formKeyValidator;
         $this->_formFactory = $formFactory;
         $this->_addressRepository = $addressRepository;
-        $this->customerRepository= $customerRepository;
+        $this->customerRepository = $customerRepository ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $this->addressDataFactory = $addressDataFactory;
         $this->regionDataFactory = $regionDataFactory;
         $this->_dataProcessor = $dataProcessor;
