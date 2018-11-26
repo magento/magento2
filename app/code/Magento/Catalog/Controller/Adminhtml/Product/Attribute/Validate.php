@@ -84,6 +84,14 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $response->setError(true);
             $response->setProductAttribute($attribute->toArray());
         }
+        
+        if(in_array($attributeCode, \Magento\Catalog\Model\ResourceModel\Eav\Attribute::DEFAULT_ATTRIBUTE)){
+    		$message = 	__('Cannot create attribute (%1) as it is already used in catalog',$attributeCode);
+    		$this->setMessageToResponse($response, [$message]);
+    		$response->setError(true);
+    		$response->setProductAttribute($attribute->toArray());
+    	}
+        
         if ($this->getRequest()->has('new_attribute_set_name')) {
             $setName = $this->getRequest()->getParam('new_attribute_set_name');
             /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */
