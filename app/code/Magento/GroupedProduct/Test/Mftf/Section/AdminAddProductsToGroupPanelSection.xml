@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminAddProductsToGroupPanelSection">
+        <element name="addSelectedProducts" type="button" selector=".product_form_product_form_grouped_grouped_products_modal button.action-primary" timeout="30"/>
+        <element name="filters" type="button" selector=".product_form_product_form_grouped_grouped_products_modal [data-action='grid-filter-expand']" timeout="30"/>
+    </section>
+</sections>
