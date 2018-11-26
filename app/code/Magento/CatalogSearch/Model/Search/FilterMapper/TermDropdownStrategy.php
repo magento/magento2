@@ -16,8 +16,8 @@ use Magento\Framework\App\ObjectManager;
  *   - The filter for dropdown or multi-select attribute
  *   - The filter is Term filter
  *
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class TermDropdownStrategy implements FilterStrategyInterface
 {

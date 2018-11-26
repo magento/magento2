@@ -20,6 +20,7 @@ use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -41,6 +42,7 @@ use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime;
@@ -327,9 +329,9 @@ class AccountManagement implements AccountManagementInterface
     private $accountConfirmation;
 
     /**
-     * @var AddressRegistry
+     * @var SearchCriteriaBuilder
      */
-    private $addressRegistry;
+    private $searchCriteriaBuilder;
 
     /**
      * @param CustomerFactory $customerFactory
@@ -361,7 +363,7 @@ class AccountManagement implements AccountManagementInterface
      * @param SessionManagerInterface|null $sessionManager
      * @param SaveHandlerInterface|null $saveHandler
      * @param CollectionFactory|null $visitorCollectionFactory
-     * @param AddressRegistry|null $addressRegistry
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -394,7 +396,7 @@ class AccountManagement implements AccountManagementInterface
         SessionManagerInterface $sessionManager = null,
         SaveHandlerInterface $saveHandler = null,
         CollectionFactory $visitorCollectionFactory = null,
-        AddressRegistry $addressRegistry = null
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -430,8 +432,8 @@ class AccountManagement implements AccountManagementInterface
             ?: ObjectManager::getInstance()->get(SaveHandlerInterface::class);
         $this->visitorCollectionFactory = $visitorCollectionFactory
             ?: ObjectManager::getInstance()->get(CollectionFactory::class);
-        $this->addressRegistry = $addressRegistry
-            ?: ObjectManager::getInstance()->get(AddressRegistry::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder
+            ?: ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -577,12 +579,6 @@ class AccountManagement implements AccountManagementInterface
         // load customer by email
         $customer = $this->customerRepository->get($email, $websiteId);
 
-        foreach ($customer->getAddresses() as $address) {
-            // No need to validate customer address while saving customer reset password token
-            $addressModel = $this->addressRegistry->retrieve($address->getId());
-            $addressModel->setShouldIgnoreValidation(true);
-        }
-
         $newPasswordToken = $this->mathRandom->getUniqueHash();
         $this->changeResetPasswordLinkToken($customer, $newPasswordToken);
 
@@ -604,6 +600,43 @@ class AccountManagement implements AccountManagementInterface
             $this->logger->critical($e);
         }
         return false;
+    }
+
+    /**
+     * Match a customer by their RP token.
+     *
+     * @param string $rpToken
+     * @throws ExpiredException
+     * @throws NoSuchEntityException
+     *
+     * @return CustomerInterface
+     * @throws LocalizedException
+     */
+    private function matchCustomerByRpToken(string $rpToken): CustomerInterface
+    {
+        $this->searchCriteriaBuilder->addFilter(
+            'rp_token',
+            $rpToken
+        );
+        $this->searchCriteriaBuilder->setPageSize(1);
+        $found = $this->customerRepository->getList(
+            $this->searchCriteriaBuilder->create()
+        );
+        if ($found->getTotalCount() > 1) {
+            //Failed to generated unique RP token
+            throw new ExpiredException(
+                new Phrase('Reset password token expired.')
+            );
+        }
+        if ($found->getTotalCount() === 0) {
+            //Customer with such token not found.
+            throw NoSuchEntityException::singleField(
+                'rp_token',
+                $rpToken
+            );
+        }
+        //Unique customer found.
+        return $found->getItems()[0];
     }
 
     /**
@@ -630,18 +663,26 @@ class AccountManagement implements AccountManagementInterface
      */
     public function resetPassword($email, $resetToken, $newPassword)
     {
-        $customer = $this->customerRepository->get($email);
+        if (!$email) {
+            $customer = $this->matchCustomerByRpToken($resetToken);
+            $email = $customer->getEmail();
+        } else {
+            $customer = $this->customerRepository->get($email);
+        }
         //Validate Token and new password strength
         $this->validateResetPasswordToken($customer->getId(), $resetToken);
+        $this->credentialsValidator->checkPasswordDifferentFromEmail(
+            $email,
+            $newPassword
+        );
         $this->checkPasswordStrength($newPassword);
         //Update secure data
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
-        $this->getAuthentication()->unlock($customer->getId());
-        $this->sessionManager->destroy();
         $this->destroyCustomerSessions($customer->getId());
+        $this->sessionManager->destroy();
         $this->customerRepository->save($customer);
 
         return true;
@@ -796,6 +837,7 @@ class AccountManagement implements AccountManagementInterface
             if ($customer->getWebsiteId()) {
                 $storeId = $this->storeManager->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
             } else {
+                $this->storeManager->setCurrentStore(null);
                 $storeId = $this->storeManager->getStore()->getId();
             }
             $customer->setStoreId($storeId);
@@ -970,7 +1012,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Get attribute validator
+     * Get EAV validator
      *
      * @return Backend
      */
@@ -1050,10 +1092,11 @@ class AccountManagement implements AccountManagementInterface
      * @throws \Magento\Framework\Exception\State\ExpiredException If token is expired
      * @throws \Magento\Framework\Exception\InputException If token or customer id is invalid
      * @throws \Magento\Framework\Exception\NoSuchEntityException If customer doesn't exist
+     * @throws LocalizedException
      */
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
-        if (empty($customerId) || $customerId < 0) {
+        if ($customerId !== null && $customerId <= 0) {
             throw new InputException(
                 __(
                     'Invalid value of "%value" provided for the %fieldName field.',
@@ -1061,21 +1104,24 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
+
+        if ($customerId === null) {
+            //Looking for the customer.
+            $customerId = $this->matchCustomerByRpToken($resetPasswordLinkToken)
+                ->getId();
+        }
         if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
             throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         }
-
         $customerSecureData = $this->customerRegistry->retrieveSecureData($customerId);
         $rpToken = $customerSecureData->getRpToken();
         $rpTokenCreatedAt = $customerSecureData->getRpTokenCreatedAt();
-
         if (!Security::compareStrings($rpToken, $resetPasswordLinkToken)) {
             throw new InputMismatchException(__('The password token is mismatched. Reset and try again.'));
         } elseif ($this->isResetPasswordLinkTokenExpired($rpToken, $rpTokenCreatedAt)) {
             throw new ExpiredException(__('The password token is expired. Reset and try again.'));
         }
-
         return true;
     }
 
@@ -1158,6 +1204,7 @@ class AccountManagement implements AccountManagementInterface
      * @param int|string|null $defaultStoreId
      * @return int
      * @deprecated 100.1.0
+     * @throws LocalizedException
      */
     protected function getWebsiteStoreId($customer, $defaultStoreId = null)
     {
@@ -1170,7 +1217,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Get available email template types
+     * Get template types
      *
      * @return array
      * @deprecated 100.1.0

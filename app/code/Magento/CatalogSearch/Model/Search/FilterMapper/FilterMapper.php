@@ -14,8 +14,8 @@ use Magento\CatalogInventory\Model\Stock;
  * Class FilterMapper
  * This class applies filters to Select based on SelectContainer configuration
  *
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class FilterMapper
 {

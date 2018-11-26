@@ -178,6 +178,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Process rating codes
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
@@ -201,6 +203,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Process rating stores
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
@@ -224,6 +228,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Delete rating data
+     *
      * @param int $ratingId
      * @param string $table
      * @param array $storeIds
@@ -247,6 +253,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Insert rating data
+     *
      * @param string $table
      * @param array $data
      * @return void
@@ -269,6 +277,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Perform actions after object delete
+     *
      * Prepare rating data for reaggregate all data for reviews
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -425,9 +434,11 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $data = $connection->fetchAll($select, [':review_id' => $object->getReviewId()]);
 
+        $currentStore = $this->_storeManager->isSingleStoreMode() ? $this->_storeManager->getStore()->getId() : null;
+
         if ($onlyForCurrentStore) {
             foreach ($data as $row) {
-                if ($row['store_id'] == $this->_storeManager->getStore()->getId()) {
+                if ($row['store_id'] !== $currentStore) {
                     $object->addData($row);
                 }
             }
