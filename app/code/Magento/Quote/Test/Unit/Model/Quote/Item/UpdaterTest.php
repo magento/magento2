@@ -92,7 +92,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @ExceptedExceptionMessage The qty value is required to update quote item.
+     * @expectedExceptionMessage The qty value is required to update quote item.
      */
     public function testUpdateNoQty()
     {
@@ -130,6 +130,9 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->object);
     }
 
+    /**
+     * @return array
+     */
     public function qtyProvider()
     {
         return [
@@ -142,6 +145,9 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function qtyProviderDecimal()
     {
         return [

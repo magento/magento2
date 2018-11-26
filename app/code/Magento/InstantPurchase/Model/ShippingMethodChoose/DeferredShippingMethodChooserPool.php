@@ -15,6 +15,11 @@ class DeferredShippingMethodChooserPool
 {
     private $choosers;
 
+    /**
+     * DeferredShippingMethodChooserPool constructor.
+     *
+     * @param array $choosers
+     */
     public function __construct(array $choosers)
     {
         foreach ($choosers as $chooser) {
@@ -28,6 +33,11 @@ class DeferredShippingMethodChooserPool
         $this->choosers = $choosers;
     }
 
+    /**
+     * @param $type
+     *
+     * @return DeferredShippingMethodChooserInterface
+     */
     public function get($type) : DeferredShippingMethodChooserInterface
     {
         if (!isset($this->choosers[$type])) {

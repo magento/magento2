@@ -33,6 +33,9 @@ class PhraseFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         $subMessage1 = new Error('go jogging');

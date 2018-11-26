@@ -37,7 +37,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->locationDirectoryMock = $this->getMockBuilder(LocationDirectory::class)
-            ->setMethods(['hasCountryId', 'getCountryId', 'hasRegionId', 'getRegionId'])
+            ->setMethods(['hasCountryId', 'getCountryId', 'hasRegionId', 'getRegionIds'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->columnResolverMock = $this->getMockBuilder(ColumnResolver::class)
@@ -92,7 +92,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
             $conditionShortName,
             $columnValueMap
         );
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals([$expectedResult], $result);
     }
 
     /**
@@ -128,6 +128,9 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
         throw $exception;
     }
 
+    /**
+     * @return array
+     */
     public function parseWithExceptionDataProvider()
     {
         $rowData = ['a', 'b', 'c', 'd', 'e'];
@@ -143,7 +146,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
                     [$conditionFullName, $rowData, 40],
                     [ColumnResolver::COLUMN_PRICE, $rowData, 350],
                 ],
-                'Please correct Country "XX" in the Row #120.',
+                'The "XX" country in row number "120" is incorrect. Verify the country and try again.',
             ],
             [
                 $rowData,
@@ -155,7 +158,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
                     [$conditionFullName, $rowData, 40],
                     [ColumnResolver::COLUMN_PRICE, $rowData, 350],
                 ],
-                'Please correct Region/State "AA" in the Row #120.',
+                'The "AA" region or state in row number "120" is incorrect. Verify the region or state and try again.',
             ],
             [
                 $rowData,
@@ -179,7 +182,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
                     [$conditionFullName, $rowData, 40],
                     [ColumnResolver::COLUMN_PRICE, $rowData, 'BBB'],
                 ],
-                'Please correct Shipping Price "BBB" in the Row #120.',
+                'The "BBB" shipping price in row number "120" is incorrect. Verify the shipping price and try again.',
             ],
         ];
     }

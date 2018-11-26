@@ -45,6 +45,9 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->sidebar->getResponseData($error));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderGetResponseData()
     {
         return [
@@ -94,7 +97,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @exceptedExceptionMessage We can't find the quote item.
+     * @expectedExceptionMessage We can't find the quote item.
      */
     public function testCheckQuoteItemWithException()
     {

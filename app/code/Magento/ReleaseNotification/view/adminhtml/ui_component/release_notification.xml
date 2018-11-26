@@ -12,6 +12,7 @@
         </item>
         <item name="label" xsi:type="string" translate="true">Release Notification</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
+        <item name="releaseContentVersion" xsi:type="string">2.2.4</item>
     </argument>
     <settings>
         <namespace>release_notification</namespace>

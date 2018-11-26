@@ -83,6 +83,7 @@ class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
      */
     public function viewInvoice()
     {
+        $this->resetFilter();
         $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
         $this->_rootElement->find($this->invoiceId)->click();
     }

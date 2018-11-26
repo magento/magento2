@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderUsingBraintreePaymentTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Creation an admin order using Braintree payment"/>
+            <title value="Create order using Braintree payment"/>
+            <description value="Admin should be able to create order using Braintree payment"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-94247"/>
+            <group value="braintree"/>
+        </annotations>
+
+        <before>
+            <createData entity="SandboxBraintreeConfig" stepKey="setupBraintree"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100</field>
+            </createData>
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+            <createData entity="restrictedWebUser" stepKey="createRestrictedAdmin"/>
+
+            <actionGroup ref="LoginToAdminActionGroup" stepKey="loginToBackend"/>
+            <actionGroup ref="AdminCreateUserRoleActionGroup" stepKey="createRestrictedAdminRole">
+                <argument name="roleName" value="{{RoleTest.roleName}}"/>
+                <argument name="resourceAccess" value="Custom"/>
+                <argument name="resource" value="Magento_Sales::sales"/>
+            </actionGroup>
+            <actionGroup ref="AdminAssignUserRoleActionGroup" stepKey="assignAdminRole">
+                <argument name="user_restricted" value="$$createRestrictedAdmin$$"/>
+                <argument name="roleName" value="{{RoleTest.roleName}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromBackend"/>
+        </before>
+
+        <after>
+            <actionGroup ref="LoginToAdminActionGroup" stepKey="loginToBackendWithDefaultAdmin"/>
+            <!--Remove created admin user-->
+            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="removeAdminUser">
+                <argument name="user_restricted" value="$$createRestrictedAdmin$$"/>
+            </actionGroup>
+            <!--Remove created admin user role-->
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="removeUserRole">
+                <argument name="roleName" value="{{RoleTest.roleName}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutDefaultAdminFromBackend"/>
+            <createData entity="DefaultBraintreeConfig" stepKey="restoreBraintree"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="removeSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="removeCustomer"/>
+        </after>
+        <!--Login with restricted user-->
+        <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>
+        <waitForPageLoad stepKey="waitForLoginPageLoad"/>
+        <fillField selector="{{AdminLoginFormSection.username}}" userInput="$$createRestrictedAdmin.username$$" stepKey="fillUsername"/>
+        <fillField selector="{{AdminLoginFormSection.password}}" userInput="$$createRestrictedAdmin.password$$" stepKey="fillPassword"/>
+        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickOnSignIn"/>
+        <!--Navigate to orders page-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad time="30" stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <!--Create new order-->
+        <click selector="{{OrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <!--Choose customer-->
+        <actionGroup ref="chooseOrderCustomer" stepKey="selectCustomer">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+        <!--Add product to order-->
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!--Select shipping-->
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+        <!--Fill payment method-->
+        <actionGroup ref="AdminOrderFillBraintreeCreditCardActionGroup" stepKey="selectBraintreeCreditCard"/>
+        <!--Submit Order and verify information-->
+        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="clickSubmitOrder"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." stepKey="seeOrderSuccessMessage"/>
+        <actionGroup ref="logout" stepKey="logoutRestrictedAdminFromBackend"/>
+    </test>
+</tests>

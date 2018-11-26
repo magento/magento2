@@ -38,6 +38,10 @@ class OrderCanInvoice
      */
     public function afterCanInvoice(Order $order, $result): bool
     {
+        if (!$order->getPayment()) {
+            return false;
+        }
+
         if ($this->express->isOrderAuthorizationAllowed($order->getPayment())) {
             return false;
         }

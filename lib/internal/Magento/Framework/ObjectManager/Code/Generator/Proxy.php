@@ -288,6 +288,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
                 ? $this->getSourceClassName()
                 : $returnTypeName;
         }
+
         return $returnTypeValue;
     }
 }

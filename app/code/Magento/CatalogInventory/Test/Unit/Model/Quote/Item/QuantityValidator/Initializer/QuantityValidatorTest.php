@@ -119,6 +119,9 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $stockStatusMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
@@ -278,11 +281,13 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $optionMock = $this->getMockBuilder(OptionItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setHasError', 'getStockStateResult'])
+            ->setMethods(['setHasError', 'getStockStateResult', 'getProduct'])
             ->getMock();
         $optionMock->expects($this->once())
             ->method('getStockStateResult')
             ->willReturn($this->resultMock);
+        $optionMock->method('getProduct')
+            ->willReturn($this->productMock);
         $this->stockRegistryMock->expects($this->at(0))
             ->method('getStockItem')
             ->willReturn($this->stockItemMock);
@@ -319,7 +324,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $optionMock = $this->getMockBuilder(OptionItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setHasError', 'getStockStateResult'])
+            ->setMethods(['setHasError', 'getStockStateResult', 'getProduct'])
             ->getMock();
         $this->stockRegistryMock->expects($this->at(0))
             ->method('getStockItem')
@@ -330,6 +335,8 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $optionMock->expects($this->once())
             ->method('getStockStateResult')
             ->willReturn($this->resultMock);
+        $optionMock->method('getProduct')
+            ->willReturn($this->productMock);
         $options = [$optionMock];
         $this->createInitialStub(1);
         $this->setUpStubForQuantity(1, true);
@@ -360,7 +367,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $optionMock = $this->getMockBuilder(OptionItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setHasError', 'getStockStateResult'])
+            ->setMethods(['setHasError', 'getStockStateResult', 'getProduct'])
             ->getMock();
         $quoteItem = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
@@ -369,6 +376,8 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $optionMock->expects($this->once())
             ->method('getStockStateResult')
             ->willReturn($this->resultMock);
+        $optionMock->method('getProduct')
+            ->willReturn($this->productMock);
         $this->stockRegistryMock->expects($this->at(0))
             ->method('getStockItem')
             ->willReturn($this->stockItemMock);
@@ -450,6 +459,10 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $this->quantityValidator->validate($this->observerMock);
     }
 
+    /**
+     * @param $qty
+     * @param $hasError
+     */
     private function setUpStubForQuantity($qty, $hasError)
     {
         $this->productMock->expects($this->any())
@@ -480,6 +493,9 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn('');
     }
 
+    /**
+     * @param $qty
+     */
     private function createInitialStub($qty)
     {
         $this->storeMock->expects($this->any())
@@ -537,6 +553,9 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->resultMock);
     }
 
+    /**
+     * @return void
+     */
     private function setUpStubForRemoveError()
     {
         $quoteItems = [$this->quoteItemMock];

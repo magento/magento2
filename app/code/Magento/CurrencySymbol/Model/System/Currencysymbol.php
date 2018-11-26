@@ -192,9 +192,11 @@ class Currencysymbol
      */
     public function setCurrencySymbolsData($symbols = [])
     {
-        foreach ($this->getCurrencySymbolsData() as $code => $values) {
-            if (isset($symbols[$code]) && ($symbols[$code] == $values['parentSymbol'] || empty($symbols[$code]))) {
-                unset($symbols[$code]);
+        if (!$this->_storeManager->isSingleStoreMode()) {
+            foreach ($this->getCurrencySymbolsData() as $code => $values) {
+                if (isset($symbols[$code]) && ($symbols[$code] == $values['parentSymbol'] || empty($symbols[$code]))) {
+                    unset($symbols[$code]);
+                }
             }
         }
         $value = [];

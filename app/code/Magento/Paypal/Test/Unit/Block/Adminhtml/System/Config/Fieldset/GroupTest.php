@@ -93,6 +93,9 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function isCollapseStateDataProvider()
     {
         return [

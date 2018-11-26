@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ProductAttributeMediaGalleryEntryMagentoLogo" type="media_gallery_entries">
+        <data key="media_type">image</data>
+        <data key="label" unique="suffix">Magento Logo</data>
+        <data key="position">1</data>
+        <array key="types">
+            <item>image</item>
+            <item>small_image</item>
+            <item>thumbnail</item>
+        </array>
+        <data key="disabled">false</data>
+        <requiredEntity type="image_content">MagentoLogoImageContent</requiredEntity>
+    </entity>
+</entities>

@@ -20,6 +20,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\Escaper;
 
 /**
  * Class EditPost
@@ -72,6 +73,9 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     private $customerMapper;
 
+    /** @var Escaper */
+    private $escaper;
+
     /**
      * @param Context $context
      * @param Session $customerSession
@@ -79,6 +83,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerRepositoryInterface $customerRepository
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
+     * @param Escaper|null $escaper
      */
     public function __construct(
         Context $context,
@@ -86,7 +91,8 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
-        CustomerExtractor $customerExtractor
+        CustomerExtractor $customerExtractor,
+        Escaper $escaper = null
     ) {
         parent::__construct($context);
         $this->session = $customerSession;
@@ -94,6 +100,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
     }
 
     /**
@@ -175,9 +182,9 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->messageManager->addError($message);
                 return $resultRedirect->setPath('customer/account/login');
             } catch (InputException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
                 foreach ($e->getErrors() as $error) {
-                    $this->messageManager->addError($error->getMessage());
+                    $this->messageManager->addErrorMessage($this->escaper->escapeHtml($error->getMessage()));
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());

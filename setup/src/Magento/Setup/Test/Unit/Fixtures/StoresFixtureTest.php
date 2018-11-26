@@ -75,7 +75,6 @@ class StoresFixtureTest extends \PHPUnit\Framework\TestCase
                     'getDefaultStoreView',
                     'getStore',
                     'getStores',
-                    'reinitStores'
                 ]
             )->getMock();
 
@@ -249,10 +248,6 @@ class StoresFixtureTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->willReturn($storeGroupMock);
-
-        $this->storeManagerMock->expects($this->once())
-            ->method('reinitStores')
-            ->willReturn('void');
 
         $this->storeManagerMock->expects($this->once())
             ->method('getGroups')

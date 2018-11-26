@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Filesystem\Io;
 
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Exception\LocalizedException;
 

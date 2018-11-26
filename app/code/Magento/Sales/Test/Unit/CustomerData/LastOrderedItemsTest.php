@@ -176,6 +176,9 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['items' => [$expectedItem1, $expectedItem2]], $this->section->getSectionData());
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getLastOrderMock()
     {
         $customerId = 1;

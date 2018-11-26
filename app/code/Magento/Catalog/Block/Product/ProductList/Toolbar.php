@@ -83,7 +83,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'product/list/toolbar.phtml';
+    protected $_template = 'Magento_Catalog::product/list/toolbar.phtml';
 
     /**
      * Catalog config
@@ -196,7 +196,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
                 $this->_collection->addAttributeToSort(
                     $this->getCurrentOrder(),
                     $this->getCurrentDirection()
-                )->addAttributeToSort('entity_id', $this->getCurrentDirection());
+                );
             } else {
                 $this->_collection->setOrder($this->getCurrentOrder(), $this->getCurrentDirection());
             }

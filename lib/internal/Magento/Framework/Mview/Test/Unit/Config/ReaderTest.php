@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Mview\Test\Unit\Config;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**

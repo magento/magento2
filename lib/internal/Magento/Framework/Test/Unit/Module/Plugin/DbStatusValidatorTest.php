@@ -119,6 +119,9 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
         $this->plugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
     }
 
+    /**
+     * @return array
+     */
     public static function beforeDispatchOutOfDateWithErrorsDataProvider()
     {
         return [

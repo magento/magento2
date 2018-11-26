@@ -767,7 +767,6 @@
                             <attribute type="shared">1</attribute>
                         </field>
                         <field id="bml_wizard" translate="button_label" sortOrder="15" showInDefault="1" showInWebsite="1">
-                            <label></label>
                             <button_label>Get Publisher ID from PayPal</button_label>
                             <button_url><![CDATA[https:/financing.paypal.com/ppfinportal/cart/index?dcp=4eff8563b9cc505e0b9afaff3256705081553c79]]></button_url>
                             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\BmlApiWizard</frontend_model>

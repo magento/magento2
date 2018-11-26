@@ -39,7 +39,7 @@
             <% if (data.items.length) { %>
             <% _.each(data.items, function(value){ %>
             <li class="item"
-                <%- data.optionData(value) %>
+                <%= data.optionData(value) %>
                 >
                 <a href="<%- value.url %>" class="title"><%- value.name %></a>
                 <span class="type"><%- value.type %></span>

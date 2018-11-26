@@ -18,6 +18,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productResource;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeMock;
@@ -33,9 +38,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
-        $productResource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        $productResource->expects($this->once())->method('loadAllAttributes')->willReturnSelf();
-        $productResource->expects($this->once())->method('getAttributesByCode')->willReturn([]);
+        $this->productResource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $this->productResource->expects($this->once())->method('loadAllAttributes')->willReturnSelf();
+        $this->productResource->expects($this->once())->method('getAttributesByCode')->willReturn([]);
         $productCategoryList = $this->getMockBuilder(\Magento\Catalog\Model\ProductCategoryList::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -45,7 +50,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             [
                 'config' => $eavConfig,
                 'storeManager' => $storeManager,
-                'productResource' => $productResource,
+                'productResource' => $this->productResource,
                 'productCategoryList' => $productCategoryList,
                 'data' => [
                     'rule' => $ruleMock,
@@ -67,6 +72,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->attributeMock->expects($this->once())->method('isScopeGlobal')->willReturn(true);
         $this->attributeMock->expects($this->once())->method('isScopeGlobal')->willReturn(true);
         $this->attributeMock->expects($this->once())->method('getBackendType')->willReturn('multiselect');
+
+        $entityMock = $this->createMock(\Magento\Eav\Model\Entity\AbstractEntity::class);
+        $entityMock->expects($this->once())->method('getLinkField')->willReturn('entitiy_id');
+        $this->attributeMock->expects($this->once())->method('getEntity')->willReturn($entityMock);
+        $connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+
+        $this->productResource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connection);
+
         $this->model->addToCollection($collectionMock);
     }
 

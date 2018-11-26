@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminConfigureTaxSection">
+        <element name="taxClasses" type="block" selector="#tax_classes-head" timeout="30"/>
+
+        <element name="taxCalculationSettings" type="block" selector="#tax_calculation-head" timeout="30"/>
+        <element name="taxCalculationSettingsOpened" type="block" selector="#tax_calculation-head.open" timeout="30"/>
+        <element name="taxCalculationAlgorithm" type="select" selector="#tax_calculation_algorithm"/>
+        <element name="taxCalculationAlgorithmDisabled" type="select" selector="#tax_calculation_algorithm[disabled='disabled']"/>
+        <element name="taxCalculationAlgorithmInherit" type="checkbox" selector="#tax_calculation_algorithm_inherit"/>
+        <element name="taxCalculationBased" type="select" selector="#tax_calculation_based_on"/>
+        <element name="taxCalculationBasedDisabled" type="select" selector="#tax_calculation_based_on[disabled='disabled']"/>
+        <element name="taxCalculationBasedInherit" type="checkbox" selector="#tax_calculation_based_on_inherit"/>
+        <element name="taxCalculationPrices" type="select" selector="#tax_calculation_price_includes_tax"/>
+        <element name="taxCalculationPricesDisabled" type="select" selector="#tax_calculation_price_includes_tax[disabled='disabled']"/>
+        <element name="taxCalculationPricesInherit" type="checkbox" selector="#tax_calculation_price_includes_tax_inherit"/>
+
+        <element name="taxPriceDisplaySettings" type="block" selector="#tax_display-head" timeout="30"/>
+        <element name="taxPriceDisplaySettingsOpened" type="block" selector="#tax_display-head.open" timeout="30"/>
+        <element name="taxDisplayProductPrices" type="select" selector="#tax_display_type"/>
+        <element name="taxDisplayProductPricesDisabled" type="select" selector="#tax_display_type[disabled='disabled']"/>
+        <element name="taxDisplayProductPricesInherit" type="checkbox" selector="#tax_display_type_inherit"/>
+    </section>
+</sections>

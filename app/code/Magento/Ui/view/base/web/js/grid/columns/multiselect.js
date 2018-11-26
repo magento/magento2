@@ -230,6 +230,15 @@ define([
         },
 
         /**
+        * Selects or deselects all records on the current page.
+        *
+        * @returns {Multiselect} Chainable.
+        */
+        togglePage: function () {
+            return this.isPageSelected() ? this.deselectPage() : this.selectPage();
+        },
+
+        /**
          * Clears the array of not selected records.
          *
          * @returns {Multiselect} Chainable.

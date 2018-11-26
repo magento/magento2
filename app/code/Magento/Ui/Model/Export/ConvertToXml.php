@@ -13,7 +13,6 @@ use Magento\Framework\Convert\ExcelFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Ui\Component\MassAction\Filter;
 
 /**
@@ -22,7 +21,7 @@ use Magento\Ui\Component\MassAction\Filter;
 class ConvertToXml
 {
     /**
-     * @var WriteInterface
+     * @var DirectoryList
      */
     protected $directory;
 

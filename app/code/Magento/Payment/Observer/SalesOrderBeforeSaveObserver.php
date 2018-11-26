@@ -15,11 +15,18 @@ class SalesOrderBeforeSaveObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException in case order has no payment specified.
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         /** @var \Magento\Sales\Model\Order $order */
         $order = $observer->getEvent()->getOrder();
+
+        if (!$order->getPayment()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please provide payment for the order.')
+            );
+        }
 
         if ($order->getPayment()->getMethodInstance()->getCode() != 'free') {
             return $this;

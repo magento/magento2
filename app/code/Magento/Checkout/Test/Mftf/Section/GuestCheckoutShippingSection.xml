@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="GuestCheckoutShippingSection">
+        <element name="email" type="input" selector="#customer-email"/>
+        <element name="firstName" type="input" selector="input[name=firstname]"/>
+        <element name="lastName" type="input" selector="input[name=lastname]"/>
+        <element name="street" type="input" selector="input[name='street[0]']"/>
+        <element name="city" type="input" selector="input[name=city]"/>
+        <element name="region" type="select" selector="select[name=region_id]"/>
+        <element name="postcode" type="input" selector="input[name=postcode]"/>
+        <element name="telephone" type="input" selector="input[name=telephone]"/>
+        <element name="next" type="button" selector="button.button.action.continue.primary"/>
+        <element name="firstShippingMethod" type="radio" selector=".row:nth-of-type(1) .col-method .radio"/>
+    </section>
+</sections>

@@ -99,7 +99,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
         } elseif (!is_string($value)) {
-            $object->setData($attributeName, '');
+            $object->setData($attributeName, null);
         }
 
         return parent::beforeSave($object);

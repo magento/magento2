@@ -29,6 +29,9 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedFailsDescription, $this->model->getFailsDescription());
     }
 
+    /**
+     * @return array
+     */
     public function resultDataProvider()
     {
         $phraseMock = $this->getMockBuilder(\Magento\Framework\Phrase::class)->disableOriginalConstructor()->getMock();

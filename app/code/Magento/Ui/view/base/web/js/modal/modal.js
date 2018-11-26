@@ -104,11 +104,12 @@ define([
                 /**
                  * Escape key press handler,
                  * close modal window
+                 * @param {Object} event - event
                  */
-                escapeKey: function () {
+                escapeKey: function (event) {
                     if (this.options.isOpen && this.modal.find(document.activeElement).length ||
                         this.options.isOpen && this.modal[0] === document.activeElement) {
-                        this.closeModal();
+                        this.closeModal(event);
                     }
                 }
             }
@@ -423,8 +424,7 @@ define([
          * Creates overlay, append it to wrapper, set previous click event on overlay.
          */
         _createOverlay: function () {
-            var events,
-                outerClickHandler = this.options.outerClickHandler || this.closeModal;
+            var events;
 
             this.overlay = $('.' + this.options.overlayClass);
 
@@ -436,7 +436,6 @@ define([
             }
             events = $._data(this.overlay.get(0), 'events');
             events ? this.prevOverlayHandler = events.click[0].handler : false;
-            this.options.clickableOverlay ? this.overlay.unbind().on('click', outerClickHandler) : false;
         },
 
         /**

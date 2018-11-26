@@ -40,6 +40,7 @@
                 <item name="9" xsi:type="string">Stores</item>
                 <item name="10" xsi:type="string">System</item>
                 <item name="11" xsi:type="string">Global Search</item>
+                <item name="12" xsi:type="string">Catalog</item>
             </field>
         </dataset>
     </repository>

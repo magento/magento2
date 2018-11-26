@@ -15,7 +15,7 @@ class Detailed extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'detailed.phtml';
+    protected $_template = 'Magento_Review::detailed.phtml';
 
     /**
      * @var \Magento\Review\Model\RatingFactory
@@ -42,7 +42,7 @@ class Detailed extends \Magento\Framework\View\Element\Template
     protected function _toHtml()
     {
         $entityId = $this->_request->getParam('id');
-        if (intval($entityId) <= 0) {
+        if ((int)$entityId <= 0) {
             return '';
         }
 

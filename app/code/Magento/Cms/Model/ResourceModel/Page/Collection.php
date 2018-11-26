@@ -52,34 +52,6 @@ class Collection extends AbstractCollection
     }
 
     /**
-     * Returns pairs identifier - title for unique identifiers
-     * and pairs identifier|page_id - title for non-unique after first
-     *
-     * @return array
-     */
-    public function toOptionIdArray()
-    {
-        $res = [];
-        $existingIdentifiers = [];
-        foreach ($this as $item) {
-            $identifier = $item->getData('identifier');
-
-            $data['value'] = $identifier;
-            $data['label'] = $item->getData('title');
-
-            if (in_array($identifier, $existingIdentifiers)) {
-                $data['value'] .= '|' . $item->getData('page_id');
-            } else {
-                $existingIdentifiers[] = $identifier;
-            }
-
-            $res[] = $data;
-        }
-
-        return $res;
-    }
-
-    /**
      * Set first store flag
      *
      * @param bool $flag

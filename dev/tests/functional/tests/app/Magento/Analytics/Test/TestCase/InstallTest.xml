@@ -9,6 +9,7 @@
     <testCase name="Magento\Install\Test\TestCase\InstallTest" summary="[Web Setup][Auto] Install CE Magento via Web Interface">
         <variation name="InstallTestVariation" summary="Magento analytics opt-in by default" ticketId="MAGETWO-80760">
             <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="releaseContentVersion" xsi:type="string">2.2.4</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist"/>
             <constraint name="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled"/>
             <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" prev="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist" />

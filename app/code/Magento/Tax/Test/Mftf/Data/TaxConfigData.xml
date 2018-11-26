@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="TaxConfig" type="tax_config_state">
+      <!-- Calculation settings -->
+      <requiredEntity type="algorithm">TaxCalculationMethodBasedOn</requiredEntity>
+      <requiredEntity type="based_on">TaxCalculationBasedOn</requiredEntity>
+      <requiredEntity type="price_includes_tax">CatalogPrices</requiredEntity>
+      <requiredEntity type="shipping_includes_tax">ShippingPrices</requiredEntity>
+      <requiredEntity type="apply_after_discount">ApplyCustomerTax</requiredEntity>
+      <requiredEntity type="discount_tax">ApplyDiscountOnPrices</requiredEntity>
+      <requiredEntity type="apply_tax_on">ApplyTaxOn</requiredEntity>
+      <requiredEntity type="cross_border_trade_enabled">EnableCrossBorderTrade</requiredEntity>
+      <!-- Default Tax Destination Calculation -->
+      <requiredEntity type="country">CountryUS</requiredEntity>
+      <requiredEntity type="region">RegionCA</requiredEntity>
+      <requiredEntity type="postcode">AllPostCode</requiredEntity>
+      <!-- Shopping Cart Display Settings -->
+      <requiredEntity type="priceCart">DisplayPricesCart</requiredEntity>
+      <requiredEntity type="subtotalCart">DisplaySubtotalCart</requiredEntity>
+      <requiredEntity type="shippingCart">DisplayShippingAmountCart</requiredEntity>
+      <requiredEntity type="grandtotalCart">IncludeTaxInOrderTotalCart</requiredEntity>
+      <requiredEntity type="full_summaryCart">DisplayFullTaxSummaryCart</requiredEntity>
+      <requiredEntity type="zero_taxCart">DisplayZeroTaxSubtotalCart</requiredEntity>
+      <!-- Orders, Invoices, Credit Memos Display Settings -->
+      <requiredEntity type="spriceSale">DisplayPricesSales</requiredEntity>
+      <requiredEntity type="subtotalSales">DisplaySubtotalSales</requiredEntity>
+      <requiredEntity type="shippingSales">DisplayShippingAmountSales</requiredEntity>
+      <requiredEntity type="grandtotalSales">IncludeTaxInOrderTotalSales</requiredEntity>
+      <requiredEntity type="full_summarySales">DisplayFullTaxSummarySales</requiredEntity>
+      <requiredEntity type="zero_taxSales">DisplayZeroTaxSubtotalSales</requiredEntity>
+    </entity>
+    <!-- Calculation settings -->
+    <entity name="TaxCalculationMethodBasedOn" type="algorithm">
+        <data key="value">TOTAL_BASE_CALCULATION</data>
+    </entity>
+    <entity name="TaxCalculationBasedOn" type="based_on">
+        <data key="value">shipping</data>
+    </entity>
+    <entity name="CatalogPrices" type="price_includes_tax">
+        <data key="value">0</data>
+    </entity>
+    <entity name="ShippingPrices" type="shipping_includes_tax">
+        <data key="value">0</data>
+    </entity>
+    <entity name="ApplyCustomerTax" type="apply_after_discount">
+        <data key="value">1</data>
+    </entity>
+    <entity name="ApplyDiscountOnPrices" type="discount_tax">
+        <data key="value">0</data>
+    </entity>
+    <entity name="ApplyTaxOn" type="apply_tax_on">
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableCrossBorderTrade" type="cross_border_trade_enabled">
+        <data key="value">0</data>
+    </entity>
+    <!-- Default Tax Destination Calculation -->
+    <entity name="CountryUS" type="country">
+        <data key="value">US</data>
+    </entity>
+    <entity name="RegionCA" type="region">
+        <data key="value">12</data>
+    </entity>
+    <entity name="AllPostCode" type="postcode">
+        <data key="value">*</data>
+    </entity>
+    <!-- Shopping Cart Display Settings -->
+    <entity name="DisplayPricesCart" type="priceCart">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplaySubtotalCart" type="subtotalCart">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayShippingAmountCart" type="shippingCart">
+        <data key="value">1</data>
+    </entity>
+    <entity name="IncludeTaxInOrderTotalCart" type="grandtotalCart">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayFullTaxSummaryCart" type="full_summaryCart">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayZeroTaxSubtotalCart" type="zero_taxCart">
+        <data key="value">1</data>
+    </entity>
+    <!-- Orders, Invoices, Credit Memos Display Settings -->
+    <entity name="DisplayPricesSales" type="priceSales">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplaySubtotalSales" type="subtotalSales">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayShippingAmountSales" type="shippingSales">
+        <data key="value">1</data>
+    </entity>
+    <entity name="IncludeTaxInOrderTotalSales" type="grandtotalSales">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayFullTaxSummarySales" type="full_summarySales">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayZeroTaxSubtotalSales" type="zero_taxSales">
+        <data key="value">1</data>
+    </entity>
+    <entity name="Tax_Config_CA" type="tax_config_state">
+        <!-- Default Tax Destination Calculation -->
+        <requiredEntity type="country">CountryUS</requiredEntity>
+        <requiredEntity type="region">Region_CA</requiredEntity>
+        <requiredEntity type="postcode">AllPostCode</requiredEntity>
+        <!-- Shopping Cart Display Settings -->
+        <requiredEntity type="grandtotalCart">IncludeTaxInOrderTotalCart</requiredEntity>
+        <requiredEntity type="full_summaryCart">DisplayFullTaxSummaryCart</requiredEntity>
+        <requiredEntity type="zero_taxCart">DisplayZeroTaxSubtotalCart</requiredEntity>
+    </entity>
+
+    <entity name="Tax_Config_NY" type="tax_config_state">
+        <!-- Default Tax Destination Calculation -->
+        <requiredEntity type="country">CountryUS</requiredEntity>
+        <requiredEntity type="region">Region_NY</requiredEntity>
+        <requiredEntity type="postcode">AllPostCode</requiredEntity>
+        <!-- Shopping Cart Display Settings -->
+        <requiredEntity type="grandtotalCart">IncludeTaxInOrderTotalCart</requiredEntity>
+        <requiredEntity type="full_summaryCart">DisplayFullTaxSummaryCart</requiredEntity>
+        <requiredEntity type="zero_taxCart">DisplayZeroTaxSubtotalCart</requiredEntity>
+    </entity>
+<!-- Set default settings -->
+    <entity name="DefaultTaxConfig" type="tax_config_default">
+        <requiredEntity type="taxTotalFlagZero">DefaultTotalFlagZero</requiredEntity>
+        <requiredEntity type="taxPostCodeEmpty">EmptyField</requiredEntity>
+    </entity>
+    <entity name="DefaultTotalFlagZero" type="taxTotalFlagZero">
+        <data key="value">0</data>
+    </entity>
+    <entity name="EmptyField" type="taxPostCodeEmpty">
+        <data key="value"/>
+    </entity>
+</entities>

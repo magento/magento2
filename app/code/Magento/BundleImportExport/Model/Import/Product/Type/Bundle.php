@@ -8,11 +8,12 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
-use \Magento\Framework\App\ObjectManager;
-use \Magento\Bundle\Model\Product\Price as BundlePrice;
-use \Magento\Catalog\Model\Product\Type\AbstractType;
-use \Magento\CatalogImportExport\Model\Import\Product;
-use \Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Bundle\Model\Product\Price as BundlePrice;
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Bundle\Model\ResourceModel\Bundle as BundleResourceModel;
 
 /**
  * Class Bundle
@@ -149,6 +150,11 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     private $storeCodeToId = [];
 
     /**
+     * @var BundleResourceModel
+     */
+    private $bundleResourceModel;
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -156,8 +162,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param Bundle\RelationsDataSaver|null $relationsDataSaver
      * @param StoreManagerInterface $storeManager
+     * @param BundleResourceModel $bundleResourceModel
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -166,13 +172,16 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         array $params,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         Bundle\RelationsDataSaver $relationsDataSaver = null,
-        StoreManagerInterface $storeManager = null
+        StoreManagerInterface $storeManager = null,
+        BundleResourceModel $bundleResourceModel = null
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->relationsDataSaver = $relationsDataSaver
             ?: ObjectManager::getInstance()->get(Bundle\RelationsDataSaver::class);
         $this->storeManager = $storeManager
             ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->bundleResourceModel = $bundleResourceModel
+            ?: ObjectManager::getInstance()->get(BundleResourceModel::class);
     }
 
     /**
@@ -389,13 +398,15 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if ($this->_type != $productData['type_id']) {
                         continue;
                     }
-                    $this->parseSelections($rowData, $productData[$this->getProductEntityLinkField()]);
+                    $productId = $productData[$this->getProductEntityLinkField()];
+                    $this->parseSelections($rowData, $productId);
                 }
                 if (!empty($this->_cachedOptions)) {
                     $this->retrieveProducsByCachedSkus();
                     $this->populateExistingOptions();
                     $this->insertOptions();
                     $this->insertSelections();
+                    $this->insertProductRelations();
                     $this->clear();
                 }
             }
@@ -641,6 +652,29 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $this->relationsDataSaver->saveSelections($selections);
 
         return $this;
+    }
+
+    /**
+     * Insert product relations.
+     *
+     * @return void
+     */
+    private function insertProductRelations()
+    {
+        foreach ($this->_cachedOptions as $productId => $options) {
+            $childIds = [];
+            foreach ($options as $option) {
+                foreach ($option['selections'] as $selection) {
+                    if (isset($this->_cachedSkuToProducts[$selection['sku']])) {
+                        $childIds[] = $this->_cachedSkuToProducts[$selection['sku']];
+                    }
+                }
+            }
+            if (!empty($childIds)) {
+                $childIds = array_unique($childIds);
+                $this->bundleResourceModel->saveProductRelations($productId, $childIds);
+            }
+        }
     }
 
     /**

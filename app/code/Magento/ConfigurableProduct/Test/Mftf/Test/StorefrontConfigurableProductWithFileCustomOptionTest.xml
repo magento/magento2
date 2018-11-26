@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductWithFileCustomOptionTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Add configurable product to cart"/>
+            <title value="Correct error message and redirect with invalid file custom option"/>
+            <description value="Configurable product has file custom option. When adding to cart with an invalid filetype, the correct error message is shown, and options remain selected."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-93318"/>
+            <group value="configurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteAllProductsOnProductsGridPageFilteredByName" stepKey="deleteAllCreatedProducts">
+                <argument name="product" value="BaseConfigurableProduct"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttribute" stepKey="deleteCreatedProductAttribute">
+                <argument name="productAttribute" value="colorProductAttribute"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+        <!-- Create a configurable product via the UI -->
+        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <!--Add custom option to configurable product-->
+        <actionGroup ref="AddProductCustomOptionFile" stepKey="addCustomOptionToProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+
+        <!--Go to storefront-->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad"/>
+        <click selector="{{StorefrontNavigationSection.topCategory($$createCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryTitle}}" userInput="$$createCategory.name$$" stepKey="seeOnCategoryPage"/>
+        <!--Add configurable product to cart-->
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.productTitleByName(BaseConfigurableProduct.name)}}" stepKey="hoverProductInGrid"/>
+        <click selector="{{StorefrontCategoryProductSection.productAddToCartByName(BaseConfigurableProduct.name)}}" stepKey="tryAddToCartFromCategoryPage"/>
+        <waitForPageLoad stepKey="waitForRedirectToProductPage"/>
+        <seeInCurrentUrl url="{{StorefrontProductPage.url(BaseConfigurableProduct.urlKey)}}" stepKey="seeOnProductPage"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="{{colorProductAttribute2.name}}" stepKey="selectColor"/>
+        <!--Try invalid file-->
+        <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="lorem_ipsum.docx" stepKey="attachInvalidFile"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartInvalidFile"/>
+        <waitForPageLoad time="30" stepKey="waitForAddToCartWithError"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.alertMessage}}" stepKey="waitForErrorMessageInvalidFile"/>
+        <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="The file 'lorem_ipsum.docx' for '{{ProductOptionFile.title}}' has an invalid extension." stepKey="seeMessageInvalidFile"/>
+        <!--Option remains selected-->
+        <seeOptionIsSelected selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeOptionRemainSelected"/>
+        <!--Try valid file-->
+        <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="attachValidFile"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$11.99" stepKey="seePriceUpdated"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="BaseConfigurableProduct.name"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{BaseConfigurableProduct.name}} to your shopping cart." stepKey="seeSuccessMessage"/>
+
+        <!--Check item in cart-->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
+        <waitForPageLoad stepKey="waitForCartPageLoad"/>
+        <seeElement selector="{{CheckoutCartProductSection.productLinkByName(BaseConfigurableProduct.name)}}" stepKey="seeProductInCart"/>
+        <see selector="{{CheckoutCartProductSection.productOptionByNameAndAttribute(BaseConfigurableProduct.name, colorProductAttribute.default_label)}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeSelectedOption"/>
+        <see selector="{{CheckoutCartProductSection.productOptionByNameAndAttribute(BaseConfigurableProduct.name, ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="seeCorrectOptionFile"/>
+        <!--Delete cart item-->
+        <click selector="{{CheckoutCartProductSection.removeItem}}" stepKey="deleteCartItem"/>
+    </test>
+</tests>

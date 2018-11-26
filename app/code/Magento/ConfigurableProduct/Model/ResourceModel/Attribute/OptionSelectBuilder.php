@@ -91,7 +91,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                 ]
             ),
             []
-        )->joinInner(
+        )->joinLeft(
             ['attribute_option' => $this->attributeResource->getTable('eav_attribute_option')],
             'attribute_option.option_id = entity_value.value',
             []

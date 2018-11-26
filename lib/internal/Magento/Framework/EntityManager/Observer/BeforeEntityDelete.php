@@ -9,7 +9,6 @@ namespace Magento\Framework\EntityManager\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Class BeforeEntityDelete

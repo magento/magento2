@@ -24,7 +24,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
         'enable' => '1',
         'font' => 'linlibertine',
         'mode' => 'after_fail',
-        'forms' => 'user_forgotpassword,user_create,guest_checkout,register_during_checkout',
+        'forms' => 'user_forgotpassword,user_create',
         'failed_attempts_login' => '3',
         'failed_attempts_ip' => '1000',
         'timeout' => '7',
@@ -35,8 +35,6 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
         'always_for' => [
             'user_create',
             'user_forgotpassword',
-            'guest_checkout',
-            'register_during_checkout',
             'contact_us',
         ],
     ];
@@ -354,13 +352,15 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $captcha->isShownToLoggedInUser());
     }
 
+    /**
+     * @return array
+     */
     public function isShownToLoggedInUserDataProvider()
     {
         return [
             [true, 'contact_us'],
             [false, 'user_create'],
             [false, 'user_forgotpassword'],
-            [false, 'guest_checkout']
         ];
     }
 }

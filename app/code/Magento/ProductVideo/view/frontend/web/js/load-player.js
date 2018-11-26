@@ -88,6 +88,7 @@ define(['jquery', 'jquery/ui'], function ($) {
             this._playing = this._autoplay || false;
             this._loop = this.element.data('loop');
             this._rel = this.element.data('related');
+            this.useYoutubeNocookie = this.element.data('youtubenocookie') || false;
 
             this._responsive = this.element.data('responsive') !== false;
 
@@ -164,6 +165,12 @@ define(['jquery', 'jquery/ui'], function ($) {
                  * Handle event
                  */
                 'youtubeapiready': function () {
+                    var host = 'https://www.youtube.com';
+
+                    if (self.useYoutubeNocookie) {
+                        host = 'https://www.youtube-nocookie.com';
+                    }
+
                     if (self._player !== undefined) {
                         return;
                     }
@@ -182,6 +189,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                         width: self._width,
                         videoId: self._code,
                         playerVars: self._params,
+                        host: host,
                         events: {
 
                             /**

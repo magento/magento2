@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateNewPageWithAllValues">
+        <arguments>
+            <argument name="pageTitle" type="string"/>
+            <argument name="contentHeading" type="string"/>
+            <argument name="urlKey" type="string"/>
+            <argument name="selectStoreViewOpt" type="string"/>
+        </arguments>
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnCMSNewPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" stepKey="waitUntilTitleAppears"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{pageTitle}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{contentHeading}}" stepKey="fillFieldContentHeading"/>
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimization"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{urlKey}}" stepKey="fillFieldUrlKey"/>
+        <click selector="{{AdminCmsNewPagePiwSection.header}}" stepKey="clickPageInWebsites"/>
+        <waitForElementVisible selector="{{AdminCmsNewPagePiwSection.selectStoreView(selectStoreViewOpt)}}" stepKey="waitForStoreGridReload"/>
+        <clickWithLeftButton selector="{{AdminCmsNewPagePiwSection.selectStoreView(selectStoreViewOpt)}}" stepKey="clickStoreView2"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="StorefrontHeaderSection">
+        <element name="storeViewSwitcher" type="button" selector="#switcher-language-trigger"/>
+        <element name="storeViewDropdown" type="button" selector="ul.switcher-dropdown"/>
+        <element name="storeViewOption" type="button" selector="li.view-{{var1}}>a" parameterized="true"/>
+        <element name="mainTitle" type="text" selector="#maincontent .page-title"/>
+    </section>
+</sections>

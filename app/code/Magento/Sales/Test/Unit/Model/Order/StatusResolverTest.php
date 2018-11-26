@@ -27,6 +27,9 @@ class StatusResolverTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expectedReturn, $actualReturn);
     }
 
+    /**
+     * @return array
+     */
     public function statesDataProvider()
     {
         return [

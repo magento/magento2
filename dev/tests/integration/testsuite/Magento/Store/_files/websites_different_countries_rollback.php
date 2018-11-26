@@ -13,17 +13,17 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndex;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 $objectManager = Bootstrap::getObjectManager();
+
+/** @var Registry $registry */
+$registry = $objectManager->get(Registry::class);
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', true);
+
 //Deleting second website's store.
 $store = $objectManager->create(Store::class);
 if ($store->load('fixture_second_store', 'code')->getId()) {
     $store->delete();
 }
-
-//Deleting the second website.
-/** @var Registry $registry */
-$registry = $objectManager->get(Registry::class);
-$registry->unregister('isSecureArea');
-$registry->register('isSecureArea', true);
 
 $configResource = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
 //Restoring allowed countries.

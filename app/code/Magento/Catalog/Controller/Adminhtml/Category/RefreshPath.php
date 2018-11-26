@@ -38,7 +38,11 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
 
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
-            return $resultJson->setData(['id' => $categoryId, 'path' => $category->getPath()]);
+            return $resultJson->setData([
+                'id' => $categoryId,
+                'path' => $category->getPath(),
+                'parentId' => $category->getParentId(),
+            ]);
         }
     }
 }
