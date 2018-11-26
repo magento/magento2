@@ -15,7 +15,8 @@
             <title value="Check Customer Information Created By Guest"/>
             <description value="Check customer information after placing the order as the guest who created an account"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-95820"/>
+            <testCaseId value="MAGETWO-95932"/>
+            <useCaseId value="MAGETWO-95820"/>
             <group value="checkout"/>
         </annotations>
 
@@ -29,6 +30,7 @@
         </before>
 
         <after>
+            <createData entity="DisableAllowGuestCheckout" stepKey="enableGuestCheckout"/>
             <deleteData createDataKey="product" stepKey="deleteProduct" />
             <deleteData createDataKey="category" stepKey="deleteCategory" />
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
