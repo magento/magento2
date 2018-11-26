@@ -33,21 +33,30 @@ class Tree
     protected $treeFactory;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Category\TreeFactory
+     */
+    private $treeResourceFactory;
+
+    /**
      * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection
      * @param \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory $treeFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\TreeFactory|null $treeResourceFactory
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection,
-        \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory $treeFactory
+        \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory $treeFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $treeResourceFactory = null
     ) {
         $this->categoryTree = $categoryTree;
         $this->storeManager = $storeManager;
         $this->categoryCollection = $categoryCollection;
         $this->treeFactory = $treeFactory;
+        $this->treeResourceFactory = $treeResourceFactory ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\ResourceModel\Category\TreeFactory::class);
     }
 
     /**
@@ -77,7 +86,8 @@ class Tree
     protected function getNode(\Magento\Catalog\Model\Category $category)
     {
         $nodeId = $category->getId();
-        $node = $this->categoryTree->loadNode($nodeId);
+        $categoryTree = $this->treeResourceFactory->create();
+        $node = $categoryTree->loadNode($nodeId);
         $node->loadChildren();
         $this->prepareCollection();
         $this->categoryTree->addCollectionData($this->categoryCollection);
