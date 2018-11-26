@@ -191,7 +191,8 @@ class Addresses extends Tab
                 $data[$addressNumber] = [];
             } else {
                 $customerAddressesGrid->searchAndOpen($address->getData());
-                $data[$addressNumber] = $this->getData($address, $this->browser->find($this->customerAddressModalForm));
+                $data[$addressNumber] = $this->getCustomerAddressModalForm()
+                    ->getData($address, $this->browser->find($this->customerAddressModalForm));
             }
         }
 
