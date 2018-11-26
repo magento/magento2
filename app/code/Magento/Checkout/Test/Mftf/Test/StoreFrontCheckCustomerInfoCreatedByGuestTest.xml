@@ -50,9 +50,7 @@
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
-        <wait stepKey="asd" time="15"/>
         <grabTextFrom selector="{{CheckoutSuccessRegisterSection.orderNumber}}" stepKey="grabOrderNumber"/>
-        <wait stepKey="asdasd" time="15"/>
         <click selector="{{CustomerAccountSection.createAccount}}" stepKey="clickToCreateAccount"/>
         <fillField selector="{{StorefrontCustomerCreateFormSection.passwordField}}" userInput="{{CustomerData.password}}" stepKey="TypePassword"/>
         <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{CustomerData.password}}" stepKey="TypeConfirmationPassword"/>
