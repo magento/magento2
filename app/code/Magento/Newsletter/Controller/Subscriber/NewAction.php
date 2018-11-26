@@ -143,13 +143,11 @@ class NewAction extends SubscriberController
                 if ($subscriber->getId()
                     && (int) $subscriber->getSubscriberStatus() === Subscriber::STATUS_SUBSCRIBED
                 ) {
-                    throw new LocalizedException(
-                        __('This email address is already subscribed.')
-                    );
+                    $this->messageManager->addErrorMessage(__('This email address is already subscribed.'));
+                } else {
+                    $status = (int)$this->_subscriberFactory->create()->subscribe($email);
+                    $this->messageManager->addSuccessMessage($this->getSuccessMessage($status));
                 }
-
-                $status = (int) $this->_subscriberFactory->create()->subscribe($email);
-                $this->messageManager->addSuccessMessage($this->getSuccessMessage($status));
             } catch (LocalizedException $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
