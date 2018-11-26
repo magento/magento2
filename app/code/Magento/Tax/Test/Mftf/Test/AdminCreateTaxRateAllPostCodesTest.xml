@@ -36,7 +36,7 @@
         <!-- Create a tax rate with * for postcodes -->
         <click selector="{{AdminTaxRateGridSection.add}}" stepKey="clickAddNewTaxRateButton"/>
         <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillRuleName"/>
-        <fillField selector="{{AdminTaxRateGridSection.zipCode}}" userInput="*" stepKey="fillPostCode"/>
+        <fillField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="*" stepKey="fillPostCode"/>
         <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="Australia" stepKey="selectCountry1"/>
         <fillField selector="{{AdminTaxRateFormSection.rate}}" userInput="20" stepKey="fillRate"/>
         <click selector="{{AdminTaxRateFormSection.save}}" stepKey="clickSave"/>
@@ -64,8 +64,8 @@
 
         <!-- Verify we see expected values on the tax rate edit page -->
         <seeInField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeRuleName2"/>
-        <seeInField selector="{{AdminTaxRateGridSection.zipCode}}" userInput="*" stepKey="seeZipCode"/>
-        <seeOptionIsSelected selector="{{AdminTaxRateGridSection.country}}" userInput="Australia" stepKey="seeCountry2"/>
+        <seeInField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="*" stepKey="seeZipCode"/>
+        <seeOptionIsSelected selector="{{AdminTaxRateFormSection.country}}" userInput="Australia" stepKey="seeCountry2"/>
         <seeInField selector="{{AdminTaxRateFormSection.rate}}" userInput="20" stepKey="seeRate"/>
 
         <!-- Go to the tax rule grid page and verify our tax rate can be used in the rule -->
