@@ -3,9 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @api
- */
 define([
     'Magento_Ui/js/form/element/country'
 ], function (Country) {

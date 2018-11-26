@@ -3,9 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @api
- */
 define([
     'Magento_Ui/js/grid/massactions',
     'Magento_Ui/js/modal/alert',
