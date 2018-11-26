@@ -120,5 +120,5 @@ User,User
 "Execution Time","Execution Time"
 Summary,Summary
 "New product data is added to existing product data entries in the database. All fields except SKU can be updated.","New product data is added to existing product data entries in the database. All fields except SKU can be updated."
-"The existing product data is replaced with new data. <b>Exercise caution when replacing data because the existing product data will be completely cleared and all references in the system will be lost.</b>","The existing product data is replaced with new data. <b>Exercise caution when replacing data because the existing product data will be completely cleared and all references in the system will be lost.</b>"
+"All existing product data is replaced with the imported new data. <b>Exercise caution when replacing data. All existing product data will be completely cleared and all references in the system will be lost.</b>","All existing product data is replaced with the imported new data. <b>Exercise caution when replacing data. All existing product data will be completely cleared and all references in the system will be lost.</b>"
 "Any entities in the import data that already exist in the database are deleted from the database.","Any entities in the import data that already exist in the database are deleted from the database."
