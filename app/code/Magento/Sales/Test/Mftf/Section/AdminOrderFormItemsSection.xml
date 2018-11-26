@@ -27,5 +27,6 @@
         <element name="applyCoupon" type="input" selector="#coupons:code"/>
         <element name="customPriceField" type="input" selector="//*[@class='custom-price-block']/following-sibling::input"/>
         <element name="productRowBySku" type="block" selector="//*[@id='order-items_grid']//tbody//td[contains(@class,'col-product')]/span[starts-with(@id,'order_item_') and text()='{{productName}}']/ancestor::tr" parameterized="true"/>
+        <element name="itemsOrderedSummaryText" type="text" selector="#order-items_grid tfoot tr"/>
     </section>
 </sections>
