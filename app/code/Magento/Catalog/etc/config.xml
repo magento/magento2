@@ -67,6 +67,9 @@
                     <product_custom_options_fodler>custom_options</product_custom_options_fodler>
                 </allowed_resources>
             </media_storage_configuration>
+            <upload_configuration>
+                <jpeg_quality>80</jpeg_quality>
+            </upload_configuration>
         </system>
         <design>
             <watermark>
