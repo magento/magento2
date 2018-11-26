@@ -9,7 +9,7 @@
     <system>
         <section id="dev">
             <group id="js">
-                <field id="translate_strategy" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="translate_strategy" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Translation Strategy</label>
                     <source_model>Magento\Translation\Model\Js\Config\Source\Strategy</source_model>
                     <comment>Please put your store into maintenance mode and redeploy static files after changing strategy</comment>

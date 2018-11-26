@@ -6,7 +6,7 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="BasicFieldNewsletterSection">
         <element name="templateName" type="input" selector="#code"/>
         <element name="templateSubject" type="input" selector="#subject"/>

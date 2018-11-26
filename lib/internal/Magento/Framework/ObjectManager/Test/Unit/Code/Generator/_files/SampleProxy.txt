@@ -101,4 +101,20 @@ class Sample_Proxy extends Sample implements \Magento\Framework\ObjectManager\No
     {
         return $this->_getSubject()->getMessages();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setConfig(array $config)
+    {
+        return $this->_getSubject()->setConfig($config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfig() : array
+    {
+        return $this->_getSubject()->getConfig();
+    }
 }

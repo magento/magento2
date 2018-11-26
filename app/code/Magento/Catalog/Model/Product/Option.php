@@ -323,7 +323,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
             self::OPTION_TYPE_TIME => self::OPTION_GROUP_DATE,
         ];
 
-        return isset($optionGroupsToTypes[$type]) ? $optionGroupsToTypes[$type] : '';
+        return $optionGroupsToTypes[$type] ?? '';
     }
 
     /**

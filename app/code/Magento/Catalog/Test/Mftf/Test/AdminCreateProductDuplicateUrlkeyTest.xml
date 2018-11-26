@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateProductDuplicateUrlkeyTest">
         <annotations>
             <features value="Catalog"/>
@@ -39,5 +39,47 @@
         <fillField userInput="$$simpleProduct.custom_attributes[url_key]$$" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         <see userInput="The value specified in the URL Key field would generate a URL that already exists" selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="assertErrorMessage"/>
+    </test>
+    <test name="AdminCreateProductDuplicateProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Validation Errors"/>
+            <title value="No validation errors when trying to duplicate product twice"/>
+            <description value="No validation errors when trying to duplicate product twice"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-5472"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete all products by filtering grid and using mass delete action-->
+            <actionGroup ref="deleteAllDuplicateProductUsingProductGrid" stepKey="deleteAllDuplicateProducts">
+                <argument name="product" value="$$createSimpleProduct$$"/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deletePreReqCatalog" />
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct1">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!--Save and duplicated the product once-->
+        <actionGroup ref="AdminFormSaveAndDuplicate" stepKey="saveAndDuplicateProductForm1"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct2">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!--Save and duplicated the product second time-->
+        <actionGroup ref="AdminFormSaveAndDuplicate" stepKey="saveAndDuplicateProductForm2"/>
     </test>
 </tests>

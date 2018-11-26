@@ -26,7 +26,8 @@ define([
 
         describe('Test enable, disable, activate and deactivate methods', function () {
             var group = $('<div id="2"></div>'),
-                content = $('<div data-role="content"></div>').appendTo(group);
+                content = $('<div data-role="content"></div>').appendTo(group),
+                emptyGroup = $('<div></div>');
 
             $('<div data-role="title"></div>').prependTo(group);
 
@@ -64,6 +65,15 @@ define([
 
                 group.collapsible('destroy');
                 expect(group.is(':mage-collapsible')).toBeFalsy();
+            });
+
+            it('check activate method on empty group', function () {
+                emptyGroup.collapsible();
+                expect(emptyGroup.is(':mage-collapsible')).toBeTruthy();
+
+                expect(function () {
+                    emptyGroup.collapsible('activate');
+                }).not.toThrow();
             });
         });
 

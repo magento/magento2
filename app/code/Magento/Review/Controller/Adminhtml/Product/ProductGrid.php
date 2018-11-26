@@ -5,6 +5,8 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
@@ -13,7 +15,7 @@ use Magento\Review\Model\RatingFactory;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\ResultFactory;
 
-class ProductGrid extends ProductController
+class ProductGrid extends ProductController implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory

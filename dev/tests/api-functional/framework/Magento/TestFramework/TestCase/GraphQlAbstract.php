@@ -33,7 +33,9 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @param string $query
      * @param array $variables
      * @param string $operationName
+     * @param array $headers
      * @return array|int|string|float|bool GraphQL call results
+     * @throws \Exception
      */
     public function graphQlQuery(
         string $query,
@@ -50,11 +52,14 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
+     * Compose headers
+     *
+     * @param array $headers
      * @return string[]
      */
-    private function composeHeaders($headers)
+    private function composeHeaders(array $headers): array
     {
-        $headersArray =[];
+        $headersArray = [];
         foreach ($headers as $key => $value) {
             $headersArray[] = sprintf('%s: %s', $key, $value);
         }
@@ -97,5 +102,32 @@ abstract class GraphQlAbstract extends WebapiAbstract
             );
         }
         return $this->graphQlClient;
+    }
+
+    /**
+     * Compare actual response fields with expected
+     *
+     * @param array $actualResponse
+     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
+     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
+     */
+    protected function assertResponseFields($actualResponse, $assertionMap)
+    {
+        foreach ($assertionMap as $key => $assertionData) {
+            $expectedValue = isset($assertionData['expected_value'])
+                ? $assertionData['expected_value']
+                : $assertionData;
+            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
+            self::assertNotNull(
+                $expectedValue,
+                "Value of '{$responseField}' field must not be NULL"
+            );
+            self::assertEquals(
+                $expectedValue,
+                $actualResponse[$responseField],
+                "Value of '{$responseField}' field in response does not match expected value: "
+                . var_export($expectedValue, true)
+            );
+        }
     }
 }

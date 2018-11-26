@@ -581,8 +581,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             '4-2-radio' => 40000.00
         ];
         foreach ($options as $option) {
+            if (!$option->getValues()) {
+                continue;
+            }
             foreach ($option->getValues() as $value) {
-                $this->assertEquals($expectedValue[$value->getSku()], floatval($value->getPrice()));
+                $this->assertEquals($expectedValue[$value->getSku()], (float)$value->getPrice());
             }
         }
     }

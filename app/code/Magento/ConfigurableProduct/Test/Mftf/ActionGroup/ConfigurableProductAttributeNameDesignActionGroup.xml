@@ -69,26 +69,31 @@
 
         <!--Add option 1 to attribute-->
         <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption1"/>
+        <waitForPageLoad stepKey="waitForOption1"/>
         <fillField stepKey="fillInAdminFieldRed" selector="{{NewProduct.adminFieldRed}}" userInput="{{NewProductsData.adminFieldRed}}"/>
         <fillField stepKey="fillInDefaultStoreViewFieldRed" selector="{{NewProduct.defaultStoreViewFieldRed}}" userInput="{{NewProductsData.defaultStoreViewFieldRed}}"/>
 
         <!--Add option 2 to attribute-->
         <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption2"/>
+        <waitForPageLoad stepKey="waitForOption2"/>
         <fillField stepKey="fillInAdminFieldBlue" selector="{{NewProduct.adminFieldBlue}}" userInput="{{NewProductsData.adminFieldBlue}}"/>
         <fillField stepKey="fillInDefaultStoreViewFieldBlue" selector="{{NewProduct.defaultStoreViewFieldBlue}}" userInput="{{NewProductsData.defaultStoreViewFieldBlue}}"/>
 
         <!--Add option 3 to attribute-->
         <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption3"/>
+        <waitForPageLoad stepKey="waitForOption3"/>
         <fillField stepKey="fillInAdminFieldYellow" selector="{{NewProduct.adminFieldYellow}}" userInput="{{NewProductsData.adminFieldYellow}}"/>
         <fillField stepKey="fillInDefaultStoreViewFieldYellow" selector="{{NewProduct.defaultStoreViewFieldYellow}}" userInput="{{NewProductsData.defaultStoreViewFieldYellow}}"/>
 
         <!--Add option 4 to attribute-->
         <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption4"/>
+        <waitForPageLoad stepKey="waitForOption4"/>
         <fillField stepKey="fillInAdminFieldGreen" selector="{{NewProduct.adminFieldGreen}}" userInput="{{NewProductsData.adminFieldGreen}}"/>
         <fillField stepKey="fillInDefaultStoreViewFieldGreen" selector="{{NewProduct.defaultStoreViewFieldGreen}}" userInput="{{NewProductsData.defaultStoreViewFieldGreen}}"/>
 
         <!--Add option 5 to attribute-->
         <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption5"/>
+        <waitForPageLoad stepKey="waitForOption5"/>
         <fillField stepKey="fillInAdminFieldBlack" selector="{{NewProduct.adminFieldBlack}}" userInput="{{NewProductsData.adminFieldBlack}}"/>
         <fillField stepKey="fillInDefaultStoreViewFieldBlack" selector="{{NewProduct.defaultStoreViewFieldBlack}}" userInput="{{NewProductsData.defaultStoreViewFieldBlack}}"/>
 
@@ -135,6 +140,7 @@
 
         <!--Click on Stores item-->
         <click stepKey="clickOnStoresItem" selector="{{CatalogProductsSection.storesItem}}"/>
+        <waitForPageLoad stepKey="waitForNavigationPanel"/>
 
         <!--Click on Products item-->
         <waitForElementVisible selector="{{CatalogProductsSection.storesProductItem}}" stepKey="waitForCatalogLoad"/>

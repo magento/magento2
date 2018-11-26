@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontConfigurableProductWithFileCustomOptionTest">
         <annotations>
             <features value="ConfigurableProduct"/>
@@ -17,7 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93059"/>
             <group value="ConfigurableProduct"/>
-            <group value="skip"/><!-- MAGETWO-94170 -->
         </annotations>
 
         <before>
@@ -41,7 +40,7 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         
         <!--Go to storefront-->
-        <amOnPage url="" stepKey="goToHomePage"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageLoad"/>
         <click selector="{{StorefrontNavigationSection.topCategory($$createCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>

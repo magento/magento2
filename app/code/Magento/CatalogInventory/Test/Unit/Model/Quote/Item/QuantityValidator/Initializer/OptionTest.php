@@ -151,7 +151,6 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->optionMock->expects($this->any())->method('getProduct')->will($this->returnValue($this->productMock));
 
         $this->stockItemMock->expects($this->once())->method('setIsChildItem')->with(true);
-        $this->stockItemMock->expects($this->once())->method('setSuppressCheckQtyIncrements')->with(true);
         $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(true));
 
         $this->stockRegistry
@@ -222,7 +221,6 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->optionMock->expects($this->any())->method('getProduct')->will($this->returnValue($this->productMock));
 
         $this->stockItemMock->expects($this->once())->method('setIsChildItem')->with(true);
-        $this->stockItemMock->expects($this->once())->method('setSuppressCheckQtyIncrements')->with(true);
         $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(true));
 
         $this->stockRegistry

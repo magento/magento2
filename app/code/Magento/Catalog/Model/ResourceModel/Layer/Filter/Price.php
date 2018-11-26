@@ -112,7 +112,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         /**
          * Check and set correct variable values to prevent SQL-injections
          */
-        $range = floatval($range);
+        $range = (float)$range;
         if ($range == 0) {
             $range = 1;
         }

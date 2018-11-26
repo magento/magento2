@@ -1,12 +1,16 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Onepage;
 
-class Success extends \Magento\Checkout\Controller\Onepage
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+/**
+ * Onepage checkout success controller class
+ */
+class Success extends \Magento\Checkout\Controller\Onepage implements HttpGetActionInterface
 {
     /**
      * Order success action
@@ -24,7 +28,10 @@ class Success extends \Magento\Checkout\Controller\Onepage
         $resultPage = $this->resultPageFactory->create();
         $this->_eventManager->dispatch(
             'checkout_onepage_controller_success_action',
-            ['order_ids' => [$session->getLastOrderId()]]
+            [
+                'order_ids' => [$session->getLastOrderId()],
+                'order' => $session->getLastRealOrder()
+            ]
         );
         return $resultPage;
     }

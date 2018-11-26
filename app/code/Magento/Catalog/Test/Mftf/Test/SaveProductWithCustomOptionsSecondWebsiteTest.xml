@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="SaveProductWithCustomOptionsAdditionalWebsiteTest">
         <annotations>
             <features value="Save a product with Custom Options and assign to a different website"/>
@@ -67,7 +67,7 @@
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
         <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
 
-       <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
         <waitForPageLoad stepKey="waitAfterAddOption"/>
         <fillField selector="input[name='product[options][0][title]']" userInput="Radio Option" stepKey="fillOptionTitle"/>

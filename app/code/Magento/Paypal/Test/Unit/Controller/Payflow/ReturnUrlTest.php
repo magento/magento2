@@ -148,9 +148,6 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context->expects($this->any())->method('getView')->willReturn($this->view);
-        $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
-
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -160,13 +157,16 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
         $this->context->method('getRequest')
             ->willReturn($this->request);
 
-        $this->returnUrl = $this->objectManager->getObject(ReturnUrl::class, [
-            'context' => $this->context,
-            'checkoutSession' => $this->checkoutSession,
-            'orderFactory' => $this->orderFactory,
-            'checkoutHelper' => $this->checkoutHelper,
-            'paymentFailures' => $this->paymentFailures,
-        ]);
+        $this->returnUrl = $this->objectManager->getObject(
+            ReturnUrl::class,
+            [
+                'context' => $this->context,
+                'checkoutSession' => $this->checkoutSession,
+                'orderFactory' => $this->orderFactory,
+                'checkoutHelper' => $this->checkoutHelper,
+                'paymentFailures' => $this->paymentFailures,
+            ]
+        );
     }
 
     /**

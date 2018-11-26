@@ -15,11 +15,12 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Setup\SalesSetupFactory;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
+     * @var ModuleDataSetupInterface
      */
     private $moduleDataSetup;
 
@@ -55,10 +56,10 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
 
     /**
      * PatchInitial constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
+        ModuleDataSetupInterface $moduleDataSetup,
         SalesSetupFactory $salesSetupFactory,
         State $state,
         Config $eavConfig,
@@ -82,39 +83,41 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
     {
         $this->state->emulateAreaCode(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-            [$this, 'fillQuoteAddressIdInSalesOrderAddress']
+            [$this, 'fillQuoteAddressIdInSalesOrderAddress'],
+            [$this->moduleDataSetup]
         );
         $this->eavConfig->clear();
     }
 
     /**
      * Fill quote_address_id in table sales_order_address if it is empty.
+     *
+     * @param ModuleDataSetupInterface $setup
      */
-    public function fillQuoteAddressIdInSalesOrderAddress()
+    public function fillQuoteAddressIdInSalesOrderAddress(ModuleDataSetupInterface $setup)
     {
-        $addressCollection = $this->addressCollectionFactory->create();
-        $addressCollection->addFieldToFilter('quote_address_id', ['null' => true]);
-
-        /** @var \Magento\Sales\Model\Order\Address $orderAddress */
-        foreach ($addressCollection as $orderAddress) {
-            $orderId = $orderAddress->getParentId();
-            $addressType = $orderAddress->getAddressType();
-
-            /** @var \Magento\Sales\Model\Order $order */
-            $order = $this->orderFactory->create()->load($orderId);
-            $quoteId = $order->getQuoteId();
-            $quote = $this->quoteFactory->create()->load($quoteId);
-
-            if ($addressType == \Magento\Sales\Model\Order\Address::TYPE_SHIPPING) {
-                $quoteAddressId = $quote->getShippingAddress()->getId();
-                $orderAddress->setData('quote_address_id', $quoteAddressId);
-            } elseif ($addressType == \Magento\Sales\Model\Order\Address::TYPE_BILLING) {
-                $quoteAddressId = $quote->getBillingAddress()->getId();
-                $orderAddress->setData('quote_address_id', $quoteAddressId);
-            }
-
-            $orderAddress->save();
-        }
+        $addressTable = $setup->getTable('sales_order_address');
+        $updateOrderAddress = $setup->getConnection()
+            ->select()
+            ->joinInner(
+                ['sales_order' => $setup->getTable('sales_order')],
+                $addressTable . '.parent_id = sales_order.entity_id',
+                ['quote_address_id' => 'quote_address.address_id']
+            )
+            ->joinInner(
+                ['quote_address' => $setup->getTable('quote_address')],
+                'sales_order.quote_id = quote_address.quote_id 
+                AND ' . $addressTable . '.address_type = quote_address.address_type',
+                []
+            )
+            ->where(
+                $addressTable . '.quote_address_id IS NULL'
+            );
+        $updateOrderAddress = $setup->getConnection()->updateFromSelect(
+            $updateOrderAddress,
+            $addressTable
+        );
+        $setup->getConnection()->query($updateOrderAddress);
     }
 
     /**

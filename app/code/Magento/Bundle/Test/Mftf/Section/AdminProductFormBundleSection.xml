@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormBundleSection">
         <element name="bundleItemsToggle" type="button" selector="//span[text()='Bundle Items']"/>
         <element name="shipmentType" type="select" selector=".admin__control-select[name='product[shipment_type]']"/>
@@ -49,7 +49,9 @@
         <!--NameOfProductOnProductPage-->
         <element name="bundleProductName" type="text" selector="//*[@id='maincontent']//span[@itemprop='name']"/>
         <!--EnableDisableToggle-->
-        <element name="enableDisableToggle" type="button" selector="//*[@id='container']//input[@name='product[status]']/.." timeout="30"/>
+        <element name="enableDisableToggle" type="checkbox" selector="//*[@id='container']//input[@name='product[status]']/.." timeout="30"/>
+        <element name="enableDisableToggleOn" type="checkbox" selector="//*[@id='container']//input[@name='product[status]' and @value='1']/.."/>
+        <element name="enableDisableToggleOff" type="checkbox" selector="//*[@id='container']//input[@name='product[status]' and @value='2']/.."/>
         <!--SearchButton-->
         <element name="searchButton" type="button" selector="//div[@class='data-grid-search-control-wrap']//*[@type='button']" timeout="30"/>
         <!--ClickOnFirstProductInCatalog-->
@@ -61,9 +63,31 @@
         <element name="listedBundleItem2" type="text" selector="//tr[@data-repeat-index='2']//div"/>
         <!--FirstProductOption-->
         <element name="firstProductOption" type="checkbox" selector="//div[@class='admin__data-grid-outer-wrap']//tr[@data-repeat-index='0']//input[@type='checkbox']"/>
+        <element name="dynamicSkuToggle" type="checkbox" selector="div[data-index='sku_type'] .admin__actions-switch-label" timeout="30"/>
+        <element name="dynamicPriceToggle" type="checkbox" selector="//div[@data-index='price_type']//div[@data-role='switcher']"/>
+        <element name="taxClassDropDown" type="select" selector="//select[@name='product[tax_class_id]']" timeout="30"/>
+        <element name="taxableGoodsOption" type="text" selector="//select[@name='product[tax_class_id]']//option[@data-title='Taxable Goods']"/>
+        <element name="stockStatusField" type="select" selector="//select[@name='product[quantity_and_stock_status][is_in_stock]']"/>
+        <element name="inStockOption" type="text" selector="//select[@name='product[quantity_and_stock_status][is_in_stock]']//option[@data-title='{{stock}}']" parameterized="true" timeout="30"/>
+        <element name="dynamicWeightToggle" type="checkbox" selector="//div[@data-index='weight_type']//div[@data-role='switcher']" timeout="30"/>
+        <element name="weightField" type="input" selector="//div[@data-index='weight']//input"/>
+        <element name="categoriesDropDown" type="block" selector="//div[@data-index='category_ids']//div[@class='admin__field-control']" timeout="30"/>
+        <element name="defaultCategory" type="text" selector="//div[@data-index='category_ids']//span[contains(text(), 'Default Category')]"/>
+        <element name="visibilityDropDown" type="select" selector="//select[@name='product[visibility]']"/>
+        <element name="catalogOption1" type="text" selector="//select[@name='product[visibility]']//option[1]"/>
+        <element name="catalogOption2" type="text" selector="//select[@name='product[visibility]']//option[2]"/>
+        <element name="fromDate" type="input" selector="//div[@data-index='news_from_date']//input"/>
+        <element name="toDate" type="input" selector="//div[@data-index='news_to_date']//input"/>
+        <element name="countryOfManufactureDropDown" type="select" selector="//select[@name='product[country_of_manufacture]']"/>
+        <element name="selectCountryOfManufacture" type="text" selector="//select[@name='product[country_of_manufacture]']//option[@data-title='{{country}}']" parameterized="true"/>
+        <element name="dynamicSkuToggleOn" type="checkbox" selector="//div[@data-index='sku_type']//div[@data-role='switcher']//input[@value='0']"/>
+        <element name="dynamicSkuToggleOff" type="checkbox" selector="//div[@data-index='sku_type']//div[@data-role='switcher']//input[@value='1']"/>
+        <element name="dynamicWeightToggleOn" type="checkbox" selector="//div[@data-index='weight_type']//div[@data-role='switcher']//input[@value='0']"/>
+        <element name="dynamicWeightToggleOff" type="checkbox" selector="//div[@data-index='weight_type']//div[@data-role='switcher']//input[@value='1']"/>
+        <element name="categoryFieldName" type="text" selector="//fieldset[@data-index='container_category_ids']//label//span" timeout="30"/>
+        <element name="categoryDone" type="button" selector=".admin__action-multiselect-actions-wrap [type='button'] span" timeout="30"/>
+        <element name="dynamicPriceToggleOff" type="checkbox" selector="//div[@data-index='price_type']//div[@data-role='switcher']//input[@value='1']"/>
         <!--Category Selection-->
-        <element name="categoriesDropDown" type="multiselect" selector="//div[@data-index='category_ids']//div" timeout="30"/>
-        <element name="defaultCategory" type="multiselect" selector="//div[@data-index='category_ids']//span[contains(text(), 'Default Category')]"/>
         <element name="categoryByName" type="multiselect" selector="//div[@data-index='category_ids']//span[contains(text(), '{{category}}')]" parameterized="true"/>
         <element name="searchForCategory" type="input" selector="div.action-menu._active > div.admin__action-multiselect-search-wrap input" timeout="30"/>
         <element name="selectCategory" type="multiselect" selector="//div[@class='action-menu _active']//label[@class='admin__action-multiselect-label']"/>

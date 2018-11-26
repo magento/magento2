@@ -17,6 +17,10 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
 
+/**
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class DataProvider implements DataProviderInterface
 {
     /**

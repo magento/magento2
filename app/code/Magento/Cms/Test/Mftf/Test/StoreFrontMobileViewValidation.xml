@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontMobileViewValidation">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Mobile view page footer should stick to the bottom of page on Store front"/>
+            <title value="Mobile view page footer should stick to the bottom of page on Store front"/>
+            <description value="Mobile view page footer should stick to the bottom of page on Store front"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94333"/>
+            <useCaseId value="MAGETWO-93978"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <createData entity="_longContentCmsPage" stepKey="createPreReqCMSPage"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createPreReqCMSPage" stepKey="deletePreReqCMSPage"/>
+            <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
+        </after>
+        <resizeWindow width="375" height="812" stepKey="resizeWindowToMobile"/>
+        <amOnPage url="$$createPreReqCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad6" />
+         <!--Verifying that Footer is not in visible area by default as the CMS page has lots of content which will occupy entire visible area-->
+        <executeJS function="return document.querySelector('{{StorefrontCMSPageSection.footerTop}}').getBoundingClientRect().top" stepKey="topOfFooter"/>
+        <assertGreaterThan stepKey="assertDefaultLoad">
+            <actualResult type="variable">topOfFooter</actualResult>
+            <expectedResult type="string">812</expectedResult>
+        </assertGreaterThan>
+         <!--Verifying that even after scroll footer section is below the main content section-->
+        <scrollTo selector="{{StorefrontCMSPageSection.footerTop}}" stepKey="scrollToFooterSection"/>
+        <executeJS function="return document.querySelector('{{StorefrontCMSPageSection.footerTop}}').getBoundingClientRect().top" stepKey="topOfTheFooterAfterScroll"/>
+        <executeJS function="return document.querySelector('{{StorefrontCMSPageSection.mainContent}}').getBoundingClientRect().bottom" stepKey="bottomOfMainContent"/>
+        <assertGreaterThan stepKey="assertAfterScroll">
+            <actualResult type="variable">topOfTheFooterAfterScroll</actualResult>
+            <expectedResult type="variable">bottomOfMainContent</expectedResult>
+        </assertGreaterThan>
+    </test>
+</tests>

@@ -11,6 +11,7 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type;
  * Test for Magento\Bundle\Block\Catalog\Product\View\Type\Bundle
  *
  * @magentoDataFixture Magento/Bundle/_files/product.php
+ * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  */
 class BundleTest extends \PHPUnit\Framework\TestCase
@@ -73,6 +74,9 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(5, $selection['prices']['finalPrice']['amount']);
     }
 
+    /**
+     * Tear Down
+     */
     protected function tearDown()
     {
         $this->objectManager->get(\Magento\Framework\Registry::class)->unregister('product');

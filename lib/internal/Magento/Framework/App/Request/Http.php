@@ -96,6 +96,11 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     private $distroBaseUrl;
 
     /**
+     * @var PathInfo
+     */
+    private $pathInfoService;
+
+    /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
      * @param ConfigInterface $routeConfig
@@ -103,6 +108,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * @param ObjectManagerInterface $objectManager
      * @param \Zend\Uri\UriInterface|string|null $uri
      * @param array $directFrontNames
+     * @param PathInfo|null $pathInfoService
      */
     public function __construct(
         CookieReaderInterface $cookieReader,
@@ -111,94 +117,71 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
         PathInfoProcessorInterface $pathInfoProcessor,
         ObjectManagerInterface $objectManager,
         $uri = null,
-        $directFrontNames = []
+        $directFrontNames = [],
+        PathInfo $pathInfoService = null
     ) {
         parent::__construct($cookieReader, $converter, $uri);
         $this->routeConfig = $routeConfig;
         $this->pathInfoProcessor = $pathInfoProcessor;
         $this->objectManager = $objectManager;
         $this->directFrontNames = $directFrontNames;
+        $this->pathInfoService = $pathInfoService ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            PathInfo::class
+        );
     }
 
     /**
-     * Returns ORIGINAL_PATH_INFO.
-     * This value is calculated instead of reading PATH_INFO
-     * directly from $_SERVER due to cross-platform differences.
+     * Return the ORIGINAL_PATH_INFO.
+     * This value is calculated and processed from $_SERVER due to cross-platform differences.
+     * instead of reading PATH_INFO
      *
      * @return string
      */
     public function getOriginalPathInfo()
     {
         if (empty($this->originalPathInfo)) {
-            $this->setPathInfo();
+            $originalPathInfoFromRequest = $this->pathInfoService->getPathInfo(
+                $this->getRequestUri(),
+                $this->getBaseUrl()
+            );
+            $this->originalPathInfo = (string)$this->pathInfoProcessor->process($this, $originalPathInfoFromRequest);
+            $this->requestString = $this->originalPathInfo
+                . $this->pathInfoService->getQueryString($this->getRequestUri());
         }
         return $this->originalPathInfo;
     }
 
     /**
-     * Set the PATH_INFO string
-     * Set the ORIGINAL_PATH_INFO string
+     * Return the path info
+     *
+     * @return string
+     */
+    public function getPathInfo()
+    {
+        if (empty($this->pathInfo)) {
+            $this->pathInfo = $this->getOriginalPathInfo();
+        }
+        return $this->pathInfo;
+    }
+
+    /**
+     * Set the PATH_INFO string.
+     *
+     * Set the ORIGINAL_PATH_INFO string.
      *
      * @param string|null $pathInfo
      * @return $this
      */
     public function setPathInfo($pathInfo = null)
     {
-        if ($pathInfo === null) {
-            $requestUri = $this->getRequestUri();
-            if ('/' === $requestUri) {
-                return $this;
-            }
-
-            $requestUri = $this->removeRepeatedSlashes($requestUri);
-            $parsedRequestUri = explode('?', $requestUri, 2);
-            $queryString = !isset($parsedRequestUri[1]) ? '' : '?' . $parsedRequestUri[1];
-            $baseUrl = $this->getBaseUrl();
-            $pathInfo = (string)substr($parsedRequestUri[0], (int)strlen($baseUrl));
-
-            if ($this->isNoRouteUri($baseUrl, $pathInfo)) {
-                $pathInfo = 'noroute';
-            }
-            $pathInfo = $this->pathInfoProcessor->process($this, $pathInfo);
-            $this->originalPathInfo = (string)$pathInfo;
-            $this->requestString = $pathInfo . $queryString;
-        }
         $this->pathInfo = (string)$pathInfo;
         return $this;
     }
 
     /**
-     * Remove repeated slashes from the start of the path.
+     * Check if code declared as direct access frontend name.
      *
-     * @param string $pathInfo
-     * @return string
-     */
-    private function removeRepeatedSlashes($pathInfo)
-    {
-        $firstChar = (string)substr($pathInfo, 0, 1);
-        if ($firstChar == '/') {
-            $pathInfo = '/' . ltrim($pathInfo, '/');
-        }
-
-        return $pathInfo;
-    }
-
-    /**
-     * Check is URI should be marked as no route, helps route to 404 URI like `index.phpadmin`.
-     *
-     * @param string $baseUrl
-     * @param string $pathInfo
-     * @return bool
-     */
-    private function isNoRouteUri($baseUrl, $pathInfo)
-    {
-        $firstChar = (string)substr($pathInfo, 0, 1);
-        return $baseUrl !== '' && !in_array($firstChar, ['/', '']);
-    }
-
-    /**
-     * Check if code declared as direct access frontend name
-     * this mean what this url can be used without store code
+     * This means what this url can be used without store code.
      *
      * @param   string $code
      * @return  bool
@@ -284,8 +267,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
-     * Collect properties changed by _forward in protected storage
-     * before _forward was called first time.
+     * Collect properties changed by _forward in protected storage before _forward was called first time.
      *
      * @return $this
      */
@@ -427,6 +409,8 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
+     * Sleep
+     *
      * @return array
      */
     public function __sleep()
@@ -435,7 +419,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isSafeMethod()
     {

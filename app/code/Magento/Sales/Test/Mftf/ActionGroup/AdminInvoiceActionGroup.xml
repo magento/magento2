@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Check customer information is correct in invoice-->
     <actionGroup name="verifyBasicInvoiceInformation">
         <arguments>
@@ -37,5 +37,17 @@
             <argument name="product"/>
         </arguments>
         <see selector="{{AdminInvoiceItemsSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
+    </actionGroup>
+
+    <actionGroup name="goToInvoiceIntoOrder">
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <seeInCurrentUrl url="{{AdminInvoiceNewPage.url}}" stepKey="seeOrderInvoiceUrl"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
+    </actionGroup>
+
+    <actionGroup name="submitInvoiceIntoOrder">
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageInvoice"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
     </actionGroup>
 </actionGroups>

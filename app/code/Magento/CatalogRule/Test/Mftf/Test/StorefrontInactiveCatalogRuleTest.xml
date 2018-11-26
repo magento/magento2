@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontInactiveCatalogRuleTest">
         <annotations>
             <features value="CatalogRule"/>
@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-79"/>
             <group value="CatalogRule"/>
+            <skip>
+                <issueId value="DEVOPS-3618"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>

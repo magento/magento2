@@ -195,6 +195,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Retrieve wishlist item count (include config settings)
+     *
      * Used in top link menu only
      *
      * @return int
@@ -450,6 +451,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get cart URL parameters
+     *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return array
      */
@@ -576,7 +579,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             ) {
                 $count = $collection->getItemsQty();
             } else {
-                $count = $collection->getSize();
+                $count = $collection->count();
             }
             $this->_customerSession->setWishlistDisplayType(
                 $this->scopeConfig->getValue(

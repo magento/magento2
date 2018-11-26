@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminConfigurableProductSearchTest">
         <annotations>
             <features value="ConfigurableProduct"/>
@@ -16,6 +16,7 @@
             <description value="admin should be able to search for a configurable product"/>
             <testCaseId value="MC-100"/>
             <group value="ConfigurableProduct"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>
@@ -94,6 +95,7 @@
             <description value="admin should be able to filter by type configurable product"/>
             <testCaseId value="MC-66"/>
             <group value="ConfigurableProduct"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>

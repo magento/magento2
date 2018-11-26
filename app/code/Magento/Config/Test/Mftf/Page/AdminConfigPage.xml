@@ -5,7 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminConfigPage" url="admin/system_config/" area="admin" module="Magento_Config">
         <section name="AdminConfigSection"/>
     </page>
@@ -17,5 +17,8 @@
     </page>
     <page name="AdminSalesTaxClassPage" url="admin/system_config/edit/section/tax/" area="admin" module="Magento_Config">
         <section name="SalesTaxClassSection"/>
+    </page>
+    <page name="AdminConfigGeneralPage" url="admin/system_config/edit/section/general/" area="admin" module="Magento_Config">
+        <section name="GeneralSection"/>
     </page>
 </pages>
