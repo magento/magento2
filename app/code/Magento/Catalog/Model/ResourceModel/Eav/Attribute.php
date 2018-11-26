@@ -40,7 +40,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     const ENTITY = 'catalog_eav_attribute';
 
     const KEY_IS_GLOBAL = 'is_global';
-
+        
+    CONST DEFAULT_ATTRIBUTE =  ['product_type'];
     /**
      * @var LockValidatorInterface
      */
