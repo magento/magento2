@@ -151,10 +151,7 @@ class NewAction extends SubscriberController
                 $status = (int) $this->_subscriberFactory->create()->subscribe($email);
                 $this->messageManager->addSuccessMessage($this->getSuccessMessage($status));
             } catch (LocalizedException $e) {
-                $this->messageManager->addExceptionMessage(
-                    $e,
-                    __('There was a problem with the subscription: %1', $e->getMessage())
-                );
+                $this->messageManager->addErrorMessage(__('This email address is already subscribed.'));
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong with the subscription.'));
             }
