@@ -154,6 +154,7 @@ class CustomerForm extends FormTabs
     protected function waitForm()
     {
         $this->waitForElementNotVisible($this->spinner);
+        $this->getTab('addresses')->waitForAddressesGrid();
     }
 
     /**

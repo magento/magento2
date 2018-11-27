@@ -195,6 +195,7 @@ class Addresses extends Tab
                 $customerAddressesGrid->searchAndOpen($address->getData());
                 $data[$addressNumber] = $this->getCustomerAddressModalForm()
                     ->getData($address, $this->browser->find($this->customerAddressModalForm));
+                $this->getCustomerAddressModalForm()->clickCancelButton();
             }
         }
 
@@ -347,7 +348,7 @@ class Addresses extends Tab
     }
 
     /**
-     *
+     * Wait for addresses grid rendering
      */
     public function waitForAddressesGrid()
     {
