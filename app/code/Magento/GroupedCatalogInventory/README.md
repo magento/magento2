@@ -1,1 +1,1 @@
-Magento_CatalogInventory module allows retrieve and update stock attributes, such as status and quantity.
+Magento_GroupedCatalogInventory contains behavior related to the inventory status of items within grouped products.
