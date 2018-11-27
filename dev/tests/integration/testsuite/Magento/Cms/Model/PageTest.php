@@ -39,12 +39,15 @@ class PageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider generateIdentifierFromTitleDataProvider
+     * @dataProvider       generateIdentifierFromTitleDataProvider
+     * @param array  $data
+     * @param string $expectedIdentifier
+     * @return void
      */
-    public function testGenerateIdentifierFromTitle($data, $expectedIdentifier)
+    public function testGenerateIdentifierFromTitle(array $data, string $expectedIdentifier)
     {
-        /** @var \Magento\Cms\Model\Page $page */
-        $page = $this->objectManager->create(\Magento\Cms\Model\Page::class);
+        /** @var Page $page */
+        $page = $this->objectManager->create(Page::class);
         $page->setData($data);
         $page->save();
         $this->assertEquals($expectedIdentifier, $page->getIdentifier());
@@ -52,15 +55,16 @@ class PageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
+     * @return void
      */
     public function testUpdateTime()
     {
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $db */
-        $db = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class)
+        $db = $this->objectManager->get(ResourceConnection::class)
             ->getConnection(ResourceConnection::DEFAULT_CONNECTION);
 
-        /** @var \Magento\Cms\Model\Page $page */
-        $page = $this->objectManager->create(\Magento\Cms\Model\Page::class);
+        /** @var Page $page */
+        $page = $this->objectManager->create(Page::class);
         $page->setData(['title' => 'Test', 'stores' => [1]]);
         $beforeTimestamp = $db->fetchOne('SELECT UNIX_TIMESTAMP()');
         $page->save();

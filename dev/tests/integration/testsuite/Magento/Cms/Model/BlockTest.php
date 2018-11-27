@@ -37,28 +37,29 @@ class BlockTest extends TestCase
      */
     private $blockRepository;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-
-        /** @var BlockFactory $blockFactory */
-        /** @var Block $blockResource */
         $this->blockResource   = $this->objectManager->create(Block::class);
         $this->blockFactory    = $this->objectManager->create(BlockFactory::class);
         $this->blockRepository = $this->objectManager->create(BlockRepositoryInterface::class);
     }
 
     /**
-     * Test UpdateTime
+     * Tests update time.
+     *
      * @param array $blockData
-     * @throws \Exception
+     * @return void
      * @magentoDbIsolation enabled
      * @dataProvider testUpdateTimeDataProvider
      */
     public function testUpdateTime(array $blockData)
     {
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $db */
-        $db = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class)
+        $db = $this->objectManager->get(ResourceConnection::class)
             ->getConnection(ResourceConnection::DEFAULT_CONNECTION);
 
         # Prepare and save the temporary block
@@ -78,7 +79,7 @@ class BlockTest extends TestCase
     }
 
     /**
-     * Data provider "testUpdateTime" method
+     * Data provider "testUpdateTime" method.
      *
      * @return array
      */
@@ -93,7 +94,7 @@ class BlockTest extends TestCase
                     'content'    => 'Test content',
                     'is_active'  => 1,
                 ],
-            ]
+            ],
         ];
     }
 }
