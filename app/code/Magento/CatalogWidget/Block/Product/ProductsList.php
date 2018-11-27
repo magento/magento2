@@ -6,10 +6,14 @@
 
 namespace Magento\CatalogWidget\Block\Product;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
+use Magento\Framework\View\LayoutFactory;
 use Magento\Widget\Block\BlockInterface;
 
 /**
@@ -95,6 +99,21 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     private $json;
 
     /**
+     * @var LayoutFactory
+     */
+    private $layoutFactory;
+
+    /**
+     * @var UrlHelper
+     */
+    private $urlHelper;
+
+    /**
+     * @var \Magento\Framework\View\Element\RendererList
+     */
+    private $rendererListBlock;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
@@ -104,6 +123,10 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
      * @param array $data
      * @param Json|null $json
+     * @param LayoutFactory|null $layoutFactory
+     * @param UrlHelper|null $urlHelper
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -114,7 +137,9 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         \Magento\CatalogWidget\Model\Rule $rule,
         \Magento\Widget\Helper\Conditions $conditionsHelper,
         array $data = [],
-        Json $json = null
+        Json $json = null,
+        LayoutFactory $layoutFactory = null,
+        UrlHelper $urlHelper = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -123,6 +148,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $this->rule = $rule;
         $this->conditionsHelper = $conditionsHelper;
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
+        $this->layoutFactory = $layoutFactory ?: ObjectManager::getInstance()->get(LayoutFactory::class);
+        $this->urlHelper = $urlHelper ?: ObjectManager::getInstance()->get(UrlHelper::class);
         parent::__construct(
             $context,
             $data
@@ -215,6 +242,41 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         );
 
         return $price;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getDetailsRendererList()
+    {
+        if (empty($this->rendererListBlock)) {
+            /** @var $layout \Magento\Framework\View\LayoutInterface */
+            $layout = $this->layoutFactory->create(['cacheable' => false]);
+            $layout->getUpdate()->addHandle('catalog_widget_product_list')->load();
+            $layout->generateXml();
+            $layout->generateElements();
+
+            $this->rendererListBlock = $layout->getBlock('category.product.type.widget.details.renderers');
+        }
+        return $this->rendererListBlock;
+    }
+
+    /**
+     * Get post parameters.
+     *
+     * @param Product $product
+     * @return array
+     */
+    public function getAddToCartPostParams(Product $product)
+    {
+        $url = $this->getAddToCartUrl($product);
+        return [
+            'action' => $url,
+            'data' => [
+                'product' => $product->getEntityId(),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl($url),
+            ]
+        ];
     }
 
     /**
