@@ -4,7 +4,7 @@
  */
 
 define([
-    'Magento_Ui/js/grid/filters/chips',
+    'Magento_Ui/js/grid/filters/chips'
 ], function (Chips) {
     'use strict';
 
