@@ -7,6 +7,7 @@ namespace Magento\Customer\Ui\Component\Listing\Address;
 
 use Magento\Customer\Model\ResourceModel\Address\Grid\CollectionFactory;
 use Magento\Directory\Model\CountryFactory;
+use Magento\Framework\Api\Filter;
 
 /**
  * Custom DataProvider for customer addresses listing
@@ -69,5 +70,44 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
 
         return $data;
+    }
+
+    /**
+     * Add full text search filter to collection
+     *
+     * @param Filter $filter
+     * @return void
+     */
+    public function addFilter(Filter $filter): void
+    {
+        if ($filter->getField() !== 'fulltext') {
+            $this->collection->addFieldToFilter(
+                $filter->getField(),
+                [$filter->getConditionType() => $filter->getValue()]
+            );
+        } else {
+            $value = trim($filter->getValue());
+            $this->collection->addFieldToFilter(
+                [
+                    ['attribute' => 'firstname'],
+                    ['attribute' => 'lastname'],
+                    ['attribute' => 'street'],
+                    ['attribute' => 'city'],
+                    ['attribute' => 'region'],
+                    ['attribute' => 'postcode'],
+                    ['attribute' => 'telephone']
+                ],
+                [
+                    ['like' => "%{$value}%"],
+                    ['like' => "%{$value}%"],
+                    ['like' => "%{$value}%"],
+                    ['like' => "%{$value}%"],
+                    ['like' => "%{$value}%"],
+                    ['like' => "%{$value}%"],
+                    ['like' => "%{$value}%"],
+                    ['like' => "%{$value}%"],
+                ]
+            );
+        }
     }
 }
