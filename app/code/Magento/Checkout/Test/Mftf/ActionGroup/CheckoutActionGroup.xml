@@ -73,4 +73,12 @@
         <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" visible="true" stepKey="selectFlatRateShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForNextButton"/>
     </actionGroup>
+
+    <actionGroup name="CheckTotalsSortOrderInSummarySection">
+        <arguments>
+            <argument name="elementName" type="string"/>
+            <argument name="positionNumber" type="integer"/>
+        </arguments>
+        <see userInput="{{elementName}}" selector="{{StorefrontCheckoutCartSummarySection.totalsElementByPosition(positionNumber)}}" stepKey="assertElementPosition"/>
+    </actionGroup>
 </actionGroups>
