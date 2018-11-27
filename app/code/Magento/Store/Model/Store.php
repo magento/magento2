@@ -412,7 +412,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @return string[]
+     * @inheritdoc
      */
     public function __sleep()
     {
@@ -786,7 +786,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     public function isUrlSecure()
     {
@@ -902,23 +902,17 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getCurrentCurrencyCode()
     {
+        $availableCurrencyCodes = \array_values($this->getAvailableCurrencyCodes(true));
         // try to get currently set code among allowed
-        $code = $this->_httpContext->getValue(Context::CONTEXT_CURRENCY);
-        $code = $code === null ? $this->_getSession()->getCurrencyCode() : $code;
-        if (empty($code)) {
+        $code = $this->_httpContext->getValue(Context::CONTEXT_CURRENCY) ?? $this->_getSession()->getCurrencyCode();
+        if (empty($code) || !\in_array($code, $availableCurrencyCodes)) {
             $code = $this->getDefaultCurrencyCode();
-        }
-        if (in_array($code, $this->getAvailableCurrencyCodes(true))) {
-            return $code;
+            if (!\in_array($code, $availableCurrencyCodes) && !empty($availableCurrencyCodes)) {
+                $code = $availableCurrencyCodes[0];
+            }
         }
 
-        // take first one of allowed codes
-        $codes = array_values($this->getAvailableCurrencyCodes(true));
-        if (empty($codes)) {
-            // return default code, if no codes specified at all
-            return $this->getDefaultCurrencyCode();
-        }
-        return array_shift($codes);
+        return $code;
     }
 
     /**
@@ -1349,6 +1343,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Get store path
+     *
      * @return string
      */
     public function getStorePath()
@@ -1358,8 +1354,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
-     * @since 100.1.0
+     * @inheritdoc
      */
     public function getScopeType()
     {
@@ -1367,8 +1362,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
-     * @since 100.1.0
+     * @inheritdoc
      */
     public function getScopeTypeName()
     {
@@ -1376,7 +1370,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -1384,8 +1378,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @param \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
-     * @return $this
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
