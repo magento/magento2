@@ -267,12 +267,24 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->model->isCanDelete());
     }
 
+    /**
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     */
     public function testGetCurrentUrl()
     {
         $this->model->load('admin');
         $this->model->expects($this->any())->method('getUrl')->will($this->returnValue('http://localhost/index.php'));
         $this->assertStringEndsWith('default', $this->model->getCurrentUrl());
         $this->assertStringEndsNotWith('default', $this->model->getCurrentUrl(false));
+
+        $this->model->load('fixture_second_store');
+
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
+            ->setValue(Store::XML_PATH_STORE_IN_URL, true, ScopeInterface::SCOPE_STORE);
+
+        $this->assertEquals('http://localhost/index.php?___store=fixture_second_store&___from_store=default', $this->model->getCurrentUrl(true));
+        $this->assertEquals('http://localhost/index.php?___store=fixture_second_store', $this->model->getCurrentUrl(false));
     }
 
     /**
