@@ -23,7 +23,6 @@
         <click selector="{{AdminMainActionsSection.delete}}" stepKey="deleteUser"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
-        <waitForPageLoad stepKey="waitForSave" />
         <see userInput="You deleted the user." stepKey="seeUserDeleteMessage"/>
     </actionGroup>
 </actionGroups>

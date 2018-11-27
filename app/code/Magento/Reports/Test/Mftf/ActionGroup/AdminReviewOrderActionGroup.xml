@@ -18,6 +18,6 @@
         <waitForPageLoad time="5" stepKey="waitForOrdersPage"/>
         <click selector="{{AdminOrderedProductsSection.refresh}}" stepKey="refresh"/>
         <scrollTo selector="{{AdminOrderedProductsSection.total}}" stepKey="scrollTo"/>
-        <see userInput="{{productName}}" stepKey="seeOrder"/>
+        <see userInput="{{productName}}" stepKey="seeOrderedProduct"/>
     </actionGroup>
 </actionGroups>
