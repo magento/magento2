@@ -378,7 +378,7 @@
                 <settings>
                     <imports>
                         <link name="address">${ $.provider}:data.default_shipping_address</link>
-                    </imports>efas
+                    </imports>
                 </settings>
             </component>
             <button name="edit_shipping_address" component="Magento_Customer/js/address/default-address">
