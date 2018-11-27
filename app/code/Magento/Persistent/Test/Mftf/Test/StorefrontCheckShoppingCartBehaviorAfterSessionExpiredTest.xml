@@ -37,11 +37,11 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
         <!--Login as a Customer-->
-        <actionGroup ref="CustomerLoginOnStorefront" stepKey="signUpNewUser">
+        <actionGroup ref="CustomerLoginOnStorefront" stepKey="loginToStorefrontAccount">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <!-- Add simple product to cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart1">
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="goToShoppingCartFromMinicart"/>

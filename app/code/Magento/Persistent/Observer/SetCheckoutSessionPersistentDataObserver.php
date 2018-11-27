@@ -66,8 +66,6 @@ class SetCheckoutSessionPersistentDataObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

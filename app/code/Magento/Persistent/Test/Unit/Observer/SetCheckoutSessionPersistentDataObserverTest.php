@@ -88,8 +88,6 @@ class SetCheckoutSessionPersistentDataObserverTest extends \PHPUnit\Framework\Te
      * Test execute method when session is not persistent.
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testExecuteWhenSessionIsNotPersistent()
     {
@@ -113,8 +111,6 @@ class SetCheckoutSessionPersistentDataObserverTest extends \PHPUnit\Framework\Te
      * Test execute method when session is persistent.
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testExecute()
     {
