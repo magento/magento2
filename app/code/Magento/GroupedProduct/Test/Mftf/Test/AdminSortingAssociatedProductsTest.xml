@@ -139,7 +139,8 @@
                           visible="false"
                           stepKey="openGroupedProductsSection"
         />
-        <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
+
+        <click selector="{{AdminProductFormGroupedProductsSection.buttonContainer}}" stepKey="moveFocusToGroup"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanelSection.filters}}" stepKey="waitForGroupedProductModal"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSimplesForGroupedProduct">
@@ -156,7 +157,6 @@
 
         <!--Open created Grouped Product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="resetFiltersIfExist"/>
         <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchProductGridForm">
             <argument name="keyword" value="GroupedProduct.name"/>
         </actionGroup>
@@ -174,11 +174,11 @@
         <grabTextFrom selector="{{AdminProductFormGroupedProductsSection.nameProductFromGrid('1')}}" stepKey="grabNameProductPosition0"/>
         <grabTextFrom selector="{{AdminProductFormGroupedProductsSection.nameProductFromGrid('2')}}" stepKey="grabNameProductPositionFirst"/>
         <fillField selector="{{AdminProductFormGroupedProductsSection.positionProduct('1')}}" userInput="21" stepKey="fillFieldProductPosition0"/>
-        <doubleClick selector="{{AdminProductFormGroupedProductsSection.nextActionButton}}" stepKey="clickButton"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.nextActionButton}}" stepKey="clickButton"/>
         <waitForAjaxLoad stepKey="waitForAjax"/>
 
         <!--Go to next page and verify that Products in grid were recalculated-->
-        <doubleClick selector="{{AdminProductFormGroupedProductsSection.nextActionButton}}" stepKey="clickNextActionButton"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.nextActionButton}}" stepKey="clickNextActionButton"/>
         <waitForAjaxLoad stepKey="waitForAjax1"/>
 
         <grabTextFrom selector="{{AdminProductFormGroupedProductsSection.nameProductFromGrid('2')}}" stepKey="grabNameProductPosition21"/>
@@ -189,7 +189,7 @@
 
         <!--Change position value for the product to 1-->
         <fillField selector="{{AdminProductFormGroupedProductsSection.positionProduct('2')}}" userInput="1" stepKey="fillFieldProductPosition1"/>
-        <doubleClick selector="{{AdminProductFormGroupedProductsSection.previousActionButton}}" stepKey="clickButton2"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.previousActionButton}}" stepKey="clickButton2"/>
         <waitForAjaxLoad stepKey="waitForAjax2"/>
 
         <!--Go to previous page and verify that Products in grid were recalculated-->

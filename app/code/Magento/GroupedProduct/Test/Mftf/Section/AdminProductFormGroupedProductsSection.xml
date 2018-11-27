@@ -15,5 +15,6 @@
         <element name="previousActionButton" type="button" selector="[data-index='grouped'] .action-previous"/>
         <element name="positionProduct" type="input" selector="[data-index='grouped'] tr[class*='data-row']:nth-child({{arg}}) td[data-index='positionCalculated'] .position-widget-input" parameterized="true"/>
         <element name="nameProductFromGrid" type="text" selector="[data-index='grouped'] tr[class*='data-row']:nth-child({{arg}}) td[data-index='name'] .admin__field-control span" parameterized="true"/>
+        <element name="buttonContainer" type="block" selector="[data-index='grouped_products_button_set']"/>
     </section>
 </sections>
