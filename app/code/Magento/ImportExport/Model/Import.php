@@ -7,9 +7,11 @@
 namespace Magento\ImportExport\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Framework\Message\ManagerInterface;
 
 /**
  * Import model
@@ -168,6 +170,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_filesystem;
 
     /**
+     * @var ManagerInterface
+     */
+    private $messageManager;
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -183,6 +190,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param History $importHistoryModel
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $localeDate
      * @param array $data
+     * @param ManagerInterface|null $messageManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -200,7 +208,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\ImportExport\Model\History $importHistoryModel,
         \Magento\Framework\Stdlib\DateTime\DateTime $localeDate,
-        array $data = []
+        array $data = [],
+        ManagerInterface $messageManager = null
     ) {
         $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
@@ -215,6 +224,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $this->_filesystem = $filesystem;
         $this->importHistoryModel = $importHistoryModel;
         $this->localeDate = $localeDate;
+        $this->messageManager = $messageManager ?: ObjectManager::getInstance()->get(ManagerInterface::class);
         parent::__construct($logger, $filesystem, $data);
     }
 
@@ -588,9 +598,13 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
 
-        $result = !$errorAggregator->getErrorsCount();
+        $errorsCount = $errorAggregator->getErrorsCount();
+        $result = !$errorsCount;
         $validationStrategy = $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY);
-        if ($validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS) {
+        if ($errorsCount
+            && $validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+        ) {
+            $this->messageManager->addWarningMessage(sprintf(__('Skipped errors: %d'), $errorsCount));
             $result = true;
         }
 
