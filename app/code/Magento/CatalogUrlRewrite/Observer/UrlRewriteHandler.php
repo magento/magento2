@@ -24,6 +24,8 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
+ * Class for management url rewrites.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UrlRewriteHandler
@@ -156,6 +158,30 @@ class UrlRewriteHandler
     }
 
     /**
+     * Update product url rewrites for changed product.
+     *
+     * @param Category $category
+     * @return array
+     */
+    public function updateProductUrlRewritesForChangedProduct(Category $category): array
+    {
+        $mergeDataProvider = clone $this->mergeDataProviderPrototype;
+        $this->isSkippedProduct[$category->getEntityId()] = [];
+        $saveRewriteHistory = (bool)$category->getData('save_rewrites_history');
+        $storeIds = $this->getCategoryStoreIds($category);
+
+        if ($category->getChangedProductIds()) {
+            foreach ($storeIds as $storeId) {
+                $this->generateChangedProductUrls($mergeDataProvider, $category, (int)$storeId, $saveRewriteHistory);
+            }
+        }
+
+        return $mergeDataProvider->getData();
+    }
+
+    /**
+     * Delete category rewrites for children.
+     *
      * @param Category $category
      * @return void
      */
@@ -184,6 +210,8 @@ class UrlRewriteHandler
     }
 
     /**
+     * Get category products url rewrites.
+     *
      * @param Category $category
      * @param int $storeId
      * @param bool $saveRewriteHistory

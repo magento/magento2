@@ -100,16 +100,19 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         }
 
         $mapsGenerated = false;
-        if ($category->dataHasChangedFor('url_key')
-            || $category->dataHasChangedFor('is_anchor')
-            || !empty($category->getChangedProductIds())
-        ) {
+        if ($this->isCategoryHasChanged($category)) {
             if ($category->dataHasChangedFor('url_key')) {
                 $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category);
                 $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
             }
-            $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
-            $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+            if ($this->isChangedOnlyProduct($category)) {
+                $productUrlRewriteResult =
+                    $this->urlRewriteHandler->updateProductUrlRewritesForChangedProduct($category);
+                $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+            } else {
+                $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
+                $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+            }
             $mapsGenerated = true;
         }
 
@@ -117,6 +120,38 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         if ($mapsGenerated) {
             $this->resetUrlRewritesDataMaps($category);
         }
+    }
+
+    /**
+     * Check is category changed changed.
+     *
+     * @param Category $category
+     * @return bool
+     */
+    private function isCategoryHasChanged(Category $category): bool
+    {
+        if ($category->dataHasChangedFor('url_key')
+            || $category->dataHasChangedFor('is_anchor')
+            || !empty($category->getChangedProductIds())) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check is only product changed.
+     *
+     * @param Category $category
+     * @return bool
+     */
+    private function isChangedOnlyProduct(Category $category): bool
+    {
+        if (!empty($category->getChangedProductIds())
+            && !$category->dataHasChangedFor('is_anchor')
+            && !$category->dataHasChangedFor('url_key')) {
+            return true;
+        }
+        return false;
     }
 
     /**
