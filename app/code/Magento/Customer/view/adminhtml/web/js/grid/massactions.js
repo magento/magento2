@@ -46,30 +46,25 @@ define([
         defaultCallback: function (action, data) {
             var itemsType, selections;
 
-            if (action.isAjax) {
-                itemsType = data.excludeMode ? 'excluded' : 'selected';
-                selections = {};
+            itemsType = data.excludeMode ? 'excluded' : 'selected';
+            selections = {};
 
-                selections[itemsType] = data[itemsType];
+            selections[itemsType] = data[itemsType];
 
-                if (!selections[itemsType].length) {
-                    selections[itemsType] = false;
-                }
-
-                _.extend(selections, data.params || {});
-
-                this.request(action.url, selections).done(function (response) {
-                    if (!response.error) {
-                        this.trigger('massaction', {
-                            action: action.type,
-                            data: this.selections().selected()
-                        });
-                    }
-                }.bind(this));
-
-            } else {
-                this._super();
+            if (!selections[itemsType].length) {
+                selections[itemsType] = false;
             }
+
+            _.extend(selections, data.params || {});
+
+            this.request(action.url, selections).done(function (response) {
+                if (!response.error) {
+                    this.trigger('massaction', {
+                        action: action.type,
+                        data: this.selections().selected()
+                    });
+                }
+            }.bind(this));
         },
 
         /**
