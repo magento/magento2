@@ -76,7 +76,7 @@
         position: absolute;
         speak: none;
         text-shadow: none;
-        top: 1.3rem;
+        top: 1.5rem;
         width: auto;
     }
 }
@@ -121,6 +121,15 @@
     }
 }
 
+.adminhtml-import-index   {
+    .message-success {
+        &:before {
+            color: @alert-icon__success__color;
+            content: @alert-icon__success__content;
+            top: 2.3rem;
+        }
+    }
+}
 .message-spinner {
     &:before {
         display: none;
