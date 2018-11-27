@@ -149,7 +149,7 @@
         }
     }
 
-    .product-options {
+    > .product-options {
         > .admin__field {
             border: 0;
             margin: 0 0 3rem 0;
@@ -162,12 +162,21 @@
     
             > .admin__field-control {
                 #mix-grid .column(@field-control-grid__column, @field-grid__columns);
+                float: none;
+                display: inline-block;
+                margin-bottom: 3rem;
+                &:last-child {
+                    margin-bottom: 0;
+                }
             }
     
             > .admin__field-label {
                 #mix-grid .column(@field-label-grid__column, @field-grid__columns);
+                float: none;
+                display: inline-block;  
+                vertical-align: top;              
             }
-     
+      
             &:extend(.abs-field-sizes all);
     
             &.admin__field-no-label {
