@@ -283,6 +283,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->setValue(Store::XML_PATH_STORE_IN_URL, true, ScopeInterface::SCOPE_STORE);
 
+
         $this->assertEquals('http://localhost/index.php?___store=fixture_second_store&___from_store=default', $this->model->getCurrentUrl(true));
         $this->assertEquals('http://localhost/index.php?___store=fixture_second_store', $this->model->getCurrentUrl(false));
     }
