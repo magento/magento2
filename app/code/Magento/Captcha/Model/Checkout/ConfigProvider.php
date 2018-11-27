@@ -49,7 +49,8 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
                 'imageHeight' => $this->getImageHeight($formId),
                 'imageSrc' => $this->getImageSrc($formId),
                 'refreshUrl' => $this->getRefreshUrl(),
-                'isRequired' => $this->isRequired($formId)
+                'isRequired' => $this->isRequired($formId),
+                'timestamp' => time()
             ];
         }
         return $config;

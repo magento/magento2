@@ -93,8 +93,8 @@ class AjaxLogin
         foreach ($this->formIds as $formId) {
             if ($formId === $loginFormId) {
                 $captchaModel = $this->helper->getCaptcha($formId);
+                $captchaModel->logAttempt($username);
                 if ($captchaModel->isRequired($username)) {
-                    $captchaModel->logAttempt($username);
                     if (!$captchaModel->isCorrect($captchaString)) {
                         $this->sessionManager->setUsername($username);
                         return $this->returnJsonError(__('Incorrect CAPTCHA'));
