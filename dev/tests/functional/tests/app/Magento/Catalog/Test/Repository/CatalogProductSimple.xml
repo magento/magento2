@@ -41,7 +41,7 @@
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
-            <field name="name" xsi:type="string">Product \&#39;!@#$%^&amp;*()+:;\\|}{][?=-~` %isolation%</field>
+            <field name="name" xsi:type="string">Product \&#39;!@#$%^&amp;*()+:;\\|}{][?=~` %isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
             <field name="is_virtual" xsi:type="string">No</field>
             <field name="product_has_weight" xsi:type="string">This item has weight</field>
