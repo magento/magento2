@@ -158,7 +158,7 @@ class AddressesGrid extends DataGrid
     /**
      * Open first row from the addresses grid
      *
-     * @throws \Exception
+     * @return void
      */
     public function openFirstRow()
     {
@@ -168,8 +168,6 @@ class AddressesGrid extends DataGrid
             $firstRow->find($this->editAddress)->click();
             $this->waitForElementVisible($this->customerAddressModalForm);
             $this->waitLoader();
-        } else {
-            throw new \Exception("There is no any items in the grid");
         }
     }
 }

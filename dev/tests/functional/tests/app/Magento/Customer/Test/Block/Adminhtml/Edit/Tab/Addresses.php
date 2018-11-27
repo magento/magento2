@@ -205,7 +205,7 @@ class Addresses extends Tab
      * Get data from Customer addresses.
      *
      * @param FixtureInterface|FixtureInterface[]|null $address
-     * @return array
+     * @return array|null
      * @throws \Exception
      */
     public function getAddressFromFirstRow($address = null)
@@ -213,9 +213,10 @@ class Addresses extends Tab
         $customerAddressesGrid = $this->getCustomerAddressesGrid();
         $customerAddressesGrid->resetFilter();
         $customerAddressesGrid->openFirstRow();
-        $address = $this->getCustomerAddressModalForm()
-            ->getData($address, $this->browser->find($this->customerAddressModalForm));
-
+        if ($this->getCustomerAddressModalForm()->isVisible()) {
+            $address = $this->getCustomerAddressModalForm()
+                ->getData($address, $this->browser->find($this->customerAddressModalForm));
+        }
 
         return $address;
     }
