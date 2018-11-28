@@ -8,17 +8,17 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="CustomerAccountsSharingDefault" type="customer_account_sharing_config">
-        <requiredEntity type="account_share_scope_value">CustomerAccountsSharingPerWebsite</requiredEntity>
+    <entity name="CustomerAccountSharingDefault" type="customer_account_sharing_config">
+        <requiredEntity type="account_share_scope_value">CustomerAccountSharingPerWebsite</requiredEntity>
     </entity>
-    <entity name="CustomerAccountsSharingPerWebsite" type="account_share_scope_value">
+    <entity name="CustomerAccountSharingPerWebsite" type="account_share_scope_value">
         <data key="value">1</data>
     </entity>
 
-    <entity name="CustomerAccountsSharingGlobal" type="customer_account_sharing_config">
-        <requiredEntity type="account_share_scope_value">GlobalCustomerAccountsSharing</requiredEntity>
+    <entity name="CustomerAccountSharingGlobal" type="customer_account_sharing_config">
+        <requiredEntity type="account_share_scope_value">GlobalCustomerAccountSharing</requiredEntity>
     </entity>
-    <entity name="GlobalCustomerAccountsSharing" type="account_share_scope_value">
-        <data key="value">Global</data>
+    <entity name="GlobalCustomerAccountSharing" type="account_share_scope_value">
+        <data key="value">0</data>
     </entity>
 </entities>
