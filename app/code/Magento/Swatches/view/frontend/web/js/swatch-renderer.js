@@ -501,7 +501,9 @@ define([
                     label,
                     width,
                     height,
-                    attr;
+                    attr,
+                    swatchImageWidth,
+                    swatchImageHeight;
 
                 if (!optionConfig.hasOwnProperty(this.id)) {
                     return '';
@@ -534,6 +536,9 @@ define([
                     ' thumb-width="' + width + '"' +
                     ' thumb-height="' + height + '"';
 
+                swatchImageWidth = _.has(sizeConfig, 'swatchImage') ? sizeConfig.swatchImage.width : 30;
+                swatchImageHeight = _.has(sizeConfig, 'swatchImage') ? sizeConfig.swatchImage.height : 20;
+
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
                     attr += ' option-empty="true"';
                 }
@@ -552,7 +557,7 @@ define([
                     // Image
                     html += '<div class="' + optionClass + ' image" ' + attr +
                         ' style="background: url(' + value + ') no-repeat center; background-size: initial;width:' +
-                        sizeConfig.swatchImage.width + 'px; height:' + sizeConfig.swatchImage.height + 'px">' + '' +
+                        swatchImageWidth + 'px; height:' + swatchImageHeight + 'px">' + '' +
                         '</div>';
                 } else if (type === 3) {
                     // Clear
