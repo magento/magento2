@@ -40,11 +40,11 @@
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
         <!-- Add simple product to cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart2">
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart1">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <!-- Navigate to checkout -->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1"/>
         <seeInField selector="{{GuestCheckoutShippingSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="assertGuestEmail"/>
         <seeInField selector="{{GuestCheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="assertGuestFirstName"/>
         <seeInField selector="{{GuestCheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="assertGuestLastName"/>
