@@ -45,7 +45,7 @@ class History extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\Backend\Model\Auth\Session
      */
-    private $session;
+    protected $session;
 
     /**
      * Class constructor
