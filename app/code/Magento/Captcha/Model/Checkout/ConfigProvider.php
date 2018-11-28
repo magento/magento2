@@ -5,6 +5,9 @@
  */
 namespace Magento\Captcha\Model\Checkout;
 
+/**
+ * Configuration provider for Captcha rendering.
+ */
 class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
 {
     /**
@@ -38,7 +41,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {

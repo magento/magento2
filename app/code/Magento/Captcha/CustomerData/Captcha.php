@@ -42,7 +42,7 @@ class Captcha extends \Magento\Framework\DataObject implements SectionSourceInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData() :array
     {
