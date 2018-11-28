@@ -37,6 +37,9 @@ class DeleteCustomerUsageTest extends \PHPUnit\Framework\TestCase
         $this->customerRuleMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -44,10 +47,6 @@ class DeleteCustomerUsageTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithUpdateTimeUsedZero()
     {
-        $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->adapterMock
             ->expects($this->once())
             ->method('delete')
