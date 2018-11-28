@@ -7,8 +7,9 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/form/form',
+    'underscore',
     'mage/translate'
-], function ($, uiAlert, uiConfirm, Form, $t) {
+], function ($, uiAlert, uiConfirm, Form, _, $t) {
     'use strict';
 
     return Form.extend({
@@ -27,7 +28,6 @@ define([
          * @param {String} url - ajax url
          */
         deleteAddress: function (url) {
-            console.log(url);
             var that = this;
 
             uiConfirm({

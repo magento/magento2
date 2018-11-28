@@ -19,6 +19,11 @@ define([
             }
         },
 
+        /**
+         * Close modal, reload customer address listing and save customer address
+         *
+         * @param {Object} responseData
+         */
         onResponse: function (responseData) {
             var data;
 
@@ -32,6 +37,12 @@ define([
             }
         },
 
+        /**
+         * Save customer address to customer form data source
+         *
+         * @param {Object} responseData
+         * @param {Object} data - customer address
+         */
         saveAddress: function (responseData, data) {
             data['entity_id'] = responseData.data['entity_id'];
 
@@ -56,7 +67,7 @@ define([
          * Event method that closes "Edit customer address" modal and refreshes grid after customer address
          * was removed through "Delete" button on the "Edit customer address" modal
          *
-         * @param {string} id - customer address ID to delete
+         * @param {String} id - customer address ID to delete
          */
         onAddressDelete: function (id) {
             this.addressModal().closeModal();

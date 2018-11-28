@@ -38,17 +38,8 @@
     <listingToolbar name="listing_top">
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
-        <!-- Filter Search -->
-        <filterSearch name="fulltext" provider="customer_address_listing.customer_address_listing_data_source">
-            <settings>
-                <chipsProvider>customer_address_listing.customer_address_listing.listing_top.listing_filters_chips</chipsProvider>
-                <storageConfig>
-                    <param name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.bookmarks</param>
-                    <param name="namespace" xsi:type="string">current.search</param>
-                </storageConfig>
-            </settings>
-        </filterSearch>
-        <filters name="listing_filters">
+        <filterSearch name="fulltext"/>
+        <filters name="listing_filters" component="Magento_Customer/js/grid/filters/filters">
             <settings>
                 <storageConfig>
                     <param name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.bookmarks</param>
@@ -63,16 +54,15 @@
             </settings>
         </filters>
         <massaction name="listing_massaction" component="Magento_Customer/js/grid/massactions">
-            <action name="customer_addresses_mass_delete">
+            <action name="delete">
                 <settings>
-                    <isAjax>true</isAjax>
+                    <url path="customer/address/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
                     <confirm>
                         <message translate="true">Are you sure to delete selected address?</message>
                         <title translate="true">Delete items</title>
                     </confirm>
-                    <url path="customer/address/massDelete"/>
-                    <type>delete</type>
-                    <label translate="true">Delete</label>
                 </settings>
             </action>
         </massaction>

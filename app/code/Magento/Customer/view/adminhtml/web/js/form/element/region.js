@@ -3,9 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @api
- */
 define([
     'Magento_Ui/js/form/element/region'
 ], function (Region) {
@@ -16,6 +13,11 @@ define([
             regionScope: 'data.region'
         },
 
+        /**
+         * Set region to customer address form
+         *
+         * @param {String} value - region
+         */
         setDifferedFromDefault: function (value) {
             this._super();
 

@@ -16,7 +16,7 @@ define([
         var obj,
             originaljQueryAjax;
 
-        beforeEach (function () {
+        beforeEach(function () {
             originaljQueryAjax = $.ajax;
             obj = new Constr({
                 provider: 'provName',
