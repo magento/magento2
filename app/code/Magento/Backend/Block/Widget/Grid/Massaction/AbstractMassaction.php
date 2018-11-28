@@ -7,6 +7,7 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
 use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
 use Magento\Framework\DataObject;
+use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Grid widget massaction block
@@ -276,16 +277,19 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         }
         /** @var \Magento\Framework\Data\Collection $allIdsCollection */
         $allIdsCollection = clone $this->getParentBlock()->getCollection();
+        
         if ($this->getMassactionIdField()) {
             $massActionIdField = $this->getMassactionIdField();
         } else {
             $massActionIdField = $this->getParentBlock()->getMassactionIdField();
         }
-        $allIdsCollection = clone $allIdsCollection->getSelect();
-        $allIdsCollection->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
-        $allIdsCollection->columns($massActionIdField, 'main_table');
-        $resourse = \Magento\Framework\App\ObjectManager::getInstance()->create('Magento\Framework\App\ResourceConnection');
-        $gridIds = $resourse->getConnection()->fetchCol($allIdsCollection);
+
+        if ($allIdsCollection instanceof AbstractDb) {
+            $allIdsCollection->getSelect()->limit();
+            $allIdsCollection->clear();
+        }
+        
+        $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
         if (!empty($gridIds)) {
             return join(",", $gridIds);
         }
