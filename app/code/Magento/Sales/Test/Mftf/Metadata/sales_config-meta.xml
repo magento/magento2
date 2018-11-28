@@ -42,12 +42,6 @@
                     <object key="grand_total" dataType="grand_total">
                         <field key="value">integer</field>
                     </object>
-                    <object key="giftcardaccount" dataType="giftcardaccount">
-                        <field key="value">integer</field>
-                    </object>
-                    <object key="customerbalance" dataType="customerbalance">
-                        <field key="value">integer</field>
-                    </object>
                 </object>
             </object>
         </object>
@@ -85,12 +79,6 @@
                         <object key="inherit" dataType="checkoutTotalFlagZero">
                             <field key="value">integer</field>
                         </object>
-                    </object>
-                    <object key="giftcardaccount" dataType="giftcardaccount">
-                        <field key="value">integer</field>
-                    </object>
-                    <object key="customerbalance" dataType="customerbalance">
-                        <field key="value">integer</field>
                     </object>
                 </object>
             </object>
