@@ -43,6 +43,8 @@ class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
             $categoryId
         )->order(
             'ccp.position ' . \Magento\Framework\DB\Select::SQL_ASC
+        )->order(
+            'ccp.product_id ' . \Magento\Framework\DB\Select::SQL_DESC
         );
 
         return array_flip($connection->fetchCol($select));
