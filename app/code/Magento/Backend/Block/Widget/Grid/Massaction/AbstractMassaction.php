@@ -282,8 +282,11 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         } else {
             $massActionIdField = $this->getParentBlock()->getMassactionIdField();
         }
-        $gridIds = $allIdsCollection->setPageSize(0)->getAllColumnValues($massActionIdField);
-        
+        $allIdsCollection = clone $allIdsCollection->getSelect();
+        $allIdsCollection->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $allIdsCollection->columns($massActionIdField, 'main_table');
+        $resourse = \Magento\Framework\App\ObjectManager::getInstance()->create('Magento\Framework\App\ResourceConnection');
+        $gridIds = $resourse->getConnection()->fetchCol($allIdsCollection);
         if (!empty($gridIds)) {
             return join(",", $gridIds);
         }
