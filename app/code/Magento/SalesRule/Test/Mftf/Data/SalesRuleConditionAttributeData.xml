@@ -9,8 +9,8 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SalesRuleConditionAttributeData" type="SalesRuleConditionAttribute">
-        <data key="PriceInCart" >Magento\SalesRule\Model\Rule\Condition\Product|quote_item_price</data>
-        <data key="QuantityInCart">Magento\SalesRule\Model\Rule\Condition\Product|quote_item_qty</data>
-        <data key="RowTotalInCart">Magento\SalesRule\Model\Rule\Condition\Product|quote_item_row_total</data>
+        <data key="priceInCart" >Magento\SalesRule\Model\Rule\Condition\Product|quote_item_price</data>
+        <data key="quantityInCart">Magento\SalesRule\Model\Rule\Condition\Product|quote_item_qty</data>
+        <data key="rowTotalInCart">Magento\SalesRule\Model\Rule\Condition\Product|quote_item_row_total</data>
     </entity>
 </entities>
