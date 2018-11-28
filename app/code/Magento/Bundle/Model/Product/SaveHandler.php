@@ -158,14 +158,14 @@ class SaveHandler implements ExtensionInterface
     /**
      * Removes old options that no longer exists.
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface|object $entity
+     * @param ProductInterface $entity
      * @param array $existingOptionsIds
      * @param array $optionIds
      * @return void
      */
-    private function processRemovedOptions(object $entity, array $existingOptionsIds, array $optionIds): void
+    private function processRemovedOptions(ProductInterface $entity, array $existingOptionsIds, array $optionIds): void
     {
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $parentId = $entity->getData($metadata->getLinkField());
         foreach (array_diff($existingOptionsIds, $optionIds) as $optionId) {
             $option = $this->optionRepository->get($entity->getSku(), $optionId);
