@@ -7,18 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Create customer data resolver
@@ -102,16 +104,23 @@ class CreateCustomer implements ResolverInterface
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
+
         return ['customer' => $data];
     }
 
+    /**
+     * @param $args
+     * @return CustomerInterface
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
     private function createUserAccount($args)
     {
         $customerDataObject = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,
             $args['input'],
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            CustomerInterface::class
         );
         $store = $this->storeManager->getStore();
         $customerDataObject->setWebsiteId($store->getWebsiteId());
@@ -122,6 +131,10 @@ class CreateCustomer implements ResolverInterface
         return $this->accountManagement->createAccount($customerDataObject, $password);
     }
 
+    /**
+     * @param $context
+     * @param CustomerInterface $customer
+     */
     private function setUpUserContext($context, $customer)
     {
         $context->setUserId((int)$customer->getId());
