@@ -192,7 +192,7 @@ class Addresses extends Tab
             if (!$hasData && !$isVisibleCustomerAddress) {
                 $data[$addressNumber] = [];
             } else {
-                $customerAddressesGrid->searchAndOpen($address->getData());
+                $customerAddressesGrid->openFirstRow();
                 $data[$addressNumber] = $this->getCustomerAddressModalForm()
                     ->getData($address, $this->browser->find($this->customerAddressModalForm));
                 $this->getCustomerAddressModalForm()->clickCancelButton();

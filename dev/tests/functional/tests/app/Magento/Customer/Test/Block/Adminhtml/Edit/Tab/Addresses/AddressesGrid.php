@@ -109,27 +109,6 @@ class AddressesGrid extends DataGrid
     }
 
     /**
-     * Search item and open it for editing.
-     *
-     * @param array $filter
-     * @throws \Exception
-     * @return void
-     */
-    public function searchAndOpen(array $filter)
-    {
-        $this->search($filter);
-        $rowItem = $this->getRow([$filter['firstname']]);
-        if ($rowItem->isVisible()) {
-            $rowItem->find($this->selectAction)->click();
-            $rowItem->find($this->editAddress)->click();
-            $this->waitForElementVisible($this->customerAddressModalForm);
-            $this->waitLoader();
-        } else {
-            throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
-        }
-    }
-
-    /**
      * Delete customer address by filter
      *
      * @param array $filter
