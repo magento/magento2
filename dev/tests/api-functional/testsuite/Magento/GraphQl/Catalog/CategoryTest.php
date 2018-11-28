@@ -132,7 +132,9 @@ QUERY;
         attribute_set_id
         country_of_manufacture
         created_at
-        description
+        description {
+            html
+        }
         gift_message_available
         id
         categories {
@@ -222,7 +224,9 @@ QUERY;
           position
           sku
         }
-        short_description
+        short_description {
+            html
+        }
         sku
         small_image { url, label }
         thumbnail { url, label }
