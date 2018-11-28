@@ -220,7 +220,7 @@
                 </select>
             </formElements>
         </field>
-        <field name="postcode" sortOrder="120" formElement="input">
+        <field name="postcode" component="Magento_Ui/js/form/element/post-code" sortOrder="120" formElement="input">
             <settings>
                 <dataType>text</dataType>
                 <visible>true</visible>
@@ -242,7 +242,7 @@
                 <dataType>text</dataType>
                 <label translate="true">VAT Number</label>
                 <validation>
-                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                    <rule name="validate-alphanum" xsi:type="boolean">true</rule>
                 </validation>
             </settings>
         </field>
