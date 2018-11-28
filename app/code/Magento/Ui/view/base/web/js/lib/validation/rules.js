@@ -14,7 +14,8 @@ define([
     'tinycolor',
     'jquery/validate',
     'jquery/ui',
-    'mage/translate'
+    'mage/translate',
+    'mage/math'
 ], function ($, _, utils, moment, tinycolor) {
     'use strict';
 
@@ -963,7 +964,7 @@ define([
                     isMaxAllowedValid = typeof params.maxAllowed === 'undefined' ||
                         qty <= utils.parseNumber(params.maxAllowed),
                     isQtyIncrementsValid = typeof params.qtyIncrements === 'undefined' ||
-                        qty % utils.parseNumber(params.qtyIncrements) === 0;
+                        $.mage.getExactDivision(qty, $.mage.parseNumber(params.qtyIncrements)) === 0;
 
                 result = qty > 0;
 
