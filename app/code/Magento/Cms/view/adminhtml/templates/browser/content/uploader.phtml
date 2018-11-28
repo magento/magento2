@@ -108,7 +108,7 @@ require([
             fileTypes: /^image\/(gif|jpeg|png)$/,
             maxFileSize: <?= (int) $block->getFileSizeService()->getMaxFileSize() ?> * 10
         },
-        <?= $resizeConfig ?>,
+        <?= /* @noEscape */ $resizeConfig ?>,
         {
             action: 'save'
         }]
