@@ -15,6 +15,6 @@ define([
                 provider: '${ $.chipsConfig.name }',
                 component: 'Magento_Customer/js/grid/filters/chips'
             }
-        },
+        }
     });
 });
