@@ -18,6 +18,6 @@ define([
         initElement: function (elem) {
             this.clear();
             this._super(elem);
-        },
+        }
     });
 });
