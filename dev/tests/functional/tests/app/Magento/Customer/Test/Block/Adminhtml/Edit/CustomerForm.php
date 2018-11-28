@@ -140,6 +140,7 @@ class CustomerForm extends FormTabs
             $this->openTab('addresses');
             $this->waitForElementNotVisible($this->tabReadiness);
             $this->waitForm();
+            $this->getTab('addresses')->waitForAddressesGrid();
             $data['addresses'] = $this->getTab('addresses')->getDataAddresses($address);
         }
 
@@ -154,7 +155,6 @@ class CustomerForm extends FormTabs
     protected function waitForm()
     {
         $this->waitForElementNotVisible($this->spinner);
-        $this->getTab('addresses')->waitForAddressesGrid();
     }
 
     /**
