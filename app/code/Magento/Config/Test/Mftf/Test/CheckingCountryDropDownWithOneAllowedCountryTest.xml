@@ -19,11 +19,16 @@
             <group value="configuration"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="EnableAdminAccountAllowCountry" stepKey="setAllowedCountries"/>
         </before>
         <after>
             <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DeleteCustomerAdminActionGroup" stepKey="deleteCustomer">
+                <argument name="customer" value="CustomerEntityOne"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
+            <waitForPageLoad stepKey="WaitForPageToLoad"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
          <!--Flush Magento Cache-->
