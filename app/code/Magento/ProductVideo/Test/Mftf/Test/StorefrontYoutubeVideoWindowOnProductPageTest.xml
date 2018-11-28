@@ -47,7 +47,6 @@
 
         <!--Open simple product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
-        <waitForPageLoad stepKey="wait1"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterProductGridBySku">
             <argument name="inputName" value="sku"/>
             <argument name="value" value="$$createProduct.sku$$"/>
@@ -66,7 +65,6 @@
 
         <!-- Assert product video in storefront product page -->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="goToStorefrontProductPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontProductPageLoaded"/>
         <actionGroup ref="assertProductVideoStorefrontProductPage" stepKey="assertProductVideoStorefrontProductPage"/>
 
         <!--Click Play video button-->
@@ -90,7 +88,7 @@
         <wait time="5" stepKey="waitAgainFiveSecondToPlayVideo"/>
         <switchToIFrame selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="switchToFrame2"/>
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="waitForVideoPlayedAgain"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="AssertVideoIsPlayedAgain"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="assertVideoIsPlayedAgain"/>
         <switchToIFrame stepKey="switchBack2"/>
     </test>
 </tests>
