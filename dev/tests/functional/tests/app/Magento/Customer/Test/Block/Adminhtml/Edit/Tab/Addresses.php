@@ -322,7 +322,7 @@ class Addresses extends Tab
     }
 
     /**
-     * Get New Category Modal Form.
+     * Get new/update customer address modal form.
      *
      * @return \Magento\Customer\Test\Block\Adminhtml\Edit\Tab\Addresses\AddressForm
      */
@@ -335,7 +335,7 @@ class Addresses extends Tab
     }
 
     /**
-     * Get New Category Modal Form.
+     * Get customer addresses grid.
      *
      * @return \Magento\Customer\Test\Block\Adminhtml\Edit\Tab\Addresses\AddressesGrid
      */

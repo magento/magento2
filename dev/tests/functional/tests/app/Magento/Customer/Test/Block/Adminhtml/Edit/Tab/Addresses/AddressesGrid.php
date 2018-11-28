@@ -119,19 +119,27 @@ class AddressesGrid extends DataGrid
         $this->search($filter);
         $rowItem = $this->getRow([$filter['firstname']]);
         if ($rowItem->isVisible()) {
-            $rowItem->find($this->selectAction)->click();
-            $rowItem->find($this->deleteAddress)->click();
-            $modalElement = $this->browser->find($this->confirmModal);
-            /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-            $modal = $this->blockFactory->create(
-                \Magento\Ui\Test\Block\Adminhtml\Modal::class,
-                ['element' => $modalElement]
-            );
-            $modal->acceptAlert();
-            $this->waitLoader();
+            $this->deleteRowItemAddress($rowItem);
         } else {
             throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
+    }
+
+    /**
+     * @param \Magento\Mtf\Client\Element\SimpleElement $rowItem
+     */
+       public function deleteRowItemAddress(\Magento\Mtf\Client\Element\SimpleElement $rowItem)
+    {
+        $rowItem->find($this->selectAction)->click();
+        $rowItem->find($this->deleteAddress)->click();
+        $modalElement = $this->browser->find($this->confirmModal);
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create(
+            \Magento\Ui\Test\Block\Adminhtml\Modal::class,
+            ['element' => $modalElement]
+        );
+        $modal->acceptAlert();
+        $this->waitLoader();
     }
 
     /**
@@ -141,12 +149,22 @@ class AddressesGrid extends DataGrid
      */
     public function openFirstRow()
     {
-        $firstRow = $this->_rootElement->find($this->firstRowSelector, \Magento\Mtf\Client\Locator::SELECTOR_XPATH);
+        $firstRow = $this->getFirstRow();
         if ($firstRow->isVisible()) {
             $firstRow->find($this->selectAction)->click();
             $firstRow->find($this->editAddress)->click();
             $this->waitForElementVisible($this->customerAddressModalForm);
             $this->waitLoader();
         }
+    }
+
+    /**
+     * Get first row from the grid
+     *
+     * @return \Magento\Mtf\Client\Element\SimpleElement
+     */
+    public function getFirstRow()
+    {
+        return $this->_rootElement->find($this->firstRowSelector, \Magento\Mtf\Client\Locator::SELECTOR_XPATH);
     }
 }
