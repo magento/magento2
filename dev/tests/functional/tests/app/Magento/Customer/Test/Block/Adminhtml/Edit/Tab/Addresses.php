@@ -254,15 +254,11 @@ class Addresses extends Tab
      */
     protected function openCustomerAddress($addressNumber)
     {
-        $addressTab = $this->_rootElement->find(
-            sprintf($this->customerAddress, $addressNumber),
-            Locator::SELECTOR_XPATH
-        );
-
-        if (!$addressTab->isVisible()) {
+        $customerAddressesGrid = $this->getCustomerAddressesGrid();
+        if (!$customerAddressesGrid->getFirstRow()->isVisible()) {
             throw new \Exception("Can't open customer address #{$addressNumber}");
         }
-        $addressTab->click();
+        $customerAddressesGrid->openFirstRow();
     }
 
     /**
