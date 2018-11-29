@@ -31,6 +31,16 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $productConfigMock;
 
     /**
+     * @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $contextMock;
+
+    /**
+     * @var \Magento\Framework\View\Layout|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $layoutMock;
+
+    /**
      * @var Renderer
      */
     private $renderer;
@@ -39,6 +49,10 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->contextMock = $this->createPartialMock(\Magento\Backend\Block\Template\Context::class,['getLayout']);
+        $this->layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
+        $this->contextMock->expects($this->once())->method('getLayout')->willReturn($this->layoutMock);
+
         $this->configManager = $this->createMock(\Magento\Framework\View\ConfigInterface::class);
         $this->imageHelper = $this->createPartialMock(
             \Magento\Catalog\Helper\Image::class,
@@ -53,6 +67,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 'imageHelper' => $this->imageHelper,
                 'scopeConfig' => $this->scopeConfig,
                 'productConfig' => $this->productConfigMock,
+                'context' => $this->contextMock,
             ]
         );
     }
@@ -74,5 +89,38 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $item->expects($this->exactly(2))->method('getProduct')->will($this->returnValue($product));
         $this->renderer->setItem($item);
         $this->assertEquals(array_merge($productTags, $productTags), $this->renderer->getIdentities());
+    }
+
+    public function testGetProductPriceHtml()
+    {
+        $priceHtml = 'some price html';
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+
+        $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $item->expects($this->atLeastOnce())->method('getProduct')->willReturn($productMock);
+
+        $priceRender = $this->getMockBuilder(\Magento\Framework\Pricing\Render::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->layoutMock->expects($this->once())
+            ->method('getBlock')
+            ->with('product.price.render.default')
+            ->willReturn($priceRender);
+
+        $priceRender->expects($this->once())
+            ->method('render')
+            ->with(
+                \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
+                $productMock,
+                [
+                    'include_container' => true,
+                    'display_minimal_price' => true,
+                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                ]
+            )->willReturn($priceHtml);
+
+        $this->renderer->setItem($item);
+        $this->assertEquals($priceHtml, $this->renderer->getProductPriceHtml($productMock));
     }
 }
