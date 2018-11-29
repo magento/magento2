@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CheckoutTotalsSortOrderInCartTest">
+    <test name="StorefrontCheckoutTotalsSortOrderInCartTest">
         <annotations>
             <title value="Checkout Totals Sort Order configuration and displaying in cart"/>
             <stories value="MAGETWO-89397: Wrong Checkout Totals Sort Order in cart"/>
@@ -18,24 +18,26 @@
         </annotations>
 
         <before>
-            <createData entity="_defaultCategory" stepKey="defaultCategory"/>
-            <createData entity="SimpleProduct" stepKey="simpleProduct">
-                <requiredEntity createDataKey="defaultCategory"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <createData entity="ApiCartRule1" stepKey="cartRule"/>
+            <createData entity="ApiCartRule1" stepKey="createCartRule"/>
             <createData entity="CheckoutShippingTotalsSortOrder" stepKey="setConfigShippingTotalsSortOrder"/>
         </before>
 
         <after>
-            <createData entity="DefaultCheckoutTotalsSortOrder" stepKey="setDefaultTotalsSortOrder"/>
-            <deleteData createDataKey="cartRule" stepKey="deleteCartRule"/>
-            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
-            <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCartRule" stepKey="deleteCartRule"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <createData entity="DefaultTotalsSortOrder" stepKey="setDefaultTotalsSortOrder"/>
         </after>
 
-        <actionGroup ref="VerifyDiscountAmount" stepKey="verifyStorefront">
-            <argument name="productUrl" value="$$simpleProduct.sku$$.html"/>
-            <argument name="quantity" value="1"/>
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="VerifyDiscountAmount" stepKey="verifyDiscountAmount">
             <argument name="expectedDiscount" value="-$100"/>
         </actionGroup>
 
