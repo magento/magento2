@@ -974,19 +974,63 @@ define([
          * @private
          */
         _getPrices: function (newPrices, displayPrices) {
-            var $widget = this;
+            var $widget = this,
+                optionPriceDiff = 0,
+                allowedProduct, optionPrices, basePrice, optionFinalPrice;
 
             if (_.isEmpty(newPrices)) {
-                newPrices = $widget.options.jsonConfig.prices;
+                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
+                optionPrices = this.options.jsonConfig.optionPrices;
+                basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount);
+
+                if (!_.isEmpty(allowedProduct)) {
+                    optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+                    optionPriceDiff = optionFinalPrice - basePrice;
+                }
+
+                if (optionPriceDiff !== 0) {
+                    newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
+                } else {
+                    newPrices = $widget.options.jsonConfig.prices;
+                }
             }
 
             _.each(displayPrices, function (price, code) {
+
                 if (newPrices[code]) {
                     displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
                 }
             });
 
             return displayPrices;
+        },
+
+        /**
+         * Get product with minimum price from selected options.
+         *
+         * @param {Array} allowedProducts
+         * @returns {String}
+         * @private
+         */
+        _getAllowedProductWithMinPrice: function (allowedProducts) {
+            var optionPrices = this.options.jsonConfig.optionPrices,
+                product = {},
+                optionFinalPrice, optionMinPrice;
+
+            _.each(allowedProducts, function (allowedProduct) {
+                optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+
+                if (_.isEmpty(product)) {
+                    optionMinPrice = optionFinalPrice;
+                    product = allowedProduct;
+                }
+
+                if (optionFinalPrice < optionMinPrice) {
+                    product = allowedProduct;
+                }
+            }, this);
+
+            return product;
         },
 
         /**

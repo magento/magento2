@@ -13,6 +13,9 @@
         "magento/framework": "101.0.*",
         "magento/module-ui": "101.0.*"
     },
+    "suggest": {
+        "magento/module-webapi": "*"
+    },
     "type": "magento2-module",
     "version": "100.2.5",
     "license": [
