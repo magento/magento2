@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCheckoutCartSummarySection">
-        <element name="checkoutWithMultipleAddresses" type="text" selector=".multicheckout" timeout="30"/>
+        <element name="checkoutWithMultipleAddresses" type="button" selector=".multicheckout" timeout="30"/>
     </section>
 </sections>

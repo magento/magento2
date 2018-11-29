@@ -330,9 +330,9 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * Check availability of order level functionality.
      *
-     * @return bool
+     * @return bool|null
      */
-    public function isMessagesOrderAvailable(): bool
+    public function isMessagesOrderAvailable()
     {
         $entity = $this->getEntity();
         if (!$entity->hasIsGiftOptionsAvailable()) {
