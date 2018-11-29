@@ -32,14 +32,14 @@
 
             <!--Create bundle product with checkbox bundle option-->
             <createData entity="ApiBundleProduct" stepKey="product"/>
-            <createData entity="CheckboxOption" stepKey="bundleOption">
+            <createData entity="CheckboxOption" stepKey="checkboxBundleOption">
                 <requiredEntity createDataKey="product"/>
             </createData>
 
             <!--Link simple product 1 to bundle option with default quantity 2-->
             <createData entity="ApiBundleLink" stepKey="createBundleLink1">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="checkboxBundleOption"/>
                 <requiredEntity createDataKey="simple1"/>
                 <field key="qty">2</field>
                 <field key="is_default">1</field>
@@ -48,10 +48,32 @@
             <!--Link simple product 2 to bundle option with default quantity 2-->
             <createData entity="ApiBundleLink" stepKey="createBundleLink2">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="checkboxBundleOption"/>
                 <requiredEntity createDataKey="simple2"/>
                 <field key="qty">2</field>
                 <field key="is_default">1</field>
+            </createData>
+
+            <!--Add drop-down bundle option-->
+            <createData entity="DropDownBundleOption" stepKey="dropDownBundleOption">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+
+            <!--Link simple product 1 to drop-down bundle option with default quantity 2-->
+            <createData entity="ApiBundleLink" stepKey="createBundleLink3">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="dropDownBundleOption"/>
+                <requiredEntity createDataKey="simple1"/>
+                <field key="qty">2</field>
+                <field key="is_default">1</field>
+            </createData>
+
+            <!--Link simple product 2 to drop-down bundle option with default quantity 2-->
+            <createData entity="ApiBundleLink" stepKey="createBundleLink4">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="dropDownBundleOption"/>
+                <requiredEntity createDataKey="simple2"/>
+                <field key="qty">2</field>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
@@ -65,7 +87,7 @@
         <actionGroup ref="addBundleProductToOrderAndCheckPriceInGrid" stepKey="addBundleProductToOrder">
             <argument name="product" value="$$product$$"/>
             <argument name="quantity" value="1"/>
-            <argument name="price" value="$492.00"/>
+            <argument name="price" value="$738.00"/>
         </actionGroup>
 
         <!--Select FlatRate shipping method-->

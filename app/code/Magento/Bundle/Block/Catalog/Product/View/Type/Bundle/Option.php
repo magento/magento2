@@ -264,7 +264,8 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
         if ($selection) {
             $price = $this->getProduct()->getPriceModel()->getSelectionPreFinalPrice(
                 $this->getProduct(),
-                $selection
+                $selection,
+                1
             );
             if (is_numeric($price)) {
                 $price = $this->pricingHelper->currencyByStore($price, $store, false);
