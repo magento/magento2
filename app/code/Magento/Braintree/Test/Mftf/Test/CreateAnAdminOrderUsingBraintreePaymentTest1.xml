@@ -78,6 +78,9 @@
         <waitForElementVisible selector="{{NewOrderSection.successMessage}}" stepKey="waitForSuccessMessage" time="1"/>
 
         <after>
+            <!-- Disable BrainTree-->
+            <actionGroup ref="DisableBrainTree" stepKey="disableBrainTree"/>
+
             <!--SignOut-->
             <actionGroup ref="SignOut" stepKey="signOutFromNewUser"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -95,8 +98,6 @@
             <!--Delete Role-->
             <actionGroup ref="GoToUserRoles" stepKey="GoBackToUserRoles"/>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="AdminDeleteRoleActionGroup"/>
-
         </after>
-
     </test>
 </tests>
