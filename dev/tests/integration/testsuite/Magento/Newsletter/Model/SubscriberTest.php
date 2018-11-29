@@ -104,21 +104,26 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
             ->save();
 
         // Registering customer with the same email from second store
-        $customer = $this->objectManager->create(\Magento\Customer\Model\Data\Customer::class, [
-            'data' => [
-                \Magento\Customer\Model\Data\Customer::FIRSTNAME => 'John',
-                \Magento\Customer\Model\Data\Customer::LASTNAME => 'Doe',
-                \Magento\Customer\Model\Data\Customer::EMAIL => $email,
-                \Magento\Customer\Model\Data\Customer::STORE_ID => $secondStoreId,
+        $customer = $this->objectManager->create(
+            \Magento\Customer\Model\Data\Customer::class,
+            [
+                'data' => [
+                    \Magento\Customer\Model\Data\Customer::FIRSTNAME => 'John',
+                    \Magento\Customer\Model\Data\Customer::LASTNAME => 'Doe',
+                    \Magento\Customer\Model\Data\Customer::EMAIL => $email,
+                    \Magento\Customer\Model\Data\Customer::STORE_ID => $secondStoreId,
+                ]
             ]
-        ]);
+        );
 
         /** @var \Magento\Customer\Api\AccountManagementInterface $accountManagement */
         $accountManagement = $this->objectManager->get(\Magento\Customer\Api\AccountManagementInterface::class);
-        $accountManagement->createAccount($customer);
+        $customer = $accountManagement->createAccount($customer);
 
-        $subscribers = $this->_model->getCollection()->getItems();
+        /** @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection $subscribers */
+        $subscribers = $this->_model->getCollection()->addFieldToFilter('subscriber_email', $email);
 
-        $this->assertCount(1, $subscribers);
+        $this->assertCount(1, $subscribers->getItems());
+        $this->assertEquals($subscribers->getFirstItem()->getCustomerId(), $customer->getId());
     }
 }
