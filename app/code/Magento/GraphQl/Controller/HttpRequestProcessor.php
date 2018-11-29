@@ -36,7 +36,7 @@ class HttpRequestProcessor
     public function processHeaders(Http $request) : void
     {
         foreach ($this->headerProcessors as $headerName => $headerClass) {
-            $headerClass->processHeaderValue((string)$request->getHeader($headerName));
+            $headerClass->processHeaderValue((string)$request->getHeader($headerName), $request);
         }
     }
 }

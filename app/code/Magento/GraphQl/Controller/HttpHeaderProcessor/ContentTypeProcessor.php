@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller\HttpHeaderProcessor;
 
+use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
 
@@ -18,10 +19,10 @@ class ContentTypeProcessor implements HttpHeaderProcessorInterface
     /**
      * Handle the mandatory application/json header
      *
-     * {@inheritDoc}
+     * @inheritDoc
      * @throws LocalizedException
      */
-    public function processHeaderValue(string $headerValue) : void
+    public function processHeaderValue(string $headerValue, HttpRequestInterface $request) : void
     {
         if (!$headerValue || strpos($headerValue, 'application/json') === false) {
             throw new LocalizedException(

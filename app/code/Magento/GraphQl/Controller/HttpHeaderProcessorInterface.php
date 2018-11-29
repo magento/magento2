@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller;
 
+use Magento\Framework\App\HttpRequestInterface;
+
 /**
  * Use this interface to implement a processor for each entry of a header in an HTTP GraphQL request.
  */
@@ -19,7 +21,8 @@ interface HttpHeaderProcessorInterface
      * to enforce required headers like "application/json"
      *
      * @param string $headerValue
+     * @param HttpRequestInterface $request
      * @return void
      */
-    public function processHeaderValue(string $headerValue) : void;
+    public function processHeaderValue(string $headerValue, HttpRequestInterface $request) : void;
 }
