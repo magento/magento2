@@ -6,9 +6,12 @@
 
 namespace Magento\Store\Model;
 
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\UrlInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 use Zend\Stdlib\Parameters;
 
 /**
@@ -268,23 +271,33 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testGetCurrentUrl()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
+        ->setValue('web/url/use_store', true, ScopeInterface::SCOPE_STORE, 'secondstore');
+
         $this->model->load('admin');
         $this->model->expects($this->any())->method('getUrl')->will($this->returnValue('http://localhost/index.php'));
         $this->assertStringEndsWith('default', $this->model->getCurrentUrl());
         $this->assertStringEndsNotWith('default', $this->model->getCurrentUrl(false));
 
-        $this->model->load('fixture_second_store');
+        /** @var \Magento\Store\Model\Store $secondStore */
+        $secondStore = $objectManager->get(StoreRepositoryInterface::class)->get('secondstore');
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
-            ->setValue(Store::XML_PATH_STORE_IN_URL, true, ScopeInterface::SCOPE_STORE);
-        
-        $this->assertEquals('http://localhost/index.php?___store=fixture_second_store&___from_store=default', $this->model->getCurrentUrl(true));
-        $this->assertEquals('http://localhost/index.php?___store=fixture_second_store', $this->model->getCurrentUrl(false));
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = $objectManager->create(ProductRepository::class);
+        $product = $productRepository->get('simple');
+        $product->setStoreId($secondStore->getId());
+        $url = $product->getUrlInStore();
+
+        $this->assertEquals('http://localhost/index.php/secondstore/catalog/product/view/id/1/s/simple-product/', $url);
+        $this->assertEquals('http://localhost/index.php/secondstore/?___from_store=default', $secondStore->getCurrentUrl());
+        $this->assertEquals('http://localhost/index.php/secondstore/', $secondStore->getCurrentUrl(false));
     }
 
     /**

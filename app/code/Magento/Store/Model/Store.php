@@ -1169,10 +1169,6 @@ class Store extends AbstractExtensibleModel implements
 
         $storeUrl = $this->getUrl('', ['_secure' => $this->_storeManager->getStore()->isCurrentlySecure()]);
 
-        if ($this->_config->getValue(self::XML_PATH_STORE_IN_URL)) {
-            $storeUrl   = preg_replace('/\/'.$this->getCode().'{1}/','',$storeUrl);
-        }
-
         if (!filter_var($storeUrl, FILTER_VALIDATE_URL)) {
             return $storeUrl;
         }
