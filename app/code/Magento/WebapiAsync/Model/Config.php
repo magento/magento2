@@ -158,7 +158,7 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
     private function generateTopicNameFromService($serviceInterface, $serviceMethod, $httpMethod)
     {
         $typeName = strtolower(sprintf('%s.%s', $serviceInterface, $serviceMethod));
-        return self::TOPIC_PREFIX . $this->generateKey($typeName, $httpMethod, '\\', false);
+        return strtolower(self::TOPIC_PREFIX . $this->generateKey($typeName, $httpMethod, '\\', false));
     }
 
     /**

@@ -77,13 +77,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'async.V1.products.POST' => [
                 'interface' => 'Magento\Catalog\Api\ProductRepositoryInterface',
                 'method' => 'save',
-                'topic' => 'async.magento.catalog.api.productrepositoryinterface.save.POST',
+                'topic' => 'async.magento.catalog.api.productrepositoryinterface.save.post',
             ]
         ];
         */
         $result = $this->config->getServices();
 
-        $expectedTopic = 'async.magento.catalog.api.productrepositoryinterface.save.POST';
+        $expectedTopic = 'async.magento.catalog.api.productrepositoryinterface.save.post';
         $lookupKey = 'async.V1.products.POST';
         $this->assertArrayHasKey($lookupKey, $result);
         $this->assertEquals($result[$lookupKey]['topic'], $expectedTopic);
