@@ -128,7 +128,7 @@ class AddressesGrid extends DataGrid
     /**
      * @param \Magento\Mtf\Client\Element\SimpleElement $rowItem
      */
-       public function deleteRowItemAddress(\Magento\Mtf\Client\Element\SimpleElement $rowItem)
+    public function deleteRowItemAddress(\Magento\Mtf\Client\Element\SimpleElement $rowItem)
     {
         $rowItem->find($this->selectAction)->click();
         $rowItem->find($this->deleteAddress)->click();
