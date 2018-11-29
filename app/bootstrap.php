@@ -14,12 +14,12 @@ error_reporting(E_ALL);
 if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 70103) {
     if (PHP_SAPI == 'cli') {
         echo 'Magento supports 7.1.3 or later. ' .
-            'Please read https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements2.html';
+            'Please read https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements-tech.html';
     } else {
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
     <p>Magento supports PHP 7.1.3 or later. Please read
-    <a target="_blank" href="https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements2.html">
+    <a target="_blank" href="https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements-tech.html">
     Magento System Requirements</a>.
 </div>
 HTML;
