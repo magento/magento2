@@ -12,6 +12,9 @@ use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\GiftMessage\Api\OrderItemRepositoryInterface as GiftMessageItemRepositoryInterface;
 use Magento\Sales\Api\Data\OrderItemExtensionFactory;
 
+/**
+ * Plugin for adding gift message to order item
+ */
 class OrderItemGet
 {
     /** @var OrderItemExtensionFactory */
