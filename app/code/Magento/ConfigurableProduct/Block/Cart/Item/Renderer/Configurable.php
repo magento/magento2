@@ -70,4 +70,14 @@ class Configurable extends Renderer implements IdentityInterface
         }
         return $identities;
     }
+
+    /**
+     * Get price for exact simple product added to cart
+     *
+     * @inheritdoc
+     */
+    public function getProductPriceHtml(\Magento\Catalog\Model\Product $product)
+    {
+        return parent::getProductPriceHtml($this->getChildProduct());
+    }
 }
