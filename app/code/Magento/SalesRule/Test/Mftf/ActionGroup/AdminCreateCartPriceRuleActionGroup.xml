@@ -30,7 +30,7 @@
         </arguments>
         <remove keyForRemoval="selectActionType"/>
         <remove keyForRemoval="fillDiscountAmount"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType" after="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType" after="fillRuleName"/>
         <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.couponCode}}" stepKey="waitForElementVisible" after="selectCouponType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{couponCode}}" stepKey="fillCouponCode" after="waitForElementVisible"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="99" stepKey="fillUserPerCoupon" after="fillCouponCode"/>
