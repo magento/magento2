@@ -10,17 +10,27 @@
     <entity name="SimpleTaxRate" type="taxRate">
         <data key="code" unique="suffix">TaxRate</data>
     </entity>
-    <entity name="taxRateCustomRateUS" type="taxRate">
+    <entity name="defaultTaxRate" type="taxRate">
         <data key="code" unique="suffix">Tax Rate </data>
         <data key="tax_country_id">US</data>
         <data key="tax_region_id">12</data>
+        <data key="tax_postcode">*</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">10</data>
+    </entity>
+    <entity name="taxRateCustomRateUS" type="taxRate">
+        <data key="code" unique="suffix">Tax Rate </data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_region">California</data>
         <data key="tax_postcode">90001</data>
         <data key="zip_is_range">0</data>
-        <data key="rate">100</data>
+        <data key="rate">100.0000</data>
     </entity>
     <entity name="defaultTaxRateWithZipRange" type="taxRate">
         <data key="code" unique="suffix">Tax Rate </data>
-        <data key="tax_country_id">United States</data>
+        <data key="tax_country_id">US</data>
         <data key="tax_region_id">12</data>
         <data key="zip_is_range">1</data>
         <data key="zip_from">90001</data>
@@ -29,14 +39,14 @@
     </entity>
     <entity name="defaultTaxRateWithLargeRate" type="taxRate">
         <data key="code" unique="suffix">TaxRate</data>
-        <data key="tax_country_id">United Kingdom</data>
+        <data key="tax_country_id">GB</data>
         <data key="tax_postcode">*</data>
         <data key="zip_is_range">0</data>
         <data key="rate">777</data>
     </entity>
     <entity name="taxRateCustomRateCanada" type="taxRate">
         <data key="code" unique="suffix">TaxRate</data>
-        <data key="tax_country_id">Canada</data>
+        <data key="tax_country_id">CA</data>
         <data key="tax_region_id">*</data>
         <data key="tax_postcode">180</data>
         <data key="zip_is_range">0</data>
@@ -44,7 +54,7 @@
     </entity>
     <entity name="taxRateCustomRateUK" type="taxRate">
         <data key="code" unique="suffix">TaxRate</data>
-        <data key="tax_country_id">United Kingdom</data>
+        <data key="tax_country_id">GB</data>
         <data key="zip_is_range">1</data>
         <data key="zip_from">1</data>
         <data key="zip_to">7800935</data>
@@ -52,7 +62,7 @@
     </entity>
     <entity name="taxRateCustomRateFrance" type="taxRate">
         <data key="code" unique="suffix">TaxRate</data>
-        <data key="tax_country_id">France</data>
+        <data key="tax_country_id">FR</data>
         <data key="tax_region_id">277</data>
         <data key="tax_postcode">*</data>
         <data key="zip_is_range">0</data>
