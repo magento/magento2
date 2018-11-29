@@ -67,7 +67,6 @@ class Method extends Block
      */
     private function waitFormLoading()
     {
-        $this->_rootElement->click();
         $this->browser->waitUntil(
             function () {
                 return $this->browser->find($this->waitElement)->isVisible() ? null : true;
