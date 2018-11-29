@@ -11,11 +11,11 @@
     <test name="AdminCheckValidatorConfigurableProductTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="MAGETWO-95834: Unable to create Configurations for Configurable Products"/>
             <title value="Check that validator works correctly when creating Configurations for Configurable Products"/>
             <description value="Verify validator works correctly for Configurable Products"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95995"/>
+            <useCaseId value="MAGETWO-95834"/>
             <group value="ConfigurableProduct"/>
         </annotations>
 
@@ -29,6 +29,22 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
         </before>
+
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+                <argument name="sku" value="{{ApiConfigurableProduct.name}}-thisIsShortName"/>
+            </actionGroup>
+            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
+                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+            <!-- Remove attribute -->
+            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="productDropDownAttribute"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
 
         <!-- Find the product that we just created using the product grid -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
@@ -106,21 +122,5 @@
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitPopUpVisible"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmPopup"/>
         <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSaveProductMessage"/>
-
-        <after>
-            <!--Delete created data-->
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
-                <argument name="sku" value="{{ApiConfigurableProduct.name}}-thisIsShortName"/>
-            </actionGroup>
-            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
-                dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
-            <!-- Remove attribute -->
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
-                <argument name="ProductAttribute" value="productDropDownAttribute"/>
-            </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
-        </after>
     </test>
 </tests>
