@@ -63,7 +63,5 @@ class OrderItemGetRepositoryTest extends WebapiAbstract
         unset($resultMessage['gift_message_id']);
         unset($resultMessage['customer_id']);
         $this->assertEquals($expectedMessage, $resultMessage);
-
-        var_export($result);
     }
 }

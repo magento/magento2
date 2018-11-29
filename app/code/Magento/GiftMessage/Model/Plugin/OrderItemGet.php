@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -18,11 +17,8 @@ class OrderItemGet
     /** @var OrderItemExtensionFactory */
     private $orderItemExtensionFactory;
 
-    /** @var GiftMessageItemRepositoryInterface */
-    private $orderItemRepository;
-
-    /** @var OrderItemExtensionFactory */
-    private $orderItemExtensionFactor;
+    /**@var GiftMessageItemRepositoryInterface */
+    private $giftMessageOrderItemRepository;
 
     /**
      * @param GiftMessageItemRepositoryInterface $giftMessageOrderItemRepository
@@ -33,12 +29,15 @@ class OrderItemGet
         OrderItemExtensionFactory $orderItemExtensionFactor
     ) {
         $this->giftMessageOrderItemRepository = $giftMessageOrderItemRepository;
-        $this->orderItemExtensionFactor = $orderItemExtensionFactor;
+        $this->orderItemExtensionFactory = $orderItemExtensionFactor;
     }
 
     /**
+     * Add gift message for order item
+     *
      * @param OrderItemRepositoryInterface $subject
-     * @param OrderItemInterface $result
+     * @param OrderItemInterface $orderItem
+     * @return OrderItemInterface
      */
     public function afterGet(OrderItemRepositoryInterface $subject, OrderItemInterface $orderItem)
     {
