@@ -18,8 +18,8 @@ if (!defined('PHP_VERSION_ID') || !(PHP_VERSION_ID === 70002 || PHP_VERSION_ID =
     } else {
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
-    <p>Magento supports PHP 7.0.2, 7.0.4, and 7.0.6 or later. Please read
-    <a target="_blank" href="http://devdocs.magento.com/guides/v2.2/install-gde/system-requirements.html">
+    <p>Magento supports PHP 7.1.3 or later. Please read
+    <a target="_blank" href="https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements2.html">
     Magento System Requirements</a>.
 </div>
 HTML;
