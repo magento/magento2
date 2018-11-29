@@ -26,4 +26,16 @@
         <data key="zip">*</data>
         <data key="rate">0</data>
     </entity>
+    <entity name="SimpleTaxWithZipCode" type="tax">
+        <data key="state">Texas</data>
+        <data key="country">United States</data>
+        <data key="zip">78729</data>
+        <data key="rate">7.25</data>
+    </entity>
+    <entity name="SimpleSecondTaxWithZipCode" type="tax">
+        <data key="state">Texas</data>
+        <data key="country">United States</data>
+        <data key="zip">78729</data>
+        <data key="rate">0.125</data>
+    </entity>
 </entities>

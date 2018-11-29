@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
@@ -85,7 +85,7 @@ class Categories implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         if (!isset($value['model'])) {
-            throw new GraphQlInputException(__('"model" value should be specified'));
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
         /** @var \Magento\Catalog\Model\Product $product */
@@ -109,6 +109,7 @@ class Categories implements ResolverInterface
                 if (in_array($item->getId(), $categoryIds)) {
                     // Try to extract all requested fields from the loaded collection data
                     $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item, true);
+                    $categories[$item->getId()]['model'] = $item;
                     $requestedFields = $that->attributesJoiner->getQueryFields($info->fieldNodes[0]);
                     $extractedFields = array_keys($categories[$item->getId()]);
                     $foundFields = array_intersect($requestedFields, $extractedFields);

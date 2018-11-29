@@ -158,8 +158,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     }
 
     /**
-     * Returns the total width in points of the string using the specified font and
-     * size.
+     * Returns the total width in points of the string using the specified font and size.
      *
      * This is not the most efficient way to perform this calculation. I'm
      * concentrating optimization efforts on the upcoming layout manager class.
@@ -230,7 +229,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Insert logo to pdf page
      *
      * @param \Zend_Pdf_Page &$page
-     * @param null $store
+     * @param string|null $store
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -285,7 +284,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Insert address to pdf page
      *
      * @param \Zend_Pdf_Page &$page
-     * @param null $store
+     * @param string|null $store
      * @return void
      */
     protected function insertAddress(&$page, $store = null)
@@ -362,6 +361,38 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             }
         }
         return $y;
+    }
+
+    /**
+     * Detect an input string is Arabic
+     *
+     * @param string $subject
+     * @return bool
+     */
+    private function isArabic(string $subject): bool
+    {
+        return (preg_match('/\p{Arabic}/u', $subject) > 0);
+    }
+
+    /**
+     * Reverse text with Arabic characters
+     *
+     * @param string $string
+     * @return string
+     */
+    private function reverseArabicText($string)
+    {
+        $splitText = explode(' ', $string);
+        for ($i = 0; $i < count($splitText); $i++) {
+            if ($this->isArabic($splitText[$i])) {
+                for ($j = $i + 1; $j < count($splitText); $j++) {
+                    $tmp = $this->string->strrev($splitText[$j]);
+                    $splitText[$j] = $this->string->strrev($splitText[$i]);
+                    $splitText[$i] = $tmp;
+                }
+            }
+        }
+        return implode(' ', $splitText);
     }
 
     /**
@@ -475,7 +506,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             if ($value !== '') {
                 $text = [];
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
-                    $text[] = $_value;
+                    $text[] = ($this->isArabic($_value)) ? $this->reverseArabicText($_value) : $_value;
                 }
                 foreach ($text as $part) {
                     $page->drawText(strip_tags(ltrim($part)), 35, $this->y, 'UTF-8');
@@ -492,7 +523,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 if ($value !== '') {
                     $text = [];
                     foreach ($this->string->split($value, 45, true, true) as $_value) {
-                        $text[] = $_value;
+                        $text[] = ($this->isArabic($_value)) ? $this->reverseArabicText($_value) : $_value;
                     }
                     foreach ($text as $part) {
                         $page->drawText(strip_tags(ltrim($part)), 285, $this->y, 'UTF-8');
@@ -641,11 +672,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             return 0;
         }
 
-        if ($a['sort_order'] == $b['sort_order']) {
-            return 0;
-        }
-
-        return $a['sort_order'] > $b['sort_order'] ? 1 : -1;
+        return $a['sort_order'] <=> $b['sort_order'];
     }
 
     /**

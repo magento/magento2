@@ -33,6 +33,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @param string $query
      * @param array $variables
      * @param string $operationName
+     * @param array $headers
      * @return array|int|string|float|bool GraphQL call results
      * @throws \Exception
      */
@@ -51,11 +52,14 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
+     * Compose headers
+     *
+     * @param array $headers
      * @return string[]
      */
-    private function composeHeaders($headers)
+    private function composeHeaders(array $headers): array
     {
-        $headersArray =[];
+        $headersArray = [];
         foreach ($headers as $key => $value) {
             $headersArray[] = sprintf('%s: %s', $key, $value);
         }

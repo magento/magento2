@@ -120,12 +120,12 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo('Email Subject'))
             ->willReturnSelf();
 
-        $this->messageMock->expects($this->exactly(intval($messageType == MessageInterface::TYPE_TEXT)))
+        $this->messageMock->expects($this->exactly((int)($messageType == MessageInterface::TYPE_TEXT)))
             ->method('setBodyText')
             ->with($this->equalTo($bodyText))
             ->willReturnSelf();
 
-        $this->messageMock->expects($this->exactly(intval($messageType == MessageInterface::TYPE_HTML)))
+        $this->messageMock->expects($this->exactly((int)($messageType == MessageInterface::TYPE_HTML)))
             ->method('setBodyHtml')
             ->with($this->equalTo($bodyText))
             ->willReturnSelf();
