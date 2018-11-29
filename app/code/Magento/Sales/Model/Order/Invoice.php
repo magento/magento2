@@ -445,10 +445,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         $order->setBaseDiscountInvoiced($order->getBaseDiscountInvoiced() - $this->getBaseDiscountAmount());
         $order->setBaseTotalInvoicedCost($order->getBaseTotalInvoicedCost() - $this->getBaseCost());
 
-        if ($this->getState() == self::STATE_PAID) {
-            $order->setTotalPaid($order->getTotalPaid() - $this->getGrandTotal());
-            $order->setBaseTotalPaid($order->getBaseTotalPaid() - $this->getBaseGrandTotal());
-        }
         $this->setState(self::STATE_CANCELED);
         $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
             ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING));
