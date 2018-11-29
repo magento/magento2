@@ -13,10 +13,10 @@ class UniqueValidator implements UniqueValidationInterface
     /**
      * @inheritdoc
      */
-    public function validate(AbstractAttribute $attribute, $object, $entityIdField, array $entityIds)
+    public function validate(AbstractAttribute $attribute, $object, $entityLinkField, array $entityIds)
     {
         if (isset($entityIds[0])) {
-            return $entityIds[0] == $object->getData($entityIdField);
+            return $entityIds[0] == $object->getData($entityLinkField);
         }
         return true;
     }

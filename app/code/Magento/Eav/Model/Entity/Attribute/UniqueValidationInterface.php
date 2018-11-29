@@ -15,9 +15,9 @@ interface UniqueValidationInterface
      *
      * @param AbstractAttribute $attribute
      * @param \Magento\Framework\DataObject $object
-     * @param string $entityIdField
+     * @param string $entityLinkField
      * @param array $entityIds
      * @return bool
      */
-    public function validate(AbstractAttribute $attribute, $object, $entityIdField, array $entityIds);
+    public function validate(AbstractAttribute $attribute, $object, $entityLinkField, array $entityIds);
 }
