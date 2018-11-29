@@ -180,7 +180,7 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getAttributesMeta(Type $entityType): array
+    private function getAttributesMeta(Type $entityType): array
     {
         $meta = [];
         $attributes = $entityType->getAttributeCollection();

@@ -197,7 +197,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getAttributesMeta(Type $entityType): array
+    private function getAttributesMeta(Type $entityType): array
     {
         $meta = [];
         $attributes = $entityType->getAttributeCollection();

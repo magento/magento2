@@ -29,7 +29,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
     /**
      * @var AggregationInterface
      */
-    protected $aggregations;
+    private $aggregations;
 
     /**
      * @param Context $context
