@@ -48,7 +48,7 @@ define([
                         if (typeof controlButtonArea != 'undefined') {
                             var buttons = controlButtonArea.childElements();
                             for (var i = 0; i < buttons.length; i++) {
-                                if (buttons[i].innerHTML.include(button.label)) {
+                                if (buttons[i].innerHTML.include(button.getLabel())) {
                                     return;
                                 }
                             }
@@ -1171,8 +1171,12 @@ define([
 
         submit : function()
         {
-            jQuery('#edit_form').trigger('processStart');
-            jQuery('#edit_form').trigger('submitOrder');
+            var $editForm = jQuery('#edit_form');
+
+            if ($editForm.valid()) {
+                $editForm.trigger('processStart');
+                $editForm.trigger('submitOrder');
+            }
         },
 
         _realSubmit: function () {
@@ -1432,6 +1436,10 @@ define([
             node.update('<span>' + this._label + '</span>');
             content[position] = node;
             Element.insert(element, content);
+        },
+
+        getLabel: function(){
+            return this._label;
         }
     };
 

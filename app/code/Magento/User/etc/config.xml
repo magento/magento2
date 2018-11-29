@@ -10,6 +10,7 @@
         <admin>
             <emails>
                 <forgot_email_template>admin_emails_forgot_email_template</forgot_email_template>
+                <new_user_notification_template>admin_emails_new_user_notification_template</new_user_notification_template>
                 <forgot_email_identity>general</forgot_email_identity>
                 <user_notification_template>admin_emails_user_notification_template</user_notification_template>
             </emails>
