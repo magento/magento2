@@ -186,6 +186,17 @@
     li {
         display: block;
     }
+    li.parent.level-0{
+        &:before{
+          content: @icon-caret-right__content;
+          color: @menu-item__color;
+          position: absolute;
+          font-family: 'Admin Icons';
+          z-index: 999;
+          right: 5px;
+          margin-top: 20px; 
+        }
+    }
 
     //  External link marker
     [target='_blank'] {
