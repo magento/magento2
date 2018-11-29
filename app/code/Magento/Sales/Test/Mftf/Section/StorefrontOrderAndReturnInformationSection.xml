@@ -8,7 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="OrderAndReturnInformationSection">
+    <section name="StorefrontOrderAndReturnInformationSection">
         <element name="orderId" type="input" selector="#oar-order-id"/>
         <element name="bilingLastName" type="input" selector="#oar-billing-lastname"/>
         <element name="findOrderBy" type="select" selector="#quick-search-type-id"/>

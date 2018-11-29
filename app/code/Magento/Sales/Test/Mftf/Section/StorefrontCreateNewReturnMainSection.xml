@@ -8,7 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="CreateNewReturnMainSection">
+    <section name="StorefrontCreateNewReturnMainSection">
         <element name="quantityToReturn" type="input" selector="#items:qty_requested0"/>
         <element name="submit" type="submit" selector="//span[contains(text(), 'Submit')]"/>
         <element name="resolutionError" type="text" selector="//*[@id='items:resolution0']/following-sibling::div[contains(text(),'Please select an option')]"/>
