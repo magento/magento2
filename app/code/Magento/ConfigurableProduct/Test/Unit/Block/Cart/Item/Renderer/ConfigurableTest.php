@@ -8,6 +8,9 @@ namespace Magento\ConfigurableProduct\Test\Unit\Block\Cart\Item\Renderer;
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 use Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable as Renderer;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -49,7 +52,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->contextMock = $this->createPartialMock(\Magento\Backend\Block\Template\Context::class,['getLayout']);
+        $this->contextMock = $this->createPartialMock(\Magento\Backend\Block\Template\Context::class, ['getLayout']);
         $this->layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
         $this->contextMock->expects($this->once())->method('getLayout')->willReturn($this->layoutMock);
 
