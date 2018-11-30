@@ -264,10 +264,9 @@ class Addresses extends Tab
     /**
      * Check is visible customer address.
      *
-     * @param int $addressNumber
      * @return bool
      */
-    protected function isVisibleCustomerAddress($addressNumber)
+    protected function isVisibleCustomerAddress()
     {
         $customerAddressesGrid = $this->getCustomerAddressesGrid();
         $customerAddressesGrid->isFirstRowVisible();

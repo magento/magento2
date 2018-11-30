@@ -65,6 +65,7 @@ class CustomerForm extends FormTabs
      * @param FixtureInterface $customer
      * @param FixtureInterface|FixtureInterface[]|null $address
      * @return $this
+     * @throws \Exception
      */
     public function fillCustomer(FixtureInterface $customer, $address = null)
     {
@@ -73,6 +74,10 @@ class CustomerForm extends FormTabs
         $isHasData = ($customer instanceof InjectableFixture) ? $customer->hasData() : true;
         if ($isHasData) {
             parent::fill($customer);
+        }
+        if (null !== $address) {
+            $this->openTab('addresses');
+            $this->fillCustomerAddress($address);
         }
 
         return $this;
