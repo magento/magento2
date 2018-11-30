@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-69988"/>
             <group value="сonfigurable_product"/>
+            <skip>
+                <issueId value="MAGETWO-96658"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
