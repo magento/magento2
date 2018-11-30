@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Block\Adminhtml\Edit\Tab\Addresses;
 
@@ -74,15 +75,13 @@ class AddressForm extends Form
      *
      * @param array $fields
      * @param \Magento\Mtf\Client\Element\SimpleElement|null $contextElement
-     * @return $this
+     * @return void
      * @throws \Exception
      */
-    public function setFieldsData(array $fields, \Magento\Mtf\Client\Element\SimpleElement $contextElement = null)
+    public function setFieldsData(array $fields, \Magento\Mtf\Client\Element\SimpleElement $contextElement = null): void
     {
         $data = $this->dataMapping($fields);
         $this->_fill($data, $contextElement);
-
-        return $this;
     }
 
     /**
@@ -90,7 +89,7 @@ class AddressForm extends Form
      *
      * @return void
      */
-    public function saveAddress()
+    public function saveAddress(): void
     {
         $this->_rootElement->find($this->saveAddressButton)->click();
         $this->waitForElementNotVisible($this->loader);
@@ -101,7 +100,7 @@ class AddressForm extends Form
      *
      * @return void
      */
-    public function clickCancelButton()
+    public function clickCancelButton(): void
     {
         $this->_rootElement->find($this->cancelButton)->click();
     }
@@ -111,7 +110,7 @@ class AddressForm extends Form
      *
      * @return array
      */
-    public function getJsErrors()
+    public function getJsErrors(): array
     {
         $data = [];
         $elements = $this->_rootElement->getElements($this->mageErrorField, Locator::SELECTOR_XPATH);

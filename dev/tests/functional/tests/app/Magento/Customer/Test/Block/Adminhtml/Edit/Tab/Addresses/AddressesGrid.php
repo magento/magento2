@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Block\Adminhtml\Edit\Tab\Addresses;
 
@@ -102,8 +103,9 @@ class AddressesGrid extends DataGrid
      * Search customer address by filter.
      *
      * @param array $filter
+     * @return void
      */
-    public function search(array $filter)
+    public function search(array $filter): void
     {
         parent::search(array_intersect_key($filter, $this->filters));
     }
@@ -112,9 +114,10 @@ class AddressesGrid extends DataGrid
      * Delete customer address by filter
      *
      * @param array $filter
+     * @return void
      * @throws \Exception
      */
-    public function deleteCustomerAddress(array $filter)
+    public function deleteCustomerAddress(array $filter): void
     {
         $this->search($filter);
         $rowItem = $this->getRow([$filter['firstname']]);
@@ -127,8 +130,9 @@ class AddressesGrid extends DataGrid
 
     /**
      * @param \Magento\Mtf\Client\Element\SimpleElement $rowItem
+     * @return void
      */
-    public function deleteRowItemAddress(\Magento\Mtf\Client\Element\SimpleElement $rowItem)
+    public function deleteRowItemAddress(\Magento\Mtf\Client\Element\SimpleElement $rowItem): void
     {
         $rowItem->find($this->selectAction)->click();
         $rowItem->find($this->deleteAddress)->click();
@@ -147,7 +151,7 @@ class AddressesGrid extends DataGrid
      *
      * @return void
      */
-    public function openFirstRow()
+    public function openFirstRow(): void
     {
         $firstRow = $this->getFirstRow();
         if ($firstRow->isVisible()) {
@@ -163,7 +167,7 @@ class AddressesGrid extends DataGrid
      *
      * @return \Magento\Mtf\Client\Element\SimpleElement
      */
-    public function getFirstRow()
+    public function getFirstRow(): \Magento\Mtf\Client\Element\SimpleElement
     {
         return $this->_rootElement->find($this->firstRowSelector, \Magento\Mtf\Client\Locator::SELECTOR_XPATH);
     }

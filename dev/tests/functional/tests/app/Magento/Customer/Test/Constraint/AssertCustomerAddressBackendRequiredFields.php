@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Constraint;
 
@@ -23,9 +24,10 @@ class AssertCustomerAddressBackendRequiredFields extends AbstractConstraint
      * Assert required fields on customer address form.
      * @param CustomerIndexNew $customerNewPage
      * @param array $expectedRequiredFields
+     * @return void
      * @throws \Exception
      */
-    public function processAssert(CustomerIndexNew $customerNewPage, array $expectedRequiredFields)
+    public function processAssert(CustomerIndexNew $customerNewPage, array $expectedRequiredFields): void
     {
         $actualRequiredFields = $customerNewPage->getCustomerForm()->getTab('addresses')
             ->getCustomerAddressModalForm()->getJsErrors();
@@ -47,7 +49,7 @@ class AssertCustomerAddressBackendRequiredFields extends AbstractConstraint
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'All required fields on customer form are highlighted.';
     }
