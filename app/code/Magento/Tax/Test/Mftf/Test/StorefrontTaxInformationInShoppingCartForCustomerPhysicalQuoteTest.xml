@@ -63,6 +63,7 @@
             <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>

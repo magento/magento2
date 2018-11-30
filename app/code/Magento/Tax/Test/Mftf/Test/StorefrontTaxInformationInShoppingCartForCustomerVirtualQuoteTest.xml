@@ -38,6 +38,7 @@
             <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
