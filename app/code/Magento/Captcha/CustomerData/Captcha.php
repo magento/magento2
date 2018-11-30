@@ -11,7 +11,7 @@ namespace Magento\Captcha\CustomerData;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 
 /**
- * Cart source
+ * Captcha section
  */
 class Captcha extends \Magento\Framework\DataObject implements SectionSourceInterface
 {

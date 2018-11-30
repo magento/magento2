@@ -486,7 +486,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     /**
      * Get captcha word
      *
-     * @return string
+     * @return string|null
      */
     public function getWord()
     {
@@ -497,7 +497,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     /**
      * Get captcha words
      *
-     * @return string
+     * @return string|null
      */
     private function getWords()
     {
