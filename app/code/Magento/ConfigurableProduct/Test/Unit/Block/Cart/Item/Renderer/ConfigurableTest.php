@@ -94,6 +94,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(array_merge($productTags, $productTags), $this->renderer->getIdentities());
     }
 
+    /**
+     * Product price renderer test.
+     *
+     * @return void
+     */
     public function testGetProductPriceHtml()
     {
         $priceHtml = 'some price html';
@@ -102,16 +107,16 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $item->expects($this->atLeastOnce())->method('getProduct')->willReturn($productMock);
 
-        $priceRender = $this->getMockBuilder(\Magento\Framework\Pricing\Render::class)
+        $priceRenderMock = $this->getMockBuilder(\Magento\Framework\Pricing\Render::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.price.render.default')
-            ->willReturn($priceRender);
+            ->willReturn($priceRenderMock);
 
-        $priceRender->expects($this->once())
+        $priceRenderMock->expects($this->once())
             ->method('render')
             ->with(
                 \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
