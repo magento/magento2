@@ -387,11 +387,11 @@ define([
 
             if (this.checkForNewAttributes()) {
                 this.formSaveParams = arguments;
-                this.attributeSetHandlerModal().openModal().then(_.bind(this.unserializeData, this));
+                this.attributeSetHandlerModal().openModal();
             } else {
                 this.formElement().save(arguments[0], arguments[1]);
 
-                if (this.source.params.invalid) {
+                if (this.formElement().source.get('params.invalid')) {
                     this.unserializeData();
                 }
             }
@@ -466,20 +466,20 @@ define([
          * @returns {Boolean}
          */
         addNewAttributeSetHandler: function () {
-            var choosenAttributeSetOption;
+            var chosenAttributeSetOption;
 
             this.formElement().validate();
 
             if (this.formElement().source.get('params.invalid') === false) {
-                choosenAttributeSetOption = this.attributeSetSelection;
+                chosenAttributeSetOption = this.attributeSetSelection;
 
-                if (choosenAttributeSetOption === 'new') {
+                if (chosenAttributeSetOption === 'new') {
                     this.createNewAttributeSet();
 
                     return false;
                 }
 
-                if (choosenAttributeSetOption === 'existing') {
+                if (chosenAttributeSetOption === 'existing') {
                     this.set(
                         'skeletonAttributeSet',
                         this.attributeSetId
@@ -489,6 +489,9 @@ define([
                 this.closeDialogAndProcessForm();
 
                 return true;
+            } else {
+                this.unserializeData();
+                return false;
             }
         },
 
