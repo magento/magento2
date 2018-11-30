@@ -84,6 +84,8 @@ class CustomerForm extends FormTabs
     }
 
     /**
+     * Fill customer address by provided in parameter data
+     *
      * @param FixtureInterface|FixtureInterface[] $address
      * @return $this
      * @throws \Exception
