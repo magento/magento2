@@ -295,14 +295,14 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                     'qty_ordered' => 12, 'qty_invoiced' => 5, 'qty_refunded' => 5, 'qty_shipped' => 0,
                     'qty_canceled' => 0,
                 ],
-                'expectedResult' => ['to_ship' => 12.0, 'to_invoice' => 7.0]
+                'expectedResult' => ['to_ship' => 7.0, 'to_invoice' => 7.0]
             ],
             'partially_refunded' => [
                 'options' => [
                     'qty_ordered' => 12, 'qty_invoiced' => 12, 'qty_refunded' => 5, 'qty_shipped' => 0,
                     'qty_canceled' => 0,
                 ],
-                'expectedResult' => ['to_ship' => 12.0, 'to_invoice' => 0.0]
+                'expectedResult' => ['to_ship' => 7.0, 'to_invoice' => 0.0]
             ],
             'partially_shipped' => [
                 'options' => [
@@ -316,7 +316,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                     'qty_ordered' => 12, 'qty_invoiced' => 12, 'qty_refunded' => 5, 'qty_shipped' => 4,
                     'qty_canceled' => 0
                 ],
-                'expectedResult' => ['to_ship' => 8.0, 'to_invoice' => 0.0]
+                'expectedResult' => ['to_ship' => 3.0, 'to_invoice' => 0.0]
             ],
             'complete' => [
                 'options' => [
@@ -337,7 +337,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                     'qty_ordered' => 4.4, 'qty_invoiced' => 0.4, 'qty_refunded' => 0.4, 'qty_shipped' => 4,
                     'qty_canceled' => 0,
                 ],
-                'expectedResult' => ['to_ship' => 0.4, 'to_invoice' => 4.0]
+                'expectedResult' => ['to_ship' => 0.0, 'to_invoice' => 4.0]
             ],
             'completely_invoiced_using_decimals' => [
                 'options' => [
