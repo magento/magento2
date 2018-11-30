@@ -86,7 +86,7 @@
                     <source_model>Magento\Dhl\Model\Source\Method\Doc</source_model>
                 </field>
                 <field id="nondoc_methods" translate="label" type="multiselect" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Documents Allowed Methods</label>
+                    <label>Non Documents Allowed Methods</label>
                     <source_model>Magento\Dhl\Model\Source\Method\Nondoc</source_model>
                 </field>
                 <field id="ready_time" translate="label comment" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
