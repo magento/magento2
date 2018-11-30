@@ -92,7 +92,7 @@ class DeclarativeSchemaDependencyProvider
         foreach ($dependencies as $dependency) {
             $checkResult = array_intersect($declared, $dependency);
             if ($checkResult) {
-                $existingDeclared = array_merge(array_values($checkResult));
+                $existingDeclared = array_merge($existingDeclared, array_values($checkResult));
             }
         }
 

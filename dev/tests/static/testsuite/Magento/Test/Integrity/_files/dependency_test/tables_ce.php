@@ -96,7 +96,7 @@ return [
     'catalogrule_website'                         => 'Magento\CatalogRule',
     'catalogsearch_fulltext'                      => 'Magento\CatalogSearch',
     'catalogsearch_result'                        => 'Magento\CatalogSearch',
-    'search_query'                                => 'Magento\CatalogSearch',
+    'search_query'                                => 'Magento\Search',
     'checkout_agreement'                          => 'Magento\Checkout',
     'checkout_agreement_store'                    => 'Magento\Checkout',
     'cms_block'                                   => 'Magento\Cms',
