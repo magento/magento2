@@ -59,8 +59,12 @@
 }
 
 .abs-field-no-label {
+    /**
+     *@codingStandardsIgnoreStart
+     */
     #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
     margin-left: @_length;
+    //@codingStandardsIgnoreEnd
 }
 
 //
@@ -237,7 +241,6 @@
                 margin-top: .2rem;
                 position: absolute;
                 z-index: 1;
-                
             }
         }
     }
@@ -284,7 +287,7 @@
         }
     }
     
-    legend.admin__field-label{
+    legend.admin__field-label {
         span {
             &:after {
                 display: none;
@@ -302,7 +305,11 @@
             content: attr(data-config-scope);
             display: inline-block;
             font-size: @font-size__s;
+            /**
+             *@codingStandardsIgnoreStart
+             */
             left: @_length;
+            //@codingStandardsIgnoreEnd
             line-height: 3.2rem;
             margin-left: 2 * @temp_gutter;
             position: absolute;
