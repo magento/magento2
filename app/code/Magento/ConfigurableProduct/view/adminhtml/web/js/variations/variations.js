@@ -489,10 +489,10 @@ define([
                 this.closeDialogAndProcessForm();
 
                 return true;
-            } else {
-                this.unserializeData();
-                return false;
             }
+            
+            this.unserializeData();
+            return false;
         },
 
         /**
