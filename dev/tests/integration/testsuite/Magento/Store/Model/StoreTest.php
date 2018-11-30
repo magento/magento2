@@ -301,6 +301,38 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoDbIsolation disabled
+     */
+    public function testGetCurrentUrlWithUseStoreInUrlFalse()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class)
+            ->setValue('web/url/use_store', false, ScopeInterface::SCOPE_STORE, 'default');
+
+        /** @var \Magento\Store\Model\Store $secondStore */
+        $secondStore = $objectManager->get(StoreRepositoryInterface::class)->get('fixture_second_store');
+
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = $objectManager->create(ProductRepository::class);
+        $product = $productRepository->get('simple333');
+
+        $product->setStoreId($secondStore->getId());
+        $url = $product->getUrlInStore();
+
+         /** @var \Magento\Catalog\Model\CategoryRepository $categoryRepository */
+        $categoryRepository = $objectManager->get(\Magento\Catalog\Model\CategoryRepository::class);
+        $category = $categoryRepository->get(333,$secondStore->getStoreId());
+
+        $this->assertEquals('http://localhost/index.php/catalog/category/view/s/category-1/id/333/',$category->getUrl());
+        $this->assertEquals('http://localhost/index.php/catalog/product/view/id/333/s/simple-product-three/?___store=fixture_second_store', $url);
+        $this->assertEquals('http://localhost/index.php/?___store=fixture_second_store&___from_store=default', $secondStore->getCurrentUrl());
+        $this->assertEquals('http://localhost/index.php/?___store=fixture_second_store', $secondStore->getCurrentUrl(false));
+
+    }
+
+    /**
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
