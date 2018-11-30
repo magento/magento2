@@ -9,7 +9,8 @@ namespace Magento\Customer\Test\Unit\Model\Customer;
 use Magento\Customer\Model\AttributeMetadataResolver;
 use Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses;
 use Magento\Customer\Model\FileUploaderDataResolver;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
@@ -31,7 +32,7 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
     private $eavConfigMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerCollectionFactoryMock;
 
@@ -51,7 +52,7 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
     private $customerMock;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Customer\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerCollection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerCollectionMock;
 
@@ -70,37 +71,25 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerCollectionFactoryMock = $this->createPartialMock(
-            \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,
-            ['create']
-        );
-        $this->sessionMock = $this
-            ->getMockBuilder(\Magento\Framework\Session\SessionManagerInterface::class)
+        $this->eavConfigMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $this->customerCollectionFactoryMock = $this->createPartialMock(CustomerCollectionFactory::class, ['create']);
+        $this->sessionMock = $this->getMockBuilder(\Magento\Framework\Session\SessionManagerInterface::class)
             ->setMethods(['getCustomerFormData', 'unsCustomerFormData'])
             ->getMockForAbstractClass();
-
         $this->countryFactoryMock = $this->getMockBuilder(\Magento\Directory\Model\CountryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', 'loadByCode', 'getName'])
             ->getMock();
-
         $this->customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerCollectionMock = $this->getMockBuilder(
-            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
-        )
+        $this->customerCollectionMock = $this->getMockBuilder(CustomerCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerCollectionMock->expects($this->once())->method('addAttributeToSelect')->with('*');
-        $this->customerCollectionFactoryMock
-            ->expects($this->once())
+        $this->customerCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->customerCollectionMock);
-
         $this->eavConfigMock->expects($this->atLeastOnce())
             ->method('getEntityType')
             ->with('customer')
@@ -162,7 +151,6 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
                     ],
                 ]
             );
-
         $helper = new ObjectManager($this);
         $this->dataProvider = $helper->getObject(
             DataProviderWithDefaultAddresses::class,
