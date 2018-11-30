@@ -53,6 +53,15 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
     </actionGroup>
 
+    <!--Navigate to New Order Page for existing Customer And Store-->
+    <actionGroup name="NavigateToNewOrderPageExistingCustomerAndStoreActionGroup" extends="navigateToNewOrderPageExistingCustomer" >
+        <arguments>
+            <argument name="storeView" defaultValue="_defaultStore"/>
+        </arguments>
+        <click selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" stepKey="selectStoreView" after="waitForCreateOrderPageLoad"/>
+        <waitForPageLoad stepKey="waitForLoad" after="selectStoreView"/>
+    </actionGroup>
+
     <!--Check the required fields are actually required-->
     <actionGroup name="checkRequiredFieldsNewOrderForm">
         <seeElement selector="{{AdminOrderFormAccountSection.requiredGroup}}" stepKey="seeCustomerGroupRequired"/>
