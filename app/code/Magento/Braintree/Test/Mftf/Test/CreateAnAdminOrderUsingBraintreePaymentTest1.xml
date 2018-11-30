@@ -78,7 +78,7 @@
         <waitForElementVisible selector="{{NewOrderSection.successMessage}}" stepKey="waitForSuccessMessage" time="1"/>
 
         <after>
-            <!-- Disable BrainTree-->
+            <!-- Disable BrainTree -->
             <actionGroup ref="DisableBrainTree" stepKey="disableBrainTree"/>
 
             <!--SignOut-->
