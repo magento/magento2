@@ -320,4 +320,12 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeOrderStatusCanceled"/>
     </actionGroup>
+
+    <actionGroup name="NavigateToNewOrderPageExistingCustomerAndStoreActionGroup" extends="navigateToNewOrderPageExistingCustomer" >
+        <arguments>
+            <argument name="storeView" defaultValue="_defaultStore"/>
+        </arguments>
+        <click selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" stepKey="selectStoreView" after="waitForCreateOrderPageLoad"/>
+        <waitForPageLoad stepKey="waitForLoad" after="selectStoreView"/>
+    </actionGroup>
 </actionGroups>
