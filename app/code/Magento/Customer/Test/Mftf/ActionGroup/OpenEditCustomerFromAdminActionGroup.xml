@@ -35,21 +35,8 @@
         <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="clickDelete"/>
         <waitForAjaxLoad stepKey="waitForLoadConfirmation"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
-        <wait time="5" stepKey="aaa"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="A total of 1 record(s) were deleted" stepKey="seeSuccess"/>
     </actionGroup>
-
-    <actionGroup name="DeleteCustomerAdminActionGroup" extends="DeleteCustomerFromAdminActionGroup">
-        <arguments>
-            <argument name="customer"/>
-        </arguments>
-        <remove keyForRemoval="fillSearch"/>
-        <remove keyForRemoval="clickSubmit"/>
-        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomerPage" after="clickOnButtonToRemoveFiltersIfPresent"/>
-        <fillField userInput="{{customer.email}}" selector="{{AdminDataGridHeaderSection.filterFieldInput('email')}}" stepKey="fillEmailOnFiltersSection" after="openFiltersSectionOnCustomerPage"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton" after="fillEmailOnFiltersSection"/>
-    </actionGroup>
-
     <actionGroup name="AdminClearCustomersFiltersActionGroup">
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="amOnCustomersPage"/>
         <waitForPageLoad stepKey="WaitForPageToLoad"/>

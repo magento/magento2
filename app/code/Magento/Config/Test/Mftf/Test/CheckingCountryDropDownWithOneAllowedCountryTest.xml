@@ -24,8 +24,8 @@
         <after>
             <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="DeleteCustomerAdminActionGroup" stepKey="deleteCustomer">
-                <argument name="customer" value="CustomerEntityOne"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
             <waitForPageLoad stepKey="WaitForPageToLoad"/>
