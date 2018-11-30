@@ -15,7 +15,7 @@
             <title value="MAGETWO-95934: Can't upload Watermark Image"/>
             <description value="Watermark images should be able to be uploaded in the admin"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-95934"/>
+            <testCaseId value="MC-5796"/>
             <group value="Watermark"/>
         </annotations>
         <before>
