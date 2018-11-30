@@ -55,7 +55,5 @@
             <expectedResult type="string">{{US_Address_CA.postcode}}</expectedResult>
             <actualResult type="variable">grabTextPostCode</actualResult>
         </assertEquals>
-        <scrollTo selector="{{CheckoutCartSummarySection.country}}" stepKey="scrollToPostCodeField2"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.custom_attributes[url_key]$)}}" stepKey="amOnPage2"/>
     </test>
 </tests>
