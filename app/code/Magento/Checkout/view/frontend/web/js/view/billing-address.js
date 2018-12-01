@@ -55,7 +55,7 @@ function (
             if (address.isDefaultBilling()) {
                 quote.billingAddress(address);
             }
-            
+
             return address.getType() == 'customer-address'; //eslint-disable-line eqeqeq
         });
 
