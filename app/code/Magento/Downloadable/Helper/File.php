@@ -131,11 +131,17 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
             $file = substr($file, 0, strlen($file) - 4);
         }
 
-        $destFile = dirname(
-            $file
-        ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-            $this->getFilePath($basePath, $file)
-        );
+        if ($this->_coreFileStorageDatabase->checkDbUsage()) {
+            $destFile = $this->_coreFileStorageDatabase->getUniqueFilename(
+                $basePath,
+                $file
+            );
+        } else {
+            $destFile = dirname($file) . '/'
+                . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
+                      $this->_mediaDirectory->getAbsolutePath($this->getFilePath($basePath, $file))
+                 );
+        }
 
         $this->_coreFileStorageDatabase->copyFile(
             $this->getFilePath($baseTmpPath, $file),
