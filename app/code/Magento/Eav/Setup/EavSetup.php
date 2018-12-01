@@ -931,6 +931,7 @@ class EavSetup
         } elseif (isset($option['values'])) {
             foreach ($option['values'] as $sortOrder => $label) {
                 // add option
+                $this->setup->getConnection()->delete($optionTable, ['attribute_id =?' =>$option['attribute_id'], 'sort_order =?' => $sortOrder]);
                 $data = ['attribute_id' => $option['attribute_id'], 'sort_order' => $sortOrder];
                 $this->setup->getConnection()->insert($optionTable, $data);
                 $intOptionId = $this->setup->getConnection()->lastInsertId($optionTable);
