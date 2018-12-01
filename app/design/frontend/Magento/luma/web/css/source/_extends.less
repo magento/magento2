@@ -9,7 +9,7 @@
 
 @_column-number: 1;
 
-& when (@media-common = true) {
+.media-common() {
     .abs-reset-list {
         .lib-list-reset-styles();
 
@@ -23,7 +23,7 @@
 //  Primary button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .action-primary {
         .lib-button-primary();
         .lib-css(border-radius, @button__border-radius);
@@ -34,7 +34,7 @@
 //  Secondary button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-revert-to-action-secondary {
         &:extend(.abs-revert-secondary-color all);
         .lib-css(border-radius, @button__border-radius);
@@ -53,7 +53,7 @@
 //  Link as a button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-action-link-button {
         .lib-button();
         .lib-link-as-button();
@@ -65,7 +65,7 @@
 //  Button as a link
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-action-button-as-link {
         .lib-button-as-link(@_margin: false);
         .lib-css(font-weight, @font-weight__regular);
@@ -82,7 +82,7 @@
 //  Button revert secondary color
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-revert-secondary-color {
         .lib-button-revert-secondary-color();
     }
@@ -92,7 +92,7 @@
 //  Button revert secondary size
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-revert-secondary-size {
         .lib-button-revert-secondary-size();
     }
@@ -102,7 +102,7 @@
 //  Large button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-button-l {
         .lib-button-l();
     }
@@ -130,7 +130,7 @@
     }
 };
 
-& when (@media-common = true) {
+.media-common() {
     .abs-product-options-list {
         @abs-product-options-list();
     }
@@ -150,7 +150,7 @@
 //  Button reset width, floats, margins
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-button-responsive {
         .lib-button-responsive();
     }
@@ -199,7 +199,7 @@
 //  Reset image alignment in container
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-reset-image-wrapper {
         height: auto;
         padding: 0 !important;
@@ -214,7 +214,7 @@
 //  Adaptive images
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-adaptive-images {
         display: block;
         height: auto;
@@ -233,7 +233,7 @@
 //  Title for login blocks
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-login-block-title {
         .lib-css(border-bottom, 1px solid @secondary__color);
         .lib-font-size(18);
@@ -250,7 +250,7 @@
 //  Simple Dropdown
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-dropdown-simple {
         .lib-dropdown(
         @_dropdown-list-item-padding: 5px 5px 5px 23px,
@@ -269,7 +269,7 @@
 //  Input quantity
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-input-qty {
         text-align: center;
         width: 54px;
@@ -280,7 +280,7 @@
 //  Marging for blocks & widgets
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-margin-for-blocks-and-widgets {
         margin-bottom: @indent__xl;
     }
@@ -296,7 +296,7 @@
 //  Remove button for blocks
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-remove-button-for-blocks {
         .lib-icon-font(
         @icon-remove,
@@ -314,7 +314,7 @@
 //  Product link
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-product-link {
         font-weight: @font-weight__regular;
         > a {
@@ -336,7 +336,7 @@
 //  Link
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-like-link {
         .lib-link();
         cursor: pointer;
@@ -351,7 +351,7 @@
     margin-left: 0;
 };
 
-& when (@media-common = true) {
+.media-common() {
     .abs-reset-left-margin {
         @abs-reset-left-margin();
     }
@@ -373,7 +373,7 @@
 //  Action with icon remove with text
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-action-remove {
         &:extend(.abs-action-button-as-link all);
         line-height: normal;
@@ -398,7 +398,7 @@
 //  Add Recipient
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-add-fields {
         .fieldset {
             .field {
@@ -489,7 +489,7 @@
     .lib-visibility-hidden();
 };
 
-& when (@media-common = true) {
+.media-common() {
     .abs-hidden {
         @abs-hidden();
     }
@@ -503,7 +503,7 @@
     .lib-visually-hidden();
 };
 
-& when (@media-common = true) {
+.media-common() {
     .abs-visually-hidden {
         @abs-visually-hidden();
     }
@@ -537,7 +537,7 @@
 //  Visually hidden reset
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-visually-hidden-reset {
         .lib-visually-hidden-reset();
     }
@@ -551,7 +551,7 @@
     .lib-clearfix();
 };
 
-& when (@media-common = true) {
+.media-common() {
     .abs-add-clearfix {
         @abs-add-clearfix();
     }
@@ -589,7 +589,7 @@
     box-sizing: border-box;
 };
 
-& when (@media-common = true) {
+.media-common() {
     .abs-add-box-sizing {
         @abs-add-box-sizing();
     }
@@ -636,7 +636,7 @@
 //  Settings icons
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-navigation-icon {
         .lib-icon-font(
             @_icon-font-content: @icon-down,
@@ -658,7 +658,7 @@
 //  Split button
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-split-button {
         .lib-dropdown-split(
         @_options-selector : ~'.items',
@@ -726,7 +726,7 @@
 //  Checkout shipping methods title
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-methods-shipping-title {
         .lib-css(font-weight, @font-weight__semibold);
         .lib-font-size(16);
@@ -786,7 +786,7 @@
 //  Add to Actions
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-actions-addto {
         .lib-css(color, @addto-color);
         display: inline-block;
@@ -816,7 +816,7 @@
 //  Box-tocart block
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-box-tocart {
         margin: 0 0 @indent__l;
     }
@@ -868,7 +868,7 @@
     }
 };
 
-& when (@media-common = true) {
+.media-common() {
     .abs-toggling-title {
         @abs-toggling-title();
         .lib-css(padding, @indent__s @indent__xl @indent__s @mobile-cart-padding);
@@ -911,7 +911,7 @@
 //  Cart discount block
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-cart-block {
         margin: 0;
 
@@ -951,7 +951,7 @@
 //  Checkout order review price
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-checkout-cart-price {
         .lib-css(color, @primary__color__lighter);
         .lib-font-size(16);
@@ -963,7 +963,7 @@
 //  Checkout order product name
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-checkout-product-name {
         .lib-font-size(18);
         font-weight: @font-weight__light;
@@ -1023,7 +1023,7 @@
 //  Account pages: title
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-account-title {
         > strong,
         > span {
@@ -1051,7 +1051,7 @@
 //  Account pages: block line-height
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-account-block-line-height {
         line-height: 24px;
     }
@@ -1088,7 +1088,7 @@
 //  Account pages: order table summary
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-account-summary {
         td {
             .lib-css(background, @sidebar__background-color);
@@ -1130,7 +1130,7 @@
 //  Excl/Incl tax
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-incl-excl-tax {
         .price-including-tax,
         .price-excluding-tax {
@@ -1172,7 +1172,7 @@
 //  Cart tax total
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-tax-total {
         cursor: pointer;
         padding-right: @indent__s;
@@ -1205,7 +1205,7 @@
 //  Forms: margin-bottom for small forms
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-forms-margin-small {
         .lib-css(margin-bottom, @indent__base);
     }
@@ -1215,7 +1215,7 @@
 //  Forms: margin-bottom for small forms
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-rating-summary {
         .rating {
             &-summary {
@@ -1242,7 +1242,7 @@
 //  Account pages: actions
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-account-actions {
         &:after {
             .lib-css(border-left, 1px solid @primary__color__light);
@@ -1265,7 +1265,7 @@
 //  Account blocks
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-account-blocks {
         .block-title {
             &:extend(.abs-account-title all);
@@ -1295,7 +1295,7 @@
 //  Add colon
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-colon {
         &:after {
             content: ': ';
@@ -1307,7 +1307,7 @@
 //  Icon - create add
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-icon-add {
         .lib-icon-font(
         @_icon-font-content: @icon-expand,
@@ -1335,7 +1335,7 @@
 //  Dropdown items - create new
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-dropdown-items-new {
         .items .item:last-child {
             &:hover {
@@ -1361,7 +1361,7 @@
     display: none;
 };
 
-& when (@media-common = true) {
+.media-common() {
     .abs-no-display {
         @abs-no-display();
     }
@@ -1383,7 +1383,7 @@
 //  Status
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-status {
         .lib-css(border, 2px solid @border-color__base);
         border-radius: 3px;
@@ -1406,7 +1406,7 @@
 //  Page title - orders pages
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-title-orders {
         .page-main {
             .page-title-wrapper {
@@ -1461,7 +1461,7 @@
 //  Table striped
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-table-striped {
         .lib-table-striped(
             @_stripped-highlight: even
@@ -1524,7 +1524,7 @@
 //  Items counter in blocks
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-block-items-counter {
         .lib-css(color, @block-items__counter__color);
         .lib-font-size(12px);
@@ -1544,7 +1544,7 @@
 //  Sidebar and widget blocks title
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-block-widget-title {
         margin: 0 0 @indent__base;
 
@@ -1559,7 +1559,7 @@
 //  Shopping cart items
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-shopping-cart-items {
         margin-bottom: @indent__base;
 
@@ -1605,7 +1605,7 @@
 //  Form Field Date
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-field-date {
         .control {
             position: relative;
@@ -1622,7 +1622,7 @@
 //  Form Field Date Input
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-field-date-input {
         .lib-css(margin-right, @indent__s);
         width: calc(~'100% -' @icon-calendar__font-size + @indent__s);
@@ -1633,7 +1633,7 @@
 //  Form Field Tooltip
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-field-tooltip {
         &:extend(.abs-add-box-sizing all);
         position: relative;
@@ -1677,7 +1677,7 @@
     }
 };
 
-& when (@media-common = true) {
+.media-common() {
     .abs-checkout-tooltip-content-position-top {
         @abs-checkout-tooltip-content-position-top();
     }
@@ -1693,7 +1693,7 @@
 //  Checkout title
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-checkout-title {
         .lib-css(padding-bottom, @checkout-step-title__padding);
         .lib-typography(
@@ -1710,7 +1710,7 @@
 //  Shopping cart sidebar and checkout sidebar totals
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-sidebar-totals {
         border-top: 1px solid @border-color__base;
         padding-top: 10px;
@@ -1852,7 +1852,7 @@
 //  Shopping cart and payment discount codes block
 //  ---------------------------------------------
 
-& when (@media-common = true) {
+.media-common() {
     .abs-discount-block {
         .block {
             &:extend(.abs-cart-block all);
