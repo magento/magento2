@@ -189,9 +189,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     {
         $shippingAddress = $quote->getShippingAddress();
         if ($shippingAddress && $shippingAddress->getShippingMethod()) {
-            $shippingDataArray = explode('_', $shippingAddress->getShippingMethod());
-            $shippingCarrier = array_shift($shippingDataArray);
-            $shippingAddress->setLimitCarrier($shippingCarrier);
+            $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
+            $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
         }
     }
 }

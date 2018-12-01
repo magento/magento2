@@ -280,9 +280,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $billingAddressId = 1;
         $quote = $this->createMock(Quote::class);
         $quoteBillingAddress = $this->createMock(Address::class);
+        $shippingRate = $this->createPartialMock(\Magento\Quote\Model\Quote\Address\Rate::class, []);
+        $shippingRate->setCarrier('flatrate');
         $quoteShippingAddress = $this->createPartialMock(
             Address::class,
-            ['setLimitCarrier', 'getShippingMethod']
+            ['setLimitCarrier', 'getShippingMethod', 'getShippingRateByCode']
         );
         $this->cartRepositoryMock->method('getActive')
             ->with($cartId)
@@ -302,6 +304,9 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $quote->expects($this->once())
             ->method('setBillingAddress')
             ->with($billingAddressMock);
+        $quoteShippingAddress->expects($this->any())
+            ->method('getShippingRateByCode')
+            ->willReturn($shippingRate);
         $quote->expects($this->once())
             ->method('setDataChanges')
             ->willReturnSelf();
