@@ -36,6 +36,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_mediaDirectory;
 
+    protected $_uploader;
+
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
@@ -46,11 +48,13 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\App\Helper\Context $context,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\Filesystem $filesystem,
+        \Magento\MediaStorage\Model\File\Uploader $uploader,
         array $mimeTypes = []
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_filesystem = $filesystem;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->_uploader = $uploader;
         parent::__construct($context);
         if (!empty($mimeTypes)) {
             foreach ($mimeTypes as $key => $value) {
@@ -131,10 +135,11 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
             $file = substr($file, 0, strlen($file) - 4);
         }
 
-        $destFile = dirname($file) . '/'
-                . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-                      $this->_mediaDirectory->getAbsolutePath($this->getFilePath($basePath, $file))
-                 );
+        $destFile = dirname(
+            $file
+        ) . '/' . $this->_uploader->getNewFileName(
+            $this->getFilePath($basePath, $file)
+        );
 
         $this->_coreFileStorageDatabase->copyFile(
             $this->getFilePath($baseTmpPath, $file),
