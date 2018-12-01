@@ -12,14 +12,9 @@ define([
     'Magento_Checkout/js/action/select-billing-address'
 ], function (quote,checkoutData,selectBillingAddress) {
     'use strict';
-
     return function (shippingAddress) {
-            {   var lastSelectedBillingAddress;
-                window.isbothAddressSame = false;
-                lastSelectedBillingAddress = quote.billingAddress();
-                
-            }
+        window.isbothAddressSame = false;
         quote.shippingAddress(shippingAddress);
-        quote.billingAddress(lastSelectedBillingAddress);
+        quote.billingAddress(quote.billingAddress());
     };
 });

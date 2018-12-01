@@ -130,11 +130,9 @@ function (
             if (this.isAddressSameAsShipping()) {
                 window.isbothAddressSame = true;
                 selectBillingAddress(quote.shippingAddress());
-
                 this.updateAddresses();
                 this.isAddressDetailsVisible(true);
             } else {
-                window.isbothAddressSame = false;
                 lastSelectedBillingAddress = quote.billingAddress();
                 quote.billingAddress(null);
                 this.isAddressDetailsVisible(false);
