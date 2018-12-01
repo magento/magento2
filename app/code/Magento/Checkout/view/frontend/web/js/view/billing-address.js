@@ -52,7 +52,7 @@ function (
         },
         countryData = customerData.get('directory-data'),
         addressOptions = addressList().filter(function (address) {
-            if(address.isDefaultBilling()){
+            if (address.isDefaultBilling()) {
                 quote.billingAddress(address);
             }
             return address.getType() == 'customer-address'; //eslint-disable-line eqeqeq
