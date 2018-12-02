@@ -19,7 +19,7 @@ define([
             variable = ko.observable(variableText),
             dataTranslateAttr = '[{"shown":"&","translated":"&","original":"$","location":"Span element"}]',
             dataTranslateAttrName = 'data-translate',
-            context = require.s.contexts._,
+            context = 's' in require ? require.s.contexts._ : require.contexts._,
 
             /** Stub */
             manageInlineTranslation = function (state) {

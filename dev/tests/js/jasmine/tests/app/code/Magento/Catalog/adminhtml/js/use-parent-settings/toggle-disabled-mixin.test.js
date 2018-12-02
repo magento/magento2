@@ -21,7 +21,7 @@ define([
         obj;
 
     describe('toggle-disabled-mixin structure tests', function () {
-        var defaultContext = require.s.contexts._;
+        var defaultContext = 's' in require ? require.s.contexts._ : require.contexts._;
 
         obj = new CustomInput(defaultProperties);
 

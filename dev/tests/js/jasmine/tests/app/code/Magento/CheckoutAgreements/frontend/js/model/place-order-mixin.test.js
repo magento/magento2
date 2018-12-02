@@ -13,7 +13,7 @@ define([
             'Magento_Checkout/js/action/place-order': jasmine.createSpy('placeOrderAction'),
             'Magento_CheckoutAgreements/js/model/agreements-assigner': jasmine.createSpy('agreementsAssigner')
         },
-        defaultContext = require.s.contexts._,
+        defaultContext = 's' in require ? require.s.contexts._ : require.contexts._,
         mixin,
         placeOrderAction;
 

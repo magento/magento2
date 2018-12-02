@@ -297,7 +297,7 @@ config;
         $excludesCode = empty($excludes) ? 'true' : implode('&&', $excludes);
 
         $result = <<<code
-    var ctx = require.s.contexts._,
+    var ctx = 's' in require ? require.s.contexts._ : require.contexts._.req,
         origNameToUrl = ctx.nameToUrl;
 
     ctx.nameToUrl = function() {

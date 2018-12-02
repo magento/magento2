@@ -17,7 +17,7 @@ define([
         mocks = {
             'Magento_Theme/js/model/breadcrumb-list': jasmine.createSpyObj(['push'])
         },
-        defaultContext = require.s.contexts._,
+        defaultContext = 's' in require ? require.s.contexts._ : require.contexts._,
         menuItem = $(
             '<li class="level0 category-item">' +
             '<a href="http://localhost.com/cat1.html">Cat1</a>' +

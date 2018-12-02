@@ -17,7 +17,7 @@ define([
     describe('Magento_Theme/js/view/breadcrumbs', function () {
         var breadcrumbs,
             mixin,
-            defaultContext = require.s.contexts._;
+            defaultContext = 's' in require ? require.s.contexts._ : require.contexts._;
 
         beforeEach(function (done) {
             window.BASE_URL = window.location.hostname;
