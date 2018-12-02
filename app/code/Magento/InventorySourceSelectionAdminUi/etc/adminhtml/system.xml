@@ -25,7 +25,7 @@
                 <field id="api_key" translate="label" type="password" sortOrder="10" showInDefault="1" showInWebsite="0"
                        showInStore="0">
                     <label>Google API key</label>
-                    <comment>Must be enabled both for Geo Coding and Distance Matrix</comment>
+                    <comment>Geocoding API and Distance Matrix API must enabled in your Google API key to support this feature.</comment>
                 </field>
                 <field id="mode" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0"
                        showInStore="0" canRestore="1">
