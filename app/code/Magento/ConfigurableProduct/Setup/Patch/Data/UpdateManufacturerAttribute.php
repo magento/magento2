@@ -50,19 +50,26 @@ class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInt
     {
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
-        $relatedProductTypes = explode(
-            ',',
-            $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'manufacturer', 'apply_to')
-        );
 
-        if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
-            $relatedProductTypes[] = Configurable::TYPE_CODE;
-            $eavSetup->updateAttribute(
-                \Magento\Catalog\Model\Product::ENTITY,
-                'manufacturer',
-                'apply_to',
-                implode(',', $relatedProductTypes)
+        if ($manufacturer = $eavSetup->getAttribute(
+            \Magento\Catalog\Model\Product::ENTITY,
+            'manufacturer',
+            'apply_to'
+        )) {
+            $relatedProductTypes = explode(
+                ',',
+                $manufacturer
             );
+
+            if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
+                $relatedProductTypes[] = Configurable::TYPE_CODE;
+                $eavSetup->updateAttribute(
+                    \Magento\Catalog\Model\Product::ENTITY,
+                    'manufacturer',
+                    'apply_to',
+                    implode(',', $relatedProductTypes)
+                );
+            }
         }
     }
 
