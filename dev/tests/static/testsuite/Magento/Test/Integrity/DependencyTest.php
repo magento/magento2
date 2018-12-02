@@ -221,7 +221,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     protected static function _initRules()
     {
-        $replaceFilePattern = str_replace('\\', '/', realpath(__DIR__)) . '/_files/dependency_test/*.php';
+        $replaceFilePattern = str_replace('\\', '/', realpath(__DIR__)) . '/_files/dependency_test/tables_*.php';
         $dbRuleTables = [];
         foreach (glob($replaceFilePattern) as $fileName) {
             $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
@@ -423,6 +423,14 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     public function collectRedundant()
     {
         $schemaDependencyProvider = new DeclarativeSchemaDependencyProvider();
+
+        /** TODO: Remove this temporary solution after MC-5806 is closed */
+        $filePattern = __DIR__ . '/_files/dependency_test/undetected_dependencies_*.php';
+        $undetectedDependencies = [];
+        foreach (glob($filePattern) as $fileName) {
+            $undetectedDependencies = array_merge($undetectedDependencies, require $fileName);
+        }
+
         foreach (array_keys(self::$mapDependencies) as $module) {
             $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
             $found = array_merge(
@@ -430,6 +438,11 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND),
                 $schemaDependencyProvider->getDeclaredExistingModuleDependencies($module)
             );
+            /** TODO: Remove this temporary solution after MC-5806 is closed */
+            if (!empty($undetectedDependencies[$module])) {
+                $found = array_merge($found, $undetectedDependencies[$module]);
+            }
+
             $found['Magento\Framework'] = 'Magento\Framework';
             $this->_setDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
         }
