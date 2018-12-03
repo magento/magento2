@@ -65,7 +65,7 @@
 
         <!--Categories > Content > Add CMS Block: name saved block-->
         <waitForElementVisible selector="{{AdminCategoryContentSection.sectionHeader}}" stepKey="waitForContentSection"/>
-        <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
+        <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.addCMSBlock}}" visible="false" stepKey="openContentSection"/>
 
         <selectOption selector="{{AdminCategoryContentSection.addCMSBlock}}" userInput="{{DefaultCmsBlock.title}}" stepKey="selectSavedBlock"/>
 
