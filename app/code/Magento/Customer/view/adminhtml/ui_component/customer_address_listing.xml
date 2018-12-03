@@ -55,6 +55,11 @@
         </filters>
         <massaction name="listing_massaction" component="Magento_Customer/js/grid/massactions">
             <action name="delete">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isAjax" xsi:type="boolean">true</item>
+                    </item>
+                </argument>
                 <settings>
                     <url path="customer/address/massDelete"/>
                     <type>delete</type>
