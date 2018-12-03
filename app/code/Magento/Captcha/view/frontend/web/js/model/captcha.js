@@ -42,7 +42,7 @@ define([
              * @return {Boolean}
              */
             getIsVisible: function () {
-                return this.visibility;
+                return this.visibility();
             },
 
             /**
