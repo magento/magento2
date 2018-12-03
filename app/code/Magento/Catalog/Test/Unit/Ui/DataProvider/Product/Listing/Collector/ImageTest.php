@@ -6,15 +6,16 @@
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
-use Magento\Catalog\Api\Data\ProductRenderInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
+use Magento\Catalog\Api\Data\ProductRenderInterface;
+use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Catalog\Helper\ImageFactory;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image;
 use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\DesignLoader;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Helper\ImageFactory;
-use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
-use Magento\Catalog\Helper\Image as ImageHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,6 +43,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $imageInterfaceFactory;
 
+    /** @var DesignLoader|\PHPUnit_Framework_MockObject_MockObject */
+    private $designLoader;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->imageFactory = $this->getMockBuilder(ImageFactory::class)
@@ -60,13 +67,15 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->design = $this->createMock(DesignInterface::class);
+        $this->designLoader = $this->createMock(DesignLoader::class);
         $this->model = new Image(
             $this->imageFactory,
             $this->state,
             $this->storeManager,
             $this->design,
             $this->imageInterfaceFactory,
-            $this->imageCodes
+            $this->imageCodes,
+            $this->designLoader
         );
     }
 
@@ -165,6 +174,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $imageMock->expects($this->once())
             ->method('setUrl')
             ->with('url');
+        $this->designLoader->expects($this->once())->method('load');
 
         $this->assertEquals(
             $imageHelperMock,
