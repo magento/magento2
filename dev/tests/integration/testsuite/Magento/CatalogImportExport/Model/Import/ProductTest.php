@@ -70,10 +70,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     private $logger;
 
     /**
-     * @var \Magento\Framework\EntityManager\EntityMetadata
+     * @inheritdoc
      */
-    private $metadata;
-
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -84,11 +82,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\CatalogImportExport\Model\Import\Product::class,
             ['logger' => $this->logger]
         );
-
-        $metadataPool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Framework\EntityManager\MetadataPool::class
-        );
-        $this->metadata = $metadataPool->getMetadata(ProductInterface::class);
 
         parent::setUp();
     }
@@ -1327,7 +1320,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $resourceConnection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\App\ResourceConnection::class
         );
-        $linkField = $this->metadata->getLinkField();
         $categoryProductstableName = $resourceConnection->getTableName('catalog_category_product');
         $productEntitiesTableName = $resourceConnection->getTableName('catalog_product_entity');
         $select = $resourceConnection->getConnection()
@@ -1335,7 +1327,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             ->from(['category_products' => $categoryProductstableName])
             ->join(
                 ['product_entities' => $productEntitiesTableName],
-                'product_entities.' . $linkField . ' = category_products.product_id',
+                'product_entities.entity_id = category_products.product_id',
                 ''
             )
             ->where('category_products.category_id = ?', $categoryId)
