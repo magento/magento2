@@ -202,7 +202,7 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
                 $response['redirectUrl'] = $this->_redirect->success($redirectRoute);
                 $this->getAccountRedirect()->clearRedirectCookie();
             }
-        } catch (LocalizedException | InvalidEmailOrPasswordException | EmailNotConfirmedException $e) {
+        } catch (LocalizedException $e) {
             $response = [
                 'errors' => true,
                 'message' => $e->getMessage(),

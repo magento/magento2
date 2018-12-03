@@ -129,6 +129,8 @@ define([
         },
 
         /**
+         * Set isRequired on current captcha model.
+         *
          * @param {Boolean} flag
          */
         setIsRequired: function (flag) {
