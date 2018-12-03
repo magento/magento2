@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Open Source)",
     "type": "project",
-    "version": "2.2.7",
+    "version": "2.2.8-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -77,7 +77,6 @@
         "magento/magento2-functional-testing-framework": "2.3.11",
         "phpunit/phpunit": "~6.2.0",
         "squizlabs/php_codesniffer": "3.2.2",
-        "magento/magento2-functional-testing-framework": "2.3.8",
         "phpmd/phpmd": "@stable",
         "pdepend/pdepend": "2.5.2",
         "friendsofphp/php-cs-fixer": "~2.2.1",
