@@ -56,4 +56,13 @@
         <data key="zip_is_range">0</data>
         <data key="rate">25</data>
     </entity>
+    <entity name="taxRateCustomRateUK" type="taxRate">
+        <data key="code" unique="suffix">TaxRate</data>
+        <data key="tax_country_id">GB</data>
+        <data key="tax_country">United Kingdom</data>
+        <data key="zip_is_range">1</data>
+        <data key="zip_from">1</data>
+        <data key="zip_to">7800935</data>
+        <data key="rate">12.99</data>
+    </entity>
 </entities>
