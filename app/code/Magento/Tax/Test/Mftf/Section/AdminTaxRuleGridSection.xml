@@ -10,6 +10,9 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminTaxRuleGridSection">
         <element name="add" type="button" selector="#add" timeout="30"/>
+        <element name="search" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="filterByTaxIdentifier" type="text" selector="#taxRuleGrid_filter_code"/>
+        <element name="success" type="text" selector=".empty-text"/>
     </section>
 </sections>
 

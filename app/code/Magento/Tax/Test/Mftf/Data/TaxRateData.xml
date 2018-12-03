@@ -31,7 +31,9 @@
     <entity name="defaultTaxRateWithZipRange" type="taxRate">
         <data key="code" unique="suffix">Tax Rate </data>
         <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
         <data key="tax_region_id">12</data>
+        <data key="tax_region">California</data>
         <data key="zip_is_range">1</data>
         <data key="zip_from">90001</data>
         <data key="zip_to">96162</data>
@@ -40,6 +42,7 @@
     <entity name="defaultTaxRateWithLargeRate" type="taxRate">
         <data key="code" unique="suffix">TaxRate</data>
         <data key="tax_country_id">GB</data>
+        <data key="tax_country">United Kingdom</data>
         <data key="tax_postcode">*</data>
         <data key="zip_is_range">0</data>
         <data key="rate">777</data>
@@ -47,6 +50,7 @@
     <entity name="taxRateCustomRateCanada" type="taxRate">
         <data key="code" unique="suffix">TaxRate</data>
         <data key="tax_country_id">CA</data>
+        <data key="tax_country">Canada</data>
         <data key="tax_region_id">*</data>
         <data key="tax_postcode">180</data>
         <data key="zip_is_range">0</data>
@@ -55,6 +59,7 @@
     <entity name="taxRateCustomRateUK" type="taxRate">
         <data key="code" unique="suffix">TaxRate</data>
         <data key="tax_country_id">GB</data>
+        <data key="tax_country">United Kingdom</data>
         <data key="zip_is_range">1</data>
         <data key="zip_from">1</data>
         <data key="zip_to">7800935</data>
@@ -63,7 +68,9 @@
     <entity name="taxRateCustomRateFrance" type="taxRate">
         <data key="code" unique="suffix">TaxRate</data>
         <data key="tax_country_id">FR</data>
+        <data key="tax_country">France</data>
         <data key="tax_region_id">277</data>
+        <data key="tax_region">Val-d'Oise</data>
         <data key="tax_postcode">*</data>
         <data key="zip_is_range">0</data>
         <data key="rate">0.1</data>
