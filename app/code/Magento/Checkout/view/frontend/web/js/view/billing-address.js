@@ -95,7 +95,6 @@ function (
                 } else {
                     this.isAddressSameAsShipping(
                         newAddress != null &&
-                         window.isbothAddressSame &&
                         newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() //eslint-disable-line eqeqeq
                     );
                 }
@@ -128,7 +127,6 @@ function (
          */
         useShippingAddress: function () {
             if (this.isAddressSameAsShipping()) {
-                window.isbothAddressSame = true;
                 selectBillingAddress(quote.shippingAddress());
                 this.updateAddresses();
                 this.isAddressDetailsVisible(true);
