@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRestrictedUserOnlyAccessCmsBlockTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="MAGETWO-91688: Exception when login as restricted admin with access only to CMS Block"/>
+            <title value="Check: restricted admin with access only to CMS Block"/>
+            <description value="Check that the system shows information only in Blocks"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94804"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+        </before>
+
+        <!--Create restricted roles for this user. Access to Content->Blocks only-->
+        <actionGroup ref="AdminCreateRoleActionGroup" stepKey="adminCreateRole">
+            <argument name="restrictedRole" value="Blocks"/>
+            <argument name="User" value="adminRole"/>
+        </actionGroup>
+
+        <!--Create new admin user-->
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="adminCreateUser">
+            <argument name="role" value="adminRole"/>
+        </actionGroup>
+
+        <!--Log out-->
+        <actionGroup ref="SignOut" stepKey="SignOut"/>
+        <!--Log in as new user-->
+        <actionGroup ref="LoginAsAnyUser" stepKey="LoginActionGroup">
+            <argument name="uname" value="{{newAdmin.username}}"/>
+            <argument name="passwd" value="{{newAdmin.password}}"/>
+        </actionGroup>
+
+        <!--Verify that The system shows information included in "Blocks"-->
+        <see stepKey="seeBlocksPage" userInput="Blocks"/>
+        <seeInCurrentUrl url="{{CmsBlocksPage.url}}" stepKey="assertUrl"/>
+
+        <!--Log Out-->
+        <actionGroup ref="logout" stepKey="logOut1"/>
+
+        <after>
+            <!--Login as Admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="logInForDeletingCreatedData"/>
+            <!--Delete created user-->
+            <actionGroup ref="DeleteCreatedUserActionGroup" stepKey="AdminDeleteUserActionGroup">
+                <argument name="user" value="adminRole"/>
+            </actionGroup>
+            <!--Delete created role-->
+            <actionGroup ref="AdminDeleteCreatedRoleActionGroup" stepKey="AdminDeleteRoleActionGroup">
+                <argument name="role" value="adminRole"/>
+            </actionGroup>
+            <!--Log Out-->
+            <actionGroup ref="logout" stepKey="logOut2"/>
+        </after>
+    </test>
+</tests>
