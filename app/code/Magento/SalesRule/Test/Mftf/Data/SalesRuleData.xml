@@ -85,7 +85,7 @@
     <entity name="SalesRule100PercentDiscount" extends="TestSalesRule" type="SalesRule">
         <data key="discountAmount">100</data>
     </entity>
-    <entity name="ApiCartRule1" type="SalesRule">
+    <entity name="SaleRule50PercentDiscountNoCoupon" type="SalesRule">
         <data key="name" unique="suffix">salesRule</data>
         <data key="description">Sales Rule Descritpion</data>
         <array key="website_ids">

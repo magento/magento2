@@ -22,7 +22,7 @@
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <createData entity="ApiCartRule1" stepKey="createCartRule"/>
+            <createData entity="SaleRule50PercentDiscountNoCoupon" stepKey="createCartRule"/>
             <createData entity="CheckoutShippingTotalsSortOrder" stepKey="setConfigShippingTotalsSortOrder"/>
         </before>
 
@@ -41,9 +41,6 @@
             <argument name="expectedDiscount" value="-$100"/>
         </actionGroup>
 
-        <actionGroup ref="CheckTotalsSortOrderInSummarySection" stepKey="checkTotalsSortOrderInSummarySection">
-            <argument name="elementName" value="Shipping (Flat Rate - Fixed)"/>
-            <argument name="positionNumber" value="3"/>
-        </actionGroup>
+        <see userInput="Shipping (Flat Rate - Fixed)" selector="{{StorefrontCheckoutCartSummarySection.totalsElementByPosition('3')}}" stepKey="assertElementPosition"/>
     </test>
 </tests>
