@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca98d8e543436233c41b62a52bca9efa",
+    "content-hash": "93418bd14ad2d9f54f4059550ded7061",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -88,16 +88,16 @@
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
-            "version": "1.10.5",
+            "version": "1.10.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
-                "reference": "91d949e28d939e607484a4bbf9307cff5afa689b"
+                "reference": "cc941a5f4cc017e11d3eab9061811ba9583ed6bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/91d949e28d939e607484a4bbf9307cff5afa689b",
-                "reference": "91d949e28d939e607484a4bbf9307cff5afa689b",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/cc941a5f4cc017e11d3eab9061811ba9583ed6bf",
+                "reference": "cc941a5f4cc017e11d3eab9061811ba9583ed6bf",
                 "shasum": ""
             },
             "require": {
@@ -120,7 +120,7 @@
             ],
             "description": "Zend_Cache backend using Redis with full support for tags.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
-            "time": "2018-05-15T16:02:25+00:00"
+            "time": "2018-09-24T16:02:07+00:00"
         },
         {
             "name": "colinmollenhour/credis",
@@ -2064,7 +2064,7 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.10.0",
+            "version": "v1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -2122,16 +2122,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.10.0",
+            "version": "v1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494"
+                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/c79c051f5b3a46be09205c73b80b346e4153e494",
-                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d0cd638f4634c16d8df4508e847f14e9e43168b8",
+                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8",
                 "shasum": ""
             },
             "require": {
@@ -2177,7 +2177,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-09-21T13:07:52+00:00"
+            "time": "2018-08-06T14:22:27+00:00"
         },
         {
             "name": "symfony/process",
@@ -4617,56 +4617,6 @@
             "time": "2016-12-07T12:15:46+00:00"
         },
         {
-            "name": "allure-framework/allure-phpunit",
-            "version": "1.2.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/allure-framework/allure-phpunit.git",
-                "reference": "45504aeba41304cf155a898fa9ac1aae79f4a089"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/allure-framework/allure-phpunit/zipball/45504aeba41304cf155a898fa9ac1aae79f4a089",
-                "reference": "45504aeba41304cf155a898fa9ac1aae79f4a089",
-                "shasum": ""
-            },
-            "require": {
-                "allure-framework/allure-php-api": "~1.1.0",
-                "mikey179/vfsstream": "1.*",
-                "php": ">=7.0.0",
-                "phpunit/phpunit": ">=6.0.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Yandex": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Ivan Krutov",
-                    "email": "vania-pooh@yandex-team.ru",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A PHPUnit adapter for Allure report.",
-            "homepage": "http://allure.qatools.ru/",
-            "keywords": [
-                "allure",
-                "attachments",
-                "cases",
-                "phpunit",
-                "report",
-                "steps",
-                "testing"
-            ],
-            "time": "2017-11-03T13:08:21+00:00"
-        },
-        {
             "name": "behat/gherkin",
             "version": "v4.4.5",
             "source": {
@@ -6401,16 +6351,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.3.9",
+            "version": "2.3.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "9885925ea741d0b0eede35be09a45b62d9ef7c84"
+                "reference": "3ca1bd74228a61bd05520bed1ef88b5a19764d92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/9885925ea741d0b0eede35be09a45b62d9ef7c84",
-                "reference": "9885925ea741d0b0eede35be09a45b62d9ef7c84",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/3ca1bd74228a61bd05520bed1ef88b5a19764d92",
+                "reference": "3ca1bd74228a61bd05520bed1ef88b5a19764d92",
                 "shasum": ""
             },
             "require": {
@@ -6468,53 +6418,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-10-28T11:19:53+00:00"
-        },
-        {
-            "name": "mikey179/vfsStream",
-            "version": "v1.6.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mikey179/vfsStream.git",
-                "reference": "d5fec95f541d4d71c4823bb5e30cf9b9e5b96145"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/vfsStream/zipball/d5fec95f541d4d71c4823bb5e30cf9b9e5b96145",
-                "reference": "d5fec95f541d4d71c4823bb5e30cf9b9e5b96145",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.5"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.6.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "org\\bovigo\\vfs\\": "src/main/php"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Frank Kleine",
-                    "homepage": "http://frankkleine.de/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Virtual file system to mock the real file system in unit tests.",
-            "homepage": "http://vfs.bovigo.org/",
-            "time": "2017-08-01T08:02:14+00:00"
+            "time": "2018-11-13T18:22:25+00:00"
         },
         {
             "name": "moontoast/math",
@@ -8733,16 +8637,16 @@
         },
         {
             "name": "symfony/polyfill-php70",
-            "version": "v1.10.0",
+            "version": "v1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php70.git",
-                "reference": "6b88000cdd431cd2e940caa2cb569201f3f84224"
+                "reference": "1e24b0c4a56d55aaf368763a06c6d1c7d3194934"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/6b88000cdd431cd2e940caa2cb569201f3f84224",
-                "reference": "6b88000cdd431cd2e940caa2cb569201f3f84224",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/1e24b0c4a56d55aaf368763a06c6d1c7d3194934",
+                "reference": "1e24b0c4a56d55aaf368763a06c6d1c7d3194934",
                 "shasum": ""
             },
             "require": {
@@ -8788,20 +8692,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-09-21T06:26:08+00:00"
+            "time": "2018-08-06T14:22:27+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
-            "version": "v1.10.0",
+            "version": "v1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php72.git",
-                "reference": "9050816e2ca34a8e916c3a0ae8b9c2fccf68b631"
+                "reference": "95c50420b0baed23852452a7f0c7b527303ed5ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/9050816e2ca34a8e916c3a0ae8b9c2fccf68b631",
-                "reference": "9050816e2ca34a8e916c3a0ae8b9c2fccf68b631",
+                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/95c50420b0baed23852452a7f0c7b527303ed5ae",
+                "reference": "95c50420b0baed23852452a7f0c7b527303ed5ae",
                 "shasum": ""
             },
             "require": {
@@ -8843,7 +8747,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-09-21T13:07:52+00:00"
+            "time": "2018-08-06T14:22:27+00:00"
         },
         {
             "name": "symfony/stopwatch",
