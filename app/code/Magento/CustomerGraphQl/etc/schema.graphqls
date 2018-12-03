@@ -18,10 +18,16 @@ type CustomerToken {
 }
 
 input CustomerInput {
-    firstname: String
-    lastname: String
-    email: String
-    password: String
+    prefix: String
+    firstname: String!
+    middlename: String!
+    lastname: String!
+    suffix: String
+    dob: String
+    taxvat: String
+    gender: String
+    email: String!
+    password: String!
     is_subscribed: Boolean
 }
 
