@@ -65,4 +65,14 @@
         <data key="zip_to">7800935</data>
         <data key="rate">12.99</data>
     </entity>
+    <entity name="taxRateCustomRateFrance" type="taxRate">
+        <data key="code" unique="suffix">TaxRate</data>
+        <data key="tax_country_id">FR</data>
+        <data key="tax_country">France</data>
+        <data key="tax_region_id">277</data>
+        <data key="tax_region">Val-d'Oise</data>
+        <data key="tax_postcode">*</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">0.1</data>
+    </entity>
 </entities>
