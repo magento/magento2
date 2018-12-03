@@ -25,11 +25,13 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Increment times_used counter
      *
-     * @param int $customerId
-     * @param mixed $couponId
-     * @return void
+     * @param  int $customerId
+     * @param  mixed $couponId
+     * @param int|null $delta
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function updateCustomerCouponTimesUsed($customerId, $couponId)
+    public function updateCustomerCouponTimesUsed($customerId, $couponId, $delta = 1)
     {
         $connection = $this->getConnection();
         $select = $connection->select();
@@ -44,16 +46,16 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $timesUsed = $connection->fetchOne($select, [':coupon_id' => $couponId, ':customer_id' => $customerId]);
 
-        if ($timesUsed > 0) {
-            $this->getConnection()->update(
-                $this->getMainTable(),
-                ['times_used' => $timesUsed + 1],
-                ['coupon_id = ?' => $couponId, 'customer_id = ?' => $customerId]
-            );
-        } else {
+        if ($timesUsed === false) {
             $this->getConnection()->insert(
                 $this->getMainTable(),
                 ['coupon_id' => $couponId, 'customer_id' => $customerId, 'times_used' => 1]
+            );
+        } else {
+            $this->getConnection()->update(
+                $this->getMainTable(),
+                ['times_used' => (int)$timesUsed + $delta],
+                ['coupon_id = ?' => $couponId, 'customer_id = ?' => $customerId]
             );
         }
     }

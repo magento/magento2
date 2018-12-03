@@ -27,4 +27,7 @@
     <event name="magento_salesrule_api_data_ruleinterface_load_after">
         <observer name="legacy_model_load" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
     </event>
+    <event name="order_cancel_after">
+        <observer name="coupon_code_restore" instance="Magento\SalesRule\Observer\SalesOrderAfterCancelObserver" />
+    </event>
 </config>
