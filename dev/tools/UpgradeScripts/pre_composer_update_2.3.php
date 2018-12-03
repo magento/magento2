@@ -148,7 +148,7 @@ try {
     }
     else {
         foreach ($composerData['repositories'] as $label => $repo) {
-            if (strpos(strtolower($label), 'mage') !== false || strpos($repo['url'], '.mage') !== false) {
+            if (strpos(strtolower((string) $label), 'mage') !== false || strpos($repo['url'], '.mage') !== false) {
                 $mageUrls[] = $repo['url'];
             }
         }
