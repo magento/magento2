@@ -120,8 +120,7 @@
         }
 
         > .admin__field-control {
-            #mix-grid .column(@field-control-grid__column, @field-grid__columns);
-            padding-top: 7px;
+            #mix-grid .column(@field-control-grid__column, @field-grid__columns); 
         }
 
         > .admin__field-label {
@@ -149,8 +148,11 @@
             }
         }
     }
-    &.composite-bundle{
-        .admin__field-option{
+    &.composite-bundle {
+        > .admin__field-control {
+            padding-top: 7px;
+        }
+        .admin__field-option {
             padding-top: 0;
         }
     }
