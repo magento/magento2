@@ -8,13 +8,11 @@
  */
 define([
     'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/checkout-data',
-    'Magento_Checkout/js/action/select-billing-address'
-], function (quote, checkoutData) {
+], function (quote) {
     'use strict';
-    
+
     return function (shippingAddress) {
-        window.isbothAddressSame = false;
+        quote.isbothAddressSame = false;
         quote.shippingAddress(shippingAddress);
         quote.billingAddress(quote.billingAddress());
     };
