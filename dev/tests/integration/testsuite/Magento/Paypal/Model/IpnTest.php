@@ -64,8 +64,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $creditmemoItems = $order->getCreditmemosCollection()->getItems();
         $creditmemo = current($creditmemoItems);
 
-        //Totally refunded orders still can be shipped
-        $this->assertEquals(Order::STATE_PROCESSING, $order->getState()) ;
+        $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
         $this->assertEquals(1, count($creditmemoItems));
         $this->assertEquals(Creditmemo::STATE_REFUNDED, $creditmemo->getState());
         $this->assertEquals(10, $order->getSubtotalRefunded());
@@ -147,8 +146,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
 
         $creditmemoItems = $order->getCreditmemosCollection()->getItems();
 
-        //Totally refunded orders still can be shipped
-        $this->assertEquals(Order::STATE_PROCESSING, $order->getState()) ;
+        $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
         $this->assertEquals(1, count($creditmemoItems));
         $this->assertEquals(10, $order->getSubtotalRefunded());
         $this->assertEquals(10, $order->getBaseSubtotalRefunded());
