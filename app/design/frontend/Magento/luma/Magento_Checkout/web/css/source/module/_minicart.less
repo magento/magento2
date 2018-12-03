@@ -129,7 +129,12 @@
 
         .block-minicart {
             .lib-css(padding, 25px @minicart__padding-horizontal);
-            
+            &:before {
+                right:11px;
+            }
+            &:after { 
+                right: 10px; 
+            }
             .block-title {
                 display: none;
             }
@@ -417,6 +422,12 @@
         .block-minicart {
             right: -10px;
             width: 390px;
+            &:before {
+                right:17px;
+            }
+            &:after {
+                right:16px;
+            }
         }
     }
     .minilist .action.delete,
