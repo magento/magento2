@@ -10,7 +10,7 @@ use Magento\Framework\App\Action\Action;
 /** @var \Magento\CatalogWidget\Block\Product\ProductsList $block */
 ?>
 <?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())): ?>
-<?php
+    <?php
     $type = 'widget-product-grid';
 
     $mode = 'grid';
@@ -23,12 +23,12 @@ use Magento\Framework\App\Action\Action;
     $showCart = true;
     $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::DEFAULT_VIEW;
     $description = false;
-?>
+    ?>
     <div class="block widget block-products-list <?= /* @noEscape */ $mode ?>">
         <?php if ($block->getTitle()): ?>
-        <div class="block-title">
-            <strong><?= $block->escapeHtml(__($block->getTitle())) ?></strong>
-        </div>
+            <div class="block-title">
+                <strong><?= $block->escapeHtml(__($block->getTitle())) ?></strong>
+            </div>
         <?php endif ?>
         <div class="block-content">
             <?= /* @noEscape */ '<!-- ' . $image . '-->' ?>

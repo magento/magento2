@@ -602,6 +602,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\ProductOption">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="custom_options" xsi:type="object">Magento\Catalog\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
