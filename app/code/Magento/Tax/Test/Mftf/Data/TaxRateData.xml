@@ -47,4 +47,13 @@
         <data key="zip_is_range">0</data>
         <data key="rate">777</data>
     </entity>
+    <entity name="taxRateCustomRateCanada" type="taxRate">
+        <data key="code" unique="suffix">TaxRate</data>
+        <data key="tax_country_id">CA</data>
+        <data key="tax_country">Canada</data>
+        <data key="tax_region_id">*</data>
+        <data key="tax_postcode">180</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">25</data>
+    </entity>
 </entities>
