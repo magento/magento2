@@ -310,7 +310,7 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" userInput="0.1" stepKey="selectProductTierPricePriceInput"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
         <actionGroup ref="saveProductForm" stepKey="saveProduct1"/>
-        <amOnPage url="{{StorefrontProductPage.url(SimpleProduct.urlKey)}}" stepKey="goProductPageOnStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.sku$$)}}" stepKey="goProductPageOnStorefront"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('99.90')}}" stepKey="assertProductFinalPriceProductPage"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceProductPage"/>
