@@ -11,6 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\CustomerGraphQl\Model\Customer\ChangeSubscriptionStatus;
 use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
@@ -22,26 +23,20 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Create customer data resolver
- */
 class CreateCustomer implements ResolverInterface
 {
     /**
      * @var CustomerDataProvider
      */
     private $customerDataProvider;
-
     /**
      * @var AccountManagementInterface
      */
     private $accountManagement;
-
     /**
      * @var CustomerInterfaceFactory
      */
     private $customerFactory;
-
     /**
      * @var DataObjectHelper
      */
@@ -54,6 +49,10 @@ class CreateCustomer implements ResolverInterface
      * @var SubscriberFactory
      */
     private $subscriberFactory;
+    /**
+     * @var ChangeSubscriptionStatus
+     */
+    private $changeSubscriptionStatus;
 
     /**
      * @param DataObjectHelper $dataObjectHelper
@@ -62,6 +61,7 @@ class CreateCustomer implements ResolverInterface
      * @param StoreManagerInterface $storeManager
      * @param SubscriberFactory $subscriberFactory
      * @param CustomerDataProvider $customerDataProvider
+     * @param ChangeSubscriptionStatus $changeSubscriptionStatus
      */
     public function __construct(
         DataObjectHelper $dataObjectHelper,
@@ -69,7 +69,8 @@ class CreateCustomer implements ResolverInterface
         AccountManagementInterface $accountManagement,
         StoreManagerInterface $storeManager,
         SubscriberFactory $subscriberFactory,
-        CustomerDataProvider $customerDataProvider
+        CustomerDataProvider $customerDataProvider,
+        ChangeSubscriptionStatus $changeSubscriptionStatus
     ) {
         $this->customerDataProvider = $customerDataProvider;
         $this->accountManagement = $accountManagement;
@@ -77,6 +78,7 @@ class CreateCustomer implements ResolverInterface
         $this->dataObjectHelper = $dataObjectHelper;
         $this->storeManager = $storeManager;
         $this->subscriberFactory = $subscriberFactory;
+        $this->changeSubscriptionStatus = $changeSubscriptionStatus;
     }
 
     /**
@@ -94,13 +96,14 @@ class CreateCustomer implements ResolverInterface
         }
         try {
             $customer = $this->createUserAccount($args);
+            $customerId = (int)$customer->getId();
             $this->setUpUserContext($context, $customer);
             if (array_key_exists('is_subscribed', $args['input'])) {
                 if ($args['input']['is_subscribed']) {
-                    $this->subscriberFactory->create()->subscribeCustomerById($customer->getId());
+                    $this->changeSubscriptionStatus->execute($customerId, true);
                 }
             }
-            $data = $this->customerDataProvider->getCustomerById((int)$customer->getId());
+            $data = $this->customerDataProvider->getCustomerById($customerId);
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
