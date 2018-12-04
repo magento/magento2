@@ -7,9 +7,8 @@ declare(strict_types=1);
  */
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
-use Magento\Framework\Phrase;
 use Magento\Backend\App\Action;
-use Magento\Customer\Model\Data\Address;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
@@ -71,19 +70,21 @@ class DefaultBillingAddress extends Action implements HttpPostActionInterface
         $customerId = $this->getRequest()->getParam('parent_id', false);
         $addressId = $this->getRequest()->getParam('id', false);
         $error = false;
-        $message = '';
 
         if ($addressId) {
             try {
                 $address = $this->addressRepository->getById($addressId)->setCustomerId($customerId);
                 $this->setAddressAsDefault($address);
                 $this->addressRepository->save($address);
-                $message = $this->getSuccessMessage();
+                $message = __('Default billing address has been changed.');
             } catch (\Exception $e) {
                 $error = true;
-                $message = $this->getExceptionMessage();
+                $message = __('We can\'t change default billing address right now.');
                 $this->logger->critical($e);
             }
+        } else {
+            $error = true;
+            $message = __('There is no address id in set default billing request.');
         }
 
         $resultJson = $this->resultJsonFactory->create();
@@ -100,31 +101,11 @@ class DefaultBillingAddress extends Action implements HttpPostActionInterface
     /**
      * Set address as default billing address
      *
-     * @param Address $address
+     * @param AddressInterface $address
      * @return void
      */
-    private function setAddressAsDefault(Address $address): void
+    private function setAddressAsDefault(AddressInterface $address): void
     {
         $address->setIsDefaultBilling(true);
-    }
-
-    /**
-     * Get success message
-     *
-     * @return Phrase
-     */
-    private function getSuccessMessage(): Phrase
-    {
-        return __('Default billing address has been changed.');
-    }
-
-    /**
-     * Get exception message
-     *
-     * @return Phrase
-     */
-    private function getExceptionMessage(): Phrase
-    {
-        return __('We can\'t change default billing address right now.');
     }
 }
