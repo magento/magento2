@@ -9,7 +9,6 @@ use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -18,7 +17,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class PlaceOrder
  */
-class PlaceOrder extends AbstractAction implements HttpPostActionInterface
+class PlaceOrder extends AbstractAction
 {
     /**
      * @var Helper\OrderPlace
