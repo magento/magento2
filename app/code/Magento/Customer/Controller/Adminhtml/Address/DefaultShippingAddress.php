@@ -8,32 +8,122 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Framework\Phrase;
+use Magento\Backend\App\Action;
+use Magento\Customer\Model\Data\Address;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class to process default shipping address setting
+ * Class to process set default shipping address action
  */
-class DefaultShippingAddress extends AbstractDefaultAddress
+class DefaultShippingAddress extends Action implements HttpPostActionInterface
 {
     /**
-     * @inheritdoc
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
-    protected function setAddressAsDefault($address)
+    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
+     * @var AddressRepositoryInterface
+     */
+    private $addressRepository;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var JsonFactory
+     */
+    private $resultJsonFactory;
+
+    /**
+     * @param Action\Context $context
+     * @param AddressRepositoryInterface $addressRepository
+     * @param LoggerInterface $logger
+     * @param JsonFactory $resultJsonFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        AddressRepositoryInterface $addressRepository,
+        LoggerInterface $logger,
+        JsonFactory $resultJsonFactory
+    ) {
+        parent::__construct($context);
+        $this->addressRepository = $addressRepository;
+        $this->logger = $logger;
+        $this->resultJsonFactory = $resultJsonFactory;
+    }
+
+    /**
+     * Execute action to set customer default shipping address
+     *
+     * @return Json
+     */
+    public function execute(): Json
+    {
+        $customerId = $this->getRequest()->getParam('parent_id', false);
+        $addressId = $this->getRequest()->getParam('id', false);
+        $error = false;
+        $message = '';
+
+        if ($addressId) {
+            try {
+                $address = $this->addressRepository->getById($addressId)->setCustomerId($customerId);
+                $this->setAddressAsDefault($address);
+                $this->addressRepository->save($address);
+                $message = $this->getSuccessMessage();
+            } catch (\Exception $e) {
+                $error = true;
+                $message = $this->getExceptionMessage();
+                $this->logger->critical($e);
+            }
+        }
+
+        $resultJson = $this->resultJsonFactory->create();
+        $resultJson->setData(
+            [
+                'message' => $message,
+                'error' => $error,
+            ]
+        );
+
+        return $resultJson;
+    }
+
+    /**
+     * Set address as default shipping address
+     *
+     * @param Address $address
+     * @return void
+     */
+    private function setAddressAsDefault(Address $address): void
     {
         $address->setIsDefaultShipping(true);
     }
 
     /**
-     * @inheritdoc
+     * Get success message
+     *
+     * @return Phrase
      */
-    protected function getSuccessMessage(): Phrase
+    private function getSuccessMessage(): Phrase
     {
         return __('Default shipping address has been changed.');
     }
 
     /**
-     * @inheritdoc
+     * Get exception message
+     *
+     * @return Phrase
      */
-    protected function getExceptionMessage(): Phrase
+    private function getExceptionMessage(): Phrase
     {
         return __('We can\'t change default shipping address right now.');
     }
