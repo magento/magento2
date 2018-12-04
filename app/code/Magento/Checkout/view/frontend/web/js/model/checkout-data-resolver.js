@@ -33,7 +33,7 @@ define([
     addressConverter,
     selectBillingAddress,
     createBillingAddress,
-    address,
+    customerAddress,
     $,
     _
 ) {
@@ -270,10 +270,11 @@ define([
                 //set billing address same as shipping by default if it is not empty
                 selectBillingAddress(quote.shippingAddress());
             }else {
-                var addressesList=address.getAddressItems();
+                var addressesList=customerAddress.getAddressItems();
             $.each(addressesList, function (key,item) {
             if (item.isDefaultBilling()) {
                 selectBillingAddress(item);
+                
             return;
              }
             });
