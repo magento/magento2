@@ -192,6 +192,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Add images to result json config in case of Layered Navigation is used
      *
      * @return array
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      * @since 100.2.0
      */
     protected function _getAdditionalConfig()
