@@ -18,6 +18,7 @@ class FileUploaderDataResolver
 {
     /**
      * Maximum file size allowed for file_uploader UI component
+     * This constant was copied from deprecated data provider \Magento\Customer\Model\Customer\DataProvider
      */
     private const MAX_FILE_SIZE = 2097152;
 
@@ -84,7 +85,7 @@ class FileUploaderDataResolver
     ): array {
         $attributeCode = $attribute->getAttributeCode();
 
-        $file = $customerData[$attributeCode] ?? '';
+        $file = $customerData[$attributeCode] ?? null;
 
         /** @var FileProcessor $fileProcessor */
         $fileProcessor = $this->fileProcessorFactory->create([
