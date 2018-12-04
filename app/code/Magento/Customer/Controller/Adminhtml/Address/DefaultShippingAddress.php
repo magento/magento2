@@ -69,7 +69,8 @@ class DefaultShippingAddress extends Action implements HttpPostActionInterface
     {
         $customerId = $this->getRequest()->getParam('parent_id', false);
         $addressId = $this->getRequest()->getParam('id', false);
-        $error = false;
+        $error = true;
+        $message = __('There is no address id in setting default shipping address.');
 
         if ($addressId) {
             try {
@@ -77,14 +78,11 @@ class DefaultShippingAddress extends Action implements HttpPostActionInterface
                 $this->setAddressAsDefault($address);
                 $this->addressRepository->save($address);
                 $message = __('Default shipping address has been changed.');
+                $error = false;
             } catch (\Exception $e) {
-                $error = true;
                 $message = __('We can\'t change default shipping address right now.');
                 $this->logger->critical($e);
             }
-        } else {
-            $error = true;
-            $message = __('There is no address id in set default shipping request.');
         }
 
         $resultJson = $this->resultJsonFactory->create();
