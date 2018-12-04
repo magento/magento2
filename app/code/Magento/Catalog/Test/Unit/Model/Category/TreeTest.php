@@ -64,7 +64,9 @@ class TreeTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\StoreManagerInterface::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->treeResourceFactoryMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\TreeFactory::class);
+        $this->treeResourceFactoryMock = $this->createMock(
+            \Magento\Catalog\Model\ResourceModel\Category\TreeFactory::class
+        );
         $this->treeResourceFactoryMock->method('create')
             ->willReturn($this->categoryTreeMock);
 

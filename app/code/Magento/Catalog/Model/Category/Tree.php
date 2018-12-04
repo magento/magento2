@@ -60,8 +60,12 @@ class Tree
     }
 
     /**
+     * Get root node by category.
+     *
      * @param \Magento\Catalog\Model\Category|null $category
      * @return Node|null
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getRootNode($category = null)
     {
@@ -80,8 +84,12 @@ class Tree
     }
 
     /**
+     * Get node by category.
+     *
      * @param \Magento\Catalog\Model\Category $category
      * @return Node
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function getNode(\Magento\Catalog\Model\Category $category)
     {
@@ -95,7 +103,11 @@ class Tree
     }
 
     /**
+     * Prepare category collection.
+     *
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function prepareCollection()
     {
@@ -114,6 +126,8 @@ class Tree
     }
 
     /**
+     * Get tree by node.
+     *
      * @param \Magento\Framework\Data\Tree\Node $node
      * @param int $depth
      * @param int $currentLevel
@@ -137,6 +151,8 @@ class Tree
     }
 
     /**
+     * Get node children.
+     *
      * @param \Magento\Framework\Data\Tree\Node $node
      * @param int $depth
      * @param int $currentLevel
