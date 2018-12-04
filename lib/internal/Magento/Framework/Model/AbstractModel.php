@@ -778,7 +778,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Get list of cache tags applied to model object.
-     * 
+     *
      * Return false if cache tags are not supported by model
      *
      * @return array|false
