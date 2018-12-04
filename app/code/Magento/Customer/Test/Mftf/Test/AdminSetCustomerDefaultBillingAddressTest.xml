@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSetCustomerDefaultBillingAddressTest">
+        <annotations>
+            <stories value="Set customer default billing address"/>
+            <title value="Admin should be able to set customer default billing address"/>
+            <description value="Admin should be able to set customer default billing address"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-94952"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <!--Edit customer info-->
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <click stepKey="goToAddresses" selector="{{AdminCustomerAccountInformationSection.addressesButton}}"/>
+        <waitForPageLoad stepKey="waitForAddresses"/>
+
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomerAddressGrid"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
+        <fillField userInput="{{Simple_US_Customer.lastname}}" selector="//" stepKey="fillNameFieldOnFiltersSection"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCustomerGroupGridActionsSection.selectButton('customerGroupName')}}" stepKey="clickSelectButton"/>
+
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDeleteCustomerGroup"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessage"/>
+        <see userInput="The customer will receive an email with a link to reset password." stepKey="messageThatLinkToPasswordResetIsSent"/>
+    </test>
+</tests>
+
+

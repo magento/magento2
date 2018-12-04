@@ -9,6 +9,9 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminEditCustomerPage" url="/customer/index/edit/id/{{var1}}" area="admin" module="Magento_Customer" parameterized="true">
         <section name="AdminCustomerAccountInformationSection"/>
+        <section name="AdminCustomerAddressesGridSection"/>
+        <section name="AdminCustomerAddressesGridActionsSection"/>
+        <section name="AdminCustomerAddressesSection"/>
         <section name="AdminCustomerMainActionsSection"/>
     </page>
 </pages>
