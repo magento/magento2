@@ -18,8 +18,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -82,7 +85,15 @@ class CreateCustomer implements ResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return array|Value|mixed
+     * @throws GraphQlInputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function resolve(
         Field $field,
@@ -104,7 +115,7 @@ class CreateCustomer implements ResolverInterface
                 }
             }
             $data = $this->customerDataProvider->getCustomerById($customerId);
-        } catch (LocalizedException $e) {
+        } catch (ValidatorException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
 

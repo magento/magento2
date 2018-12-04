@@ -18,17 +18,17 @@ type CustomerToken {
 }
 
 input CustomerInput {
-    prefix: String
-    firstname: String
-    middlename: String
-    lastname: String
-    suffix: String
-    dob: String
-    taxvat: String
-    gender: Int
-    email: String
-    password: String
-    is_subscribed: Boolean
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    firstname: String @doc(description: "The customer's first name")
+    middlename: String @doc(description: "The customer's middle name")
+    lastname: String @doc(description: "The customer's family name")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III")
+    email: String @doc(description: "The customer's email address. Required")
+    dob: String @doc(description: "The customer's date of birth")
+    taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
+    gender: Int @doc(description: "The customer's gender(Male - 1, Female - 2)")
+    password: String @doc(description: "The customer's password")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter")
 }
 
 type CustomerOutput {
