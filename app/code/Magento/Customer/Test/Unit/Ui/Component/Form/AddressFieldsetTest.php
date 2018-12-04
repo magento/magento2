@@ -51,7 +51,7 @@ class AddressFieldsetTest extends \PHPUnit\Framework\TestCase
     {
         $this->context->expects($this->atLeastOnce())->method('getRequestParam')->with('id')
             ->willReturn(1);
-        $this->assertEquals(true, $this->fieldset->canShow());
+        $this->assertTrue($this->fieldset->isComponentVisible());
     }
 
     /**
@@ -64,6 +64,6 @@ class AddressFieldsetTest extends \PHPUnit\Framework\TestCase
     {
         $this->context->expects($this->atLeastOnce())->method('getRequestParam')->with('id')
             ->willReturn(null);
-        $this->assertEquals(false, $this->fieldset->canShow());
+        $this->assertEquals(false, $this->fieldset->isComponentVisible());
     }
 }
