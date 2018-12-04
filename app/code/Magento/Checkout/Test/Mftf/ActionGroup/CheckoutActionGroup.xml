@@ -74,10 +74,4 @@
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
     </actionGroup>
-
-    <!-- Checkout select Flat Rate shipping method -->
-    <actionGroup name="CheckoutSelectFlatRateShippingMethodActionGroup">
-        <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" visible="true" stepKey="selectFlatRateShippingMethod"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForNextButton"/>
-    </actionGroup>
 </actionGroups>
