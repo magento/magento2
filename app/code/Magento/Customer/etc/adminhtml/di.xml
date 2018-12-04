@@ -23,4 +23,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Metadata\AttributeMetadataCache">
+        <arguments>
+            <argument name="backendSession" xsi:type="object">Magento\Backend\Model\Auth\SessionFactory</argument>
+        </arguments>
+    </type>
 </config>
