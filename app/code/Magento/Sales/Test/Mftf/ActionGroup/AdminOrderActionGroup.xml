@@ -92,6 +92,7 @@
         <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="1" stepKey="fillProductQty"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+        <wait time="5" stepKey="waitForOptionsToLoad"/>
     </actionGroup>
 
     <!--Add configurable product to order -->
@@ -280,6 +281,7 @@
         <waitForPageLoad stepKey="waitForStoresPageOpened"/>
         <click stepKey="chooseStore" selector="{{AdminOrderStoreScopeTreeSection.storeForOrder(storeView.name)}}"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForPageLoad stepKey="waitForStoreToAppear"/>
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
         <waitForPageLoad stepKey="waitForProductsListForOrder"/>
         <click selector="{{AdminOrdersGridSection.productForOrder(product.sku)}}" stepKey="chooseTheProduct"/>
