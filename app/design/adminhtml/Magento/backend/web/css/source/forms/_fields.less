@@ -61,6 +61,7 @@
 .abs-field-no-label {
     #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
     margin-left: @_length;
+    //@codingStandardsIgnoreEnd
 }
 
 //
@@ -305,7 +306,11 @@
             content: attr(data-config-scope);
             display: inline-block;
             font-size: @font-size__s;
+            /**
+             *@codingStandardsIgnoreStart
+             */
             left: @_length;
+            //@codingStandardsIgnoreEnd
             line-height: 3.2rem;
             margin-left: 2 * @temp_gutter;
             position: absolute;

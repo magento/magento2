@@ -187,12 +187,12 @@
         display: block;
     }
 
-    // External link marker
+    //  External link marker
     [target='_blank'] {
         &:after {
             &:extend(.abs-icon all);
             content: @icon-external-link__content;
-            font-size: 0.5rem;
+            font-size: .5rem;
             margin-left: @indent__xs;
             vertical-align: super;
         }
@@ -271,18 +271,18 @@
 
         &._show {
             > .submenu {
+                display: block;
+                float: left;
+                left: 100%;
+                max-width: 1440px;
+                min-height: 98.65%;
+                min-width: 100%;
+                overflow-x: auto;
+                position: absolute;
                 transform: translateX(0);
                 visibility: visible;
                 z-index: @submenu__z-index;
-                overflow-x: auto;
-                min-height: 98.65%;
-                position: absolute;
-                left: 100%;
-                min-width: 100%;
-                display: block;
-                float: left;
-                max-width: 1440px;
-            }
+          }
         }
     }
 
