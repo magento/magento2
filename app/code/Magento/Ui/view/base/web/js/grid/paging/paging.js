@@ -43,10 +43,14 @@ define([
                 current: '${ $.provider }:params.paging.current'
             },
 
+            statefull: {
+                current: true
+            },
+
             listens: {
-                'pages': 'onPagesChange',
-                'pageSize': 'onPageSizeChange',
                 'totalRecords': 'updateCounter',
+                'pages': 'updateCounter',
+                'pageSize': 'onPageSizeChange',
                 '${ $.provider }:params.filters': 'goFirst'
             },
 
@@ -236,7 +240,9 @@ define([
 
             this.previousSize = size;
 
-            this.setPage(cursor);
+            if (!isNaN(delta)) {
+                this.setPage(cursor);
+            }
 
             return this;
         },
