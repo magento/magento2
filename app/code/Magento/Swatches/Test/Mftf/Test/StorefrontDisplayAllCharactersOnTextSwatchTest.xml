@@ -29,7 +29,6 @@
         <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('3')}}" userInput="123456789012345678901BrownD" stepKey="fillDescription3" after="fillSwatch3"/>
 
         <see selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '3')}}" userInput="123456789012345678901" stepKey="seeGreen" after="seeBlue"/>
-        
         <see selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '4')}}" userInput="123456789012345678901" stepKey="seeBrown" after="seeGreen"/>
 
         <!-- Go to the category page -->
@@ -49,8 +48,7 @@
         <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeInLayeredNav3"/>
         <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandAttribute3"/>
         <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '3')}}" stepKey="filterBySwatch3"/>
-
-
+        
         <!-- Go to the category page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage4"/>
         <waitForPageLoad stepKey="waitForCategoryPage4"/>
