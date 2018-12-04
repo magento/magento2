@@ -47,10 +47,17 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     private $designLoader;
 
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
      * @inheritdoc
      */
     public function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
         $this->imageFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,15 +75,20 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->design = $this->createMock(DesignInterface::class);
         $this->designLoader = $this->createMock(DesignLoader::class);
-        $this->model = new Image(
-            $this->imageFactory,
-            $this->state,
-            $this->storeManager,
-            $this->design,
-            $this->imageInterfaceFactory,
-            $this->imageCodes,
-            $this->designLoader
-        );
+
+        $this->model = $this->objectManager
+            ->getObject(
+                Image::class,
+                [
+                    'imageFactory' => $this->imageFactory,
+                    'state' => $this->state,
+                    'storeManager' => $this->storeManager,
+                    'design' => $this->design,
+                    'imageRenderInfoFactory' => $this->imageInterfaceFactory,
+                    'imageCodes' => $this->imageCodes,
+                    'designLoader' => $this->designLoader,
+                ]
+            );
     }
 
     public function testGet()
