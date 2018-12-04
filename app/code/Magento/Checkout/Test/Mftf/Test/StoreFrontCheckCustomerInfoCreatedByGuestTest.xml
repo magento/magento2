@@ -52,8 +52,8 @@
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessRegisterSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickToCreateAccount"/>
-        <fillField selector="{{StorefrontCustomerCreateFormSection.passwordField}}" userInput="{{CustomerData.password}}" stepKey="TypePassword"/>
-        <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{CustomerData.password}}" stepKey="TypeConfirmationPassword"/>
+        <fillField selector="{{StorefrontCustomerCreateFormSection.passwordField}}" userInput="{{customerData.password}}" stepKey="TypePassword"/>
+        <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{customerData.password}}" stepKey="TypeConfirmationPassword"/>
         <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickOnCreateAccount"/>
         <see userInput="Thank you for registering" stepKey="verifyAccountCreated"/>
         <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
