@@ -80,7 +80,10 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function getRelatedProductTypes(string $attributeId, EavSetup $eavSetup)
     {
-        if($attribute = $eavSetup->getAttribute(Product::ENTITY, $attributeId, 'apply_to')) {
+        if ($attribute = $eavSetup->getAttribute(
+            Product::ENTITY,
+            $attributeId, 'apply_to'
+        )) {
             return explode(
                 ',',
                 $attribute
