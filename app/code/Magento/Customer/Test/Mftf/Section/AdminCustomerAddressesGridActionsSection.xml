@@ -13,7 +13,7 @@
         <element name="gridLoadingMask" type="button" selector=".admin__data-grid-loading-mask"/>
         <element name="search" type="input" selector="#fulltext"/>
         <element name="delete" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Delete']"/>
-        <element name="actions" type="text" selector=".action-select"/>
+        <element name="actions" type="text" selector="//div[@class='admin__data-grid-header']//button[@class='action-select']"/>
         <element name="filters" type="button" selector="button[data-action='grid-filter-expand']" timeout="30"/>
         <element name="firstRow" type="button" selector="tr:nth-of-type(1)[data-role='row']"/>
         <element name="ok" type="button" selector="//button[@data-role='action']//span[text()='OK']"/>
