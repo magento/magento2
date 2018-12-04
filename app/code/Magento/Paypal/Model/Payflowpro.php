@@ -419,6 +419,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
             $request->setTrxtype(self::TRXTYPE_SALE);
             $request->setOrigid($payment->getAdditionalInformation(self::PNREF));
             $payment->unsAdditionalInformation(self::PNREF);
+            $request->setData('currency', $payment->getOrder()->getBaseCurrencyCode());
         } elseif ($payment->getParentTransactionId()) {
             $request = $this->buildBasicRequest();
             $request->setOrigid($payment->getParentTransactionId());
@@ -647,6 +648,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param DataObject $response
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Payment\Gateway\Command\CommandException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      */
     public function processErrors(DataObject $response)
@@ -658,9 +660,9 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         } elseif ($response->getResultCode() != self::RESPONSE_CODE_APPROVED &&
             $response->getResultCode() != self::RESPONSE_CODE_FRAUDSERVICE_FILTER
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(__($response->getRespmsg()));
+            throw new \Magento\Payment\Gateway\Command\CommandException(__($response->getRespmsg()));
         } elseif ($response->getOrigresult() == self::RESPONSE_CODE_DECLINED_BY_FILTER) {
-            throw new \Magento\Framework\Exception\LocalizedException(__($response->getRespmsg()));
+            throw new \Magento\Payment\Gateway\Command\CommandException(__($response->getRespmsg()));
         }
     }
 

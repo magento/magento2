@@ -45,6 +45,6 @@ class PropertyGroup extends Collection
      */
     public function getProperty($name)
     {
-        return isset($this->properties[$name]) ? $this->properties[$name] : null;
+        return $this->properties[$name] ?? null;
     }
 }

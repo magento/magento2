@@ -15,6 +15,9 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Store\Api\Data\WebsiteInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ExclusionStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -50,10 +53,31 @@ class ExclusionStrategyTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->aliasResolverMock = $this->createMock(AliasResolver::class);
 
+        $this->indexScopeResolverMock = $this->createMock(
+            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+        );
+        $this->tableResolverMock = $this->createMock(
+            \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver::class
+        );
+        $this->dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
+        $this->dimensionFactoryMock = $this->createMock(\Magento\Framework\Indexer\DimensionFactory::class);
+        $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock->method('getId')->willReturn(1);
+        $storeMock->method('getWebsiteId')->willReturn(1);
+        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
+        $this->indexScopeResolverMock->method('resolve')->willReturn('catalog_product_index_price');
+        $this->httpContextMock = $this->createMock(\Magento\Framework\App\Http\Context::class);
+        $this->httpContextMock->method('getValue')->willReturn(1);
+
         $this->model = new ExclusionStrategy(
             $this->resourceConnectionMock,
             $this->storeManagerMock,
-            $this->aliasResolverMock
+            $this->aliasResolverMock,
+            $this->tableResolverMock,
+            $this->dimensionFactoryMock,
+            $this->indexScopeResolverMock,
+            $this->httpContextMock
         );
     }
 

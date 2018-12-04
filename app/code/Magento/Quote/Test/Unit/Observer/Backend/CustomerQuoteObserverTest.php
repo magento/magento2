@@ -160,6 +160,9 @@ class CustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
         $this->customerQuote->execute($this->observerMock);
     }
 
+    /**
+     * @return array
+     */
     public function dispatchDataProvider()
     {
         return [

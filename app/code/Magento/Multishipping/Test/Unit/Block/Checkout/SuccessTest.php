@@ -71,7 +71,7 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
     public function testGetOrderIds()
     {
         $ids = [100, 102, 103];
-        $this->sessionMock->method('getOrderIds')->willReturn($ids);;
+        $this->sessionMock->method('getOrderIds')->willReturn($ids);
 
         $this->assertEquals($ids, $this->model->getOrderIds());
     }

@@ -15,13 +15,14 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method string getTitle()
  * @method \Magento\Widget\Model\Widget\Instance setTitle(string $value)
  * @method \Magento\Widget\Model\Widget\Instance setStoreIds(string $value)
- * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string $value)
+ * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string|array $value)
  * @method int getSortOrder()
  * @method \Magento\Widget\Model\Widget\Instance setSortOrder(int $value)
  * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
  * @method int getThemeId()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
@@ -95,6 +96,16 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @var string[]
      */
     protected $_relatedCacheTypes;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Type
+     */
+    protected $_productType;
+
+    /**
+     * @var \Magento\Widget\Model\Config\Reader
+     */
+    protected $_reader;
 
     /**
      * @var \Magento\Framework\Escaper

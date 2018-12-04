@@ -63,6 +63,9 @@ class DecoratorAbstractTest extends \PHPUnit\Framework\TestCase
         $this->getMockForAbstractClass(\Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class, [$options]);
     }
 
+    /**
+     * @return array
+     */
     public function constructorExceptionDataProvider()
     {
         return [
@@ -86,6 +89,9 @@ class DecoratorAbstractTest extends \PHPUnit\Framework\TestCase
         call_user_func([$decorator, $methodName], null, null);
     }
 
+    /**
+     * @return array
+     */
     public function allMethodsDataProvider()
     {
         $return = [];

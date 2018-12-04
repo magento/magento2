@@ -219,6 +219,11 @@ abstract class Product extends \Magento\Framework\App\Action\Action
 
         try {
             $product = $this->productRepository->getById($productId);
+
+            if (!in_array($this->storeManager->getStore()->getWebsiteId(), $product->getWebsiteIds())) {
+                throw new NoSuchEntityException();
+            }
+
             if (!$product->isVisibleInCatalog() || !$product->isVisibleInSiteVisibility()) {
                 throw new NoSuchEntityException();
             }

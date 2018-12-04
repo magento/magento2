@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="PriceRuleCategoryNestingTest">
+        <annotations>
+            <description value="Category nesting level must be the same as were created in categories."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-88031"/>
+            <group value="sale_rules"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="subcategory1"/>
+            <createData entity="SubCategoryWithParent" stepKey="subcategory2">
+                <requiredEntity createDataKey="subcategory1"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="subcategory3">
+                <requiredEntity createDataKey="subcategory2"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="subcategory4">
+                <requiredEntity createDataKey="subcategory3"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="subcategory5">
+                <requiredEntity createDataKey="subcategory4"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="subcategory1" stepKey="deleteCategory1"/>
+            <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+        <!-- Login as admin and open page for creation new Price Rule -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <amOnPage url="{{PriceRuleNewPage.url}}" stepKey="openCatalogPriceRulePage"/>
+        <waitForPageLoad stepKey="waitCatalogPriceRulePageLoad"/>
+        <!-- Open Conditions section and select Categories condition -->
+        <click selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="openConditionsSection"/>
+        <scrollTo selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="scrollToConditionsTab"/>
+        <click selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="createNewRule"/>
+        <selectOption selector="{{PriceRuleConditionsSection.rulesDropdown}}" userInput="Magento\SalesRule\Model\Rule\Condition\Product\Found" stepKey="selectProductAttributes"/>
+        <waitForAjaxLoad stepKey="ajaxLoad1"/>
+        <waitForElement selector="{{PriceRuleConditionsSection.addProductAttributesButton}}" stepKey="wait1"/>
+        <scrollTo selector="{{PriceRuleConditionsSection.addProductAttributesButton}}" stepKey="scrollToAddProductAttributeButton"/>
+        <click selector="{{PriceRuleConditionsSection.addProductAttributesButton}}" stepKey="clickToshowAttributes"/>
+        <selectOption selector="{{PriceRuleConditionsSection.productAttributesDropdown}}" userInput="Magento\SalesRule\Model\Rule\Condition\Product|category_ids" stepKey="selectCategoryAttribute"/>
+        <waitForAjaxLoad stepKey="ajaxLoad2"/>
+        <!-- Select categories chooser -->
+        <waitForElement selector="{{PriceRuleConditionsSection.changeCategoriesButton}}" stepKey="wait2"/>
+        <click selector="{{PriceRuleConditionsSection.changeCategoriesButton}}" stepKey="changeCategories"/>
+        <click selector="{{PriceRuleConditionsSection.categoriesChooser}}" stepKey="showCategoriesChooser"/>
+        <waitForAjaxLoad stepKey="ajaxLoad3"/>
+        <!-- Click on categories to check that the deepest subcategory is clickable -->
+        <waitForElement selector="{{PriceRuleConditionsSection.treeRoot}}" stepKey="wait3"/>
+        <click selector="{{PriceRuleConditionsSection.lastTreeNode}}" stepKey="openLatestTreeNode1"/>
+        <click selector="{{PriceRuleConditionsSection.lastTreeNode}}" stepKey="openLatestTreeNode2"/>
+        <click selector="{{PriceRuleConditionsSection.lastTreeNode}}" stepKey="openLatestTreeNode3"/>
+        <waitForAjaxLoad stepKey="ajaxLoad4"/>
+        <waitForElement selector="{{PriceRuleConditionsSection.subcategory4level}}" stepKey="wait4"/>
+        <click selector="{{PriceRuleConditionsSection.subcategory4level}}" stepKey="openLatestTreeNode4"/>
+    </test>
+</tests>

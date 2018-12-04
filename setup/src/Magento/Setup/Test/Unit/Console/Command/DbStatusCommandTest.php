@@ -85,6 +85,9 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedCode, $tester->getStatusCode());
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [

@@ -1313,8 +1313,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $address = null)
     {
-        $old = $this->getBillingAddress();
-
+        $old = $this->getAddressesCollection()->getItemById($address->getId()) ?? $this->getBillingAddress();
         if (!empty($old)) {
             $old->addData($address->getData());
         } else {
@@ -1334,7 +1333,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if ($this->getIsMultiShipping()) {
             $this->addAddress($address->setAddressType(Address::TYPE_SHIPPING));
         } else {
-            $old = $this->getShippingAddress();
+            $old = $this->getAddressesCollection()->getItemById($address->getId()) ?? $this->getShippingAddress();
             if (!empty($old)) {
                 $old->addData($address->getData());
             } else {
@@ -1400,7 +1399,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
-            if (!$item->isDeleted() && !$item->getParentItemId()) {
+            if (!$item->isDeleted() && !$item->getParentItemId() && !$item->getParentItem()) {
                 $items[] = $item;
             }
         }
@@ -1609,7 +1608,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
          * Error message
          */
         if (is_string($cartCandidates) || $cartCandidates instanceof \Magento\Framework\Phrase) {
-            return strval($cartCandidates);
+            return (string)$cartCandidates;
         }
 
         /**
@@ -2022,7 +2021,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         foreach ($this->getMessages() as $message) {
             /* @var $error \Magento\Framework\Message\AbstractMessage */
             if ($message->getType() == \Magento\Framework\Message\MessageInterface::TYPE_ERROR) {
-                array_push($errors, $message);
+                $errors[] = $message;
             }
         }
         return $errors;
@@ -2302,7 +2301,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getIsVirtual()
     {
-        return intval($this->isVirtual());
+        return (int)$this->isVirtual();
     }
 
     /**
@@ -2342,6 +2341,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             foreach ($this->getAllItems() as $quoteItem) {
                 if ($quoteItem->compare($item)) {
                     $quoteItem->setQty($quoteItem->getQty() + $item->getQty());
+                    $this->itemProcessor->merge($item, $quoteItem);
                     $found = true;
                     break;
                 }
@@ -2389,8 +2389,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         // collect totals and save me, if required
         if (1 == $this->getTriggerRecollect()) {
-            $this->collectTotals()->save();
-            $this->setTriggerRecollect(0);
+            $this->collectTotals()
+                ->setTriggerRecollect(0)
+                ->save();
         }
         return parent::_afterLoad();
     }

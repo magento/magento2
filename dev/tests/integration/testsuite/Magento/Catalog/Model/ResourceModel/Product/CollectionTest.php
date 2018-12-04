@@ -44,11 +44,13 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testAddPriceDataOnSchedule()
     {
         $this->processor->getIndexer()->setScheduled(true);
         $this->assertTrue($this->processor->getIndexer()->isScheduled());
+
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
@@ -80,7 +82,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $product = reset($items);
         $this->assertCount(2, $items);
         $this->assertEquals(15, $product->getPrice());
-        $this->processor->getIndexer()->reindexList([1]);
 
         $this->processor->getIndexer()->setScheduled(false);
     }
@@ -88,6 +89,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testAddPriceDataOnSave()
     {
@@ -123,6 +125,36 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(3, $tierPrices);
         $this->assertEquals(50, $tierPrices[2]->getExtensionAttributes()->getPercentageValue());
         $this->assertEquals(5, $tierPrices[2]->getValue());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoDbIsolation disabled
+     */
+    public function testGetProductsWithSpecialPrice()
+    {
+        $product = $this->productRepository->get('simple');
+        $originalFinalPrice = $product->getFinalPrice();
+
+        $specialPrice = 9;
+        $product->setSpecialPrice($specialPrice);
+        $product = $this->productRepository->save($product);
+        /** @var \Magento\Catalog\Model\Product $item */
+        $item = $this->collection->addIdFilter($product->getId())
+            ->addPriceData()
+            ->getFirstItem();
+        $item->setPriceCalculation(false);
+        $this->assertEquals($specialPrice, $item->getFinalPrice());
+
+        $product->setSpecialPrice(null);
+        $product = $this->productRepository->save($product);
+        /** @var \Magento\Catalog\Model\Product $item */
+        $item = $this->collection->clear()
+            ->addIdFilter($product->getId())
+            ->addPriceData()
+            ->getFirstItem();
+        $item->setPriceCalculation(false);
+        $this->assertEquals($originalFinalPrice, $item->getFinalPrice());
     }
 
     /**
@@ -184,5 +216,16 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             . ' AND (alias.entity_type = \'product\')';
 
         self::assertContains($expected, str_replace(PHP_EOL, '', $sql));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
+     * @magentoDbIsolation enabled
+     */
+    public function testAddAttributeToFilterAffectsGetSize()
+    {
+        $this->assertEquals(10, $this->collection->getSize());
+        $this->collection->addAttributeToFilter('sku', 'Product1');
+        $this->assertEquals(1, $this->collection->getSize());
     }
 }

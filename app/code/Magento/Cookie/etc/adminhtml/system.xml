@@ -22,7 +22,7 @@
                     <label>Cookie Domain</label>
                     <backend_model>Magento\Cookie\Model\Config\Backend\Domain</backend_model>
                 </field>
-                <field id="cookie_httponly" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="cookie_httponly" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use HTTP Only</label>
                     <comment>
                         <![CDATA[<strong style="color:red">Warning</strong>:  Do not set to "No". User security could be compromised.]]>

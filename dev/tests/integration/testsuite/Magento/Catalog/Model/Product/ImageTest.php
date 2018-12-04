@@ -23,15 +23,15 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product\Image::class
         );
-        /** @var \Magento\Catalog\Model\View\Asset\Placeholder $defualtPlaceholder */
-        $defualtPlaceholder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        /** @var \Magento\Catalog\Model\View\Asset\Placeholder $defaultPlaceholder */
+        $defaultPlaceholder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Model\View\Asset\Placeholder::class,
                 ['type' => 'image']
             );
 
         $model->setDestinationSubdir('image');
         $model->setBaseFile('');
-        $this->assertEquals($defualtPlaceholder->getSourceFile(), $model->getBaseFile());
+        $this->assertEquals($defaultPlaceholder->getSourceFile(), $model->getBaseFile());
         return $model;
     }
 

@@ -246,7 +246,8 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
 
         //assert price wrapper
         $this->assertEquals(
-            '<div class="price-box price-final_price" data-role="priceBox" data-product-id="">test</div>',
+            '<div class="price-box price-final_price" data-role="priceBox" data-product-id="" ' .
+            'data-price-box="product-id-">test</div>',
             $result
         );
     }
@@ -346,6 +347,9 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->object->hasSpecialPrice());
     }
 
+    /**
+     * @return array
+     */
     public function hasSpecialPriceProvider()
     {
         return [

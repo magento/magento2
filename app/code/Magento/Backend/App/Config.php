@@ -68,6 +68,6 @@ class Config implements ConfigInterface
         if ($path) {
             $configPath .= '/' . $path;
         }
-        return (bool) $this->appConfig->get(System::CONFIG_TYPE, $configPath);
+        return (bool)$this->appConfig->get(System::CONFIG_TYPE, $configPath);
     }
 }

@@ -293,7 +293,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             foreach ($methods as $code => $title) {
                 if (isset($groups[$code])) {
                     $labelValues[$code]['label'] = $title;
-                    $labelValues[$code]['value'] = null;
+                    if (!isset($labelValues[$code]['value'])) {
+                        $labelValues[$code]['value'] = null;
+                    }
                 } elseif (isset($groupRelations[$code])) {
                     unset($labelValues[$code]);
                     $labelValues[$groupRelations[$code]]['value'][$code] = ['value' => $code, 'label' => $title];

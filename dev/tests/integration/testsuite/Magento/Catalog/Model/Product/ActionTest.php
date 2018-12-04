@@ -42,7 +42,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testUpdateWebsites()
@@ -90,6 +90,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      * @param string $status
      * @param string $productsCount
      * @dataProvider updateAttributesDataProvider
+     * @magentoDbIsolation disabled
      */
     public function testUpdateAttributes($status, $productsCount)
     {

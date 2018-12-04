@@ -87,7 +87,7 @@ class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
                 'paymentGateway' => 'paypal_account',
                 'transactionId' => $payment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),
-                'avsResponseCode' => 'U',
+                'avsResponseCode' => '',
                 'cvvResponseCode' => '',
                 'orderChannel' => 'WEB',
                 'totalPrice' => $order->getGrandTotal(),

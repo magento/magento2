@@ -28,7 +28,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $this->response = $this->createPartialMock(
             \Magento\Framework\HTTP\PhpEnvironment\Response::class,
-            ['setHeader', 'sendHeaders']
+            ['setHeader', 'sendHeaders', 'setHeaders']
         );
         $this->mime = $this->createMock(\Magento\Framework\File\Mime::class);
         $this->object = new Http($this->response, $this->mime);
@@ -56,6 +56,28 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->object->send($file);
     }
 
+    public function testSendWithOptions()
+    {
+        $file = __DIR__ . '/../../_files/javascript.js';
+        $contentType = 'content/type';
+
+        $headers = $this->getMockBuilder(\Zend\Http\Headers::class)->getMock();
+        $this->response->expects($this->atLeastOnce())
+            ->method('setHeader')
+            ->withConsecutive(['Content-length', filesize($file)], ['Content-Type', $contentType]);
+        $this->response->expects($this->atLeastOnce())
+            ->method('setHeaders')
+            ->with($headers);
+        $this->response->expects($this->once())
+            ->method('sendHeaders');
+        $this->mime->expects($this->once())
+            ->method('getMimeType')
+            ->with($file)
+            ->will($this->returnValue($contentType));
+        $this->expectOutputString(file_get_contents($file));
+
+        $this->object->send(['filepath' => $file, 'headers' => $headers]);
+    }
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Filename is not set

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryTest">
+        <annotations>
+            <features value="Category Creation"/>
+            <stories value="Create a Category via the Admin"/>
+            <title value="You should be able to create a Category in the admin back-end."/>
+            <description value="You should be able to create a Category in the admin back-end."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-72102"/>
+            <group value="category"/>
+        </annotations>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="enterURLKey"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
+
+        <!-- Literal URL below, need to refactor line + StorefrontCategoryPage when support for variable URL is implemented-->
+        <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
+        <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertTitle"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="assertInfo1"/>
+    </test>
+</tests>

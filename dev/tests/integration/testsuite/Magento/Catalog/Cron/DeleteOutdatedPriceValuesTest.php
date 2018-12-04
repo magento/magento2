@@ -49,7 +49,7 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoConfigFixture current_store catalog/price/scope 1
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testExecute()

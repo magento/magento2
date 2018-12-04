@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminSimpleProductImagesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add images of different types and sizes to Simple Product"/>
+            <description value="Admin should be able to add images of different types and sizes to Simple Product"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-76315"/>
+            <group value="catalog"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="_defaultProduct" stepKey="firstProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="secondProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="category" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Go to the first product edit page -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProductOnBackend1">
+            <argument name="product" value="$$firstProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductOnBackend1">
+            <argument name="product" value="$$firstProduct$$"/>
+        </actionGroup>
+
+        <!-- Set url key -->
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="$$firstProduct.name$$" stepKey="fillUrlKey"/>
+
+        <click selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="expandImages"/>
+
+        <!-- *.bmp is not allowed -->
+        <actionGroup ref="AdminProductCheckUnsupportedFileActionGroup" stepKey="attachBmp">
+            <argument name="filename" value="bmp.bmp"/>
+        </actionGroup>
+
+        <!-- *.ico is not allowed -->
+        <actionGroup ref="AdminProductCheckUnsupportedFileActionGroup" stepKey="attachIco">
+            <argument name="filename" value="ico.ico"/>
+        </actionGroup>
+
+        <!-- *.svg is not allowed -->
+        <actionGroup ref="AdminProductCheckUnsupportedFileActionGroup" stepKey="attachSvg">
+            <argument name="filename" value="svg.svg"/>
+        </actionGroup>
+
+
+        <!-- 0kb size is not allowed -->
+        <actionGroup ref="AdminProductCheckUnsupportedFileActionGroup" stepKey="attachEmpty">
+            <argument name="filename" value="empty.jpg"/>
+        </actionGroup>
+
+        <!-- 1~ kb is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="small.jpg" stepKey="attachSmall"/>
+        <waitForPageLoad stepKey="waitForUploadSmall"/>
+        <dontSeeElement selector="{{AdminConfirmationModalSection.message}}" stepKey="dontSeeErrorSmall"/>
+
+        <!-- 1~ mb is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="medium.jpg" stepKey="attachMedium"/>
+        <waitForPageLoad stepKey="waitForUploadMedium"/>
+        <dontSeeElement selector="{{AdminConfirmationModalSection.message}}" stepKey="dontSeeErrorMedium"/>
+
+        <!-- 10~ mb is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="large.jpg" stepKey="attachLarge"/>
+        <waitForPageLoad stepKey="waitForUploadLarge"/>
+        <dontSeeElement selector="{{AdminConfirmationModalSection.message}}" stepKey="dontSeeErrorLarge"/>
+
+        <!-- *.gif is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="gif.gif" stepKey="attachGif"/>
+        <waitForPageLoad stepKey="waitForUploadGif"/>
+        <dontSeeElement selector="{{AdminConfirmationModalSection.message}}" stepKey="dontSeeErrorGif"/>
+
+        <!-- *.jpg is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="jpg.jpg" stepKey="attachJpg"/>
+        <waitForPageLoad stepKey="waitForUploadJpg"/>
+        <dontSeeElement selector="{{AdminConfirmationModalSection.message}}" stepKey="dontSeeErrorJpg"/>
+
+        <!-- *.png is allowed -->
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="png.png" stepKey="attachPng"/>
+        <waitForPageLoad stepKey="waitForUploadPng"/>
+        <dontSeeElement selector="{{AdminConfirmationModalSection.message}}" stepKey="dontSeeErrorPng"/>
+
+        <!-- Save the first product and go to the storefront -->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <amOnPage url="{{StorefrontProductPage.url($$firstProduct.name$$)}}" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront1"/>
+
+        <!-- See all of the images that we uploaded -->
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('small')}}" stepKey="seeSmall"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('medium')}}" stepKey="seeMedium"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('gif')}}" stepKey="seeGif"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('jpg')}}" stepKey="seeJpg"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('png')}}" stepKey="seePng"/>
+
+        <!-- Go to the category page and see a placeholder image for the second product -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="goToCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.categoryPageProductImagePlaceholderSmall}}" stepKey="seePlaceholder"/>
+
+        <!-- Go to the second product edit page -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex2"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid2"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProductOnBackend2">
+            <argument name="product" value="$$secondProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductOnBackend2">
+            <argument name="product" value="$$secondProduct$$"/>
+        </actionGroup>
+
+        <!-- Upload an image -->
+        <click selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="expandImages2"/>
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="large.jpg" stepKey="attachLarge2"/>
+        <waitForPageLoad stepKey="waitForUploadLarge2"/>
+        <dontSeeElement selector="{{AdminConfirmationModalSection.message}}" stepKey="dontSeeErrorLarge2"/>
+
+        <!-- Set url key -->
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection2"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="$$secondProduct.name$$" stepKey="fillUrlKey2"/>
+
+        <!-- Save the second product -->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
+
+        <!-- Go to the admin grid and see the uploaded image -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex3"/>
+        <waitForPageLoad stepKey="wait3"/>
+        <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid3"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProductOnBackend3">
+            <argument name="product" value="$$secondProduct$$"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductGridSection.adminImgGridThumbnail('large')}}" stepKey="seeImgInGrid"/>
+
+        <!-- Go to the category page and see the uploaded image -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="goToCategoryPage2"/>
+        <waitForPageLoad stepKey="waitForStorefront2"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.categoryPageProductImage('large')}}" stepKey="seeUploadedImg"/>
+
+        <!-- Go to the product page and see the uploaded image -->
+        <amOnPage url="{{StorefrontProductPage.url($$secondProduct.name$$)}}" stepKey="goToStorefront2"/>
+        <waitForPageLoad stepKey="waitForStorefront3"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
+    </test>
+</tests>

@@ -6,6 +6,7 @@
 
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
+use Magento\Framework\DB\Select;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Address;
 
@@ -209,7 +210,9 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 $andWhereCondition = implode(' AND ', $andWhereConditions);
 
                 $select->where(
-                    $noCouponWhereCondition . ' OR ((' . $orWhereCondition . ') AND ' . $andWhereCondition . ')'
+                    $noCouponWhereCondition . ' OR ((' . $orWhereCondition . ') AND ' . $andWhereCondition . ')',
+                    null,
+                    Select::TYPE_CONDITION
                 );
             } else {
                 $this->addFieldToFilter(
@@ -320,7 +323,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         $this->getSelect()->where(
             sprintf('(%s OR %s)', $cCond, $aCond),
             null,
-            \Magento\Framework\DB\Select::TYPE_CONDITION
+            Select::TYPE_CONDITION
         );
 
         return $this;

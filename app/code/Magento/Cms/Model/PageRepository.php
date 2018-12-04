@@ -110,7 +110,7 @@ class PageRepository implements PageRepositoryInterface
      */
     public function save(\Magento\Cms\Api\Data\PageInterface $page)
     {
-        if (empty($page->getStoreId())) {
+        if ($page->getStoreId() === null) {
             $storeId = $this->storeManager->getStore()->getId();
             $page->setStoreId($storeId);
         }

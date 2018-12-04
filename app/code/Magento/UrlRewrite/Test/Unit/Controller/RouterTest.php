@@ -6,9 +6,8 @@
 
 namespace Magento\UrlRewrite\Test\Unit\Controller;
 
-use Magento\Framework\App\Action\Redirect;
+use Magento\Framework\App\Action\Forward;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Store\Model\Store;
 
@@ -87,7 +86,6 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $currentStoreId = 'current-store-id';
         $rewriteEntityType = 'entity-type';
         $rewriteEntityId = 42;
-        $redirectUrl = '/' . $newRequestPath;
 
         $this->request
             ->expects($this->any())
@@ -141,38 +139,16 @@ class RouterTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         UrlRewrite::REQUEST_PATH => $initialRequestPath,
-                        UrlRewrite::STORE_ID     => $oldStoreId,
-                    ],
-                    $oldUrlRewrite,
-                ],
-                [
-                    [
-                        UrlRewrite::ENTITY_TYPE   => $rewriteEntityType,
-                        UrlRewrite::ENTITY_ID     => $rewriteEntityId,
-                        UrlRewrite::STORE_ID      => $currentStoreId,
-                        UrlRewrite::REDIRECT_TYPE => 0,
+                        UrlRewrite::STORE_ID     => $currentStoreId,
                     ],
                     $urlRewrite,
-                ],
+                ]
             ]);
 
-        $this->url
-            ->expects($this->once())
-            ->method('getUrl')
-            ->with('', ['_direct' => $newRequestPath])
-            ->willReturn($redirectUrl);
-        $this->response
-            ->expects($this->once())
-            ->method('setRedirect')
-            ->with($redirectUrl, OptionProvider::TEMPORARY);
-        $this->request
-            ->expects($this->once())
-            ->method('setDispatched')
-            ->with(true);
         $this->actionFactory
             ->expects($this->once())
             ->method('create')
-            ->with(Redirect::class);
+            ->with(Forward::class);
 
         $this->router->match($this->request);
     }

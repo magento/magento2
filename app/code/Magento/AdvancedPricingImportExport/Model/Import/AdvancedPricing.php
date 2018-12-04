@@ -8,7 +8,6 @@ namespace Magento\AdvancedPricingImportExport\Model\Import;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class AdvancedPricing
@@ -619,6 +618,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Get product entity link field
      *
      * @return string
+     * @throws \Exception
      */
     private function getProductEntityLinkField()
     {

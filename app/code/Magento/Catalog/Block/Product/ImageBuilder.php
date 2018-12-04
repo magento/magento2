@@ -146,6 +146,7 @@ class ImageBuilder
                 'custom_attributes' => $this->getCustomAttributes(),
                 'resized_image_width' => $imagesize[0],
                 'resized_image_height' => $imagesize[1],
+                'product_id' => $this->product->getId()
             ],
         ];
 

@@ -321,7 +321,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     protected function getTypeValue($type)
     {
-        return isset($this->typeMapping[$type]) ? $this->typeMapping[$type] : self::VALUE_DYNAMIC;
+        return $this->typeMapping[$type] ?? self::VALUE_DYNAMIC;
     }
 
     /**
@@ -332,7 +332,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     protected function getPriceViewValue($type)
     {
-        return isset($this->priceViewMapping[$type]) ? $this->priceViewMapping[$type] : self::VALUE_PRICE_RANGE;
+        return $this->priceViewMapping[$type] ?? self::VALUE_PRICE_RANGE;
     }
 
     /**
@@ -343,7 +343,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     protected function getPriceTypeValue($type)
     {
-        return isset($this->priceTypeMapping[$type]) ? $this->priceTypeMapping[$type] : null;
+        return $this->priceTypeMapping[$type] ?? null;
     }
 
     /**
@@ -354,7 +354,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     private function getShipmentTypeValue($type)
     {
-        return isset($this->shipmentTypeMapping[$type]) ? $this->shipmentTypeMapping[$type] : null;
+        return $this->shipmentTypeMapping[$type] ?? null;
     }
 
     /**

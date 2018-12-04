@@ -219,7 +219,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $sql = $this->getSelectCountSql();
             $this->_totalRecords = $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
-        return intval($this->_totalRecords);
+        return (int)$this->_totalRecords;
     }
 
     /**
@@ -629,7 +629,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Overridden to use _idFieldName by default.
      *
-     * @param null $valueField
+     * @param string|null $valueField
      * @param string $labelField
      * @param array $additional
      * @return array

@@ -188,7 +188,7 @@ class Less implements ProcessorInterface
             if (!isset($this->map[$filePath])) {
                 $this->map[$filePath] = [];
             }
-            array_push($this->map[$filePath], $resolvedMapPath);
+            $this->map[$filePath][] = $resolvedMapPath;
             $this->buildMap($resolvedMapPath, $packagePath, $contentType);
         };
         if ($content) {

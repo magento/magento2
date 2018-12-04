@@ -31,6 +31,11 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $productResource;
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -39,6 +44,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->get(ProductRepositoryInterface::class);
         $this->productResource = Bootstrap::getObjectManager()
             ->get(ProductResource::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
     }
 
     /**
@@ -143,5 +150,100 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             $nameUpdated,
             $product->getName()
         );
+    }
+
+    /**
+     * Check a case when product should be retrieved with different SKU variations.
+     *
+     * @param string $sku
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @dataProvider skuDataProvider
+     */
+    public function testGetProduct(string $sku)
+    {
+        $expectedSku = 'simple';
+        $product = $this->productRepository->get($sku);
+
+        self::assertNotEmpty($product);
+        self::assertEquals($expectedSku, $product->getSku());
+    }
+
+    /**
+     * Get list of SKU variations for the same product.
+     *
+     * @return array
+     */
+    public function skuDataProvider(): array
+    {
+        return [
+            ['sku' => 'simple'],
+            ['sku' => 'Simple'],
+            ['sku' => 'simple ']
+        ];
+    }
+
+    /**
+     * Checks filtering by store_id.
+     *
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @return void
+     */
+    public function testFilterByStoreId()
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('store_id', '1', 'eq')
+            ->create();
+        $list = $this->productRepository->getList($searchCriteria);
+        $count = $list->getTotalCount();
+
+        $this->assertGreaterThanOrEqual(1, $count);
+    }
+
+    /**
+     * Test save product with gallery image
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_image.php
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function testSaveProductWithGalleryImage()
+    {
+        /** @var $mediaConfig \Magento\Catalog\Model\Product\Media\Config */
+        $mediaConfig = Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Model\Product\Media\Config::class);
+
+        /** @var $mediaDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        $mediaDirectory = Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Filesystem::class)
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+
+        $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+        $product->load(1);
+
+        $path = $mediaConfig->getBaseMediaPath() . '/magento_image.jpg';
+        $absolutePath = $mediaDirectory->getAbsolutePath() . $path;
+        $product->addImageToMediaGallery($absolutePath, [
+            'image',
+            'small_image',
+        ], false, false);
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository->save($product);
+
+        $gallery = $product->getData('media_gallery');
+        $this->assertArrayHasKey('images', $gallery);
+        $images = array_values($gallery['images']);
+
+        $this->assertNotEmpty($gallery);
+        $this->assertTrue(isset($images[0]['file']));
+        $this->assertStringStartsWith('/m/a/magento_image', $images[0]['file']);
+        $this->assertArrayHasKey('media_type', $images[0]);
+        $this->assertEquals('image', $images[0]['media_type']);
+        $this->assertStringStartsWith('/m/a/magento_image', $product->getData('image'));
+        $this->assertStringStartsWith('/m/a/magento_image', $product->getData('small_image'));
     }
 }

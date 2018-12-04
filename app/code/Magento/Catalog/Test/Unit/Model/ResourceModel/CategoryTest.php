@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 
 use Magento\Catalog\Model\Factory;
+use Magento\Catalog\Model\Indexer\Category\Product\Processor;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Eav\Model\Config;
@@ -92,6 +93,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     private $serializerMock;
 
     /**
+     * @var Processor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $indexerProcessorMock;
+
+    /**
      * {@inheritDoc}
      */
     protected function setUp()
@@ -121,6 +127,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->indexerProcessorMock = $this->getMockBuilder(Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->serializerMock = $this->getMockBuilder(Json::class)->getMock();
 
@@ -132,7 +141,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             $this->treeFactoryMock,
             $this->collectionFactoryMock,
             [],
-            $this->serializerMock
+            $this->serializerMock,
+            $this->indexerProcessorMock
         );
     }
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminProductAttributeSetGridSection">
+        <element name="attributeSetName" type="text" selector="//td[contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="attributeSetNameFilter" type="input" selector="#setGrid_filter_set_name"/>
+        <element name="applyFilterButton" type="button" selector="#setGrid [data-action='grid-filter-apply']" timeout="30"/>
+        <element name="attributeSetRowByIndex" type="block" selector="#setGrid_table tbody tr:nth-of-type({{var1}})" parameterized="true"/>
+        <element name="addAttributeSetBtn" type="button" selector="button.add-set" timeout="30"/>
+        <element name="deleteOptionByName" type="button" selector="//*[contains(@value, '{{arg}}')]/../following-sibling::td[contains(@class, 'delete')]/button" parameterized="true"/>
+    </section>
+</sections>

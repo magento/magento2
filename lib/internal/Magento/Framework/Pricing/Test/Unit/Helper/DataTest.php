@@ -50,6 +50,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $helper->currency($amount, $format, $includeContainer));
     }
 
+    /**
+     * @return array
+     */
     public function currencyDataProvider()
     {
         return [
@@ -84,6 +87,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $helper->currencyByStore($amount, $store, $format, $includeContainer));
     }
 
+    /**
+     * @return array
+     */
     public function currencyByStoreDataProvider()
     {
         return [

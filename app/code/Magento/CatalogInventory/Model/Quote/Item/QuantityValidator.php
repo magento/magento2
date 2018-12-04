@@ -16,10 +16,12 @@ use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Stoc
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuantityValidator
 {
@@ -66,7 +68,7 @@ class QuantityValidator
      * Add error information to Quote Item
      *
      * @param \Magento\Framework\DataObject $result
-     * @param \Magento\Quote\Model\Quote\Item $quoteItem
+     * @param Item $quoteItem
      * @param bool $removeError
      * @return void
      */
@@ -99,12 +101,11 @@ class QuantityValidator
      */
     public function validate(Observer $observer)
     {
-        /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
+        /* @var $quoteItem Item */
         $quoteItem = $observer->getEvent()->getItem();
         if (!$quoteItem ||
             !$quoteItem->getProductId() ||
-            !$quoteItem->getQuote() ||
-            $quoteItem->getQuote()->getIsSuperMode()
+            !$quoteItem->getQuote()
         ) {
             return;
         }
@@ -115,6 +116,18 @@ class QuantityValidator
         $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
         if (!$stockItem instanceof StockItemInterface) {
             throw new LocalizedException(__('The stock item for Product is not valid.'));
+        }
+
+        if (($options = $quoteItem->getQtyOptions()) && $qty > 0) {
+            foreach ($options as $option) {
+                $this->optionInitializer->initialize($option, $quoteItem, $qty);
+            }
+        } else {
+            $this->stockItemInitializer->initialize($stockItem, $quoteItem, $qty);
+        }
+
+        if ($quoteItem->getQuote()->getIsSuperMode()) {
+            return;
         }
 
         /* @var \Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus */
@@ -159,41 +172,17 @@ class QuantityValidator
         /**
          * Check item for options
          */
-        if (($options = $quoteItem->getQtyOptions()) && $qty > 0) {
+        if ($options) {
             $qty = $product->getTypeInstance()->prepareQuoteItemQty($qty, $product);
             $quoteItem->setData('qty', $qty);
             if ($stockStatus) {
-                $result = $this->stockState->checkQtyIncrements(
-                    $product->getId(),
-                    $qty,
-                    $product->getStore()->getWebsiteId()
-                );
-                if ($result->getHasError()) {
-                    $quoteItem->addErrorInfo(
-                        'cataloginventory',
-                        Data::ERROR_QTY_INCREMENTS,
-                        $result->getMessage()
-                    );
-
-                    $quoteItem->getQuote()->addErrorInfo(
-                        $result->getQuoteMessageIndex(),
-                        'cataloginventory',
-                        Data::ERROR_QTY_INCREMENTS,
-                        $result->getQuoteMessage()
-                    );
-                } else {
-                    // Delete error from item and its quote, if it was set due to qty problems
-                    $this->_removeErrorsFromQuoteAndItem(
-                        $quoteItem,
-                        Data::ERROR_QTY_INCREMENTS
-                    );
-                }
+                $this->checkOptionsQtyIncrements($quoteItem, $options);
             }
             // variable to keep track if we have previously encountered an error in one of the options
             $removeError = true;
 
             foreach ($options as $option) {
-                $result = $this->optionInitializer->initialize($option, $quoteItem, $qty);
+                $result = $option->getStockStateResult();
                 if ($result->getHasError()) {
                     $option->setHasError(true);
                     //Setting this to false, so no error statuses are cleared
@@ -206,7 +195,7 @@ class QuantityValidator
             }
         } else {
             if ($quoteItem->getParentItem() === null) {
-                $result = $this->stockItemInitializer->initialize($stockItem, $quoteItem, $qty);
+                $result = $quoteItem->getStockStateResult();
                 if ($result->getHasError()) {
                     $this->addErrorInfoToQuote($result, $quoteItem);
                 } else {
@@ -217,9 +206,43 @@ class QuantityValidator
     }
 
     /**
+     * Verifies product options quantity increments.
+     *
+     * @param Item $quoteItem
+     * @param array $options
+     * @return void
+     */
+    private function checkOptionsQtyIncrements(Item $quoteItem, array $options)
+    {
+        $removeErrors = true;
+        foreach ($options as $option) {
+            $result = $this->stockState->checkQtyIncrements(
+                $option->getProduct()->getId(),
+                $quoteItem->getData('qty'),
+                $option->getProduct()->getStore()->getWebsiteId()
+            );
+            if ($result->getHasError()) {
+                $quoteItem->getQuote()->addErrorInfo(
+                    $result->getQuoteMessageIndex(),
+                    'cataloginventory',
+                    Data::ERROR_QTY_INCREMENTS,
+                    $result->getQuoteMessage()
+                );
+
+                $removeErrors = false;
+            }
+        }
+
+        if ($removeErrors) {
+            // Delete error from item and its quote, if it was set due to qty problems
+            $this->_removeErrorsFromQuoteAndItem($quoteItem, Data::ERROR_QTY_INCREMENTS);
+        }
+    }
+
+    /**
      * Removes error statuses from quote and item, set by this observer
      *
-     * @param \Magento\Quote\Model\Quote\Item $item
+     * @param Item $item
      * @param int $code
      * @return void
      */

@@ -137,7 +137,7 @@ define([
                 },
                 onSuccess: function (transport) {
                     if (this._processSuccess(transport)) {
-                        $(chooser).update(transport.responseText);
+                        jQuery(chooser).html(transport.responseText);
                         this.showChooserLoaded(chooser, transport);
                         jQuery(chooser).trigger('contentUpdated');
                     }
@@ -219,6 +219,8 @@ define([
             var elemContainer = Element.down(container, '.element');
 
             var elem = Element.down(elemContainer, 'input.input-text');
+
+            jQuery(elem).trigger('contentUpdated');
 
             if (elem) {
                 elem.focus();

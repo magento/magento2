@@ -8,8 +8,19 @@ namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Mod
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\CustomOptions as CustomOptionsModifier;
 
+/**
+ * Class for testing custom options in configurable product.
+ */
 class CustomOptionsTest extends AbstractModifierTest
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->arrayManagerMock->expects($this->any())
+            ->method('merge')
+            ->willReturnArgument(1);
+    }
+
     /**
      * {@inheritdoc}
      */

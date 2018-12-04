@@ -79,6 +79,9 @@ class CookieTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_object->getCookieRestrictionLifetime(), 60 * 60 * 24 * 365);
     }
 
+    /**
+     * @return $this
+     */
     protected function _initMock()
     {
         $scopeConfig = $this->_getConfigStub();

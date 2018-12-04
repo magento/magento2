@@ -17,5 +17,5 @@ class Form extends \Magento\Backend\Block\Template
      *
      * @var string
      */
-    protected $_template = 'order/view/form.phtml';
+    protected $_template = 'Magento_Sales::order/view/form.phtml';
 }

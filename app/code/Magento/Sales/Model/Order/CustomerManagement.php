@@ -6,12 +6,18 @@
 
 namespace Magento\Sales\Model\Order;
 
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Quote\Model\Quote\AddressFactory as QuoteAddressFactory;
+use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Class CustomerManagement
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementInterface
 {
@@ -21,17 +27,17 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
     protected $accountManagement;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @deprecated
      */
     protected $customerFactory;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
+     * @deprecated
      */
     protected $addressFactory;
 
     /**
-     * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
+     * @deprecated
      */
     protected $regionFactory;
 
@@ -41,14 +47,19 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
     protected $orderRepository;
 
     /**
-     * @var \Magento\Framework\DataObject\Copy
+     * @deprecated
      */
     protected $objectCopyService;
 
     /**
-     * @var \Magento\Quote\Model\Quote\AddressFactory
+     * @var QuoteAddressFactory
      */
     private $quoteAddressFactory;
+
+    /**
+     * @var OrderCustomerExtractor
+     */
+    private $customerExtractor;
 
     /**
      * @param \Magento\Framework\DataObject\Copy $objectCopyService
@@ -57,7 +68,8 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
      * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory
      * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-     * @param \Magento\Quote\Model\Quote\AddressFactory|null $quoteAddressFactory
+     * @param QuoteAddressFactory|null $quoteAddressFactory
+     * @param OrderCustomerExtractor|null $orderCustomerExtractor
      */
     public function __construct(
         \Magento\Framework\DataObject\Copy $objectCopyService,
@@ -66,7 +78,8 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory,
         \Magento\Customer\Api\Data\RegionInterfaceFactory $regionFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory = null
+        QuoteAddressFactory $quoteAddressFactory = null,
+        OrderCustomerExtractor $orderCustomerExtractor = null
     ) {
         $this->objectCopyService = $objectCopyService;
         $this->accountManagement = $accountManagement;
@@ -74,9 +87,10 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
         $this->customerFactory = $customerFactory;
         $this->addressFactory = $addressFactory;
         $this->regionFactory = $regionFactory;
-        $this->quoteAddressFactory = $quoteAddressFactory ?: ObjectManager::getInstance()->get(
-            \Magento\Quote\Model\Quote\AddressFactory::class
-        );
+        $this->quoteAddressFactory = $quoteAddressFactory
+            ?: ObjectManager::getInstance()->get(QuoteAddressFactory::class);
+        $this->customerExtractor = $orderCustomerExtractor
+            ?? ObjectManager::getInstance()->get(OrderCustomerExtractor::class);
     }
 
     /**
@@ -86,50 +100,23 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
     {
         $order = $this->orderRepository->get($orderId);
         if ($order->getCustomerId()) {
-            throw new AlreadyExistsException(__("This order already has associated customer account"));
-        }
-        $customerData = $this->objectCopyService->copyFieldsetToTarget(
-            'order_address',
-            'to_customer',
-            $order->getBillingAddress(),
-            []
-        );
-        $addresses = $order->getAddresses();
-        foreach ($addresses as $address) {
-            if (!$this->isNeededToSaveAddress($address->getData('quote_address_id'))) {
-                continue;
-            }
-            $addressData = $this->objectCopyService->copyFieldsetToTarget(
-                'order_address',
-                'to_customer_address',
-                $address,
-                []
+            throw new AlreadyExistsException(
+                __('This order already has associated customer account')
             );
-            /** @var \Magento\Customer\Api\Data\AddressInterface $customerAddress */
-            $customerAddress = $this->addressFactory->create(['data' => $addressData]);
-            switch ($address->getAddressType()) {
-                case QuoteAddress::ADDRESS_TYPE_BILLING:
-                    $customerAddress->setIsDefaultBilling(true);
-                    break;
-                case QuoteAddress::ADDRESS_TYPE_SHIPPING:
-                    $customerAddress->setIsDefaultShipping(true);
-                    break;
-            }
-
-            if (is_string($address->getRegion())) {
-                /** @var \Magento\Customer\Api\Data\RegionInterface $region */
-                $region = $this->regionFactory->create();
-                $region->setRegion($address->getRegion());
-                $region->setRegionCode($address->getRegionCode());
-                $region->setRegionId($address->getRegionId());
-                $customerAddress->setRegion($region);
-            }
-            $customerData['addresses'][] = $customerAddress;
         }
 
-        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
-        $customer = $this->customerFactory->create(['data' => $customerData]);
+        $customer = $this->customerExtractor->extract($orderId);
+        /** @var AddressInterface[] $filteredAddresses */
+        $filteredAddresses = [];
+        foreach ($customer->getAddresses() as $address) {
+            if ($this->needToSaveAddress($order, $address)) {
+                $filteredAddresses[] = $address;
+            }
+        }
+        $customer->setAddresses($filteredAddresses);
+
         $account = $this->accountManagement->createAccount($customer);
+        $order = $this->orderRepository->get($orderId);
         $order->setCustomerId($account->getId());
         $order->setCustomerIsGuest(0);
         $this->orderRepository->save($order);
@@ -138,21 +125,36 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
     }
 
     /**
-     * Check if we need to save address in address book.
-     *
-     * @param int $quoteAddressId
+     * @param OrderInterface $order
+     * @param AddressInterface $address
      *
      * @return bool
      */
-    private function isNeededToSaveAddress($quoteAddressId)
-    {
-        $saveInAddressBook = true;
+    private function needToSaveAddress(
+        OrderInterface $order,
+        AddressInterface $address
+    ): bool {
+        /** @var OrderAddressInterface|null $orderAddress */
+        $orderAddress = null;
+        if ($address->isDefaultBilling()) {
+            $orderAddress = $order->getBillingAddress();
+        } elseif ($address->isDefaultShipping()) {
+            $orderAddress = $order->getShippingAddress();
+        }
+        if ($orderAddress) {
+            $quoteAddressId = $orderAddress->getData('quote_address_id');
+            if ($quoteAddressId) {
+                /** @var QuoteAddress $quote */
+                $quote = $this->quoteAddressFactory->create()
+                    ->load($quoteAddressId);
+                if ($quote && $quote->getId()) {
+                    return (bool)(int)$quote->getData('save_in_address_book');
+                }
+            }
 
-        $quoteAddress = $this->quoteAddressFactory->create()->load($quoteAddressId);
-        if ($quoteAddress && $quoteAddress->getId()) {
-            $saveInAddressBook = (int)$quoteAddress->getData('save_in_address_book');
+            return true;
         }
 
-        return $saveInAddressBook;
+        return false;
     }
 }

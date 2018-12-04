@@ -32,7 +32,7 @@ class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Wid
     /**
      * Initialize category object in registry
      *
-     * @return Category
+     * @return Category|bool
      */
     protected function _initCategory()
     {
@@ -77,10 +77,11 @@ class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Wid
             if (!($category = $this->_initCategory())) {
                 return;
             }
+            $selected = $this->getRequest()->getPost('selected', '');
             $block = $this->_view->getLayout()->createBlock(
                 \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree::class
             )->setCategoryIds(
-                [$categoryId]
+                explode(',', $selected)
             );
             $this->getResponse()->representJson(
                 $block->getTreeJson($category)

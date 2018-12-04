@@ -63,10 +63,11 @@ abstract class AbstractModifierTest extends \PHPUnit\Framework\TestCase
                 'getAttributes',
                 'getStore',
                 'getAttributeDefaultValue',
-                'getExistsStoreValueFlag'
+                'getExistsStoreValueFlag',
+                'isLockedAttribute'
             ])->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['load', 'getId', 'getConfig'])
+            ->setMethods(['load', 'getId', 'getConfig', 'getBaseCurrency', 'getBaseCurrencyCode'])
             ->getMockForAbstractClass();
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()
@@ -80,9 +81,6 @@ abstract class AbstractModifierTest extends \PHPUnit\Framework\TestCase
             ->willReturnArgument(2);
         $this->arrayManagerMock->expects($this->any())
             ->method('set')
-            ->willReturnArgument(1);
-        $this->arrayManagerMock->expects($this->any())
-            ->method('merge')
             ->willReturnArgument(1);
         $this->arrayManagerMock->expects($this->any())
             ->method('remove')

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SampleBraintreeConfig" type="braintree_config_state">
+        <requiredEntity type="title">SampleTitle</requiredEntity>
+        <requiredEntity type="payment_action">SamplePaymentAction</requiredEntity>
+        <requiredEntity type="environment">SampleEnvironment</requiredEntity>
+        <requiredEntity type="merchant_id">SampleMerchantId</requiredEntity>
+        <requiredEntity type="public_key">SamplePublicKey</requiredEntity>
+        <requiredEntity type="private_key">SamplePrivateKey</requiredEntity>
+    </entity>
+    <entity name="SampleTitle" type="title">
+        <data key="value">Sample Braintree Config</data>
+    </entity>
+    <entity name="SamplePaymentAction" type="payment_action">
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="SampleEnvironment" type="environment">
+        <data key="value">sandbox</data>
+    </entity>
+    <entity name="SampleMerchantId" type="merchant_id">
+        <data key="value">someMerchantId</data>
+    </entity>
+    <entity name="SamplePublicKey" type="public_key">
+        <data key="value">somePublicKey</data>
+    </entity>
+    <entity name="SamplePrivateKey" type="private_key">
+        <data key="value">somePrivateKey</data>
+    </entity>
+
+    <!-- default configuration used to restore Magento config -->
+    <entity name="DefaultBraintreeConfig" type="braintree_config_state">
+        <requiredEntity type="title">DefaultTitle</requiredEntity>
+        <requiredEntity type="payment_action">DefaultPaymentAction</requiredEntity>
+        <requiredEntity type="environment">DefaultEnvironment</requiredEntity>
+        <requiredEntity type="merchant_id">DefaultMerchantId</requiredEntity>
+        <requiredEntity type="public_key">DefaultPublicKey</requiredEntity>
+        <requiredEntity type="private_key">DefaultPrivateKey</requiredEntity>
+        <requiredEntity type="active">DefaultActive</requiredEntity>
+        <requiredEntity type="merchant_account_id">DefaultMerchantAccountId</requiredEntity>
+    </entity>
+    <entity name="DefaultTitle" type="title">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPaymentAction" type="payment_action">
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="DefaultEnvironment" type="environment">
+        <data key="value">sandbox</data>
+    </entity>
+    <entity name="DefaultMerchantId" type="merchant_id">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPublicKey" type="public_key">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPrivateKey" type="private_key">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultActive" type="active">
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultMerchantAccountId" type="merchant_account_id">
+        <data key="value"/>
+    </entity>
+
+    <entity name="SandboxBraintreeConfig" type="braintree_config_state">
+        <requiredEntity type="title">EnabledTitle</requiredEntity>
+        <requiredEntity type="payment_action">AuthorizePaymentAction</requiredEntity>
+        <requiredEntity type="environment">SandboxEnvironment</requiredEntity>
+        <requiredEntity type="merchant_id">EnabledMerchantId</requiredEntity>
+        <requiredEntity type="public_key">EnabledPublicKey</requiredEntity>
+        <requiredEntity type="private_key">EnabledPrivateKey</requiredEntity>
+        <requiredEntity type="active">EnabledActive</requiredEntity>
+        <requiredEntity type="merchant_account_id">EnabledMerchantAccountId</requiredEntity>
+    </entity>
+    <entity name="EnabledTitle" type="title">
+        <data key="value">Credit Card (Braintree)</data>
+    </entity>
+    <entity name="AuthorizePaymentAction" type="payment_action">
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="SandboxEnvironment" type="environment">
+        <data key="value">sandbox</data>
+    </entity>
+    <entity name="EnabledMerchantId" type="merchant_id">
+        <data key="value">d4pdjhxgjfrsmzbf</data>
+    </entity>
+    <entity name="EnabledPublicKey" type="public_key">
+        <data key="value">m7q4wmh43xrgyrst</data>
+    </entity>
+    <entity name="EnabledPrivateKey" type="private_key">
+        <data key="value">67de364080b1b4e2492d7a3de413a572</data>
+    </entity>
+    <entity name="EnabledActive" type="active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnabledMerchantAccountId" type="merchant_account_id">
+        <data key="value">Magneto</data>
+    </entity>
+
+    <entity name="BraintreeCard" type="creditCard">
+        <data key="cc_type">MasterCard</data>
+        <data key="card_number">5105105105105100</data>
+        <data key="exp_month">12</data>
+        <data key="exp_year">20</data>
+        <data key="cvv">113</data>
+    </entity>
+
+</entities>

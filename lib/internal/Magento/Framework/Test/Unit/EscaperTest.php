@@ -103,6 +103,9 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->escaper->escapeJs($data));
     }
 
+    /**
+     * @return array
+     */
     public function escapeJsDataProvider()
     {
         return [

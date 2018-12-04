@@ -123,6 +123,7 @@
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
             <data name="address/data/company" xsi:type="string">Magento</data>
+            <data name="address/data/country_id" xsi:type="string"></data>
             <data name="expectedRequiredFields" xsi:type="array">
                 <item name="2" xsi:type="string">Street Address</item>
                 <item name="3" xsi:type="string">City</item>

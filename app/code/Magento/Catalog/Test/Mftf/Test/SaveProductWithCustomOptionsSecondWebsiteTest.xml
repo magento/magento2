@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="SaveProductWithCustomOptionsAdditionalWebsiteTest">
+        <annotations>
+            <features value="Save a product with Custom Options and assign to a different website"/>
+            <stories value="Purchase a product with Custom Options of different types"/>
+            <title value="You should be able to save a product with custom options assigned to a different website"/>
+            <description value="Custom Options should not be split when saving the product after assigning to a different website"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-92749"/>
+            <group value="product"/>
+        </annotations>
+
+        <after>
+            <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
+        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="addnewWebsite">
+            <argument name="newWebsiteName" value="Second Website"/>
+            <argument name="websiteCode" value="second_website"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStoreGroup">
+            <argument name="website" value="Second Website"/>
+            <argument name="storeGroupName" value="Second Store"/>
+            <argument name="storeGroupCode" value="second_store"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStore">
+            <argument name="storeGroup" value="secondStoreGroup"/>
+            <argument name="customStore" value="secondStore"/>
+        </actionGroup>
+
+        <!--Create a Simple Product with Custom Options -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
+        <waitForPageLoad time="30" stepKey="waitForProductsGridPageLoad"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+
+        <!--Click Customizable Options-->
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
+        <waitForPageLoad stepKey="waitAfterAddOption"/>
+        <fillField selector="input[name='product[options][0][title]']" userInput="Radio Option" stepKey="fillOptionTitle"/>
+        <click selector=".admin__dynamic-rows[data-index='options'] .action-select" stepKey="openOptionTypeDropDown"/>
+        <click selector=".admin__dynamic-rows[data-index='options'] .action-menu._active li:nth-of-type(3) li:nth-of-type(2)" stepKey="selectRadioButtonType"/>
+
+        <!--Add Option Values -->
+        <click selector="{{AdminProductCustomizableOptionsSection.clickAddValue('Radio Option')}}" stepKey="clickAddValue1"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '0')}}" userInput="option 1" stepKey="fillOptionValueTitle1"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '0')}}" userInput="5" stepKey="fillOptionValuePrice1"/>
+
+        <click selector="{{AdminProductCustomizableOptionsSection.clickAddValue('Radio Option')}}" stepKey="clickAddValue2"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '1')}}" userInput="option 2" stepKey="fillOptionValueTitle2"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '1')}}" userInput="6" stepKey="fillOptionValuePrice2"/>
+
+        <click selector="{{AdminProductCustomizableOptionsSection.clickAddValue('Radio Option')}}" stepKey="clickAddValue3"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '2')}}" userInput="option 3" stepKey="fillOptionValueTitle3"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '2')}}" userInput="7" stepKey="fillOptionValuePrice3"/>
+
+        <!--Save the product with custom options -->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitProductPageSave"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeProductSavedMessage"/>
+
+        <!-- Add this product to second website -->
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsitesSection1"/>
+        <click selector="{{ProductInWebsitesSection.website('Second Website')}}" stepKey="selectSecondWebsite"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForProductPagetoSaveAgain"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
+
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection"/>
+        <scrollTo stepKey="scrollToCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" />
+        <seeNumberOfElements selector=".admin__dynamic-rows[data-index='values'] tr.data-row" userInput="3" stepKey="see4RowsOfOptions"/>
+    </test>
+</tests>

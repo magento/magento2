@@ -82,7 +82,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
             try {
                 $product = $this->productRepository->get($sku, false, null, true);
                 $this->productRepository->delete($product);
-            } catch (NoSuchEntityException $e) {
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             }
         }
         parent::tearDown();

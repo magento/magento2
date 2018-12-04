@@ -82,6 +82,9 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($label, (string)$block->getLabel());
     }
 
+    /**
+     * @return array
+     */
     public function getLabelDataProvider()
     {
         return [[1, 'My Cart (1 item)'], [2, 'My Cart (2 items)'], [0, 'My Cart']];

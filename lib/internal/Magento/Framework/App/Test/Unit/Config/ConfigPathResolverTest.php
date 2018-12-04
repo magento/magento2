@@ -55,6 +55,9 @@ class ConfigPathResolverTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $this->model->resolve($path, $scope, $scopeCode, $type));
     }
 
+    /**
+     * @return array
+     */
     public function resolveDataProvider()
     {
         return [

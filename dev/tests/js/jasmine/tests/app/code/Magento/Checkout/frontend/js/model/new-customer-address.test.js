@@ -14,7 +14,8 @@ define([
         beforeEach(function () {
 
             window.checkoutConfig = {
-                defaultCountryId: 'US'
+                defaultCountryId: 'US',
+                defaultRegionId: 1
             };
 
             newCustomerAddress = NewCustomerAddress;
@@ -27,6 +28,7 @@ define([
         it('Check on empty object.', function () {
             var expected = {
                 countryId: 'US',
+                regionId: 1,
                 regionCode: null,
                 region: null
             };
@@ -46,27 +48,28 @@ define([
             expect(result.canUseForBilling()).toBeTruthy();
         });
 
-        it('Check on regionId with region object in address data.', function () {
+        it('Check on regionId with country object in address data.', function () {
             var result = newCustomerAddress({
-                    region: {
-                        'region_id': 1
-                    }
+                    'country_id': 'CA'
                 }),
                 expected = {
-                    countryId: 'US',
-                    regionId: 1
+                    countryId: 'CA',
+                    regionCode: null,
+                    region: null
                 };
 
             expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
         });
-        it('Check on regionId with countryId in address data.', function () {
+        it('Check on regionId with countryId and regionId in address data.', function () {
             var result = newCustomerAddress({
-                    'country_id': 'US'
+                    'country_id': 'CA',
+                    region: {
+                        'region_id': 66
+                    }
                 }),
                 expected = {
-                    countryId: 'US',
-                    regionCode: null,
-                    region: null
+                    countryId: 'CA',
+                    regionId: 66
                 };
 
             expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));

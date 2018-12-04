@@ -50,9 +50,8 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
         // redirect according to rewrite rule
         if ($requestUrl != $backendUrl) {
             return $this->getRedirect($backendUrl);
-        } else {
-            return $this->resultPageFactory->create();
         }
+        return $this->resultPageFactory->create();
     }
 
     /**

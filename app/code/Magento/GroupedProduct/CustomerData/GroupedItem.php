@@ -8,6 +8,10 @@ namespace Magento\GroupedProduct\CustomerData;
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 use Magento\Checkout\CustomerData\DefaultItem;
 
+/**
+ * @deprecated moved to model because of class refactoring
+ * @see \Magento\GroupedProduct\Model\Product\Configuration\Item\ItemProductResolver
+ */
 class GroupedItem extends DefaultItem
 {
     /**
@@ -22,6 +26,7 @@ class GroupedItem extends DefaultItem
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Catalog\Helper\Image $imageHelper,
@@ -29,14 +34,16 @@ class GroupedItem extends DefaultItem
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool,
         \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         parent::__construct(
             $imageHelper,
             $msrpHelper,
             $urlBuilder,
             $configurationPool,
-            $checkoutHelper
+            $checkoutHelper,
+            $escaper
         );
         $this->_scopeConfig = $scopeConfig;
     }

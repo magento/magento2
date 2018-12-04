@@ -16,6 +16,11 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowExcepti
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Import offline shipping.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Import
 {
     /**
@@ -84,6 +89,8 @@ class Import
     }
 
     /**
+     * Check if there are errors.
+     *
      * @return bool
      */
     public function hasErrors()
@@ -92,6 +99,8 @@ class Import
     }
 
     /**
+     * Get errors.
+     *
      * @return array
      */
     public function getErrors()
@@ -100,6 +109,8 @@ class Import
     }
 
     /**
+     * Retrieve columns.
+     *
      * @return array
      */
     public function getColumns()
@@ -108,6 +119,8 @@ class Import
     }
 
     /**
+     * Get data from file.
+     *
      * @param ReadInterface $file
      * @param int $websiteId
      * @param string $conditionShortName
@@ -132,7 +145,7 @@ class Import
                 if (empty($csvLine)) {
                     continue;
                 }
-                $rowData = $this->rowParser->parse(
+                $rowsData = $this->rowParser->parse(
                     $csvLine,
                     $rowNumber,
                     $websiteId,
@@ -141,20 +154,25 @@ class Import
                     $columnResolver
                 );
 
-                // protect from duplicate
-                $hash = $this->dataHashGenerator->getHash($rowData);
-                if (array_key_exists($hash, $this->uniqueHash)) {
-                    throw new RowException(
-                        __(
-                            'Duplicate Row #%1 (duplicates row #%2)',
-                            $rowNumber,
-                            $this->uniqueHash[$hash]
-                        )
-                    );
-                }
-                $this->uniqueHash[$hash] = $rowNumber;
+                foreach ($rowsData as $rowData) {
+                    // protect from duplicate
+                    $hash = $this->dataHashGenerator->getHash($rowData);
+                    if (array_key_exists($hash, $this->uniqueHash)) {
+                        throw new RowException(
+                            __(
+                                'Duplicate Row #%1 (duplicates row #%2)',
+                                $rowNumber,
+                                $this->uniqueHash[$hash]
+                            )
+                        );
+                    }
+                    $this->uniqueHash[$hash] = $rowNumber;
 
-                $items[] = $rowData;
+                    $items[] = $rowData;
+                }
+                if (count($rowsData) > 1) {
+                    $bunchSize += count($rowsData) - 1;
+                }
                 if (count($items) === $bunchSize) {
                     yield $items;
                     $items = [];
@@ -169,6 +187,8 @@ class Import
     }
 
     /**
+     * Retrieve column headers.
+     *
      * @param ReadInterface $file
      * @return array|bool
      * @throws LocalizedException
@@ -178,8 +198,11 @@ class Import
         // check and skip headers
         $headers = $file->readCsv();
         if ($headers === false || count($headers) < 5) {
-            throw new LocalizedException(__('Please correct Table Rates File Format.'));
+            throw new LocalizedException(
+                __('The Table Rates File Format is incorrect. Verify the format and try again.')
+            );
         }
+
         return $headers;
     }
 }

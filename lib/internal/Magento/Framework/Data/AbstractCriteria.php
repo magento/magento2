@@ -274,7 +274,7 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
      */
     public function getPart($name, $default = null)
     {
-        return isset($this->data[$name]) ? $this->data[$name] : $default;
+        return $this->data[$name] ?? $default;
     }
 
     /**

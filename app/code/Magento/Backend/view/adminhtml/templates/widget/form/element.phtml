@@ -19,9 +19,6 @@
       <?php break;
     case 'column': ?>
       <?php break;
-    case 'hidden': ?>
-    <input type="<?= /* @escapeNotVerified */ $element->getType() ?>" name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>">
-      <?php break;
     case 'select': ?>
     <span class="form_row">
         <?php if ($element->getLabel()): ?><label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label><?php endif; ?>

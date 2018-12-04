@@ -87,7 +87,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         if ($element->getValue()) {
             $rule = $this->ruleFactory->create()->load((int)$element->getValue());
             if ($rule->getId()) {
-                $chooser->setLabel($rule->getName());
+                $chooser->setLabel($this->escapeHtml($rule->getName()));
             }
         }
 

@@ -81,39 +81,28 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         parent::_afterSave($object);
 
-        $conditions = [
+        $condition = [
             'option_id = ?' => $object->getId(),
             'store_id = ? OR store_id = 0' => $object->getStoreId(),
             'parent_product_id = ?' => $object->getParentId()
         ];
-
         $connection = $this->getConnection();
+        $connection->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
 
-        if ($this->isOptionPresent($conditions)) {
-            $connection->update(
-                $this->getTable('catalog_product_bundle_option_value'),
-                [
-                    'title' => $object->getTitle()
-                ],
-                $conditions
-            );
-        } else {
-            $data = new \Magento\Framework\DataObject();
-            $data->setOptionId($object->getId())
-                ->setStoreId($object->getStoreId())
-                ->setParentProductId($object->getParentId())
-                ->setTitle($object->getTitle());
+        $data = new \Magento\Framework\DataObject();
+        $data->setOptionId($object->getId())
+            ->setStoreId($object->getStoreId())
+            ->setParentProductId($object->getParentId())
+            ->setTitle($object->getTitle());
 
+        $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+
+        /**
+         * also saving default fallback value
+         */
+        if (0 !== (int)$object->getStoreId()) {
+            $data->setStoreId(0)->setTitle($object->getDefaultTitle());
             $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
-
-            /**
-             * also saving default value if this store view scope
-             */
-            if ($object->getStoreId()) {
-                $data->setStoreId(0);
-                $data->setTitle($object->getDefaultTitle());
-                $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
-            }
         }
 
         return $this;
@@ -217,27 +206,5 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->entityManager->save($object);
 
         return $this;
-    }
-
-    /**
-     * Is Bundle option present in the database
-     *
-     * @param array $conditions
-     *
-     * @return bool
-     */
-    private function isOptionPresent($conditions)
-    {
-        $connection = $this->getConnection();
-
-        $select = $connection->select()->from($this->getTable('catalog_product_bundle_option_value'));
-        foreach ($conditions as $condition => $conditionValue) {
-            $select->where($condition, $conditionValue);
-        }
-        $select->limit(1);
-
-        $rowSelect = $connection->fetchRow($select);
-
-        return (is_array($rowSelect) && !empty($rowSelect));
     }
 }

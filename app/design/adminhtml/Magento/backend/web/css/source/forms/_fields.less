@@ -59,8 +59,12 @@
 }
 
 .abs-field-no-label {
+    /**
+     *@codingStandardsIgnoreStart
+     */
     #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
     margin-left: @_length;
+    //@codingStandardsIgnoreEnd
 }
 
 //
@@ -225,7 +229,7 @@
 
     .required > &, // ToDo UI: change classes 'required' to '_required'.
     ._required > & {
-        > span {
+        span {
             &:after {
                 color: @validation__color;
                 content: '*';
@@ -279,7 +283,15 @@
     //  Hide group legend and show first field label instead
     legend {
         &.admin__field-label {
-            opacity: 0;
+            opacity: 1;
+        }
+    }
+    
+    legend.admin__field-label {
+        span {
+            &:after {
+                display: none;
+            } 
         }
     }
 
@@ -293,7 +305,11 @@
             content: attr(data-config-scope);
             display: inline-block;
             font-size: @font-size__s;
+            /**
+             *@codingStandardsIgnoreStart
+             */
             left: @_length;
+            //@codingStandardsIgnoreEnd
             line-height: 3.2rem;
             margin-left: 2 * @temp_gutter;
             position: absolute;

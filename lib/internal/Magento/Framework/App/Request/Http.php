@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\App\Request;
 
+use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\App\RequestContentInterface;
 use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\App\Route\ConfigInterface\Proxy as ConfigInterface;
@@ -16,7 +17,7 @@ use Magento\Framework\Stdlib\StringUtils;
 /**
  * Http request
  */
-class Http extends Request implements RequestContentInterface, RequestSafetyInterface
+class Http extends Request implements RequestContentInterface, RequestSafetyInterface, HttpRequestInterface
 {
     /**#@+
      * HTTP Ports
@@ -149,7 +150,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
                 return $this;
             }
 
-            $requestUri = $this->removeRepitedSlashes($requestUri);
+            $requestUri = $this->removeRepeatedSlashes($requestUri);
             $parsedRequestUri = explode('?', $requestUri, 2);
             $queryString = !isset($parsedRequestUri[1]) ? '' : '?' . $parsedRequestUri[1];
             $baseUrl = $this->getBaseUrl();
@@ -172,7 +173,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * @param string $pathInfo
      * @return string
      */
-    private function removeRepitedSlashes($pathInfo)
+    private function removeRepeatedSlashes($pathInfo)
     {
         $firstChar = (string)substr($pathInfo, 0, 1);
         if ($firstChar == '/') {

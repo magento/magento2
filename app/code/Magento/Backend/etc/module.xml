@@ -9,6 +9,7 @@
     <module name="Magento_Backend" setup_version="2.0.0">
         <sequence>
             <module name="Magento_Directory"/>
+            <module name="Magento_Theme"/>
         </sequence>
     </module>
 </config>

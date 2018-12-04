@@ -5,6 +5,9 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer;
 
+/**
+ * Class OptionTest
+ */
 class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -67,6 +70,9 @@ class OptionTest extends \PHPUnit\Framework\TestCase
      */
     protected $websiteId = 111;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $optionMethods = [
@@ -140,6 +146,9 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testInitializeWhenResultIsDecimalGetBackordersMessageHasOptionQtyUpdate()
     {
         $optionValue = 5;
@@ -151,7 +160,6 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->optionMock->expects($this->any())->method('getProduct')->will($this->returnValue($this->productMock));
 
         $this->stockItemMock->expects($this->once())->method('setIsChildItem')->with(true);
-        $this->stockItemMock->expects($this->once())->method('setSuppressCheckQtyIncrements')->with(true);
         $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(true));
 
         $this->stockRegistry
@@ -212,6 +220,9 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->validator->initialize($this->optionMock, $this->quoteItemMock, $qty);
     }
 
+    /**
+     * @return void
+     */
     public function testInitializeWhenResultNotDecimalGetBackordersMessageHasOptionQtyUpdate()
     {
         $optionValue = 5;
@@ -222,7 +233,6 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->optionMock->expects($this->any())->method('getProduct')->will($this->returnValue($this->productMock));
 
         $this->stockItemMock->expects($this->once())->method('setIsChildItem')->with(true);
-        $this->stockItemMock->expects($this->once())->method('setSuppressCheckQtyIncrements')->with(true);
         $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(true));
 
         $this->stockRegistry
@@ -267,6 +277,8 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
+     *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage The stock item for Product in option is not valid.
      */

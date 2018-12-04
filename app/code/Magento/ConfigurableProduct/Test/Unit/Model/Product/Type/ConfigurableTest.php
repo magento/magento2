@@ -379,7 +379,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                     ['_cache_instance_used_product_attributes', null, []]
                 ]
             );
-
+        $this->catalogConfig->expects($this->any())->method('getProductAttributes')->willReturn([]);
         $productCollection->expects($this->atLeastOnce())->method('addAttributeToSelect')->willReturnSelf();
         $productCollection->expects($this->once())->method('setProductFilter')->willReturnSelf();
         $productCollection->expects($this->atLeastOnce())->method('setFlag')->willReturnSelf();

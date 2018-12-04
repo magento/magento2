@@ -123,6 +123,9 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
      */
     public function clickUpdateTotals()
     {
-        $this->_rootElement->find($this->updateTotalsSelector)->click();
+        $button = $this->_rootElement->find($this->updateTotalsSelector);
+        if (!$button->isDisabled()) {
+            $button->click();
+        }
     }
 }

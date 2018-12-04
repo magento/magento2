@@ -9,6 +9,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Application provides ability to configure multiple connections to persistent storage.
@@ -102,9 +103,21 @@ class ResourceConnection
      */
     public function closeConnection($resourceName = self::DEFAULT_CONNECTION)
     {
-        $processConnectionName = $this->getProcessConnectionName($this->config->getConnectionName($resourceName));
-        if (isset($this->connections[$processConnectionName])) {
-            $this->connections[$processConnectionName] = null;
+        if ($resourceName === null) {
+            foreach ($this->connections as $processConnection) {
+                if ($processConnection !== null) {
+                    $processConnection->closeConnection();
+                }
+            }
+            $this->connections = [];
+        } else {
+            $processConnectionName = $this->getProcessConnectionName($this->config->getConnectionName($resourceName));
+            if (isset($this->connections[$processConnectionName])) {
+                if ($this->connections[$processConnectionName] !== null) {
+                    $this->connections[$processConnectionName]->closeConnection();
+                }
+                $this->connections[$processConnectionName] = null;
+            }
         }
     }
 

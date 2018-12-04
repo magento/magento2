@@ -112,6 +112,9 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $this->toolbarModel->getCurrentPage());
     }
 
+    /**
+     * @return array
+     */
     public function stringParamProvider()
     {
         return [
@@ -119,6 +122,9 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function intParamProvider()
     {
         return [

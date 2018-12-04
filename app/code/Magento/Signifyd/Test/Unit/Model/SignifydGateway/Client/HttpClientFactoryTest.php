@@ -101,14 +101,17 @@ class HttpClientFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreateWithParams()
     {
         $param = ['id' => 1];
+        $storeId = 1;
         $json = '{"id":1}';
 
         $this->config->expects($this->once())
             ->method('getApiKey')
+            ->with($storeId)
             ->willReturn('testKey');
 
         $this->config->expects($this->once())
             ->method('getApiUrl')
+            ->with($storeId)
             ->willReturn(self::$dummy);
 
         $this->dataEncoder->expects($this->once())
@@ -121,7 +124,7 @@ class HttpClientFactoryTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($json), 'application/json')
             ->willReturnSelf();
 
-        $client = $this->httpClient->create('url', 'method', $param);
+        $client = $this->httpClient->create('url', 'method', $param, $storeId);
 
         $this->assertInstanceOf(ZendClient::class, $client);
     }

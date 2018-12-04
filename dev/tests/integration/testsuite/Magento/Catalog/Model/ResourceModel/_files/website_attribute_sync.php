@@ -126,7 +126,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(AttributeStatus::STATUS_ENABLED)
     ->setWebsiteIds([$website->getId()])
-    ->setCateroryIds([])
+    ->setCategoryIds([])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
 
 $product = $productRepository->save($product);

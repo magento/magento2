@@ -96,7 +96,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $productDescription = '.product.attribute.description';
+    protected $productDescription = '.product.attribute.description .value';
 
     /**
      * Product short-description element.
@@ -405,8 +405,10 @@ class View extends AbstractConfigureBlock
     public function braintreePaypalCheckout()
     {
         $currentWindow = $this->browser->getCurrentWindow();
+        $this->getMiniCartBlock()->waitInit();
         $this->getMiniCartBlock()->openMiniCart();
         $this->getMiniCartBlock()->clickBraintreePaypalButton();
+
         return $currentWindow;
     }
 

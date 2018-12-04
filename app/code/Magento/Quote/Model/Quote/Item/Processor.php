@@ -97,10 +97,25 @@ class Processor
         $item->addQty($candidate->getCartQty());
 
         $customPrice = $request->getCustomPrice();
+        $item->setPrice($candidate->getFinalPrice());
         if (!empty($customPrice)) {
             $item->setCustomPrice($customPrice);
             $item->setOriginalCustomPrice($customPrice);
         }
+    }
+
+    /**
+     * Merge two quote items.
+     *
+     * @param Item $source
+     * @param Item $target
+     * @return Item
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function merge(Item $source, Item $target): Item
+    {
+        return $target;
     }
 
     /**

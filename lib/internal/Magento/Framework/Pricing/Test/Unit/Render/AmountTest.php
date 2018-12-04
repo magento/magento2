@@ -277,6 +277,13 @@ class AmountTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($adjustmentHtml1 . $adjustmentHtml2, $this->model->getAdjustmentsHtml());
     }
 
+    /**
+     * @param array $data
+     * @param string $html
+     * @param string $code
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getAdjustmentRenderMock($data = [], $html = '', $code = 'adjustment_code')
     {
         $adjustmentRender = $this->getMockForAbstractClass(

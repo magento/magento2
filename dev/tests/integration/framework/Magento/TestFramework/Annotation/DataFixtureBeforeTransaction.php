@@ -9,6 +9,8 @@
  */
 namespace Magento\TestFramework\Annotation;
 
+use PHPUnit\Framework\Exception;
+
 class DataFixtureBeforeTransaction
 {
     /**
@@ -138,8 +140,15 @@ class DataFixtureBeforeTransaction
                 require $fixture;
             }
         } catch (\Exception $e) {
-            throw new \Exception(
-                sprintf("Error in fixture: %s.\n %s", json_encode($fixture), (string)$e)
+            throw new Exception(
+                sprintf(
+                    "Error in fixture: %s.\n %s\n %s",
+                    json_encode($fixture),
+                    $e->getMessage(),
+                    $e->getTraceAsString()
+                ),
+                500,
+                $e
             );
         }
     }

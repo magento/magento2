@@ -108,6 +108,7 @@ class AttributeSet extends AbstractModifier
                     self::ATTRIBUTE_SET_FIELD_ORDER
                 ),
                 'multiple' => false,
+                'disabled' => $this->locator->getProduct()->isLockedAttribute('attribute_set_id'),
             ];
         }
 

@@ -76,6 +76,18 @@ class PlaceOrder extends Action
      */
     private $orderRepository;
 
+    /**
+     * PlaceOrder constructor.
+     *
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param Session $customerSession
+     * @param FormKeyValidator $formKeyValidator
+     * @param InstantPurchaseOptionLoadingFactory $instantPurchaseOptionLoadingFactory
+     * @param ProductRepositoryInterface $productRepository
+     * @param PlaceOrderModel $placeOrder
+     * @param OrderRepositoryInterface $orderRepository
+     */
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,

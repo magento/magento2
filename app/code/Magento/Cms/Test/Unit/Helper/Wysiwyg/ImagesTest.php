@@ -384,6 +384,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->fail('An expected exception has not been raised.');
     }
 
+    /**
+     * @return array
+     */
     public function providerGetCurrentPath()
     {
         return [
@@ -431,6 +434,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName, true));
     }
 
+    /**
+     * @return array
+     */
     public function providerGetImageHtmlDeclarationRenderingAsTag()
     {
         return [
@@ -465,6 +471,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName));
     }
 
+    /**
+     * @return array
+     */
     public function providerGetImageHtmlDeclaration()
     {
         return [

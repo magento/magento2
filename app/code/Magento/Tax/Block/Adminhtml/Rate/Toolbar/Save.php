@@ -16,7 +16,7 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     /**
      * @var string
      */
-    protected $_template = 'toolbar/rate/save.phtml';
+    protected $_template = 'Magento_Tax::toolbar/rate/save.phtml';
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ButtonList
@@ -115,7 +115,7 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
             ['label' => __('Reset'), 'onclick' => 'window.location.reload()', 'class' => 'reset']
         );
 
-        $rate = intval($this->getRequest()->getParam('rate'));
+        $rate = (int)$this->getRequest()->getParam('rate');
         if ($rate) {
             $this->buttonList->add(
                 'delete',

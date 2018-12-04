@@ -162,7 +162,8 @@ class Files
     {
         $result = [];
         foreach ($files as $file) {
-            $result[$file] = [$file];
+            $key = str_replace(BP . '/', '', $file);
+            $result[$key] = [$file];
         }
         return $result;
     }
@@ -391,7 +392,7 @@ class Files
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
             $files = [];
             foreach ($configXmlPaths as $xmlPath) {
-                $files = array_merge($files, glob($xmlPath));
+                $files = array_merge($files, glob($xmlPath, GLOB_NOSORT));
             }
             self::$_cache[$cacheKey] = $files;
         }

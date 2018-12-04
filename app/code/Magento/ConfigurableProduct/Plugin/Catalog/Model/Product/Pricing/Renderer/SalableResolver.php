@@ -44,9 +44,7 @@ class SalableResolver
         \Magento\Framework\Pricing\SaleableInterface $salableItem
     ) {
         if ($salableItem->getTypeId() == 'configurable' && $result) {
-            if (!$this->lowestPriceOptionsProvider->getProducts($salableItem)) {
-                $result = false;
-            }
+            $result = $salableItem->isSalable();
         }
 
         return $result;
