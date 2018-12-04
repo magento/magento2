@@ -16,6 +16,7 @@ use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -116,6 +117,8 @@ class CreateCustomer implements ResolverInterface
             }
             $data = $this->customerDataProvider->getCustomerById($customerId);
         } catch (ValidatorException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
+        } catch (InputMismatchException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
 
