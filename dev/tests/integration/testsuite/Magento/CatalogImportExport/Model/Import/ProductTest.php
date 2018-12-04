@@ -1290,18 +1290,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testNewProductPositionInCategory()
     {
-        $categoryId = 333;
-
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Filesystem::class
-        );
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/product_to_import_with_category.csv',
-                'directory' => $directory
+                'directory' => $directory,
             ]
         );
         $errors = $this->_model->setSource(
@@ -1313,29 +1309,17 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             ]
         )->validateData();
 
-        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->assertTrue($errors->getErrorsCount() === 0);
         $this->_model->importData();
 
-        /** @var \Magento\Framework\App\ResourceConnection $resourceConnection */
-        $resourceConnection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\App\ResourceConnection::class
-        );
-        $categoryProductstableName = $resourceConnection->getTableName('catalog_category_product');
-        $productEntitiesTableName = $resourceConnection->getTableName('catalog_product_entity');
-        $select = $resourceConnection->getConnection()
-            ->select()
-            ->from(['category_products' => $categoryProductstableName])
-            ->join(
-                ['product_entities' => $productEntitiesTableName],
-                'product_entities.entity_id = category_products.product_id',
-                ''
-            )
-            ->where('category_products.category_id = ?', $categoryId)
-            ->where('product_entities.sku = "simpleImported"');
-        $importedItem = $resourceConnection->getConnection()->fetchRow($select);
-        $this->assertTrue(is_array($importedItem));
-        $this->assertNotEmpty($importedItem);
-        $this->assertEquals(0, $importedItem['position']);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get('simpleImported');
+        $categoryLinks = $product->getExtensionAttributes('category_links')->getCategoryLinks();
+        $position = $categoryLinks[0]->getPosition();
+
+        $this->assertEquals(0, $position);
     }
 
     /**
