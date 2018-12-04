@@ -51,9 +51,6 @@
                     <element key="codingStandardsIgnoreEnd">
                         <string>codingStandardsIgnoreEnd</string>
                     </element>
-                    <element key="codingStandardsIgnoreFile">
-                        <string>codingStandardsIgnoreEnd</string>
-                    </element>
                     <element key="cover">
                         <string>cover</string>
                     </element>

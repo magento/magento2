@@ -27,7 +27,6 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @codingStandardsIgnoreFile
  */
 class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
