@@ -51,7 +51,7 @@
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessRegisterSection.orderNumber}}" stepKey="grabOrderNumber"/>
-        <click selector="{{CustomerAccountSection.createAccount}}" stepKey="clickToCreateAccount"/>
+        <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickToCreateAccount"/>
         <fillField selector="{{StorefrontCustomerCreateFormSection.passwordField}}" userInput="{{CustomerData.password}}" stepKey="TypePassword"/>
         <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{CustomerData.password}}" stepKey="TypeConfirmationPassword"/>
         <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickOnCreateAccount"/>
