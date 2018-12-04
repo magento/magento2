@@ -27,20 +27,20 @@ class AssignOrderToCustomerObserver implements ObserverInterface
     /**
      * @var CustomerAssignment
      */
-    private $customerAssignmentService;
+    private $assignmentService;
 
     /**
      * AssignOrderToCustomerObserver constructor.
      *
      * @param OrderRepositoryInterface $orderRepository
-     * @param CustomerAssignment $customerAssignmentService
+     * @param CustomerAssignment $assignmentService
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        CustomerAssignment $customerAssignmentService
+        CustomerAssignment $assignmentService
     ) {
         $this->orderRepository = $orderRepository;
-        $this->customerAssignmentService = $customerAssignmentService;
+        $this->assignmentService = $assignmentService;
     }
 
     /**
@@ -57,7 +57,7 @@ class AssignOrderToCustomerObserver implements ObserverInterface
             $orderId = $delegateData['__sales_assign_order_id'];
             $order = $this->orderRepository->get($orderId);
             if (!$order->getCustomerId() && $customer->getId()) {
-                $this->customerAssignmentService->execute($order, $customer);
+                $this->assignmentService->execute($order, $customer);
             }
         }
     }
