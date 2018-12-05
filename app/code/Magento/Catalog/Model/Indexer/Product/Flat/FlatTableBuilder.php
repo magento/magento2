@@ -11,6 +11,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class FlatTableBuilder
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FlatTableBuilder
@@ -389,7 +390,7 @@ class FlatTableBuilder
     }
 
     /**
-     * Get MetadataPool
+     * Get metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
