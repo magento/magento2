@@ -2354,4 +2354,35 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             $collUrlRewrite->getFirstItem()->getRequestPath()
         );
     }
+
+    /**
+     * Test that product import with non existing images does not broke roles on existing images.
+     *
+     * @magentoDataIsolation enabled
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoAppIsolation enabled
+     */
+    public function testSaveProductOnImportNonExistingImage()
+    {
+        $this->importDataForMediaTest('import_media.csv');
+
+        $product = $this->getProductBySku('simple_new');
+
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
+        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
+        $this->assertEquals('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
+
+        $this->importDataForMediaTest('import_media_non_existing_images.csv', 1);
+
+        $this->assertNotEquals('/u/p/uploaded.jpg', $product->getData('image'));
+        $this->assertNotEquals('/u/p/uploaded.jpg', $product->getData('small_image'));
+        $this->assertNotEquals('/u/p/uploaded.jpg', $product->getData('thumbnail'));
+        $this->assertNotEquals('/u/p/uploaded.jpg', $product->getData('swatch_image'));
+
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
+        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
+        $this->assertEquals('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
+    }
 }
