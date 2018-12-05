@@ -138,17 +138,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $customer = $this->customerRepository->getById($customerId);
             $defaultBilling = $customer->getDefaultBilling();
             $defaultShipping = $customer->getDefaultShipping();
-            foreach ($this->meta['general']['children'] as $attributeName => $attributeMeta) {
-                if ($attributeMeta['arguments']['data']['config']['dataType'] === Multiline::NAME
-                    && isset($this->loadedData[$addressId][$attributeName])
-                    && !is_array($this->loadedData[$addressId][$attributeName])
-                ) {
-                    $this->loadedData[$addressId][$attributeName] = explode(
-                        "\n",
-                        $this->loadedData[$addressId][$attributeName]
-                    );
-                }
-            }
             $this->prepareAddressData($addressId, $this->loadedData, $defaultBilling, $defaultShipping);
             $this->fileUploaderDataResolver->overrideFileUploaderData($item, $this->loadedData[$addressId]);
         }
@@ -177,8 +166,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (null !== $defaultShipping && $addressId === $defaultShipping) {
             $addresses[$addressId]['default_shipping'] = '1';
         }
-        if (null !== $addresses[$addressId]['street'] && !\is_array($addresses[$addressId]['street'])) {
-            $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
+        foreach ($this->meta['general']['children'] as $attributeName => $attributeMeta) {
+            if ($attributeMeta['arguments']['data']['config']['dataType'] === Multiline::NAME
+                && isset($this->loadedData[$addressId][$attributeName])
+                && !\is_array($this->loadedData[$addressId][$attributeName])
+            ) {
+                $this->loadedData[$addressId][$attributeName] = explode(
+                    "\n",
+                    $this->loadedData[$addressId][$attributeName]
+                );
+            }
         }
     }
 

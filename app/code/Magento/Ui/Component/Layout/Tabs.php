@@ -88,7 +88,8 @@ class Tabs extends \Magento\Framework\View\Layout\Generic
                 $this->addWrappedBlock($childComponent, $childrenAreas);
                 continue;
             }
-            if ($childComponent instanceof ComponentVisibilityInterface && false === $childComponent->canShow()) {
+            if ($childComponent instanceof ComponentVisibilityInterface
+                && false === $childComponent->isComponentVisible()) {
                 continue;
             }
 
