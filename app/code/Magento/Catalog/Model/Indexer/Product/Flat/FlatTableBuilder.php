@@ -365,7 +365,7 @@ class FlatTableBuilder
                         []
                     )->columns(
                         [$columnName => $this->_connection->getIfNullSql('ts.value', 't0.value')]
-                    )->where($attributeCode . ' IS NOT NULL');
+                    )->where($columnName . ' IS NOT NULL');
                     if (!empty($changedIds)) {
                         $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
                     }
