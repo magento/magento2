@@ -8,6 +8,8 @@ namespace Magento\SalesRule\Model\Rule\Condition\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
+ * Combine conditions for product.
+ *
  * @api
  * @since 100.0.2
  */
@@ -84,5 +86,77 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
             $condition->collectValidatedAttributes($productCollection);
         }
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _isValid($entity)
+    {
+        if (!$this->getConditions()) {
+            return true;
+        }
+
+        $all = $this->getAggregator() === 'all';
+        $true = (bool)$this->getValue();
+
+        foreach ($this->getConditions() as $cond) {
+            if ($entity instanceof \Magento\Framework\Model\AbstractModel) {
+                $validated = $this->validateEntity($entity, $cond);
+            } else {
+                $validated = $cond->validateByEntityId($entity);
+            }
+            if ($all && $validated !== $true) {
+                return false;
+            } elseif (!$all && $validated === $true) {
+                return true;
+            }
+        }
+
+        return $all ? true : false;
+    }
+
+    /**
+     * Validate entity.
+     *
+     * @param \Magento\Framework\Model\AbstractModel $entity
+     * @param mixed $cond
+     * @return bool
+     */
+    private function validateEntity(\Magento\Framework\Model\AbstractModel $entity, $cond): bool
+    {
+        $true = (bool)$this->getValue();
+        $validated = !$true;
+        foreach ($this->retrieveValidateEntities($entity, $cond->getAttributeScope()) as $validateEntity) {
+            $validated = $cond->validate($validateEntity);
+            if ($validated === $true) {
+                break;
+            }
+        }
+
+        return $validated;
+    }
+
+    /**
+     * Retrieve entities for validation by attribute scope
+     *
+     * @param \Magento\Framework\Model\AbstractModel $entity
+     * @param string|null $attributeScope
+     * @return \Magento\Framework\Model\AbstractModel[]
+     */
+    private function retrieveValidateEntities(
+        \Magento\Framework\Model\AbstractModel $entity,
+        $attributeScope
+    ): array {
+        if ($attributeScope === 'parent') {
+            $validateEntities = [$entity];
+        } elseif ($attributeScope === 'children') {
+            $validateEntities = $entity->getChildren() ?: [$entity];
+        } else {
+            $validateEntities = $entity->getChildren() ?: [];
+            $validateEntities[] = $entity;
+        }
+
+        return $validateEntities;
     }
 }

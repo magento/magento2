@@ -13,5 +13,7 @@
         <element name="filterByNameInput" type="input" selector="input[name='name']"/>
         <element name="searchButton" type="button" selector="#promo_quote_grid button[title='Search']" timeout="30"/>
         <element name="rowByIndex" type="text" selector="tr[data-role='row']:nth-of-type({{var1}})" parameterized="true" timeout="30"/>
+        <element name="nameColumns" type="text" selector="td[data-column='name']"/>
+        <element name="rowContainingText" type="text" selector="//*[@id='promo_quote_grid_table']/tbody/tr[td//text()[contains(., '{{var1}}')]]" parameterized="true" timeout="30"/>
     </section>
 </sections>

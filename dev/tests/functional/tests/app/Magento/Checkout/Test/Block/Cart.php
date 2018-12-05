@@ -114,6 +114,13 @@ class Cart extends Block
     private $popupWindowContent = '#main';
 
     /**
+     * Locator for page with ajax loading state.
+     *
+     * @var string
+     */
+    private $ajaxLoading = 'body.ajax-loading';
+
+    /**
      * Wait for PayPal page is loaded.
      *
      * @return void
@@ -172,8 +179,17 @@ class Cart extends Block
     public function braintreePaypalCheckout()
     {
         $currentWindow = $this->browser->getCurrentWindow();
+        // Button can be enabled/disabled few times.
+        sleep(2);
+
+        $windowsCount = count($this->browser->getWindowHandles());
         $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
             ->click();
+        $browser = $this->browser;
+        $this->browser->waitUntil(function () use ($browser, $windowsCount) {
+            return count($browser->getWindowHandles()) === ($windowsCount + 1) ? true: null;
+        });
+
         return $currentWindow;
     }
 
@@ -285,5 +301,15 @@ class Cart extends Block
     public function waitForCheckoutButton()
     {
         $this->waitForElementVisible($this->inContextPaypalCheckoutButton);
+    }
+
+    /**
+     * Wait loading.
+     *
+     * @return void
+     */
+    public function waitForLoader()
+    {
+        $this->waitForElementNotVisible($this->ajaxLoading);
     }
 }

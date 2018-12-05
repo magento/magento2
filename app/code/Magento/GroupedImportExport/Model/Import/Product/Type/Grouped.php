@@ -89,7 +89,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                 foreach ($associatedSkusAndQtyPairs as $associatedSkuAndQty) {
                     ++$position;
                     $associatedSkuAndQty = explode(self::SKU_QTY_DELIMITER, $associatedSkuAndQty);
-                    $associatedSku = isset($associatedSkuAndQty[0]) ? trim($associatedSkuAndQty[0]) : null;
+                    $associatedSku = isset($associatedSkuAndQty[0]) ? strtolower(trim($associatedSkuAndQty[0])) : null;
                     if (isset($newSku[$associatedSku])) {
                         $linkedProductId = $newSku[$associatedSku][$this->getProductEntityIdentifierField()];
                     } elseif (isset($oldSku[$associatedSku])) {

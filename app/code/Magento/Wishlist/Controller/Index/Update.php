@@ -109,6 +109,9 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
                 }
                 try {
                     $item->setDescription($description)->setQty($qty)->save();
+                    $this->messageManager->addSuccessMessage(
+                        __('%1 has been updated in your Wish List.', $item->getProduct()->getName())
+                    );
                     $updatedItems++;
                 } catch (\Exception $e) {
                     $this->messageManager->addError(

@@ -580,7 +580,7 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function setFrameLength($frame)
     {
-        $frame = abs(intval($frame));
+        $frame = abs((int)$frame);
         if ($frame == 0) {
             $frame = $this->_frameLength;
         }
@@ -600,7 +600,7 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function setJump($jump)
     {
-        $jump = abs(intval($jump));
+        $jump = abs((int)$jump);
         if ($this->getJump() != $jump) {
             $this->_setFrameInitialized(false);
             $this->_jump = $jump;

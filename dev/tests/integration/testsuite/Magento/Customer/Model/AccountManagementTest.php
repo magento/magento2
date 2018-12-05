@@ -358,6 +358,32 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testValidateResetPasswordLinkTokenWithoutId()
+    {
+        $token = 'randomStr123';
+        $this->setResetPasswordData($token, 'Y-m-d H:i:s');
+
+        $this->assertTrue(
+            $this->accountManagement->validateResetPasswordLinkToken(0, $token)
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/two_customers.php
+     * @expectedException \Magento\Framework\Exception\State\ExpiredException
+     */
+    public function testValidateResetPasswordLinkTokenAmbiguous()
+    {
+        $token = 'randomStr123';
+        $this->setResetPasswordData($token, 'Y-m-d H:i:s', 1);
+        $this->setResetPasswordData($token, 'Y-m-d H:i:s', 2);
+
+        $this->accountManagement->validateResetPasswordLinkToken(0, $token);
+    }
+
+    /**
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
@@ -510,6 +536,34 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         } catch (NoSuchEntityException $e) {
             $this->assertEquals('No such entity with email = invalid, websiteId = 1', $e->getMessage());
         }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testResetPasswordWithoutEmail()
+    {
+        $resetToken = 'lsdj579slkj5987slkj595lkj';
+        $password = 'new_Password123';
+
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
+        $this->assertTrue(
+            $this->accountManagement->resetPassword('', $resetToken, $password)
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/two_customers.php
+     * @expectedException \Magento\Framework\Exception\State\ExpiredException
+     */
+    public function testResetPasswordAmbiguousToken()
+    {
+        $resetToken = 'lsdj579slkj5987slkj595lkj';
+        $password = 'new_Password123';
+
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 1);
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 2);
+        $this->accountManagement->resetPassword('', $resetToken, $password);
     }
 
     /**
@@ -960,10 +1014,13 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      *
      * @param $resetToken
      * @param $date
+     * @param int $customerIdFromFixture Which customer to use.
      */
-    protected function setResetPasswordData($resetToken, $date)
-    {
-        $customerIdFromFixture = 1;
+    protected function setResetPasswordData(
+        $resetToken,
+        $date,
+        int $customerIdFromFixture = 1
+    ) {
         /** @var \Magento\Customer\Model\Customer $customerModel */
         $customerModel = $this->objectManager->create(\Magento\Customer\Model\Customer::class);
         $customerModel->load($customerIdFromFixture);

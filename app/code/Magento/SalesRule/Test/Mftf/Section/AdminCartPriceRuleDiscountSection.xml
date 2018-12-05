@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCartPriceRuleDiscountSection">
+        <element name="discountTab" type="button" selector="//strong[text()='Apply Discount Code']"/>
+        <element name="couponInput" type="input" selector="#coupon_code"/>
+        <element name="applyCodeBtn" type="button" selector="//span[text()='Apply Discount']"/>
+    </section>
+</sections>

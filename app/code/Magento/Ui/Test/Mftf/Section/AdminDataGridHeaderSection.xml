@@ -19,6 +19,7 @@
         <element name="cancelFilters" type="button" selector="button[data-action='grid-filter-cancel']" timeout="30"/>
         <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
         <element name="clearFilters" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" timeout="30"/>
+        <element name="removeFilter" type="button" selector=".admin__data-grid-filters-current._show .action-remove" timeout="30"/>
         <!--Grid view bookmarks-->
         <element name="bookmarkToggle" type="button" selector="div.admin__data-grid-action-bookmarks button[data-bind='toggleCollapsible']" timeout="30"/>
         <element name="bookmarkOption" type="button" selector="//div[contains(@class, 'admin__data-grid-action-bookmarks')]/ul/li/div/a[text() = '{{label}}']" parameterized="true" timeout="30"/>

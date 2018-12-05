@@ -90,14 +90,13 @@
         <!-- Go to the shopping cart page and edit the first product -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCartPageLoad"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForInfoDropdown"/>
+        <waitForElementVisible selector="{{StorefrontCheckoutCartSummarySection.total}}" stepKey="waitForInfoDropdown"/>
         <waitForPageLoad stepKey="waitForCartPageLoad3"/>
-        <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalBefore"/>
+        <grabTextFrom selector="{{StorefrontCheckoutCartSummarySection.total}}" stepKey="grabTotalBefore"/>
         <click selector="{{CheckoutCartProductSection.editItemParametersButton('1')}}" stepKey="clickEdit"/>
         <waitForPageLoad stepKey="waitForStorefront2"/>
 
-        <!-- Choose both of the options on the storefront -->
-        <click selector="{{StorefrontBundledSection.bundleOption('1','1')}}" stepKey="selectFirstBundleOption2"/>
+        <!-- Check second one option to choose both of the options on the storefront -->
         <click selector="{{StorefrontBundledSection.bundleOption('1','2')}}" stepKey="selectSecondBundleOption2"/>
 
         <waitForPageLoad stepKey="waitForPriceUpdate3"/>
@@ -113,9 +112,9 @@
         <!-- Assert that the options are both there and the proce no longer matches -->
         <see selector="{{CheckoutCartProductSection.itemOptionsBlock('2')}}" userInput="$$simpleProduct1.sku$$" stepKey="assertBothOptions"/>
         <see selector="{{CheckoutCartProductSection.itemOptionsBlock('2')}}" userInput="$$simpleProduct2.sku$$" stepKey="assertBothOptions2"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForInfoDropdown2"/>
+        <waitForElementVisible selector="{{StorefrontCheckoutCartSummarySection.total}}" stepKey="waitForInfoDropdown2"/>
         <waitForPageLoad stepKey="waitForCartPageLoad4"/>
-        <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalAfter"/>
+        <grabTextFrom selector="{{StorefrontCheckoutCartSummarySection.total}}" stepKey="grabTotalAfter"/>
         <assertNotEquals expected="{$grabTotalBefore}" expectedType="string" actual="{$grabTotalAfter}" actualType="string" stepKey="assertNotEquals"/>
 
         <!-- Delete the bundled product -->
