@@ -5,11 +5,14 @@
  */
 namespace Magento\Customer\Controller;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 
 /**
  * Customer address controller
  *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Address extends \Magento\Framework\App\Action\Action
@@ -30,7 +33,7 @@ abstract class Address extends \Magento\Framework\App\Action\Action
     protected $_addressRepository;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     protected $customerRepository;
 
@@ -81,7 +84,7 @@ abstract class Address extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param CustomerRepositoryInterface $customerRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -96,13 +99,14 @@ abstract class Address extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        ?\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository = null
+        ?CustomerRepositoryInterface $customerRepository = null
     ) {
         $this->_customerSession = $customerSession;
         $this->_formKeyValidator = $formKeyValidator;
         $this->_formFactory = $formFactory;
         $this->_addressRepository = $addressRepository;
-        $this->customerRepository = $customerRepository ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $this->customerRepository = $customerRepository ?:
+            ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
         $this->addressDataFactory = $addressDataFactory;
         $this->regionDataFactory = $regionDataFactory;
         $this->_dataProcessor = $dataProcessor;
@@ -137,6 +141,8 @@ abstract class Address extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Build url by requested path and parameters.
+     *
      * @param string $route
      * @param array $params
      * @return string
