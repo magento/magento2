@@ -37,4 +37,17 @@
         <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionTypeToFixed" after="clickToExpandActions"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="1" stepKey="fillDiscountAmount" after="selectActionTypeToFixed"/>
     </actionGroup>
+
+    <!--Delete Cart price Rule for Retailer customer-->
+    <actionGroup name="AdminDeleteCartPriceRuleForRetailerActionGroup">
+        <click selector="{{AdminMenuSection.marketing}}" stepKey="clickOnMarketing" />
+        <waitForPageLoad stepKey="waitForMarketing" time="3"/>
+        <click selector="{{CartPriceRulesSubmenuSection.cartPriceRules}}" stepKey="clickOnCartPriceRules"/>
+        <waitForPageLoad stepKey="waitForCartPriceRules" time="5"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{SimpleSalesRule.name}}" stepKey="filterByName"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
+        <click selector="{{AdminCartPriceRulesSection.rowByIndex('1')}}" stepKey="goToEditRulePage"/>
+        <click selector="{{AdminCartPriceRulesFormSection.delete}}" stepKey="clickDeleteButton"/>
+        <click selector="{{AdminCartPriceRulesFormSection.modalAcceptButton}}" stepKey="confirmDelete"/>
+    </actionGroup>
 </actionGroups>

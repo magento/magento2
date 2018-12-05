@@ -8,6 +8,7 @@
 namespace Magento\Bundle\Test\Unit\Model;
 
 use Magento\Bundle\Model\OptionRepository;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -84,7 +85,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->optionResourceMock = $this->createPartialMock(
             \Magento\Bundle\Model\ResourceModel\Option::class,
-            ['delete', '__wakeup', 'save', 'removeOptionSelections']
+            ['get', 'delete', '__wakeup', 'save', 'removeOptionSelections']
         );
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->linkManagementMock = $this->createMock(\Magento\Bundle\Api\ProductLinkManagementInterface::class);
@@ -227,32 +228,92 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->delete($optionMock);
     }
 
+    /**
+     * Test successful delete action for given $optionId
+     */
     public function testDeleteById()
     {
         $productSku = 'sku';
         $optionId = 100;
-        $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
+
+        $optionMock = $this->createMock(\Magento\Bundle\Model\Option::class);
+        $optionMock->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturn($optionId);
+
+        $optionMock->expects($this->once())
+            ->method('getData')
+            ->willReturn([
+                'title' => 'Option title',
+                'option_id' => $optionId
+            ]);
+
+        $this->optionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($optionMock);
+
+        $productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getTypeId', 'getTypeInstance', 'getStoreId', 'getPriceType', '__wakeup', 'getSku']
+        );
         $productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
-        $this->productRepositoryMock->expects($this->once())
+        $productMock->expects($this->exactly(2))->method('getSku')->willReturn($productSku);
+
+        $this->productRepositoryMock
+            ->expects($this->once())
             ->method('get')
             ->with($productSku)
             ->willReturn($productMock);
 
-        $optionMock = $this->createMock(\Magento\Bundle\Model\Option::class);
-
         $optCollectionMock = $this->createMock(\Magento\Bundle\Model\ResourceModel\Option\Collection::class);
+        $optCollectionMock->expects($this->once())->method('getItemById')->with($optionId)->willReturn($optionMock);
         $this->typeMock->expects($this->once())
             ->method('getOptionsCollection')
             ->with($productMock)
             ->willReturn($optCollectionMock);
 
-        $optCollectionMock->expects($this->once())->method('setIdFilter')->with($optionId)->willReturnSelf();
-        $optCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($optionMock);
-
-        $this->optionResourceMock->expects($this->once())->method('delete')->with($optionMock)->willReturnSelf();
         $this->assertTrue($this->model->deleteById($productSku, $optionId));
+    }
+
+    /**
+     * Tests if NoSuchEntityException thrown when provided $optionId not found
+     */
+    public function testDeleteByIdException()
+    {
+        $productSku = 'sku';
+        $optionId = null;
+
+        $optionMock = $this->createMock(\Magento\Bundle\Model\Option::class);
+        $optionMock->expects($this->exactly(1))
+            ->method('getId')
+            ->willReturn($optionId);
+
+        $productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getTypeId', 'getTypeInstance', 'getStoreId', 'getPriceType', '__wakeup', 'getSku']
+        );
+        $productMock->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
+
+        $this->productRepositoryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($productSku)
+            ->willReturn($productMock);
+
+        $optCollectionMock = $this->createMock(\Magento\Bundle\Model\ResourceModel\Option\Collection::class);
+        $optCollectionMock->expects($this->once())->method('getItemById')->with($optionId)->willReturn($optionMock);
+        $this->typeMock->expects($this->once())
+            ->method('getOptionsCollection')
+            ->with($productMock)
+            ->willReturn($optCollectionMock);
+
+        $this->expectException(NoSuchEntityException::class);
+
+        $this->model->deleteById($productSku, $optionId);
     }
 
     /**
