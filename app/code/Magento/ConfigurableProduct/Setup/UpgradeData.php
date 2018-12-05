@@ -82,7 +82,8 @@ class UpgradeData implements UpgradeDataInterface
     {
         if ($attribute = $eavSetup->getAttribute(
             Product::ENTITY,
-            $attributeId, 'apply_to'
+            $attributeId,
+            'apply_to'
         )) {
             return explode(
                 ',',

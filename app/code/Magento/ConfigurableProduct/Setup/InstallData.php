@@ -59,7 +59,8 @@ class InstallData implements InstallDataInterface
         foreach ($attributes as $attributeCode) {
             if ($attribute = $eavSetup->getAttribute(
                 \Magento\Catalog\Model\Product::ENTITY,
-                $attributeCode, 'apply_to'
+                $attributeCode,
+                'apply_to'
             )) {
                 $relatedProductTypes = explode(
                     ',',
