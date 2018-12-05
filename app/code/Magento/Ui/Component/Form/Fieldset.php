@@ -31,14 +31,4 @@ class Fieldset extends AbstractComponent
     {
         return static::NAME;
     }
-
-    /**
-     * Check that fieldset can be shown.
-     *
-     * @return bool
-     */
-    public function canShow(): bool
-    {
-        return true;
-    }
 }

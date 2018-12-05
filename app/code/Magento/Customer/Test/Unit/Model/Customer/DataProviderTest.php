@@ -21,7 +21,6 @@ use Magento\Ui\DataProvider\EavValidationRules;
  *
  * Test for class \Magento\Customer\Model\Customer\DataProvider
  *
- * @deprecated tested class is not used.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProviderTest extends \PHPUnit\Framework\TestCase
@@ -650,10 +649,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                         2 => [
                             'firstname' => 'firstname',
                             'lastname' => 'lastname',
-                            'street' => [
-                                'street',
-                                'street',
-                            ],
+                            // Won't be an array because it isn't defined as a multiline field in this test
+                            'street' => "street\nstreet",
                             'default_billing' => 2,
                             'default_shipping' => 2,
                         ]
