@@ -56,10 +56,10 @@ class Shipping extends AbstractTotal
         // amounts including tax
         $orderShippingInclTax = $order->getShippingInclTax();
         $orderBaseShippingInclTax = $order->getBaseShippingInclTax();
-        $allowedTaxAmount = $order->getShippingTaxAmount() - $order->getShippingTaxRefunded();
+        $allowedTaxAmount = $order->getShippingTaxAmount() + $order->getShippingDiscountTaxCompensationAmount() - $order->getShippingTaxRefunded();
         $allowedAmountInclTax = $allowedAmount + $allowedTaxAmount;
-        $baseAllowedAmountInclTax = $orderBaseShippingInclTax
-            - $order->getBaseShippingRefunded()
+        $baseAllowedTaxAmount = $order->getBaseShippingTaxAmount() 
+            + $order->getBaseShippingDiscountTaxCompensationAmnt() 
             - $order->getBaseShippingTaxRefunded();
 
         // Check if the desired shipping amount to refund was specified (from invoice or another source).
