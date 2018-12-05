@@ -56,7 +56,6 @@ class SampleFileProvider
      *
      * @param string $entityName
      * @return int|null
-     * @throws NoSuchEntityException
      */
     public function getSize(string $entityName)
     {
@@ -82,7 +81,8 @@ class SampleFileProvider
     }
 
     /**
-     * @return string $entityName
+     * @param string $entityName
+     * @return string
      * @throws NoSuchEntityException
      */
     private function getPath(string $entityName): string
