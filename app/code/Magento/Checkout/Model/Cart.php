@@ -438,8 +438,14 @@ class Cart extends DataObject implements CartInterface
                 }
                 $product = $this->_getProduct($productId);
                 if ($product->getId() && $product->isVisibleInCatalog()) {
+                    $request = null;
+                    $stockItem = $this->stockRegistry->getStockItem($productId, $product->getStore()->getWebsiteId());
+                    $minimumQty = $stockItem->getMinSaleQty();
+                    if ($minimumQty && $minimumQty > 0) {
+                        $request = $minimumQty;
+                    }
                     try {
-                        $this->getQuote()->addProduct($product);
+                        $this->getQuote()->addProduct($product, $request);
                     } catch (\Exception $e) {
                         $allAdded = false;
                     }
