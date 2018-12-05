@@ -5,40 +5,46 @@
  */
 namespace Magento\Checkout\Test\Unit\Controller\Sidebar;
 
+use Magento\Checkout\Controller\Sidebar\UpdateItemQty;
+use Magento\Checkout\Model\Sidebar;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Psr\Log\LoggerInterface;
 
 class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Checkout\Controller\Sidebar\UpdateItemQty */
-    protected $updateItemQty;
+    /** @var UpdateItemQty */
+    private $updateItemQty;
 
     /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
-    /** @var \Magento\Checkout\Model\Sidebar|\PHPUnit_Framework_MockObject_MockObject */
-    protected $sidebarMock;
+    /** @var Sidebar|\PHPUnit_Framework_MockObject_MockObject */
+    private $sidebarMock;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $loggerMock;
+    /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $loggerMock;
 
-    /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $jsonHelperMock;
+    /** @var Data|\PHPUnit_Framework_MockObject_MockObject */
+    private $jsonHelperMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $requestMock;
+    /** @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $requestMock;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $responseMock;
+    /** @var ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $responseMock;
 
     protected function setUp()
     {
-        $this->sidebarMock = $this->createMock(\Magento\Checkout\Model\Sidebar::class);
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->jsonHelperMock = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->sidebarMock = $this->createMock(Sidebar::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->jsonHelperMock = $this->createMock(Data::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->responseMock = $this->getMockForAbstractClass(
-            \Magento\Framework\App\ResponseInterface::class,
+            ResponseInterface::class,
             [],
             '',
             false,
@@ -49,7 +55,7 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->updateItemQty = $this->objectManagerHelper->getObject(
-            \Magento\Checkout\Controller\Sidebar\UpdateItemQty::class,
+            UpdateItemQty::class,
             [
                 'sidebar' => $this->sidebarMock,
                 'logger' => $this->loggerMock,
@@ -60,6 +66,9 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Tests execute action.
+     */
     public function testExecute()
     {
         $this->requestMock->expects($this->at(0))
@@ -113,6 +122,9 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('json represented', $this->updateItemQty->execute());
     }
 
+    /**
+     * Tests with localized exception.
+     */
     public function testExecuteWithLocalizedException()
     {
         $this->requestMock->expects($this->at(0))
@@ -157,6 +169,9 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('json represented', $this->updateItemQty->execute());
     }
 
+    /**
+     * Tests with exception.
+     */
     public function testExecuteWithException()
     {
         $this->requestMock->expects($this->at(0))
@@ -206,5 +221,32 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
             ->willReturn('json represented');
 
         $this->assertEquals('json represented', $this->updateItemQty->execute());
+    }
+
+    /**
+     * Tests execute with float item quantity.
+     */
+    public function testExecuteWithFloatItemQty()
+    {
+        $itemId = '1';
+        $floatItemQty = '2.2';
+
+        $this->requestMock->expects($this->at(0))
+            ->method('getParam')
+            ->with('item_id', null)
+            ->willReturn($itemId);
+        $this->requestMock->expects($this->at(1))
+            ->method('getParam')
+            ->with('item_qty', null)
+            ->willReturn($floatItemQty);
+
+        $this->sidebarMock->expects($this->once())
+            ->method('checkQuoteItem')
+            ->with($itemId);
+        $this->sidebarMock->expects($this->once())
+            ->method('updateQuoteItem')
+            ->with($itemId, $floatItemQty);
+
+        $this->updateItemQty->execute();
     }
 }
