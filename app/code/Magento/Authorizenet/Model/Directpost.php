@@ -372,6 +372,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
 
     /**
      * Refund the amount
+     *
      * Need to decode last 4 digits for request.
      *
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
@@ -682,6 +683,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
 
     /**
      * Operate with order using information from Authorize.net.
+     *
      * Authorize order or authorize and capture it.
      *
      * @param \Magento\Sales\Model\Order $order
@@ -699,6 +701,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             //decline the order (in case of wrong response code) but don't return money to customer.
             $message = $e->getMessage();
             $this->declineOrder($order, $message, false);
+
             throw $e;
         }
 
@@ -769,7 +772,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     }
 
     /**
-     * Add status comment
+     * Add status comment to history
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return $this
@@ -824,6 +827,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
                       ->void($response);
             }
             $order->registerCancellation($message)->save();
+            $this->_eventManager->dispatch('order_cancel_after', ['order' => $order ]);
         } catch (\Exception $e) {
             //quiet decline
             $this->getPsrLogger()->critical($e);
@@ -858,7 +862,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Getter for specified value according to set payment method code
      *
      * @param mixed $key
-     * @param null $storeId
+     * @param mixed $storeId
      * @return mixed
      */
     public function getValue($key, $storeId = null)
@@ -922,6 +926,8 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     }
 
     /**
+     * Add status comment on update
+     *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @param \Magento\Framework\DataObject $response
      * @param string $transactionId
@@ -996,6 +1002,8 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     }
 
     /**
+     * Retrieve PSR Logger if not properly loaded via DI
+     *
      * @return \Psr\Log\LoggerInterface
      *
      * @deprecated 100.1.0
@@ -1038,7 +1046,9 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     }
 
     /**
-     * Checks if filter action is Report Only. Transactions that trigger this filter are processed as normal,
+     * Checks if filter action is Report Only.
+     *
+     * Transactions that trigger this filter are processed as normal,
      * but are also reported in the Merchant Interface as triggering this filter.
      *
      * @param string $fdsFilterAction
