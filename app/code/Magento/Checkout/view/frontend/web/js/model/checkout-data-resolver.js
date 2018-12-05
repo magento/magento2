@@ -269,15 +269,14 @@ define([
             ) {
                 //set billing address same as shipping by default if it is not empty
                 selectBillingAddress(quote.shippingAddress());
-            }else {
-                var addressesList=customerAddress.getAddressItems();
-            $.each(addressesList, function (key,item) {
-            if (item.isDefaultBilling()) {
-                selectBillingAddress(item);
-                
-            return;
-             }
-            });
+            } else {
+                addressesList = customerAddress.getAddressItems();
+                $.each(addressesList, function (key, item) {
+                    if (item.isDefaultBilling()) {
+                        selectBillingAddress(item);
+                        return;
+                    }
+                });
             }
         }
     };
