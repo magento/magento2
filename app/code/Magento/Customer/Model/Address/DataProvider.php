@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\FileUploaderDataResolver;
 use Magento\Customer\Model\AttributeMetadataResolver;
+use Magento\Ui\Component\Form\Element\Multiline;
 
 /**
  * Dataprovider of customer addresses for customer address grid.
@@ -137,6 +138,17 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $customer = $this->customerRepository->getById($customerId);
             $defaultBilling = $customer->getDefaultBilling();
             $defaultShipping = $customer->getDefaultShipping();
+            foreach ($this->meta['general']['children'] as $attributeName => $attributeMeta) {
+                if ($attributeMeta['arguments']['data']['config']['dataType'] === Multiline::NAME
+                    && isset($this->loadedData[$addressId][$attributeName])
+                    && !is_array($this->loadedData[$addressId][$attributeName])
+                ) {
+                    $this->loadedData[$addressId][$attributeName] = explode(
+                        "\n",
+                        $this->loadedData[$addressId][$attributeName]
+                    );
+                }
+            }
             $this->prepareAddressData($addressId, $this->loadedData, $defaultBilling, $defaultShipping);
             $this->fileUploaderDataResolver->overrideFileUploaderData($item, $this->loadedData[$addressId]);
         }
