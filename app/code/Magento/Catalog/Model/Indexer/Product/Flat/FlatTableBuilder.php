@@ -10,7 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Class FlatTableBuilder
+ * Class for building flat index
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
