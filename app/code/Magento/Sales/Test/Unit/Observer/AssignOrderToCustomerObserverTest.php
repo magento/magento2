@@ -29,7 +29,7 @@ class AssignOrderToCustomerObserverTest extends TestCase
     protected $orderRepositoryMock;
 
     /** @var CustomerAssignment | PHPUnit_Framework_MockObject_MockObject */
-    protected $customerAssignmentMock;
+    protected $assignmentMock;
 
     /**
      * Set Up
@@ -40,11 +40,11 @@ class AssignOrderToCustomerObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customerAssignmentMock =  $this->getMockBuilder(CustomerAssignment::class)
+        $this->assignmentMock =  $this->getMockBuilder(CustomerAssignment::class)
         ->disableOriginalConstructor()
         ->getMock();
 
-        $this->sut = new AssignOrderToCustomerObserver($this->orderRepositoryMock, $this->customerAssignmentMock);
+        $this->sut = new AssignOrderToCustomerObserver($this->orderRepositoryMock, $this->assignmentMock);
     }
 
     /**
@@ -78,12 +78,14 @@ class AssignOrderToCustomerObserverTest extends TestCase
         $orderMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->orderRepositoryMock->expects($this->once())->method('get')->with($orderId)
             ->willReturn($orderMock);
+
         if ($customerId) {
-            $this->customerAssignmentMock->expects($this->once())->method('execute')->with($orderMock, $customerMock);
-        } else {
-            $this->customerAssignmentMock->expects($this->never())->method('execute');
+            $this->assignmentMock->expects($this->once())->method('execute')->with($orderMock, $customerMock);
+            $this->sut->execute($observerMock);
+            return;
         }
 
+        $this->assignmentMock->expects($this->never())->method('execute');
         $this->sut->execute($observerMock);
     }
 

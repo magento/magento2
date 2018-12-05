@@ -1,7 +1,8 @@
 <?php
 
-use Magento\Sales\Model\Order;
+namespace Magento\SalesRule\Model\Observer;
 
+use Magento\Sales\Model\Order;
 use Magento\Customer\Model\GroupManagement;
 use Magento\SalesRule\Api\CouponRepositoryInterface;
 use Magento\SalesRule\Model\Coupon;
@@ -12,6 +13,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class AssignCouponDataAfterOrderCustomerAssignTest
+ *
+ * @magentoAppIsolation enabled
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -80,12 +83,12 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
         parent::__construct($name, $data, $dataName);
         $this->objectManager = Bootstrap::getObjectManager();
         $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->orderRepository = $this->objectManager->get(Magento\Sales\Model\OrderRepository::class);
+        $this->orderRepository = $this->objectManager->get(\Magento\Sales\Model\OrderRepository::class);
         $this->delegateCustomerService = $this->objectManager->get(Order\OrderCustomerDelegate::class);
         $this->customerRepository = $this->objectManager->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
-        $this->ruleCustomerFactory =  $this->objectManager->get(Magento\SalesRule\Model\Rule\CustomerFactory::class);;
+        $this->ruleCustomerFactory =  $this->objectManager->get(\Magento\SalesRule\Model\Rule\CustomerFactory::class);
         $this->assignCouponToCustomerObserver = $this->objectManager->get(
-            Magento\SalesRule\Observer\AssignCouponDataAfterOrderCustomerAssignObserver::class
+            \Magento\SalesRule\Observer\AssignCouponDataAfterOrderCustomerAssignObserver::class
         );
     }
 
@@ -116,7 +119,6 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
     }
 
     /**
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/order.php
      */
     public function testCouponDataHasBeenAssignedTest()
@@ -137,7 +139,6 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
     }
 
     /**
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/order.php
      */
     public function testOrderCancelingDecreasesCouponUsages()
@@ -145,7 +146,7 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
         $this->processOrder($this->order);
 
         // Should not throw exception as bux is fixed now
-        $this->cancelOrder($this->order);
+        $this->order->cancel();
         $ruleCustomer = $this->getSalesruleCustomerUsage($this->customer, $this->salesRule);
 
         // Assert, that rule customer model has been created for specific customer
@@ -173,19 +174,11 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
     }
 
     /**
-     * @param Order $order
-     */
-    private function cancelOrder(Order $order)
-    {
-        $order->cancel();
-    }
-
-    /**
      * @param Customer $customer
      * @param Rule $rule
      * @return Rule\Customer
      */
-    private function getSalesruleCustomerUsage(Customer $customer, Rule $rule) : Magento\SalesRule\Model\Rule\Customer
+    private function getSalesruleCustomerUsage(Customer $customer, Rule $rule) : \Magento\SalesRule\Model\Rule\Customer
     {
         $ruleCustomer = $this->ruleCustomerFactory->create();
         return $ruleCustomer->loadByCustomerRule($customer->getId(), $rule->getRuleId());
@@ -301,4 +294,3 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
         return $customer;
     }
 }
-
