@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Webapi\Rest\Response\Renderer;
 
+/**
+ * Renders response data in Xml format.
+ */
 class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
 {
     /**
@@ -165,4 +168,3 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
         return $key;
     }
 }
-
