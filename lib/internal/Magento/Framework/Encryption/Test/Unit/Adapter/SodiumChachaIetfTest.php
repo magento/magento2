@@ -22,6 +22,7 @@ class SodiumChachaIetfTest extends \PHPUnit\Framework\TestCase
         foreach ($result as &$cryptParams) {
             $cryptParams['encrypted'] = base64_decode($cryptParams['encrypted']);
         }
+
         unset($cryptParams);
 
         return $result;
