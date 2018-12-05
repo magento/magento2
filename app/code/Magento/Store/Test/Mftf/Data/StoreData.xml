@@ -65,4 +65,78 @@
         <data key="name" unique="suffix">StoreView</data>
         <data key="code" unique="suffix">StoreViewCode</data>
     </entity>
+
+    <!-- For creation 10 Store Views-->
+    <entity name="storeViewData" type="store">
+        <data key="group_id">1</data>
+        <data key="name" unique="suffix">storeView</data>
+        <data key="code" unique="suffix">storeView</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
+    <entity name="storeViewData1" type="store">
+        <data key="group_id">1</data>
+        <data key="name" unique="suffix">storeView</data>
+        <data key="code" unique="suffix">storeView</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
+    <entity name="storeViewData2" type="store">
+        <data key="group_id">1</data>
+        <data key="name" unique="suffix">storeView</data>
+        <data key="code" unique="suffix">storeView</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
+    <entity name="storeViewData3" type="store">
+        <data key="group_id">1</data>
+        <data key="name" unique="suffix">storeView</data>
+        <data key="code" unique="suffix">storeView</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
+    <entity name="storeViewData4" type="store">
+        <data key="group_id">1</data>
+        <data key="name" unique="suffix">storeView</data>
+        <data key="code" unique="suffix">storeView</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
+    <entity name="storeViewData5" type="store">
+        <data key="group_id">1</data>
+        <data key="name" unique="suffix">storeView</data>
+        <data key="code" unique="suffix">storeView</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
+    <entity name="storeViewData6" type="store">
+        <data key="group_id">1</data>
+        <data key="name" unique="suffix">storeView</data>
+        <data key="code" unique="suffix">storeView</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
+    <entity name="storeViewData7" type="store">
+        <data key="group_id">1</data>
+        <data key="name" unique="suffix">storeView</data>
+        <data key="code" unique="suffix">storeView</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
 </entities>

@@ -22,6 +22,11 @@
         <element name="TinyMCE4" type="button" selector="//span[text()='Default Value']/parent::label/following-sibling::div//div[@class='mce-branding-powered-by']"/>
         <element name="checkIfTabOpen" selector="//div[@id='advanced_fieldset-wrapper' and not(contains(@class,'opened'))]" type="button"/>
         <element name="useInLayeredNavigation" type="select" selector="#is_filterable"/>
+        <element name="addSwatch" type="button" selector="#add_new_swatch_text_option_button"/>
+    </section>
+    <section name="AttributeManageSwatchSection">
+        <element name="swatchField" type="input" selector="//th[contains(@class, 'col-swatch')]/span[contains(text(), '{{arg}}')]/ancestor::thead/following-sibling::tbody//input[@placeholder='Swatch']" parameterized="true"/>
+        <element name="descriptionField" type="input" selector="//th[contains(@class, 'col-swatch')]/span[contains(text(), '{{arg}}')]/ancestor::thead/following-sibling::tbody//input[@placeholder='Description']" parameterized="true"/>
     </section>
     <section name="AttributeOptionsSection">
         <element name="AddOption" type="button" selector="#add_new_option_button"/>
