@@ -273,6 +273,11 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             'customerAddressMapper',
             $this->customerAddressMapper
         );
+        $objectManager->setBackwardCompatibleProperty(
+            $this->backwardModel,
+            'customerRepository',
+            null
+        );
     }
 
     /**
