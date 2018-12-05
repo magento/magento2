@@ -6,12 +6,12 @@
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
 /**
- * Order credit memo tax total calculation model
+ * Collects credit memo taxes.
  */
 class Tax extends AbstractTotal
 {
     /**
-     * Collect credit memo tax total
+     * Collects credit memo taxes.
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
@@ -85,18 +85,10 @@ class Tax extends AbstractTotal
                 $totalDiscountTaxCompensation += $invoice->getShippingDiscountTaxCompensationAmount() * $taxFactor;
                 $baseTotalDiscountTaxCompensation +=
                     $invoice->getBaseShippingDiscountTaxCompensationAmnt() * $taxFactor;
-                $shippingDiscountTaxCompensationAmount =
-                    $invoice->getShippingDiscountTaxCompensationAmount() * $taxFactor;
-                $baseShippingDiscountTaxCompensationAmount =
-                    $invoice->getBaseShippingDiscountTaxCompensationAmnt() * $taxFactor;
                 $shippingTaxAmount = $creditmemo->roundPrice($shippingTaxAmount);
                 $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base');
                 $totalDiscountTaxCompensation = $creditmemo->roundPrice($totalDiscountTaxCompensation);
                 $baseTotalDiscountTaxCompensation = $creditmemo->roundPrice($baseTotalDiscountTaxCompensation, 'base');
-                $shippingDiscountTaxCompensationAmount =
-                    $creditmemo->roundPrice($shippingDiscountTaxCompensationAmount);
-                $baseShippingDiscountTaxCompensationAmount =
-                    $creditmemo->roundPrice($baseShippingDiscountTaxCompensationAmount, 'base');
                 if ($taxFactor < 1 && $invoice->getShippingTaxAmount() > 0) {
                     $isPartialShippingRefunded = true;
                 }
