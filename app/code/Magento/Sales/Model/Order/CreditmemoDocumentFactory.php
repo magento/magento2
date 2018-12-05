@@ -100,6 +100,7 @@ class CreditmemoDocumentFactory
             ->setIsCustomerNotified($appendComment);
         $creditmemo->setComments([$comment]);
         $creditmemo->setCustomerNote($comment->getComment());
+        $creditmemo->setCustomerNoteNotify($appendComment);
         return $creditmemo;
     }
 
