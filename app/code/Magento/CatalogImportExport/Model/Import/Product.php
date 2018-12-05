@@ -130,6 +130,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const COL_NAME = 'name';
 
     /**
+     * Column new_from_date.
+     */
+    const COL_NEW_FROM_DATE = 'new_from_date';
+
+    /**
+     * Column new_to_date.
+     */
+    const COL_NEW_TO_DATE = 'new_to_date';
+
+    /**
      * Column product website.
      */
     const COL_PRODUCT_WEBSITES = '_product_websites';
@@ -292,7 +302,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
-        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually'
+        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
+        ValidatorInterface::ERROR_NEW_TO_DATE => 'Make sure new_to_date is later than or the same as new_from_date',
     ];
 
     /**
@@ -313,8 +324,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         Product::COL_TYPE => 'product_type',
         Product::COL_PRODUCT_WEBSITES => 'product_websites',
         'status' => 'product_online',
-        'news_from_date' => 'new_from_date',
-        'news_to_date' => 'new_to_date',
+        'news_from_date' => self::COL_NEW_FROM_DATE,
+        'news_to_date' => self::COL_NEW_TO_DATE,
         'options_container' => 'display_product_options_in',
         'minimal_price' => 'map_price',
         'msrp' => 'msrp_price',
@@ -2477,6 +2488,20 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
         }
+
+        if (!empty($rowData[self::COL_NEW_FROM_DATE]) && !empty($rowData[self::COL_NEW_TO_DATE])
+        ) {
+            $newFromTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_FROM_DATE], false));
+            $newToTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_TO_DATE], false));
+            if ($newFromTimestamp > $newToTimestamp) {
+                $this->addRowError(
+                    ValidatorInterface::ERROR_NEW_TO_DATE,
+                    $rowNum,
+                    $rowData[self::COL_NEW_TO_DATE]
+                );
+            }
+        }
+
         return !$this->getErrorAggregator()->isRowInvalid($rowNum);
     }
 
