@@ -270,9 +270,17 @@
 
         &._show {
             > .submenu {
+                display: block;
+                float: left;
+                left: 100%;
+                min-height: 98.65%;
+                min-width: 100%;
+                overflow-x: auto;
+                position: absolute;
                 transform: translateX(0);
                 visibility: visible;
                 z-index: @submenu__z-index;
+                max-width: 1440px;
             }
         }
     }
