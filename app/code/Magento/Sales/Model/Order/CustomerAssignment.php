@@ -49,7 +49,8 @@ class CustomerAssignment
         $this->orderRepository->save($order);
 
         $this->eventManager->dispatch(
-            'sales_order_customer_assign_after', [
+            'sales_order_customer_assign_after',
+            [
                 'order'     => $order,
                 'customer'  => $customer
             ]
