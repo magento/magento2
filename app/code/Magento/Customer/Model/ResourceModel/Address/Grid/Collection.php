@@ -9,7 +9,6 @@ namespace Magento\Customer\Model\ResourceModel\Address\Grid;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Framework\View\Element\UiComponent\Context;
 
 /**
  * Class getting collection of addresses assigned to customer
@@ -17,22 +16,11 @@ use Magento\Framework\View\Element\UiComponent\Context;
 class Collection extends AbstractCollection implements SearchResultInterface
 {
     /**
-     * @var string
-     */
-    protected $_idFieldName = 'entity_id';
-
-    /**
-     * @var Context
-     */
-    private $context;
-
-    /**
      * @var AggregationInterface
      */
     private $aggregations;
 
     /**
-     * @param Context $context
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -48,7 +36,6 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Context $context,
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
@@ -61,11 +48,11 @@ class Collection extends AbstractCollection implements SearchResultInterface
         $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
-        $this->context = $context;
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
         $this->_init($model, $resourceModel);
         $this->setMainTable($mainTable);
+        $this->_idFieldName = 'entity_id';
         parent::__construct(
             $entityFactory,
             $logger,

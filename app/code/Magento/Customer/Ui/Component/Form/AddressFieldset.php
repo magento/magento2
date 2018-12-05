@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\Customer\Ui\Component\Form;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\ComponentVisibilityInterface;
 
 /**
  * Customer addresses fieldset class
  */
-class AddressFieldset extends \Magento\Ui\Component\Form\Fieldset
+class AddressFieldset extends \Magento\Ui\Component\Form\Fieldset implements ComponentVisibilityInterface
 {
     /**
      * @param ContextInterface $context
@@ -37,7 +38,7 @@ class AddressFieldset extends \Magento\Ui\Component\Form\Fieldset
      *
      * @return boolean
      */
-    public function canShow(): bool
+    public function isComponentVisible(): bool
     {
         $customerId = $this->context->getRequestParam('id');
         return (bool)$customerId;
