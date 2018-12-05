@@ -1,15 +1,13 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: poluyano
- * Date: 12/4/2018
- * Time: 5:45 PM
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Element;
 
 /**
- * Interface which allows modify visibility behavior of UI components
+ * Interface which allows to modify visibility behavior of UI components
  */
 interface ComponentVisibilityInterface
 {
