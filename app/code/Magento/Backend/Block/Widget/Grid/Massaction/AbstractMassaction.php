@@ -6,8 +6,8 @@
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
 use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
-use Magento\Framework\DataObject;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject;
 
 /**
  * Grid widget massaction block
@@ -52,7 +52,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -217,6 +217,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve JSON string of selected checkboxes
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSelectedJson()
     {
@@ -231,6 +232,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve array of selected checkboxes
      *
      * @return string[]
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSelected()
     {
@@ -252,6 +254,8 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get mass action javascript code.
+     *
      * @return string
      */
     public function getJavaScript()
@@ -268,6 +272,8 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get grid ids in JSON format.
+     *
      * @return string
      */
     public function getGridIdsJson()
@@ -277,7 +283,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         }
         /** @var \Magento\Framework\Data\Collection $allIdsCollection */
         $allIdsCollection = clone $this->getParentBlock()->getCollection();
-        
+
         if ($this->getMassactionIdField()) {
             $massActionIdField = $this->getMassactionIdField();
         } else {
@@ -288,7 +294,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
             $allIdsCollection->getSelect()->limit();
             $allIdsCollection->clear();
         }
-        
+
         $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
         if (!empty($gridIds)) {
             return join(",", $gridIds);
@@ -297,6 +303,8 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Html id.
+     *
      * @return string
      */
     public function getHtmlId()
