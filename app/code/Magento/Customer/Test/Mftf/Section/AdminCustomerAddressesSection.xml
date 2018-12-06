@@ -10,7 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerAddressesSection">
         <element name="addNewAddress" type="button" selector="//span[text()='Add New Address']"/>
-        <element name="defaultBillingAddress" type="button" selector="div[data-index=default_billing] .admin__actions-switch-label"/>
+        <element name="defaultBillingAddress" type="input" selector="//input[@name='default_billing']"/>
         <element name="defaultShippingAddress" type="button" selector="div[data-index=default_shipping] .admin__actions-switch-label"/>
         <element name="firstNameForAddress" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'firstname')]"/>
         <element name="lastNameForAddress" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'lastname')]"/>
