@@ -69,6 +69,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     private $logger;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -79,6 +82,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\CatalogImportExport\Model\Import\Product::class,
             ['logger' => $this->logger]
         );
+
         parent::setUp();
     }
 
@@ -1276,6 +1280,46 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         foreach ($items as $item) {
             $this->assertGreaterThan(50, $item['position']);
         }
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testNewProductPositionInCategory()
+    {
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/product_to_import_with_category.csv',
+                'directory' => $directory,
+            ]
+        );
+        $errors = $this->_model->setSource(
+            $source
+        )->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product',
+            ]
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() === 0);
+        $this->_model->importData();
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get('simpleImported');
+        $categoryLinks = $product->getExtensionAttributes('category_links')->getCategoryLinks();
+        $position = $categoryLinks[0]->getPosition();
+
+        $this->assertEquals(0, $position);
     }
 
     /**
