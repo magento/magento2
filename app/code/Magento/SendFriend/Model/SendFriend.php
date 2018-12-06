@@ -17,7 +17,6 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @api
  * @since 100.0.2
  */
@@ -123,6 +122,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
