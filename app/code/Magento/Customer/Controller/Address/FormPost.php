@@ -8,7 +8,9 @@ namespace Magento\Customer\Controller\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
@@ -25,9 +27,10 @@ use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\View\Result\PageFactory;
-use \Magento\Customer\Api\Data\CustomerInterface;
 
 /**
+ * Customer address from POST action.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FormPost extends \Magento\Customer\Controller\Address implements HttpPostActionInterface
@@ -53,7 +56,6 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @param FormKeyValidator $formKeyValidator
      * @param FormFactory $formFactory
      * @param AddressRepositoryInterface $addressRepository
-     * @param CustomerRepositoryInterface $customerRepository
      * @param AddressInterfaceFactory $addressDataFactory
      * @param RegionInterfaceFactory $regionDataFactory
      * @param DataObjectProcessor $dataProcessor
@@ -62,6 +64,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @param PageFactory $resultPageFactory
      * @param RegionFactory $regionFactory
      * @param HelperData $helperData
+     * @param CustomerRepositoryInterface $customerRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -101,31 +104,13 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
     /**
      * Extract address from request
      *
-     * @return \Magento\Customer\Api\Data\AddressInterface
+     * @return AddressInterface
+     * @throws \Exception
      * @deprecated Use extractCurrentAddress instead
      */
-    protected function _extractAddress()
+    protected function _extractAddress(): AddressInterface
     {
-        $existingAddressData = $this->getExistingAddressData();
-        /** @var \Magento\Customer\Model\Metadata\Form $addressForm */
-        $addressForm = $this->_formFactory->create(
-            'customer_address',
-            'customer_address_edit',
-            $existingAddressData
-        );
-        $addressData = $addressForm->extractData($this->getRequest());
-        $attributeValues = $addressForm->compactData($addressData);
-        $this->updateRegionData($attributeValues);
-        $addressDataObject = $this->addressDataFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $addressDataObject,
-            array_merge($existingAddressData, $attributeValues),
-            \Magento\Customer\Api\Data\AddressInterface::class
-        );
-        $addressDataObject->setCustomerId($this->_getSession()->getCustomerId())
-            ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
-            ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
-        return $addressDataObject;
+        return $this->extractCurrentAddress();
     }
     /**
      * Retrieve existing address data
@@ -134,26 +119,19 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @throws \Exception
      * @deprecated Use _getExistingAddressData instead
      */
-    protected function getExistingAddressData()
+    protected function getExistingAddressData(): array
     {
-        $existingAddressData = [];
-        if ($addressId = $this->getRequest()->getParam('id')) {
-            $existingAddress = $this->_addressRepository->getById($addressId);
-            if ($existingAddress->getCustomerId() !== $this->_getSession()->getCustomerId()) {
-                throw new \Exception();
-            }
-            $existingAddressData = $this->getCustomerAddressMapper()->toFlatArray($existingAddress);
-        }
-        return $existingAddressData;
+        return $this->_getExistingAddressData();
     }
 
     /**
      * Extract address from request
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
-     * @return \Magento\Customer\Api\Data\AddressInterface
+     * @param CustomerInterface|null $customer
+     * @return AddressInterface
+     * @throws \Exception
      */
-    protected function extractCurrentAddress(CustomerInterface $customer = null)
+    protected function extractCurrentAddress(CustomerInterface $customer = null): AddressInterface
     {
         $existingAddressData = $this->_getExistingAddressData($customer);
 
@@ -172,7 +150,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             array_merge($existingAddressData, $attributeValues),
-            \Magento\Customer\Api\Data\AddressInterface::class
+            AddressInterface::class
         );
         $addressDataObject->setCustomerId($this->_getSession()->getCustomerId())
             ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
@@ -183,12 +161,12 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
 
     /**
      * Retrieve existing address data
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      *
+     * @param CustomerInterface|null $customer
      * @return array
      * @throws \Exception
      */
-    protected function _getExistingAddressData(CustomerInterface $customer = null)
+    protected function _getExistingAddressData(CustomerInterface $customer = null): array
     {
         $existingAddressData = [];
         $addressId = $this->getRequest()->getParam('id');
@@ -294,7 +272,9 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
     }
 
     /**
-     * process address save, based on two repositories
+     * Process address save, based on two repositories.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function saveAddress()
     {
@@ -325,7 +305,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      *
      * @deprecated 100.1.3
      */
-    private function getCustomerAddressMapper()
+    private function getCustomerAddressMapper(): Mapper
     {
         if ($this->customerAddressMapper === null) {
             $this->customerAddressMapper = ObjectManager::getInstance()->get(

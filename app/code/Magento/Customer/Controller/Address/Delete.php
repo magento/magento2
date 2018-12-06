@@ -6,9 +6,8 @@
  */
 namespace Magento\Customer\Controller\Address;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Delete customer address controller action.
@@ -28,7 +27,7 @@ class Delete extends \Magento\Customer\Controller\Address implements HttpPostAct
             $addresses = $customer->getAddresses();
 
             try {
-                $addressesFiltered = array_filter($addresses, function ($customerAddress) use ($addressId){
+                $addressesFiltered = array_filter($addresses, function ($customerAddress) use ($addressId) {
                     return $customerAddress->getId() != $addressId;
                 });
                 if (count($addresses) !== count($addressesFiltered)) {
