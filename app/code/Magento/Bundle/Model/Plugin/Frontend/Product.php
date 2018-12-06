@@ -10,6 +10,9 @@ namespace Magento\Bundle\Model\Plugin\Frontend;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Model\Product as CatalogProduct;
 
+/**
+ * Add child identities to product identities on storefront.
+ */
 class Product
 {
     /**
