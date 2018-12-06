@@ -36,16 +36,16 @@
             <argument name="customer" value="Simple_US_Customer_Multiple_Addresses"/>
         </actionGroup>
         <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTab"/>
-        <!-- -
-        Step4. Click *Select* link in *Actions* column for target additional address
-        Step5. Click *Delete*
-        Step6. Press *Ok* button on the pop-up
-        <!- -->
+        <!--Step4. Click *Select* link in *Actions* column for target additional address-->
         <click selector="{{AdminCustomerAddressesGridSection.firstRowSelectLink}}" stepKey="clickOnSelectLinkInFirstRow"/>
+        <!--Step5. Click *Delete*-->
         <click selector="{{AdminCustomerAddressesGridSection.firstRowDeleteLink}}" stepKey="chooseDeleteOptionInFirstRow"/>
         <waitForPageLoad stepKey="waitForCustomerAddressesGridPageLoad1"/>
+        <!--Step6. Press *Ok* button on the pop-up-->
         <click selector="{{AdminCustomerAddressesGridActionsSection.ok}}" stepKey="clickOkOnPopup"/>
         <waitForPageLoad stepKey="waitForCustomerAddressesGridPageLoad2"/>
+        <seeNumberOfElements userInput="1" selector="{{AdminCustomerAddressesGridSection.rowsInGrid}}" stepKey="seeOnlyOneCustomerAddressesInGrid"/>
+        <!--Step7. Delete last customer address-->
         <click selector="{{AdminCustomerAddressesGridSection.firstRowSelectLink}}" stepKey="clickOnSelectLinkInFirstRow2"/>
         <click selector="{{AdminCustomerAddressesGridSection.firstRowDeleteLink}}" stepKey="chooseDeleteOptionInFirstRow2"/>
         <waitForPageLoad stepKey="waitForCustomerAddressesGridPageLoad3"/>

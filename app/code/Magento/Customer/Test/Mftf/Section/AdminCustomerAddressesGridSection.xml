@@ -18,6 +18,6 @@
         <element name="firstRowCheckbox" type="checkbox" selector="//tr[contains(@data-repeat-index, '0')]//input[contains(@data-action, 'select-row')]"/>
         <element name="secondRowCheckbox" type="checkbox" selector="//tr[contains(@data-repeat-index, '1')]//input[contains(@data-action, 'select-row')]"/>
         <element name="checkboxByName" type="checkbox" selector="//div[contains(text(),'{{customer}}')]/ancestor::tr[contains(@class, 'data-row')]//input[@class='admin__control-checkbox']" parameterized="true" />
-
+        <element name="rowsInGrid" type="text" selector="//tr[contains(@class,'data-row')]"/>
     </section>
 </sections>
