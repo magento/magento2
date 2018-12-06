@@ -85,6 +85,7 @@
         <data key="state">New York</data>
         <data key="postcode">11001</data>
         <data key="country_id">US</data>
+        <data key="country">United States</data>
         <data key="default_billing">Yes</data>
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionNY</requiredEntity>
