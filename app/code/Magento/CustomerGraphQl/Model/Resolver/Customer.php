@@ -7,14 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\Authorization\Model\UserContextInterface;
+use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataProvider;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\CustomerGraphQl\Model\Customer\CustomerDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
@@ -23,17 +19,25 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class Customer implements ResolverInterface
 {
     /**
-     * @var CustomerDataProvider
+     * @var CheckCustomerAccount
      */
-    private $customerResolver;
+    private $checkCustomerAccount;
 
     /**
-     * @param CustomerDataProvider $customerResolver
+     * @var CustomerDataProvider
+     */
+    private $customerDataProvider;
+
+    /**
+     * @param CheckCustomerAccount $checkCustomerAccount
+     * @param CustomerDataProvider $customerDataProvider
      */
     public function __construct(
-        CustomerDataProvider $customerResolver
+        CheckCustomerAccount $checkCustomerAccount,
+        CustomerDataProvider $customerDataProvider
     ) {
-        $this->customerResolver = $customerResolver;
+        $this->checkCustomerAccount = $checkCustomerAccount;
+        $this->customerDataProvider = $customerDataProvider;
     }
 
     /**
@@ -46,21 +50,13 @@ class Customer implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var ContextInterface $context */
-        if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
-            throw new GraphQlAuthorizationException(
-                __(
-                    'Current customer does not have access to the resource "%1"',
-                    [\Magento\Customer\Model\Customer::ENTITY]
-                )
-            );
-        }
+        $currentUserId = $context->getUserId();
+        $currentUserType = $context->getUserType();
 
-        try {
-            $data = $this->customerResolver->getCustomerById($context->getUserId());
-            return !empty($data) ? $data : [];
-        } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(__('Customer id %1 does not exist.', [$context->getUserId()]));
-        }
+        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
+
+        $currentUserId = (int)$currentUserId;
+        $data = $this->customerDataProvider->getCustomerById($currentUserId);
+        return $data;
     }
 }

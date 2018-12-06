@@ -67,7 +67,7 @@ class Manager implements ManagerInterface
      * @param Event\ManagerInterface $eventManager
      * @param LoggerInterface $logger
      * @param string $defaultGroup
-     * @param ExceptionMessageFactoryInterface|null exceptionMessageFactory
+     * @param ExceptionMessageFactoryInterface|null $exceptionMessageFactory
      */
     public function __construct(
         Session $session,
@@ -89,7 +89,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultGroup()
     {
@@ -110,8 +110,8 @@ class Manager implements ManagerInterface
     /**
      * @inheritdoc
      *
-     * @param string|null $group
      * @param bool $clear
+     * @param string|null $group
      * @return Collection
      */
     public function getMessages($clear = false, $group = null)
