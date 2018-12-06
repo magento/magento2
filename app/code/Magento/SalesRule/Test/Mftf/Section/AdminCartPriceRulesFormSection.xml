@@ -47,5 +47,15 @@
         <element name="couponQty" type="input" selector="#coupons_qty"/>
         <element name="generateCouponsButton" type="button" selector="#coupons_generate_button" timeout="30"/>
         <element name="generatedCouponByIndex" type="text" selector="#couponCodesGrid_table > tbody > tr:nth-child({{var}}) > td.col-code" parameterized="true"/>
+
+        <!--Conditions sub-form-->
+        <element name="conditionsHeader" type="button" selector="div[data-index='conditions']" timeout="30"/>
+        <element name="addCondition" type="button" selector="//*[@id='conditions__{{arg}}__children']//span" parameterized="true"/>
+        <element name="ruleCondition" type="select" selector="rule[conditions][{{arg}}][new_child]" parameterized="true"/>
+        <element name="ruleParameter" type="text" selector="//span[@class='rule-param']/a[contains(text(), '{{arg}}')]" parameterized="true"/>
+        <element name="ruleParameterSelect" type="select" selector="rule[conditions][{{arg}}][operator]" parameterized="true"/>
+        <element name="ruleParameterInput" type="input" selector="rule[conditions][{{arg}}][value]" parameterized="true"/>
+        <element name="openChooser" type="button" selector="//label[@for='conditions__{{arg}}__value']" parameterized="true"/>
+        <element name="categoryCheckbox" type="checkbox" selector="//span[contains(text(), '{{arg}}')]/parent::a/preceding-sibling::input[@type='checkbox']" parameterized="true"/>
     </section>
 </sections>
