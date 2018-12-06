@@ -102,6 +102,6 @@
         <click selector="{{StorefrontCustomerWishlistProductSection.productUpdateWishList}}" stepKey="clickAddToWishlistButton"/>
         <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productInfoByName(product.name)}}" stepKey="wishlistMoveMouseOverProduct" />
         <!--Check error message-->
-        <see selector="{{StorefrontCustomerWishlistProductSection.productQtyError}}" userInput="The maximum you may purchase is {{errorNum}}." stepKey="checkQtyError"/>
+        <see selector="{{StorefrontCustomerWishlistProductSection.productQtyError(product.name)}}" userInput="The maximum you may purchase is {{errorNum}}." stepKey="checkQtyError"/>
     </actionGroup>
 </actionGroups>

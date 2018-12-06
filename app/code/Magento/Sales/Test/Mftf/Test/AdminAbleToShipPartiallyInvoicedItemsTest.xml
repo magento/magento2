@@ -69,12 +69,13 @@
         <scrollTo selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" stepKey="scrollToItemsInvoiced"/>
         <!--Change invoiced items count-->
         <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="5" stepKey="invoiceHalfTheItems"/>
-        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQtyToBeInvoiced"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForUpdateQtyButton"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQtyEnabled}}" stepKey="updateQtyToBeInvoiced"/>
         <waitForLoadingMaskToDisappear stepKey="waitForQtyToUpdate"/>
         <waitForElementVisible selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="waitforSubmitInvoiceBtn"/>
         <!--Submit Invoice-->
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceToSubmit"/>
+        <waitForPageLoad stepKey="waitForInvoiceToSubmit1"/>
         <!--Invoice created successfully-->
         <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceSuccessMessage"/>
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems"/>
@@ -135,7 +136,7 @@
         <see selector="{{AdminInvoiceItemsSection.itemQty('1')}}" userInput="Refunded 5" stepKey="seeQtyOfItemsRefunded"/>
         <!--Submit Invoice-->
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice2" />
-        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceToSubmit1"/>
+        <waitForPageLoad stepKey="waitForInvoiceToSubmit2"/>
         <!--Invoice created successfully for the rest of the ordered items-->
         <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceSuccessMessage2"/>
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems3"/>

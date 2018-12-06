@@ -20,6 +20,6 @@
         <element name="productEditButtonByName" type="button" selector="//li[.//a[contains(text(), '{{var1}}')]]//span[contains(text(), 'Edit')]" parameterized="true"/>
         <element name="productUpdateWishList" type="button" selector=".column.main .actions-toolbar .action.update" timeout="30"/>
         <element name="productAddAllToCart" type="button" selector=".column.main .actions-toolbar .action.tocart" timeout="30"/>
-        <element name="productQtyError" type="text" selector=".box-tocart div.mage-error" timeout="30"/>
+        <element name="productQtyError" type="text" selector="//li[.//a[contains(text(), '{{var1}}')]]//div[@class='mage-error']" parameterized="true" timeout="30"/>
     </section>
 </sections>
