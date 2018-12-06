@@ -90,7 +90,7 @@
         <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectShippingMethod"/>
         <see userInput="${{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
         <see userInput="({{shippingMethod}})" selector="{{CheckoutCartSummarySection.shippingMethod}}" stepKey="assertShippingMethod"/>
-        <waitForText userInput="${{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="30" stepKey="assertShipping"/>
+        <waitForText userInput="${{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="45" stepKey="assertShipping"/>
         <see userInput="${{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal"/>
     </actionGroup>
 
