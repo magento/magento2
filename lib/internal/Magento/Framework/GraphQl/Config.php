@@ -10,6 +10,7 @@ namespace Magento\Framework\GraphQl;
 use Magento\Framework\Config\DataInterface;
 use Magento\Framework\GraphQl\Config\ConfigElementFactoryInterface;
 use Magento\Framework\GraphQl\Config\ConfigElementInterface;
+use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 
 /**
  * Provides access to typing information for a configured GraphQL schema.
@@ -27,15 +28,23 @@ class Config implements ConfigInterface
     private $configElementFactory;
 
     /**
+     * @var QueryFields
+     */
+    private $queryFields;
+
+    /**
      * @param DataInterface $data
      * @param ConfigElementFactoryInterface $configElementFactory
+     * @param QueryFields $queryFields
      */
     public function __construct(
         DataInterface $data,
-        ConfigElementFactoryInterface $configElementFactory
+        ConfigElementFactoryInterface $configElementFactory,
+        QueryFields $queryFields
     ) {
         $this->configData = $data;
         $this->configElementFactory = $configElementFactory;
+        $this->queryFields = $queryFields;
     }
 
     /**
@@ -44,6 +53,7 @@ class Config implements ConfigInterface
      * @param string $configElementName
      * @return ConfigElementInterface
      * @throws \LogicException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getConfigElement(string $configElementName) : ConfigElementInterface
     {
@@ -53,6 +63,20 @@ class Config implements ConfigInterface
                 sprintf('Config element "%s" is not declared in GraphQL schema', $configElementName)
             );
         }
+
+        $fieldsInQuery = $this->queryFields->getFieldsUsedInQuery();
+        if (isset($data['fields'])) {
+            if (!empty($fieldsInQuery)) {
+                foreach ($data['fields'] as $fieldName => $fieldConfig) {
+                    if (!isset($fieldsInQuery[$fieldName])) {
+                        unset($data['fields'][$fieldName]);
+                    }
+                }
+            }
+
+            ksort($data['fields']);
+        }
+
         return $this->configElementFactory->createFromConfigData($data);
     }
 
