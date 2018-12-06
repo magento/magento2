@@ -133,6 +133,24 @@
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
 
+    <!-- Place order with logged the user -->
+    <actionGroup name="PlaceOrderWithLoggedUserActionGroup">
+        <arguments>
+            <!--First available shipping method will be selected if value is not passed for shippingMethod-->
+            <argument name="shippingMethod" defaultValue="" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitProceedToCheckout"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="selectShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </actionGroup>
+
     <!-- Check product in checkout cart items -->
     <actionGroup name="CheckProductInCheckoutCartItemsActionGroup">
         <arguments>
@@ -163,7 +181,7 @@
     <actionGroup name="CheckTotalsSortOrderInSummarySection">
         <arguments>
             <argument name="elementName" type="string"/>
-            <argument name="positionNumber" type="integer"/>
+            <argument name="positionNumber" type="string"/>
         </arguments>
         <see userInput="{{elementName}}" selector="{{CheckoutCartSummarySection.elementPosition(positionNumber)}}" stepKey="assertElementPosition"/>
     </actionGroup>
