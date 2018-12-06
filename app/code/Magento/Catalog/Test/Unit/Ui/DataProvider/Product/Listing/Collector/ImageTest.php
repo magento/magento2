@@ -15,6 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Helper\ImageFactory;
 use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
 use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Framework\View\DesignLoader;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,6 +33,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
     /** @var  DesignInterface | \PHPUnit_Framework_MockObject_MockObject */
     private $design;
+
+    /** @var DesignLoader | \PHPUnit_Framework_MockObject_MockObject*/
+    private $designLoader;
 
     /** @var  Image */
     private $model;
@@ -60,13 +64,15 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->design = $this->createMock(DesignInterface::class);
+        $this->designLoader = $this->createMock(DesignLoader::class);
         $this->model = new Image(
             $this->imageFactory,
             $this->state,
             $this->storeManager,
             $this->design,
             $this->imageInterfaceFactory,
-            $this->imageCodes
+            $this->imageCodes,
+            $this->designLoader
         );
     }
 
