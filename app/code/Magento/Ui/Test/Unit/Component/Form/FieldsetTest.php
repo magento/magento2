@@ -55,15 +55,4 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(self::NAME, $this->fieldset->getComponentName());
     }
-
-    /**
-     * Run test for canShow() method
-     *
-     * @return void
-     *
-     */
-    public function testCanShow()
-    {
-        $this->assertEquals(true, $this->fieldset->canShow());
-    }
 }
