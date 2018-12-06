@@ -40,5 +40,12 @@ var config = {
         "mage/dataPost",
         "js/theme",
         "mage/bootstrap"
-    ]
+    ],
+    config: {
+        mixins: {
+            'jquery/jquery-ui': {
+                'jquery/patches/jquery-ui': true
+            }
+        }
+    }
 };

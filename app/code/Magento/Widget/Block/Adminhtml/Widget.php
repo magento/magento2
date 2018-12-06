@@ -16,7 +16,7 @@ namespace Magento\Widget\Block\Adminhtml;
 class Widget extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -36,12 +36,16 @@ class Widget extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'region', 'footer');
         $this->buttonList->update('save', 'data_attribute', []);
 
-        $this->_formScripts[] = 'require(["mage/adminhtml/wysiwyg/widget"], function(){wWidget = new WysiwygWidget.Widget(' .
-            '"widget_options_form", "select_widget_type", "widget_options", "' .
-            $this->getUrl(
-                'adminhtml/*/loadOptions'
-            ) . '", "' . $this->getRequest()->getParam(
-                'widget_target_id'
-            ) . '");});';
+        $this->_formScripts[] = <<<EOJS
+ 	 		require(['mage/adminhtml/wysiwyg/widget'], function() {
+ 	 		    wWidget = new WysiwygWidget.Widget(
+ 	 		        'widget_options_form',
+ 	 		        'select_widget_type',
+ 	 		        'widget_options',
+ 	 		        '{$this->getUrl('adminhtml/*/loadOptions')}',
+ 	 		        '{$this->_escaper->escapeJs((string)$this->getRequest()->getParam('widget_target_id'))}'
+ 	 		    );
+ 	 		});
+EOJS;
     }
 }

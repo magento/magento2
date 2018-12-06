@@ -7,6 +7,7 @@
 namespace Magento\Framework\View\Test\Unit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Unserialize\SecureUnserializer;
 
 class DesignExceptionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,18 +29,21 @@ class DesignExceptionsTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     protected $scopeType = 'scope_type';
 
+    private $secureUnserializer;
+
     protected function setUp()
     {
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->secureUnserializer = $this->objectManagerHelper->getObject(SecureUnserializer::class);
         $this->designExceptions = $this->objectManagerHelper->getObject(
             'Magento\Framework\View\DesignExceptions',
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'exceptionConfigPath' => $this->exceptionConfigPath,
-                'scopeType' => $this->scopeType
+                'scopeType' => $this->scopeType,
+                'secureUnserializer' => $this->secureUnserializer,
             ]
         );
     }

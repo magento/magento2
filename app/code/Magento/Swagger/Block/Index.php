@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\Template;
  * Class Index
  *
  * @api
+ * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
  */
 class Index extends Template
 {
@@ -19,7 +20,7 @@ class Index extends Template
      */
     private function getParamStore()
     {
-        return $this->getRequest()->getParam('store') ?: 'all';
+        return $this->stripTags($this->getRequest()->getParam('store')) ?: 'all';
     }
 
     /**
