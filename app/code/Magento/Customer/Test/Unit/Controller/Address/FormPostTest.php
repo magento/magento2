@@ -30,6 +30,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
@@ -167,15 +168,19 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Customer\Model\Address\Mapper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerAddressMapper;
+
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerRepository;
-    /** @var  @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject */
+
+    /**
+     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $customer;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function setUp()
     {
@@ -183,10 +188,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
 
         $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'setAddressFormData',
-                'getCustomerId',
-            ])
+            ->setMethods(['setAddressFormData', 'getCustomerId'])
             ->getMock();
 
         $this->formKeyValidator = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
@@ -262,7 +264,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             $this->helperData
         );
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $objectManager->setBackwardCompatibleProperty(
             $this->model,
             'customerAddressMapper',
