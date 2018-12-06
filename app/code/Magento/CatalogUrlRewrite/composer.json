@@ -16,6 +16,9 @@
         "magento/module-ui": "*",
         "magento/module-url-rewrite": "*"
     },
+    "suggest": {
+        "magento/module-webapi": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",

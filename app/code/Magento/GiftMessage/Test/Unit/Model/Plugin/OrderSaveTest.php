@@ -128,7 +128,7 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedMessage The gift message couldn't be added to the "Test message" order.
+     * @expectedExceptionMessage The gift message couldn't be added to the "Test message" order.
      */
     public function testAfterSaveIfGiftMessagesNotExist()
     {
@@ -146,7 +146,7 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
         $this->giftMessageOrderRepositoryMock
             ->expects($this->once())
             ->method('save')
-            ->willThrowException(new \Exception('TestMessage'));
+            ->willThrowException(new \Exception('Test message'));
 
         // save Gift Messages on item level
         $this->orderMock->expects($this->never())->method('getItems');
@@ -155,7 +155,7 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedMessage The gift message couldn't be added to the "Test message" order.
+     * @expectedExceptionMessage The gift message couldn't be added to the "Test message" order item.
      */
     public function testAfterSaveIfItemGiftMessagesNotExist()
     {
@@ -185,7 +185,7 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
         $this->giftMessageOrderItemRepositoryMock
             ->expects($this->once())->method('save')
             ->with($orderId, $orderItemId, $this->giftMessageMock)
-            ->willThrowException(new \Exception('TestMessage'));
+            ->willThrowException(new \Exception('Test message'));
         $this->plugin->afterSave($this->orderRepositoryMock, $this->orderMock);
     }
 }
