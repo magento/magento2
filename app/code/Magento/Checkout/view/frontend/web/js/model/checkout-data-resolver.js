@@ -240,7 +240,8 @@ define([
          */
         applyBillingAddress: function () {
             var shippingAddress,
-                isBillingAddressInitialized;
+                isBillingAddressInitialized,
+                customerAddressList;
 
             if (quote.billingAddress()) {
                 selectBillingAddress(quote.billingAddress());
@@ -262,8 +263,8 @@ define([
 
             shippingAddress = quote.shippingAddress();
 
-            addressesList = customerAddress.getAddressItems();
-                $.each(addressesList, function (key, item) {
+            customerAddressList = customerAddress.getAddressItems();
+                $.each(customerAddressList, function (key, item) {
                     if (item.isDefaultBilling()) {
                         selectBillingAddress(item);
                         return;
