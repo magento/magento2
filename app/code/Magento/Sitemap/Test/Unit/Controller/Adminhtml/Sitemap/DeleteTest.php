@@ -135,7 +135,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->sitemapFactoryMock->expects($this->once())->method('create')->willReturn($sitemapMock);
         $writeDirectoryMock->expects($this->any())
             ->method('getRelativePath')
-            ->with($sitemapPath . $sitemapFilename)
+            ->with($sitemapFilename)
             ->willReturn($relativePath);
         $writeDirectoryMock->expects($this->once())->method('isFile')->with($relativePath)->willReturn(true);
         $writeDirectoryMock->expects($this->once())->method('delete')->with($relativePath)->willReturn(true);
