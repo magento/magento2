@@ -25,7 +25,6 @@ define(['uiComponent'], function (Component) {
             }
 
             return null;
-        },
-
+        }
     });
 });
