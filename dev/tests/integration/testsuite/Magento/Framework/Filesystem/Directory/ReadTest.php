@@ -7,6 +7,7 @@
  */
 namespace Magento\Framework\Filesystem\Directory;
 
+use Magento\Framework\Exception\ValidatorException;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -34,11 +35,55 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('_files/foo/bar', $dir->getAbsolutePath('bar'));
     }
 
+    /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testGetAbsolutePathOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->getAbsolutePath($path . '/ReadTest.php');
+    }
+
+    /**
+     * @return array
+     */
+    public function pathDataProvider(): array
+    {
+        return [
+            ['../../Directory'],
+            ['//./..///../Directory'],
+            ['\..\..\Directory'],
+        ];
+    }
+
     public function testGetRelativePath()
     {
         $dir = $this->getDirectoryInstance('foo');
+        $this->assertEquals(
+            'file_three.txt',
+            $dir->getRelativePath('file_three.txt')
+        );
         $this->assertEquals('', $dir->getRelativePath());
         $this->assertEquals('bar', $dir->getRelativePath(__DIR__ . '/../_files/foo/bar'));
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testGetRelativePathOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->getRelativePath(__DIR__ . $path . '/ReadTest.php');
     }
 
     /**
@@ -73,6 +118,20 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testReadOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->read($path . '/ReadTest.php');
+    }
+
+    /**
      * Test for search method
      *
      * @dataProvider searchProvider
@@ -104,6 +163,20 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testSearchOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->search('/*/*.txt', $path . '/ReadTest.php');
+    }
+
+    /**
      * Test for isExist method
      *
      * @dataProvider existsProvider
@@ -125,6 +198,20 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     public function existsProvider()
     {
         return [['foo', 'bar', true], ['foo', 'bar/baz/', true], ['foo', 'bar/notexists', false]];
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testIsExistOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->isExist($path . '/ReadTest.php');
     }
 
     /**
@@ -169,6 +256,20 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testStatOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->stat('bar/' . $path);
+    }
+
+    /**
      * Test for isReadable method
      *
      * @dataProvider isReadableProvider
@@ -180,6 +281,20 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     {
         $dir = $this->getDirectoryInstance($dirPath);
         $this->assertEquals($readable, $dir->isReadable($path));
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testIsReadableOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->isReadable($path . '/ReadTest.php');
     }
 
     /**
@@ -195,6 +310,20 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testIsFileOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->isFile($path . '/ReadTest.php');
+    }
+
+    /**
      * Test for isDirectory method
      *
      * @dataProvider isDirectoryProvider
@@ -204,6 +333,20 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     public function testIsDirectory($path, $isDirectory)
     {
         $this->assertEquals($isDirectory, $this->getDirectoryInstance('foo')->isDirectory($path));
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testIsDirectoryOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->isDirectory($path . '/ReadTest.php');
     }
 
     /**
@@ -247,6 +390,20 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testOpenFileOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->openFile($path . '/ReadTest.php');
+    }
+
+    /**
      * Test readFile
      *
      * @dataProvider readFileProvider
@@ -268,8 +425,25 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['popup.csv', 'var myData = 5;'],
-            ['data.csv', '"field1", "field2"' . "\n" . '"field3", "field4"' . "\n"]
+            [
+                'data.csv',
+                '"field1", "field2"' . PHP_EOL . '"field3", "field4"' . PHP_EOL,
+            ],
         ];
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testReadFileOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->readFile($path . '/ReadTest.php');
     }
 
     /**
@@ -300,5 +474,19 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEquals($expected, $actual);
         sort($expected);
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ValidatorException
+     * @dataProvider pathDataProvider
+     */
+    public function testReadRecursivelyOutside(string $path)
+    {
+        $dir = $this->getDirectoryInstance('foo');
+
+        $dir->readRecursively($path);
     }
 }
