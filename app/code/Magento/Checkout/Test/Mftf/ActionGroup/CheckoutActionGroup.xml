@@ -11,8 +11,15 @@
     <!-- Checkout select Check/Money Order payment -->
     <actionGroup name="CheckoutSelectCheckMoneyOrderPaymentActionGroup">
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" visible="true" stepKey="clickCheckMoneyOrderPayment"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{PaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" dependentSelector="{{PaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+    </actionGroup>
+
+    <!-- Checkout select Flat Rate shipping method -->
+    <actionGroup name="CheckoutSelectFlatRateShippingMethodActionGroup">
+        <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" visible="true" stepKey="selectFlatRateShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForNextButton"/>
     </actionGroup>
 
     <!-- Checkout place order -->
@@ -66,11 +73,5 @@
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
-    </actionGroup>
-
-    <!-- Checkout select Flat Rate shipping method -->
-    <actionGroup name="CheckoutSelectFlatRateShippingMethodActionGroup">
-        <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" visible="true" stepKey="selectFlatRateShippingMethod"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForNextButton"/>
     </actionGroup>
 </actionGroups>
