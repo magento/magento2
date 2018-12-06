@@ -153,7 +153,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     /**
      * Reformat customer addresses data to be compatible with customer service interface
      *
-     * @deprecated addresses are save separately for now
+     * @deprecated addresses are saved separately for now
      * @param array $extractedCustomerData
      * @return array
      */
