@@ -264,12 +264,14 @@ define([
             shippingAddress = quote.shippingAddress();
 
             customerAddressList = customerAddress.getAddressItems();
-                $.each(customerAddressList, function (key, item) {
-                    if (item.isDefaultBilling()) {
-                        selectBillingAddress(item);
-                        return;
-                    }
-                });
+            $.each(customerAddressList, function (key, item) {
+
+                if (item.isDefaultBilling()) {
+                    selectBillingAddress(item);
+
+                    return;
+                }
+            });
 
             if (!isBillingAddressInitialized &&
                 shippingAddress &&
