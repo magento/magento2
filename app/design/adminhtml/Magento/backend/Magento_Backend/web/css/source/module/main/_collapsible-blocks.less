@@ -127,6 +127,21 @@
                 }
             }
         }
+
+        td.admin__collapsible-block-wrapper {
+            .admin__collapsible-title {
+                &:before {
+                    content: @icon-expand-open__content;
+                }
+            }
+            &._show {
+                .admin__collapsible-title {
+                    &:before {
+                        content: @icon-expand-close__content;
+                    } 
+                }
+            }
+        }
     }
 
     &.fieldset-wrapper {
