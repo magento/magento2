@@ -5,6 +5,8 @@
  */
 namespace Magento\Sitemap\Model;
 
+use Magento\Store\Model\App\Emulation;
+use Magento\Framework\App\ObjectManager;
 /**
  * Sitemap module observer
  *
@@ -67,13 +69,21 @@ class Observer
     protected $inlineTranslation;
 
     /**
+     * @var \Magento\Store\Model\App\Emulation $appEmulation
+     */
+    protected $appEmulation;
+
+    /**
+     * Observer constructor.
+     * @param Emulation|null $appEmulation
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory $collectionFactory
+     * @param ResourceModel\Sitemap\CollectionFactory $collectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
+        Emulation $appEmulation = null,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory $collectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -85,6 +95,8 @@ class Observer
         $this->_storeManager = $storeManager;
         $this->_transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
+        $this->appEmulation = $appEmulation ?: ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\App\Emulation::class);
     }
 
     /**
@@ -112,10 +124,20 @@ class Observer
         foreach ($collection as $sitemap) {
             /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
             try {
+
+                $this->appEmulation->startEnvironmentEmulation(
+                    $sitemap->getStoreId(),
+                    \Magento\Framework\App\Area::AREA_FRONTEND,
+                    true
+                );
+
                 $sitemap->generateXml();
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
+            } finally {
+                $this->appEmulation->stopEnvironmentEmulation();
             }
+
         }
 
         if ($errors && $this->_scopeConfig->getValue(
