@@ -262,21 +262,21 @@ define([
 
             shippingAddress = quote.shippingAddress();
 
-            if (!isBillingAddressInitialized &&
-                shippingAddress && shippingAddress.isDefaultBilling() &&
-                shippingAddress.canUseForBilling() &&
-                (shippingAddress.isDefaultShipping() || !quote.isVirtual())
-            ) {
-                //set billing address same as shipping by default if it is not empty
-                selectBillingAddress(quote.shippingAddress());
-            } else {
-                addressesList = customerAddress.getAddressItems();
+            addressesList = customerAddress.getAddressItems();
                 $.each(addressesList, function (key, item) {
                     if (item.isDefaultBilling()) {
                         selectBillingAddress(item);
                         return;
                     }
                 });
+
+            if (!isBillingAddressInitialized &&
+                shippingAddress &&
+                shippingAddress.canUseForBilling() &&
+                (shippingAddress.isDefaultShipping() || !quote.isVirtual())
+            ) {
+                //set billing address same as shipping by default if it is not empty
+                selectBillingAddress(quote.shippingAddress());
             }
         }
     };
