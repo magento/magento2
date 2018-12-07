@@ -203,4 +203,10 @@
         </arguments>
         <see selector="{{AdminOrderItemsOrderedSection.productSkuColumn}}" userInput="{{product.sku}}" stepKey="seeSkuInItemsOrdered"/>
     </actionGroup>
+
+    <!--Select Check Money payment method-->
+    <actionGroup name="SelectCheckMoneyPaymentMethod">
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" dependentSelector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" visible="true" stepKey="checkCheckMoneyOption"/>
+    </actionGroup>
 </actionGroups>
