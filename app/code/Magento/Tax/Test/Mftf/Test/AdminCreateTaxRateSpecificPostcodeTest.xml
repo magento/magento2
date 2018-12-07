@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateTaxRateSpecificPostcode">
+    <test name="AdminCreateTaxRateSpecificPostcodeTest">
         <annotations>
             <stories value="Create tax rate"/>
             <title value="Create tax rate,specific postcode"/>
