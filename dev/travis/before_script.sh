@@ -81,6 +81,7 @@ case $TEST_SUITE in
         cp Gruntfile.js.sample Gruntfile.js
         yarn
         sed -i'.bak' 's/requirejs.s.contexts/requirejs.contexts/g' node_modules/squirejs/src/Squire.js
+        sed -i'.bak' 's/return context.require.undef(module)/delete context.defined[module];/g' node_modules/squirejs/src/Squire.js
 
         if [[ $GRUNT_COMMAND != "static" ]]; then
             echo "Installing Magento"
