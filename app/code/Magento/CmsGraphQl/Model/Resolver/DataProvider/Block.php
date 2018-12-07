@@ -40,6 +40,8 @@ class Block
     }
 
     /**
+     * Get block data
+     *
      * @param string $blockIdentifier
      * @return array
      * @throws NoSuchEntityException
@@ -49,7 +51,9 @@ class Block
         $block = $this->blockRepository->getById($blockIdentifier);
 
         if (false === $block->isActive()) {
-            throw new NoSuchEntityException();
+            throw new NoSuchEntityException(
+                __('The CMS block with the "%1" ID doesn\'t exist.', $blockIdentifier)
+            );
         }
 
         $renderedContent = $this->widgetFilter->filter($block->getContent());
