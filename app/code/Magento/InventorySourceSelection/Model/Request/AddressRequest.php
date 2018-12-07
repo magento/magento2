@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelection\Model\Request;
 
+use Magento\Framework\Locale\ListsInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
 
 /**
@@ -40,6 +41,11 @@ class AddressRequest implements AddressRequestInterface
     private $city;
 
     /**
+     * @var ListsInterface
+     */
+    private $lists;
+
+    /**
      * ItemRequestAddress constructor.
      *
      * @param string $country
@@ -47,19 +53,22 @@ class AddressRequest implements AddressRequestInterface
      * @param string $streetAddress
      * @param string $region
      * @param string $city
+     * @param ListsInterface $lists
      */
     public function __construct(
         string $country,
         string $postcode,
         string $streetAddress,
         string $region,
-        string $city
+        string $city,
+        ListsInterface $lists
     ) {
         $this->country = $country;
         $this->postcode = $postcode;
         $this->streetAddress = $streetAddress;
         $this->region = $region;
         $this->city = $city;
+        $this->lists = $lists;
     }
 
     /**
@@ -111,10 +120,11 @@ class AddressRequest implements AddressRequestInterface
     {
         return implode(' ', [
             $this->getStreetAddress(),
+            'ZIP',
             $this->getPostcode(),
             $this->getCity(),
             $this->getRegion(),
-            $this->getCountry()
+            $this->lists->getCountryTranslation($this->getCountry()),
         ]);
     }
 }
