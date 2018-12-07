@@ -62,6 +62,7 @@
         <!-- Save the product -->
         <click selector="{{AdminProductFormActionSection.saveArrow}}" stepKey="openSaveDropDown"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSave"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickConfirm"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="assertSuccess"/>
     </actionGroup>
 </actionGroups>
