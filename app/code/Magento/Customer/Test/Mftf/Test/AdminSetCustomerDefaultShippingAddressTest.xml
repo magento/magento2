@@ -8,13 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminSetCustomerDefaultBillingAddressTest">
+    <test name="AdminSetCustomerDefaultShippingAddressTest">
         <annotations>
-            <stories value="Set customer default billing address"/>
-            <title value="Admin should be able to set customer default billing address"/>
-            <description value="Admin should be able to set customer default billing address from customer addresses grid row actions"/>
+            <stories value="Set customer default shipping address"/>
+            <title value="Admin should be able to set customer default shipping address"/>
+            <description value="Admin should be able to set customer default shipping address from customer addresses grid row actions"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-94952"/>
+            <testCaseId value="MAGETWO-94953"/>
             <group value="customer"/>
         </annotations>
         <before>
@@ -39,19 +39,19 @@
         <fillField userInput="{{US_Address_NY_Not_Default_Address.street[0]}}" selector="{{AdminCustomerAddressesGridActionsSection.search}}" stepKey="fillCustomerAddressStreetInSearchByKeyword"/>
         <pressKey parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" selector="{{AdminCustomerAddressesGridActionsSection.search}}" stepKey="pressEnterKey"/>
         <waitForPageLoad stepKey="waitForCustomerAddressesGridPageLoad"/>
-        <see userInput="The customer does not have default billing address" selector="{{AdminCustomerAddressesDefaultBillingSection.address}}" stepKey="assertThatThereIsNoDefaultBillingAddress"/>
+        <see userInput="The customer does not have default shipping address" selector="{{AdminCustomerAddressesDefaultShippingSection.address}}" stepKey="assertThatThereIsNoDefaultShippingAddress"/>
         <seeNumberOfElements userInput="1" selector="{{AdminCustomerAddressesGridSection.rowsInGrid}}" stepKey="seeOnlyOneCustomerAddressesInGrid"/>
         <!--Step4. Click *Select* link in *Actions* column for target additional address-->
         <click selector="{{AdminCustomerAddressesGridSection.firstRowSelectLink}}" stepKey="clickSelectElementFromRow" />
-        <!--Step4. Click *Set as default billing*-->
-        <click selector="{{AdminCustomerAddressesGridSection.firstRowSetAsDefaultBillingLink}}" stepKey="clickOnSetAddressAsDefaultBilling"/>
+        <!--Step4. Click *Set as default shipping*-->
+        <click selector="{{AdminCustomerAddressesGridSection.firstRowSetAsDefaultShippingLink}}" stepKey="clickOnSetAddressAsDefaultShipping"/>
         <!--Step5. Press *Ok* button on the pop-up-->
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmSetAddressAsDefaultBilling"/>
-        <seeElement selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="seeDefaultBillingAddressSection"/>
-        <see userInput="{{US_Address_NY_Not_Default_Address.street[0]}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="assertDefaultBillingAddressIsSet"/>
-        <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditDefaultBillingAddress"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmSetAddressAsDefaultShipping"/>
+        <seeElement selector="{{AdminCustomerAddressesDefaultShippingSection.addressDetails}}" stepKey="seeDefaultShippingAddressSection"/>
+        <see userInput="{{US_Address_NY_Not_Default_Address.street[0]}}" selector="{{AdminCustomerAddressesDefaultShippingSection.addressDetails}}" stepKey="assertDefaultShippingAddressIsSet"/>
+        <click selector="{{AdminCustomerAddressesDefaultShippingSection.editButton}}" stepKey="clickEditDefaultShippingAddress"/>
         <waitForPageLoad stepKey="waitForCustomerAddressAddUpdateFormLoad"/>
-        <assertElementContainsAttribute selector="{{AdminCustomerAddressesSection.defaultBillingAddressCheckBox}}" attribute="value" expectedValue="1" stepKey="assertDefaultBillingCheckboxIsCheckedOnCustomerAddressAddUpdateForm"/>
+        <assertElementContainsAttribute selector="{{AdminCustomerAddressesSection.defaultShippingAddressCheckBox}}" attribute="value" expectedValue="1" stepKey="assertDefaultShippingCheckboxIsCheckedOnCustomerAddressAddUpdateForm"/>
     </test>
 </tests>
 
