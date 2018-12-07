@@ -69,7 +69,7 @@ class Observer
     protected $inlineTranslation;
 
     /**
-     * @var \Magento\Store\Model\App\Emulation $appEmulation
+     * @var Emulation
      */
     private $appEmulation;
 
