@@ -54,5 +54,3 @@
         <assertElementContainsAttribute selector="{{AdminCustomerAddressesSection.defaultShippingAddressCheckBox}}" attribute="value" expectedValue="1" stepKey="assertDefaultShippingCheckboxIsCheckedOnCustomerAddressAddUpdateForm"/>
     </test>
 </tests>
-
-
