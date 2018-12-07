@@ -795,6 +795,7 @@ class AccountManagement implements AccountManagementInterface
         } else {
             $hash = null;
         }
+
         return $this->createAccountWithPasswordHash($customer, $hash, $redirectUrl, $extensions);
     }
 
