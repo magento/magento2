@@ -282,7 +282,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         ->setValue('web/url/use_store', true, ScopeInterface::SCOPE_STORE, 'secondstore');
 
         $this->model->load('admin');
-        $this->model->expects($this->any())->method('getUrl')->will($this->returnValue('http://localhost/index.php'));
+        $this->model
+            ->expects($this->any())->method('getUrl')
+            ->will($this->returnValue('http://localhost/index.php'));
         $this->assertStringEndsWith('default', $this->model->getCurrentUrl());
         $this->assertStringEndsNotWith('default', $this->model->getCurrentUrl(false));
 
@@ -295,9 +297,18 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $product->setStoreId($secondStore->getId());
         $url = $product->getUrlInStore();
 
-        $this->assertEquals('http://localhost/index.php/secondstore/catalog/product/view/id/1/s/simple-product/', $url);
-        $this->assertEquals('http://localhost/index.php/secondstore/?___from_store=default', $secondStore->getCurrentUrl());
-        $this->assertEquals('http://localhost/index.php/secondstore/', $secondStore->getCurrentUrl(false));
+        $this->assertEquals(
+            $secondStore->getBaseUrl().'catalog/product/view/id/1/s/simple-product/',
+            $url
+        );
+        $this->assertEquals(
+            $secondStore->getBaseUrl().'?___from_store=default',
+            $secondStore->getCurrentUrl()
+        );
+        $this->assertEquals(
+            $secondStore->getBaseUrl(),
+            $secondStore->getCurrentUrl(false)
+        );
     }
 
     /**
@@ -323,13 +334,25 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
          /** @var \Magento\Catalog\Model\CategoryRepository $categoryRepository */
         $categoryRepository = $objectManager->get(\Magento\Catalog\Model\CategoryRepository::class);
-        $category = $categoryRepository->get(333,$secondStore->getStoreId());
+        $category = $categoryRepository->get(333, $secondStore->getStoreId());
 
-        $this->assertEquals('http://localhost/index.php/catalog/category/view/s/category-1/id/333/',$category->getUrl());
-        $this->assertEquals('http://localhost/index.php/catalog/product/view/id/333/s/simple-product-three/?___store=fixture_second_store', $url);
-        $this->assertEquals('http://localhost/index.php/?___store=fixture_second_store&___from_store=default', $secondStore->getCurrentUrl());
-        $this->assertEquals('http://localhost/index.php/?___store=fixture_second_store', $secondStore->getCurrentUrl(false));
-
+        $this->assertEquals(
+            $secondStore->getBaseUrl().'catalog/category/view/s/category-1/id/333/',
+            $category->getUrl()
+        );
+        $this->assertEquals(
+            $secondStore->getBaseUrl().
+            'catalog/product/view/id/333/s/simple-product-three/?___store=fixture_second_store',
+            $url
+        );
+        $this->assertEquals(
+            $secondStore->getBaseUrl().'?___store=fixture_second_store&___from_store=default',
+            $secondStore->getCurrentUrl()
+        );
+        $this->assertEquals(
+            $secondStore->getBaseUrl().'?___store=fixture_second_store',
+            $secondStore->getCurrentUrl(false)
+        );
     }
 
     /**
