@@ -125,7 +125,7 @@ class ConfigurableTest extends TestCase
         $configurableProduct = $this->getConfigurableProductFromCollection();
         $this->assertEquals(10, $configurableProduct->getMinimalPrice());
 
-        $childProduct = $this->productRepository->getById(10, false, null, true);
+        $childProduct = $this->productRepository->get('simple_10', false, null, true);
         $stockItem = $childProduct->getExtensionAttributes()->getStockItem();
         $stockItem->setIsInStock(Stock::STOCK_OUT_OF_STOCK);
         $this->stockRepository->save($stockItem);
