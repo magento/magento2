@@ -17,6 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoAppIsolation enabled
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\TestCase
 {
@@ -168,8 +169,8 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
      */
     private function processOrder(Order $order)
     {
-        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
-        $order->setStatus(\Magento\Sales\Model\Order::STATE_PROCESSING);
+        $order->setState(Order::STATE_PROCESSING);
+        $order->setStatus(Order::STATE_PROCESSING);
         return $this->orderRepository->save($order);
     }
 
