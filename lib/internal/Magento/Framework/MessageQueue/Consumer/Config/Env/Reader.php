@@ -33,8 +33,6 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     public function read($scope = null)
     {
         $configData = $this->envConfig->read($scope);
-        return isset($configData[\Magento\Framework\MessageQueue\Config\Reader\Env::ENV_CONSUMERS])
-            ? $configData[\Magento\Framework\MessageQueue\Config\Reader\Env::ENV_CONSUMERS]
-            : [];
+        return $configData[\Magento\Framework\MessageQueue\Config\Reader\Env::ENV_CONSUMERS] ?? [];
     }
 }
