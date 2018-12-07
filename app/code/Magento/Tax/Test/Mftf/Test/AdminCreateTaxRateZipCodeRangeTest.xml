@@ -10,8 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateTaxRateZipCodeRangeTest">
         <annotations>
-            <stories value="Create Tax Rate"/>
-            <title value="Create Tax Rate,zip code range"/>
+            <stories value="Create tax rate"/>
+            <title value="Create tax tate, zip code range"/>
             <description value="Test log in to Create Tax Rate and Create Zip Code Range"/>
             <testCaseId value="MC-5319"/>
             <severity value="CRITICAL"/>

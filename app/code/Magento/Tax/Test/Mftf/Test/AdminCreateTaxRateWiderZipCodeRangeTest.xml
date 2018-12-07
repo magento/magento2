@@ -11,7 +11,7 @@
     <test name="AdminCreateTaxRateWiderZipCodeRangeTest">
         <annotations>
             <stories value="Create tax rate"/>
-            <title value="Create Tax Rate, wider zip code range"/>
+            <title value="Create tax rate, wider zip code range"/>
             <description value="Test log in to Create Tax Rate and Create Wider Zip Code Range"/>
             <testCaseId value="MC-5321"/>
             <severity value="CRITICAL"/>

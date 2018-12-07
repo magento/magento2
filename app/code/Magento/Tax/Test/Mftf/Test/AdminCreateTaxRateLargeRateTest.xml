@@ -11,7 +11,7 @@
     <test name="AdminCreateTaxRateLargeRateTest">
         <annotations>
             <stories value="Create tax rate"/>
-            <title value="Create Tax Rate, large rate"/>
+            <title value="Create tax rate, large rate"/>
             <description value="Test log in to Create Tax Rate and Create Large Rate"/>
             <testCaseId value="MC-5322"/>
             <severity value="CRITICAL"/>

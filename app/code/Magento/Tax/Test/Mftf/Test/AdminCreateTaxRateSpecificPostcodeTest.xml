@@ -11,7 +11,7 @@
     <test name="AdminCreateTaxRateSpecificPostcodeTest">
         <annotations>
             <stories value="Create tax rate"/>
-            <title value="Create tax rate,specific postcode"/>
+            <title value="Create tax rate, specific postcode"/>
             <description value="Test log in to Create Tax Rate and Create specific Postcode"/>
             <testCaseId value="MC-5320"/>
             <severity value="CRITICAL"/>
