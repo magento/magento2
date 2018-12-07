@@ -114,8 +114,8 @@ class FreeShipping implements FreeShippingInterface
     {
         /** @var AbstractItem $item */
         foreach ($items as $item) {
-            $item->getAddress()
-                ->setFreeShipping((int)$freeShipping);
+            $item->getAddress()->setFreeShipping((int) $freeShipping);
+            $item->setFreeShipping($freeShipping);
             $this->applyToChildren($item, $freeShipping);
         }
     }
