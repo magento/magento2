@@ -346,18 +346,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         return $this;
     }
 
-    /**
-     * Processing additional validation to check is carrier applicable.
-     *
-     * @param \Magento\Framework\DataObject $request
-     * @return $this|bool|\Magento\Framework\DataObject
-     * @deprecated
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
-    {
-        return $this->processAdditionalValidation($request);
-    }
+    
 
     /**
      * Determine whether current carrier enabled for activity
