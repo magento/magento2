@@ -8,17 +8,17 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAddNewDefaultBillingShippingCustomerAddressTest">
+    <test name="AdminEditDefaultBillingShippingCustomerAddressTest">
         <annotations>
-            <stories value="Add new default billing/shipping customer address"/>
-            <title value="Add new default billing/shipping customer address"/>
-            <description value="Add new default billing/shipping customer address on customer addresses tab"/>
+            <stories value="Edit default billing/shipping customer address"/>
+            <title value="Edit default billing/shipping customer address"/>
+            <description value="Edit default billing/shipping customer address on customer addresses tab"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-94814"/>
+            <testCaseId value="MAGETWO-94815"/>
             <group value="customer"/>
         </annotations>
         <before>
-            <createData entity="Simple_US_Customer_Multiple_Addresses_No_Default_Address" stepKey="customer"/>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="customer"/>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
         <after>
@@ -32,14 +32,14 @@
         <!- -->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
-            <argument name="customer" value="Simple_US_Customer_Multiple_Addresses_No_Default_Address"/>
+            <argument name="customer" value="Simple_US_Customer_Multiple_Addresses"/>
         </actionGroup>
         <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTab"/>
         <waitForPageLoad stepKey="waitForAddresses"/>
-        <seeElement selector="{{AdminCustomerAddressesDefaultBillingSection.address}}" stepKey="seeDefaultBillingAddressSectionBeforeChangingDefaultAddress"/>
-        <see userInput="The customer does not have default billing address" selector="{{AdminCustomerAddressesDefaultBillingSection.address}}" stepKey="assertThereIsNoDefaultBillingAddressSet"/>
-        <seeElement selector="{{AdminCustomerAddressesDefaultShippingSection.address}}" stepKey="seeDefaultShippingAddressSectionBeforeChangingDefaultAddress"/>
-        <see userInput="The customer does not have default shipping address" selector="{{AdminCustomerAddressesDefaultShippingSection.address}}" stepKey="assertThereIsNoDefaultShippingAddressSet"/>
+        <seeElement selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="seeDefaultBillingAddressSectionBeforeChangingDefaultAddress"/>
+        <see userInput="{{US_Address_NY.street[0]}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="assertDefaultBillingAddressIsSetBeforeChangingDefaultAddress"/>
+        <seeElement selector="{{AdminCustomerAddressesDefaultShippingSection.addressDetails}}" stepKey="seeDefaultShippingAddressSectionBeforeChangingDefaultAddress"/>
+        <see userInput="{{US_Address_NY.street[0]}}" selector="{{AdminCustomerAddressesDefaultShippingSection.addressDetails}}" stepKey="assertDefaultShippingAddressIsSetBeforeChangingDefaultAddress"/>
         <click selector="{{AdminCustomerAddressesSection.addNewAddress}}" stepKey="clickAddNewAddressButton"/>
         <waitForPageLoad stepKey="waitForAddUpdateCustomerAddressForm"/>
         <!--Step4. Fill all the fields with test data and press *Save* button-->
