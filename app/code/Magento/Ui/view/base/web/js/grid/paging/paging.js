@@ -43,6 +43,10 @@ define([
                 current: '${ $.provider }:params.paging.current'
             },
 
+            tracks: {
+                current: true
+            },
+
             statefull: {
                 current: true
             },
