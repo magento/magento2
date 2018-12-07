@@ -71,6 +71,13 @@ class WebapiDecorator implements CurlInterface
     protected $response;
 
     /**
+     * Webapi token.
+     *
+     * @var string
+     */
+    protected $webapiToken;
+
+    /**
      * @construct
      * @param ObjectManager $objectManager
      * @param CurlTransport $transport
@@ -110,6 +117,9 @@ class WebapiDecorator implements CurlInterface
             $integration->persist();
 
             $this->setConfiguration($integration);
+            $this->webapiToken = $integration->getToken();
+        } else {
+            $this->webapiToken = $integrationToken;
         }
     }
 
@@ -218,5 +228,15 @@ class WebapiDecorator implements CurlInterface
     public function close()
     {
         $this->transport->close();
+    }
+
+    /**
+     * Return webapiToken.
+     *
+     * @return string
+     */
+    public function getWebapiToken()
+    {
+        return $this->webapiToken;
     }
 }
