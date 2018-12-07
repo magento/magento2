@@ -160,7 +160,7 @@ class Options extends \Magento\Framework\View\Element\Template
      */
     protected function _getPriceConfiguration($option)
     {
-        $optionPrice = $this->pricingHelper->currency($option->getPrice(true), false, false);
+        $optionPrice = $option->getPrice(true);
         $data = [
             'prices' => [
                 'oldPrice' => [
@@ -195,7 +195,7 @@ class Options extends \Magento\Framework\View\Element\Template
                 ],
             ],
             'type' => $option->getPriceType(),
-            'name' => $option->getTitle()
+            'name' => $option->getTitle(),
         ];
         return $data;
     }
@@ -231,7 +231,7 @@ class Options extends \Magento\Framework\View\Element\Template
         //pass the return array encapsulated in an object for the other modules to be able to alter it eg: weee
         $this->_eventManager->dispatch('catalog_product_option_price_configuration_after', ['configObj' => $configObj]);
 
-        $config=$configObj->getConfig();
+        $config = $configObj->getConfig();
 
         return $this->_jsonEncoder->encode($config);
     }
