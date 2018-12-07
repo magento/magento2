@@ -12,5 +12,7 @@
         <element name="addressDetails" type="text" selector="//div[@class='customer-default-billing-address-content']//div[@class='address_details']"/>
         <element name="address" type="text" selector="//div[@class='customer-default-billing-address-content']//address//span"/>
         <element name="editButton" type="text" selector="//button[@data-index='edit_billing_address']"/>
+        <element name="deleteButton" type="button" selector="//button[@id='delete']"/>
+        <element name="ok" type="button" selector="//button[@data-role='action']//span[text()='OK']"/>
     </section>
 </sections>
