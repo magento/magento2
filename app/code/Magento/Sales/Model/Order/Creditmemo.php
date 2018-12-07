@@ -19,10 +19,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * Order creditmemo model
  *
  * @api
- * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
- * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
+ * @method \Magento\Sales\Model\Order\Creditmemo setSendEmail(bool $value)
+ * @method \Magento\Sales\Model\Order\Creditmemo setCustomerNote(string $value)
  * @method string getCustomerNote()
- * @method \Magento\Sales\Model\Order\Invoice setCustomerNoteNotify(bool $value)
+ * @method \Magento\Sales\Model\Order\Creditmemo setCustomerNoteNotify(bool $value)
  * @method bool getCustomerNoteNotify()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
