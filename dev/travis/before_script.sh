@@ -80,6 +80,7 @@ case $TEST_SUITE in
         cp package.json.sample package.json
         cp Gruntfile.js.sample Gruntfile.js
         yarn
+        sed 's/requirejs.s.contexts/requirejs.contexts/g' node_modules/squirejs/src/Squire.js
 
         if [[ $GRUNT_COMMAND != "static" ]]; then
             echo "Installing Magento"
