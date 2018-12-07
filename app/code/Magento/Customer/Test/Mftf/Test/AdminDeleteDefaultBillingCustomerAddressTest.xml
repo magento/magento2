@@ -27,7 +27,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- -
-        Step1. Login to admin and go to Customers > All Customerts.
+        Step1. Login to admin and go to Customers > All Customers.
         Step2. On *Customers* page choose customer from preconditions and open it to edit
         <!- -->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
@@ -40,9 +40,9 @@
         <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditNearDefaultBillingAddress"/>
         <waitForPageLoad stepKey="waitForDefaultBillingAddressPopupLoad"/>
         <!--Step4. Press *Delete* button-->
-        <click selector="{{AdminCustomerAddressesDefaultBillingSection.deleteButton}}" stepKey="clickDeleteButton"/>
+        <click selector="{{AdminCustomerAddressesSection.deleteButton}}" stepKey="clickDeleteButton"/>
         <waitForPageLoad stepKey="waitForConfirmationPopupLoad"/>
-        <click selector="{{AdminCustomerAddressesDefaultBillingSection.ok}}" stepKey="clickOkOnPopup"/>
+        <click selector="{{AdminCustomerAddressesSection.ok}}" stepKey="clickOkOnPopup"/>
         <waitForPageLoad stepKey="waitForDefaultBillingAddressPopupLoad2"/>
         <seeNumberOfElements userInput="1" selector="{{AdminCustomerAddressesGridSection.rowsInGrid}}" stepKey="seeOnlyOneCustomerAddressesInGrid"/>
         <dontSee userInput="{{US_Address_NY.street[0]}}" stepKey="assertDefaultBillingIsSet"/>
