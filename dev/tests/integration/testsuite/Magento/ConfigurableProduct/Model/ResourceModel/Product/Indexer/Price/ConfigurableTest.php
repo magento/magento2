@@ -96,7 +96,7 @@ class ConfigurableTest extends TestCase
         $configurableProduct = $this->getConfigurableProductFromCollection();
         $this->assertEquals(10, $configurableProduct->getMinimalPrice());
 
-        $childProduct = $this->productRepository->getById(10, false, null, true);
+        $childProduct = $this->productRepository->get('simple_10', false, null, true);
         $childProduct->setStatus(Status::STATUS_DISABLED);
 
         // update in default store scope
