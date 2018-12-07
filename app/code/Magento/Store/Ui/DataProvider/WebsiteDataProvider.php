@@ -7,18 +7,12 @@
 namespace Magento\Store\Ui\DataProvider;
 
 use Magento\Store\Model\ResourceModel\Website\Grid\CollectionFactory as WebsiteCollectionFactory;
-use Magento\Store\Model\ResourceModel\Website\Grid\Collection as WebsiteCollection;
 
 /**
  * Class WebsiteDataProvider
  */
 class WebsiteDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
-    /**
-     * @var WebsiteCollection
-     */
-    protected $collection;
-
     /**
      * WebsiteDataProvider constructor.
      *

@@ -41,6 +41,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Backend::store</aclResource>
         <dataProvider class="Magento\Store\Ui\DataProvider\WebsiteDataProvider" name="store_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
