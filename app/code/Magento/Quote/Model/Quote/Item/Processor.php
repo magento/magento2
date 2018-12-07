@@ -53,8 +53,8 @@ class Processor
     /**
      * Initialize quote item object
      *
-     * @param DataObject $request
      * @param Product $product
+     * @param DataObject $request
      *
      * @return Item
      */
