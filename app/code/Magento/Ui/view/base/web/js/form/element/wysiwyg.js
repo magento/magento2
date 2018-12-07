@@ -64,8 +64,8 @@ define([
         /** @inheritdoc */
         initConfig: function (config) {
             var pattern = config.suffixRegExpPattern || this.constructor.defaults.suffixRegExpPattern;
-            pattern = pattern.replace(/\$/g, '\\$&');
 
+            pattern = pattern.replace(/\$/g, '\\$&');
             config.content = config.content.replace(new RegExp(pattern, 'g'), this.getUniqueSuffix(config));
             this._super();
 
