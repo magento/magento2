@@ -346,8 +346,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         return $this;
     }
 
-    
-
     /**
      * Determine whether current carrier enabled for activity
      *
