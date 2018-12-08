@@ -106,7 +106,7 @@ class QuantityValidator
         if (!$quoteItem ||
             !$quoteItem->getProductId() ||
             !$quoteItem->getQuote() ||
-            !$quoteItem->getId()
+            $quoteItem->getId() === null
         ) {
             return;
         }
