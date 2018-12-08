@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
@@ -21,10 +19,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * Order creditmemo model
  *
  * @api
- * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
- * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
+ * @method \Magento\Sales\Model\Order\Creditmemo setSendEmail(bool $value)
+ * @method \Magento\Sales\Model\Order\Creditmemo setCustomerNote(string $value)
  * @method string getCustomerNote()
- * @method \Magento\Sales\Model\Order\Invoice setCustomerNoteNotify(bool $value)
+ * @method \Magento\Sales\Model\Order\Creditmemo setCustomerNoteNotify(bool $value)
  * @method bool getCustomerNoteNotify()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -657,13 +655,20 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      *
      * @return bool
      */
+<<<<<<< HEAD
     private function isAllowZeroGrandTotal(): bool
+=======
+    public function isAllowZeroGrandTotal()
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $isAllowed = $this->scopeConfig->getValue(
             self::XML_PATH_ALLOW_ZERO_GRANDTOTAL,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $isAllowed;
     }
 

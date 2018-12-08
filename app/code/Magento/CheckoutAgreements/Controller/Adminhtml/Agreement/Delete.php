@@ -12,8 +12,14 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+<<<<<<< HEAD
 
 class Delete extends Agreement
+=======
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class Delete extends Agreement implements HttpPostActionInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 {
     /**
      * @var CheckoutAgreementsRepositoryInterface

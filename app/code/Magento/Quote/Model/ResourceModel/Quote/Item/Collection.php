@@ -343,7 +343,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @see \Magento\CatalogInventory\Helper\Stock::addIsInStockFilterToCollection
      */
-    private function skipStockStatusFilter(ProductCollection $productCollection)
+    private function skipStockStatusFilter(ProductCollection $productCollection): void
     {
         $productCollection->setFlag('has_stock_status_filter', true);
     }
@@ -353,7 +353,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      *
      * @return void
      */
+<<<<<<< HEAD
     private function removeItemsWithAbsentProducts()
+=======
+    private function removeItemsWithAbsentProducts(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         if (count($this->_productIds) === 0) {
             return;

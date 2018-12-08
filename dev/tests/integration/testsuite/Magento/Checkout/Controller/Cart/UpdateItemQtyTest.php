@@ -113,7 +113,11 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
                 'request' => ['qty' => 230],
                 'response' => [
                     'success' => false,
+<<<<<<< HEAD
                     'error_message' => 'We don\'t have as many "Simple Product" as you requested.']
+=======
+                    'error_message' => 'The requested qty is not available']
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
         ];
     }

@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminStoresMainActionsSection">
         <element name="createStoreViewButton" type="button" selector="#add_store"/>
@@ -12,6 +13,15 @@
         <element name="createWebsiteButton" type="button" selector="#add"/>
         <element name="saveButton" type="button" selector="#save"/>
         <element name="backButton" type="button" selector="#back"/>
+=======
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminStoresMainActionsSection">
+        <element name="createStoreViewButton" type="button" selector="#add_store" timeout="30"/>
+        <element name="createStoreButton" type="button" selector="#add_group" timeout="30"/>
+        <element name="createWebsiteButton" type="button" selector="#add" timeout="30"/>
+        <element name="saveButton" type="button" selector="#save" timeout="30"/>
+        <element name="backButton" type="button" selector="#back" timeout="30"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         <element name="deleteButton" type="button" selector="#delete" timeout="30"/>
     </section>
 </sections>

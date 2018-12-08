@@ -152,6 +152,10 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * @magentoDataFixture Magento/Catalog/_files/enable_reindex_schedule.php
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoAppArea adminhtml
@@ -203,6 +207,10 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * @magentoDataFixture Magento/Catalog/_files/enable_reindex_schedule.php
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoDbIsolation disabled

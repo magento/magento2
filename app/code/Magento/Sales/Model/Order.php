@@ -8,7 +8,10 @@ namespace Magento\Sales\Model;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\ObjectManager;
+<<<<<<< HEAD
 use Magento\Framework\Exception\LocalizedException;
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -215,6 +218,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;
+
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
+    private $_eavConfig;
 
     /**
      * @var \Magento\Sales\Model\Order\Status\HistoryFactory
@@ -552,6 +560,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             }
         }
 
+<<<<<<< HEAD
         $allRefunded = true;
         foreach ($this->getAllItems() as $orderItem) {
             $allRefunded = $allRefunded
@@ -559,6 +568,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
 
         if ($allInvoiced && !$allRefunded) {
+=======
+        if ($allInvoiced) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             return false;
         }
 
@@ -633,11 +645,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return $this->getForcedCanCreditmemo();
         }
 
+<<<<<<< HEAD
         if ($this->canUnhold()
             || $this->isPaymentReview()
             || $this->isCanceled()
             || $this->getState() === self::STATE_CLOSED
         ) {
+=======
+        if ($this->canUnhold() || $this->isPaymentReview() ||
+            $this->isCanceled() || $this->getState() === self::STATE_CLOSED) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             return false;
         }
 
@@ -660,7 +677,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param float $totalRefunded
      * @return bool
      */
+<<<<<<< HEAD
     private function canCreditmemoForZeroTotalRefunded(float $totalRefunded): bool
+=======
+    private function canCreditmemoForZeroTotalRefunded($totalRefunded)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $isRefundZero = abs($totalRefunded) < .0001;
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
@@ -672,19 +693,28 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
         return true;
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     /**
      * Retrieve credit memo for zero total availability.
      *
      * @param float $totalRefunded
      * @return bool
      */
+<<<<<<< HEAD
     private function canCreditmemoForZeroTotal(float $totalRefunded): bool
+=======
+    public function canCreditmemoForZeroTotal($totalRefunded)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $totalPaid = $this->getTotalPaid();
         //check if total paid is less than grandtotal
         $checkAmtTotalPaid = $totalPaid <= $this->getGrandTotal();
         //case when amount is due for invoice
+<<<<<<< HEAD
         $dueAmountCondition = $this->canInvoice() && $checkAmtTotalPaid;
         //case when paid amount is refunded and order has creditmemo created
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
@@ -693,6 +723,17 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         if (($dueAmountCondition || $paidAmtIsRefunded)
             || (!$checkAmtTotalPaid && abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)
         ) {
+=======
+        $dueAmountCondition = $this->canInvoice() && ($checkAmtTotalPaid);
+        //case when paid amount is refunded and order has creditmemo created
+
+        $creditmemos = ($this->getCreditmemosCollection() === false) ?
+             true : (count($this->getCreditmemosCollection()) > 0);
+        $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
+        if (($dueAmountCondition || $paidAmtIsRefunded) ||
+            (!$checkAmtTotalPaid &&
+            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             return false;
         }
 
@@ -1023,7 +1064,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Set order state
+     * @inheritdoc
      *
      * @param string $state
      * @return $this
@@ -1069,8 +1110,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Add a comment to order
-     * Different or default status may be specified
+     * Add a comment to order.
+     *
+     * Different or default status may be specified.
      *
      * @param string $comment
      * @param bool|string $status
@@ -1084,8 +1126,14 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
     
     /**
+<<<<<<< HEAD
      * Add a comment to order status history
      * Different or default status may be specified
+=======
+     * Add a comment to order status history.
+     *
+     * Different or default status may be specified.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param string $comment
      * @param bool|string $status
@@ -1150,7 +1198,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Hold order.
+=======
+     * Hold order
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return $this
      * @throws LocalizedException
@@ -1297,7 +1349,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /*********************** ADDRESSES ***************************/
 
     /**
+<<<<<<< HEAD
      * Get addresses collection.
+=======
+     * Get addresses collection
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return Collection
      */
@@ -1313,7 +1369,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get address by id.
+=======
+     * Get address by id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param mixed $addressId
      * @return false
@@ -1329,7 +1389,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Add address.
+=======
+     * Add address
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param \Magento\Sales\Model\Order\Address $address
      * @return $this
@@ -1345,7 +1409,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get items collection.
+=======
+     * Get items collection
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param array $filterByTypes
      * @param bool $nonChildrenOnly
@@ -1391,7 +1459,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _getItemsRandomCollection($limit, $nonChildrenOnly = false)
     {
-        $collection = $this->_orderItemCollectionFactory->create()->setOrderFilter($this)->setRandomOrder();
+        $collection = $this->_orderItemCollectionFactory->create()
+            ->setOrderFilter($this)
+            ->setRandomOrder()
+            ->setPageSize($limit);
 
         if ($nonChildrenOnly) {
             $collection->filterByParent();
@@ -1405,9 +1476,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $products
         )->setVisibility(
             $this->_productVisibility->getVisibleInSiteIds()
-        )->addPriceData()->setPageSize(
-            $limit
-        )->load();
+        )->addPriceData()->load();
 
         foreach ($collection as $item) {
             $product = $productsCollection->getItemById($item->getProductId());
@@ -1420,7 +1489,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get all items.
+=======
+     * Get all items
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return \Magento\Sales\Model\Order\Item[]
      */
@@ -1436,7 +1509,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get all visible items.
+=======
+     * Get all visible items
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return array
      */
@@ -1469,7 +1546,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get item by quote item id.
+=======
+     * Get item by quote item id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param mixed $quoteItemId
      * @return  \Magento\Framework\DataObject|null
@@ -1485,7 +1566,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Add item.
+=======
+     * Add item
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param \Magento\Sales\Model\Order\Item $item
      * @return $this
@@ -1502,7 +1587,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /*********************** PAYMENTS ***************************/
 
     /**
+<<<<<<< HEAD
      * Get payments collection.
+=======
+     * Get payments collection
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return PaymentCollection
      */
@@ -1518,7 +1607,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get all payments.
+=======
+     * Get all payments
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return array
      */
@@ -1534,7 +1627,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get payment by id.
+=======
+     * Get payment by id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param mixed $paymentId
      * @return Payment|false
@@ -1617,7 +1714,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get status history by id.
+=======
+     * Get status history by id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param mixed $statusId
      * @return string|false
@@ -1633,7 +1734,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Set the order status history object and the order object to each other
+     * @inheritdoc
+     *
      * Adds the object to the status history collection, which is automatically saved when the order is saved.
      * See the entity_id attribute backend model.
      * Or the history record can be saved standalone after this.
@@ -1656,7 +1758,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get real order id.
+=======
+     * Get real order id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string
      */
@@ -1696,7 +1802,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Format price precision.
+=======
+     * Format price precision
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param float $price
      * @param int $precision
@@ -1733,7 +1843,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Format base price.
+=======
+     * Format base price
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param float $price
      * @return string
@@ -1744,7 +1858,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Format Base Price Precision.
+=======
+     * Format Base Price Precision
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param float $price
      * @param int $precision
@@ -1756,7 +1874,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Is currency different.
+=======
+     * Is currency different
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return bool
      */
@@ -1790,7 +1912,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get data.
+=======
+     * Get data
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param string $key
      * @param null|string|int $index
@@ -1827,7 +1953,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Set order invoices collection
+     * @inheritdoc
      *
      * @param InvoiceCollection $invoices
      * @return $this
@@ -1932,7 +2058,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get customer name.
+=======
+     * Get customer name
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string
      */
@@ -1976,7 +2106,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get email customer note.
+=======
+     * Get email customer note
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string
      */
@@ -1989,7 +2123,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get store group name.
+=======
+     * Get store group name
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string
      */
@@ -2027,7 +2165,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get order is not virtual.
+=======
+     * Get order is not virtual
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
@@ -2071,7 +2213,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get Items.
+=======
+     * Get Items
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return \Magento\Sales\Api\Data\OrderItemInterface[]
      */
@@ -2096,7 +2242,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get addresses.
+=======
+     * Get addresses
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return \Magento\Sales\Api\Data\OrderAddressInterface[]
      */
@@ -2112,7 +2262,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get status History.
+=======
+     * Get status History
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[]|null
      */
@@ -2151,7 +2305,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     //@codeCoverageIgnoreStart
 
     /**
+<<<<<<< HEAD
      * Return adjustment_negative.
+=======
+     * Return adjustment_negative
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2161,7 +2319,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return adjustment_positive.
+=======
+     * Return adjustment_positive
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2171,7 +2333,13 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return applied_rule_ids.
+=======
+     * Return applied_rule_ids
+     *
+     * Rules are comma separated if there are more than one.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2181,7 +2349,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_adjustment_negative.
+=======
+     * Return base_adjustment_negative
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2191,7 +2363,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_adjustment_positive.
+=======
+     * Return base_adjustment_positive
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2201,7 +2377,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_currency_code.
+=======
+     * Return base_currency_code
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2211,7 +2391,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_discount_amount.
+=======
+     * Return base_discount_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2221,7 +2405,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_discount_canceled.
+=======
+     * Return base_discount_canceled
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2231,7 +2419,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_discount_invoiced.
+=======
+     * Return base_discount_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2241,7 +2433,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_discount_refunded.
+=======
+     * Return base_discount_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2251,7 +2447,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_grand_total.
+=======
+     * Return base_grand_total
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float
      */
@@ -2261,7 +2461,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_discount_tax_compensation_amount.
+=======
+     * Return base_discount_tax_compensation_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2271,7 +2475,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_discount_tax_compensation_invoiced.
+=======
+     * Return base_discount_tax_compensation_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2281,7 +2489,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_discount_tax_compensation_refunded.
+=======
+     * Return base_discount_tax_compensation_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2291,7 +2503,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_shipping_amount.
+=======
+     * Return base_shipping_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2301,7 +2517,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_shipping_canceled.
+=======
+     * Return base_shipping_canceled
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2311,7 +2531,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_shipping_discount_amount.
+=======
+     * Return base_shipping_discount_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2321,7 +2545,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_shipping_discount_tax_compensation_amnt.
+=======
+     * Return base_shipping_discount_tax_compensation_amnt
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2331,7 +2559,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_shipping_incl_tax.
+=======
+     * Return base_shipping_incl_tax
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2341,7 +2573,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_shipping_invoiced.
+=======
+     * Return base_shipping_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2351,7 +2587,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_shipping_refunded.
+=======
+     * Return base_shipping_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2361,7 +2601,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_shipping_tax_amount.
+=======
+     * Return base_shipping_tax_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2371,7 +2615,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_shipping_tax_refunded.
+=======
+     * Return base_shipping_tax_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2381,7 +2629,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_subtotal.
+=======
+     * Return base_subtotal
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2391,7 +2643,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_subtotal_canceled.
+=======
+     * Return base_subtotal_canceled
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2401,7 +2657,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_subtotal_incl_tax.
+=======
+     * Return base_subtotal_incl_tax
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2411,7 +2671,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_subtotal_invoiced.
+=======
+     * Return base_subtotal_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2421,7 +2685,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_subtotal_refunded.
+=======
+     * Return base_subtotal_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2431,7 +2699,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_tax_amount.
+=======
+     * Return base_tax_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2441,7 +2713,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_tax_canceled.
+=======
+     * Return base_tax_canceled
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2451,7 +2727,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_tax_invoiced.
+=======
+     * Return base_tax_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2461,7 +2741,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_tax_refunded.
+=======
+     * Return base_tax_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2471,7 +2755,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_total_canceled.
+=======
+     * Return base_total_canceled
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2481,7 +2769,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_total_invoiced.
+=======
+     * Return base_total_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2491,7 +2783,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_total_invoiced_cost.
+=======
+     * Return base_total_invoiced_cost
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2501,7 +2797,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_total_offline_refunded.
+=======
+     * Return base_total_offline_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2511,7 +2811,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_total_online_refunded.
+=======
+     * Return base_total_online_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2521,7 +2825,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_total_paid.
+=======
+     * Return base_total_paid
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2531,7 +2839,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_total_qty_ordered.
+=======
+     * Return base_total_qty_ordered
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2541,7 +2853,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_total_refunded.
+=======
+     * Return base_total_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2551,7 +2867,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_to_global_rate.
+=======
+     * Return base_to_global_rate
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2561,7 +2881,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return base_to_order_rate.
+=======
+     * Return base_to_order_rate
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2571,7 +2895,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return billing_address_id.
+=======
+     * Return billing_address_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2581,7 +2909,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return can_ship_partially.
+=======
+     * Return can_ship_partially
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2591,7 +2923,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return can_ship_partially_item.
+=======
+     * Return can_ship_partially_item
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2601,7 +2937,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return coupon_code.
+=======
+     * Return coupon_code
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2611,7 +2951,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return created_at.
+=======
+     * Return created_at
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2629,7 +2973,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_dob.
+=======
+     * Return customer_dob
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2639,7 +2987,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_email.
+=======
+     * Return customer_email
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string
      */
@@ -2649,7 +3001,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_firstname.
+=======
+     * Return customer_firstname
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2659,7 +3015,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_gender.
+=======
+     * Return customer_gender
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2669,7 +3029,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_group_id.
+=======
+     * Return customer_group_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2679,7 +3043,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_id.
+=======
+     * Return customer_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2689,7 +3057,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_is_guest.
+=======
+     * Return customer_is_guest
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2699,7 +3071,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_lastname.
+=======
+     * Return customer_lastname
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2709,7 +3085,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_middlename.
+=======
+     * Return customer_middlename
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2719,7 +3099,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_note.
+=======
+     * Return customer_note
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2729,7 +3113,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_note_notify.
+=======
+     * Return customer_note_notify
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2739,7 +3127,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_prefix.
+=======
+     * Return customer_prefix
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2749,7 +3141,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_suffix.
+=======
+     * Return customer_suffix
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2759,7 +3155,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return customer_taxvat.
+=======
+     * Return customer_taxvat
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2769,7 +3169,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return discount_amount.
+=======
+     * Return discount_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2779,7 +3183,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return discount_canceled.
+=======
+     * Return discount_canceled
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2789,7 +3197,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return discount_description.
+=======
+     * Return discount_description
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2799,7 +3211,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return discount_invoiced.
+=======
+     * Return discount_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2809,7 +3225,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return discount_refunded.
+=======
+     * Return discount_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2819,7 +3239,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return edit_increment.
+=======
+     * Return edit_increment
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2829,7 +3253,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return email_sent.
+=======
+     * Return email_sent
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2839,7 +3267,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return ext_customer_id.
+=======
+     * Return ext_customer_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2849,7 +3281,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return ext_order_id.
+=======
+     * Return ext_order_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2859,7 +3295,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return forced_shipment_with_invoice.
+=======
+     * Return forced_shipment_with_invoice
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2869,7 +3309,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return global_currency_code.
+=======
+     * Return global_currency_code
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2879,7 +3323,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return grand_total.
+=======
+     * Return grand_total
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float
      */
@@ -2889,7 +3337,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return discount_tax_compensation_amount.
+=======
+     * Return discount_tax_compensation_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2899,7 +3351,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return discount_tax_compensation_invoiced.
+=======
+     * Return discount_tax_compensation_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2909,7 +3365,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return discount_tax_compensation_refunded.
+=======
+     * Return discount_tax_compensation_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2919,7 +3379,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return hold_before_state.
+=======
+     * Return hold_before_state
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2929,7 +3393,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return hold_before_status.
+=======
+     * Return hold_before_status
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2939,7 +3407,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return is_virtual.
+=======
+     * Return is_virtual
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2949,7 +3421,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return order_currency_code.
+=======
+     * Return order_currency_code
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2959,7 +3435,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return original_increment_id.
+=======
+     * Return original_increment_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2969,7 +3449,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return payment_authorization_amount.
+=======
+     * Return payment_authorization_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -2979,7 +3463,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return payment_auth_expiration.
+=======
+     * Return payment_auth_expiration
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -2989,7 +3477,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return protect_code.
+=======
+     * Return protect_code
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -2999,7 +3491,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return quote_address_id.
+=======
+     * Return quote_address_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -3009,7 +3505,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return quote_id.
+=======
+     * Return quote_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -3019,7 +3519,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return relation_child_id.
+=======
+     * Return relation_child_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -3029,7 +3533,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return relation_child_real_id.
+=======
+     * Return relation_child_real_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -3039,7 +3547,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return relation_parent_id.
+=======
+     * Return relation_parent_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -3049,7 +3561,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return relation_parent_real_id.
+=======
+     * Return relation_parent_real_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -3059,7 +3575,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return remote_ip.
+=======
+     * Return remote_ip
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -3069,7 +3589,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return shipping_amount.
+=======
+     * Return shipping_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3079,7 +3603,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return shipping_canceled.
+=======
+     * Return shipping_canceled
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3089,7 +3617,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return shipping_description.
+=======
+     * Return shipping_description
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -3099,7 +3631,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return shipping_discount_amount.
+=======
+     * Return shipping_discount_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3109,7 +3645,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return shipping_discount_tax_compensation_amount.
+=======
+     * Return shipping_discount_tax_compensation_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3119,7 +3659,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return shipping_incl_tax.
+=======
+     * Return shipping_incl_tax
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3129,7 +3673,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return shipping_invoiced.
+=======
+     * Return shipping_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3139,7 +3687,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return shipping_refunded.
+=======
+     * Return shipping_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3149,7 +3701,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return shipping_tax_amount.
+=======
+     * Return shipping_tax_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3159,7 +3715,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return shipping_tax_refunded.
+=======
+     * Return shipping_tax_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3169,7 +3729,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return state.
+=======
+     * Return state
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -3179,7 +3743,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return status.
+=======
+     * Return status
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -3189,7 +3757,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return store_currency_code.
+=======
+     * Return store_currency_code
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -3199,7 +3771,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return store_id.
+=======
+     * Return store_id
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -3209,7 +3785,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return store_name.
+=======
+     * Return store_name
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -3219,7 +3799,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return store_to_base_rate.
+=======
+     * Return store_to_base_rate
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3229,7 +3813,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return store_to_order_rate.
+=======
+     * Return store_to_order_rate
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3239,7 +3827,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return subtotal.
+=======
+     * Return subtotal
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3249,7 +3841,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return subtotal_canceled.
+=======
+     * Return subtotal_canceled
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3259,7 +3855,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return subtotal_incl_tax.
+=======
+     * Return subtotal_incl_tax
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3269,7 +3869,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return subtotal_invoiced.
+=======
+     * Return subtotal_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3279,7 +3883,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return subtotal_refunded.
+=======
+     * Return subtotal_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3289,7 +3897,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return tax_amount.
+=======
+     * Return tax_amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3299,7 +3911,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return tax_canceled.
+=======
+     * Return tax_canceled
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3309,7 +3925,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return tax_invoiced.
+=======
+     * Return tax_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3319,7 +3939,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return tax_refunded.
+=======
+     * Return tax_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3329,7 +3953,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return total_canceled.
+=======
+     * Return total_canceled
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3339,7 +3967,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return total_invoiced.
+=======
+     * Return total_invoiced
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3349,7 +3981,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return total_item_count.
+=======
+     * Return total_item_count
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int|null
      */
@@ -3359,7 +3995,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return total_offline_refunded.
+=======
+     * Return total_offline_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3369,7 +4009,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return total_online_refunded.
+=======
+     * Return total_online_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3379,7 +4023,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return total_paid.
+=======
+     * Return total_paid
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3389,7 +4037,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return total_qty_ordered.
+=======
+     * Return total_qty_ordered
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3399,7 +4051,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return total_refunded.
+=======
+     * Return total_refunded
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3409,7 +4065,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return updated_at.
+=======
+     * Return updated_at
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */
@@ -3419,7 +4079,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return weight.
+=======
+     * Return weight
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return float|null
      */
@@ -3429,7 +4093,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+<<<<<<< HEAD
      * Return x_forwarded_for.
+=======
+     * Return x_forwarded_for
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string|null
      */

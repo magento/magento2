@@ -19,25 +19,43 @@ class GeneralResponseValidator extends AbstractValidator
     protected $subjectReader;
 
     /**
+<<<<<<< HEAD
      * @var ErrorCodeValidator
      */
     private $errorCodeValidator;
+=======
+     * @var ErrorCodeProvider
+     */
+    private $errorCodeProvider;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     /**
      * Constructor
      *
      * @param ResultInterfaceFactory $resultFactory
      * @param SubjectReader $subjectReader
+<<<<<<< HEAD
      * @param ErrorCodeValidator $errorCodeValidator
+=======
+     * @param ErrorCodeProvider $errorCodeProvider
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function __construct(
         ResultInterfaceFactory $resultFactory,
         SubjectReader $subjectReader,
+<<<<<<< HEAD
         ErrorCodeValidator $errorCodeValidator
     ) {
         parent::__construct($resultFactory);
         $this->subjectReader = $subjectReader;
         $this->errorCodeValidator = $errorCodeValidator;
+=======
+        ErrorCodeProvider $errorCodeProvider
+    ) {
+        parent::__construct($resultFactory);
+        $this->subjectReader = $subjectReader;
+        $this->errorCodeProvider = $errorCodeProvider;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -59,8 +77,9 @@ class GeneralResponseValidator extends AbstractValidator
                 $errorMessages = array_merge($errorMessages, $validationResult[1]);
             }
         }
+        $errorCodes = $this->errorCodeProvider->getErrorCodes($response);
 
-        return $this->createResult($isValid, $errorMessages);
+        return $this->createResult($isValid, $errorMessages, $errorCodes);
     }
 
     /**

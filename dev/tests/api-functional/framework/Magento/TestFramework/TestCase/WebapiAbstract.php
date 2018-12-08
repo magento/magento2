@@ -1,7 +1,5 @@
 <?php
 /**
- * Generic test case for Web API functional tests.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,8 +8,11 @@ namespace Magento\TestFramework\TestCase;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Webapi\Model\Soap\Fault;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * Test case for Web API functional tests for REST and SOAP.
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -288,7 +289,9 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
                     sprintf('Declaration of the requested Web API adapter "%s" was not found.', $webApiAdapterCode)
                 );
             }
-            $this->_webApiAdapters[$webApiAdapterCode] = new $this->_webApiAdaptersMap[$webApiAdapterCode]();
+            $this->_webApiAdapters[$webApiAdapterCode] = Bootstrap::getObjectManager()->get(
+                $this->_webApiAdaptersMap[$webApiAdapterCode]
+            );
         }
         return $this->_webApiAdapters[$webApiAdapterCode];
     }
@@ -638,27 +641,15 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         $wrappedErrorsNode = Fault::NODE_DETAIL_WRAPPED_ERRORS;
         if ($expectedWrappedErrors) {
             $wrappedErrorNode = Fault::NODE_DETAIL_WRAPPED_ERROR;
-            $wrappedErrorNodeFieldName = 'fieldName';
-            $wrappedErrorNodeValue = Fault::NODE_DETAIL_WRAPPED_ERROR_VALUE;
             $actualWrappedErrors = [];
             if (isset($errorDetails->$wrappedErrorsNode->$wrappedErrorNode)) {
-                if (is_array($errorDetails->$wrappedErrorsNode->$wrappedErrorNode)) {
-                    foreach ($errorDetails->$wrappedErrorsNode->$wrappedErrorNode as $error) {
-                        $actualParameters = [];
-                        foreach ($error->parameters->parameter as $parameter) {
-                            $actualParameters[$parameter->key] = $parameter->value;
-                        }
-                        $actualWrappedErrors[] = [
-                            'message' => $error->message,
-                            'params' => $actualParameters,
-                        ];
+                $errorNode = $errorDetails->$wrappedErrorsNode->$wrappedErrorNode;
+                if (is_array($errorNode)) {
+                    foreach ($errorNode as $error) {
+                        $actualWrappedErrors[] = $this->getActualWrappedErrors($error);
                     }
                 } else {
-                    $error = $errorDetails->$wrappedErrorsNode->$wrappedErrorNode;
-                    $actualWrappedErrors[] = [
-                        "fieldName" => $error->$wrappedErrorNodeFieldName,
-                        "value" => $error->$wrappedErrorNodeValue,
-                    ];
+                    $actualWrappedErrors[] = $this->getActualWrappedErrors($errorNode);
                 }
             }
             $this->assertEquals(
@@ -672,5 +663,27 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
                 "Wrapped errors are not expected in fault details."
             );
         }
+    }
+
+    /**
+     * @param \stdClass $errorNode
+     * @return array
+     */
+    private function getActualWrappedErrors(\stdClass $errorNode)
+    {
+        $actualParameters = [];
+        $parameterNode = $errorNode->parameters->parameter;
+        if (is_array($parameterNode)) {
+            foreach ($parameterNode as $parameter) {
+                $actualParameters[$parameter->key] = $parameter->value;
+            }
+        } else {
+            $actualParameters[$parameterNode->key] = $parameterNode->value;
+        }
+        return [
+            'message' => $errorNode->message,
+            // Can not rename on parameters due to Backward Compatibility
+            'params' => $actualParameters,
+        ];
     }
 }

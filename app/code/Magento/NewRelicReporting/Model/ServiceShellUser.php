@@ -24,7 +24,11 @@ class ServiceShellUser
             return $userFromArgument;
         }
 
+<<<<<<< HEAD
         $user = `echo \$USER`;
+=======
+        $user = "echo \$USER";
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         if ($user) {
             return $user;
         }

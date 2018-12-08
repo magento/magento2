@@ -22,6 +22,12 @@
                 <timeout>100</timeout>
                 <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
             </fixerio>
+<<<<<<< HEAD
+=======
+            <currencyconverterapi>
+                <timeout>100</timeout>
+            </currencyconverterapi>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             <import>
                 <enabled>0</enabled>
                 <error_email />

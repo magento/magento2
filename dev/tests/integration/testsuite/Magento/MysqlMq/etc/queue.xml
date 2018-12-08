@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <publisher name="demo-publisher-1" connection="db" exchange="magento"/>
+    <publisher name="demo-publisher-2" connection="db" exchange="magento"/>
+
+    <publisher name="test-publisher-1" connection="amqp" exchange="magento"/>
+    <publisher name="test-publisher-3" connection="amqp" exchange="test-exchange-1"/>
+
+    <topic name="demo.object.created" schema="Magento\MysqlMq\Model\DataObject" publisher="demo-publisher-1"/>
+    <topic name="demo.object.updated" schema="Magento\MysqlMq\Model\DataObject" publisher="demo-publisher-2"/>
+    <topic name="demo.object.custom.created" schema="Magento\MysqlMq\Model\DataObject" publisher="demo-publisher-2"/>
+
+    <topic name="test.schema.defined.by.method" schema="Magento\MysqlMq\Model\DataObjectRepository::delayedOperation" publisher="demo-publisher-2"/>
+
+    <topic name="customer.created" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-1"/>
+    <topic name="customer.created.one" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-1"/>
+    <topic name="customer.created.one.two" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-1"/>
+    <topic name="customer.created.two" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-1"/>
+    <topic name="customer.updated" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="demo-publisher-2"/>
+    <topic name="customer.deleted" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="demo-publisher-2"/>
+    <topic name="cart.created" schema="Magento\Quote\Api\Data\CartInterface" publisher="test-publisher-3"/>
+    <topic name="cart.created.one" schema="Magento\Quote\Api\Data\CartInterface" publisher="test-publisher-3"/>
+
+    <consumer name="demoConsumerQueueOne" queue="demo-queue-1" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
+    <consumer name="demoConsumerQueueOneWithException" queue="demo-queue-1" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessageWithException"/>
+    <consumer name="demoConsumerQueueTwo" queue="demo-queue-2" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
+    <consumer name="demoConsumerQueueThree" queue="demo-queue-3" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
+    <consumer name="demoConsumerQueueFour" queue="demo-queue-4" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
+    <consumer name="demoConsumerQueueFive" queue="demo-queue-5" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
+
+    <consumer name="customerCreatedListener" queue="test-queue-1" connection="amqp" class="Magento\MysqlMq\Model\Processor" method="processMessage"/>
+    <consumer name="customerDeletedListener" queue="test-queue-2" connection="db" class="Magento\MysqlMq\Model\Processor" method="processMessage" max_messages="98765"/>
+    <consumer name="cartCreatedListener" queue="test-queue-3" connection="amqp" class="Magento\MysqlMq\Model\Processor" method="processMessage"/>
+
+    <consumer name="delayedOperationConsumer" queue="demo-queue-6" connection="db" class="Magento\MysqlMq\Model\DataObjectRepository" method="delayedOperation"/>
+
+    <bind queue="demo-queue-1" exchange="magento" topic="demo.object.created"/>
+    <bind queue="demo-queue-2" exchange="magento" topic="demo.object.created"/>
+    <bind queue="demo-queue-2" exchange="magento" topic="demo.object.updated"/>
+    <bind queue="demo-queue-3" exchange="magento" topic="demo.object.*"/>
+    <bind queue="demo-queue-5" exchange="magento" topic="demo.object.#"/>
+
+    <bind queue="demo-queue-6" exchange="magento" topic="test.schema.defined.by.method"/>
+
+    <bind queue="test-queue-1" exchange="magento" topic="customer.created"/>
+    <bind queue="test-queue-1" exchange="magento" topic="customer.created.one"/>
+    <bind queue="test-queue-1" exchange="magento" topic="customer.created.one.two"/>
+    <bind queue="test-queue-1" exchange="magento" topic="customer.created.two"/>
+    <bind queue="test-queue-1" exchange="magento" topic="customer.updated"/>
+    <bind queue="test-queue-1" exchange="test-exchange-1" topic="cart.created"/>
+    <bind queue="test-queue-2" exchange="magento" topic="customer.created"/>
+    <bind queue="test-queue-2" exchange="magento" topic="customer.deleted"/>
+    <bind queue="test-queue-3" exchange="magento" topic="cart.created"/>
+    <bind queue="test-queue-3" exchange="magento" topic="cart.created.one"/>
+    <bind queue="test-queue-3" exchange="test-exchange-1" topic="cart.created"/>
+    <bind queue="test-queue-4" exchange="magento" topic="customer.*"/>
+    <bind queue="test-queue-5" exchange="magento" topic="customer.#"/>
+    <bind queue="test-queue-7" exchange="magento" topic="*.created.*"/>
+    <bind queue="test-queue-8" exchange="magento" topic="*.created.#"/>
+    <bind queue="test-queue-9" exchange="magento" topic="#"/>
+</config>

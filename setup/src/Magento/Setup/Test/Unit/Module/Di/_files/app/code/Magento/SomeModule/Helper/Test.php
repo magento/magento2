@@ -27,7 +27,10 @@ class Test
 
     /**
      * Test constructor.
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param \Magento\SomeModule\Module\Factory $factory
      * @param \Magento\SomeModule\Element\Factory $elementFactory
      * @param \Magento\SomeModule\ElementFactory $rightElementFactory

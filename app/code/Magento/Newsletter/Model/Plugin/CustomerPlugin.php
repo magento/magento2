@@ -14,6 +14,9 @@ use Magento\Newsletter\Model\ResourceModel\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Newsletter Plugin for customer
+ */
 class CustomerPlugin
 {
     /**
@@ -47,12 +50,18 @@ class CustomerPlugin
      * Initialize dependencies.
      *
      * @param SubscriberFactory $subscriberFactory
+<<<<<<< HEAD
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param Subscriber|null $subscriberResource
+=======
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param Subscriber $subscriberResource
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         SubscriberFactory $subscriberFactory,
+<<<<<<< HEAD
         ExtensionAttributesFactory $extensionFactory = null,
         Subscriber $subscriberResource = null,
         StoreManagerInterface $storeManager = null
@@ -61,6 +70,15 @@ class CustomerPlugin
         $this->extensionFactory = $extensionFactory
             ?: ObjectManager::getInstance()->get(ExtensionAttributesFactory::class);
         $this->subscriberResource = $subscriberResource ?: ObjectManager::getInstance()->get(Subscriber::class);
+=======
+        ExtensionAttributesFactory $extensionFactory,
+        Subscriber $subscriberResource,
+        StoreManagerInterface $storeManager = null
+    ) {
+        $this->subscriberFactory = $subscriberFactory;
+        $this->extensionFactory = $extensionFactory;
+        $this->subscriberResource = $subscriberResource;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
@@ -80,6 +98,10 @@ class CustomerPlugin
         $resultId = $result->getId();
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = $this->subscriberFactory->create();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $subscriber->updateSubscription($resultId);
         // update the result only if the original customer instance had different value.
         $initialExtensionAttributes = $result->getExtensionAttributes();
@@ -88,10 +110,15 @@ class CustomerPlugin
             $initialExtensionAttributes = $this->extensionFactory->create(CustomerInterface::class);
             $result->setExtensionAttributes($initialExtensionAttributes);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $newExtensionAttributes = $customer->getExtensionAttributes();
         if ($newExtensionAttributes
             && $initialExtensionAttributes->getIsSubscribed() !== $newExtensionAttributes->getIsSubscribed()
         ) {
+<<<<<<< HEAD
             if ($newExtensionAttributes->getIsSubscribed() === true) {
                 $subscriber->subscribeCustomerById($resultId);
             } elseif ($newExtensionAttributes->getIsSubscribed() === false) {
@@ -101,6 +128,19 @@ class CustomerPlugin
         $isSubscribed = $subscriber->isSubscribed();
         $this->customerSubscriptionStatus[$resultId] = $isSubscribed;
         $initialExtensionAttributes->setIsSubscribed($isSubscribed);
+=======
+            if ($newExtensionAttributes->getIsSubscribed()) {
+                $subscriber->subscribeCustomerById($resultId);
+            } else {
+                $subscriber->unsubscribeCustomerById($resultId);
+            }
+        }
+
+        $isSubscribed = $subscriber->isSubscribed();
+        $this->customerSubscriptionStatus[$resultId] = $isSubscribed;
+        $initialExtensionAttributes->setIsSubscribed($isSubscribed);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $result;
     }
 
@@ -169,6 +209,10 @@ class CustomerPlugin
             $isSubscribed = $this->isSubscribed($customer);
             $extensionAttributes->setIsSubscribed($isSubscribed);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $customer;
     }
 
@@ -176,7 +220,11 @@ class CustomerPlugin
      * This method returns newsletters subscription status for given customer.
      *
      * @param CustomerInterface $customer
+<<<<<<< HEAD
      * @return mixed
+=======
+     * @return bool
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private function isSubscribed(CustomerInterface $customer)
     {
@@ -186,6 +234,10 @@ class CustomerPlugin
             $this->customerSubscriptionStatus[$customerId] = isset($subscriber['subscriber_status'])
                 && $subscriber['subscriber_status'] == 1;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $this->customerSubscriptionStatus[$customerId];
     }
 }

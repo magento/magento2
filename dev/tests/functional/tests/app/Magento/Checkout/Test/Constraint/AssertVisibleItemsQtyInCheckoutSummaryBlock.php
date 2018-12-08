@@ -41,7 +41,7 @@ class AssertVisibleItemsQtyInCheckoutSummaryBlock extends AbstractConstraint
             }
         }
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $checkoutSummaryMaxVisibleCartItemsCount,
             $presentItems,
             'Wrong quantity of visible Cart items in checkout summary block.'

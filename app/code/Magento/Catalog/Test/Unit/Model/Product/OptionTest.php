@@ -77,14 +77,21 @@ class OptionTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $rawExtensions
      * @param string $expectedExtensions
+<<<<<<< HEAD
      * @dataProvider beforeSaveFileOptionDataProvider
      */
     public function testBeforeSaveFileOption($rawExtensions, $expectedExtensions)
+=======
+     * @dataProvider cleanFileExtensionsDataProvider
+     */
+    public function testCleanFileExtensions(string $rawExtensions, string $expectedExtensions)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->model->setType(Option::OPTION_GROUP_FILE);
         $this->model->setFileExtension($rawExtensions);
         $this->model->beforeSave();
         $actualExtensions = $this->model->getFileExtension();
+<<<<<<< HEAD
         $this->assertEquals(
             $expectedExtensions,
             $actualExtensions
@@ -97,6 +104,17 @@ class OptionTest extends \PHPUnit\Framework\TestCase
      * @return array
      */
     public function beforeSaveFileOptionDataProvider()
+=======
+        $this->assertEquals($expectedExtensions, $actualExtensions);
+    }
+
+    /**
+     * Data provider for testCleanFileExtensions.
+     *
+     * @return array
+     */
+    public function cleanFileExtensionsDataProvider()
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return [
             ['JPG, PNG, GIF', 'jpg, png, gif'],

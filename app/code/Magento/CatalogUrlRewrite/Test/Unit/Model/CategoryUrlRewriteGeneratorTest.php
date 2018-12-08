@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -78,7 +76,10 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->category = $this->createMock(\Magento\Catalog\Model\Category::class);
         $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
-        $mergeDataProviderFactory = $this->createPartialMock(\Magento\UrlRewrite\Model\MergeDataProviderFactory::class, ['create']);
+        $mergeDataProviderFactory = $this->createPartialMock(
+            \Magento\UrlRewrite\Model\MergeDataProviderFactory::class,
+            ['create']
+        );
         $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
@@ -125,7 +126,10 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->with(1, $this->category, $categoryId)
             ->will($this->returnValue(['category-3' => $current]));
-        $categoryForSpecificStore = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['getUrlKey', 'getUrlPath']);
+        $categoryForSpecificStore = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            ['getUrlKey', 'getUrlPath']
+        );
         $this->categoryRepository->expects($this->once())->method('get')->willReturn($categoryForSpecificStore);
 
         $this->assertEquals(

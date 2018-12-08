@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Api;
 
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
@@ -21,6 +22,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
+     * @return void
      */
     public function testGet()
     {
@@ -33,6 +35,9 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $this->assertEquals($attributeCode, $attribute['attribute_code']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetList()
     {
         $searchCriteria = [
@@ -81,6 +86,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
      */
     public function testCreate()
     {
@@ -115,6 +121,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
+     * @return void
      */
     public function testCreateWithExceptionIfAttributeAlreadyExists()
     {
@@ -131,6 +138,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
      */
     public function testUpdate()
     {
@@ -200,6 +208,72 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
+     */
+    public function testUpdateWithNoDefaultLabelAndAdminStorelabel()
+    {
+        $attributeCode = uniqid('label_attr_code');
+        $attribute = $this->createAttribute($attributeCode);
+
+        $attributeData = [
+            'attribute' => [
+                'attribute_id' => $attribute['attribute_id'],
+                'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
+                'is_used_in_grid' => true,
+                'frontend_labels' => [
+                    //Update existing
+                    ['store_id' => 0, 'label' => 'front_lbl_store0_new'],
+                    ['store_id' => 1, 'label' => 'front_lbl_store1_new'],
+                ],
+                'is_required' => false,
+                'frontend_input' => 'select',
+            ],
+        ];
+        $result = $this->updateAttribute($attributeCode, $attributeData);
+
+        $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
+        $this->assertEquals(true, $result['is_used_in_grid']);
+        $this->assertEquals($attributeCode, $result['attribute_code']);
+        $this->assertEquals('front_lbl_store0_new', $result['default_frontend_label']);
+        $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
+     */
+    public function testUpdateWithNoDefaultLabelAndNoAdminStoreLabel()
+    {
+        $attributeCode = uniqid('label_attr_code');
+        $attribute = $this->createAttribute($attributeCode);
+
+        $attributeData = [
+            'attribute' => [
+                'attribute_id' => $attribute['attribute_id'],
+                'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
+                'is_used_in_grid' => true,
+                'frontend_labels' => [
+                    //Update existing
+                    ['store_id' => 1, 'label' => 'front_lbl_store1_new'],
+                ],
+                'is_required' => false,
+                'frontend_input' => 'select',
+            ],
+        ];
+        $result = $this->updateAttribute($attributeCode, $attributeData);
+
+        $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
+        $this->assertEquals(true, $result['is_used_in_grid']);
+        $this->assertEquals($attributeCode, $result['attribute_code']);
+        $this->assertEquals('default_label', $result['default_frontend_label']);
+        $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
      */
     public function testUpdateWithNoDefaultLabelAndAdminStorelabel()
     {
@@ -330,6 +404,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
+     * @return void
      */
     public function testDeleteById()
     {
@@ -337,10 +412,14 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $this->assertTrue($this->deleteAttribute($attributeCode));
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteNoSuchEntityException()
     {
         $attributeCode = 'some_test_code';
-        $expectedMessage = 'Attribute with attributeCode "%1" does not exist.';
+        $expectedMessage =
+            'The attribute with a "%1" attributeCode doesn\'t exist. Verify the attribute and try again.';
 
         $serviceInfo = [
             'rest' => [
@@ -517,6 +596,9 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         return $this->_webApiCall($serviceInfo, $attributeData);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         foreach ($this->createdAttributes as $attributeCode) {

@@ -23,8 +23,12 @@ require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespaceExtension.php';
  */
 class GeneratorTest extends TestCase
 {
+<<<<<<< HEAD
     const CLASS_NAME_WITH_NAMESPACE = \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace::class;
     const CLASS_NAME_WITH_NAMESPACE_71 = \Magento\Framework\Code\Generator71Test\SourceClassWithNamespace::class;
+=======
+    const CLASS_NAME_WITH_NAMESPACE = GeneratorTest\SourceClassWithNamespace::class;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     /**
      * @var Generator
@@ -115,6 +119,7 @@ class GeneratorTest extends TestCase
             file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceFactory.php.sample')
         );
         $this->assertEquals($expectedContent, $content);
+<<<<<<< HEAD
     }
 
     /**
@@ -227,6 +232,78 @@ class GeneratorTest extends TestCase
             );
             $this->assertEquals($expectedContent, $content);
         }
+=======
+    }
+
+    /**
+     * Generates a new file with Proxy class and compares with the sample from the
+     * SourceClassWithNamespaceProxy.php.sample file.
+     */
+    public function testGenerateClassProxyWithNamespace()
+    {
+        $proxyClassName = self::CLASS_NAME_WITH_NAMESPACE . '\Proxy';
+        $this->assertEquals(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($proxyClassName));
+        $proxy = Bootstrap::getObjectManager()->create($proxyClassName);
+        $this->assertInstanceOf(self::CLASS_NAME_WITH_NAMESPACE, $proxy);
+        $content = $this->_clearDocBlock(
+            file_get_contents($this->_ioObject->generateResultFileName($proxyClassName))
+        );
+        $expectedContent = $this->_clearDocBlock(
+            file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceProxy.php.sample')
+        );
+        $this->assertEquals($expectedContent, $content);
+    }
+
+    /**
+     * Generates a new file with Interceptor class and compares with the sample from the
+     * SourceClassWithNamespaceInterceptor.php.sample file.
+     */
+    public function testGenerateClassInterceptorWithNamespace()
+    {
+        $interceptorClassName = self::CLASS_NAME_WITH_NAMESPACE . '\Interceptor';
+        $this->assertEquals(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($interceptorClassName));
+        $content = $this->_clearDocBlock(
+            file_get_contents($this->_ioObject->generateResultFileName($interceptorClassName))
+        );
+        $expectedContent = $this->_clearDocBlock(
+            file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceInterceptor.php.sample')
+        );
+        $this->assertEquals($expectedContent, $content);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
+    }
+
+    /**
+     * It tries to generate a new class file when the generated directory is read-only
+     */
+    public function testGeneratorClassWithErrorSaveClassFile()
+    {
+<<<<<<< HEAD
+        $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'Factory';
+        $msgPart = 'Class ' . $factoryClassName . ' generation error: The requested class did not generate properly, '
+            . 'because the \'generated\' directory permission is read-only.';
+        $regexpMsgPart = preg_quote($msgPart);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageRegExp("/.*$regexpMsgPart.*/");
+        $this->generatedDirectory->create($this->testRelativePath);
+        $this->generatedDirectory->changePermissionsRecursively($this->testRelativePath, 0555, 0444);
+        $generatorResult = $this->_generator->generateClass($factoryClassName);
+        $this->assertFalse($generatorResult);
+        $pathToSystemLog = $this->logDirectory->getAbsolutePath('system.log');
+        $this->assertContains($msgPart, file_get_contents($pathToSystemLog));
+=======
+        $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'ExtensionInterfaceFactory';
+        $this->generatedDirectory->create($this->testRelativePath);
+        $this->assertEquals(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($factoryClassName));
+        $factory = Bootstrap::getObjectManager()->create($factoryClassName);
+        $this->assertInstanceOf(self::CLASS_NAME_WITH_NAMESPACE . 'Extension', $factory->create());
+        $content = $this->_clearDocBlock(
+            file_get_contents($this->_ioObject->generateResultFileName($factoryClassName))
+        );
+        $expectedContent = $this->_clearDocBlock(
+            file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceExtensionInterfaceFactory.php.sample')
+        );
+        $this->assertEquals($expectedContent, $content);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**

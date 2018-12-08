@@ -7,7 +7,6 @@
 namespace Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery;
 
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
-use Magento\ProductVideo\Setup\InstallSchema;
 
 /**
  * Plugin for catalog product gallery create/update handlers.
@@ -106,7 +105,7 @@ class CreateHandler extends AbstractHandler
     protected function saveVideoValuesItem(array $item)
     {
         $this->resourceModel->saveDataRow(
-            InstallSchema::GALLERY_VALUE_VIDEO_TABLE,
+            'catalog_product_entity_media_gallery_value_video',
             $this->prepareVideoRowDataForSave($item)
         );
     }
@@ -154,7 +153,7 @@ class CreateHandler extends AbstractHandler
         $result = [];
         if (!empty($ids)) {
             $result = $this->resourceModel->loadDataFromTableByValueId(
-                InstallSchema::GALLERY_VALUE_VIDEO_TABLE,
+                'catalog_product_entity_media_gallery_value_video',
                 $ids,
                 null,
                 $this->videoPropertiesDbMapping
@@ -263,10 +262,17 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+<<<<<<< HEAD
      * @param $item
      * @return bool
      */
     private function isVideoItem($item): bool
+=======
+     * @param array $item
+     * @return bool
+     */
+    private function isVideoItem(array $item): bool
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return !empty($item['media_type'])
             && empty($item['removed'])
@@ -274,10 +280,17 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
+<<<<<<< HEAD
      * @param $item
      * @return bool
      */
     private function isNewVideo($item): bool
+=======
+     * @param array $item
+     * @return bool
+     */
+    private function isNewVideo(array $item): bool
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return !isset($item['video_url_default'], $item['video_title_default'])
             || empty($item['video_url_default'])

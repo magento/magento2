@@ -9,8 +9,11 @@ use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Backend\Block\Template\Context;
 
 /**
+<<<<<<< HEAD
  * Class SubscriptionStatusLabel.
  *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * Provides labels for subscription status
  * Status can be reviewed in System Configuration
  */
@@ -22,8 +25,11 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
     private $subscriptionStatusProvider;
 
     /**
+<<<<<<< HEAD
      * SubscriptionStatusLabel constructor.
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param Context $context
      * @param SubscriptionStatusProvider $labelStatusProvider
      * @param array $data
@@ -59,6 +65,10 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
      */
     private function prepareLabelValue()
     {
+<<<<<<< HEAD
         return __('Subscription status') . ': ' . __($this->subscriptionStatusProvider->getStatus());
+=======
+        return __('Subscription status') . ': ' . $this->subscriptionStatusProvider->getStatus();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 }

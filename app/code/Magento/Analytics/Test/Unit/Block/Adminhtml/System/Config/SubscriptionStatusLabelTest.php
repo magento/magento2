@@ -12,9 +12,12 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+<<<<<<< HEAD
 /**
  * Class SignupTest
  */
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class SubscriptionStatusLabelTest extends \PHPUnit\Framework\TestCase
 {
     /**

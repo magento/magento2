@@ -12,9 +12,14 @@ define([
     'Magento_Checkout/js/view/summary/abstract-total',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/totals',
+<<<<<<< HEAD
     'jquery',
     'mage/translate'
 ], function (ko, Component, quote, totals, $, $t) {
+=======
+    'mage/translate'
+], function (ko, Component, quote, totals, $t) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     'use strict';
 
     var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal,

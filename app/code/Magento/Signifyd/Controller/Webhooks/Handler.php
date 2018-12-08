@@ -7,6 +7,11 @@ namespace Magento\Signifyd\Controller\Webhooks;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
@@ -21,7 +26,11 @@ use Psr\Log\LoggerInterface;
  *
  * @see https://www.signifyd.com/docs/api/#/reference/webhooks/
  */
+<<<<<<< HEAD
 class Handler extends Action
+=======
+class Handler extends Action implements \Magento\Framework\App\CsrfAwareActionInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 {
     /**
      * Event topic of test webhook request.
@@ -136,4 +145,23 @@ class Handler extends Action
             $this->logger->critical($e);
         }
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 }

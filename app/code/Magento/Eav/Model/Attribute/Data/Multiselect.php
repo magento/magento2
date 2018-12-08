@@ -44,7 +44,7 @@ class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
     }
 
     /**
-     * Return formated attribute value from entity model
+     * Return formatted attribute value from entity model
      *
      * @param string $format
      * @return array|string

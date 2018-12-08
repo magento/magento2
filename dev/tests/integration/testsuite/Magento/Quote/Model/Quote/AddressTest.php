@@ -26,9 +26,12 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
     /**@var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
     protected $customerRepository;
 
+<<<<<<< HEAD
     /** @var  StoreRepositoryInterface */
     private $storeRepository;
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     public static function setUpBeforeClass()
     {
         $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()

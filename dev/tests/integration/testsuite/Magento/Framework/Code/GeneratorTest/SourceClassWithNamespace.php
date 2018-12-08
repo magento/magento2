@@ -125,6 +125,43 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     /**
      * Test method
      *
+<<<<<<< HEAD
+=======
+     * @param mixed $arg1
+     * @param string $arg2
+     * @param int|null $arg3
+     * @param int|null $arg4
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function public71(
+        $arg1,
+        string $arg2,
+        ?int $arg3,
+        ?int $arg4 = null
+    ): void {
+    }
+
+    /**
+     * Test method
+     *
+     * @param \DateTime|null $arg1
+     * @param mixed $arg2
+     *
+     * @return null|string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function public71Another(?\DateTime $arg1, $arg2 = false): ?string
+    {
+    }
+
+    /**
+     * Test method
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param bool $arg
      * @return SourceClassWithNamespace
      *

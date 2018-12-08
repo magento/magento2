@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Model;
 
@@ -56,7 +57,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     /**
      * @var ResourceConnection
      */
+<<<<<<< HEAD
     private $connectionPull;
+=======
+    private $connectionPool;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
@@ -75,7 +80,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository,
+<<<<<<< HEAD
         ResourceConnection $connectionPull = null
+=======
+        ResourceConnection $connectionPool = null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -83,7 +92,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $this->paymentInformationManagement = $paymentInformationManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->cartRepository = $cartRepository;
+<<<<<<< HEAD
         $this->connectionPull = $connectionPull ?: ObjectManager::getInstance()->get(ResourceConnection::class);
+=======
+        $this->connectionPool = $connectionPool ?: ObjectManager::getInstance()->get(ResourceConnection::class);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -95,8 +108,13 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
+<<<<<<< HEAD
         $salesConnection = $this->connectionPull->getConnection('sales');
         $checkoutConnection = $this->connectionPull->getConnection('checkout');
+=======
+        $salesConnection = $this->connectionPool->getConnection('sales');
+        $checkoutConnection = $this->connectionPool->getConnection('checkout');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $salesConnection->beginTransaction();
         $checkoutConnection->beginTransaction();
 
@@ -123,7 +141,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             $checkoutConnection->rollBack();
             throw $e;
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $orderId;
     }
 
@@ -185,7 +207,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @return void
      * @see \Magento\Shipping\Model\Shipping::collectRates
      */
+<<<<<<< HEAD
     private function limitShippingCarrier(Quote $quote)
+=======
+    private function limitShippingCarrier(Quote $quote) : void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $shippingAddress = $quote->getShippingAddress();
         if ($shippingAddress && $shippingAddress->getShippingMethod()) {

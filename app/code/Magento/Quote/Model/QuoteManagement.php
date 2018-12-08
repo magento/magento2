@@ -233,10 +233,13 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         try {
             $quote->getShippingAddress()->setCollectShippingRates(true);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Cannot create quote'));
+            throw new CouldNotSaveException(__("The quote can't be created."));
         }
         return $quote->getId();
     }
@@ -252,9 +255,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         try {
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Cannot create quote'));
+            throw new CouldNotSaveException(__("The quote can't be created."));
         }
-        return $quote->getId();
+        return (int)$quote->getId();
     }
 
     /**
@@ -268,18 +271,18 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         if (!in_array($storeId, $customerModel->load($customerId)->getSharedStoreIds())) {
             throw new StateException(
-                __('Cannot assign customer to the given cart. The cart belongs to different store.')
+                __("The customer can't be assigned to the cart. The cart belongs to a different store.")
             );
         }
         if ($quote->getCustomerId()) {
             throw new StateException(
-                __('Cannot assign customer to the given cart. The cart is not anonymous.')
+                __("The customer can't be assigned to the cart because the cart isn't anonymous.")
             );
         }
         try {
             $this->quoteRepository->getForCustomer($customerId);
             throw new StateException(
-                __('Cannot assign customer to the given cart. Customer already has active cart.')
+                __("The customer can't be assigned to the cart because the customer already has an active cart.")
             );
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         }
@@ -365,7 +368,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         if (null == $order) {
             throw new LocalizedException(
-                __('An error occurred on the server. Please try to place the order again.')
+                __('A server error stopped your order from being placed. Please try to place your order again.')
             );
         }
 

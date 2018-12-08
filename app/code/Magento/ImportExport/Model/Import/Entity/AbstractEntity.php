@@ -556,6 +556,10 @@ abstract class AbstractEntity
             $this->_parameters['behavior'] != ImportExport::BEHAVIOR_APPEND &&
             $this->_parameters['behavior'] != ImportExport::BEHAVIOR_ADD_UPDATE &&
             $this->_parameters['behavior'] != ImportExport::BEHAVIOR_REPLACE &&
+<<<<<<< HEAD
+=======
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_CUSTOM &&
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $this->_parameters['behavior'] != ImportExport::BEHAVIOR_DELETE
         ) {
             return ImportExport::getDefaultBehavior();
@@ -829,6 +833,8 @@ abstract class AbstractEntity
     }
 
     /**
+     * Get error aggregator object
+     *
      * @return ProcessingErrorAggregatorInterface
      */
     public function getErrorAggregator()

@@ -26,6 +26,14 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var string
      */
+<<<<<<< HEAD
+=======
+    private $fullDirectoryPath;
+
+    /**
+     * @var string
+     */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     private $dirName= 'NewDirectory';
 
     /**
@@ -48,10 +56,15 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+<<<<<<< HEAD
+=======
+        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->model = $objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\NewFolder::class);
     }
 
     /**
+<<<<<<< HEAD
      * Execute method with correct directory path to check that new folder can be created under linked media directory.
      */
     public function testExecute()
@@ -65,6 +78,23 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
             $this->mediaDirectory->isExist(
                 $this->mediaDirectory->getRelativePath(
                     $fullDirectoryPath . DIRECTORY_SEPARATOR . $this->dirName
+=======
+     * Execute method with correct directory path to check that new folder can be created under WYSIWYG media directory.
+     *
+     * @return void
+     */
+    public function testExecute()
+    {
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('name', $this->dirName);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
+        $this->model->execute();
+
+        $this->assertTrue(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath(
+                    $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->dirName
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 )
             )
         );
@@ -78,16 +108,49 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithLinkedMedia()
     {
         $linkedDirectoryPath =  $this->filesystem->getDirectoryRead(DirectoryList::PUB)
+<<<<<<< HEAD
                 ->getAbsolutePath() . DIRECTORY_SEPARATOR . 'linked_media';
         $fullDirectoryPath = $this->imagesHelper->getStorageRoot();
         $this->model->getRequest()->setMethod('POST')
             ->setPostValue('name', $this->dirName);
         $this->model->getStorage()->getSession()->setCurrentPath($fullDirectoryPath);
         $this->model->execute();
+=======
+                ->getAbsolutePath()  . 'linked_media';
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('name', $this->dirName);
+        $this->model->getStorage()
+            ->getSession()
+            ->setCurrentPath($this->fullDirectoryPath . DIRECTORY_SEPARATOR . 'wysiwyg');
+        $this->model->execute();
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->assertTrue(is_dir($linkedDirectoryPath . DIRECTORY_SEPARATOR . $this->dirName));
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Execute method with traversal directory path to check that there is no ability to create new folder not
+     * under media directory.
+     *
+     * @return void
+     */
+    public function testExecuteWithWrongPath()
+    {
+        $dirPath = '/../../../';
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('name', $this->dirName);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath . $dirPath);
+        $this->model->execute();
+
+        $this->assertFileNotExists(
+            $this->fullDirectoryPath . $dirPath . $this->dirName
+        );
+    }
+
+    /**
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @inheritdoc
      */
     public static function tearDownAfterClass()

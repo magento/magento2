@@ -6,6 +6,8 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\System\Message;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class ListAction extends \Magento\Backend\App\AbstractAction
 {
     /**
@@ -15,6 +17,7 @@ class ListAction extends \Magento\Backend\App\AbstractAction
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @deprecated
      */
     protected $jsonHelper;
 
@@ -41,7 +44,7 @@ class ListAction extends \Magento\Backend\App\AbstractAction
     }
 
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -65,6 +68,9 @@ class ListAction extends \Magento\Backend\App\AbstractAction
                 )
             ];
         }
-        $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $resultJson->setData($result);
+        return $resultJson;
     }
 }

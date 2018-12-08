@@ -8,6 +8,9 @@
 
 namespace Magento\Framework\DB;
 
+/**
+ * DataBase Helper
+ */
 class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
 {
     /**
@@ -52,7 +55,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * Field can be with 'dot' delimiter.
      *
      * @param string $field
-     * @param bool   $reverse OPTIONAL
+     * @param bool $reverse OPTIONAL
      * @return string
      */
     protected function _truncateAliasName($field, $reverse = false)
@@ -143,6 +146,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     }
 
     /**
+     * Assemble limit
      *
      * @param string $query
      * @param int $limitCount

@@ -28,8 +28,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method Address setAddressType(string $value)
  * @method int getFreeShipping()
  * @method Address setFreeShipping(int $value)
- * @method int getCollectShippingRates()
- * @method Address setCollectShippingRates(int $value)
+ * @method bool getCollectShippingRates()
+ * @method Address setCollectShippingRates(bool $value)
  * @method Address setShippingMethod(string $value)
  * @method string getShippingDescription()
  * @method Address setShippingDescription(string $value)
@@ -1003,7 +1003,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         /**
          * Store and website identifiers specified from StoreManager
          */
+<<<<<<< HEAD
         $request->setQuoteStoreId($this->getQuote()->getStoreId());
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         if ($this->getQuote()->getStoreId()) {
             $storeId = $this->getQuote()->getStoreId();
             $request->setStoreId($storeId);
@@ -1690,6 +1693,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
     /**
      * @inheritdoc
+<<<<<<< HEAD
+=======
+     *
+     * @return \Magento\Quote\Api\Data\AddressExtensionInterface|null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function getExtensionAttributes()
     {
@@ -1698,6 +1706,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
     /**
      * @inheritdoc
+<<<<<<< HEAD
+=======
+     *
+     * @param \Magento\Quote\Api\Data\AddressExtensionInterface $extensionAttributes
+     * @return $this
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function setExtensionAttributes(\Magento\Quote\Api\Data\AddressExtensionInterface $extensionAttributes)
     {

@@ -5,6 +5,10 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SetCustomerDataLifetimeActionGroup">

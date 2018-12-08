@@ -23,7 +23,11 @@ class MergeQuoteItems
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+<<<<<<< HEAD
     public function afterMerge(Processor $subject, Item $result, Item $source)
+=======
+    public function afterMerge(Processor $subject, Item $result, Item $source): Item
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $giftMessageId = $source->getGiftMessageId();
 

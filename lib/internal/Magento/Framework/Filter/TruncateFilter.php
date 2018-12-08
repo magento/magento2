@@ -9,7 +9,10 @@ namespace Magento\Framework\Filter;
 
 use Magento\Framework\Filter\TruncateFilter\Result;
 use Magento\Framework\Filter\TruncateFilter\ResultFactory;
+<<<<<<< HEAD
 use Magento\Framework\Stdlib\StringUtils;
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 /**
  * Truncate filter
@@ -35,7 +38,11 @@ class TruncateFilter implements \Zend_Filter_Interface
     private $breakWords;
 
     /**
+<<<<<<< HEAD
      * @var StringUtils
+=======
+     * @var \Magento\Framework\Stdlib\StringUtils
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private $stringUtils;
 
@@ -45,18 +52,30 @@ class TruncateFilter implements \Zend_Filter_Interface
     private $resultFactory;
 
     /**
+<<<<<<< HEAD
      * @param StringUtils $stringUtils
+=======
+     * @param \Magento\Framework\Stdlib\StringUtils $stringUtils
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param ResultFactory $resultFactory
      * @param int $length
      * @param string $etc
      * @param bool $breakWords
      */
     public function __construct(
+<<<<<<< HEAD
         StringUtils $stringUtils,
         ResultFactory $resultFactory,
         int $length = 80,
         string $etc = '...',
         bool $breakWords = true
+=======
+        \Magento\Framework\Stdlib\StringUtils $stringUtils,
+        ResultFactory $resultFactory,
+        $length = 80,
+        $etc = '...',
+        $breakWords = true
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         $this->stringUtils = $stringUtils;
         $this->resultFactory = $resultFactory;
@@ -68,7 +87,11 @@ class TruncateFilter implements \Zend_Filter_Interface
     /**
      * Filter value
      *
+<<<<<<< HEAD
      * @param mixed $string
+=======
+     * @param string $string
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return Result
      */
     public function filter($string) : Result
@@ -78,7 +101,10 @@ class TruncateFilter implements \Zend_Filter_Interface
         $length = $this->length;
         if (0 == $length) {
             $result->setValue('');
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             return $result;
         }
 
@@ -87,7 +113,10 @@ class TruncateFilter implements \Zend_Filter_Interface
             $length -= $this->stringUtils->strlen($this->etc);
             if ($length <= 0) {
                 $result->setValue('');
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 return $result;
             }
             $preparedString = $string;
@@ -102,7 +131,10 @@ class TruncateFilter implements \Zend_Filter_Interface
             }
             $result->setRemainder($this->stringUtils->substr($string, $preparedLength, $originalLength));
             $result->setValue($this->stringUtils->substr($preparedString, 0, $length) . $this->etc);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             return $result;
         }
 

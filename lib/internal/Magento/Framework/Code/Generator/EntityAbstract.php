@@ -311,7 +311,11 @@ abstract class EntityAbstract
      */
     private function extractParameterType(
         \ReflectionParameter $parameter
+<<<<<<< HEAD
     ) {
+=======
+    ): ?string {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         /** @var string|null $typeName */
         $typeName = null;
         if ($parameter->hasType()) {
@@ -324,12 +328,20 @@ abstract class EntityAbstract
             } elseif ($parameter->isCallable()) {
                 $typeName = 'callable';
             } else {
+<<<<<<< HEAD
                 $typeName = (string)$parameter->getType();
             }
 
             // compatibility with PHP7.0.
             if ($parameter->allowsNull() && method_exists($parameter->getType(), 'getName')) {
                 $typeName = '?' . $typeName;
+=======
+                $typeName = $parameter->getType()->getName();
+            }
+
+            if ($parameter->allowsNull()) {
+                $typeName = '?' .$typeName;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             }
         }
 
@@ -343,7 +355,11 @@ abstract class EntityAbstract
      */
     private function extractParameterDefaultValue(
         \ReflectionParameter $parameter
+<<<<<<< HEAD
     ) {
+=======
+    ): ?ValueGenerator {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         /** @var ValueGenerator|null $value */
         $value = null;
         if ($parameter->isOptional() && $parameter->isDefaultValueAvailable()) {

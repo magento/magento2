@@ -8,6 +8,7 @@ namespace Magento\Swatches\Block\Product\Renderer;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Product as CatalogProduct;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
@@ -86,6 +87,12 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     private $swatchAttributesProvider;
 
     /**
+     * @var UrlBuilder
+     */
+    private $imageUrlBuilder;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @param Context $context
      * @param ArrayUtils $arrayUtils
      * @param EncoderInterface $jsonEncoder
@@ -96,9 +103,9 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * @param ConfigurableAttributeData $configurableAttributeData
      * @param SwatchData $swatchHelper
      * @param Media $swatchMediaHelper
-     * @param array $data other data
-     * @param SwatchAttributesProvider $swatchAttributesProvider
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param array $data
+     * @param SwatchAttributesProvider|null $swatchAttributesProvider
+     * @param UrlBuilder|null $imageUrlBuilder
      */
     public function __construct(
         Context $context,
@@ -112,12 +119,14 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         SwatchData $swatchHelper,
         Media $swatchMediaHelper,
         array $data = [],
-        SwatchAttributesProvider $swatchAttributesProvider = null
+        SwatchAttributesProvider $swatchAttributesProvider = null,
+        UrlBuilder $imageUrlBuilder = null
     ) {
         $this->swatchHelper = $swatchHelper;
         $this->swatchMediaHelper = $swatchMediaHelper;
         $this->swatchAttributesProvider = $swatchAttributesProvider
             ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
+        $this->imageUrlBuilder = $imageUrlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
         parent::__construct(
             $context,
             $arrayUtils,
@@ -374,8 +383,9 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
             $swatchImageId = $imageType == Swatch::SWATCH_IMAGE_NAME ? 'swatch_image_base' : 'swatch_thumb_base';
             $imageAttributes = ['type' => 'image'];
         }
-        if (isset($swatchImageId)) {
-            return $this->_imageHelper->init($childProduct, $swatchImageId, $imageAttributes)->getUrl();
+
+        if (!empty($swatchImageId) && !empty($imageAttributes['type'])) {
+            return $this->imageUrlBuilder->getUrl($childProduct->getData($imageAttributes['type']), $swatchImageId);
         }
     }
 
@@ -485,7 +495,11 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      *
      * @return string
      */
+<<<<<<< HEAD
     public function getJsonSwatchSizeConfig(): string
+=======
+    public function getJsonSwatchSizeConfig()
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $imageConfig = $this->swatchMediaHelper->getImageConfig();
         $sizeConfig = [];

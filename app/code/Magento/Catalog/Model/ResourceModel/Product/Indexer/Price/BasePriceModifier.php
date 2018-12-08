@@ -29,7 +29,11 @@ class BasePriceModifier implements PriceModifierInterface
     /**
      * {@inheritdoc}
      */
+<<<<<<< HEAD
     public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = [])
+=======
+    public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = []) : void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         foreach ($this->priceModifiers as $priceModifier) {
             $priceModifier->modifyPrice($priceTable, $entityIds);

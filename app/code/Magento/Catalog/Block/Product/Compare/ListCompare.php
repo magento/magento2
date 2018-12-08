@@ -122,12 +122,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getAddToWishlistParams($product)
     {
-        $continueUrl = $this->urlEncoder->encode($this->getUrl('customer/account'));
-        $urlParamName = Action::PARAM_NAME_URL_ENCODED;
-
-        $continueUrlParams = [$urlParamName => $continueUrl];
-
-        return $this->_wishlistHelper->getAddParams($product, $continueUrlParams);
+        return $this->_wishlistHelper->getAddParams($product);
     }
 
     /**
@@ -206,7 +201,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
             ['select', 'boolean', 'multiselect']
         )
         ) {
-            //$value = $attribute->getSource()->getOptionText($product->getData($attribute->getAttributeCode()));
             $value = $attribute->getFrontend()->getValue($product);
         } else {
             $value = $product->getData($attribute->getAttributeCode());
@@ -215,19 +209,30 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
+<<<<<<< HEAD
      * Check if any of the products has a value set for the attribute.
+=======
+     * Check if any of the products has a value set for the attribute
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return bool
      */
+<<<<<<< HEAD
     public function hasAttributeValueForProducts(\Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute) : bool
+=======
+    public function hasAttributeValueForProducts($attribute)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         foreach ($this->getItems() as $item) {
             if ($item->hasData($attribute->getAttributeCode())) {
                 return true;
             }
         }
+<<<<<<< HEAD
         
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return false;
     }
 

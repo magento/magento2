@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote\Item\Option;
+<<<<<<< HEAD
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,12 +50,33 @@ class ItemProductResolverTest extends TestCase
     /**
      * @var Product | \PHPUnit_Framework_MockObject_MockObject
      */
+=======
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ItemProductResolverTest extends TestCase
+{
+    /** @var ItemProductResolver */
+    private $model;
+    /** @var ItemInterface | MockObject */
+    private $item;
+    /** @var Product | MockObject */
+    private $parentProduct;
+    /** @var  ScopeConfigInterface | MockObject */
+    private $scopeConfig;
+    /** @var OptionInterface | MockObject */
+    private $option;
+    /** @var Product | MockObject */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     private $childProduct;
 
     /**
      * Set up method
+<<<<<<< HEAD
      *
      * @return void
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     protected function setUp()
     {
@@ -100,12 +122,23 @@ class ItemProductResolverTest extends TestCase
 
     /**
      * Test for deleted child product from configurable product
+<<<<<<< HEAD
      *
      * @return void
      */
     public function testGetFinalProductChildIsNull()
     {
         $this->item->method('getOptionByCode')
+=======
+     */
+    public function testGetFinalProductChildIsNull(): void
+    {
+        $this->scopeConfig->expects($this->never())->method('getValue');
+        $this->childProduct->expects($this->never())->method('getData');
+
+        $this->item->expects($this->once())
+            ->method('getOptionByCode')
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->willReturn(null);
 
         $finalProduct = $this->model->getFinalProduct($this->item);
@@ -122,6 +155,7 @@ class ItemProductResolverTest extends TestCase
      * @param string $expectedSku
      * @param string $scopeValue
      * @param string | null $thumbnail
+<<<<<<< HEAD
      * @return void
      */
     public function testGetFinalProductChild($expectedSku, $scopeValue, $thumbnail)
@@ -133,6 +167,22 @@ class ItemProductResolverTest extends TestCase
             ->willReturn($thumbnail);
 
         $this->scopeConfig->method('getValue')
+=======
+     */
+    public function testGetFinalProductChild($expectedSku, $scopeValue, $thumbnail): void
+    {
+        $this->item->expects($this->once())
+            ->method('getOptionByCode')
+            ->willReturn($this->option);
+
+        $this->childProduct
+            ->expects($this->once())
+            ->method('getData')
+            ->willReturn($thumbnail);
+
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->willReturn($scopeValue);
 
         $finalProduct = $this->model->getFinalProduct($this->item);
@@ -140,8 +190,12 @@ class ItemProductResolverTest extends TestCase
     }
 
     /**
+<<<<<<< HEAD
      * Data provider for scope test
      *
+=======
+     * Dataprovider for scope test
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return array
      */
     public function provideScopeConfig(): array

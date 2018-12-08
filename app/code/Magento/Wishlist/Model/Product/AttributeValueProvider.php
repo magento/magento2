@@ -36,7 +36,11 @@ class AttributeValueProvider
      * @param int|null $storeId
      * @return null|string
      */
+<<<<<<< HEAD
     public function getRawAttributeValue(int $productId, string $attributeCode, int $storeId = null)
+=======
+    public function getRawAttributeValue(int $productId, string $attributeCode, int $storeId = null):? string
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $collection = $this->productCollectionFactory->create();
         $collection->addIdFilter($productId)

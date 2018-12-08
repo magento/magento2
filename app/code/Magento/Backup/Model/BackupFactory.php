@@ -39,8 +39,13 @@ class BackupFactory
      */
     public function create($timestamp, $type)
     {
+<<<<<<< HEAD
         $fsCollection = $this->_objectManager->get(\Magento\Backup\Model\Fs\Collection::class);
         $backupInstance = $this->_objectManager->get(\Magento\Backup\Model\Backup::class);
+=======
+        $fsCollection = $this->_objectManager->create(\Magento\Backup\Model\Fs\Collection::class);
+        $backupInstance = $this->_objectManager->create(\Magento\Backup\Model\Backup::class);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
         foreach ($fsCollection as $backup) {
             if ($backup->getTime() === (int) $timestamp && $backup->getType() === $type) {

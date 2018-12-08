@@ -93,6 +93,8 @@ class CategoryLink
     }
 
     /**
+     * Get category link metadata
+     *
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
      */
     private function getCategoryLinkMetadata()
@@ -132,6 +134,8 @@ class CategoryLink
     }
 
     /**
+     * Update category links
+     *
      * @param ProductInterface $product
      * @param array $insertLinks
      * @param bool $insert
@@ -175,6 +179,8 @@ class CategoryLink
     }
 
     /**
+     * Delete category links
+     *
      * @param ProductInterface $product
      * @param array $deleteLinks
      * @return array

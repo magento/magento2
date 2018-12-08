@@ -45,7 +45,7 @@ class AssertAbandonedCartCustomerInfoResult extends AbstractConstraint
         $abandonedCarts->getGridBlock()->search($filter);
         $filter['created_at'] = date('M j, Y');
         $filter['updated_at'] = date('M j, Y');
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $abandonedCarts->getGridBlock()->isRowVisible($filter, false, false),
             'Expected customer info is absent in Abandoned Carts report grid.'
         );

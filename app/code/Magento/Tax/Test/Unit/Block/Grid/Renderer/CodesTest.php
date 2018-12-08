@@ -5,6 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Block\Grid\Renderer;
 
+use Magento\Backend\Block\Context;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -74,7 +75,7 @@ class CodesTest extends \PHPUnit\Framework\TestCase
             [['some_code'], 'ESCAPED:some_code'],
             [['some_code', 'some_code2'], 'ESCAPED:some_code, some_code2'],
             [[], ''],
-            [null, '']
+            [null, ''],
         ];
     }
 }

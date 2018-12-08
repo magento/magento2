@@ -285,7 +285,11 @@ class Type implements OptionSourceInterface
 
             $types = $this->getTypes();
             foreach ($types as $typeId => $typeInfo) {
+<<<<<<< HEAD
                 $priority = isset($typeInfo['index_priority']) ? abs((int)$typeInfo['index_priority']) : 0;
+=======
+                $priority = isset($typeInfo['index_priority']) ? abs((int) $typeInfo['index_priority']) : 0;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 if (!empty($typeInfo['composite'])) {
                     $compositePriority[$typeId] = $priority;
                 } else {
@@ -307,7 +311,7 @@ class Type implements OptionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

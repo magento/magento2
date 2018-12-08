@@ -62,7 +62,10 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $popup
      * @param string $productTab
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return MockObject
      */
     private function createRequestMock($popup, $productTab = 'variations')
@@ -155,7 +158,10 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $value
      * @param $label
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return array
      */
     private function createFrontendInputValue($value, $label)
@@ -166,7 +172,10 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $originalValues
      * @param array $expectedValues
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return MockObject
      */
     private function createForm(array $originalValues = [], array $expectedValues = [])

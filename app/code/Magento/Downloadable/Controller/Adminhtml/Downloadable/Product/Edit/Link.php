@@ -66,8 +66,21 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
         if ($fileSize = $helper->getFileSize()) {
             $response->setHeader('Content-Length', $fileSize);
         }
+<<<<<<< HEAD
 
         $response->setHeader('Content-Disposition', 'attachment; filename=' . $fileName);
+=======
+        //Setting disposition as state in the config or forcing it for HTML.
+        /** @var string|null $contentDisposition */
+        $contentDisposition = $helper->getContentDisposition();
+        if (!$contentDisposition || $contentType === 'text/html') {
+            $contentDisposition = 'attachment';
+        }
+        $response->setHeader(
+            'Content-Disposition',
+            $contentDisposition . '; filename=' . $fileName
+        );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         //Rendering
         $response->clearBody();
         $response->sendHeaders();

@@ -33,6 +33,9 @@ class FormatTest extends \PHPUnit\Framework\TestCase
      */
     protected $currency;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         $this->currency = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
@@ -53,6 +56,7 @@ class FormatTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Directory\Model\CurrencyFactory|\PHPUnit_Framework_MockObject_MockObject $currencyFactory */
         $currencyFactory = $this->getMockBuilder(\Magento\Directory\Model\CurrencyFactory::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->formatModel = new \Magento\Framework\Locale\Format(
@@ -63,11 +67,11 @@ class FormatTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $localeCode
-     * @param $expectedResult
+     * @param string $localeCode
+     * @param array $expectedResult
      * @dataProvider getPriceFormatDataProvider
      */
-    public function testGetPriceFormat($localeCode, $expectedResult)
+    public function testGetPriceFormat($localeCode, array $expectedResult): void
     {
         $this->scope->expects($this->once())
             ->method('getCurrentCurrency')
@@ -79,9 +83,10 @@ class FormatTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     *
      * @return array
      */
-    public function getPriceFormatDataProvider()
+    public function getPriceFormatDataProvider(): array
     {
         return [
             ['en_US', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
@@ -92,16 +97,29 @@ class FormatTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * @param float | null $expected
      * @param string|float|int $value
      * @dataProvider provideNumbers
      */
     public function testGetNumber($value, $expected)
+=======
+     *
+     * @param        mixed $value
+     * @param        float $expected
+     * @dataProvider provideNumbers
+     */
+    public function testGetNumber($value, $expected): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->assertEquals($expected, $this->formatModel->getNumber($value));
     }
 
     /**
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return array
      */
     public function provideNumbers(): array

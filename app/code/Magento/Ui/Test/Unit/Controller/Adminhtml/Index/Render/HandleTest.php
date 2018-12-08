@@ -9,8 +9,11 @@ use Magento\Ui\Controller\Adminhtml\Index\Render\Handle;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
+<<<<<<< HEAD
  * Tests \Magento\Ui\Controller\Adminhtml\Index\Render\Handle.
  *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class HandleTest extends \PHPUnit\Framework\TestCase
@@ -78,11 +81,22 @@ class HandleTest extends \PHPUnit\Framework\TestCase
 
         $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getView')->willReturn($this->viewMock);
+<<<<<<< HEAD
         $this->authorizationMock = $this->getMockForAbstractClass(\Magento\Framework\AuthorizationInterface::class);
         $this->authorizationMock->expects($this->any())
             ->method('isAllowed')
             ->willReturn(true);
         $this->uiComponentContextMock = $this->getMockForAbstractClass(ContextInterface::class);
+=======
+        $this->authorizationMock = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
+            ->getMockForAbstractClass();
+        $this->authorizationMock->expects($this->any())
+            ->method('isAllowed')
+            ->willReturn(true);
+        $this->uiComponentContextMock = $this->getMockForAbstractClass(
+            ContextInterface::class
+        );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->uiComponentMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\UiComponentInterface::class
         );

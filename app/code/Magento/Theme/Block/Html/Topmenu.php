@@ -177,7 +177,7 @@ class Topmenu extends Template implements IdentityInterface
             return $html;
         }
 
-        $colStops = null;
+        $colStops = [];
         if ($childLevel == 0 && $limit) {
             $colStops = $this->_columnBrake($child->getChildren(), $limit);
         }
@@ -205,7 +205,7 @@ class Topmenu extends Template implements IdentityInterface
         \Magento\Framework\Data\Tree\Node $menuTree,
         $childrenWrapClass,
         $limit,
-        $colBrakes = []
+        array $colBrakes = []
     ) {
         $html = '';
 
@@ -244,7 +244,7 @@ class Topmenu extends Template implements IdentityInterface
                 }
             }
 
-            if (count($colBrakes) && $colBrakes[$counter]['colbrake']) {
+            if (is_array($colBrakes) && count($colBrakes) && $colBrakes[$counter]['colbrake']) {
                 $html .= '</ul></li><li class="column"><ul>';
             }
 
@@ -261,7 +261,7 @@ class Topmenu extends Template implements IdentityInterface
             $counter++;
         }
 
-        if (count($colBrakes) && $limit) {
+        if (is_array($colBrakes) && count($colBrakes) && $limit) {
             $html = '<li class="column"><ul>' . $html . '</ul></li>';
         }
 
@@ -359,19 +359,6 @@ class Topmenu extends Template implements IdentityInterface
     public function getIdentities()
     {
         return $this->identities;
-    }
-
-    /**
-     * Get cache key informative items
-     *
-     * @return array
-     * @since 100.1.0
-     */
-    public function getCacheKeyInfo()
-    {
-        $keyInfo = parent::getCacheKeyInfo();
-        $keyInfo[] = $this->getUrl('*/*/*', ['_current' => true, '_query' => '']);
-        return $keyInfo;
     }
 
     /**

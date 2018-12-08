@@ -5,17 +5,36 @@
  */
 namespace Magento\Ui\Controller\Adminhtml\Index;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+<<<<<<< HEAD
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Element\UiComponentFactory;
+=======
+use Magento\Ui\Model\UiComponentTypeResolver;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Controller\Result\JsonFactory;
 
+/**
+ * Render a component.
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Render extends AbstractAction
 {
     /**
+<<<<<<< HEAD
+=======
+     * @var \Magento\Ui\Model\UiComponentTypeResolver
+     */
+    private $contentTypeResolver;
+
+    /**
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var JsonFactory
      */
     private $resultJsonFactory;
@@ -33,6 +52,10 @@ class Render extends AbstractAction
     /**
      * @param Context $context
      * @param UiComponentFactory $factory
+<<<<<<< HEAD
+=======
+     * @param UiComponentTypeResolver $contentTypeResolver
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param JsonFactory|null $resultJsonFactory
      * @param Escaper|null $escaper
      * @param LoggerInterface|null $logger
@@ -40,11 +63,19 @@ class Render extends AbstractAction
     public function __construct(
         Context $context,
         UiComponentFactory $factory,
+<<<<<<< HEAD
+=======
+        UiComponentTypeResolver $contentTypeResolver,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         JsonFactory $resultJsonFactory = null,
         Escaper $escaper = null,
         LoggerInterface $logger = null
     ) {
         parent::__construct($context, $factory);
+<<<<<<< HEAD
+=======
+        $this->contentTypeResolver = $contentTypeResolver;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->resultJsonFactory = $resultJsonFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Controller\Result\JsonFactory::class);
         $this->escaper = $escaper ?: \Magento\Framework\App\ObjectManager::getInstance()
@@ -54,18 +85,24 @@ class Render extends AbstractAction
     }
 
     /**
+<<<<<<< HEAD
      * Action for AJAX request.
      *
      * @return void|\Magento\Framework\Controller\ResultInterface
+=======
+     * @inheritdoc
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function execute()
     {
         if ($this->_request->getParam('namespace') === null) {
             $this->_redirect('admin/noroute');
+
             return;
         }
 
         try {
+<<<<<<< HEAD
             $component = $this->factory->create($this->_request->getParam('namespace'));
             if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
                 $this->prepareComponent($component);
@@ -75,6 +112,15 @@ class Render extends AbstractAction
                 }
 
                 $this->_response->appendBody((string) $component->render());
+=======
+            $component = $this->factory->create($this->getRequest()->getParam('namespace'));
+            if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
+                $this->prepareComponent($component);
+                $this->getResponse()->appendBody((string)$component->render());
+
+                $contentType = $this->contentTypeResolver->resolve($component->getContext());
+                $this->getResponse()->setHeader('Content-Type', $contentType, true);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->logger->critical($e);
@@ -89,6 +135,10 @@ class Render extends AbstractAction
                 \Zend\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             return $resultJson->setData($result);
         } catch (\Exception $e) {
             $this->logger->critical($e);
@@ -103,6 +153,10 @@ class Render extends AbstractAction
                 \Zend\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             return $resultJson->setData($result);
         }
     }

@@ -110,7 +110,10 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $data
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function setupTaxTotal(array $data)
@@ -128,7 +131,10 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $taxRate
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function setupTaxRateFactoryMock(array $taxRate)
@@ -154,7 +160,10 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $taxDetails
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function setupTaxDetails(array $taxDetails)

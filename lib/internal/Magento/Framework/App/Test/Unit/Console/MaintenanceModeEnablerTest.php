@@ -101,7 +101,10 @@ class MaintenanceModeEnablerTest extends TestCase
 
     /**
      * @param bool $isOn
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return MaintenanceMode
      */
     private function createMaintenanceMode(bool $isOn): MaintenanceMode
@@ -111,7 +114,11 @@ class MaintenanceModeEnablerTest extends TestCase
             ->getMock();
 
         $maintenanceMode->method('isOn')->willReturnCallback(function () use (&$isOn) {
+<<<<<<< HEAD
                 return $isOn;
+=======
+            return $isOn;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         });
         $maintenanceMode->method('set')->willReturnCallback(function ($newValue) use (&$isOn) {
             $isOn = (bool)$newValue;

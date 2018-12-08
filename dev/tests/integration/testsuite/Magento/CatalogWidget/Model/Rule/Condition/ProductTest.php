@@ -20,6 +20,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -30,6 +33,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->conditionProduct->setRule($rule);
     }
 
+    /**
+     * @return void
+     */
     public function testLoadAttributeOptions()
     {
         $this->conditionProduct->loadAttributeOptions();
@@ -44,6 +50,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return void
+     */
     public function testAddGlobalAttributeToCollection()
     {
         $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
@@ -56,6 +65,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('at_special_price.value', $this->conditionProduct->getMappedSqlField());
     }
 
+    /**
+     * @return void
+     */
     public function testAddNonGlobalAttributeToCollectionNoProducts()
     {
         $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);

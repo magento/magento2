@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;

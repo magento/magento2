@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Multishipping\Block\Checkout;
 
 use Magento\Customer\Model\Address\Config as AddressConfig;
@@ -38,11 +43,14 @@ class Results extends Success
     private $session;
 
     /**
+<<<<<<< HEAD
      * @var Multishipping
      */
     private $multishipping;
 
     /**
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param Context $context
      * @param Multishipping $multishipping
      * @param AddressConfig $addressConfig
@@ -60,7 +68,10 @@ class Results extends Success
     ) {
         parent::__construct($context, $multishipping, $data);
 
+<<<<<<< HEAD
         $this->multishipping = $multishipping;
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->addressConfig = $addressConfig;
         $this->orderRepository = $orderRepository;
         $this->session = $session;
@@ -73,7 +84,11 @@ class Results extends Success
      */
     public function getQuoteShippingAddresses(): array
     {
+<<<<<<< HEAD
         return $this->multishipping->getQuote()->getAllShippingAddresses();
+=======
+        return $this->_multishipping->getQuote()->getAllShippingAddresses();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**

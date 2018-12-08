@@ -60,10 +60,15 @@ class NotificationAboutFailedSubscription implements MessageInterface
         $messageDetails = '';
 
         $messageDetails .= __('Failed to synchronize data to the Magento Business Intelligence service. ');
+<<<<<<< HEAD
         $messageDetails .= __(
             '<a href="%1">Retry Synchronization</a>',
             $this->urlBuilder->getUrl('analytics/subscription/retry')
         );
+=======
+        $messageDetails .= '<a href="' . $this->urlBuilder->getUrl('analytics/subscription/retry') . '">'
+            . __('Retry Synchronization') . '</a>';
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
         return $messageDetails;
     }

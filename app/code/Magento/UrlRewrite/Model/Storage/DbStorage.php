@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\UrlRewrite\Model\Storage;
 
 use Magento\Framework\Api\DataObjectHelper;
@@ -12,8 +13,14 @@ use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Psr\Log\LoggerInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteData;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Url rewrites DB storage.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DbStorage extends AbstractStorage
 {
     /**
@@ -27,7 +34,7 @@ class DbStorage extends AbstractStorage
     const ERROR_CODE_DUPLICATE_ENTRY = 1062;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     protected $connection;
 
@@ -37,15 +44,15 @@ class DbStorage extends AbstractStorage
     protected $resource;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
+     * @param UrlRewriteFactory $urlRewriteFactory
      * @param DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Psr\Log\LoggerInterface|null $logger
+     * @param ResourceConnection $resource
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
@@ -55,8 +62,8 @@ class DbStorage extends AbstractStorage
     ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
-        $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Psr\Log\LoggerInterface::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()
+            ->get(LoggerInterface::class);
 
         parent::__construct($urlRewriteFactory, $dataObjectHelper);
     }
@@ -65,7 +72,7 @@ class DbStorage extends AbstractStorage
      * Prepare select statement for specific filter
      *
      * @param array $data
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
     protected function prepareSelect(array $data)
     {
@@ -75,6 +82,7 @@ class DbStorage extends AbstractStorage
         foreach ($data as $column => $value) {
             $select->where($this->connection->quoteIdentifier($column) . ' IN (?)', $value);
         }
+
         return $select;
     }
 
@@ -142,11 +150,20 @@ class DbStorage extends AbstractStorage
     }
 
     /**
+<<<<<<< HEAD
      * @param UrlRewrite[] $urls
      *
      * @return void
      */
     private function deleteOldUrls(array $urls)
+=======
+     * Delete old URLs from DB.
+     *
+     * @param UrlRewrite[] $urls
+     * @return void
+     */
+    private function deleteOldUrls(array $urls): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $oldUrlsSelect = $this->connection->select();
         $oldUrlsSelect->from(
@@ -208,12 +225,17 @@ class DbStorage extends AbstractStorage
             foreach ($urls as $url) {
                 $urlFound = $this->doFindOneByData(
                     [
+<<<<<<< HEAD
                         UrlRewriteData::REQUEST_PATH => $url->getRequestPath(),
                         UrlRewriteData::STORE_ID => $url->getStoreId(),
+=======
+                        UrlRewrite::REQUEST_PATH => $url->getRequestPath(),
+                        UrlRewrite::STORE_ID => $url->getStoreId(),
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     ]
                 );
-                if (isset($urlFound[UrlRewriteData::URL_REWRITE_ID])) {
-                    $urlConflicted[$urlFound[UrlRewriteData::URL_REWRITE_ID]] = $url->toArray();
+                if (isset($urlFound[UrlRewrite::URL_REWRITE_ID])) {
+                    $urlConflicted[$urlFound[UrlRewrite::URL_REWRITE_ID]] = $url->toArray();
                 }
             }
             if ($urlConflicted) {
@@ -275,6 +297,7 @@ class DbStorage extends AbstractStorage
                 }
             }
         }
+
         return $data;
     }
 

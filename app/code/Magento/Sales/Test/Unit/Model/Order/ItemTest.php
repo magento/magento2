@@ -243,12 +243,20 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      * Test different combinations of item qty setups
      *
      * @param array $options
+<<<<<<< HEAD
      * @param array $expectedResult
      * @return void
      *
      * @dataProvider getItemQtyVariants
      */
     public function testGetSimpleQtyToMethods(array $options, array $expectedResult)
+=======
+     * @param float $expectedResult
+     *
+     * @dataProvider getItemQtyVariants
+     */
+    public function testGetSimpleQtyToMethods(array $options, $expectedResult)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->model->setData($options);
         $this->assertSame($this->model->getSimpleQtyToShip(), $expectedResult['to_ship']);
@@ -261,92 +269,159 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
+<<<<<<< HEAD
     public function getItemQtyVariants(): array
+=======
+    public function getItemQtyVariants()
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return [
             'empty_item' => [
                 'options' => [
                     'qty_ordered' => 0, 'qty_invoiced' => 0, 'qty_refunded' => 0, 'qty_shipped' => 0,
+<<<<<<< HEAD
                     'qty_canceled' => 0,
                 ],
                 'expectedResult' => ['to_ship' => 0, 'to_invoice' => 0],
+=======
+                    'qty_canceled' => 0
+                ],
+                'expectedResult' => ['to_ship' => 0.0, 'to_invoice' => 0.0]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'ordered_item' => [
                 'options' => [
                     'qty_ordered' => 12, 'qty_invoiced' => 0, 'qty_refunded' => 0, 'qty_shipped' => 0,
+<<<<<<< HEAD
                     'qty_canceled' => 0,
                 ],
                 'expectedResult' => ['to_ship' => 12, 'to_invoice' => 12],
+=======
+                    'qty_canceled' => 0
+                ],
+                'expectedResult' => ['to_ship' => 12.0, 'to_invoice' => 12.0]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'partially_invoiced' => [
                 'options' => ['qty_ordered' => 12, 'qty_invoiced' => 4, 'qty_refunded' => 0, 'qty_shipped' => 0,
                     'qty_canceled' => 0,
                 ],
+<<<<<<< HEAD
                 'expectedResult' => ['to_ship' => 12, 'to_invoice' => 8],
+=======
+                'expectedResult' => ['to_ship' => 12.0, 'to_invoice' => 8.0]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'completely_invoiced' => [
                 'options' => [
                     'qty_ordered' => 12, 'qty_invoiced' => 12, 'qty_refunded' => 0, 'qty_shipped' => 0,
                     'qty_canceled' => 0,
                 ],
+<<<<<<< HEAD
                 'expectedResult' => ['to_ship' => 12, 'to_invoice' => 0],
+=======
+                'expectedResult' => ['to_ship' => 12.0, 'to_invoice' => 0.0]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'partially_invoiced_refunded' => [
                 'options' => [
                     'qty_ordered' => 12, 'qty_invoiced' => 5, 'qty_refunded' => 5, 'qty_shipped' => 0,
                     'qty_canceled' => 0,
                 ],
+<<<<<<< HEAD
                 'expectedResult' => ['to_ship' => 12, 'to_invoice' => 7],
+=======
+                'expectedResult' => ['to_ship' => 7.0, 'to_invoice' => 7.0]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'partially_refunded' => [
                 'options' => [
                     'qty_ordered' => 12, 'qty_invoiced' => 12, 'qty_refunded' => 5, 'qty_shipped' => 0,
                     'qty_canceled' => 0,
                 ],
+<<<<<<< HEAD
                 'expectedResult' => ['to_ship' => 12, 'to_invoice' => 0],
+=======
+                'expectedResult' => ['to_ship' => 7.0, 'to_invoice' => 0.0]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'partially_shipped' => [
                 'options' => [
                     'qty_ordered' => 12, 'qty_invoiced' => 0, 'qty_refunded' => 0, 'qty_shipped' => 4,
+<<<<<<< HEAD
                     'qty_canceled' => 0,
                 ],
                 'expectedResult' => ['to_ship' => 8, 'to_invoice' => 12],
+=======
+                    'qty_canceled' => 0
+                ],
+                'expectedResult' => ['to_ship' => 8.0, 'to_invoice' => 12.0]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'partially_refunded_partially_shipped' => [
                 'options' => [
                     'qty_ordered' => 12, 'qty_invoiced' => 12, 'qty_refunded' => 5, 'qty_shipped' => 4,
+<<<<<<< HEAD
                     'qty_canceled' => 0,
                 ],
                 'expectedResult' => ['to_ship' => 8, 'to_invoice' => 0],
+=======
+                    'qty_canceled' => 0
+                ],
+                'expectedResult' => ['to_ship' => 3.0, 'to_invoice' => 0.0]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'complete' => [
                 'options' => [
                     'qty_ordered' => 12, 'qty_invoiced' => 12, 'qty_refunded' => 0, 'qty_shipped' => 12,
+<<<<<<< HEAD
                     'qty_canceled' => 0,
                 ],
                 'expectedResult' => ['to_ship' => 0, 'to_invoice' => 0],
+=======
+                    'qty_canceled' => 0
+                ],
+                'expectedResult' => ['to_ship' => 0.0, 'to_invoice' => 0.0]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'canceled' => [
                 'options' => [
                     'qty_ordered' => 12, 'qty_invoiced' => 0, 'qty_refunded' => 0, 'qty_shipped' => 0,
+<<<<<<< HEAD
                     'qty_canceled' => 12,
                 ],
                 'expectedResult' => ['to_ship' => 0, 'to_invoice' => 0],
+=======
+                    'qty_canceled' => 12
+                ],
+                'expectedResult' => ['to_ship' => 0.0, 'to_invoice' => 0.0]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'completely_shipped_using_decimals' => [
                 'options' => [
                     'qty_ordered' => 4.4, 'qty_invoiced' => 0.4, 'qty_refunded' => 0.4, 'qty_shipped' => 4,
                     'qty_canceled' => 0,
                 ],
+<<<<<<< HEAD
                 'expectedResult' => ['to_ship' => 0.4, 'to_invoice' => 4.0],
+=======
+                'expectedResult' => ['to_ship' => 0.0, 'to_invoice' => 4.0]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'completely_invoiced_using_decimals' => [
                 'options' => [
                     'qty_ordered' => 4.4, 'qty_invoiced' => 4, 'qty_refunded' => 0, 'qty_shipped' => 4,
+<<<<<<< HEAD
                     'qty_canceled' => 0.4,
                 ],
                 'expectedResult' => ['to_ship' => 0.0, 'to_invoice' => 0.0],
             ],
+=======
+                    'qty_canceled' => 0.4
+                ],
+                'expectedResult' => ['to_ship' => 0.0, 'to_invoice' => 0.0]
+            ]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
     }
 }

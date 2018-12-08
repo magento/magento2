@@ -51,7 +51,11 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
     public function __construct(
         \Magento\Backup\Model\ResourceModel\Db $resourceDb,
         \Magento\Framework\App\ResourceConnection $resource,
+<<<<<<< HEAD
         Helper $helper = null
+=======
+        ?Helper $helper = null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         $this->_resourceDb = $resourceDb;
         $this->_resource = $resource;
@@ -150,7 +154,10 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 
     /**
      * @inheritDoc
+<<<<<<< HEAD
      * @throws RuntimeException
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function createBackup(\Magento\Framework\Backup\Db\BackupInterface $backup)
     {

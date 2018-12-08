@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Allowed locale and currency configuration.
+ */
 class Config implements \Magento\Framework\Locale\ConfigInterface
 {
     /**
@@ -74,6 +77,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'lv_LV', /*Latvian (Latvia)*/
         'mk_MK', /*Macedonian (Macedonia)*/
         'mn_Cyrl_MN', /*Mongolian (Mongolia)*/
+        'ms_MY', /*Malaysian (Malaysia)*/
         'ms_Latn_MY', /*Malaysian (Malaysia)*/
         'ms_MY', /*Malaysian (Malaysia)*/
         'nl_BE', /*Dutch (Belgium)*/

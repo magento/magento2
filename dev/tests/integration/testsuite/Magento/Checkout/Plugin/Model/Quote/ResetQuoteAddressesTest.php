@@ -24,7 +24,11 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     public function testAfterRemoveItem()
+=======
+    public function testAfterRemoveItem(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         /** @var Quote $quote */
         $quote = Bootstrap::getObjectManager()->create(Quote::class);
@@ -52,9 +56,21 @@ class ResetQuoteAddressesTest extends \PHPUnit\Framework\TestCase
         $cart = Bootstrap::getObjectManager()->create(Cart::class);
 
         $activeQuote = $cart->getQuote();
+<<<<<<< HEAD
         $cart->removeItem($activeQuote->getAllVisibleItems()[0]->getId());
         $cart->save();
 
+=======
+        // Dummy data is still persisted here. This is sufficient to check that it is removed
+        $activeQuote->getExtensionAttributes()->setShippingAssignments(['test']);
+
+        $cart->removeItem($activeQuote->getAllVisibleItems()[0]->getId());
+        $cart->save();
+
+        // Check that the shipping assignments were also unset
+        $this->assertEmpty($activeQuote->getExtensionAttributes()->getShippingAssignments());
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         /** @var Quote $quote */
         $quote = Bootstrap::getObjectManager()->create(Quote::class);
         $quote->load('test_order_with_virtual_product', 'reserved_order_id');

@@ -8,7 +8,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// @codingStandardsIgnoreStart
 
 return [
     ['_addresses', 'Magento\Customer\Model\Customer'],

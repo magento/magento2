@@ -63,7 +63,11 @@ class Block implements Layout\GeneratorInterface
     protected $exceptionHandlerBlockFactory;
 
     /**
+<<<<<<< HEAD
      * Default block class name. Will be used if no class name is specified in block configuration
+=======
+     * Default block class name. Will be used if no class name is specified in block configuration.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @var string
      */
@@ -103,9 +107,7 @@ class Block implements Layout\GeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getType()
     {

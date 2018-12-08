@@ -165,11 +165,19 @@ class StaticResource implements \Magento\Framework\AppInterface
     {
         $path = ltrim($path, '/');
         $parts = explode('/', $path, 6);
+<<<<<<< HEAD
         if (count($parts) < 5 || mb_strpos($path, '..') !== false) {
             //Checking that path contains all required parts and is not above static folder.
             throw new \InvalidArgumentException("Requested path '$path' is wrong.");
         }
         
+=======
+        if (count($parts) < 5 || preg_match('/\.\.(\\\|\/)/', $path)) {
+            //Checking that path contains all required parts and is not above static folder.
+            throw new \InvalidArgumentException("Requested path '$path' is wrong.");
+        }
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $result = [];
         $result['area'] = $parts[0];
         $result['theme'] = $parts[1] . '/' . $parts[2];

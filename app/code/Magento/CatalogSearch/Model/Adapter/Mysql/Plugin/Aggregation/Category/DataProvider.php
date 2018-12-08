@@ -18,6 +18,11 @@ use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+<<<<<<< HEAD
+=======
+ * @deprecated
+ * @see \Magento\ElasticSearch
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class DataProvider
 {

@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Store\Model\StoreManagerInterface;

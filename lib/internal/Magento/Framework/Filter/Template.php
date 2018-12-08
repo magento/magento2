@@ -10,6 +10,8 @@
 namespace Magento\Framework\Filter;
 
 /**
+ * Template filter
+ *
  * @api
  */
 class Template implements \Zend_Filter_Interface
@@ -19,16 +21,25 @@ class Template implements \Zend_Filter_Interface
      */
     const CONSTRUCTION_PATTERN = '/{{([a-z]{0,10})(.*?)}}/si';
 
-    /**#@+
-     * Construction logic regular expression
+    /**
+     * Construction `depend` regular expression
      */
     const CONSTRUCTION_DEPEND_PATTERN = '/{{depend\s*(.*?)}}(.*?){{\\/depend\s*}}/si';
 
+    /**
+     * Construction `if` regular expression
+     */
     const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
 
+    /**
+     * Construction `template` regular expression
+     */
     const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
 
-    /**#@-*/
+    /**
+     * Construction `for` regular expression
+     */
+    const LOOP_PATTERN = '/{{for(?P<loopItem>.*? )(in)(?P<loopData>.*?)}}(?P<loopBody>.*?){{\/for}}/si';
 
     /**#@-*/
     private $afterFilterCallbacks = [];
@@ -130,6 +141,8 @@ class Template implements \Zend_Filter_Interface
             }
         }
 
+        $value = $this->filterFor($value);
+
         if (preg_match_all(self::CONSTRUCTION_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
                 $callback = [$this, $construction[1] . 'Directive'];
@@ -150,6 +163,56 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Filter the string as template.
+     *
+     * @param string $value
+     * @example syntax {{for item in order.items}} name: {{var item.name}} {{/for}} order items collection.
+     * @example syntax {{for thing in things}} {{var thing.whatever}} {{/for}} e.g.:custom collection.
+     * @return string
+     */
+    private function filterFor($value)
+    {
+        if (preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
+            foreach ($constructions as $construction) {
+                if (!$this->isValidLoop($construction)) {
+                    return $value;
+                }
+
+                $fullTextToReplace = $construction[0];
+                $loopData = $this->getVariable($construction['loopData'], '');
+
+                $loopTextToReplace = $construction['loopBody'];
+                $loopItemVariableName = preg_replace('/\s+/', '', $construction['loopItem']);
+
+                if (is_array($loopData) || $loopData instanceof \Traversable) {
+                    $replaceText = $this->getLoopReplacementText($loopData, $loopItemVariableName, $loopTextToReplace);
+                    $value = str_replace($fullTextToReplace, $replaceText, $value);
+                }
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * Check if the matched construction is valid.
+     *
+     * @param array $construction
+     * @return bool
+     */
+    private function isValidLoop(array $construction)
+    {
+        $requiredFields = ['loopBody', 'loopItem', 'loopData'];
+        $validFields = array_filter(
+            $requiredFields,
+            function ($field) use ($construction) {
+                return isset($construction[$field]) && strlen(trim($construction[$field]));
+            }
+        );
+        return count($requiredFields) == count($validFields);
+    }
+
+    /**
      * Runs callbacks that have been added to filter content after directive processing is finished.
      *
      * @param string $value
@@ -167,8 +230,9 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Adds a callback to run after main filtering has happened. Callback must accept a single argument and return
-     * a string of the processed value.
+     * Adds a callback to run after main filtering has happened.
+     *
+     * Callback must accept a single argument and return a string of the processed value.
      *
      * @param callable $afterFilterCallback
      * @return $this
@@ -196,6 +260,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Get var directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -241,6 +307,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Get depend directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -259,6 +327,8 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * If directive
+     *
      * @param string[] $construction
      * @return string
      */
@@ -313,8 +383,12 @@ class Template implements \Zend_Filter_Interface
         $stackVars = $tokenizer->tokenize();
         $result = $default;
         $last = 0;
+<<<<<<< HEAD
         $stackVarsCount = count($stackVars);
         for ($i = 0; $i < $stackVarsCount; $i++) {
+=======
+        for ($i = 0, $count = count($stackVars); $i < $count; $i++) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
                 // Getting of template value
                 $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
@@ -380,5 +454,54 @@ class Template implements \Zend_Filter_Interface
             }
         }
         return $stack;
+    }
+
+    /**
+     * Process loop text to replace.
+     *
+     * @param array $loopData
+     * @param string $loopItemVariableName
+     * @param string $loopTextToReplace
+     * @return string
+     */
+    private function getLoopReplacementText(array $loopData, $loopItemVariableName, $loopTextToReplace)
+    {
+        $loopText = [];
+        $loopIndex = 0;
+        $loopDataObject = new \Magento\Framework\DataObject();
+
+        foreach ($loopData as $loopItemDataObject) {
+            // Loop item can be an array or DataObject.
+            // If loop item is an array, convert it to DataObject
+            // to have unified interface if the collection
+            if (!$loopItemDataObject instanceof \Magento\Framework\DataObject) {
+                if (!is_array($loopItemDataObject)) {
+                    continue;
+                }
+                $loopItemDataObject = new \Magento\Framework\DataObject($loopItemDataObject);
+            }
+
+            $loopDataObject->setData('index', $loopIndex++);
+            $this->templateVars['loop'] = $loopDataObject;
+            $this->templateVars[$loopItemVariableName] = $loopItemDataObject;
+
+            if (preg_match_all(
+                self::CONSTRUCTION_PATTERN,
+                $loopTextToReplace,
+                $attributes,
+                PREG_SET_ORDER
+            )
+            ) {
+                $subText = $loopTextToReplace;
+                foreach ($attributes as $attribute) {
+                    $text = $this->getVariable($attribute[2], '');
+                    $subText = str_replace($attribute[0], $text, $subText);
+                }
+                $loopText[] = $subText;
+            }
+            unset($this->templateVars[$loopItemVariableName]);
+        }
+        $replaceText = implode('', $loopText);
+        return $replaceText;
     }
 }

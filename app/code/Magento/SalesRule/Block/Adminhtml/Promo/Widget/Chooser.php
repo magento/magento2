@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Widget;
 
+/**
+ * Widget that allows to select a sales rule.
+ */
 class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**

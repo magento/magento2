@@ -8,6 +8,38 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<<<<<<< HEAD
+=======
+    <!-- Go to storefront category product page by given parameters -->
+    <actionGroup name="GoToStorefrontCategoryPageByParameters">
+        <arguments>
+            <argument name="category" type="string"/>
+            <argument name="mode" type="string"/>
+            <argument name="numOfProductsPerPage" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+            <argument name="sort" type="string" defaultValue="asc"/>
+        </arguments>
+        <!-- Go to storefront category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url(category)}}?product_list_limit={{numOfProductsPerPage}}&amp;product_list_mode={{mode}}&amp;product_list_order={{sortBy}}&amp;product_list_dir={{sort}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="VerifyCategoryPageParameters">
+        <arguments>
+            <argument name="category"/>
+            <argument name="mode" type="string"/>
+            <argument name="numOfProductsPerPage" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+        </arguments>
+        <seeInCurrentUrl url="/{{category.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{category.name}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+        <see userInput="{{mode}}" selector="{{StorefrontCategoryMainSection.modeGridIsActive}}" stepKey="assertViewMode"/>
+        <see userInput="{{numOfProductsPerPage}}" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="assertNumberOfProductsPerPage"/>
+        <see userInput="{{sortBy}}" selector="{{StorefrontCategoryMainSection.sortedBy}}" stepKey="assertSortedBy"/>
+    </actionGroup>
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     <!-- Check the category page -->
     <actionGroup name="StorefrontCheckCategoryActionGroup">
         <arguments>
@@ -16,7 +48,11 @@
         </arguments>
         <seeInCurrentUrl url="/{{category.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
         <seeInTitle userInput="{{category.name}}" stepKey="assertCategoryNameInTitle"/>
+<<<<<<< HEAD
         <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryName"/>
+=======
+        <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         <see userInput="{{productCount}}" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCount"/>
     </actionGroup>
 
@@ -25,14 +61,24 @@
         <arguments>
             <argument name="product"/>
         </arguments>
+<<<<<<< HEAD
         <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName(product.name)}}" stepKey="assertProductName"/>
         <see userInput="${{product.price}}.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
         <seeElement selector="{{StorefrontCategoryProductSection.productAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
+=======
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="assertProductName"/>
+        <see userInput="${{product.price}}.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
+        <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
+        <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </actionGroup>
 
     <actionGroup name="StorefrontSwitchCategoryViewToListMode">
         <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="switchCategoryViewToListMode"/>
+<<<<<<< HEAD
         <seeElement selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryTitle"/>
     </actionGroup>
 
@@ -46,5 +92,23 @@
         </arguments>
         <!-- Go to storefront category page -->
         <amOnPage url="{{StorefrontCategoryPage.url(category)}}?product_list_mode={{mode}}&amp;product_list_order={{sortBy}}&amp;product_list_dir={{sort}}" stepKey="onCategoryPage"/>
+=======
+        <waitForElement selector="{{StorefrontCategoryMainSection.CategoryTitle}}" time="30" stepKey="waitForCategoryReload"/>
+    </actionGroup>
+
+    <actionGroup name="GoToSubCategoryPage">
+        <arguments>
+            <argument name="parentCategory"/>
+            <argument name="subCategory"/>
+            <argument name="urlPath" type="string"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName(parentCategory.name)}}" stepKey="moveMouseOnMainCategory"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(subCategory.name)}}" stepKey="waitForSubCategoryVisible"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(subCategory.name)}}" stepKey="goToCategory"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeInCurrentUrl url="{{urlPath}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{subCategory.name}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{subCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </actionGroup>
 </actionGroups>

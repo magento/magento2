@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Catalog\Test\Unit\Model\Category\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -105,7 +110,11 @@ class PositionResolverTest extends \PHPUnit\Framework\TestCase
         $this->select->expects($this->once())
             ->method('where')
             ->willReturnSelf();
+<<<<<<< HEAD
         $this->select->expects($this->once())
+=======
+        $this->select->expects($this->exactly(2))
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('order')
             ->willReturnSelf();
         $this->select->expects($this->once())

@@ -7,9 +7,12 @@ namespace Magento\Analytics\Test\Unit\ReportXml\Config;
 
 use Magento\Analytics\ReportXml\Config\Mapper;
 
+<<<<<<< HEAD
 /**
  * Class MapperTest
  */
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class MapperTest extends \PHPUnit\Framework\TestCase
 {
     /**

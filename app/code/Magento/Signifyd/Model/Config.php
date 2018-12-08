@@ -37,7 +37,11 @@ class Config
      * @param int|null $storeId
      * @return bool
      */
+<<<<<<< HEAD
     public function isActive($storeId = null)
+=======
+    public function isActive($storeId = null): bool
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $enabled = $this->scopeConfig->isSetFlag(
             'fraud_protection/signifyd/active',
@@ -56,7 +60,11 @@ class Config
      * @param int|null $storeId
      * @return string
      */
+<<<<<<< HEAD
     public function getApiKey($storeId = null)
+=======
+    public function getApiKey($storeId = null): string
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $apiKey = $this->scopeConfig->getValue(
             'fraud_protection/signifyd/api_key',
@@ -73,7 +81,11 @@ class Config
      * @param int|null $storeId
      * @return string
      */
+<<<<<<< HEAD
     public function getApiUrl($storeId = null)
+=======
+    public function getApiUrl($storeId = null): string
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $apiUrl = $this->scopeConfig->getValue(
             'fraud_protection/signifyd/api_url',
@@ -89,7 +101,11 @@ class Config
      * @param int|null $storeId
      * @return bool
      */
+<<<<<<< HEAD
     public function isDebugModeEnabled($storeId = null)
+=======
+    public function isDebugModeEnabled($storeId = null): bool
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $debugModeEnabled = $this->scopeConfig->isSetFlag(
             'fraud_protection/signifyd/debug',

@@ -7,6 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="adminProductInWebsiteRole" type="user_role">
         <data key="rolename" unique="suffix">restrictedWebsiteRole</data>
@@ -33,5 +34,12 @@
     <entity name="RoleTest" type="user_role">
         <data key="rolename" unique="suffix">RoleTest</data>
         <data key="current_password">123123q</data>
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="adminRole" type="role">
+        <data key="name" unique="suffix">adminRole</data>
+        <data key="scope">1</data>
+        <data key="access">1</data>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </entity>
 </entities>

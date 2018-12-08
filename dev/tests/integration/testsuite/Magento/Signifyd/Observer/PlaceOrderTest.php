@@ -18,6 +18,14 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
+<<<<<<< HEAD
+=======
+/**
+ * Test for Magento\Signifyd\Observer\PlaceOrderTest class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -107,7 +115,11 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $event = $this->objectManager->create(
             Event::class,
             [
+<<<<<<< HEAD
                 'data' => ['order' => $order]
+=======
+                'data' => ['order' => $order],
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
 
@@ -122,11 +134,19 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
      * Signifyd is enabled for default store.
      * Checks a test case when order placed with website where signifyd is disabled.
      *
+<<<<<<< HEAD
+=======
+     * @return void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @covers \Magento\Signifyd\Observer\PlaceOrder::execute
      * @magentoDataFixture Magento/Signifyd/_files/order_with_customer_and_two_simple_products.php
      * @magentoDataFixture Magento/Signifyd/_files/website_configuration.php
      */
+<<<<<<< HEAD
     public function testExecuteWithWebsiteConfiguration()
+=======
+    public function testExecuteWithWebsiteConfiguration(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         /** @var StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
@@ -145,7 +165,11 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $event = $this->objectManager->create(
             Event::class,
             [
+<<<<<<< HEAD
                 'data' => ['order' => $order]
+=======
+                'data' => ['order' => $order],
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
 

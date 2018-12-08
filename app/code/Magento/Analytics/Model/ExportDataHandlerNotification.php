@@ -21,8 +21,11 @@ class ExportDataHandlerNotification implements ExportDataHandlerInterface
     private $analyticsConnector;
 
     /**
+<<<<<<< HEAD
      * ExportDataHandlerNotification constructor.
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param ExportDataHandlerInterface $exportDataHandler
      * @param Connector $connector
      */

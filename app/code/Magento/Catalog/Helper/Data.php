@@ -33,6 +33,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     const CONFIG_USE_STATIC_URLS = 'cms/wysiwyg/use_static_urls_in_catalog';
 
+    /**
+     * @deprecated
+     * @see \Magento\Catalog\Helper\Output::isDirectivesExists
+     */
     const CONFIG_PARSE_URL_DIRECTIVES = 'catalog/frontend/parse_url_directives';
 
     const XML_PATH_DISPLAY_PRODUCT_COUNT = 'catalog/layered_navigation/display_product_count';
@@ -411,7 +415,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return int|null
      */
-    public function getPriceScope()
+    public function getPriceScope(): ?int
     {
         $priceScope = $this->scopeConfig->getValue(
             self::XML_PATH_PRICE_SCOPE,
@@ -439,8 +443,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::CONFIG_USE_STATIC_URLS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->_storeId
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -448,6 +451,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if the parsing of URL directives is allowed for the catalog
      *
      * @return bool
+     * @deprecated
+     * @see \Magento\Catalog\Helper\Output::isDirectivesExists
      */
     public function isUrlDirectivesParsingAllowed()
     {
@@ -462,6 +467,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve template processor for catalog content
      *
      * @return \Magento\Framework\Filter\Template
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getPageTemplateProcessor()
     {

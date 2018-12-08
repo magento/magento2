@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
 class SetManagementTest extends \PHPUnit\Framework\TestCase
@@ -71,7 +72,6 @@ class SetManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Can not create attribute set based on non product attribute set.
      */
     public function testCreateNonProductAttributeSet()
     {
@@ -91,5 +91,9 @@ class SetManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn($typeMock);
         $skeletonSetMock->expects($this->once())->method('getEntityTypeId')->willReturn(3);
         $this->model->create($attributeSetMock, $skeletonId);
+
+        $this->expectExceptionMessage(
+            "The attribute set couldn't be created because it's based on a non-product attribute set."
+        );
     }
 }

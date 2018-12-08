@@ -13,6 +13,8 @@ use Magento\Framework\Module\Dir;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+ * Helper for persistence
+ *
  * @api
  * @since 100.0.2
  */

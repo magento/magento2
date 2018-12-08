@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate;
+use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
@@ -65,7 +66,11 @@ class ValidateTest extends AttributeTest
     /**
      * @var FormData|\PHPUnit_Framework_MockObject_MockObject
      */
+<<<<<<< HEAD
     private $formDataSerializer;
+=======
+    private $formDataSerializerMock;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     protected function setUp()
     {
@@ -92,7 +97,11 @@ class ValidateTest extends AttributeTest
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->getMockForAbstractClass();
+<<<<<<< HEAD
         $this->formDataSerializer = $this->getMockBuilder(FormData::class)
+=======
+        $this->formDataSerializerMock = $this->getMockBuilder(FormData::class)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -116,7 +125,11 @@ class ValidateTest extends AttributeTest
                 'resultJsonFactory' => $this->resultJsonFactoryMock,
                 'layoutFactory' => $this->layoutFactoryMock,
                 'multipleAttributeList' => ['select' => 'option'],
+<<<<<<< HEAD
                 'formDataSerializer' => $this->formDataSerializer,
+=======
+                'formDataSerializer' => $this->formDataSerializerMock,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
     }
@@ -184,7 +197,12 @@ class ValidateTest extends AttributeTest
                 ['serialized_options', '[]', $serializedOptions],
             ]);
 
+<<<<<<< HEAD
         $this->formDataSerializer->expects($this->once())
+=======
+        $this->formDataSerializerMock
+            ->expects($this->once())
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('unserialize')
             ->with($serializedOptions)
             ->willReturn($options);
@@ -228,9 +246,13 @@ class ValidateTest extends AttributeTest
                             "option_2" => "",
                         ],
                     ],
+<<<<<<< HEAD
 
                 ],
                 false,
+=======
+                ], false
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'valid options' => [
                 [
@@ -246,8 +268,12 @@ class ValidateTest extends AttributeTest
                             "option_2" => "",
                         ],
                     ],
+<<<<<<< HEAD
                 ],
                 false,
+=======
+                ], false
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'duplicate options' => [
                 [
@@ -263,8 +289,12 @@ class ValidateTest extends AttributeTest
                             "option_2" => "",
                         ],
                     ],
+<<<<<<< HEAD
                 ],
                 true,
+=======
+                ], true
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'duplicate and deleted' => [
                 [
@@ -279,6 +309,7 @@ class ValidateTest extends AttributeTest
                             "option_1" => "1",
                             "option_2" => "",
                         ],
+<<<<<<< HEAD
                     ],
                 ],
                 false,
@@ -299,6 +330,26 @@ class ValidateTest extends AttributeTest
                     ],
                 ],
                 false,
+=======
+                    ],
+                ], false
+            ],
+            'empty and deleted' => [
+                [
+                    'option' => [
+                        'value' => [
+                            "option_0" => [1, 0],
+                            "option_1" => [2, 0],
+                            "option_2" => ["", ""],
+                        ],
+                        'delete' => [
+                            "option_0" => "",
+                            "option_1" => "",
+                            "option_2" => "1",
+                        ],
+                    ],
+                ], false
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
         ];
     }
@@ -324,7 +375,12 @@ class ValidateTest extends AttributeTest
                 ['serialized_options', '[]', $serializedOptions],
             ]);
 
+<<<<<<< HEAD
         $this->formDataSerializer->expects($this->once())
+=======
+        $this->formDataSerializerMock
+            ->expects($this->once())
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('unserialize')
             ->with($serializedOptions)
             ->willReturn($options);
@@ -381,7 +437,11 @@ class ValidateTest extends AttributeTest
                 ],
                 (object) [
                     'error' => false,
+<<<<<<< HEAD
                 ],
+=======
+                ]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             'empty admin scope options and deleted' => [
                 [
@@ -418,7 +478,10 @@ class ValidateTest extends AttributeTest
     }
 
     /**
+<<<<<<< HEAD
      * @return void
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function testExecuteWithOptionsDataError()
@@ -436,22 +499,38 @@ class ValidateTest extends AttributeTest
                 ['serialized_options', '[]', $serializedOptions],
             ]);
 
+<<<<<<< HEAD
         $this->formDataSerializer->expects($this->once())
+=======
+        $this->formDataSerializerMock
+            ->expects($this->once())
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('unserialize')
             ->with($serializedOptions)
             ->willThrowException(new \InvalidArgumentException('Some exception'));
 
+<<<<<<< HEAD
         $this->objectManagerMock->expects($this->once())
+=======
+        $this->objectManagerMock
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('create')
             ->willReturnMap([
                 [\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], $this->attributeMock],
                 [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
             ]);
 
+<<<<<<< HEAD
         $this->attributeMock->expects($this->once())
             ->method('loadByCode')
             ->willReturnSelf();
         $this->attributeSetMock->expects($this->never())
+=======
+        $this->attributeMock
+            ->method('loadByCode')
+            ->willReturnSelf();
+        $this->attributeSetMock
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('setEntityTypeId')
             ->willReturnSelf();
         $this->resultJsonFactoryMock->expects($this->once())
@@ -461,7 +540,11 @@ class ValidateTest extends AttributeTest
             ->method('setJsonData')
             ->with(json_encode([
                 'error' => true,
+<<<<<<< HEAD
                 'message' => $message,
+=======
+                'message' => $message
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]))
             ->willReturnSelf();
 

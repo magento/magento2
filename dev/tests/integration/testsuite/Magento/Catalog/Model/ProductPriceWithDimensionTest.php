@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Catalog\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -31,12 +36,24 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
+<<<<<<< HEAD
+=======
+    /**
+     * Set up
+     */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     protected function setUp()
     {
         $this->_model = Bootstrap::getObjectManager()->create(Product::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Get price
+     */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     public function testGetPrice()
     {
         $this->assertEmpty($this->_model->getPrice());
@@ -44,6 +61,12 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(10.0, $this->_model->getPrice());
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Get price model
+     */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     public function testGetPriceModel()
     {
         $default = $this->_model->getPriceModel();
@@ -75,6 +98,12 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('<span class="price">$0.00</span>', $this->_model->getFormatedPrice());
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Set get final price
+     */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     public function testSetGetFinalPrice()
     {
         $this->assertEquals(0, $this->_model->getFinalPrice());
@@ -85,8 +114,14 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
+<<<<<<< HEAD
      */
     public function testGetMinPrice()
+=======
+     * @return void
+     */
+    public function testGetMinPrice(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $product = $this->productRepository->get('simple');
         $collection = Bootstrap::getObjectManager()->create(Collection::class);

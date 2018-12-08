@@ -61,7 +61,11 @@ define([
     Class = createConstructor({
 
         /**
+<<<<<<< HEAD
          * Entry point to the initialization of constructors' instance.
+=======
+         * Entry point to the initialization of constructor's instance.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
          *
          * @param {Object} [options={}]
          * @returns {Class} Chainable.

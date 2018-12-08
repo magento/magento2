@@ -152,7 +152,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'rateFactory' => $rateFactory,
                 'xmlElFactory' => $xmlFactory,
                 'logger' => $this->logger,
+<<<<<<< HEAD
                 'httpClientFactory' => $httpClientFactory
+=======
+                'httpClientFactory' => $httpClientFactory,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
     }
@@ -160,10 +164,17 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * Callback function, emulates getValue function.
      *
+<<<<<<< HEAD
      * @param $path
      * @return null|string
      */
     public function scopeConfigGetValue($path)
+=======
+     * @param string $path
+     * @return null|string
+     */
+    public function scopeConfigGetValue(string $path)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $pathMap = [
             'carriers/ups/free_method' => 'free_method',
@@ -289,7 +300,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $result = $refMethod->invoke($this->model, $data);
         $expectedXml = new \SimpleXMLElement($expected);
         $resultXml = new \SimpleXMLElement($result);
+<<<<<<< HEAD
         self::assertEquals($expectedXml->asXML(), $resultXml->asXML());
+=======
+        $this->assertEquals($expectedXml->asXML(), $resultXml->asXML());
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -358,7 +373,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'dest_country_id' => $countryCode,
         ]);
 
+<<<<<<< HEAD
         $this->country->expects(self::at(1))
+=======
+        $this->country->expects($this->at(1))
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('load')
             ->with($countryCode)
             ->willReturnSelf();
@@ -384,6 +403,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Checks a case when UPS processes request to create shipment.
+<<<<<<< HEAD
+=======
+     *
+     * @return void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function testRequestToShipment()
     {
@@ -397,6 +421,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->httpClient->method('getBody')
             ->willReturnOnConsecutiveCalls($shipmentResponse->asXML(), $acceptResponse->asXML());
 
+<<<<<<< HEAD
         $this->logger->expects(self::atLeastOnce())
             ->method('debug')
             ->with(self::stringContains('<UserId>****</UserId>'));
@@ -406,6 +431,17 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $info = $result->getInfo()[0];
         self::assertEquals($trackingNumber, $info['tracking_number'], 'Tracking Number must match.');
+=======
+        $this->logger->expects($this->atLeastOnce())
+            ->method('debug')
+            ->with($this->stringContains('<UserId>****</UserId>'));
+
+        $result = $this->model->requestToShipment($request);
+        $this->assertEmpty($result->getErrors());
+
+        $info = $result->getInfo()[0];
+        $this->assertEquals($trackingNumber, $info['tracking_number'], 'Tracking Number must match.');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -449,14 +485,22 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                     'weight_units' => 'POUND',
                     'weight' => '0.454000000001',
                     'customs_value' => '10.00',
+<<<<<<< HEAD
                     'container' => 'Small Express Box'
+=======
+                    'container' => 'Small Express Box',
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 ],
                 'items' => [
                     'item1' => [
                         'name' => 'item_name',
                     ],
                 ],
+<<<<<<< HEAD
             ]
+=======
+            ],
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
 
         return $packages;

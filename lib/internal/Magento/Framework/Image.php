@@ -261,6 +261,10 @@ class Image
      */
     public function setImageBackgroundColor($color)
     {
+<<<<<<< HEAD
+=======
+        /** @noinspection PhpUndefinedFieldInspection */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->_adapter->imageBackgroundColor = (int)$color;
     }
 

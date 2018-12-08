@@ -35,7 +35,11 @@ class OrderGetTest extends WebapiAbstract
     /**
      * @inheritdoc
      */
+<<<<<<< HEAD
     protected function setUp()
+=======
+    protected function setUp(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
@@ -45,7 +49,7 @@ class OrderGetTest extends WebapiAbstract
      *
      * @magentoApiDataFixture Magento/Sales/_files/order.php
      */
-    public function testOrderGet()
+    public function testOrderGet(): void
     {
         $expectedOrderData = [
             'base_subtotal' => '100.0000',
@@ -113,7 +117,113 @@ class OrderGetTest extends WebapiAbstract
         //check that nullable fields were marked as optional and were not sent
         foreach ($result as $value) {
             self::assertNotNull($value);
+<<<<<<< HEAD
+=======
         }
+    }
+
+    /**
+     * Checks order extension attributes.
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_tax.php
+     */
+    public function testOrderGetExtensionAttributes(): void
+    {
+        $expectedTax = [
+            'code' => 'US-NY-*-Rate 1',
+            'type' => 'shipping'
+        ];
+
+        $result = $this->makeServiceCall(self::ORDER_INCREMENT_ID);
+
+        $appliedTaxes = $result['extension_attributes']['applied_taxes'];
+        self::assertEquals($expectedTax['code'], $appliedTaxes[0]['code']);
+        $appliedTaxes = $result['extension_attributes']['item_applied_taxes'];
+        self::assertEquals($expectedTax['type'], $appliedTaxes[0]['type']);
+        self::assertNotEmpty($appliedTaxes[0]['applied_taxes']);
+        self::assertEquals(true, $result['extension_attributes']['converting_from_quote']);
+    }
+
+    /**
+     * Checks if the order contains product option attributes.
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_bundle.php
+     */
+    public function testGetOrderWithProductOption(): void
+    {
+        $expected = [
+            'extension_attributes' => [
+                'bundle_options' => [
+                    [
+                        'option_id' => 1,
+                        'option_selections' => [1],
+                        'option_qty' => 1
+                    ]
+                ]
+            ]
+        ];
+        $result = $this->makeServiceCall(self::ORDER_INCREMENT_ID);
+
+        $bundleProduct = $this->getBundleProduct($result['items']);
+        self::assertNotEmpty($bundleProduct, '"Bundle Product" should not be empty.');
+        self::assertNotEmpty($bundleProduct['product_option'], '"Product Option" should not be empty.');
+        self::assertEquals($expected, $bundleProduct['product_option']);
+    }
+
+    /**
+     * Gets order by increment ID.
+     *
+     * @param string $incrementId
+     * @return OrderInterface
+     */
+    private function getOrder(string $incrementId): OrderInterface
+    {
+        /** @var Order $order */
+        $order = $this->objectManager->create(Order::class);
+        $order->loadByIncrementId($incrementId);
+
+        return $order;
+    }
+
+    /**
+     * Makes service call.
+     *
+     * @param string $incrementId
+     * @return array
+     */
+    private function makeServiceCall(string $incrementId): array
+    {
+        $order = $this->getOrder($incrementId);
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $order->getId(),
+                'httpMethod' => Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_READ_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_READ_NAME . 'get',
+            ],
+        ];
+        return $this->_webApiCall($serviceInfo, ['id' => $order->getId()]);
+    }
+
+    /**
+     * Gets a bundle product from the result.
+     *
+     * @param array $items
+     * @return array
+     */
+    private function getBundleProduct(array $items): array
+    {
+        foreach ($items as $item) {
+            if ($item['product_type'] == 'bundle') {
+                return $item;
+            }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
+        }
+
+        return [];
     }
 
     /**

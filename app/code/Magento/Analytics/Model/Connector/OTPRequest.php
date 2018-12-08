@@ -103,8 +103,14 @@ class OTPRequest
             if (!$result) {
                 $this->logger->warning(
                     sprintf(
+<<<<<<< HEAD
                         'Obtaining of an OTP from the MBI service has been failed: %s',
                         !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
+=======
+                        'Obtaining of an OTP from the MBI service has been failed: %s. Content-Type: %s',
+                        !empty($response->getBody()) ? $response->getBody() : 'Response body is empty',
+                        $response->getHeader('Content-Type')
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     )
                 );
             }

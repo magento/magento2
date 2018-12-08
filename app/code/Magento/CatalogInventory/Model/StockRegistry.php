@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogInventory\Model;
 
 use Magento\Catalog\Model\ProductFactory;
@@ -192,7 +193,7 @@ class StockRegistry implements StockRegistryInterface
         if (!$productId) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(
                 __(
-                    'Product with SKU "%1" does not exist',
+                    'The Product with the "%1" SKU doesn\'t exist.',
                     $productSku
                 )
             );

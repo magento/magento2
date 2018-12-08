@@ -37,6 +37,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      *
      * @return string
      */
+<<<<<<< HEAD
     public function getAttribute(): string
     {
         $attribute = $this->getData('attribute');
@@ -44,6 +45,14 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             list(, $attribute) = explode('::', $attribute);
         }
 
+=======
+    public function getAttribute()
+    {
+        $attribute = $this->getData('attribute');
+        if (strpos($attribute, '::') !== false) {
+            list (, $attribute) = explode('::', $attribute);
+        }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $attribute;
     }
 
@@ -56,7 +65,10 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         if ($this->getAttributeScope()) {
             $attribute = $this->getAttributeScope() . '::' . $attribute;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $this->getAttributeOption($attribute);
     }
 
@@ -96,7 +108,10 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $html = parent::getAttributeElementHtml() .
                 $this->getAttributeScopeElement()->getHtml();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $html;
     }
 
@@ -105,7 +120,11 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      *
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
+<<<<<<< HEAD
     private function getAttributeScopeElement(): \Magento\Framework\Data\Form\Element\AbstractElement
+=======
+    private function getAttributeScopeElement()
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return $this->getForm()->addField(
             $this->getPrefix() . '__' . $this->getId() . '__attribute_scope',
@@ -115,7 +134,11 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 'value' => $this->getAttributeScope(),
                 'no_span' => true,
                 'class' => 'hidden',
+<<<<<<< HEAD
                 'data-form-part' => $this->getFormName(),
+=======
+                'data-form-part' => $this->getFormName()
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
     }
@@ -124,9 +147,14 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Set attribute value
      *
      * @param string $value
+<<<<<<< HEAD
      * @return void
      */
     public function setAttribute(string $value)
+=======
+     */
+    public function setAttribute($value)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         if (strpos($value, '::') !== false) {
             list($scope, $attribute) = explode('::', $value);
@@ -143,8 +171,12 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function loadArray($arr)
     {
         parent::loadArray($arr);
+<<<<<<< HEAD
         $this->setAttributeScope($arr['attribute_scope'] ?? null);
 
+=======
+        $this->setAttributeScope(isset($arr['attribute_scope']) ? $arr['attribute_scope'] : null);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $this;
     }
 
@@ -155,7 +187,10 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $out = parent::asArray($arrAttributes);
         $out['attribute_scope'] = $this->getAttributeScope();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $out;
     }
 
@@ -223,6 +258,11 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get locale-based formatted price.
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param string $value
      * @return float|null
      */

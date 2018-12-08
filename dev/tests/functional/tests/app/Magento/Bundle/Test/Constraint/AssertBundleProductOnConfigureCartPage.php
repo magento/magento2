@@ -75,7 +75,7 @@ class AssertBundleProductOnConfigureCartPage extends AbstractAssertForm
         }
 
         $error = $this->verifyData($productOptions, $formOptions);
-        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
+        \PHPUnit\Framework\Assert::assertEmpty($error, $error);
     }
 
     /**
@@ -105,7 +105,7 @@ class AssertBundleProductOnConfigureCartPage extends AbstractAssertForm
                     'price' => number_format($price, 2),
                 ];
                 foreach ($cartItemOptions as $option) {
-                    if (strpos($option['value'], $title)) {
+                    if (strpos($option['value'], $title) !== false) {
                         $optionData['options'][$productKey]['selected'] = true;
                     }
                 }

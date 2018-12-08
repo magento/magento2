@@ -7,6 +7,7 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminNewCustomerPage" url="/customer/index/new" area="admin" module="Customer">
         <section name="AdminNewCustomerAccountInformationSection"/>
@@ -14,5 +15,11 @@
         <section name="AdminCustomerAccountInformationEditAddressSection"/>
         <section name="AdminCustomerAccountAddressSection"/>
         <section name="AdminMainActionsSection"/>
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminNewCustomerPage" url="/customer/index/new" area="admin" module="Magento_Customer">
+        <section name="AdminCustomerAccountInformationSection"/>
+        <section name="AdminCustomerMainActionsSection"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </page>
 </pages>

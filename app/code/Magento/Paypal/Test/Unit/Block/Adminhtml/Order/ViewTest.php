@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\Order;
 
 use Magento\Paypal\Model\Adminhtml\Express;
@@ -14,6 +19,12 @@ use Magento\Framework\Exception\LocalizedException;
 use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+<<<<<<< HEAD
+=======
+/**
+ * Test adminhtml sales order view.
+ */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class ViewTest extends TestCase
 {
     /**
@@ -56,7 +67,11 @@ class ViewTest extends TestCase
             View::class,
             [
                 'express' => $this->express,
+<<<<<<< HEAD
                 'data' => []
+=======
+                'data' => [],
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
     }
@@ -74,12 +89,21 @@ class ViewTest extends TestCase
      * @dataProvider orderDataProvider
      */
     public function testIsOrderAuthorizationAllowed(
+<<<<<<< HEAD
         $canUnhold,
         $isPaymentReview,
         $isCanceled,
         $authAllowed,
         $orderState,
         $canAuthorize
+=======
+        bool $canUnhold,
+        bool $isPaymentReview,
+        bool $isCanceled,
+        bool $authAllowed,
+        string $orderState,
+        bool $canAuthorize
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         $this->order->method('canUnhold')
             ->willReturn($canUnhold);

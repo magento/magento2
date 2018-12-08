@@ -12,6 +12,7 @@ use Magento\Variable\Test\Page\Adminhtml\SystemVariableNew;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:
@@ -60,18 +61,35 @@ class UpdateCustomVariableEntityTest extends Injectable
     protected $store = null;
 
     /**
+     * Configuration setting.
+     *
+     * @var string
+     */
+    private $configData;
+
+    /**
+     * Factory for Test Steps.
+     *
+     * @var TestStepFactory
+     */
+    private $testStepFactory;
+
+    /**
      * Injection data.
      *
      * @param SystemVariableIndex $systemVariableIndex
      * @param SystemVariableNew $systemVariableNew
+     * @param TestStepFactory $testStepFactory
      * @return void
      */
     public function __inject(
         SystemVariableIndex $systemVariableIndex,
-        SystemVariableNew $systemVariableNew
+        SystemVariableNew $systemVariableNew,
+        TestStepFactory $testStepFactory
     ) {
         $this->systemVariableIndexPage = $systemVariableIndex;
         $this->systemVariableNewPage = $systemVariableNew;
+        $this->testStepFactory = $testStepFactory;
     }
 
     /**
@@ -81,14 +99,22 @@ class UpdateCustomVariableEntityTest extends Injectable
      * @param SystemVariable $customVariable
      * @param SystemVariable $customVariableOrigin
      * @param string $saveAction
+     * @param string|null $configData [optional]
      * @return array
      */
     public function test(
         FixtureFactory $fixtureFactory,
         SystemVariable $customVariable,
         SystemVariable $customVariableOrigin,
-        $saveAction
+        $saveAction,
+        $configData = null
     ) {
+        // Preconditions
+        $this->configData = $configData;
+        $this->testStepFactory->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData]
+        )->run();
         $this->store = $fixtureFactory->createByCode('store', ['dataset' => 'custom']);
         $this->store->persist();
         $customVariableOrigin->persist();

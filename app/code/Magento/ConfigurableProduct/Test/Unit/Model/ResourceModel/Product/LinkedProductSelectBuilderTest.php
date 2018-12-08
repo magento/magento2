@@ -42,7 +42,11 @@ class LinkedProductSelectBuilderTest extends \PHPUnit\Framework\TestCase
             LinkedProductSelectBuilder::class,
             [
                 'baseSelectProcessor' => $this->baseSelectProcessorMock,
+<<<<<<< HEAD
                 'linkedProductSelectBuilder' => $this->linkedProductSelectBuilderMock
+=======
+                'linkedProductSelectBuilder' => $this->linkedProductSelectBuilderMock,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
     }

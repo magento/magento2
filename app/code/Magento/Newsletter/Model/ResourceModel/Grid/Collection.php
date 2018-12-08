@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Newsletter problems collection
  *
@@ -18,7 +16,8 @@ class Collection extends \Magento\Newsletter\Model\ResourceModel\Problem\Collect
     /**
      * Adds queue info to grid
      *
-     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|\Magento\Newsletter\Model\ResourceModel\Grid\Collection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * |\Magento\Newsletter\Model\ResourceModel\Grid\Collection
      */
     protected function _initSelect()
     {

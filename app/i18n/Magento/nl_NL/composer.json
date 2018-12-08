@@ -1,13 +1,23 @@
 {
     "name": "magento/language-nl_nl",
     "description": "Dutch (Netherlands) language",
+<<<<<<< HEAD
     "version": "100.2.0",
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
     "require": {
+<<<<<<< HEAD
         "magento/framework": "101.0.*"
+=======
+        "magento/framework": "*"
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     },
     "type": "magento2-language",
     "autoload": {

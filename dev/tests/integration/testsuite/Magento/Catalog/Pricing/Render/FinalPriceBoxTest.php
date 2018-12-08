@@ -68,6 +68,9 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
      */
     private $templateEnginePool;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();

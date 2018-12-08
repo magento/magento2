@@ -16,6 +16,12 @@ use Magento\Sales\Model\ResourceModel\Order\Grid;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class for testing asynchronous inserts into grid.
+ */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -56,7 +62,11 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
         $this->gridAsyncInsert = $this->objectManager->create(
             GridAsyncInsert::class,
             [
+<<<<<<< HEAD
                 'entityGrid' => $this->grid
+=======
+                'entityGrid' => $this->grid,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
     }
@@ -66,6 +76,10 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture default/dev/grid/async_indexing 1
      * @magentoDataFixture Magento/Sales/_files/order.php
+<<<<<<< HEAD
+=======
+     * @return void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function testExecuteAsyncUpdateOrderGrid()
     {
@@ -123,6 +137,10 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
      * Perform assertions for updating grid test.
      *
      * @param OrderInterface $order
+<<<<<<< HEAD
+=======
+     * @return void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private function performUpdateAssertions(OrderInterface $order)
     {

@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -50,7 +55,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      * @throws StoreSwitcher\CannotSwitchStoreException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+<<<<<<< HEAD
     public function testSwitchToNonExistingPage()
+=======
+    public function testSwitchToNonExistingPage(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $fromStoreCode = 'default';
         /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
@@ -78,7 +87,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      * @throws StoreSwitcher\CannotSwitchStoreException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+<<<<<<< HEAD
     public function testSwitchToExistingPage()
+=======
+    public function testSwitchToExistingPage(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $fromStoreCode = 'default';
         /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
@@ -101,7 +114,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      * @param StoreInterface $targetStore
      * @return void
      */
+<<<<<<< HEAD
     private function setBaseUrl(StoreInterface $targetStore)
+=======
+    private function setBaseUrl(StoreInterface $targetStore): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $configValue = $this->objectManager->create(Value::class);
         $configValue->load('web/unsecure/base_url', 'path');

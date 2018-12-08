@@ -34,6 +34,12 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
      */
     private $mediaDirectory;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @inheritdoc
+     */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -52,7 +58,14 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+<<<<<<< HEAD
     public function testSaveFileToTmpDir()
+=======
+    /**
+     * @return void
+     */
+    public function testSaveFileToTmpDir(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
@@ -76,8 +89,14 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage File validation failed.
+<<<<<<< HEAD
      */
     public function testSaveFileToTmpDirWithWrongExtension()
+=======
+     * @return void
+     */
+    public function testSaveFileToTmpDirWithWrongExtension(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $fileName = 'text.txt';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
@@ -101,8 +120,14 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage File validation failed.
+<<<<<<< HEAD
      */
     public function testSaveFileToTmpDirWithWrongFile()
+=======
+     * @return void
+     */
+    public function testSaveFileToTmpDirWithWrongFile(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $fileName = 'file.gif';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);

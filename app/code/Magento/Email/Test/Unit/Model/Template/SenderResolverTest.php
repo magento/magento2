@@ -30,7 +30,11 @@ class SenderResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function setUp()
+=======
+    public function setUp(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $objectManager = new ObjectManager($this);
 
@@ -49,7 +53,11 @@ class SenderResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     public function testResolve()
+=======
+    public function testResolve(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $sender = 'general';
         $scopeId = null;
@@ -88,7 +96,11 @@ class SenderResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     public function testResolveThrowException(array $sender)
+=======
+    public function testResolveThrowException(array $sender): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->expectExceptionMessage('Invalid sender data');
         $this->expectException(MailException::class);

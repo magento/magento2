@@ -53,9 +53,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * Test if getAllIds method return results after using setInAllAttributeSetsFilter method.
      *
      * @return void
+=======
+     * Test if getAllIds method return results after using setInAllAttributeSetsFilter method
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @covers \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::setInAllAttributeSetsFilter()
      * @covers \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::getAllIds()
      */

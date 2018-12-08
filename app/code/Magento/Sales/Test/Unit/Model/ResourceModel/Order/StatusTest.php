@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order;
 
 /**
@@ -46,7 +44,10 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());
         $this->selectMock->expects($this->any())->method('where');
 
-        $this->connectionMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['update', 'insertOnDuplicate', 'select']);
+        $this->connectionMock = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['update', 'insertOnDuplicate', 'select']
+        );
         $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
 
         $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);

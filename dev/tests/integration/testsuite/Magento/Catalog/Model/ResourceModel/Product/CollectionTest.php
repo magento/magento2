@@ -128,6 +128,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoDbIsolation disabled
      */
@@ -158,6 +159,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * Test addAttributeToSort() with attribute 'is_saleable' works properly on frontend.
      *
      * @dataProvider addAttributeToSortDataProvider
@@ -222,7 +225,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
      * @magentoDbIsolation enabled
      */
+<<<<<<< HEAD
     public function testAddAttributeToFilterAffectsGetSize()
+=======
+    public function testAddAttributeToFilterAffectsGetSize(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->assertEquals(10, $this->collection->getSize());
         $this->collection->addAttributeToFilter('sku', 'Product1');

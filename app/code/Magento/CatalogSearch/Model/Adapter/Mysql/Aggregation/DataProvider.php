@@ -7,9 +7,14 @@
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation;
 
 use Magento\Catalog\Model\Product;
+<<<<<<< HEAD
 use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\QueryBuilder;
 use Magento\Customer\Model\Session;
+=======
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Eav\Model\Config;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -17,10 +22,14 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
+<<<<<<< HEAD
  * DataProvider for Catalog search Mysql.
+=======
+ * @deprecated
+ * @see \Magento\ElasticSearch
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class DataProvider implements DataProviderInterface
 {
@@ -30,24 +39,19 @@ class DataProvider implements DataProviderInterface
     private $eavConfig;
 
     /**
-     * @var Resource
-     */
-    private $resource;
-
-    /**
      * @var ScopeResolverInterface
      */
     private $scopeResolver;
 
     /**
-     * @var Session
-     */
-    private $customerSession;
-
-    /**
      * @var AdapterInterface
      */
     private $connection;
+
+    /**
+     * @var SelectBuilderForAttribute
+     */
+    private $selectBuilderForAttribute;
 
     /**
      * @var QueryBuilder;
@@ -58,22 +62,38 @@ class DataProvider implements DataProviderInterface
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
+<<<<<<< HEAD
      * @param Session $customerSession
      * @param QueryBuilder|null $queryBuilder
+=======
+     * @param null $customerSession @deprecated
+     * @param SelectBuilderForAttribute|null $selectBuilderForAttribute
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function __construct(
         Config $eavConfig,
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
+<<<<<<< HEAD
         Session $customerSession,
         QueryBuilder $queryBuilder = null
+=======
+        $customerSession,
+        SelectBuilderForAttribute $selectBuilderForAttribute = null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         $this->eavConfig = $eavConfig;
-        $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->scopeResolver = $scopeResolver;
+<<<<<<< HEAD
         $this->customerSession = $customerSession;
         $this->queryBuilder = $queryBuilder ?: ObjectManager::getInstance()->get(QueryBuilder::class);
+=======
+        $this->selectBuilderForAttribute = $selectBuilderForAttribute
+            ?: ObjectManager::getInstance()->get(SelectBuilderForAttribute::class);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -85,8 +105,8 @@ class DataProvider implements DataProviderInterface
         Table $entityIdsTable
     ) {
         $currentScope = $this->scopeResolver->getScope($dimensions['scope']->getValue())->getId();
-
         $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $bucket->getField());
+<<<<<<< HEAD
 
         $select = $this->queryBuilder->build(
             $attribute,
@@ -94,6 +114,16 @@ class DataProvider implements DataProviderInterface
             $currentScope,
             $this->customerSession->getCustomerGroupId()
         );
+=======
+        $select = $this->getSelect();
+
+        $select->joinInner(
+            ['entities' => $entityIdsTable->getName()],
+            'main_table.entity_id  = entities.entity_id',
+            []
+        );
+        $select = $this->selectBuilderForAttribute->build($select, $attribute, $currentScope);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
         return $select;
     }

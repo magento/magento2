@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
+<<<<<<< HEAD
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ProductFactory;
@@ -14,6 +15,11 @@ use Magento\Catalog\Model\Product\Option\Repository as OptionRepository;
 
 /**
  * Catalog product copier. Creates product duplicate
+=======
+
+/**
+ * The copier creates product duplicates.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class Copier
 {
@@ -83,6 +89,7 @@ class Copier
                 ? $matches[1] . '-' . ($matches[2] + 1)
                 : $urlKey . '-1';
             $duplicate->setUrlKey($urlKey);
+            $duplicate->setData(Product::URL_PATH, null);
             try {
                 $duplicate->save();
                 $isDuplicateSaved = true;
@@ -99,7 +106,13 @@ class Copier
     }
 
     /**
+<<<<<<< HEAD
      * @return OptionRepository
+=======
+     * Returns product option repository.
+     *
+     * @return Option\Repository
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @deprecated 101.0.0
      */
     private function getOptionRepository()
@@ -111,7 +124,13 @@ class Copier
     }
 
     /**
+<<<<<<< HEAD
      * @return MetadataPool
+=======
+     * Returns metadata pool.
+     *
+     * @return \Magento\Framework\EntityManager\MetadataPool
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @deprecated 101.0.0
      */
     private function getMetadataPool()

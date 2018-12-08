@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -39,11 +37,15 @@ class MenuCategoryDataTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->_catalogCategory = $this->createPartialMock(\Magento\Catalog\Helper\Category::class, ['getStoreCategories', 'getCategoryUrl']);
+        $this->_catalogCategory = $this->createPartialMock(
+            \Magento\Catalog\Helper\Category::class,
+            ['getStoreCategories', 'getCategoryUrl']
+        );
 
         $layerResolver = $this->createMock(\Magento\Catalog\Model\Layer\Resolver::class);
         $layerResolver->expects($this->once())->method('get')->willReturn(null);
-        $this->_observer = (new ObjectManager($this))->getObject(\Magento\Catalog\Observer\MenuCategoryData::class,
+        $this->_observer = (new ObjectManager($this))->getObject(
+            \Magento\Catalog\Observer\MenuCategoryData::class,
             [
                 'layerResolver' => $layerResolver,
                 'catalogCategory' => $this->_catalogCategory,

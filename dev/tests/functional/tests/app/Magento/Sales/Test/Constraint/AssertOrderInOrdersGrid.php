@@ -46,7 +46,7 @@ class AssertOrderInOrdersGrid extends AbstractConstraint
             'status' => $status
         ];
         $errorMessage = implode(', ', $filter);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $orderIndex->getSalesOrderGrid()->isRowVisible(array_filter($filter)),
             'Order with following data \'' . $errorMessage . '\' is absent in Orders grid.'
         );

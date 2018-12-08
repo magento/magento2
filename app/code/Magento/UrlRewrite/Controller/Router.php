@@ -5,11 +5,20 @@
  */
 namespace Magento\UrlRewrite\Controller;
 
+<<<<<<< HEAD
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+=======
+use Magento\Framework\App\RequestInterface;
+use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\Http as HttpResponse;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Action\Redirect;
 use Magento\Framework\App\ActionInterface;
@@ -37,7 +46,11 @@ class Router implements \Magento\Framework\App\RouterInterface
     protected $storeManager;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Framework\App\ResponseInterface|HttpResponse
+=======
+     * @var HttpResponse
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     protected $response;
 
@@ -68,17 +81,26 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
-     * Match corresponding URL Rewrite and modify request
+     * Match corresponding URL Rewrite and modify request.
      *
+<<<<<<< HEAD
      * @param \Magento\Framework\App\RequestInterface|HttpRequest $request
+=======
+     * @param RequestInterface|HttpRequest $request
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return ActionInterface|null
      */
-    public function match(\Magento\Framework\App\RequestInterface $request)
+    public function match(RequestInterface $request)
     {
         $rewrite = $this->getRewrite(
             $request->getPathInfo(),
             $this->storeManager->getStore()->getId()
         );
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         if ($rewrite === null) {
             //No rewrite rule matching current URl found, continuing with
             //processing of this URL.
@@ -101,8 +123,12 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @param UrlRewrite $rewrite
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return ActionInterface|null
      */
     protected function processRedirect($request, $rewrite)
@@ -117,7 +143,11 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
+<<<<<<< HEAD
      * @param \Magento\Framework\App\RequestInterface|HttpRequest $request
+=======
+     * @param RequestInterface|HttpRequest $request
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param string $url
      * @param int $code
      * @return ActionInterface

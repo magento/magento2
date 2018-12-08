@@ -10,6 +10,10 @@ use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Context;
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Action\HttpPostActionInterface;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -22,9 +26,15 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 
 /**
+ * New newsletter subscription action
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+<<<<<<< HEAD
 class NewAction extends SubscriberController
+=======
+class NewAction extends SubscriberController implements HttpPostActionInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 {
     /**
      * @var CustomerAccountManagement
@@ -151,10 +161,14 @@ class NewAction extends SubscriberController
                 $status = (int) $this->_subscriberFactory->create()->subscribe($email);
                 $this->messageManager->addSuccessMessage($this->getSuccessMessage($status));
             } catch (LocalizedException $e) {
+<<<<<<< HEAD
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __('There was a problem with the subscription: %1', $e->getMessage())
                 );
+=======
+                $this->messageManager->addErrorMessage($e->getMessage());
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong with the subscription.'));
             }
@@ -163,6 +177,11 @@ class NewAction extends SubscriberController
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get success message
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param int $status
      * @return Phrase
      */

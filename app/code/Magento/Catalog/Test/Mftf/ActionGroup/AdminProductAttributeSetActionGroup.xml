@@ -7,6 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssignAttributeToGroup">
         <arguments>
@@ -16,6 +17,17 @@
         <conditionalClick selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(group)}}" dependentSelector="{{AdminProductAttributeSetEditSection.attributeGroupCollapsed(group)}}" visible="true" stepKey="extendGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute(attribute)}}" selector2="{{AdminProductAttributeSetEditSection.lineItemAttributeGroup(group, '1')}}" stepKey="dragAndDropToGroupProductDetails"/>
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssignAttributeToGroup">
+        <arguments>
+            <argument name="group" type="string"/>
+            <argument name="attribute" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(group)}}" dependentSelector="{{AdminProductAttributeSetEditSection.attributeGroupCollapsed(group)}}" visible="true" stepKey="extendGroup"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute(attribute)}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemAttributeGroup(group, '1')}}" stepKey="dragAndDropToGroupProductDetails"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see userInput="{{attribute}}" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
     </actionGroup>
@@ -26,7 +38,11 @@
         </arguments>
         <conditionalClick selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(group)}}" dependentSelector="{{AdminProductAttributeSetEditSection.attributeGroupCollapsed(group)}}" visible="true" stepKey="extendGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
+<<<<<<< HEAD
         <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.assignedAttribute(attribute)}}" selector2="{{AdminProductAttributeSetEditSection.lineItemUnassignedAttribute('1')}}" stepKey="dragAndDropToUnassigned"/>
+=======
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.assignedAttribute(attribute)}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemUnassignedAttribute('1')}}" stepKey="dragAndDropToUnassigned"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see userInput="{{attribute}}" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
     </actionGroup>
@@ -34,6 +50,7 @@
         <click selector="{{AdminProductAttributeSetActionSection.save}}" stepKey="clickSave"/>
         <see userInput="You saved the attribute set" selector="{{AdminMessagesSection.success}}" stepKey="successMessage"/>
     </actionGroup>
+<<<<<<< HEAD
     <actionGroup name="CreateAttributeSet">
         <arguments>
             <argument name="attributeSetName" type="string"/>
@@ -52,5 +69,17 @@
         <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
         <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{attributeSetName}}" stepKey="searchForAttrSet"/>
         <waitForAjaxLoad stepKey="waitForLoad"/>
+=======
+    <actionGroup name="CreateDefaultAttributeSet">
+        <!--Generic atrribute set creation-->
+        <arguments>
+            <argument name="label" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <click selector="{{AdminProductAttributeSetGridSection.addAttributeSetBtn}}" stepKey="clickAddAttributeSet"/>
+        <fillField selector="{{AdminProductAttributeSetSection.name}}" userInput="{{label}}" stepKey="fillName"/>
+        <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave1"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </actionGroup>
 </actionGroups>

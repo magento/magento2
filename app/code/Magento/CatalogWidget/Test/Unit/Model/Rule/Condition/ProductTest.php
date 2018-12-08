@@ -27,6 +27,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeMock;
 
+    /**
+     * @inheritdoc
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
@@ -60,6 +65,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test addToCollection method.
+     *
+     * @return void
+     */
     public function testAddToCollection()
     {
         $collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
@@ -83,6 +93,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->model->addToCollection($collectionMock);
     }
 
+    /**
+     * Test getMappedSqlField method.
+     *
+     * @return void
+     */
     public function testGetMappedSqlFieldSku()
     {
         $this->model->setAttribute('sku');

@@ -138,7 +138,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 $linkTypesToId[$entity->getLinkType()]
             );
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
+            throw new CouldNotSaveException(__('The linked products data is invalid. Verify the data and try again.'));
         }
         return true;
     }
@@ -213,7 +213,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         try {
             $this->getLinkResource()->deleteProductLink($linkId);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
+            throw new CouldNotSaveException(__('The linked products data is invalid. Verify the data and try again.'));
         }
         return true;
     }

@@ -28,6 +28,9 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfigMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $this->validatorMock = $this->createMock(RedisConnectionValidator::class, [], [], '', false);
@@ -36,10 +39,17 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->configList = new PageCache($this->validatorMock);
     }
 
+    /**
+     * testGetOptions
+     */
     public function testGetOptions()
     {
         $options = $this->configList->getOptions();
+<<<<<<< HEAD
         $this->assertCount(6, $options);
+=======
+        $this->assertCount(7, $options);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -64,8 +74,18 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(5, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[5]);
         $this->assertEquals('page-cache-redis-password', $options[5]->getName());
+<<<<<<< HEAD
+=======
+
+        $this->assertArrayHasKey(6, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[6]);
+        $this->assertEquals('page-cache-id-prefix', $options[6]->getName());
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
+    /**
+     * testCreateConfigWithRedis
+     */
     public function testCreateConfigWithRedis()
     {
         $this->deploymentConfigMock->method('get')->willReturn('');
@@ -81,7 +101,12 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
                             'database' => '',
                             'compress_data' => '',
                             'password' => ''
+<<<<<<< HEAD
                         ]
+=======
+                        ],
+                        'id_prefix' => $this->expectedIdPrefix(),
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     ]
                 ]
             ]
@@ -92,6 +117,9 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
+    /**
+     * testCreateConfigWithRedisConfiguration
+     */
     public function testCreateConfigWithRedisConfiguration()
     {
         $expectedConfigData = [
@@ -105,7 +133,12 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
                             'database' => '6',
                             'compress_data' => '1',
                             'password' => ''
+<<<<<<< HEAD
                         ]
+=======
+                        ],
+                        'id_prefix' => $this->expectedIdPrefix(),
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     ]
                 ]
             ]
@@ -124,6 +157,57 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
+    /**
+     * testCreateConfigWithRedis
+     */
+    public function testCreateConfigWithFileCache()
+    {
+        $this->deploymentConfigMock->method('get')->willReturn('');
+
+        $expectedConfigData = [
+            'cache' => [
+                'frontend' => [
+                    'page_cache' => [
+                        'id_prefix' => $this->expectedIdPrefix(),
+                    ]
+                ]
+            ]
+        ];
+
+        $configData = $this->configList->createConfig([], $this->deploymentConfigMock);
+
+        $this->assertEquals($expectedConfigData, $configData->getData());
+    }
+
+    /**
+     * testCreateConfigCacheRedis
+     */
+    public function testCreateConfigWithIdPrefix()
+    {
+        $this->deploymentConfigMock->method('get')->willReturn('');
+
+        $explicitPrefix = 'XXX_';
+        $expectedConfigData = [
+            'cache' => [
+                'frontend' => [
+                    'page_cache' => [
+                        'id_prefix' => $explicitPrefix,
+                    ]
+                ]
+            ]
+        ];
+
+        $configData = $this->configList->createConfig(
+            ['page-cache-id-prefix' => $explicitPrefix],
+            $this->deploymentConfigMock
+        );
+
+        $this->assertEquals($expectedConfigData, $configData->getData());
+    }
+
+    /**
+     * testValidationWithValidData
+     */
     public function testValidationWithValidData()
     {
         $this->validatorMock->expects($this->once())
@@ -140,6 +224,9 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($errors);
     }
 
+    /**
+     * testValidationWithInvalidData
+     */
     public function testValidationWithInvalidData()
     {
         $options = [
@@ -150,5 +237,15 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
 
         $this->assertCount(1, $errors);
         $this->assertEquals('Invalid cache handler \'foobar\'', $errors[0]);
+    }
+
+    /**
+     * The default ID prefix, based on installation directory
+     *
+     * @return string
+     */
+    private function expectedIdPrefix(): string
+    {
+        return substr(\md5(dirname(__DIR__, 8)), 0, 3) . '_';
     }
 }

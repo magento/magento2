@@ -8,6 +8,10 @@ namespace Magento\SalesRule\Model;
 use Magento\Quote\Model\Quote\Address;
 use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
 use Magento\Framework\App\ObjectManager;
+<<<<<<< HEAD
+=======
+use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 /**
  * Class RulesApplier
@@ -33,7 +37,11 @@ class RulesApplier
     private $childrenValidationLocator;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory
+=======
+     * @var CalculatorFactory
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private $calculatorFactory;
 
@@ -41,7 +49,11 @@ class RulesApplier
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\SalesRule\Model\Utility $utility
+<<<<<<< HEAD
      * @param ChildrenValidationLocator $childrenValidationLocator
+=======
+     * @param ChildrenValidationLocator|null $childrenValidationLocator
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,

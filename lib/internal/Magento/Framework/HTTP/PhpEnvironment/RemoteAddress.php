@@ -8,19 +8,19 @@ namespace Magento\Framework\HTTP\PhpEnvironment;
 use Magento\Framework\App\RequestInterface;
 
 /**
- * Library for working with client ip address
+ * Library for working with client ip address.
  */
 class RemoteAddress
 {
     /**
-     * Request object
+     * Request object.
      *
      * @var RequestInterface
      */
     protected $request;
 
     /**
-     * Remote address cache
+     * Remote address cache.
      *
      * @var string
      */
@@ -74,6 +74,11 @@ class RemoteAddress
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Filter addresses by trusted proxies list.
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param string $remoteAddress
      * @return string|null
      */
@@ -115,7 +120,11 @@ class RemoteAddress
      *
      * @return string IPv4|long
      */
+<<<<<<< HEAD
     public function getRemoteAddress($ipToLong = false)
+=======
+    public function getRemoteAddress(bool $ipToLong = false)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         if ($this->remoteAddress !== null) {
             return $this->remoteAddress;
@@ -124,6 +133,7 @@ class RemoteAddress
         $remoteAddress = $this->readAddress();
         if (!$remoteAddress) {
             $this->remoteAddress = false;
+<<<<<<< HEAD
             return false;
         }
         $remoteAddress = $this->filterAddress($remoteAddress);
@@ -136,6 +146,21 @@ class RemoteAddress
 
             return $ipToLong ? ip2long($this->remoteAddress)
                 : $this->remoteAddress;
+=======
+
+            return false;
+        }
+        $remoteAddress = $this->filterAddress($remoteAddress);
+
+        if (!$remoteAddress) {
+            $this->remoteAddress = false;
+
+            return false;
+        } else {
+            $this->remoteAddress = $remoteAddress;
+
+            return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
     }
 

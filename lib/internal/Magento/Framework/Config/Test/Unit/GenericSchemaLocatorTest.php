@@ -35,7 +35,10 @@ class GenericSchemaLocatorTest extends \PHPUnit\Framework\TestCase
      * @param $moduleName
      * @param $mergeSchema
      * @param $perFileSchema
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return GenericSchemaLocator
      */
     private function createNewSchemaLocatorInstance(ModuleDirReader $reader, $moduleName, $mergeSchema, $perFileSchema)

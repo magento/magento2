@@ -24,7 +24,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     protected $_columnGroupBy = 'period';
 
     /**
-     * {@inheritdoc}
+     * Reports grid constructor
+     *
      * @codeCoverageIgnore
      */
     protected function _construct()
@@ -34,7 +35,9 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * Return collection name based on report_type
+     *
+     * @return string
      */
     public function getResourceCollectionName()
     {
@@ -44,7 +47,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * Initialize reports grid columns
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

@@ -21,18 +21,26 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     private $backup;
 
     /**
+<<<<<<< HEAD
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param array $data
      * @param BackupHelper|null $backup
+=======
+     * @inheritDoc
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = [],
+<<<<<<< HEAD
         BackupHelper $backup = null
+=======
+        ?BackupHelper $backup = null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->backup = $backup ?? ObjectManager::getInstance()->get(BackupHelper::class);

@@ -5,7 +5,10 @@
  */
 namespace Magento\UrlRewrite\Controller;
 
-class UrlRewriteTest extends \Magento\TestFramework\TestCase\AbstractController
+use Magento\TestFramework\TestCase\AbstractController;
+use Magento\Framework\App\Response\Http as HttpResponse;
+
+class UrlRewriteTest extends AbstractController
 {
     /**
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
@@ -21,18 +24,37 @@ class UrlRewriteTest extends \Magento\TestFramework\TestCase\AbstractController
      * @dataProvider requestDataProvider
      */
     public function testMatchUrlRewrite(
+<<<<<<< HEAD
         $request,
         $redirect,
         $expectedCode = 301
+=======
+        string $request,
+        string $redirect,
+        int $expectedCode = 301
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         $this->dispatch($request);
-        $code = $this->getResponse()->getHttpResponseCode();
-        $location = $this->getResponse()->getHeader('Location')->getFieldValue();
+        /** @var HttpResponse $response */
+        $response = $this->getResponse();
+        $code = $response->getHttpResponseCode();
+        $location = $response->getHeader('Location')->getFieldValue();
 
         $this->assertEquals($expectedCode, $code, 'Invalid response code');
+<<<<<<< HEAD
         $this->assertStringEndsWith($redirect, $location, 'Invalid location header');
+=======
+        $this->assertStringEndsWith(
+            $redirect,
+            $location,
+            'Invalid location header'
+        );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
+    /**
+     * @return array
+     */
     public function requestDataProvider()
     {
         return [

@@ -130,4 +130,16 @@ class StockRegistryStorage
             unset($this->stockStatuses[$productId][$scopeId]);
         }
     }
+
+    /**
+     * Clear cached entities
+     *
+     * @return void
+     */
+    public function clean()
+    {
+        $this->stockItems = [];
+        $this->stocks = [];
+        $this->stockStatuses = [];
+    }
 }

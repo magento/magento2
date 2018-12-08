@@ -5,8 +5,12 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+=======
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     <section name="AdminCustomerConfigSection">
         <element name="customerDataLifetime" type="input" selector="#customer_online_customers_section_data_lifetime"/>
     </section>

@@ -11,7 +11,11 @@ $orderIds = $block->getOrderIds();
 <div class="multicheckout results">
     <p class="block-content">
         <?php if (!empty($orderIds)) : ?>
+<<<<<<< HEAD
         <?= $block->escapeHtml(__('Not all items were included.')); ?>
+=======
+            <?= $block->escapeHtml(__('Not all items were included.')); ?>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         <?php endif; ?>
         <?= $block->escapeHtml(__('For details, see')); ?>
         <a href="#failed"><?= $block->escapeHtml(__('Failed to Order')); ?></a>

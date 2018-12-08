@@ -196,7 +196,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     }
 
     /**
-     * Retrieve disply price availablity
+     * Retrieve display price availability
      *
      * @return true
      */

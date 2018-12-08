@@ -42,14 +42,22 @@ class CreateCustomerAccountStep implements TestStepInterface
      *
      * @var CustomerAccountCreate
      */
+<<<<<<< HEAD
     protected $customerAccountCreate;
+=======
+    private $customerAccountCreate;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     /**
      * Customer specifies this password while registration.
      *
      * @var string
      */
+<<<<<<< HEAD
     protected $customerPassword;
+=======
+    private $customerPassword;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     /**
      * @constructor
@@ -89,7 +97,11 @@ class CreateCustomerAccountStep implements TestStepInterface
                     'data' => [
                         'password' => $this->customerPassword,
                         'password_confirmation' => $this->customerPassword,
+<<<<<<< HEAD
                     ]
+=======
+                    ],
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 ]
             );
             $this->customerAccountCreate->getRegisterForm()->registerCustomer($customerFixture);

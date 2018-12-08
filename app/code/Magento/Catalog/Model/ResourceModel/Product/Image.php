@@ -13,7 +13,11 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\App\ResourceConnection;
 
 /**
+<<<<<<< HEAD
  * Class for fast retrieval of all product images
+=======
+ * Class for retrieval of all product images
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class Image
 {
@@ -76,15 +80,34 @@ class Image
 
     /**
      * Get the number of unique pictures of products
+<<<<<<< HEAD
+=======
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return int
      */
     public function getCountAllProductImages(): int
     {
+<<<<<<< HEAD
         $select = $this->getVisibleImagesSelect()->reset('columns')->columns('count(*)');
+=======
+        $select = $this->getVisibleImagesSelect()
+            ->reset('columns')
+            ->reset('distinct')
+            ->columns(
+                new \Zend_Db_Expr('count(distinct value)')
+            );
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return (int) $this->connection->fetchOne($select);
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Return Select to fetch all products images
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return Select
      */
     private function getVisibleImagesSelect(): Select

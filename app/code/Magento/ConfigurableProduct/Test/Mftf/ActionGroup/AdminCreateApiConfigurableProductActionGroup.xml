@@ -19,7 +19,11 @@
         </createData>
 
         <!-- Create attribute with 2 options to be used in children products -->
+<<<<<<< HEAD
         <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttribute"/>
+=======
+        <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
             <requiredEntity createDataKey="createConfigProductAttribute"/>
         </createData>
@@ -62,6 +66,7 @@
             <requiredEntity createDataKey="createConfigChildProduct2"/>
         </createData>
     </actionGroup>
+<<<<<<< HEAD
 
     <actionGroup name="AdminCreateConfigurableProductChildQty1ActionGroup" extends="AdminCreateApiConfigurableProductActionGroup">
         <createData entity="ApiSimpleSingleQty" stepKey="createConfigChildProduct1">
@@ -69,4 +74,6 @@
             <requiredEntity createDataKey="getConfigAttributeOption1"/>
         </createData>
     </actionGroup>
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 </actionGroups>

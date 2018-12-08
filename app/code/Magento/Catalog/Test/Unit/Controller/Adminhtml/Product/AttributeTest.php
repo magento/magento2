@@ -10,6 +10,10 @@ use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Message\ManagerInterface;
+<<<<<<< HEAD
+=======
+use Magento\Framework\ObjectManager\ObjectManager;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Result\PageFactory;
@@ -58,7 +62,11 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
+<<<<<<< HEAD
     private $messageManager;
+=======
+    protected $messageManager;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     protected function setUp()
     {
@@ -90,7 +98,11 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
+<<<<<<< HEAD
         $this->contextMock->expects($this->once())
+=======
+        $this->contextMock
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
     }

@@ -13,5 +13,10 @@
                 <session_storage_key>collected_errors</session_storage_key>
             </js>
         </dev>
+        <cms>
+            <wysiwyg>
+                <editor_version>mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter</editor_version>
+            </wysiwyg>
+        </cms>
     </default>
 </config>

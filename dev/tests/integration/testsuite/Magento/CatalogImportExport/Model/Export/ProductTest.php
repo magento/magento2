@@ -106,6 +106,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $exportData = $this->model->export();
         $this->assertContains('simple ""1""', $exportData);
+        $this->assertContains('Category with slash\/ symbol', $exportData);
     }
 
     /**
@@ -325,8 +326,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+<<<<<<< HEAD
      */
     public function testExportWithCustomOptions()
+=======
+     * @return void
+     */
+    public function testExportWithCustomOptions(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $storeCode = 'default';
         $expectedData = [];
@@ -358,9 +365,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product->setOptions($newCustomOptions);
         $productRepository->save($product);
         $this->model->setWriter(
+<<<<<<< HEAD
             $this->objectManager->create(
                 \Magento\ImportExport\Model\Export\Adapter\Csv::class
             )
+=======
+            $this->objectManager->create(\Magento\ImportExport\Model\Export\Adapter\Csv::class)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         );
         $exportData = $this->model->export();
         /** @var $varDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
@@ -377,14 +388,25 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 $customOptionData[$storeCode] = $this->parseExportedCustomOption($data[2][$columnNumber]);
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         self::assertSame($expectedData, $customOptionData);
     }
 
     /**
+<<<<<<< HEAD
      * @param $exportedCustomOption
      * @return array
      */
     private function parseExportedCustomOption($exportedCustomOption)
+=======
+     * @param string $exportedCustomOption
+     * @return array
+     */
+    private function parseExportedCustomOption(string $exportedCustomOption): array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $customOptions = explode('|', $exportedCustomOption);
         $optionItems = [];
@@ -405,6 +427,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 $optionItems[$optionName] = [];
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $optionItems;
     }
 }

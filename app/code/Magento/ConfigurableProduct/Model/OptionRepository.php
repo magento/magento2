@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -124,7 +125,9 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             }
         }
 
-        throw new NoSuchEntityException(__('Requested option doesn\'t exist: %1', $id));
+        throw new NoSuchEntityException(
+            __('The "%1" entity that was requested doesn\'t exist. Verify the entity and try again.', $id)
+        );
     }
 
     /**
@@ -150,14 +153,14 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             $this->configurableType->resetConfigurableAttributes($product);
         } catch (\Exception $exception) {
             throw new StateException(
-                __('Cannot delete variations from product: %1', $entityId)
+                __('The variations from the "%1" product can\'t be deleted.', $entityId)
             );
         }
         try {
             $this->optionResource->delete($option);
         } catch (\Exception $exception) {
             throw new StateException(
-                __('Cannot delete option with id: %1', $option->getId())
+                __('The option with "%1" ID can\'t be deleted.', $option->getId())
             );
         }
         return true;
@@ -173,7 +176,9 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $option */
         $option = $attributeCollection->getItemById($id);
         if ($option === null) {
-            throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
+            throw new NoSuchEntityException(
+                __("The option that was requested doesn't exist. Verify the entity and try again.")
+            );
         }
         return $this->delete($option);
     }
@@ -213,11 +218,11 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         try {
             $option->save();
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Something went wrong while saving option.'));
+            throw new CouldNotSaveException(__('An error occurred while saving the option. Please try to save again.'));
         }
 
         if (!$option->getId()) {
-            throw new CouldNotSaveException(__('Something went wrong while saving option.'));
+            throw new CouldNotSaveException(__('An error occurred while saving the option. Please try to save again.'));
         }
         return $option->getId();
     }
@@ -234,7 +239,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $product = $this->productRepository->get($sku);
         if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE !== $product->getTypeId()) {
             throw new InputException(
-                __('Only implemented for configurable product: %1', $sku)
+                __('This is implemented for the "%1" configurable product only.', $sku)
             );
         }
         return $product;
@@ -252,7 +257,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $product = $this->productRepository->getById($id);
         if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE !== $product->getTypeId()) {
             throw new InputException(
-                __('Only implemented for configurable product: %1', $id)
+                __('This is implemented for the "%1" configurable product only.', $id)
             );
         }
         return $product;

@@ -9,9 +9,13 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Plugin\Webapi\Controller\Rest;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+<<<<<<< HEAD
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Webapi\Controller\Rest\InputParamsResolver as InputParamsResolverController;
+=======
+use Magento\Framework\Webapi\Rest\Request as RestRequest;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 /**
  * Plugin for InputParamsResolver
@@ -37,11 +41,19 @@ class InputParamsResolver
      * Add 'save_rewrites_history' param to the product data
      *
      * @see \Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper
+<<<<<<< HEAD
      * @param InputParamsResolverController $subject
      * @param array $result
      * @return array
      */
     public function afterResolve(InputParamsResolverController $subject, array $result): array
+=======
+     * @param \Magento\Webapi\Controller\Rest\InputParamsResolver $subject
+     * @param array $result
+     * @return array
+     */
+    public function afterResolve(\Magento\Webapi\Controller\Rest\InputParamsResolver $subject, array $result): array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $route = $subject->getRoute();
         $serviceMethodName = $route->getServiceMethod();
@@ -53,7 +65,11 @@ class InputParamsResolver
             foreach ($requestBodyParams['product']['custom_attributes'] as $attribute) {
                 if ($attribute['attribute_code'] === 'save_rewrites_history') {
                     foreach ($result as $resultItem) {
+<<<<<<< HEAD
                         if ($resultItem instanceof Product) {
+=======
+                        if ($resultItem instanceof \Magento\Catalog\Model\Product) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                             $resultItem->setData('save_rewrites_history', (bool)$attribute['value']);
                             break 2;
                         }

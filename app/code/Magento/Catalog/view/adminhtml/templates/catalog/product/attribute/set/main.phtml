@@ -197,7 +197,11 @@
                                                 }
                                             }
                                         }
+<<<<<<< HEAD
                                     }
+=======
+                                        	                                    }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                                         node.appendChild(newNode);
                                         newNode.addListener('click', editSet.unregister);
                                     }
@@ -205,6 +209,7 @@
                             }
                         }
                     }
+<<<<<<< HEAD
 
 
                 editSet = function() {
@@ -219,6 +224,22 @@
                                 }
                             }
                         },
+=======
+
+
+                    editSet = function () {
+                        return {
+                            register: function (node) {
+                                editSet.currentNode = node;
+                                if (typeof node.ui.onTextChange === 'function') {
+                                    node.ui.onTextChange = function (_3, _4, _5) {
+                                        if (this.rendered) {
+                                            this.textNode.innerText = _4;
+                                        }
+                                    }
+                                }
+                            },
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
                         unregister : function() {
                             editSet.currentNode = false;
@@ -340,8 +361,12 @@
                         },
 
                         validateGroupName : function(name, exceptNodeId) {
+<<<<<<< HEAD
                             name = name.strip();
                             name = name.escapeHTML();
+=======
+                            name = name.strip().escapeHTML();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                             var result = true;
                             if (name === '') {
                                 result = false;

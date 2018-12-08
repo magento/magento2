@@ -18,7 +18,10 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Import offline shipping.
+<<<<<<< HEAD
  *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Import

@@ -176,7 +176,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->model->_clearUserRoles($this->userMock);
     }
 
-    public function testDeleteSucess()
+    public function testDeleteSuccess()
     {
         $uid = 123;
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);

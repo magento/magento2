@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Catalog\Model\Product\Attribute\Backend\TierPrice;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
@@ -16,7 +21,11 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
 /**
  * Process tier price data for handled new product
  */
+<<<<<<< HEAD
 class SaveHandler extends AbstractHandler
+=======
+class SaveHandler implements ExtensionInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -29,6 +38,14 @@ class SaveHandler extends AbstractHandler
     private $attributeRepository;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var \Magento\Customer\Api\GroupManagementInterface
+     */
+    private $groupManagement;
+
+    /**
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
     private $metadataPoll;
@@ -52,10 +69,16 @@ class SaveHandler extends AbstractHandler
         MetadataPool $metadataPool,
         Tierprice $tierPriceResource
     ) {
+<<<<<<< HEAD
         parent::__construct($groupManagement);
 
         $this->storeManager = $storeManager;
         $this->attributeRepository = $attributeRepository;
+=======
+        $this->storeManager = $storeManager;
+        $this->attributeRepository = $attributeRepository;
+        $this->groupManagement = $groupManagement;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->metadataPoll = $metadataPool;
         $this->tierPriceResource = $tierPriceResource;
     }
@@ -66,6 +89,11 @@ class SaveHandler extends AbstractHandler
      * @param \Magento\Catalog\Api\Data\ProductInterface|object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
+<<<<<<< HEAD
+=======
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @throws \Magento\Framework\Exception\InputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -83,7 +111,11 @@ class SaveHandler extends AbstractHandler
             $isGlobal = $attribute->isScopeGlobal() || $websiteId === 0;
             $identifierField = $this->metadataPoll->getMetadata(ProductInterface::class)->getLinkField();
             $priceRows = array_filter($priceRows);
+<<<<<<< HEAD
             $productId = $entity->getData($identifierField);
+=======
+            $productId = (int) $entity->getData($identifierField);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
             // prepare and save data
             foreach ($priceRows as $data) {
@@ -107,4 +139,60 @@ class SaveHandler extends AbstractHandler
 
         return $entity;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Get additional tier price fields
+     *
+     * @param array $objectArray
+     * @return array
+     */
+    private function getAdditionalFields(array $objectArray): array
+    {
+        $percentageValue = $this->getPercentage($objectArray);
+        return [
+            'value' => $percentageValue ? null : $objectArray['price'],
+            'percentage_value' => $percentageValue ?: null,
+        ];
+    }
+
+    /**
+     * Check whether price has percentage value.
+     *
+     * @param array $priceRow
+     * @return int|null
+     */
+    private function getPercentage(array $priceRow): ?int
+    {
+        return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
+            ? (int)$priceRow['percentage_value']
+            : null;
+    }
+
+    /**
+     * Prepare tier price data by provided price row data
+     *
+     * @param array $data
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function prepareTierPrice(array $data): array
+    {
+        $useForAllGroups = (int)$data['cust_group'] === $this->groupManagement->getAllCustomersGroup()->getId();
+        $customerGroupId = $useForAllGroups ? 0 : $data['cust_group'];
+        $tierPrice = array_merge(
+            $this->getAdditionalFields($data),
+            [
+                'website_id' => $data['website_id'],
+                'all_groups' => (int)$useForAllGroups,
+                'customer_group_id' => $customerGroupId,
+                'value' => $data['price'] ?? null,
+                'qty' => (int)$data['price_qty']
+            ]
+        );
+
+        return $tierPrice;
+    }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 }

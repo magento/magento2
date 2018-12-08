@@ -22,6 +22,15 @@ class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
     private $resourceMock;
 
     /**
+<<<<<<< HEAD
+     * @var IndexerTableSwapperInterface|\PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var ActiveTableSwitcher|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
+     */
+    private $tableSwapperMock;
+
+    /**
      * @var IndexerTableSwapperInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $tableSwapperMock;
@@ -31,9 +40,13 @@ class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
         /** @var ActiveTableSwitcher|\PHPUnit_Framework_MockObject_MockObject $activeTableSwitcherMock */
         $activeTableSwitcherMock =
             $this->getMockBuilder(ActiveTableSwitcher::class)
+=======
+        $this->activeTableSwitcherMock = $this->getMockBuilder(ActiveTableSwitcher::class)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->tableSwapperMock = $this->getMockForAbstractClass(
@@ -41,7 +54,11 @@ class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
         );
         $this->model = new \Magento\CatalogRule\Model\Indexer\ReindexRuleProduct(
             $this->resourceMock,
+<<<<<<< HEAD
             $activeTableSwitcherMock,
+=======
+            $this->activeTableSwitcherMock,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $this->tableSwapperMock
         );
     }

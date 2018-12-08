@@ -27,8 +27,12 @@ class SalableResolver
     }
 
     /**
+<<<<<<< HEAD
      * Performs an additional check whether given configurable product has
      * at least one configuration in-stock.
+=======
+     * Performs an additional check whether given configurable product has at least one configuration in-stock.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param \Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver $subject
      * @param bool $result

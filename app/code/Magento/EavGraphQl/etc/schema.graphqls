@@ -1,0 +1,27 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    customAttributeMetadata(attributes: [AttributeInput!]!): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata")  @doc(description: "The customAttributeMetadata query returns the attribute type, given an attribute code and entity type")
+}
+
+type CustomAttributeMetadata @doc(description: "CustomAttributeMetadata defines an array of attribute_codes and entity_types") {
+    items: [Attribute] @doc(description: "An array of attributes")
+}
+
+type Attribute @doc(description: "Attribute contains the attribute_type of the specified attribute_code and entity_type") {
+    attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
+    entity_type: String @doc(description: "The type of entity that defines the attribute")
+    attribute_type: String @doc(description: "The data type of the attribute")
+    attribute_options: [AttributeOption] @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributeOptions") @doc(description: "Attribute options list.")
+}
+
+type AttributeOption @doc(description: "Attribute option.") {
+    label: String @doc(description: "Attribute option label.")
+    value: String @doc(description: "Attribute option value.")
+}
+
+input AttributeInput @doc(description: "AttributeInput specifies the attribute_code and entity_type to search") {
+    attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
+    entity_type: String @doc(description: "The type of entity that defines the attribute")
+}

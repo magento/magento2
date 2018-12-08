@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\User\Model;
 
 use Magento\Framework\Serialize\Serializer\Json;
@@ -181,8 +179,9 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testGetCollection()
     {
         $this->assertInstanceOf(
-             \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class,
-            $this->_model->getCollection());
+            \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class,
+            $this->_model->getCollection()
+        );
     }
 
     public function testGetName()
@@ -317,11 +316,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage User Name is a required field.
-     * @expectedExceptionMessage First Name is a required field.
-     * @expectedExceptionMessage Last Name is a required field.
+     * @expectedExceptionMessage "User Name" is required. Enter and try again.
+     * @expectedExceptionMessage "First Name" is required. Enter and try again.
+     * @expectedExceptionMessage "Last Name" is required. Enter and try again.
      * @expectedExceptionMessage Please enter a valid email.
-     * @expectedExceptionMessage Password is required field.
+     * @expectedExceptionMessage "Password" is required. Enter and try again.
      * @magentoDbIsolation enabled
      */
     public function testBeforeSaveRequiredFieldsValidation()
@@ -499,13 +498,16 @@ class UserTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/User/_files/user_with_role.php
      * @expectedException \Magento\Framework\Exception\AuthenticationException
-     * @expectedExceptionMessage You have entered an invalid password for current user.
      */
     public function testPerformIdentityCheckWrongPassword()
     {
         $this->_model->loadByUsername('adminUser');
         $passwordString = 'wrongPassword';
         $this->_model->performIdentityCheck($passwordString);
+
+        $this->expectExceptionMessage(
+            'The password entered for the current user is invalid. Verify the password and try again.'
+        );
     }
 
     /**
@@ -513,11 +515,15 @@ class UserTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/User/_files/locked_users.php
      * @expectedException \Magento\Framework\Exception\State\UserLockedException
-     * @expectedExceptionMessage You did not sign in correctly or your account is temporarily disabled.
      */
     public function testPerformIdentityCheckLockExpires()
     {
         $this->_model->loadByUsername('adminUser2');
         $this->_model->performIdentityCheck(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+
+        $this->expectExceptionMessage(
+            'The account sign-in was incorrect or your account is disabled temporarily. '
+            . 'Please wait and try again later.'
+        );
     }
 }

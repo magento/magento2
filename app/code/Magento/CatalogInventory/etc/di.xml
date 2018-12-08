@@ -35,7 +35,7 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Repository">
         <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />
     </type>
-    <type name="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute">
+    <type name="Magento\Catalog\Model\FilterProductCustomAttribute">
         <arguments>
             <argument name="blackList" xsi:type="array">
                 <item name="quantity_and_stock_status" xsi:type="string">quantity_and_stock_status</item>
@@ -132,7 +132,10 @@
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="priceIndexUpdater" type="Magento\CatalogInventory\Model\Plugin\PriceIndexUpdater" />
     </type>

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Console\Command;
 
 use Magento\Config\Model\Config\Backend\Admin\Custom;
@@ -321,45 +322,45 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             [
                 'test/test/test',
                 'value',
-                'The "test/test/test" path does not exist'
+                'The "test/test/test" path doesn\'t exist. Verify and try again.'
             ],
             //wrong scope or scope code
             [
                 Custom::XML_PATH_GENERAL_LOCALE_CODE,
                 'en_UK',
-                'Enter a scope before proceeding.',
+                'A scope is missing. Enter a scope and try again.',
                 ''
             ],
             [
                 Custom::XML_PATH_GENERAL_LOCALE_CODE,
                 'en_UK',
-                'Enter a scope code before proceeding.',
+                'A scope code is missing. Enter a code and try again.',
                 ScopeInterface::SCOPE_WEBSITE
             ],
             [
                 Custom::XML_PATH_GENERAL_LOCALE_CODE,
                 'en_UK',
-                'Enter a scope code before proceeding.',
+                'A scope code is missing. Enter a code and try again.',
                 ScopeInterface::SCOPE_STORE
             ],
             [
                 Custom::XML_PATH_GENERAL_LOCALE_CODE,
                 'en_UK',
-                'The "wrong_scope" value doesn\'t exist. Enter another value.',
+                'The "wrong_scope" value doesn\'t exist. Enter another value and try again.',
                 'wrong_scope',
                 'base'
             ],
             [
                 Custom::XML_PATH_GENERAL_LOCALE_CODE,
                 'en_UK',
-                'The "wrong_website_code" value doesn\'t exist. Enter another value.',
+                'The "wrong_website_code" value doesn\'t exist. Enter another value and try again.',
                 ScopeInterface::SCOPE_WEBSITE,
                 'wrong_website_code'
             ],
             [
                 Custom::XML_PATH_GENERAL_LOCALE_CODE,
                 'en_UK',
-                'The "wrong_store_code" value doesn\'t exist. Enter another value.',
+                'The "wrong_store_code" value doesn\'t exist. Enter another value and try again.',
                 ScopeInterface::SCOPE_STORE,
                 'wrong_store_code'
             ],

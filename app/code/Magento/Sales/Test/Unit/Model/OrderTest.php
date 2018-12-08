@@ -17,6 +17,10 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as 
  * Test class for \Magento\Sales\Model\Order
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+<<<<<<< HEAD
+=======
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class OrderTest extends \PHPUnit\Framework\TestCase
@@ -117,8 +121,11 @@ class OrderTest extends \PHPUnit\Framework\TestCase
                 'getQuoteItemId',
                 'getLockedDoInvoice',
                 'getProductId',
+<<<<<<< HEAD
                 'getQtyRefunded',
                 'getQtyInvoiced',
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]);
         $this->salesOrderCollectionMock = $this->getMockBuilder(
             \Magento\Sales\Model\ResourceModel\Order\Collection::class
@@ -345,9 +352,16 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     {
         $grandTotal = 0;
         $totalPaid = 0;
+<<<<<<< HEAD
         $this->order->setGrandTotal($grandTotal);
         $this->order->setTotalPaid($totalPaid);
         $this->assertFalse($this->order->canCreditmemo());
+=======
+        $totalRefunded = 0;
+        $this->order->setGrandTotal($grandTotal);
+        $this->order->setTotalPaid($totalPaid);
+        $this->assertFalse($this->order->canCreditmemoForZeroTotal($totalRefunded));
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     public function testCanNotCreditMemoWithTotalNull()
@@ -1218,9 +1232,12 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->order->getCreatedAtFormatted(\IntlDateFormatter::SHORT);
     }
 
+<<<<<<< HEAD
     /**
      * @return array
      */
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     public function notInvoicingStatesProvider()
     {
         return [

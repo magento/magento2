@@ -57,8 +57,9 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
                     $sitemapPath = mb_substr($sitemapPath, 1);
                 }
                 $sitemapFilename = $sitemap->getSitemapFilename();
-
-                $path = $directory->getRelativePath($sitemapPath . $sitemapFilename);
+                $path = $directory->getRelativePath(
+                    $sitemapPath .$sitemapFilename
+                );
                 if ($sitemap->getSitemapFilename() && $directory->isFile($path)) {
                     $directory->delete($path);
                 }

@@ -50,8 +50,12 @@ angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
                 .then(function successCallback(resp) {
                     $scope.checkModuleConstraints.result = resp.data;
 
+<<<<<<< HEAD
                     if (
                         $scope.checkModuleConstraints.result !== undefined &&
+=======
+                    if ($scope.checkModuleConstraints.result !== undefined &&
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                         $scope.checkModuleConstraints.result.success
                     ) {
                         $scope.loading = false;

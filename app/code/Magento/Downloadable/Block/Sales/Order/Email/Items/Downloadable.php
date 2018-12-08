@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Downloadable\Block\Sales\Order\Email\Items;
 
 use Magento\Downloadable\Model\Link;
@@ -70,12 +68,12 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     public function getLinks()
     {
         $this->_purchased = $this->_purchasedFactory->create()->load(
-            $this->getItem()->getId(),
+            $this->getItem()->getOrderItemId(),
             'order_item_id'
         );
         $purchasedLinks = $this->_itemsFactory->create()->addFieldToFilter(
             'order_item_id',
-            $this->getItem()->getId()
+            $this->getItem()->getOrderItemId()
         );
         $this->_purchased->setPurchasedItems($purchasedLinks);
 

@@ -5,11 +5,17 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
+/**
+ * Discount total calculator
+ */
 class Discount extends AbstractTotal
 {
     /**
+     * Collect discount
+     *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -26,6 +32,19 @@ class Discount extends AbstractTotal
          * basing on how much shipping should be refunded.
          */
         $baseShippingAmount = $this->getBaseShippingAmount($creditmemo);
+<<<<<<< HEAD
+=======
+
+        /**
+         * If credit memo's shipping amount is set and Order's shipping amount is 0,
+         * throw exception with different message
+         */
+        if ($baseShippingAmount && $order->getBaseShippingAmount() <= 0) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("You can not refund shipping if there is no shipping amount.")
+            );
+        }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         if ($baseShippingAmount) {
             $baseShippingDiscount = $baseShippingAmount *
                 $order->getBaseShippingDiscountAmount() /
@@ -77,7 +96,11 @@ class Discount extends AbstractTotal
     }
 
     /**
+<<<<<<< HEAD
      * Get base shipping amount.
+=======
+     * Get base shipping amount
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return float
@@ -85,13 +108,19 @@ class Discount extends AbstractTotal
     private function getBaseShippingAmount(\Magento\Sales\Model\Order\Creditmemo $creditmemo): float
     {
         $baseShippingAmount = (float)$creditmemo->getBaseShippingAmount();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         if (!$baseShippingAmount) {
             $baseShippingInclTax = (float)$creditmemo->getBaseShippingInclTax();
             $baseShippingTaxAmount = (float)$creditmemo->getBaseShippingTaxAmount();
             $baseShippingAmount = $baseShippingInclTax - $baseShippingTaxAmount;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $baseShippingAmount;
     }
 }

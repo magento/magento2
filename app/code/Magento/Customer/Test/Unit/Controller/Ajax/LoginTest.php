@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
+<<<<<<< HEAD
 // @codingStandardsIgnoreFile
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Customer\Test\Unit\Controller\Ajax;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -104,13 +108,27 @@ class LoginTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
+<<<<<<< HEAD
     protected function setUp()
+=======
+    protected function setUp(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
         $this->response = $this->createPartialMock(ResponseInterface::class, ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode']);
         $this->customerSession = $this->createPartialMock(Session::class, [
+=======
+        $this->response = $this->createPartialMock(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode']
+        );
+        $this->customerSession = $this->createPartialMock(
+            Session::class,
+            [
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 'isLoggedIn',
                 'getLastCustomerId',
                 'getBeforeAuthUrl',
@@ -118,7 +136,12 @@ class LoginTest extends \PHPUnit\Framework\TestCase
                 'setCustomerDataAsLoggedIn',
                 'regenerateId',
                 'getData'
+<<<<<<< HEAD
             ]);
+=======
+            ]
+        );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->objectManager = $this->createPartialMock(FakeObjectManager::class, ['get']);
         $this->accountManagement = $this->createPartialMock(AccountManagement::class, ['authenticate']);
 
@@ -136,6 +159,7 @@ class LoginTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCookie', 'deleteCookie'])
             ->getMockForAbstractClass();
         $this->cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
+<<<<<<< HEAD
             ->disableOriginalConstructor()
             ->getMock();
         $this->cookieMetadata = $this->getMockBuilder(CookieMetadata::class)
@@ -145,6 +169,14 @@ class LoginTest extends \PHPUnit\Framework\TestCase
         $this->resultRaw = $this->getMockBuilder(Raw::class)
             ->disableOriginalConstructor()
             ->getMock();
+=======
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resultRaw = $this->getMockBuilder(Raw::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $resultRawFactory = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -181,7 +213,11 @@ class LoginTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks successful login.
      */
+<<<<<<< HEAD
     public function testLogin()
+=======
+    public function testLogin(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $jsonRequest = '{"username":"customer@example.com", "password":"password"}';
         $loginSuccessResponse = '{"errors": false, "message":"Login successful."}';
@@ -234,7 +270,11 @@ class LoginTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks unsuccessful login.
      */
+<<<<<<< HEAD
     public function testLoginFailure()
+=======
+    public function testLoginFailure(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $jsonRequest = '{"username":"invalid@example.com", "password":"invalid"}';
         $loginFailureResponse = '{"message":"Invalid login or password."}';
@@ -279,7 +319,11 @@ class LoginTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $jsonRequest
      */
+<<<<<<< HEAD
     private function withRequest(string $jsonRequest)
+=======
+    private function withRequest(string $jsonRequest): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->request->method('getContent')
             ->willReturn($jsonRequest);
@@ -294,7 +338,11 @@ class LoginTest extends \PHPUnit\Framework\TestCase
     /**
      * Emulates cookie manager behavior.
      */
+<<<<<<< HEAD
     private function withCookieManager()
+=======
+    private function withCookieManager(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->cookieManager->method('getCookie')
             ->with('mage-cache-sessid')
@@ -315,7 +363,11 @@ class LoginTest extends \PHPUnit\Framework\TestCase
     /**
      * Emulates config behavior.
      */
+<<<<<<< HEAD
     private function withScopeConfig()
+=======
+    private function withScopeConfig(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         /** @var ScopeConfigInterface|MockObject $scopeConfig */
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);

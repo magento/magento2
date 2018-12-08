@@ -8,7 +8,10 @@ namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
+<<<<<<< HEAD
 use Magento\Framework\Filesystem\File\WriteFactoryInterface;
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 /**
  * Write Interface implementation
@@ -36,7 +39,11 @@ class Write extends Read implements WriteInterface
         \Magento\Framework\Filesystem\DriverInterface $driver,
         $path,
         $createPermissions = null,
+<<<<<<< HEAD
         PathValidatorInterface $pathValidator = null
+=======
+        ?PathValidatorInterface $pathValidator = null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         parent::__construct($fileFactory, $driver, $path, $pathValidator);
         if (null !== $createPermissions) {
@@ -57,7 +64,7 @@ class Write extends Read implements WriteInterface
             $path = (!$this->driver->isFile($path))
                 ? $this->getAbsolutePath($this->path, $path)
                 : $this->getAbsolutePath($path);
-            throw new FileSystemException(new \Magento\Framework\Phrase('The path "%1" is not writable', [$path]));
+            throw new FileSystemException(new \Magento\Framework\Phrase('The path "%1" is not writable.', [$path]));
         }
     }
 
@@ -74,7 +81,7 @@ class Write extends Read implements WriteInterface
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         if (!$this->driver->isFile($absolutePath)) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('The file "%1" doesn\'t exist or not a file', [$absolutePath])
+                new \Magento\Framework\Phrase('The "%1" file doesn\'t exist.', [$absolutePath])
             );
         }
     }

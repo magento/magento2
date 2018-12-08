@@ -235,6 +235,7 @@ interface CurrencyInterface
      * @return boolean
      */
     public function isLess($value, $currency = null);
+<<<<<<< HEAD
 
     /**
      * Returns the set service class
@@ -254,4 +255,6 @@ interface CurrencyInterface
      * @see \Magento\Directory\Model\Currency\Import\ImportInterface
      */
     public function setService($service);
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 }

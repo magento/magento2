@@ -128,6 +128,7 @@ class PayflowlinkTest extends \PHPUnit\Framework\TestCase
     public function testInitialize()
     {
         $storeId = 1;
+<<<<<<< HEAD
         $order = $this->createMock(Order::class);
         $order->method('getStoreId')
             ->willReturn($storeId);
@@ -139,6 +140,23 @@ class PayflowlinkTest extends \PHPUnit\Framework\TestCase
             ->willReturn('build notation code');
 
         $response = new DataObject(
+=======
+        $order = $this->createMock(\Magento\Sales\Model\Order::class);
+        $order->expects($this->exactly(2))
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $this->infoInstance->expects($this->any())
+            ->method('getOrder')
+            ->willReturn($order);
+        $this->infoInstance->expects($this->any())
+            ->method('setAdditionalInformation')
+            ->willReturnSelf();
+        $this->paypalConfig->expects($this->once())
+            ->method('getBuildNotationCode')
+            ->willReturn('build notation code');
+
+        $response = new \Magento\Framework\DataObject(
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             [
                 'result' => '0',
                 'pnref' => 'V19A3D27B61E',
@@ -171,8 +189,13 @@ class PayflowlinkTest extends \PHPUnit\Framework\TestCase
                 ['USER2', 'a20d3dc6824c1f7780c5529dc37ae5e', self::returnSelf()]
             );
 
+<<<<<<< HEAD
         $stateObject = new DataObject();
         $this->model->initialize(Config::PAYMENT_ACTION_AUTH, $stateObject);
+=======
+        $stateObject = new \Magento\Framework\DataObject();
+        $this->model->initialize(\Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH, $stateObject);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         self::assertEquals($storeId, $this->model->getStore(), '{Store} should be set');
     }
 

@@ -25,7 +25,10 @@
         <element name="applyParameter" type="button" selector=".rule-param-apply"/>
         <element name="openChooser" type="button" selector=".rule-chooser-trigger"/>
         <element name="selectAll" type="checkbox" selector=".admin__control-checkbox"/>
+<<<<<<< HEAD
         <element name="sortById" type="button" selector="th.data-grid-th._sortable.not-sort.col-entity_id"/>
         <element name="sortByIdAscend" type="button" selector="th.data-grid-th._sortable._ascend.col-entity_id"/>
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </section>
 </sections>

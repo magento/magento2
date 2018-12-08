@@ -1,12 +1,12 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Newsletter\Controller\Subscriber;
 
+<<<<<<< HEAD
 /**
  * Controller for unsubscribing customers.
  */
@@ -14,6 +14,18 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
 {
     /**
      * Unsubscribe newsletter
+=======
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+/**
+ * Controller for unsubscribing customers.
+ */
+class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber implements HttpGetActionInterface
+{
+    /**
+     * Unsubscribe newsletter.
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
@@ -34,7 +46,10 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirect */
         $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
         $redirectUrl = $this->_redirect->getRedirectUrl();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $redirect->setUrl($redirectUrl);
     }
 }

@@ -122,6 +122,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Init model
+     *
      * @return void
      */
     protected function _construct()
@@ -165,7 +167,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
@@ -258,6 +260,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Clone object handler
+     *
      * @return void
      */
     public function __clone()
@@ -298,6 +302,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
+     * Create customer model
+     *
      * @return Customer
      */
     protected function _createCustomer()
@@ -353,7 +359,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.0.6
      */
     protected function getCustomAttributesCodes()
@@ -363,6 +369,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * Get new AttributeList dependency for application code.
+     *
      * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
      * @deprecated 100.0.6
      */

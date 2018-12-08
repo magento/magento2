@@ -315,13 +315,21 @@ angular.module('readiness-check', ['remove-dialog'])
                     return $http.post(item.url, item.params)
                         .then(function successCallback(resp) {
                             item.process(resp.data);
+<<<<<<< HEAD
                         }, function errorCallback() {
+=======
+                        }, function successCallback() {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                             item.fail();
                         });
                 }
             }
             // setting 1 minute timeout to prevent system from timing out
+<<<<<<< HEAD
             return $http.get(item.url, {timeout: 60000})
+=======
+            return $http.get(item.url, { timeout: 60000 })
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 .then(function successCallback(resp) {
                     item.process(resp.data);
                 }, function errorCallback() {

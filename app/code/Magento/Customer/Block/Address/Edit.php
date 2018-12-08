@@ -139,7 +139,12 @@ class Edit extends \Magento\Directory\Block\Data
 
         if ($postedData = $this->_customerSession->getAddressFormData(true)) {
             $postedData['region'] = [
+<<<<<<< HEAD
                 'region' => $postedData['region'] ?? null,
+=======
+                'region_id' => isset($postedData['region_id']) ? $postedData['region_id'] : null,
+                'region' => $postedData['region'],
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ];
             if (!empty($postedData['region_id'])) {
                 $postedData['region']['region_id'] = $postedData['region_id'];

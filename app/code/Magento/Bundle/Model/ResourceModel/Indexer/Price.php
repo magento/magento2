@@ -129,7 +129,12 @@ class Price implements DimensionalIndexerInterface
 
     /**
      * {@inheritdoc}
+<<<<<<< HEAD
      *
+=======
+     * @param array $dimensions
+     * @param \Traversable $entityIds
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @throws \Exception
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds)
@@ -240,6 +245,7 @@ class Price implements DimensionalIndexerInterface
      *
      * @param array $dimensions
      * @param int $priceType
+     * @param array $dimensions
      * @param int|array $entityIds the entity ids limitation
      * @return void
      * @throws \Exception
@@ -609,9 +615,18 @@ class Price implements DimensionalIndexerInterface
     }
 
     /**
+<<<<<<< HEAD
      * @param IndexTableStructure $priceTable
      */
     private function applyBundlePrice($priceTable)
+=======
+     * Create bundle price.
+     *
+     * @param IndexTableStructure $priceTable
+     * @return  void
+     */
+    private function applyBundlePrice($priceTable): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $select = $this->getConnection()->select();
         $select->from(
@@ -634,9 +649,18 @@ class Price implements DimensionalIndexerInterface
     }
 
     /**
+<<<<<<< HEAD
      * @param IndexTableStructure $priceTable
      */
     private function applyBundleOptionPrice($priceTable)
+=======
+     * Make insert/update bundle option price.
+     *
+     * @return void
+     * @param IndexTableStructure $priceTable
+     */
+    private function applyBundleOptionPrice($priceTable): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $connection = $this->getConnection();
 
@@ -661,7 +685,11 @@ class Price implements DimensionalIndexerInterface
         $select = $connection->select()->join(
             ['io' => $subSelect],
             'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
+<<<<<<< HEAD
             ' AND i.website_id = io.website_id',
+=======
+                ' AND i.website_id = io.website_id',
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             []
         )->columns(
             [

@@ -5,7 +5,11 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
+<<<<<<< HEAD
 use \Magento\Framework\Module\PackageInfo;
+=======
+use Magento\Framework\Module\PackageInfo;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 class PackageInfoTest extends \PHPUnit\Framework\TestCase
 {
@@ -25,7 +29,11 @@ class PackageInfoTest extends \PHPUnit\Framework\TestCase
     private $packageInfo;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Framework\Serialize\Serializer\Json| \PHPUnit_Framework_MockObject_MockObject
+=======
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private $serializerMock;
 

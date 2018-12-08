@@ -20,10 +20,12 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
 
 /**
  * Fulltext Collection
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * This collection should be refactored to not have dependencies on MySQL-specific implementation.
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -70,6 +72,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
+     * @deprecated There must be no dependencies on specific adapter in generic search implementation
      */
     private $temporaryStorageFactory;
 
@@ -198,6 +201,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get search.
+     *
      * @deprecated 100.1.0
      * @return \Magento\Search\Api\SearchInterface
      */
@@ -210,6 +215,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Test search.
+     *
      * @deprecated 100.1.0
      * @param \Magento\Search\Api\SearchInterface $object
      * @return void
@@ -221,6 +228,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Set search criteria builder.
+     *
      * @deprecated 100.1.0
      * @return \Magento\Framework\Api\Search\SearchCriteriaBuilder
      */
@@ -234,6 +243,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Set search criteria builder.
+     *
      * @deprecated 100.1.0
      * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $object
      * @return void
@@ -245,6 +256,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get filter builder.
+     *
      * @deprecated 100.1.0
      * @return \Magento\Framework\Api\FilterBuilder
      */
@@ -257,6 +270,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Set filter builder.
+     *
      * @deprecated 100.1.0
      * @param \Magento\Framework\Api\FilterBuilder $object
      * @return void
@@ -271,7 +286,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Apply attribute filter to facet collection
      *
      * @param string $field
-     * @param null $condition
+     * @param mixed|null $condition
      * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
@@ -347,7 +362,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->searchResult = $this->searchResultFactory->create()->setItems([]);
         } catch (NonExistingRequestNameException $e) {
             $this->_logger->error($e->getMessage());
-            throw new LocalizedException(__('Sorry, something went wrong. You can find out more in the error log.'));
+            throw new LocalizedException(__('An error occurred. For details, see the error log.'));
         }
 
         $temporaryStorage = $this->temporaryStorageFactory->create();
@@ -384,6 +399,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Render filters.
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return $this
      */
     protected function _renderFilters()
@@ -441,7 +461,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                     $result[$metrics['value']] = $metrics;
                 }
             } else {
-                throw new StateException(__('Bucket does not exist'));
+                throw new StateException(__("The bucket doesn't exist."));
             }
         }
         return $result;

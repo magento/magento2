@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
@@ -15,7 +19,11 @@ use Magento\Vault\Model\PaymentToken;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
+<<<<<<< HEAD
  * Tests VaultCaptureDataBuilder.
+=======
+ * Tests \Magento\Braintree\Gateway\Request\VaultCaptureDataBuilder.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -42,7 +50,11 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
+<<<<<<< HEAD
     protected function setUp()
+=======
+    protected function setUp(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $this->payment = $this->getMockBuilder(Payment::class)
@@ -61,7 +73,7 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks the result after builder execution.
      */
-    public function testBuild()
+    public function testBuild(): void
     {
         $amount = 30.00;
         $token = '5tfm4c';

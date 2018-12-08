@@ -79,14 +79,22 @@ class ConfigProvider implements ConfigProviderInterface
                     'kountMerchantId' => $this->config->getKountMerchantId($storeId),
                     'hasFraudProtection' => $this->config->hasFraudProtection($storeId),
                     'merchantId' => $this->config->getMerchantId($storeId),
+<<<<<<< HEAD
                     'ccVaultCode' => self::CC_VAULT_CODE
+=======
+                    'ccVaultCode' => self::CC_VAULT_CODE,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 ],
                 Config::CODE_3DSECURE => [
                     'enabled' => $this->config->isVerify3DSecure($storeId),
                     'thresholdAmount' => $this->config->getThresholdAmount($storeId),
+<<<<<<< HEAD
                     'specificCountries' => $this->config->get3DSecureSpecificCountries($storeId)
+=======
+                    'specificCountries' => $this->config->get3DSecureSpecificCountries($storeId),
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 ],
-            ]
+            ],
         ];
     }
 

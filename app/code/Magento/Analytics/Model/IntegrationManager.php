@@ -13,8 +13,11 @@ use Magento\Integration\Model\Integration;
 use Magento\Integration\Api\OauthServiceInterface;
 
 /**
+<<<<<<< HEAD
  * Class IntegrationManager
  *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * Manages the integration user at magento side.
  * User name stored in config.
  * User roles

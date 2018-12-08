@@ -39,7 +39,11 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      *
      * @return string
      */
+<<<<<<< HEAD
     private function getRandomColor(): string
+=======
+    private function getRandomColor() : string
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
     }
@@ -50,7 +54,11 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      * @param int $optionsCount
      * @return array
      */
+<<<<<<< HEAD
     private function getSwatchVisualDataSet(int $optionsCount): array
+=======
+    private function getSwatchVisualDataSet(int $optionsCount) : array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $optionsData = [];
         $expectedOptionsLabels = [];
@@ -67,7 +75,10 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $optionRowData['optionvisual']['delete'][$optionId] = '';
             $optionsData[] = http_build_query($optionRowData);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return [
             'attribute_data' => array_merge_recursive(
                 [
@@ -79,11 +90,19 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
                 ],
                 $this->getAttributePreset(),
                 [
+<<<<<<< HEAD
                     'frontend_input' => 'swatch_visual',
                 ]
             ),
             'expected_options_count' => $optionsCount + 1,
             'expected_store_labels' => $expectedOptionsLabels,
+=======
+                    'frontend_input' => 'swatch_visual'
+                ]
+            ),
+            'expected_options_count' => $optionsCount + 1,
+            'expected_store_labels' => $expectedOptionsLabels
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
     }
 
@@ -93,7 +112,11 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      * @param int $optionsCount
      * @return array
      */
+<<<<<<< HEAD
     private function getSwatchTextDataSet(int $optionsCount): array
+=======
+    private function getSwatchTextDataSet(int $optionsCount) : array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $optionsData = [];
         $expectedOptionsLabels = [];
@@ -110,7 +133,10 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $optionRowData['optiontext']['delete'][$optionId]='';
             $optionsData[] = http_build_query($optionRowData);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return [
             'attribute_data' => array_merge_recursive(
                 [
@@ -122,11 +148,19 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
                 ],
                 $this->getAttributePreset(),
                 [
+<<<<<<< HEAD
                     'frontend_input' => 'swatch_text',
                 ]
             ),
             'expected_options_count' => $optionsCount + 1,
             'expected_store_labels' => $expectedOptionsLabels,
+=======
+                    'frontend_input' => 'swatch_text'
+                ]
+            ),
+            'expected_options_count' => $optionsCount + 1,
+            'expected_store_labels' => $expectedOptionsLabels
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
     }
 
@@ -135,7 +169,11 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      *
      * @return array
      */
+<<<<<<< HEAD
     private function getAttributePreset(): array
+=======
+    private function getAttributePreset() : array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return [
             'form_key' => 'XxtpPYjm2YPYUlAt',
@@ -175,7 +213,11 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      *
      * @return array
      */
+<<<<<<< HEAD
     public function getLargeSwatchesAmountAttributeData(): array
+=======
+    public function getLargeSwatchesAmountAttributeData() : array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $maxInputVars = ini_get('max_input_vars');
         // Each option is at least 7 variables array for a visual swatch.
@@ -184,13 +226,20 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $swatchTextOptionsCount = (int)floor($maxInputVars / 4) + 80;
         return [
             'visual swatches' => $this->getSwatchVisualDataSet($swatchVisualOptionsCount),
+<<<<<<< HEAD
             'text swatches' => $this->getSwatchTextDataSet($swatchTextOptionsCount),
+=======
+            'text swatches' => $this->getSwatchTextDataSet($swatchTextOptionsCount)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
     }
 
     /**
      * Test attribute saving with large amount of options exceeding maximum allowed by max_input_vars limit.
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @dataProvider getLargeSwatchesAmountAttributeData()
      * @param array $attributeData
      * @param int $expectedOptionsCount
@@ -201,7 +250,11 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         array $attributeData,
         int $expectedOptionsCount,
         array $expectedLabels
+<<<<<<< HEAD
     ) {
+=======
+    ) : void {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($attributeData);
         $this->getRequest()->setPostValue('form_key', $this->formKey->getFormKey());

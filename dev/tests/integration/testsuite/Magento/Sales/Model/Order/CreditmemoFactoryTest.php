@@ -32,7 +32,11 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
     private $creditmemoFactory;
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     protected function setUp()
     {
@@ -59,7 +63,11 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function createByOrderDataProvider()
+=======
+    public function createByOrderDataProvider(): array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return [
             [
@@ -67,9 +75,15 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
                     'qtys' => [
                         self::ORDER_ITEM_ID_PLACEHOLDER . '2' => 2,
                         self::ORDER_ITEM_ID_PLACEHOLDER . '3' => 10,
+<<<<<<< HEAD
                     ]
                 ],
                 'expectedQty' => 12
+=======
+                    ],
+                ],
+                'expectedQty' => 12,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             [
                 'creditmemoData' => [
@@ -77,10 +91,17 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
                         self::ORDER_ITEM_ID_PLACEHOLDER . '1' => 2,
                         self::ORDER_ITEM_ID_PLACEHOLDER . '2' => 2,
                         self::ORDER_ITEM_ID_PLACEHOLDER . '3' => 10,
+<<<<<<< HEAD
                     ]
                 ],
                 'expectedQty' => 14
             ]
+=======
+                    ],
+                ],
+                'expectedQty' => 14,
+            ],
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
     }
 
@@ -88,6 +109,11 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
      * Checks a case when creditmemo created from the invoice.
      *
      * @magentoDataFixture Magento/Sales/_files/invoice_with_bundle.php
+<<<<<<< HEAD
+=======
+     *
+     * @return void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function testCreateByInvoice()
     {
@@ -103,7 +129,11 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
      * @param array $creditmemoData
      * @return array
      */
+<<<<<<< HEAD
     private function prepareCreditMemoData(Order $order, array $creditmemoData)
+=======
+    private function prepareCreditMemoData(Order $order, array $creditmemoData): array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $result = [];
         $orderItems = $order->getAllItems();
@@ -137,6 +167,10 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
         /** @var Order $order */
         $order = $this->objectManager->create(Order::class);
         $order->loadByIncrementId($incrementId);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $order;
     }
 
@@ -156,6 +190,10 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
         /** @var InvoiceRepositoryInterface $repository */
         $repository = $this->objectManager->get(InvoiceRepositoryInterface::class);
         $items = $repository->getList($searchCriteria)->getItems();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return array_pop($items);
     }
 }

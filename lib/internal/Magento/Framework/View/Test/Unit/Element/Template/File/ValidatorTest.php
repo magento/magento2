@@ -123,7 +123,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
+<<<<<<< HEAD
     public function isValidDataProvider() : array
+=======
+    public function isValidDataProvider()
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return [
             'empty' => ['', false],

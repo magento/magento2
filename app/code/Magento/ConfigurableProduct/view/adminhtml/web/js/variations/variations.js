@@ -357,12 +357,20 @@ define([
             var element;
 
             _.each(this.disabledAttributes, function (attribute) {
+<<<<<<< HEAD
                 registry.get('code = ' + attribute, 'index = ' + attribute).disabled(false);
+=======
+                registry.get('inputName = ' + 'product[' + attribute + ']').disabled(false);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             });
             this.disabledAttributes = [];
 
             _.each(attributes, function (attribute) {
+<<<<<<< HEAD
                 element = registry.get('code = ' + attribute.code, 'index = ' + attribute.code);
+=======
+                element = registry.get('inputName = ' + 'product[' + attribute.code + ']');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
                 if (!_.isUndefined(element)) {
                     element.disabled(true);
@@ -490,7 +498,7 @@ define([
                 dataType: 'json',
                 showLoader: true,
                 context: this
-            }).success(function (data) {
+            }).done(function (data) {
                 if (!data.error) {
                     this.set(
                         'skeletonAttributeSet',
@@ -505,7 +513,7 @@ define([
                 }
 
                 return false;
-            }).error(function (xhr) {
+            }).fail(function (xhr) {
                 if (xhr.statusText === 'abort') {
                     return;
                 }

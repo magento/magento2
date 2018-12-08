@@ -16,6 +16,10 @@ class Zip extends Csv
      * @param string $file
      * @param \Magento\Framework\Filesystem\Directory\Write $directory
      * @param string $options
+<<<<<<< HEAD
+=======
+     * @throws \Magento\Framework\Exception\LocalizedException
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function __construct(

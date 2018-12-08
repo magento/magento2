@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormRelatedUpSellCrossSellSection">
+        <element name="AddRelatedProductsButton" type="button" selector="button[data-index='button_related']" timeout="30"/>
+        <element name="relatedProductSectionText" type="text" selector=".fieldset-wrapper.admin__fieldset-section[data-index='related']"/>
+        <element name="upSellProductSectionText" type="text" selector=".fieldset-wrapper.admin__fieldset-section[data-index='upsell']"/>
+        <element name="crossSellProductSectionText" type="text" selector=".fieldset-wrapper.admin__fieldset-section[data-index='crosssell']"/>
+        <element name="relatedDropdown" type="block" selector="//div[@data-index='related']" timeout="30"/>
+        <element name="relatedDependent" type="block" selector="//div[@data-index='related']//div[contains(@class, '_show')]"/>
+        <element name="selectedRelatedProduct" type="block" selector="//span[@data-index='name']"/>
+        <element name="removeRelatedProduct" type="button" selector="//span[text()='Related Products']//..//..//..//span[text()='{{productName}}']//..//..//..//..//..//button[@class='action-delete']" parameterized="true"/>
+    </section>
+</sections>

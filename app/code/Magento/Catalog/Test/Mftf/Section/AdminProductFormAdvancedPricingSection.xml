@@ -7,7 +7,11 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+=======
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     <section name="AdminProductFormAdvancedPricingSection">
         <element name="customerGroupPriceAddButton" type="button" selector="[data-action='add_new_row']" timeout="30"/>
         <element name="customerGroupPriceDeleteButton" type="button" selector="[data-action='remove_row']" timeout="30"/>
@@ -20,5 +24,9 @@
         <element name="productTierPricePercentageValuePriceInput" type="input" selector="[name='product[tier_price][{{var1}}][percentage_value]']" parameterized="true"/>
         <element name="specialPrice" type="input" selector="input[name='product[special_price]']"/>
         <element name="doneButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-primary" timeout="5"/>
+<<<<<<< HEAD
+=======
+        <element name="save" type="button" selector="#save-button"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </section>
 </sections>

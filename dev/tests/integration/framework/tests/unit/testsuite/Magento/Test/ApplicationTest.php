@@ -87,6 +87,10 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider partialLoadAreaDataProvider
      * @param string $areaCode
+<<<<<<< HEAD
+=======
+     * @return void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function testPartialLoadArea(string $areaCode)
     {
@@ -160,6 +164,12 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
             [
                 'area_code' => Area::AREA_CRONTAB,
             ],
+<<<<<<< HEAD
+=======
+            [
+                'area_code' => Area::AREA_GRAPHQL,
+            ],
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
     }
 }

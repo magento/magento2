@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Mview\Test\Unit\View;
 
 class ChangelogTest extends \PHPUnit\Framework\TestCase
@@ -45,7 +46,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Write DB connection is not available
+     * @expectedExceptionMessage The write connection to the database isn't available. Please try again later.
      */
     public function testCheckConnectionException()
     {
@@ -110,10 +111,8 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
             ->method('fetchRow')
             ->will($this->returnValue([]));
 
-        $this->expectException(
-            'Exception',
-            "Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id."
-        );
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id.");
         $this->model->setViewId('viewIdtest');
         $this->model->getVersion();
     }

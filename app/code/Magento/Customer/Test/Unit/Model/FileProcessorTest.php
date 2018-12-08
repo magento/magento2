@@ -74,7 +74,10 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $entityTypeCode
      * @param array $allowedExtensions
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return FileProcessor
      */
     private function getModel($entityTypeCode, array $allowedExtensions = [])

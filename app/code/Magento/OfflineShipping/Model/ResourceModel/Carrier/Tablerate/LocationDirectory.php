@@ -167,6 +167,7 @@ class LocationDirectory
     }
 
     /**
+<<<<<<< HEAD
      * Return region ids for country and region.
      *
      * @param string $countryId
@@ -177,6 +178,17 @@ class LocationDirectory
     {
         $this->loadRegions();
 
+=======
+     * Return region ids for country and region
+     *
+     * @param int $countryId
+     * @param string $regionCode
+     * @return array
+     */
+    public function getRegionIds($countryId, $regionCode)
+    {
+        $this->loadRegions();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $this->regionsByCode[$countryId][$regionCode];
     }
 }

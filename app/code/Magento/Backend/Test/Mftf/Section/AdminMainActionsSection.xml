@@ -10,7 +10,11 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminMainActionsSection">
         <element name="save" type="button" selector="#save" timeout="30"/>
+<<<<<<< HEAD
         <element name="delete" type="button" selector="#delete"/>
         <element name="add" type="button" selector="#add" timeout="30"/>
+=======
+        <element name="delete" type="button" selector="#delete" timeout="30"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </section>
 </sections>

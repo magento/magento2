@@ -24,9 +24,15 @@
                         <?php if ($shippingAddress) : ?>
                         <span class="shipping-label"><?= $block->escapeHtml(__('Ship to:')); ?></span>
                         <span class="shipping-address">
+<<<<<<< HEAD
                         <?= $block->escapeHtml(
                             $block->getCheckoutData()->formatOrderShippingAddress($shippingAddress)
                         ); ?>
+=======
+                            <?= $block->escapeHtml(
+                                $block->getCheckoutData()->formatOrderShippingAddress($shippingAddress)
+                            ); ?>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                         </span>
                         <?php else : ?>
                             <span class="shipping-address">

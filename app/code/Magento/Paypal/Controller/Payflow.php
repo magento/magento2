@@ -44,7 +44,11 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
     protected $_redirectBlockName = 'payflow.link.iframe';
 
     /**
+<<<<<<< HEAD
      * @var PaymentFailuresInterface
+=======
+     * @var \Magento\Sales\Api\PaymentFailuresInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private $paymentFailures;
 
@@ -55,7 +59,11 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
      * @param \Magento\Paypal\Model\PayflowlinkFactory $payflowModelFactory
      * @param \Magento\Paypal\Helper\Checkout $checkoutHelper
      * @param \Psr\Log\LoggerInterface $logger
+<<<<<<< HEAD
      * @param PaymentFailuresInterface|null $paymentFailures
+=======
+     * @param \Magento\Sales\Api\PaymentFailuresInterface|null $paymentFailures
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -64,7 +72,11 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
         \Magento\Paypal\Model\PayflowlinkFactory $payflowModelFactory,
         \Magento\Paypal\Helper\Checkout $checkoutHelper,
         \Psr\Log\LoggerInterface $logger,
+<<<<<<< HEAD
         PaymentFailuresInterface $paymentFailures = null
+=======
+        \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         parent::__construct($context);
 
@@ -73,7 +85,13 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
         $this->_logger = $logger;
         $this->_payflowModelFactory = $payflowModelFactory;
         $this->_checkoutHelper = $checkoutHelper;
+<<<<<<< HEAD
         $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(PaymentFailuresInterface::class);
+=======
+        $this->paymentFailures = $paymentFailures ?: $this->_objectManager->get(
+            \Magento\Sales\Api\PaymentFailuresInterface::class
+        );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**

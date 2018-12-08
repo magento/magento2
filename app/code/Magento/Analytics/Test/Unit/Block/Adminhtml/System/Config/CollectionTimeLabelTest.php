@@ -9,6 +9,10 @@ use Magento\Analytics\Block\Adminhtml\System\Config\CollectionTimeLabel;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+<<<<<<< HEAD
+=======
+use Magento\Framework\Locale\ResolverInterface;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -34,6 +38,14 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
      */
     private $abstractElementMock;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $localeResolver;
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     protected function setUp()
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
@@ -53,12 +65,24 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())
             ->method('getLocaleDate')
             ->willReturn($this->timeZoneMock);
+<<<<<<< HEAD
+=======
+        $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getLocale'])
+            ->getMockForAbstractClass();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
         $objectManager = new ObjectManager($this);
         $this->collectionTimeLabel = $objectManager->getObject(
             CollectionTimeLabel::class,
             [
+<<<<<<< HEAD
                 'context' => $this->contextMock
+=======
+                'context' => $this->contextMock,
+                'localeResolver' => $this->localeResolver
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
     }
@@ -73,6 +97,12 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
         $this->abstractElementMock->expects($this->any())
             ->method('getComment')
             ->willReturn('Eastern Standard Time (America/New_York)');
+<<<<<<< HEAD
+=======
+        $this->localeResolver->expects($this->once())
+            ->method('getLocale')
+            ->willReturn('en_US');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->assertRegExp(
             "/Eastern Standard Time \(America\/New_York\)/",
             $this->collectionTimeLabel->render($this->abstractElementMock)

@@ -31,7 +31,11 @@ class AssertAdvancedReportingPage extends AbstractConstraint
     {
         $this->browser = $browser;
         $this->browser->selectWindow();
+<<<<<<< HEAD
         \PHPUnit_Framework_Assert::assertTrue(
+=======
+        \PHPUnit\Framework\Assert::assertTrue(
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $this->browser->waitUntil(
                 function () use ($advancedReportingLink) {
                     return ($this->browser->getUrl() === $advancedReportingLink) ? true : null;

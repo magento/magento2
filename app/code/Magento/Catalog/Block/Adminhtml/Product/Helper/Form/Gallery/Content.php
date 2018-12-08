@@ -13,13 +13,21 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Block\Media\Uploader;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
+<<<<<<< HEAD
 use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Block\DataProviders\UploadConfig as ImageUploadConfigDataProvider;
+=======
+use Magento\Backend\Block\DataProviders\ImageUploadConfig as ImageUploadConfigDataProvider;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
+/**
+ * Block for gallery content.
+ */
 class Content extends \Magento\Backend\Block\Widget
 {
     /**
@@ -48,6 +56,11 @@ class Content extends \Magento\Backend\Block\Widget
     private $imageHelper;
 
     /**
+     * @var ImageUploadConfigDataProvider
+     */
+    private $imageUploadConfigDataProvider;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
@@ -69,6 +82,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Prepare layout.
+     *
      * @return AbstractBlock
      */
     protected function _prepareLayout()
@@ -118,6 +133,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns js object name
+     *
      * @return string
      */
     public function getJsObjectName()
@@ -126,6 +143,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns buttons for add image action.
+     *
      * @return string
      */
     public function getAddImagesButton()
@@ -139,6 +158,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns image json
+     *
      * @return string
      */
     public function getImagesJson()
@@ -184,6 +205,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns image values json
+     *
      * @return string
      */
     public function getImagesValuesJson()
@@ -258,6 +281,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns image helper object.
+     *
      * @return \Magento\Catalog\Helper\Image
      * @deprecated 101.0.3
      */

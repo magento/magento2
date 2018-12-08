@@ -30,7 +30,7 @@ class AssertRoleInGrid extends AbstractConstraint
     ) {
         $filter = ['rolename' => $role->hasData('rolename') ? $role->getRoleName() : $roleInit->getRoleName()];
         $rolePage->open();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $rolePage->getRoleGrid()->isRowVisible($filter),
             'Role with name \'' . $filter['rolename'] . '\' is absent in Roles grid.'
         );

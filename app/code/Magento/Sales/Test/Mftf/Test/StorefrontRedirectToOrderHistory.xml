@@ -11,6 +11,10 @@
     <test name="StorefrontRedirectToOrderHistory">
         <annotations>
             <features value="Redirection Rules"/>
+<<<<<<< HEAD
+=======
+            <stories value="Create Invoice"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             <title value="Create Invoice"/>
             <description
                     value="Check while order printing URL with an id of not relevant order redirects to order history"/>
@@ -34,8 +38,13 @@
         </after>
 
         <!--Log in to Storefront as Customer 1 -->
+<<<<<<< HEAD
         <actionGroup ref="CustomerLoginOnStorefront" stepKey="signUp">
             <argument name="customer" value="$$createCustomer$$"/>
+=======
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$createCustomer$$"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         </actionGroup>
 
         <!--Create an order at Storefront as Customer 1 -->
@@ -58,8 +67,13 @@
         <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
 
         <!--Log in to Storefront as Customer 2 -->
+<<<<<<< HEAD
         <actionGroup ref="CustomerLoginOnStorefront" stepKey="signUp2">
             <argument name="customer" value="$$createCustomer2$$"/>
+=======
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp2">
+            <argument name="Customer" value="$$createCustomer2$$"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         </actionGroup>
 
         <!--Create an order at Storefront as Customer 2 -->

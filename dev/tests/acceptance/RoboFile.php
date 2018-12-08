@@ -31,7 +31,11 @@ class RoboFile extends \Robo\Tasks
      *
      * @param array $tests
      * @param array $opts
+<<<<<<< HEAD
      * @return void
+=======
+     * @return \Robo\Result
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     function generateTests(array $tests, $opts = [
         'config' => null,
@@ -56,7 +60,11 @@ class RoboFile extends \Robo\Tasks
             $baseCmd .= ' --force';
         }
 
+<<<<<<< HEAD
         $this->taskExec($baseCmd)->args($tests)->run();
+=======
+        return $this->taskExec($baseCmd)->args($tests)->run();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -64,7 +72,11 @@ class RoboFile extends \Robo\Tasks
      *
      * @param array $args
      * @throws Exception
+<<<<<<< HEAD
      * @return void
+=======
+     * @return \Robo\Result
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     function generateSuite(array $args)
     {
@@ -72,20 +84,32 @@ class RoboFile extends \Robo\Tasks
             throw new Exception("Please provide suite name(s) after generate:suite command");
         }
         $baseCmd = $this->getBaseCmd("generate:suite");
+<<<<<<< HEAD
         $this->taskExec($baseCmd)->args($args)->run();
+=======
+        return $this->taskExec($baseCmd)->args($args)->run();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
      * Run all Tests with the specified @group tag'.
      *
      * @param array $args
+<<<<<<< HEAD
      * @return void
+=======
+     * @return \Robo\Result
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     function group(array $args)
     {
         $args = array_merge($args, ['-k']);
         $baseCmd = $this->getBaseCmd("run:group");
+<<<<<<< HEAD
         $this->taskExec($baseCmd)->args($args)->run();
+=======
+        return $this->taskExec($baseCmd)->args($args)->run();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -111,48 +135,84 @@ class RoboFile extends \Robo\Tasks
     /**
      * Open the HTML Allure report - Allure v1.4.X
      *
+<<<<<<< HEAD
      * @return void
      */
     function allure1Open()
     {
         $this->_exec('allure report open --report-dir tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+=======
+     * @return \Robo\Result
+     */
+    function allure1Open()
+    {
+        return $this->_exec('allure report open --report-dir tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
      * Open the HTML Allure report - Allure v2.3.X
      *
+<<<<<<< HEAD
      * @return void
      */
     function allure2Open()
     {
         $this->_exec('allure open --port 0 tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+=======
+     * @return \Robo\Result
+     */
+    function allure2Open()
+    {
+        return $this->_exec('allure open --port 0 tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
      * Generate and open the HTML Allure report - Allure v1.4.X
      *
+<<<<<<< HEAD
      * @return void
+=======
+     * @return \Robo\Result
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     function allure1Report()
     {
         $result1 = $this->allure1Generate();
 
         if ($result1->wasSuccessful()) {
+<<<<<<< HEAD
             $this->allure1Open();
+=======
+            return $this->allure1Open();
+        } else {
+            return $result1;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
     }
 
     /**
      * Generate and open the HTML Allure report - Allure v2.3.X
      *
+<<<<<<< HEAD
      * @return void
+=======
+     * @return \Robo\Result
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     function allure2Report()
     {
         $result1 = $this->allure2Generate();
 
         if ($result1->wasSuccessful()) {
+<<<<<<< HEAD
             $this->allure2Open();
+=======
+            return $this->allure2Open();
+        } else {
+            return $result1;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
     }
 
@@ -168,4 +228,8 @@ class RoboFile extends \Robo\Tasks
         chdir(__DIR__);
         return realpath('../../../vendor/bin/mftf') . " $command";
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3

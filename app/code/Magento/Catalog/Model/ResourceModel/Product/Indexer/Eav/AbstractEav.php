@@ -160,7 +160,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param array $parentIds the parent entity ids limitation
      * @return \Magento\Framework\DB\Select
      */
-    protected function _prepareRelationIndexSelect($parentIds = null)
+    protected function _prepareRelationIndexSelect(array $parentIds = null)
     {
         $connection = $this->getConnection();
         $idxTable = $this->getIdxTable();
@@ -185,12 +185,19 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             ['sw' => $this->getTable('store_website')],
             "cs.website_id = sw.website_id",
             []
+<<<<<<< HEAD
         )->joinLeft(
             ['cpw' => $this->getTable('catalog_product_website')],
             "i.entity_id = cpw.product_id AND sw.website_id = cpw.website_id",
             []
         )->where(
             'cpw.product_id IS NOT NULL'
+=======
+        )->join(
+            ['cpw' => $this->getTable('catalog_product_website')],
+            'i.entity_id = cpw.product_id AND sw.website_id = cpw.website_id',
+            []
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         )->group(
             ['parent_id', 'i.attribute_id', 'i.store_id', 'i.value', 'l.child_id']
         )->columns(

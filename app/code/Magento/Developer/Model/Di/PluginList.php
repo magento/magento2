@@ -145,6 +145,10 @@ class PluginList extends Interception\PluginList\PluginList
             if (!array_key_exists($pluginInstance, $this->pluginList[$this->pluginTypeMapping[$typeCode]])) {
                 $this->pluginList[$this->pluginTypeMapping[$typeCode]][$pluginInstance] = [];
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             if (!in_array($pluginMethod, $this->pluginList[$this->pluginTypeMapping[$typeCode]][$pluginInstance])) {
                 $this->pluginList[$this->pluginTypeMapping[$typeCode]][$pluginInstance][] = $pluginMethod;
             }

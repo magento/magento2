@@ -53,12 +53,22 @@ define([
 
         /**
          * @private
+<<<<<<< HEAD
          * @param {String} url
          */
         _redirect: function (url) {
             var urlParts = url.split('#'),
                 locationParts = window.location.href.split('#'),
                 forceReload = urlParts[0] === locationParts[0];
+=======
+         */
+        _redirect: function (url) {
+            var urlParts, locationParts, forceReload;
+
+            urlParts = url.split('#');
+            locationParts = window.location.href.split('#');
+            forceReload = urlParts[0] === locationParts[0];
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
             window.location.assign(url);
 
@@ -89,10 +99,15 @@ define([
         ajaxSubmit: function (form) {
             var self = this,
                 productIds = idsResolver(form),
+<<<<<<< HEAD
                 formData = new FormData(form[0]);
+=======
+                formData;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
             $(self.options.minicartSelector).trigger('contentLoading');
             self.disableAddToCartButton(form);
+            formData = new FormData(form[0]);
 
             $.ajax({
                 url: form.attr('action'),

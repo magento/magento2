@@ -30,7 +30,11 @@
                             <th scope="row" class="cell label remove"><span><?= /* @escapeNotVerified */ __('Remove Product') ?></span></th>
                         <?php endif; ?>
                         <td class="cell remove product hidden-print">
+<<<<<<< HEAD
                             <?php $compareHelper = $this->helper(\Magento\Catalog\Helper\Product\Compare::class);?>
+=======
+                            <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                             <a href="#" data-post='<?= /* @escapeNotVerified */ $compareHelper->getPostDataRemove($item) ?>'
                                class="action delete" title="<?= /* @escapeNotVerified */ __('Remove Product') ?>">
                                 <span><?= /* @escapeNotVerified */ __('Remove Product') ?></span>
@@ -42,7 +46,11 @@
                 <tbody>
                 <tr>
                     <?php $index = 0; ?>
+<<<<<<< HEAD
                     <?php $helper = $this->helper(\Magento\Catalog\Helper\Output::class); ?>
+=======
+                    <?php $helper = $this->helper('Magento\Catalog\Helper\Output'); ?>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     <?php /** @var $item \Magento\Catalog\Model\Product */ ?>
                     <?php foreach ($block->getItems() as $item): ?>
                         <?php if ($index++ == 0): ?>
@@ -62,7 +70,11 @@
                             <div class="product-item-actions hidden-print">
                                 <div class="actions-primary">
                                     <?php if ($item->isSaleable()): ?>
+<<<<<<< HEAD
                                         <form data-role="tocart-form" action="<?= /* @escapeNotVerified */ $this->helper(\Magento\Catalog\Helper\Product\Compare::class)->getAddToCartUrl($item) ?>" method="post">
+=======
+                                        <form data-role="tocart-form" action="<?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Product\Compare')->getAddToCartUrl($item) ?>" method="post">
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                                             <?= $block->getBlockHtml('formkey') ?>
                                             <button type="submit" class="action tocart primary">
                                                 <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>

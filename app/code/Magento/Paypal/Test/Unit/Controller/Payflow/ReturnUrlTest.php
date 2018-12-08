@@ -148,9 +148,12 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+<<<<<<< HEAD
         $this->context->expects($this->any())->method('getView')->willReturn($this->view);
         $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -160,6 +163,7 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
         $this->context->method('getRequest')
             ->willReturn($this->request);
 
+<<<<<<< HEAD
         $this->returnUrl = $this->objectManager->getObject(ReturnUrl::class, [
             'context' => $this->context,
             'checkoutSession' => $this->checkoutSession,
@@ -167,6 +171,18 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             'checkoutHelper' => $this->checkoutHelper,
             'paymentFailures' => $this->paymentFailures,
         ]);
+=======
+        $this->returnUrl = $this->objectManager->getObject(
+            ReturnUrl::class,
+            [
+                'context' => $this->context,
+                'checkoutSession' => $this->checkoutSession,
+                'orderFactory' => $this->orderFactory,
+                'checkoutHelper' => $this->checkoutHelper,
+                'paymentFailures' => $this->paymentFailures,
+            ]
+        );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**

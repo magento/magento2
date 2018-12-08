@@ -41,6 +41,12 @@ class IndexerDimensionMode
     /** @var bool */
     private $isDimensionMode = false;
 
+<<<<<<< HEAD
+=======
+    /**
+     * Restore db
+     */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     private function restoreDb()
     {
         $this->db = Bootstrap::getInstance()->getBootstrap()->getApplication()->getDbInstance();

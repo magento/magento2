@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\UrlRewrite\Model\OptionProvider;
@@ -206,10 +204,8 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateUrlRewritesWithIncorrectUrlKey($urlKey)
     {
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            'Invalid URL key'
-        );
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Invalid URL key');
         /** @var \Magento\Catalog\Api\CategoryRepositoryInterface $repository */
         $repository = $this->objectManager->get(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $category = $repository->get(3);

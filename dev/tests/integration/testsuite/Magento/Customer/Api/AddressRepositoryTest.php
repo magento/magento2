@@ -160,6 +160,13 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedNewAddress = $this->_expectedAddresses[1];
         $expectedNewAddress->setId($savedAddress->getId());
         $expectedNewAddress->setRegion($this->_expectedAddresses[1]->getRegion());
+
+        $this->assertEquals($expectedNewAddress->getExtensionAttributes(), $savedAddress->getExtensionAttributes());
+        $this->assertEquals(
+            $expectedNewAddress->getRegion()->getExtensionAttributes(),
+            $savedAddress->getRegion()->getExtensionAttributes()
+        );
+
         $this->assertEquals($expectedNewAddress, $savedAddress);
     }
 
@@ -208,8 +215,13 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals('One or more input exceptions have occurred.', $exception->getMessage());
             $errors = $exception->getErrors();
             $this->assertCount(3, $errors);
+<<<<<<< HEAD
             $this->assertEquals('firstname is a required field.', $errors[0]->getLogMessage());
             $this->assertEquals('lastname is a required field.', $errors[1]->getLogMessage());
+=======
+            $this->assertEquals('"firstname" is required. Enter and try again.', $errors[0]->getLogMessage());
+            $this->assertEquals('"lastname" is required. Enter and try again.', $errors[1]->getLogMessage());
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $this->assertEquals(
                 __(
                     'Invalid value of "%value" provided for the %fieldName field.',
@@ -230,11 +242,19 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             $errors = $exception->getErrors();
             $this->assertCount(3, $errors);
             $this->assertEquals(
+<<<<<<< HEAD
                 'firstname is a required field.',
                 $errors[0]->getLogMessage()
             );
             $this->assertEquals(
                 'lastname is a required field.',
+=======
+                '"firstname" is required. Enter and try again.',
+                $errors[0]->getLogMessage()
+            );
+            $this->assertEquals(
+                '"lastname" is required. Enter and try again.',
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 $errors[1]->getLogMessage()
             );
             $this->assertEquals(

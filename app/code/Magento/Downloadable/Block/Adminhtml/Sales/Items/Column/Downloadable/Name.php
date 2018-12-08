@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Downloadable\Block\Adminhtml\Sales\Items\Column\Downloadable;
 
 use Magento\Downloadable\Model\Link;

@@ -360,7 +360,11 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
         return [
             [true, 'contact_us'],
             [false, 'user_create'],
+<<<<<<< HEAD
             [false, 'user_forgotpassword'],
+=======
+            [false, 'user_forgotpassword']
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
     }
 }

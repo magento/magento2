@@ -28,6 +28,10 @@ class PageCache implements ConfigOptionsListInterface
     const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT = 'page-cache-redis-port';
     const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA = 'page-cache-redis-compress-data';
     const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD = 'page-cache-redis-password';
+<<<<<<< HEAD
+=======
+    const INPUT_KEY_PAGE_CACHE_ID_PREFIX = 'page-cache-id-prefix';
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     const CONFIG_PATH_PAGE_CACHE_BACKEND = 'cache/frontend/page_cache/backend';
     const CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER = 'cache/frontend/page_cache/backend_options/server';
@@ -35,6 +39,10 @@ class PageCache implements ConfigOptionsListInterface
     const CONFIG_PATH_PAGE_CACHE_BACKEND_PORT = 'cache/frontend/page_cache/backend_options/port';
     const CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA = 'cache/frontend/page_cache/backend_options/compress_data';
     const CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD = 'cache/frontend/page_cache/backend_options/password';
+<<<<<<< HEAD
+=======
+    const CONFIG_PATH_PAGE_CACHE_ID_PREFIX = 'cache/frontend/page_cache/id_prefix';
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     /**
      * @var array
@@ -81,7 +89,7 @@ class PageCache implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptions()
     {
@@ -122,16 +130,30 @@ class PageCache implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
                 'Redis server password'
+<<<<<<< HEAD
+=======
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_ID_PREFIX,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX,
+                'ID prefix for cache keys'
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             )
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        if (isset($options[self::INPUT_KEY_PAGE_CACHE_ID_PREFIX])) {
+            $configData->set(self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX, $options[self::INPUT_KEY_PAGE_CACHE_ID_PREFIX]);
+        } else {
+            $configData->set(self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX, $this->generateCachePrefix());
+        }
 
         if (isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND])) {
             if ($options[self::INPUT_KEY_PAGE_CACHE_BACKEND] == self::INPUT_VALUE_PAGE_CACHE_REDIS) {
@@ -152,7 +174,7 @@ class PageCache implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
@@ -251,5 +273,15 @@ class PageCache implements ConfigOptionsListInterface
         } else {
             return '';
         }
+    }
+
+    /**
+     * Generate default cache ID prefix based on installation dir
+     *
+     * @return string
+     */
+    private function generateCachePrefix(): string
+    {
+        return substr(\md5(dirname(__DIR__, 6)), 0, 3) . '_';
     }
 }

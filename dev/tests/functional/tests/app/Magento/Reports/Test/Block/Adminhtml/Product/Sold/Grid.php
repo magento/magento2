@@ -39,7 +39,11 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      *
      * @var string
      */
+<<<<<<< HEAD
     protected $productSku = './/*[contains(.,"%s")]/*[contains(@class,"col-sku")]';
+=======
+    private $productSku = './/*[contains(.,"%s")]/*[contains(@class,"col-sku")]';
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     /**
      * Filter locator
@@ -111,7 +115,11 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     }
 
     /**
+<<<<<<< HEAD
      * Get product sku from Ordered Products Report grid
+=======
+     * Get product sku from Ordered Products Report grid.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param OrderInjectable $order
      * @return array
@@ -120,10 +128,18 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     {
         $products = $order->getEntityId()['products'];
         $skus = [];
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         foreach ($products as $key => $productSku) {
             $skus[$key] = $this->_rootElement
                 ->find(sprintf($this->productSku, $productSku->getName()), Locator::SELECTOR_XPATH)->getText();
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $skus;
     }
 }

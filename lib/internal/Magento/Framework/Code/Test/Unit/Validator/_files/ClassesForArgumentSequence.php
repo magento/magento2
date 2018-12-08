@@ -5,8 +5,8 @@
  */
 
 /**
- * @codingStandardsIgnoreFile
  * Coding Standards have to be ignored in this file, as it is just a data source for tests.
+ * @codingStandardsIgnoreStart
  */
 
 namespace ArgumentSequence;
@@ -42,7 +42,10 @@ class ParentClass
 
     /**
      * ParentClass constructor.
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param ContextObject $contextObject
      * @param ParentRequiredObject $parentRequiredObject
      * @param array $parentRequiredScalar

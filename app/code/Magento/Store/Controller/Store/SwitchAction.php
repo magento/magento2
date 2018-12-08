@@ -15,13 +15,16 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreIsInactiveException;
-use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher;
 use Magento\Store\Model\StoreSwitcherInterface;
 
 /**
  * Handles store switching url and makes redirect.
+<<<<<<< HEAD
+=======
+ *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitchAction extends Action
@@ -77,16 +80,23 @@ class SwitchAction extends Action
         $this->storeRepository = $storeRepository;
         $this->storeManager = $storeManager;
         $this->messageManager = $context->getMessageManager();
+<<<<<<< HEAD
         $this->storeSwitcher = $storeSwitcher ?: ObjectManager::getInstance()->get(StoreSwitcher::class);
+=======
+        $this->storeSwitcher = $storeSwitcher ?: ObjectManager::getInstance()->get(StoreSwitcherInterface::class);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
+     * Execute action
+     *
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
      */
     public function execute()
     {
         $targetStoreCode = $this->_request->getParam(
+<<<<<<< HEAD
             StoreResolver::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
@@ -95,6 +105,16 @@ class SwitchAction extends Action
         $requestedUrlToRedirect = $this->_redirect->getRedirectUrl();
         $redirectUrl = $requestedUrlToRedirect;
 
+=======
+            \Magento\Store\Model\StoreManagerInterface::PARAM_NAME,
+            $this->storeCookieManager->getStoreCodeFromCookie()
+        );
+        $fromStoreCode = $this->_request->getParam('___from_store');
+
+        $requestedUrlToRedirect = $this->_redirect->getRedirectUrl();
+        $redirectUrl = $requestedUrlToRedirect;
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $error = null;
         try {
             $fromStore = $this->storeRepository->get($fromStoreCode);
@@ -102,7 +122,11 @@ class SwitchAction extends Action
         } catch (StoreIsInactiveException $e) {
             $error = __('Requested store is inactive');
         } catch (NoSuchEntityException $e) {
+<<<<<<< HEAD
             $error = __('Requested store is not found');
+=======
+            $error = __("The store that was requested wasn't found. Verify the store and try again.");
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
         if ($error !== null) {
             $this->messageManager->addErrorMessage($error);

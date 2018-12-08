@@ -6,10 +6,11 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 
-class Delete extends \Magento\Customer\Controller\Adminhtml\Group
+class Delete extends \Magento\Customer\Controller\Adminhtml\Group implements HttpPostActionInterface
 {
     /**
      * Delete customer group.

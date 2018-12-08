@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Indexer\Model;
 
 /**
@@ -107,7 +112,11 @@ class ProcessManager
      *
      * @return bool
      */
+<<<<<<< HEAD
     private function isCanBeParalleled()
+=======
+    private function isCanBeParalleled(): bool
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return function_exists('pcntl_fork');
     }
@@ -117,7 +126,11 @@ class ProcessManager
      *
      * @return bool
      */
+<<<<<<< HEAD
     private function isSetupMode()
+=======
+    private function isSetupMode(): bool
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return $this->registry->registry('setup-mode-enabled') ?: false;
     }
@@ -128,7 +141,11 @@ class ProcessManager
      * @param callable $userFunction
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
+<<<<<<< HEAD
     private function startChildProcess($userFunction)
+=======
+    private function startChildProcess(callable $userFunction)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $status = call_user_func($userFunction);
         $status = is_integer($status) ? $status : 0;
@@ -140,7 +157,11 @@ class ProcessManager
      *
      * @param int $threadNumber
      */
+<<<<<<< HEAD
     private function executeParentProcess(&$threadNumber)
+=======
+    private function executeParentProcess(int &$threadNumber)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $threadNumber++;
         if ($threadNumber >= $this->threadsCount) {

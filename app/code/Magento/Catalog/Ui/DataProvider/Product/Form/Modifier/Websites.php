@@ -89,7 +89,7 @@ class Websites extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -117,7 +117,7 @@ class Websites extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -333,6 +333,8 @@ class Websites extends AbstractModifier
     }
 
     /**
+     * Returns websites options list.
+     *
      * @return array
      * @since 101.0.0
      */

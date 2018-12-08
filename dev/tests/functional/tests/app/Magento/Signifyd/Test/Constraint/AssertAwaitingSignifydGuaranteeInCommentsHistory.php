@@ -48,13 +48,21 @@ class AssertAwaitingSignifydGuaranteeInCommentsHistory extends AbstractConstrain
             array_column($orderComments, 'comment')
         );
 
+<<<<<<< HEAD
         \PHPUnit_Framework_Assert::assertNotFalse(
+=======
+        \PHPUnit\Framework\Assert::assertNotFalse(
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $key,
             'There is no message about awaiting the Signifyd guarantee disposition' .
             ' in Comments History section for the order #' . $orderId
         );
 
+<<<<<<< HEAD
         \PHPUnit_Framework_Assert::assertEquals(
+=======
+        \PHPUnit\Framework\Assert::assertEquals(
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $this->historyCommentStatus,
             $orderComments[$key]['status'],
             'Message about awaiting the Signifyd guarantee disposition' .

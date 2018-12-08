@@ -89,4 +89,14 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $result = $this->model->prepareDataSource(['data' => ['items' => [$item]]]);
         $this->assertEquals(self::TEST_TIME, $result['data']['items'][0]['field_name']);
     }
+
+    public function testPrepareDataSourceWithZeroDate()
+    {
+        $zeroDate = '0000-00-00 00:00:00';
+        $item = ['test_data' => 'some_data', 'field_name' => $zeroDate];
+        $this->timezoneMock->expects($this->never())->method('date');
+
+        $result = $this->model->prepareDataSource(['data' => ['items' => [$item]]]);
+        $this->assertEquals($zeroDate, $result['data']['items'][0]['field_name']);
+    }
 }

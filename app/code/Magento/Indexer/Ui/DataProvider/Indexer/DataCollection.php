@@ -24,8 +24,11 @@ class DataCollection extends Collection
     private $indexerRegistry;
 
     /**
+<<<<<<< HEAD
      * DataCollection constructor.
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param EntityFactoryInterface $entityFactory
      * @param ConfigInterface $config
      * @param IndexerRegistry $indexerRegistry

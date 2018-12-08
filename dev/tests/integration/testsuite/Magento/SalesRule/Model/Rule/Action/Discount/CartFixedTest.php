@@ -3,8 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
+=======
+declare(strict_types=1);
+
+namespace Magento\SalesRule\Model\Rule\Action\Discount;
+
+use Magento\Catalog\Api\Data\ProductInterface;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Quote\Api\Data\CartItemInterface;
@@ -53,7 +61,11 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      * @dataProvider applyFixedDiscountDataProvider
      */
+<<<<<<< HEAD
     public function testApplyFixedDiscount(array $productPrices)
+=======
+    public function testApplyFixedDiscount(array $productPrices): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $expectedDiscount = '-15.00';
         $couponCode =  'CART_FIXED_DISCOUNT_15';
@@ -82,7 +94,11 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function applyFixedDiscountDataProvider()
+=======
+    public function applyFixedDiscountDataProvider(): array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return [
             'prices when discount had wrong value 15.01' => [[22, 14, 43, 7.50, 0.00]],
@@ -124,15 +140,25 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
      * Returns simple product with given price.
      *
      * @param float $price
+<<<<<<< HEAD
      * @return \Magento\Catalog\Api\Data\ProductInterface
      */
     private function createProduct($price)
+=======
+     * @return ProductInterface
+     */
+    private function createProduct(float $price): ProductInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $name = 'simple-' . $price;
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepository::class);
         $product = Bootstrap::getObjectManager()->create(Product::class);
         $product->setTypeId('simple')
+<<<<<<< HEAD
             ->setAttributeSetId(4)
+=======
+            ->setAttributeSetId($product->getDefaultAttributeSetId())
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->setWebsiteIds([1])
             ->setName($name)
             ->setSku(uniqid($name))

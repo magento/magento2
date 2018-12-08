@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
 class ViewTest extends \PHPUnit\Framework\TestCase
@@ -77,13 +75,14 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(1));
         $this->registryMock->expects($this->any())
             ->method('registry')
-            ->will($this->returnValueMap(
-                [
-                    ['product', $product],
-                    ['current_category', $category],
-                ]
-            )
-        );
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['product', $product],
+                        ['current_category', $category],
+                    ]
+                )
+            );
         $this->assertEquals(['cat_p_1', 'cat_c_1'], $this->view->getIdentities());
     }
 }

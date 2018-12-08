@@ -29,9 +29,12 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
      */
     private $itemResolver;
 
+<<<<<<< HEAD
     /**
      * @inheritdoc
      */
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -88,6 +91,11 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
             ->method('getFinalProduct')
             ->with($item)
             ->willReturn($product);
+
+        $this->itemResolver->expects($this->any())
+            ->method('getFinalProduct')
+            ->with($item)
+            ->will($this->returnValue($product));
 
         $itemData = $this->model->getItemData($item);
         $this->assertArrayHasKey('options', $itemData);

@@ -47,7 +47,11 @@ class Url extends \Magento\Framework\DataObject
     protected $urlFinder;
 
     /**
+<<<<<<< HEAD
      * @var ScopeConfigInterface
+=======
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private $scopeConfig;
 
@@ -162,7 +166,11 @@ class Url extends \Magento\Framework\DataObject
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
 
+<<<<<<< HEAD
                 if ($useCategories && $categoryId) {
+=======
+                if ($categoryId) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     $filterData[UrlRewrite::METADATA]['category_id'] = $categoryId;
                 } elseif (!$useCategories) {
                     $filterData[UrlRewrite::METADATA]['category_id'] = '';
@@ -204,7 +212,10 @@ class Url extends \Magento\Framework\DataObject
         }
 
         $url = $this->urlFactory->create()->setScope($storeId);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $url->getUrl($routePath, $routeParams);
     }
 }

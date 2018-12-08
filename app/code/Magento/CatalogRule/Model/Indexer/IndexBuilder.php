@@ -143,6 +143,16 @@ class IndexBuilder
     private $productLoader;
 
     /**
+     * @var TableSwapper
+     */
+    private $tableSwapper;
+
+    /**
+     * @var ProductLoader
+     */
+    private $productLoader;
+
+    /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -216,9 +226,18 @@ class IndexBuilder
         $this->pricesPersistor = $pricesPersistor ?? ObjectManager::getInstance()->get(
             RuleProductPricesPersistor::class
         );
+<<<<<<< HEAD
         $this->productLoader = $productLoader ?? ObjectManager::getInstance()->get(
             ProductLoader::class
         );
+=======
+        $this->activeTableSwitcher = $activeTableSwitcher ?? ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
+        );
+        $this->productLoader = $productLoader ?? ObjectManager::getInstance()->get(
+            ProductLoader::class
+        );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->tableSwapper = $tableSwapper ??
             ObjectManager::getInstance()->get(TableSwapper::class);
     }

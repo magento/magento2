@@ -111,10 +111,15 @@ class Downloadable extends Section
      * @param string $downloadable
      * @param SimpleElement|null $element
      * @return void
+<<<<<<< HEAD
      *
      * @throws \Exception
      */
     public function setIsDownloadable(string $downloadable = 'Yes', SimpleElement $element = null)
+=======
+     */
+    public function setIsDownloadable(string $downloadable = 'Yes', SimpleElement $element = null): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $context = $element ?: $this->_rootElement;
         $isDownloadable = $context->find($this->isDownloadableProduct);

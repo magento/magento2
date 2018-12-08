@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -496,7 +494,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _construct()
     {
         if ($this->isEnabledFlat()) {
-            $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product\Flat::class);
+            $this->_init(
+                \Magento\Catalog\Model\Product::class,
+                \Magento\Catalog\Model\ResourceModel\Product\Flat::class
+            );
         } else {
             $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product::class);
         }
@@ -1126,11 +1127,15 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Get SQL for get record count
      *
+<<<<<<< HEAD
      * @param \Magento\Framework\DB\Select $select
+=======
+     * @param Select $select
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param bool $resetLeftJoins
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
-    protected function _getSelectCountSql($select = null, $resetLeftJoins = true)
+    protected function _getSelectCountSql(?Select $select = null, $resetLeftJoins = true)
     {
         $this->_renderFilters();
         $countSelect = $select === null ? $this->_getClearSelect() : $this->_buildClearSelect($select);
@@ -1428,7 +1433,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'u.url_rewrite_id=cu.url_rewrite_id'
             )->where('cu.url_rewrite_id IS NULL');
         }
-
+        
         // more priority is data with category id
         $urlRewrites = [];
 
@@ -1533,7 +1538,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Add attribute to filter
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|string $attribute
+     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|string|array $attribute
      * @param array $condition
      * @param string $joinType
      * @return $this
@@ -2020,7 +2025,15 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getConnection()->quoteInto('cat_index.store_id=?', $filters['store_id'], 'int'),
         ];
         if (isset($filters['visibility']) && !isset($filters['store_table'])) {
+<<<<<<< HEAD
             $conditions[] = $this->getConnection()->quoteInto('cat_index.visibility IN(?)', $filters['visibility'], 'int');
+=======
+            $conditions[] = $this->getConnection()->quoteInto(
+                'cat_index.visibility IN(?)',
+                $filters['visibility'],
+                'int'
+            );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
         $conditions[] = $this->getConnection()->quoteInto('cat_index.category_id=?', $filters['category_id'], 'int');
         if (isset($filters['category_is_anchor'])) {

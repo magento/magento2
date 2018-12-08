@@ -29,6 +29,14 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
     private $mediaDirectory;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var string
+     */
+    private $fullDirectoryPath;
+
+    /**
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
@@ -43,12 +51,17 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
+<<<<<<< HEAD
+=======
+        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->model = $objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFolder::class);
     }
 
     /**
      * Execute method with correct directory path to check that directories under WYSIWYG media directory
      * can be removed.
+<<<<<<< HEAD
      */
     public function testExecute()
     {
@@ -63,6 +76,25 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
             $this->mediaDirectory->isExist(
                 $this->mediaDirectory->getRelativePath(
                     $fullDirectoryPath . $directoryName
+=======
+     *
+     * @return void
+     * @magentoAppIsolation enabled
+     */
+    public function testExecute()
+    {
+        $directoryName = DIRECTORY_SEPARATOR . 'NewDirectory';
+        $this->mediaDirectory->create(
+            $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . $directoryName)
+        );
+        $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
+        $this->model->execute();
+
+        $this->assertFalse(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath(
+                    $this->fullDirectoryPath . $directoryName
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 )
             )
         );
@@ -84,12 +116,36 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         $linkedDirectory->create(
             $linkedDirectory->getRelativePath($linkedDirectoryPath . DIRECTORY_SEPARATOR . $directoryName)
         );
+<<<<<<< HEAD
         $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
+=======
+        $this->model->getRequest()->setParams(
+            ['node' => $this->imagesHelper->idEncode('wysiwyg' . DIRECTORY_SEPARATOR . $directoryName)]
+        );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->model->execute();
         $this->assertFalse(is_dir($linkedDirectoryPath . DIRECTORY_SEPARATOR . $directoryName));
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Execute method with traversal directory path to check that there is no ability to remove folder which is not
+     * under media directory.
+     *
+     * @return void
+     */
+    public function testExecuteWithWrongDirectoryName()
+    {
+        $directoryName = '/../../etc/';
+        $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
+        $this->model->execute();
+
+        $this->assertFileExists($this->fullDirectoryPath . $directoryName);
+    }
+
+    /**
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @inheritdoc
      */
     public static function tearDownAfterClass()

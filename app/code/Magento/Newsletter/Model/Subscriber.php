@@ -10,9 +10,15 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
+<<<<<<< HEAD
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
+=======
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\ObjectManager;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 /**
  * Subscriber model
@@ -100,7 +106,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Date
+<<<<<<< HEAD
      * @var DateTime
+=======
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private $dateTime;
 
@@ -157,7 +167,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+<<<<<<< HEAD
      * @param DateTime|null $dateTime
+=======
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime|null $dateTime
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param CustomerInterfaceFactory|null $customerFactory
      * @param DataObjectHelper|null $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -176,7 +190,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
+<<<<<<< HEAD
         DateTime $dateTime = null,
+=======
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         CustomerInterfaceFactory $customerFactory = null,
         DataObjectHelper $dataObjectHelper = null
     ) {
@@ -185,6 +203,13 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_customerSession = $customerSession;
+        $this->dateTime = $dateTime ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Stdlib\DateTime\DateTime::class
+        );
+        $this->customerFactory = $customerFactory ?: ObjectManager::getInstance()
+            ->get(CustomerInterfaceFactory::class);
+        $this->dataObjectHelper = $dataObjectHelper ?: ObjectManager::getInstance()
+            ->get(DataObjectHelper::class);
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
@@ -389,6 +414,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         try {
             $customerData = $this->customerRepository->getById($customerId);
             $customerData->setStoreId($this->_storeManager->getStore()->getId());
+<<<<<<< HEAD
+=======
+            if ($customerData->getWebsiteId() === null) {
+                $customerData->setWebsiteId($this->_storeManager->getStore()->getWebsiteId());
+            }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $data = $this->getResource()->loadByCustomerData($customerData);
             $this->addData($data);
             if (!empty($data) && $customerData->getId() && !$this->getCustomerId()) {
@@ -525,7 +556,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * unsubscribe the customer with the id provided
+     * Unsubscribe the customer with the id provided
      *
      * @param int $customerId
      * @return $this

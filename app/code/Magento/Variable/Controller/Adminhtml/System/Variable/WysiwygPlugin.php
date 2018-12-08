@@ -23,13 +23,13 @@ class WysiwygPlugin extends \Magento\Variable\Controller\Adminhtml\System\Variab
     {
         $customVariables = $this->_objectManager->create(\Magento\Variable\Model\Variable::class)
             ->getVariablesOptionArray(true);
-        $storeContactVariabls = $this->_objectManager->create(
-            \Magento\Email\Model\Source\Variables::class
+        $storeContactVariables = $this->_objectManager->create(
+            \Magento\Variable\Model\Source\Variables::class
         )->toOptionArray(
             true
         );
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
-        return $resultJson->setData([$storeContactVariabls, $customVariables]);
+        return $resultJson->setData([$storeContactVariables, $customVariables]);
     }
 }

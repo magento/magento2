@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultWebsite" type="group">
@@ -21,5 +22,20 @@
         <data key="name" unique="suffix">Second Website </data>
         <data key="code" unique="suffix">second_website_</data>
         <data key="sort_order">10</data>
+=======
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultWebsite" type="website">
+        <data key="name">Main Website</data>
+        <data key="code">base</data>
+        <data key="sort_order">0</data>
+    </entity>
+    <entity name="customWebsite" type="website">
+        <data key="name" unique="suffix">Second Website</data>
+        <data key="code" unique="suffix">second_website</data>
+        <data key="sort_order">10</data>
+        <data key="store_action">add</data>
+        <data key="store_type">website</data>
+        <data key="website_id">null</data>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </entity>
 </entities>

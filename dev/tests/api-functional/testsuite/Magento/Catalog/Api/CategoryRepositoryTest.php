@@ -194,7 +194,7 @@ class CategoryRepositoryTest extends WebapiAbstract
                 ['attribute_code' => 'meta_keywords', 'value' => ''],
                 ['attribute_code' => 'meta_description', 'value' => ''],
                 ['attribute_code' => 'display_mode', 'value' => 'PRODUCTS'],
-                ['attribute_code' => 'landing_page', 'value' => ''],
+                ['attribute_code' => 'landing_page', 'value' => '0'],
                 ['attribute_code' => 'is_anchor', 'value' => '0'],
                 ['attribute_code' => 'custom_use_parent_settings', 'value' => '0'],
                 ['attribute_code' => 'custom_apply_to_products', 'value' => '0'],

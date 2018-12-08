@@ -5,6 +5,7 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
@@ -14,7 +15,10 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Controller\ResultFactory;
 
-class JsonProductInfo extends ProductController
+/**
+ * Represents product info in json
+ */
+class JsonProductInfo extends ProductController implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
@@ -40,13 +44,19 @@ class JsonProductInfo extends ProductController
     }
 
     /**
+     * Execute controller
+     *
      * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
         $response = new DataObject();
         $id = $this->getRequest()->getParam('id');
+<<<<<<< HEAD
         if ((int) $id > 0) {
+=======
+        if ((int)$id > 0) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $product = $this->productRepository->getById($id);
             $response->setId($id);
             $response->addData($product->getData());

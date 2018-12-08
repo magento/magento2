@@ -8,12 +8,16 @@ namespace Magento\Braintree\Test\Unit\Gateway\Request;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Request\AddressDataBuilder;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
+<<<<<<< HEAD
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+=======
+use Magento\Braintree\Gateway\SubjectReader;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class AddressDataBuilderTest
+ * Tests \Magento\Braintree\Gateway\Request\AddressDataBuilder.
  */
 class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,6 +36,14 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $builder;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @var SubjectReader|MockObject
+     */
+    private $subjectReaderMock;
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     protected function setUp()
     {
         $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
@@ -110,7 +122,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                     'city' => 'Chicago',
                     'region_code' => 'IL',
                     'country_id' => 'US',
-                    'post_code' => '00000'
+                    'post_code' => '00000',
                 ],
                 [
                     AddressDataBuilder::SHIPPING_ADDRESS => [
@@ -122,7 +134,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                         AddressDataBuilder::LOCALITY => 'Chicago',
                         AddressDataBuilder::REGION => 'IL',
                         AddressDataBuilder::POSTAL_CODE => '00000',
-                        AddressDataBuilder::COUNTRY_CODE => 'US'
+                        AddressDataBuilder::COUNTRY_CODE => 'US',
 
                     ],
                     AddressDataBuilder::BILLING_ADDRESS => [
@@ -134,10 +146,10 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                         AddressDataBuilder::LOCALITY => 'Chicago',
                         AddressDataBuilder::REGION => 'IL',
                         AddressDataBuilder::POSTAL_CODE => '00000',
-                        AddressDataBuilder::COUNTRY_CODE => 'US'
-                    ]
-                ]
-            ]
+                        AddressDataBuilder::COUNTRY_CODE => 'US',
+                    ],
+                ],
+            ],
         ];
     }
 

@@ -8,9 +8,14 @@ namespace Magento\Bundle\Pricing\Price;
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Price\AbstractPrice;
+use Magento\Framework\App\ObjectManager;
 
 /**
+<<<<<<< HEAD
  * Bundle option price model with final price
+=======
+ * Bundle option price model with final price.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterface
 {
@@ -36,7 +41,11 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
     protected $maximalPrice;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Bundle\Pricing\Price\BundleOptions
+=======
+     * @var BundleOptions
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private $bundleOptions;
 
@@ -59,8 +68,12 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
         $this->selectionFactory = $bundleSelectionFactory;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->product->setQty($this->quantity);
+<<<<<<< HEAD
         $this->bundleOptions = $bundleOptions ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Bundle\Pricing\Price\BundleOptions::class);
+=======
+        $this->bundleOptions = $bundleOptions ?: ObjectManager::getInstance()->get(BundleOptions::class);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -71,11 +84,12 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
         if (null === $this->value) {
             $this->value = $this->bundleOptions->calculateOptions($this->product);
         }
+
         return $this->value;
     }
 
     /**
-     * Getter for maximal price of options
+     * Getter for maximal price of options.
      *
      * @return bool|float
      * @deprecated
@@ -85,11 +99,12 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
         if (null === $this->maximalPrice) {
             $this->maximalPrice = $this->bundleOptions->calculateOptions($this->product, false);
         }
+
         return $this->maximalPrice;
     }
 
     /**
-     * Get Options with attached Selections collection
+     * Get Options with attached Selections collection.
      *
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
@@ -99,7 +114,7 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
     }
 
     /**
-     * Get selection amount
+     * Get selection amount.
      *
      * @param \Magento\Bundle\Model\Selection $selection
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
@@ -114,7 +129,7 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
     }
 
     /**
-     * Calculate maximal or minimal options value
+     * Calculate maximal or minimal options value.
      *
      * @param bool $searchMin
      * @return bool|float

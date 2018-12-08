@@ -107,7 +107,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @param \Magento\Webapi\Model\Cache\Type\Webapi $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
+     * @param \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
      * @param Authorization $authorization
      * @param SwaggerFactory $swaggerFactory
@@ -116,7 +116,7 @@ class Generator extends AbstractSchemaGenerator
     public function __construct(
         \Magento\Webapi\Model\Cache\Type\Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
+        \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList,
         \Magento\Webapi\Model\ServiceMetadata $serviceMetadata,
         Authorization $authorization,
         SwaggerFactory $swaggerFactory,
@@ -127,7 +127,7 @@ class Generator extends AbstractSchemaGenerator
         parent::__construct(
             $cache,
             $typeProcessor,
-            $customAttributeTypeLocator,
+            $serviceTypeList,
             $serviceMetadata,
             $authorization
         );
@@ -630,7 +630,7 @@ class Generator extends AbstractSchemaGenerator
      */
     protected function addCustomAttributeTypes()
     {
-        foreach ($this->customAttributeTypeLocator->getAllServiceDataInterfaces() as $customAttributeClass) {
+        foreach ($this->serviceTypeList->getDataTypes() as $customAttributeClass) {
             $this->typeProcessor->register($customAttributeClass);
         }
     }

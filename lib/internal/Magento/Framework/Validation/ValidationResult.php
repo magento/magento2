@@ -29,8 +29,11 @@ class ValidationResult
     }
 
     /**
+<<<<<<< HEAD
      * Check error existence. If any return boolean true else false.
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return bool
      */
     public function isValid(): bool
@@ -39,8 +42,11 @@ class ValidationResult
     }
 
     /**
+<<<<<<< HEAD
      * Return list of errors.
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return array
      */
     public function getErrors(): array

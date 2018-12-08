@@ -189,7 +189,10 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
      * @param $callNumber
      * @param $tableName
      * @param $isTableExist
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return mixed
      */
     private function mockDropTable($callNumber, $tableName, $isTableExist)
@@ -210,7 +213,10 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $callNumber
      * @param $tableName
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return mixed
      */
     private function mockFlatTable($callNumber, $tableName)
@@ -238,7 +244,10 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $callNumber
      * @param $tableName
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return mixed
      */
     private function mockFulltextTable($callNumber, $tableName)

@@ -13,9 +13,12 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
 /**
  * Class SubscriptionStatusProviderTest.
  */
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class SubscriptionStatusProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**

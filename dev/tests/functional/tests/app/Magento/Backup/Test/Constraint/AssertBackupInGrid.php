@@ -23,7 +23,7 @@ class AssertBackupInGrid extends AbstractConstraint
      */
     public function processAssert(BackupIndex $backupIndex)
     {
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $backupIndex->open()->getBackupGrid()->isBackupRowVisible(),
             'Backup is not present in grid.'
         );

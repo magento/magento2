@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
 use Magento\Catalog\Model\Product\Attribute\TypesList;
@@ -35,7 +33,10 @@ class TypesListTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->inputTypeFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Attribute\Source\InputtypeFactory::class, ['create', '__wakeup']);
+        $this->inputTypeFactoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Attribute\Source\InputtypeFactory::class,
+            ['create', '__wakeup']
+        );
         $this->attributeTypeFactoryMock =
             $this->createPartialMock(\Magento\Catalog\Api\Data\ProductAttributeTypeInterfaceFactory::class, [
                     'create',

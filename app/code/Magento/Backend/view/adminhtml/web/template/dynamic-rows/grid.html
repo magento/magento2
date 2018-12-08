@@ -5,7 +5,7 @@
  */
 -->
 
-<div class="admin__field-complex" if="element.addButton">
+<div class="admin__field-complex" if="$data.addButton">
     <div class="admin__field-complex-title">
         <span class="label" translate="'User Agent Rules'"></span>
     </div>
@@ -27,10 +27,10 @@
 <div class="admin__field admin__field-wide"
      visible="visible"
      disabled="disabled"
-     css="element.setClasses(element)"
+     css="$data.setClasses($data)"
      attr="'data-index': index">
-    <label if="element.label" class="admin__field-label" attr="for: element.uid">
-        <span translate="element.label"/>
+    <label if="$data.label" class="admin__field-label" attr="for: $data.uid">
+        <span translate="$data.label"/>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">

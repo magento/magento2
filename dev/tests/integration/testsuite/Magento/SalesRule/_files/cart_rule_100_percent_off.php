@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var Magento\Framework\Registry $registry */
@@ -24,7 +28,11 @@ $salesRule->setData(
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Store\Model\StoreManagerInterface::class
+<<<<<<< HEAD
             )->getWebsite()->getId()
+=======
+            )->getWebsite()->getId(),
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ],
         'discount_qty' => 0,
         'apply_to_shipping' => 1,

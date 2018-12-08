@@ -471,10 +471,15 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $customer = $this->customerRepository->get($fixtureCustomerEmail);
         $this->customerRepository->delete($customer);
         /** Ensure that customer was deleted */
+<<<<<<< HEAD
         $this->expectException(
             NoSuchEntityException::class,
             'No such entity with email = customer@example.com, websiteId = 1'
         );
+=======
+        $this->expectException(NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with email = customer@example.com, websiteId = 1');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->customerRepository->get($fixtureCustomerEmail);
     }
 
@@ -491,10 +496,15 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $fixtureCustomerId = 1;
         $this->customerRepository->deleteById($fixtureCustomerId);
         /** Ensure that customer was deleted */
+<<<<<<< HEAD
         $this->expectException(
             NoSuchEntityException::class,
             'No such entity with email = customer@example.com, websiteId = 1'
         );
+=======
+        $this->expectException(NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with email = customer@example.com, websiteId = 1');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->customerRepository->get($fixtureCustomerEmail);
     }
 

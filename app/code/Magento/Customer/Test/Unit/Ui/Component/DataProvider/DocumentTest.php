@@ -175,7 +175,11 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $this->document->setData('original_website_id', $websiteId);
 
         $this->scopeConfig->expects(static::once())
+<<<<<<< HEAD
             ->method('getValue')
+=======
+            ->method('isSetFlag')
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->with()
             ->willReturn(true);
 

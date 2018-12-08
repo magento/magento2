@@ -64,7 +64,11 @@ class AddPaymentWeeeItemTest extends TestCase
      * @param bool $includeInSubtotal
      * @return void
      */
+<<<<<<< HEAD
     public function testExecute(bool $isEnabled, bool $includeInSubtotal)
+=======
+    public function testExecute(bool $isEnabled, bool $includeInSubtotal): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createMock(Observer::class);
@@ -84,6 +88,7 @@ class AddPaymentWeeeItemTest extends TestCase
             $toBeCalled = 0;
         }
 
+<<<<<<< HEAD
         $eventMock->expects($this->atLeast($toBeCalled))
             ->method('getCart')
             ->willReturn($cartModelMock);
@@ -100,6 +105,24 @@ class AddPaymentWeeeItemTest extends TestCase
             ->method('getAllItems')
             ->willReturn([$itemMock]);
         $cartModelMock->expects($this->atLeast($toBeCalled))
+=======
+        $eventMock->expects($this->exactly($toBeCalled))
+            ->method('getCart')
+            ->willReturn($cartModelMock);
+        $observerMock->expects($this->exactly($toBeCalled))
+            ->method('getEvent')
+            ->willReturn($eventMock);
+        $itemMock->expects($this->exactly($toBeCalled))
+            ->method('getOriginalItem')
+            ->willReturn($originalItemMock);
+        $originalItemMock->expects($this->exactly($toBeCalled))
+            ->method('getParentItem')
+            ->willReturn($parentItemMock);
+        $salesModelMock->expects($this->exactly($toBeCalled))
+            ->method('getAllItems')
+            ->willReturn([$itemMock]);
+        $cartModelMock->expects($this->exactly($toBeCalled))
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('getSalesModel')
             ->willReturn($salesModelMock);
 
@@ -131,6 +154,7 @@ class AddPaymentWeeeItemTest extends TestCase
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
+<<<<<<< HEAD
         $storeMock->method('getId')->willReturn(Store::DEFAULT_STORE_ID);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
         $this->weeeHelperMock->method('isEnabled')->with(Store::DEFAULT_STORE_ID)
@@ -138,6 +162,23 @@ class AddPaymentWeeeItemTest extends TestCase
 
         if ($isEnabled) {
             $this->weeeHelperMock->method('includeInSubtotal')->with(Store::DEFAULT_STORE_ID)
+=======
+        $storeMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(Store::DEFAULT_STORE_ID);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($storeMock);
+        $this->weeeHelperMock->expects($this->once())
+            ->method('isEnabled')
+            ->with(Store::DEFAULT_STORE_ID)
+            ->willReturn($isEnabled);
+
+        if ($isEnabled) {
+            $this->weeeHelperMock->expects($this->once())
+                ->method('includeInSubtotal')
+                ->with(Store::DEFAULT_STORE_ID)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 ->willReturn($includeInSubtotal);
         }
 

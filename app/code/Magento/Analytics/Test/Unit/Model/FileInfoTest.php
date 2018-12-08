@@ -8,9 +8,12 @@ namespace Magento\Analytics\Test\Unit\Model;
 use Magento\Analytics\Model\FileInfo;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
 /**
  * Class FileInfoTest
  */
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class FileInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**

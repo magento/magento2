@@ -103,7 +103,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     }
 
     /**
-     * Retrieve url for form submiting
+     * Retrieve url for form submitting
      *
      * @return string
      */

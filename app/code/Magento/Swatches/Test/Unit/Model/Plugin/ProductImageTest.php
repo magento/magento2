@@ -101,6 +101,30 @@ class ProductImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $expected
      */
+<<<<<<< HEAD
+=======
+    protected function getFilterArray($expected)
+    {
+        $this->eavConfigMock
+            ->method('getEntityAttributeCodes')
+            ->with('catalog_product')
+            ->willReturn($expected['attribute_codes_array']);
+
+        $this->eavConfigMock
+            ->method('getAttribute')
+            ->with('catalog_product', $expected['attribute_code'])
+            ->willReturn($this->attributeMock);
+
+        $this->attributeMock
+            ->expects($this->exactly($expected['getId_count']))
+            ->method('getId')
+            ->willReturn($expected['getId']);
+    }
+
+    /**
+     * @param $expected
+     */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     protected function canReplaceImageWithSwatch($expected)
     {
         $this->swatchesHelperMock

@@ -60,7 +60,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected $_viewDesign;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface $cache
+     * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_cache;
 
@@ -130,6 +130,11 @@ class Translate implements \Magento\Framework\TranslateInterface
     private $serializer;
 
     /**
+     * @var DriverInterface
+     */
+    private $fileDriver;
+
+    /**
      * @param \Magento\Framework\View\DesignInterface $viewDesign
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
@@ -176,14 +181,23 @@ class Translate implements \Magento\Framework\TranslateInterface
         $this->directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_csvParser = $csvParser;
         $this->packDictionary = $packDictionary;
+<<<<<<< HEAD
         $this->fileDriver = $fileDriver ?: ObjectManager::getInstance()->get(File::class);
+=======
+        $this->fileDriver = $fileDriver
+            ?? ObjectManager::getInstance()->get(File::class);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
         $this->_config = [
             self::CONFIG_AREA_KEY => null,
             self::CONFIG_LOCALE_KEY => null,
             self::CONFIG_SCOPE_KEY => null,
             self::CONFIG_THEME_KEY => null,
+<<<<<<< HEAD
             self::CONFIG_MODULE_KEY => null
+=======
+            self::CONFIG_MODULE_KEY => null,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
     }
 
@@ -208,7 +222,12 @@ class Translate implements \Magento\Framework\TranslateInterface
         );
 
         if (!$forceReload) {
+<<<<<<< HEAD
             if (false !== $data = $this->_loadCache()) {
+=======
+            $data = $this->_loadCache();
+            if (false !== $data) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 $this->_data = $data;
                 return $this;
             }
@@ -277,6 +296,7 @@ class Translate implements \Magento\Framework\TranslateInterface
 
     /**
      * Retrieve name of the current module
+     *
      * @return mixed
      */
     protected function getControllerModuleName()
@@ -401,7 +421,11 @@ class Translate implements \Magento\Framework\TranslateInterface
      * @param array $config
      * @return string|null
      */
+<<<<<<< HEAD
     private function getThemeTranslationFileName($locale, array $config)
+=======
+    private function getThemeTranslationFileName(?string $locale, array $config): ?string
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $fileName = $this->_viewFileSystem->getLocaleFileName(
             'i18n' . '/' . $locale . '.csv',
@@ -543,11 +567,10 @@ class Translate implements \Magento\Framework\TranslateInterface
     /**
      * Retrieve cache identifier
      *
-     * @param bool $forceReload
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function getCacheId($forceReload = false)
+    protected function getCacheId()
     {
         $_cacheId = \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER;
         $_cacheId .= '_' . $this->_config[self::CONFIG_LOCALE_KEY];

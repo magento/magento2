@@ -102,7 +102,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFileSizeInvalidLinkType()
     {
-        $this->_helper->setResource(self::FILE_PATH, 'invalid link type');
+        $this->_helper->setResource(self::FILE_PATH, 'The link type is invalid. Verify and try again.');
         $this->_helper->getFileSize();
     }
 

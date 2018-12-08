@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -57,7 +55,9 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $this->_sourceFactoryMock = $this->createMock(\Magento\Config\Model\Config\SourceFactory::class);
         $this->_commentFactoryMock = $this->createMock(\Magento\Config\Model\Config\CommentFactory::class);
         $this->_blockFactoryMock = $this->createMock(\Magento\Framework\View\Element\BlockFactory::class);
-        $this->_depMapperMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Dependency\Mapper::class);
+        $this->_depMapperMock = $this->createMock(
+            \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper::class
+        );
 
         $this->_model = $objectManager->getObject(
             \Magento\Config\Model\Config\Structure\Element\Field::class,
@@ -290,7 +290,8 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $option = [
             [
                 'label' => 'test',
-                'value' => "{{\Magento\Config\Test\Unit\Model\Config\Structure\Element\FieldTest::FIELD_TEST_CONSTANT}}",
+                'value' =>
+                    "{{\Magento\Config\Test\Unit\Model\Config\Structure\Element\FieldTest::FIELD_TEST_CONSTANT}}",
             ],
         ];
         $expected = [
@@ -336,7 +337,10 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             ['source_model' => 'Source_Model_Name::retrieveElements', 'path' => 'path', 'type' => 'multiselect'],
             'scope'
         );
-        $sourceModelMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['setPath', 'retrieveElements']);
+        $sourceModelMock = $this->createPartialMock(
+            \Magento\Framework\DataObject::class,
+            ['setPath', 'retrieveElements']
+        );
         $this->_sourceFactoryMock->expects(
             $this->once()
         )->method(
@@ -358,7 +362,10 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             ['source_model' => 'Source_Model_Name::retrieveElements', 'path' => 'path', 'type' => 'select'],
             'scope'
         );
-        $sourceModelMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['setPath', 'retrieveElements']);
+        $sourceModelMock = $this->createPartialMock(
+            \Magento\Framework\DataObject::class,
+            ['setPath', 'retrieveElements']
+        );
         $this->_sourceFactoryMock->expects(
             $this->once()
         )->method(

@@ -14,8 +14,11 @@ use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
 
 /**
+<<<<<<< HEAD
  * Class SignUpCommand
  *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * SignUp merchant for Free Tier project
  */
 class SignUpCommand implements CommandInterface
@@ -112,8 +115,15 @@ class SignUpCommand implements CommandInterface
             if (!$result) {
                 $this->logger->warning(
                     sprintf(
+<<<<<<< HEAD
                         'Subscription for MBI service has been failed. An error occurred during token exchange: %s',
                         !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
+=======
+                        'Subscription for MBI service has been failed. An error occurred during token exchange: %s.'
+                        . ' Content-Type: %s',
+                        !empty($response->getBody()) ? $response->getBody() : 'Response body is empty',
+                        $response->getHeader('Content-Type')
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     )
                 );
             }

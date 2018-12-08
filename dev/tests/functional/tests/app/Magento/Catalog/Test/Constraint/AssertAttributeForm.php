@@ -37,7 +37,7 @@ class AssertAttributeForm extends AbstractAssertForm
             $attribute->getData(),
             $catalogProductAttributeNew->getAttributeForm()->getData($attribute)
         );
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
     }
 
     /**

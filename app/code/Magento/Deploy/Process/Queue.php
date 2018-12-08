@@ -207,6 +207,7 @@ class Queue
                 }
             }
         }
+<<<<<<< HEAD
 
         if (!$dependenciesNotFinished
             && !$this->isDeployed($package)
@@ -214,6 +215,27 @@ class Queue
                 $this->maxProcesses < 2
                 || (count($this->inProgress) < $this->maxProcesses)
             )
+=======
+        $this->executePackage($package, $name, $packages, $dependenciesNotFinished);
+    }
+
+    /**
+     * @param Package $package
+     * @param string $name
+     * @param array $packages
+     * @param bool $dependenciesNotFinished
+     * @return void
+     */
+    private function executePackage(
+        Package $package,
+        string $name,
+        array &$packages,
+        bool $dependenciesNotFinished
+    ) {
+        if (!$dependenciesNotFinished
+            && !$this->isDeployed($package)
+            && ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses))
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ) {
             unset($packages[$name]);
             $this->execute($package);

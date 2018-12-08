@@ -52,7 +52,11 @@ class Generator
      * @param Generator\Io $ioObject
      * @param array $generatedEntities
      * @param DefinedClasses $definedClasses
+<<<<<<< HEAD
      * @param LoggerInterface $logger
+=======
+     * @param LoggerInterface|null $logger
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function __construct(
         Io $ioObject = null,
@@ -232,7 +236,7 @@ class Generator
     {
         if (!$resultEntityType || !$sourceClassName) {
             return self::GENERATION_ERROR;
-        } elseif ($this->definedClasses->isClassLoadableFromDisc($resultClass)) {
+        } elseif ($this->definedClasses->isClassLoadableFromDisk($resultClass)) {
             $generatedFileName = $this->_ioObject->generateResultFileName($resultClass);
             /**
              * Must handle two edge cases: a competing process has generated the class and written it to disc already,

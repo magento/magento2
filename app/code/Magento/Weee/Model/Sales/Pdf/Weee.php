@@ -36,6 +36,7 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
     /**
      * Check if weee total amount should be included
      *
+     * Example:
      * array(
      *  $index => array(
      *      'amount'   => $amount,
@@ -43,6 +44,7 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
      *      'font_size'=> $font_size
      *  )
      * )
+     *
      * @return array
      */
     public function getTotalsForDisplay()
@@ -70,7 +72,11 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 
         return $totals;
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     /**
      * Check if we can display Weee total information in PDF
      *

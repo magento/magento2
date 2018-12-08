@@ -34,10 +34,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddProductWithLowerQty()
     {
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            'The fewest you may purchase is 3'
-        );
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The fewest you may purchase is 3');
         $product = $this->productRepository->get('simple');
         $this->cart->addProduct($product->getId(), ['qty' => 1]);
     }

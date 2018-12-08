@@ -6,7 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
-class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpGetActionInterface
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface

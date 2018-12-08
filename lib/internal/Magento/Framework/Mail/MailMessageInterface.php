@@ -7,6 +7,11 @@ namespace Magento\Framework\Mail;
 
 /**
  * Mail Message interface
+<<<<<<< HEAD
+=======
+ *
+ * @api
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 interface MailMessageInterface extends MessageInterface
 {

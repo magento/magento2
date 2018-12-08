@@ -6,11 +6,16 @@
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Delete image files.
  */
+<<<<<<< HEAD
 class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
+=======
+class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements HttpPostActionInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -79,7 +84,11 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
                 $filesystem = $this->_objectManager->get(\Magento\Framework\Filesystem::class);
                 $dir = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
                 $filePath = $path . '/' . \Magento\Framework\File\Uploader::getCorrectFileName($file);
+<<<<<<< HEAD
                 if ($dir->isFile($dir->getRelativePath($filePath)) && !preg_match('/^\.htaccess$/', $file)) {
+=======
+                if ($dir->isFile($dir->getRelativePath($filePath)) && !preg_match('#.htaccess#', $file)) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     $this->getStorage()->deleteFile($filePath);
                 }
             }

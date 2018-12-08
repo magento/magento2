@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 namespace Magento\Sales\Api;
 
@@ -17,6 +21,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
+<<<<<<< HEAD
+=======
+ * Test for Magento\Sales\Api\OrderCustomerDelegateInterface class.
+ *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * @magentoAppIsolation enabled
  */
 class OrderCustomerDelegateInterfaceTest extends TestCase
@@ -47,7 +56,11 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
     private $orderFactory;
 
     /**
+<<<<<<< HEAD
      * @inheritDoc
+=======
+     * {@inheritdoc}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     protected function setUp()
     {
@@ -77,7 +90,11 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
     private function compareAddresses(
         OrderAddressInterface $orderAddress,
         AddressInterface $address
+<<<<<<< HEAD
     ) {
+=======
+    ): void {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->assertEquals(
             $orderAddress->getFirstname(),
             $address->getFirstname()
@@ -124,14 +141,24 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/order.php
+<<<<<<< HEAD
      */
     public function testDelegateNew()
+=======
+     * @return void
+     */
+    public function testDelegateNew(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $orderAutoincrementId = '100000001';
         /** @var Order $orderModel */
         $orderModel = $this->orderFactory->create();
         $orderModel->loadByIncrementId($orderAutoincrementId);
+<<<<<<< HEAD
         $orderId = $orderModel->getId();
+=======
+        $orderId = (int)$orderModel->getId();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         unset($orderModel);
 
         $this->delegate->delegateNew($orderId);
@@ -178,14 +205,24 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/order_different_addresses.php
+<<<<<<< HEAD
      */
     public function testDelegateNewDifferentAddresses()
+=======
+     * @return void
+     */
+    public function testDelegateNewDifferentAddresses(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $orderAutoincrementId = '100000001';
         /** @var Order $orderModel */
         $orderModel = $this->orderFactory->create();
         $orderModel->loadByIncrementId($orderAutoincrementId);
+<<<<<<< HEAD
         $orderId = $orderModel->getId();
+=======
+        $orderId = (int)$orderModel->getId();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         unset($orderModel);
 
         $this->delegate->delegateNew($orderId);
@@ -225,6 +262,10 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
                 $this->compareAddresses($order->getShippingAddress(), $address);
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->assertEquals($order->getCustomerId(), $createdCustomer->getId());
     }
 }

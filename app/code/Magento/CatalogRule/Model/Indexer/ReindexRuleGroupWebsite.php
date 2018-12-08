@@ -31,6 +31,15 @@ class ReindexRuleGroupWebsite
     private $catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
 
     /**
+<<<<<<< HEAD
+     * @var TableSwapper
+=======
+     * @var ActiveTableSwitcher
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
+     */
+    private $tableSwapper;
+
+    /**
      * @var TableSwapper
      */
     private $tableSwapper;
@@ -40,8 +49,11 @@ class ReindexRuleGroupWebsite
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ActiveTableSwitcher $activeTableSwitcher
      * @param TableSwapper|null $tableSwapper
+<<<<<<< HEAD
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
@@ -51,6 +63,10 @@ class ReindexRuleGroupWebsite
     ) {
         $this->dateTime = $dateTime;
         $this->resource = $resource;
+<<<<<<< HEAD
+=======
+        $this->activeTableSwitcher = $activeTableSwitcher;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->tableSwapper = $tableSwapper ??
             ObjectManager::getInstance()->get(TableSwapper::class);
     }

@@ -5,6 +5,11 @@
  */
 namespace Magento\Backup\Controller\Adminhtml;
 
+<<<<<<< HEAD
+=======
+use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Backup\Helper\Data as Helper;
 use Magento\Framework\App\ObjectManager;
 
@@ -16,7 +21,7 @@ use Magento\Framework\App\ObjectManager;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
-abstract class Index extends \Magento\Backend\App\Action
+abstract class Index extends Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -73,7 +78,11 @@ abstract class Index extends \Magento\Backend\App\Action
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Backup\Model\BackupFactory $backupModelFactory,
         \Magento\Framework\App\MaintenanceMode $maintenanceMode,
+<<<<<<< HEAD
         Helper $helper = null
+=======
+        ?Helper $helper = null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_backupFactory = $backupFactory;

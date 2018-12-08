@@ -14,7 +14,11 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
+<<<<<<< HEAD
  * Test for class RefreshPath.
+=======
+ * Test for class Magento\Catalog\Controller\Adminhtml\Category\RefreshPath.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class RefreshPathTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,7 +33,11 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
     private $contextMock;
 
     /**
+<<<<<<< HEAD
      * {@inheritDoc}
+=======
+     * @inheritDoc
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     protected function setUp()
     {
@@ -53,7 +61,11 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     private function setObjectProperty($object, string $propertyName, $value)
+=======
+    private function setObjectProperty($object, string $propertyName, $value) : void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $reflectionClass = new \ReflectionClass($object);
         $reflectionProperty = $reflectionClass->getProperty($propertyName);
@@ -64,7 +76,11 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testExecute()
+=======
+    public function testExecute() : void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $value = ['id' => 3, 'path' => '1/2/3', 'parentId' => 2];
         $result = '{"id":3,"path":"1/2/3","parentId":"2"}';
@@ -116,7 +132,11 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+<<<<<<< HEAD
     public function testExecuteWithoutCategoryId()
+=======
+    public function testExecuteWithoutCategoryId() : void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $requestMock = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
 

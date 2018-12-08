@@ -12,7 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\PaymentMethodListInterface;
 
 /**
- * Provides information about vault payemnt methods availability on storefront
+ * Provides information about vault payment methods availability on storefront
  *
  * @api
  * @since 100.1.0

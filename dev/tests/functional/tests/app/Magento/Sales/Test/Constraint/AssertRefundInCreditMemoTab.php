@@ -44,7 +44,7 @@ class AssertRefundInCreditMemoTab extends AbstractConstraint
                 'amount_from' => $amount[$key]['grand_creditmemo_total'],
                 'amount_to' => $amount[$key]['grand_creditmemo_total']
             ];
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $grid->isRowVisible($filter, true, false),
                 'Credit memo is absent on credit memos tab.'
             );

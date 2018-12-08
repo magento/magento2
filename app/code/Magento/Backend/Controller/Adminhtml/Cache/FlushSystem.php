@@ -6,7 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-class FlushSystem extends \Magento\Backend\Controller\Adminhtml\Cache
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class FlushSystem extends \Magento\Backend\Controller\Adminhtml\Cache implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session

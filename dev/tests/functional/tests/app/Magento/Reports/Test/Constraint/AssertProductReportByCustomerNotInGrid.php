@@ -47,7 +47,7 @@ class AssertProductReportByCustomerNotInGrid extends AbstractConstraint
         $customerReportReview->getGridBlock()->openReview($customer);
         $reviewIndex->getReviewGrid()->search($filter);
         unset($filter['visible_in']);
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $reviewIndex->getReviewGrid()->isRowVisible($filter, false),
             'Customer review is present in Review grid.'
         );

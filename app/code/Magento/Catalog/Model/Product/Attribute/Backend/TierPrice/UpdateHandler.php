@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Catalog\Model\Product\Attribute\Backend\TierPrice;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
@@ -14,9 +19,15 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
 
 /**
+<<<<<<< HEAD
  * Process tier price data for handled existing product.
  */
 class UpdateHandler extends AbstractHandler
+=======
+ * Process tier price data for handled existing product
+ */
+class UpdateHandler implements ExtensionInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -29,6 +40,14 @@ class UpdateHandler extends AbstractHandler
     private $attributeRepository;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var \Magento\Customer\Api\GroupManagementInterface
+     */
+    private $groupManagement;
+
+    /**
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
     private $metadataPoll;
@@ -52,19 +71,35 @@ class UpdateHandler extends AbstractHandler
         MetadataPool $metadataPool,
         Tierprice $tierPriceResource
     ) {
+<<<<<<< HEAD
         parent::__construct($groupManagement);
 
         $this->storeManager = $storeManager;
         $this->attributeRepository = $attributeRepository;
+=======
+        $this->storeManager = $storeManager;
+        $this->attributeRepository = $attributeRepository;
+        $this->groupManagement = $groupManagement;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->metadataPoll = $metadataPool;
         $this->tierPriceResource = $tierPriceResource;
     }
 
     /**
+<<<<<<< HEAD
      * @param \Magento\Catalog\Api\Data\ProductInterface|object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @throws \Magento\Framework\Exception\InputException
+=======
+     * Perform action on relation/extension attribute.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface|object $entity
+     * @param array $arguments
+     * @return \Magento\Catalog\Api\Data\ProductInterface|object
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entity, $arguments = [])
@@ -83,7 +118,16 @@ class UpdateHandler extends AbstractHandler
             $productId = (int)$entity->getData($identifierField);
 
             // prepare original data to compare
+<<<<<<< HEAD
             $origPrices = $entity->getOrigData($attribute->getName());
+=======
+            $origPrices = [];
+            $originalId = $entity->getOrigData($identifierField);
+            if (empty($originalId) || $entity->getData($identifierField) == $originalId) {
+                $origPrices = $entity->getOrigData($attribute->getName());
+            }
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $old = $this->prepareOldTierPriceToCompare($origPrices);
             // prepare data for save
             $new = $this->prepareNewDataForSave($priceRows, $isGlobal);
@@ -106,11 +150,46 @@ class UpdateHandler extends AbstractHandler
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get additional tier price fields
+     *
+     * @param array $objectArray
+     * @return array
+     */
+    private function getAdditionalFields(array $objectArray): array
+    {
+        $percentageValue = $this->getPercentage($objectArray);
+        return [
+            'value' => $percentageValue ? null : $objectArray['price'],
+            'percentage_value' => $percentageValue ?: null,
+        ];
+    }
+
+    /**
+     * Check whether price has percentage value.
+     *
+     * @param array $priceRow
+     * @return int|null
+     */
+    private function getPercentage(array $priceRow): ?int
+    {
+        return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
+            ? (int)$priceRow['percentage_value']
+            : null;
+    }
+
+    /**
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * Update existing tier prices for processed product
      *
      * @param array $valuesToUpdate
      * @param array $oldValues
+<<<<<<< HEAD
      * @return boolean
+=======
+     * @return bool
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private function updateValues(array $valuesToUpdate, array $oldValues): bool
     {
@@ -135,7 +214,11 @@ class UpdateHandler extends AbstractHandler
     }
 
     /**
+<<<<<<< HEAD
      * Insert new tier prices for processed product.
+=======
+     * Insert new tier prices for processed product
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param int $productId
      * @param array $valuesToInsert
@@ -159,7 +242,11 @@ class UpdateHandler extends AbstractHandler
     }
 
     /**
+<<<<<<< HEAD
      * Delete tier price values for processed product.
+=======
+     * Delete tier price values for processed product
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param int $productId
      * @param array $valuesToDelete
@@ -177,24 +264,63 @@ class UpdateHandler extends AbstractHandler
     }
 
     /**
+<<<<<<< HEAD
      * Get generated price key based on price data.
+=======
+     * Get generated price key based on price data
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param array $priceData
      * @return string
      */
     private function getPriceKey(array $priceData): string
     {
+<<<<<<< HEAD
         $qty = $this->parseQty($priceData['price_qty']);
         $key = implode(
             '-',
             array_merge([$priceData['website_id'], $priceData['cust_group']], [$qty])
+=======
+        $key = implode(
+            '-',
+            array_merge([$priceData['website_id'], $priceData['cust_group']], [(int)$priceData['price_qty']])
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         );
 
         return $key;
     }
 
     /**
+<<<<<<< HEAD
      * Check by id is website global.
+=======
+     * Prepare tier price data by provided price row data
+     *
+     * @param array $data
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function prepareTierPrice(array $data): array
+    {
+        $useForAllGroups = (int)$data['cust_group'] === $this->groupManagement->getAllCustomersGroup()->getId();
+        $customerGroupId = $useForAllGroups ? 0 : $data['cust_group'];
+        $tierPrice = array_merge(
+            $this->getAdditionalFields($data),
+            [
+                'website_id' => $data['website_id'],
+                'all_groups' => (int)$useForAllGroups,
+                'customer_group_id' => $customerGroupId,
+                'value' => $data['price'] ?? null,
+                'qty' => (int)$data['price_qty']
+            ]
+        );
+
+        return $tierPrice;
+    }
+
+    /**
+     * Check by id is website global
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param int $websiteId
      * @return bool
@@ -210,7 +336,11 @@ class UpdateHandler extends AbstractHandler
      * @param array|null $origPrices
      * @return array
      */
+<<<<<<< HEAD
     private function prepareOldTierPriceToCompare($origPrices): array
+=======
+    private function prepareOldTierPriceToCompare(?array $origPrices): array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $old = [];
         if (is_array($origPrices)) {
@@ -231,7 +361,11 @@ class UpdateHandler extends AbstractHandler
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+<<<<<<< HEAD
     private function prepareNewDataForSave($priceRows, $isGlobal = true): array
+=======
+    private function prepareNewDataForSave(array $priceRows, bool $isGlobal = true): array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $new = [];
         $priceRows = array_filter($priceRows);

@@ -9,7 +9,10 @@ namespace Magento\PageCache\Model\System\Config\Backend;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+<<<<<<< HEAD
 use Magento\Framework\Exception\LocalizedException;
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 /**
  * Backend model for processing Public content cache lifetime settings.
@@ -24,6 +27,10 @@ class Ttl extends \Magento\Framework\App\Config\Value
     private $escaper;
 
     /**
+<<<<<<< HEAD
+=======
+     * Ttl constructor.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param ScopeConfigInterface $config
@@ -38,17 +45,28 @@ class Ttl extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Registry $registry,
         ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+<<<<<<< HEAD
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         Escaper $escaper = null
+=======
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
+        ?Escaper $escaper = null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
         $this->escaper = $escaper ?: ObjectManager::getInstance()->create(Escaper::class);
     }
 
     /**
+<<<<<<< HEAD
      * Throw exception if Ttl data is invalid or empty.
+=======
+     * Throw exception if Ttl data is invalid or empty
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -57,7 +75,11 @@ class Ttl extends \Magento\Framework\App\Config\Value
     {
         $value = $this->getValue();
         if ($value < 0 || !preg_match('/^[0-9]+$/', $value)) {
+<<<<<<< HEAD
             throw new LocalizedException(
+=======
+            throw new \Magento\Framework\Exception\LocalizedException(
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 __(
                     'Ttl value "%1" is not valid. Please use only numbers equal or greater than zero.',
                     $this->escaper->escapeHtml($value)

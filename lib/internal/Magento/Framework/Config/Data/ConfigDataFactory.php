@@ -10,7 +10,11 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
+<<<<<<< HEAD
  * Factory for ConfigData
+=======
+ * Factory for ConfigData.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class ConfigDataFactory
 {
@@ -20,7 +24,11 @@ class ConfigDataFactory
     private $objectManager;
 
     /**
+<<<<<<< HEAD
      * Factory constructor
+=======
+     * Factory constructor.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param ObjectManagerInterface $objectManager
      */

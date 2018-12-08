@@ -118,7 +118,7 @@ class Categories extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -130,7 +130,7 @@ class Categories extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -289,7 +289,11 @@ class Categories extends AbstractModifier
                                     'source' => 'product_details',
                                     'displayArea' => 'insideGroup',
                                     'sortOrder' => 20,
+<<<<<<< HEAD
                                     'dataScope' => $fieldCode,
+=======
+                                    'dataScope'  => $fieldCode,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                                 ],
                             ],
                         ]

@@ -6,6 +6,7 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteUserActionGroup">
         <arguments>
@@ -17,12 +18,29 @@
         <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch" />
         <waitForPageLoad stepKey="waitForGridToLoad"/>
         <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user_restricted.username}}" stepKey="seeUser" />
+=======
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteCustomUserActionGroup">
+        <arguments>
+            <argument name="user"/>
+        </arguments>
+        <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToUserGrid" />
+        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{user.username}}" stepKey="enterUserName" />
+        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch" />
+        <waitForPageLoad stepKey="waitForGridToLoad"/>
+        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user.username}}" stepKey="seeUser" />
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="openUserEdit"/>
         <waitForPageLoad stepKey="waitForUserEditPageLoad"/>
         <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
         <click selector="{{AdminMainActionsSection.delete}}" stepKey="deleteUser"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+<<<<<<< HEAD
         <see userInput="You deleted the user." stepKey="seeUserDeleteMessage"/>
+=======
+        <waitForPageLoad stepKey="waitForSave" />
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the user." stepKey="seeUserDeleteMessage"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </actionGroup>
 </actionGroups>

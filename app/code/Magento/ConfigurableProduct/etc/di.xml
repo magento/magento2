@@ -228,9 +228,12 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="product_identities_extender" type="Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender" />
     </type>
+<<<<<<< HEAD
     <type name="Magento\SalesRule\Model\Rule\Condition\Product">
         <plugin name="apply_rule_on_configurable_children" type="Magento\ConfigurableProduct\Plugin\SalesRule\Model\Rule\Condition\Product" />
     </type>
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     <type name="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite">
         <arguments>
             <argument name="itemResolvers" xsi:type="array">

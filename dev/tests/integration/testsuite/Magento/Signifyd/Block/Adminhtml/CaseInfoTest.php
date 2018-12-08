@@ -8,7 +8,10 @@ namespace Magento\Signifyd\Block\Adminhtml;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template\Context;
+<<<<<<< HEAD
 use Magento\Framework\View\LayoutInterface;
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -25,9 +28,15 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
     private $order;
 
     /**
+<<<<<<< HEAD
      * @var LayoutInterface
      */
     private $layout;
+=======
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     /**
      * @inheritdoc
@@ -36,7 +45,11 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->order = $this->objectManager->create(Order::class);
+<<<<<<< HEAD
         $this->layout = $this->objectManager->get(LayoutInterface::class);
+=======
+        $this->layoutFactory = $this->objectManager->get(\Magento\Framework\View\LayoutFactory::class);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -96,10 +109,19 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
      */
     private function getBlock()
     {
+<<<<<<< HEAD
         $this->layout->addContainer('order_additional_info', 'Container');
 
         /** @var CaseInfo $block */
         $block = $this->layout->addBlock(CaseInfo::class, 'order_case_info', 'order_additional_info');
+=======
+        $layout = $this->layoutFactory->create();
+
+        $layout->addContainer('order_additional_info', 'Container');
+
+        /** @var CaseInfo $block */
+        $block = $layout->addBlock(CaseInfo::class, 'order_case_info', 'order_additional_info');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $block->setAttribute('context', $this->getContext());
         $block->setTemplate('Magento_Signifyd::case_info.phtml');
 

@@ -1,0 +1,55 @@
+{
+    "wishlist": {
+        "column": {
+            "wishlist_id": true,
+            "customer_id": true,
+            "shared": true,
+            "sharing_code": true,
+            "updated_at": true
+        },
+        "index": {
+            "WISHLIST_SHARED": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "WISHLIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "WISHLIST_CUSTOMER_ID": true
+        }
+    },
+    "wishlist_item": {
+        "column": {
+            "wishlist_item_id": true,
+            "wishlist_id": true,
+            "product_id": true,
+            "store_id": true,
+            "added_at": true,
+            "description": true,
+            "qty": true
+        },
+        "index": {
+            "WISHLIST_ITEM_WISHLIST_ID": true,
+            "WISHLIST_ITEM_PRODUCT_ID": true,
+            "WISHLIST_ITEM_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "WISHLIST_ITEM_WISHLIST_ID_WISHLIST_WISHLIST_ID": true,
+            "WISHLIST_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true,
+            "WISHLIST_ITEM_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "wishlist_item_option": {
+        "column": {
+            "option_id": true,
+            "wishlist_item_id": true,
+            "product_id": true,
+            "code": true,
+            "value": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_A014B30B04B72DD0EAB3EECD779728D6": true,
+            "WISHLIST_ITEM_OPTION_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true
+        }
+    }
+}

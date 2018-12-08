@@ -5,13 +5,13 @@
  */
 
 /**
- * Sales order view items block
- *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Sales\Block\Order;
 
 /**
+ * Sales order view items block.
+ *
  * @api
  * @since 100.0.2
  */
@@ -86,8 +86,9 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * Determine if the pager should be displayed for order items list
-     * To be called from templates(after _prepareLayout())
+     * Determine if the pager should be displayed for order items list.
+     *
+     * To be called from templates(after _prepareLayout()).
      *
      * @return bool
      * @since 100.1.7
@@ -100,7 +101,8 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * Get visible items for current page.
-     * To be called from templates(after _prepareLayout())
+     *
+     * To be called from templates(after _prepareLayout()).
      *
      * @return \Magento\Framework\DataObject[]
      * @since 100.1.7
@@ -111,8 +113,9 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * Get pager HTML according to our requirements
-     * To be called from templates(after _prepareLayout())
+     * Get pager HTML according to our requirements.
+     *
+     * To be called from templates(after _prepareLayout()).
      *
      * @return string HTML output
      * @since 100.1.7

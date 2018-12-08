@@ -128,7 +128,11 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
                 ];
 
                 // Checking whether option value is not null
+<<<<<<< HEAD
                 if ($option['value']!= null) {
+=======
+                if ($option['value'] !== null) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     if (isset($option['print_value'])) {
                         $printValue = $option['print_value'];
                     } else {

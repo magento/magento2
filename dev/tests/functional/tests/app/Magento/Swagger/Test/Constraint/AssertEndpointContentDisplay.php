@@ -31,7 +31,11 @@ class AssertEndpointContentDisplay extends AbstractConstraint
             $operationContentSelector = '#operations-%s-%s%s  .opblock-body';
 
             $operationContentSelector = sprintf($operationContentSelector, $serviceName, $serviceName, $endpoint);
+<<<<<<< HEAD
             \PHPUnit_Framework_Assert::assertTrue(
+=======
+            \PHPUnit\Framework\Assert::assertTrue(
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 $swaggerPage->isElementVisible($operationContentSelector),
                 'REST API endpoint operation content on swagger page.'
             );

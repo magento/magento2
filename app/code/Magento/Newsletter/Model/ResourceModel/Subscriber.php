@@ -5,8 +5,13 @@
  */
 namespace Magento\Newsletter\Model\ResourceModel;
 
+<<<<<<< HEAD
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
+=======
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 /**
  * Newsletter subscriber resource model
@@ -76,14 +81,17 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     ) {
         $this->_date = $date;
         $this->mathRandom = $mathRandom;
+<<<<<<< HEAD
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()
             ->get(StoreManagerInterface::class);
+=======
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         parent::__construct($context, $connectionName);
     }
 
     /**
-     * Initialize resource model
-     * Get tablename from config
+     * Initialize resource model. Get tablename from config
      *
      * @return void
      */
@@ -132,6 +140,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function loadByCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
+<<<<<<< HEAD
         $storeId = (int)$customer->getStoreId() ?: $this->storeManager
             ->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
 
@@ -148,11 +157,26 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'store_id' => $storeId
                 ]
             );
+=======
+        $storeIds = $this->storeManager->getWebsite($customer->getWebsiteId())->getStoreIds();
 
-        if ($result) {
-            return $result;
+        if ($customer->getId()) {
+            $select = $this->connection
+                ->select()
+                ->from($this->getMainTable())
+                ->where('customer_id = ?', $customer->getId())
+                ->where('store_id IN (?)', $storeIds)
+                ->limit(1);
+
+            $result = $this->connection->fetchRow($select);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
+
+            if ($result) {
+                return $result;
+            }
         }
 
+<<<<<<< HEAD
         $select = $this->connection
             ->select()
             ->from($this->getMainTable())
@@ -166,9 +190,21 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'store_id' => $storeId
                 ]
             );
+=======
+        if ($customer->getEmail()) {
+            $select = $this->connection
+                ->select()
+                ->from($this->getMainTable())
+                ->where('subscriber_email = ?', $customer->getEmail())
+                ->where('store_id IN (?)', $storeIds)
+                ->limit(1);
 
-        if ($result) {
-            return $result;
+            $result = $this->connection->fetchRow($select);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
+
+            if ($result) {
+                return $result;
+            }
         }
 
         return [];

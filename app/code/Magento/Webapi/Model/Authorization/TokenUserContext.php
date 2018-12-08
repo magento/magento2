@@ -141,6 +141,10 @@ class TokenUserContext implements UserContextInterface
         if ($this->dateTime->strToTime($token->getCreatedAt()) < ($this->date->gmtTimestamp() - $tokenTtl * 3600)) {
             return true;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return false;
     }
 
@@ -178,6 +182,7 @@ class TokenUserContext implements UserContextInterface
 
         if (!$token->getId() || $token->getRevoked() || $this->isTokenExpired($token)) {
             $this->isRequestProcessed = true;
+
             return;
         }
 

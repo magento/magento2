@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ImportExport\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -22,6 +20,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * @method string getBehavior() getBehavior()
  * @method \Magento\ImportExport\Model\Import setEntity() setEntity(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
 class Import extends \Magento\ImportExport\Model\AbstractModel
@@ -281,6 +280,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param string $sourceFile Full path to source file
      * @return \Magento\ImportExport\Model\Import\AbstractSource
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function _getSourceAdapter($sourceFile)
     {
@@ -296,6 +296,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param ProcessingErrorAggregatorInterface $validationResult
      * @return string[]
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getOperationResultMessages(ProcessingErrorAggregatorInterface $validationResult)
     {
@@ -392,6 +393,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Returns number of checked entities.
      *
      * @return int
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getProcessedEntitiesCount()
     {
@@ -402,6 +404,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Returns number of checked rows.
      *
      * @return int
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getProcessedRowsCount()
     {
@@ -456,6 +459,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
+     * Process import.
+     *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -468,6 +473,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Import possibility getter.
      *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function isImportAllowed()
     {
@@ -475,6 +481,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
+     * Get error aggregator instance.
+     *
      * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -484,7 +492,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
-     * Move uploaded file and create source adapter instance.
+     * Move uploaded file.
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return string Source file path
@@ -536,7 +544,10 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         }
         $this->_removeBom($sourceFile);
         $this->createHistoryReport($sourceFileRelative, $entity, $extension, $result);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $sourceFile;
     }
 
@@ -544,6 +555,10 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Move uploaded file and provide source instance.
      *
      * @return Import\AbstractSource
+<<<<<<< HEAD
+=======
+     * @throws \Magento\Framework\Exception\FileSystemException
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function uploadFileAndGetSource()
@@ -564,6 +579,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param string $sourceFile
      * @return $this
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function _removeBom($sourceFile)
     {
@@ -583,6 +599,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      *
      * @param \Magento\ImportExport\Model\Import\AbstractSource $source
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateSource(\Magento\ImportExport\Model\Import\AbstractSource $source)
     {
@@ -611,6 +628,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $this->addLogComment($messages);
 
         $result = !$errorAggregator->getErrorsCount();
+        $validationStrategy = $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY);
+        if ($validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS) {
+            $result = true;
+        }
+
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         }
@@ -621,6 +643,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Invalidate indexes by process codes.
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function invalidateIndex()
     {
@@ -687,6 +710,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * )
      *
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getUniqueEntityBehaviors()
     {
@@ -777,6 +801,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Get count of created items
      *
      * @return int
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCreatedItemsCount()
     {
@@ -787,6 +812,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Get count of updated items
      *
      * @return int
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getUpdatedItemsCount()
     {
@@ -797,6 +823,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Get count of deleted items
      *
      * @return int
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getDeletedItemsCount()
     {

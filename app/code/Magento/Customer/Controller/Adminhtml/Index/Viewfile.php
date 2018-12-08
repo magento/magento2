@@ -139,11 +139,16 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         $directory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $fileName = CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . ltrim($file, '/');
         $path = $directory->getAbsolutePath($fileName);
+<<<<<<< HEAD
         if (mb_strpos($path, '..') !== false
             || (!$directory->isFile($fileName)
                 && !$this->_objectManager->get(
                     \Magento\MediaStorage\Helper\File\Storage::class
                 )->processStorageFile($path))
+=======
+        if (mb_strpos($path, '..') !== false || (!$directory->isFile($fileName)
+            && !$this->_objectManager->get(\Magento\MediaStorage\Helper\File\Storage::class)->processStorageFile($path))
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ) {
             throw new NotFoundException(__('Page not found.'));
         }
@@ -195,22 +200,39 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      */
     private function getFileParams()
     {
+<<<<<<< HEAD
+=======
+        $file = null;
+        $plain = false;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         if ($this->getRequest()->getParam('file')) {
             // download file
             $file = $this->urlDecoder->decode(
                 $this->getRequest()->getParam('file')
             );
+<<<<<<< HEAD
 
             return [$file, false];
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         } elseif ($this->getRequest()->getParam('image')) {
             // show plain image
             $file = $this->urlDecoder->decode(
                 $this->getRequest()->getParam('image')
             );
+<<<<<<< HEAD
 
             return [$file, true];
         } else {
             throw new NotFoundException(__('Page not found.'));
         }
+=======
+            $plain = true;
+        } else {
+            throw new NotFoundException(__('Page not found.'));
+        }
+
+        return [$file, $plain];
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 }

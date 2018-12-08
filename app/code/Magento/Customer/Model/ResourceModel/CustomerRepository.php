@@ -7,6 +7,10 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+<<<<<<< HEAD
+=======
+use Magento\Customer\Api\Data\CustomerInterface;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -170,16 +174,20 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
+    public function save(CustomerInterface $customer, $passwordHash = null)
     {
         /** @var NewOperation|null $delegatedNewOperation */
+<<<<<<< HEAD
         $delegatedNewOperation = !$customer->getId()
             ? $this->delegatedStorage->consumeNewOperation() : null;
+=======
+        $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $prevCustomerData = null;
         $prevCustomerDataArr = null;
         if ($customer->getId()) {
@@ -193,9 +201,9 @@ class CustomerRepository implements CustomerRepositoryInterface
             CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
             $prevCustomerData
         );
-
         $origAddresses = $customer->getAddresses();
         $customer->setAddresses([]);
+<<<<<<< HEAD
         $customerData = $this->extensibleDataObjectConverter->toNestedArray(
             $customer,
             [],
@@ -210,17 +218,25 @@ class CustomerRepository implements CustomerRepositoryInterface
         //so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());
 
+=======
+        $customerData = $this->extensibleDataObjectConverter->toNestedArray($customer, [], CustomerInterface::class);
+        $customer->setAddresses($origAddresses);
+        /** @var Customer $customerModel */
+        $customerModel = $this->customerFactory->create(['data' => $customerData]);
+        //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
+        $customerModel->setId($customer->getId());
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
             $customerModel->setStoreId($this->storeManager->getStore()->getId());
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->populateCustomerWithSecureData($customerModel, $passwordHash);
-
         // If customer email was changed, reset RpToken info
-        if ($prevCustomerData
-            && $prevCustomerData->getEmail() !== $customerModel->getEmail()
-        ) {
+        if ($prevCustomerData && $prevCustomerData->getEmail() !== $customerModel->getEmail()) {
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
@@ -240,20 +256,29 @@ class CustomerRepository implements CustomerRepositoryInterface
                 $prevCustomerDataArr['default_shipping']
             );
         }
-
+        $this->setValidationFlag($customerArr, $customerModel);
         $customerModel->save();
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         if (!$customer->getAddresses()
             && $delegatedNewOperation
             && $delegatedNewOperation->getCustomer()->getAddresses()
         ) {
+<<<<<<< HEAD
             $customer->setAddresses(
                 $delegatedNewOperation->getCustomer()->getAddresses()
             );
         }
         if ($customer->getAddresses() !== null) {
+=======
+            $customer->setAddresses($delegatedNewOperation->getCustomer()->getAddresses());
+        }
+        if ($customer->getAddresses() !== null && !$customerModel->getData('ignore_validation_flag')) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             if ($customer->getId()) {
                 $existingAddresses = $this->getById($customer->getId())->getAddresses();
                 $getIdFunc = function ($address) {
@@ -285,8 +310,12 @@ class CustomerRepository implements CustomerRepositoryInterface
             [
                 'customer_data_object' => $savedCustomer,
                 'orig_customer_data_object' => $prevCustomerData,
+<<<<<<< HEAD
                 'delegate_data' => $delegatedNewOperation
                     ? $delegatedNewOperation->getAdditionalData() : []
+=======
+                'delegate_data' => $delegatedNewOperation ? $delegatedNewOperation->getAdditionalData() : [],
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
 
@@ -323,7 +352,7 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($email, $websiteId = null)
     {
@@ -332,7 +361,7 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getById($customerId)
     {
@@ -341,7 +370,7 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -351,7 +380,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $collection = $this->customerFactory->create()->getCollection();
         $this->extensionAttributesJoinProcessor->process(
             $collection,
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            CustomerInterface::class
         );
         // This is needed to make sure all the attributes are properly loaded
         foreach ($this->customerMetadata->getAllAttributesMetadata() as $metadata) {
@@ -381,15 +410,15 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function delete(\Magento\Customer\Api\Data\CustomerInterface $customer)
+    public function delete(CustomerInterface $customer)
     {
         return $this->deleteById($customer->getId());
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($customerId)
     {
@@ -420,4 +449,21 @@ class CustomerRepository implements CustomerRepositoryInterface
             $collection->addFieldToFilter($fields);
         }
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Set ignore_validation_flag to skip model validation
+     *
+     * @param array $customerArray
+     * @param Customer $customerModel
+     * @return void
+     */
+    private function setValidationFlag($customerArray, $customerModel)
+    {
+        if (isset($customerArray['ignore_validation_flag'])) {
+            $customerModel->setData('ignore_validation_flag', true);
+        }
+    }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 }

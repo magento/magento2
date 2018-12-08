@@ -138,7 +138,7 @@ class Curl extends AbstractCurl implements CategoryInterface
         $response = $this->backendTransport->read();
         $this->backendTransport->close();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
             throw new \Exception('Category creation by curl handler was not successful!');
         }

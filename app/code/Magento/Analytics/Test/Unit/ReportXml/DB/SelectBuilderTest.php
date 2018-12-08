@@ -10,9 +10,12 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 
+<<<<<<< HEAD
 /**
  * Class SelectBuilderTest
  */
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class SelectBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**

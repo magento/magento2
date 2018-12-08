@@ -136,6 +136,21 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test method \Magento\Eav\Model\Entity\Collection\AbstractCollection::load
+     */
+    public function testLoad()
+    {
+        $this->fetchStrategyMock
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->will($this->returnValue([['id' => 1, 'data_changes' => true], ['id' => 2]]));
+
+        foreach ($this->model->getItems() as $item) {
+            $this->assertFalse($item->getDataChanges());
+        }
+    }
+
+    /**
      * @dataProvider getItemsDataProvider
      */
     public function testClear($values, $count)

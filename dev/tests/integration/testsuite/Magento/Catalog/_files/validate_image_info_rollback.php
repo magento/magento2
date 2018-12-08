@@ -9,7 +9,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Framework\Filesystem $filesystem */
 $filesystem = $objectManager->create(\Magento\Framework\Filesystem::class);
 
-/** @var Magento\Catalog\Model\Product\Media\Config $config */
+/** @var \Magento\Catalog\Model\Product\Media\Config $config */
 $config = $objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
 
 /** @var $tmpDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */

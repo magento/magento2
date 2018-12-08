@@ -37,7 +37,7 @@ class PredispatchAdminActionControllerObserver implements ObserverInterface
     }
 
     /**
-     * Predispath admin action controller
+     * Predispatch admin action controller
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void

@@ -43,7 +43,11 @@ main.controller('navigationController',
                 $http.post('index.php/session/prolong').then(
                     function successCallback() {},
                     function errorCallback() {}
+<<<<<<< HEAD
                 )
+=======
+                );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             },
             25000
         );
@@ -116,6 +120,10 @@ main.controller('navigationController',
         isLoadedStates: false,
         load: function () {
             var self = this;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             return $http.get('index.php/navigation').then(function successCallback(resp) {
                 var data = resp.data,
                     currentState = $location.path().replace('/', ''),
@@ -190,7 +198,11 @@ main.controller('navigationController',
                             $localStorage.isMarketplaceAuthorized = $rootScope.isMarketplaceAuthorized = false;
                             context.success();
                         }
+<<<<<<< HEAD
                     }, function errorCallback() {});
+=======
+                    });
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             },
             checkAuth: function(context) {
                 return $http.post('index.php/marketplace/check-auth', [])
@@ -211,8 +223,13 @@ main.controller('navigationController',
                     });
             },
             openAuthDialog: function(scope) {
+<<<<<<< HEAD
                 return $http.get('index.php/marketplace/popup-auth').then(function successCallback(response) {
                     var data = response.data;
+=======
+                return $http.get('index.php/marketplace/popup-auth').then(function successCallback(resp) {
+                    var data = resp.data;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
                     scope.isHiddenSpinner = true;
                     ngDialog.open({
@@ -244,7 +261,7 @@ main.controller('navigationController',
                         context.error(resp.data);
                     });
             }
-    };
+        };
     }]
 )
 .service('titleService', ['$localStorage', '$rootScope',

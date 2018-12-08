@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Model\ResourceModel\OrderFactory;
@@ -137,6 +135,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
      */
     public function validGrandTotalDataProvider(): array
     {
+<<<<<<< HEAD
         return [
             [
                 'grandTotal' => 0,
@@ -154,6 +153,28 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
                 'expectedResult' => true,
             ],
         ];
+=======
+        $this->creditmemo->setGrandTotal(0);
+        $this->creditmemo->isAllowZeroGrandTotal(true);
+        $this->assertFalse($this->creditmemo->isValidGrandTotal());
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
+    }
+
+    /**
+     * Test for isAllowZeroGrandTotal method.
+     *
+     * @return void
+     */
+    public function testIsAllowZeroGrandTotal()
+    {
+        $isAllowed = 0;
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(
+                'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )->willReturn($isAllowed);
+        $this->assertEquals($isAllowed, $this->creditmemo->isAllowZeroGrandTotal());
     }
 
     public function testIsValidGrandTotal()

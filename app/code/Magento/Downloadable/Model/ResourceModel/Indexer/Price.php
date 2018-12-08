@@ -101,7 +101,12 @@ class Price implements DimensionalIndexerInterface
 
     /**
      * {@inheritdoc}
+<<<<<<< HEAD
      *
+=======
+     * @param array $dimensions
+     * @param \Traversable $entityIds
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @throws \Exception
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds)

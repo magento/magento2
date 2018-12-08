@@ -1,0 +1,61 @@
+{
+    "store_website": {
+        "column": {
+            "website_id": true,
+            "code": true,
+            "name": true,
+            "sort_order": true,
+            "default_group_id": true,
+            "is_default": true
+        },
+        "index": {
+            "STORE_WEBSITE_SORT_ORDER": true,
+            "STORE_WEBSITE_DEFAULT_GROUP_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "STORE_WEBSITE_CODE": true
+        }
+    },
+    "store_group": {
+        "column": {
+            "group_id": true,
+            "website_id": true,
+            "name": true,
+            "root_category_id": true,
+            "default_store_id": true,
+            "code": true
+        },
+        "index": {
+            "STORE_GROUP_WEBSITE_ID": true,
+            "STORE_GROUP_DEFAULT_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "STORE_GROUP_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true,
+            "STORE_GROUP_CODE": true
+        }
+    },
+    "store": {
+        "column": {
+            "store_id": true,
+            "code": true,
+            "website_id": true,
+            "group_id": true,
+            "name": true,
+            "sort_order": true,
+            "is_active": true
+        },
+        "index": {
+            "STORE_WEBSITE_ID": true,
+            "STORE_IS_ACTIVE_SORT_ORDER": true,
+            "STORE_GROUP_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "STORE_GROUP_ID_STORE_GROUP_GROUP_ID": true,
+            "STORE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true,
+            "STORE_CODE": true
+        }
+    }
+}

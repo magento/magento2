@@ -82,7 +82,11 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
                 'stockConfiguration' => $this->stockConfigurationMock,
                 'cacheContext' => $this->cacheContextMock,
                 'eventManager' => $this->eventManagerMock,
+<<<<<<< HEAD
                 'metadataPool' => $this->metadataPoolMock,
+=======
+                'metadataPool' => $this->metadataPoolMock
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
     }

@@ -65,7 +65,11 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
 
+<<<<<<< HEAD
         $this->request->expects($this->any())
+=======
+        $this->request->expects($this->atLeastOnce())
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('isPost')
             ->willReturn(true);
 

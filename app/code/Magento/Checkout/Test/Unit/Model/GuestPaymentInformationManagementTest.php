@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -85,7 +87,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
                 'cartManagement' => $this->cartManagementMock,
                 'cartRepository' => $this->cartRepositoryMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
+<<<<<<< HEAD
                 'connectionPull' => $this->resourceConnectionMock,
+=======
+                'connectionPool' => $this->resourceConnectionMock,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
         $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
@@ -132,7 +138,6 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage An error occurred on the server. Please try to place the order again.
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderException()
@@ -167,10 +172,14 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $adapterMockForCheckout->expects($this->once())->method('rollback');
 
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
-        $exception = new \Exception(__('DB exception'));
+        $exception = new \Magento\Framework\Exception\CouldNotSaveException(__('DB exception'));
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
+
+        $this->expectExceptionMessage(
+            'A server error stopped your order from being placed. Please try to place your order again.'
+        );
     }
 
     public function testSavePaymentInformation()
@@ -213,7 +222,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      * @expectedExceptionMessage DB exception
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function testSavePaymentInformationAndPlaceOrderWithLocolizedException()
+    public function testSavePaymentInformationAndPlaceOrderWithLocalizedException()
     {
         $cartId = 100;
         $email = 'email@magento.com';
@@ -266,8 +275,15 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject $billingAddressMock
      * @return void
      */
+<<<<<<< HEAD
     private function getMockForAssignBillingAddress($cartId, $billingAddressMock)
     {
+=======
+    private function getMockForAssignBillingAddress(
+        int $cartId,
+        \PHPUnit_Framework_MockObject_MockObject  $billingAddressMock
+    ) : void {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $quoteIdMask = $this->createPartialMock(QuoteIdMask::class, ['getQuoteId', 'load']);
         $this->quoteIdMaskFactoryMock->method('create')
             ->willReturn($quoteIdMask);

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\Phrase;
@@ -57,7 +58,7 @@ class Changelog implements ChangelogInterface
     protected function checkConnection()
     {
         if (!$this->connection) {
-            throw new \Exception('Write DB connection is not available');
+            throw new \Exception("The write connection to the database isn't available. Please try again later.");
         }
     }
 

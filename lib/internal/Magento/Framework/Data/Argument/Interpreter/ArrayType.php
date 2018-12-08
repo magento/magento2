@@ -28,7 +28,7 @@ class ArrayType implements InterpreterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @return array
      * @throws \InvalidArgumentException
      */

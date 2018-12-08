@@ -25,7 +25,7 @@ class AssertCartPriceRuleConditionIsApplied extends AssertCartPriceRuleApplying
         $actualPrices['discount'] = $this->checkoutCart->getTotalsBlock()->getDiscount();
         $expectedPrices = $this->cartPrice;
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedPrices,
             $actualPrices,
             'Wrong total cart prices are displayed.'

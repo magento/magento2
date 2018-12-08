@@ -109,7 +109,10 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Filesystem\File\ReadFactory $readFactory
      * @param string|null $filePath
+<<<<<<< HEAD
      * @param \Magento\Framework\App\Filesystem\DirectoryResolver|null $directoryResolver
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -122,17 +125,20 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $filePath = null,
         \Magento\Framework\App\Filesystem\DirectoryResolver $directoryResolver = null
     ) {
-        if ($filePath !== null) {
-            $this->_setUploadFile($filePath);
-        }
         $this->_imageFactory = $imageFactory;
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;
         $this->_validator = $validator;
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->_readFactory = $readFactory;
+<<<<<<< HEAD
         $this->directoryResolver = $directoryResolver
             ?: ObjectManager::getInstance()->get(\Magento\Framework\App\Filesystem\DirectoryResolver::class);
+=======
+        if ($filePath !== null) {
+            $this->_setUploadFile($filePath);
+        }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -366,7 +372,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function chmod($file)
     {

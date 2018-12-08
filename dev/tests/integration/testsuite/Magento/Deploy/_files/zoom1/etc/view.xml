@@ -12,7 +12,6 @@
     <exclude>
         <item type="file">Lib::jquery/jquery.min.js</item>
         <item type="file">Lib::jquery/jquery-ui-1.9.2.js</item>
-        <item type="file">Lib::jquery/jquery.ba-hashchange.min.js</item>
         <item type="file">Lib::jquery/jquery.details.js</item>
         <item type="file">Lib::jquery/jquery.details.min.js</item>
         <item type="file">Lib::jquery/jquery.hoverIntent.js</item>

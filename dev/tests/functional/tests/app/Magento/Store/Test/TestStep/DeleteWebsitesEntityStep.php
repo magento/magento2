@@ -18,7 +18,11 @@ use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
+<<<<<<< HEAD
  * Test Step for DeleteStoreEntity
+=======
+ * Test Step for DeleteWebsitesEntity.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class DeleteWebsitesEntityStep implements TestStepInterface
 {
@@ -28,43 +32,61 @@ class DeleteWebsitesEntityStep implements TestStepInterface
     /* end tags */
 
     /**
+<<<<<<< HEAD
      * Page BackupIndex
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var BackupIndex
      */
     private $backupIndex;
 
     /**
+<<<<<<< HEAD
      * Page StoreIndex
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var StoreIndex
      */
     private $storeIndex;
 
     /**
+<<<<<<< HEAD
      * Page EditWebsite
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var EditWebsite
      */
     private $editWebsite;
 
     /**
+<<<<<<< HEAD
      * Page StoreDelete
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var DeleteWebsite
      */
     private $deleteWebsite;
 
     /**
+<<<<<<< HEAD
      * Fixture factory.
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var FixtureFactory
      */
     private $fixtureFactory;
 
     /**
+<<<<<<< HEAD
      * Fixture factory.
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var FixtureInterface
      */
     private $item;
@@ -80,7 +102,11 @@ class DeleteWebsitesEntityStep implements TestStepInterface
     private $stepFactory;
 
     /**
+<<<<<<< HEAD
      * Prepare pages for test
+=======
+     * Prepare pages for test.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param BackupIndex $backupIndex
      * @param StoreIndex $storeIndex

@@ -7,7 +7,10 @@ namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
+<<<<<<< HEAD
 use Magento\Framework\Filesystem\File\ReadFactoryInterface;
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 /**
  * @api
@@ -36,7 +39,11 @@ class Read implements ReadInterface
     protected $driver;
 
     /**
+<<<<<<< HEAD
      * @var PathValidatorInterface
+=======
+     * @var PathValidatorInterface|null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private $pathValidator;
 
@@ -52,7 +59,11 @@ class Read implements ReadInterface
         \Magento\Framework\Filesystem\File\ReadFactory $fileFactory,
         \Magento\Framework\Filesystem\DriverInterface $driver,
         $path,
+<<<<<<< HEAD
         PathValidatorInterface $pathValidator = null
+=======
+        ?PathValidatorInterface $pathValidator = null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         $this->fileFactory = $fileFactory;
         $this->driver = $driver;
@@ -61,6 +72,7 @@ class Read implements ReadInterface
     }
 
     /**
+<<<<<<< HEAD
      * @param string|null $path
      * @param string|null $scheme
      * @param bool $absolutePath
@@ -73,6 +85,20 @@ class Read implements ReadInterface
         $scheme = null,
         $absolutePath = false
     ) {
+=======
+     * @param null|string $path
+     * @param null|string $scheme
+     * @param bool $absolutePath
+     * @throws ValidatorException
+     *
+     * @return void
+     */
+    protected function validatePath(
+        ?string $path,
+        ?string $scheme = null,
+        bool $absolutePath = false
+    ): void {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         if ($path && $this->pathValidator) {
             $this->pathValidator->validate(
                 $this->path,
@@ -102,6 +128,7 @@ class Read implements ReadInterface
      *
      * @param string $path
      * @param string $scheme
+     * @throws ValidatorException
      * @return string
      * @throws ValidatorException
      */
@@ -116,6 +143,7 @@ class Read implements ReadInterface
      * Retrieves relative path
      *
      * @param string $path
+     * @throws ValidatorException
      * @return string
      * @throws ValidatorException
      */
@@ -134,6 +162,7 @@ class Read implements ReadInterface
      * Retrieve list of all entities in given path
      *
      * @param string|null $path
+     * @throws ValidatorException
      * @return string[]
      * @throws ValidatorException
      */
@@ -154,6 +183,7 @@ class Read implements ReadInterface
      * Read recursively
      *
      * @param null $path
+     * @throws ValidatorException
      * @return string[]
      * @throws ValidatorException
      */
@@ -177,6 +207,7 @@ class Read implements ReadInterface
      *
      * @param string $pattern
      * @param string $path [optional]
+     * @throws ValidatorException
      * @return string[]
      * @throws ValidatorException
      */
@@ -248,6 +279,7 @@ class Read implements ReadInterface
      * Open file in read mode
      *
      * @param string $path
+     * @throws ValidatorException
      *
      * @return \Magento\Framework\Filesystem\File\ReadInterface
      * @throws ValidatorException
@@ -285,6 +317,7 @@ class Read implements ReadInterface
      * Check whether given path is file
      *
      * @param string $path
+     * @throws ValidatorException
      * @return bool
      * @throws ValidatorException
      */
@@ -299,6 +332,7 @@ class Read implements ReadInterface
      * Check whether given path is directory
      *
      * @param string $path [optional]
+     * @throws ValidatorException
      * @return bool
      * @throws ValidatorException
      */

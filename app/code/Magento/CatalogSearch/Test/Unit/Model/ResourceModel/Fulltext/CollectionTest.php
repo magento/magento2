@@ -209,7 +209,10 @@ class CollectionTest extends BaseCollection
     /**
      * @param MockObject $filterBuilder
      * @param array $filters
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return MockObject
      */
     protected function addFiltersToFilterBuilder(MockObject $filterBuilder, array $filters)

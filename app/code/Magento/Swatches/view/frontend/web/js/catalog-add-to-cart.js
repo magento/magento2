@@ -16,6 +16,7 @@ require([
         $(data.form).find('[name*="super"]').each(function (index, item) {
             var $item = $(item),
                 attr;
+<<<<<<< HEAD
 
             if ($item.attr('data-attr-name')) {
                 attr = $item.attr('data-attr-name');
@@ -23,6 +24,16 @@ require([
                 attr = $item.parent().attr('attribute-code');
             }
             data.redirectParameters.push(attr + '=' + $item.val());
+=======
+
+            if ($item.attr('data-attr-name')) {
+                attr = $item.attr('data-attr-name');
+            } else {
+                attr = $item.parent().attr('attribute-code');
+            }
+            data.redirectParameters.push(attr + '=' + $item.val());
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         });
     });
 });

@@ -19,72 +19,72 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerFactory;
+    private $customerFactory;
 
     /**
      * @var \Magento\Customer\Model\Data\CustomerSecureFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerSecureFactory;
+    private $customerSecureFactory;
 
     /**
      * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerRegistry;
+    private $customerRegistry;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\AddressRepository|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $addressRepository;
+    private $addressRepository;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerResourceModel;
+    private $customerResourceModel;
 
     /**
      * @var \Magento\Customer\Api\CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerMetadata;
+    private $customerMetadata;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchResultsFactory;
+    private $searchResultsFactory;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eventManager;
+    private $eventManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $extensibleDataObjectConverter;
+    private $extensibleDataObjectConverter;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dataObjectHelper;
+    private $dataObjectHelper;
 
     /**
      * @var \Magento\Framework\Api\ImageProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $imageProcessor;
+    private $imageProcessor;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $extensionAttributesJoinProcessor;
+    private $extensionAttributesJoinProcessor;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customer;
+    private $customer;
 
     /**
      * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -92,9 +92,14 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     private $collectionProcessorMock;
 
     /**
+     * @var NotificationStorage|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $notificationStorage;
+
+    /**
      * @var \Magento\Customer\Model\ResourceModel\CustomerRepository
      */
-    protected $model;
+    private $model;
 
     /**
      * @var NotificationStorage

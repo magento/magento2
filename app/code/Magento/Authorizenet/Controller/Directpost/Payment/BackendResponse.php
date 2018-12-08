@@ -10,12 +10,15 @@ use Magento\Authorizenet\Helper\DataFactory;
 use Magento\Authorizenet\Model\Directpost;
 use Magento\Authorizenet\Model\DirectpostFactory;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface;
 
-class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Payment
+class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Payment implements CsrfAwareActionInterface
 {
     /**
      * @var LoggerInterface
@@ -46,6 +49,23 @@ class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Paymen
         parent::__construct($context, $coreRegistry, $dataFactory);
         $this->directpostFactory = $directpostFactory ?: $this->_objectManager->create(DirectpostFactory::class);
         $this->logger = $logger ?: $this->_objectManager->get(LoggerInterface::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
     }
 
     /**

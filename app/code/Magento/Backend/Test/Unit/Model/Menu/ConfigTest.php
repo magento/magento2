@@ -96,7 +96,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->menuMock, $this->model->getMenu());
     }
 
-    public function testGetMenuWithNotCachedObjectBuidlsObject()
+    public function testGetMenuWithNotCachedObjectBuildsObject()
     {
         $this->cacheInstanceMock->expects(
             $this->at(0)
@@ -168,6 +168,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         } catch (\Exception $e) {
             return;
         }
-        $this->fail("Generic \Exception was not throwed");
+        $this->fail("Generic \Exception was not thrown");
     }
 }

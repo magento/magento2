@@ -85,7 +85,7 @@ class Weee extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -93,7 +93,7 @@ class Weee extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -155,6 +155,7 @@ class Weee extends AbstractModifier
                         'dndConfig' => [
                             'enabled' => false,
                         ],
+                        'required' => (bool)$attributeConfig['arguments']['data']['config']['required'],
                     ],
                 ],
             ],

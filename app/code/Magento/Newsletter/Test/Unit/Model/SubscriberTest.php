@@ -106,6 +106,10 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
                 'received'
             ]);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->customerFactory = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -113,6 +117,10 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->subscriber = $this->objectManager->getObject(
             \Magento\Newsletter\Model\Subscriber::class,
             [

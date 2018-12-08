@@ -7,7 +7,11 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     <section name="CheckoutShippingGuestInfoSection">
         <element name="email" type="input" selector="#customer-email"/>
         <element name="firstName" type="input" selector="input[name=firstname]"/>
@@ -17,5 +21,10 @@
         <element name="region" type="select" selector="select[name=region_id]"/>
         <element name="postcode" type="input" selector="input[name=postcode]"/>
         <element name="telephone" type="input" selector="input[name=telephone]"/>
+<<<<<<< HEAD
+=======
+        <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
+        <element name="firstShippingMethod" type="radio" selector=".row:nth-of-type(1) .col-method .radio"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </section>
 </sections>

@@ -117,7 +117,7 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchNoResult" />
         </variation>
         <variation name="AdvancedSearchEntityTestVariation15" summary="Do Advanced Search without entering data" ticketId="MAGETWO-14859">
-            <data name="issue" xsi:type="string">MAGETWO-18537: "Please specify at least one search term." error message is missed in Advanced Search</data>
+            <data name="issue" xsi:type="string">MAGETWO-18537: "Enter a search term and try again." error message is missed in Advanced Search</data>
             <data name="productSearch/data/name" xsi:type="string" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchEmptyTerm" />
         </variation>

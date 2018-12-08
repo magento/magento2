@@ -56,11 +56,20 @@ class SetWeeeRendererInFormObserverTest extends TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     public function testExecute()
     {
         $attributes = new \ArrayIterator(['element_code_1', 'element_code_2']);
         /** @var Event|MockObject $eventMock */
         $eventMock = $this->getMockBuilder(Event::class)->disableOriginalConstructor()
+=======
+    public function testExecute(): void
+    {
+        $attributes = new \ArrayIterator(['element_code_1', 'element_code_2']);
+        /** @var Event|MockObject $eventMock */
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->disableOriginalConstructor()
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->setMethods(['getForm'])
             ->getMock();
 
@@ -69,10 +78,25 @@ class SetWeeeRendererInFormObserverTest extends TestCase
         /** @var Form|MockObject $formMock */
         $formMock = $this->createMock(Form::class);
 
+<<<<<<< HEAD
         $eventMock->method('getForm')->willReturn($formMock);
         $observerMock->method('getEvent')->willReturn($eventMock);
         $this->taxModelMock->method('getWeeeAttributeCodes')->willReturn($attributes);
         $formMock->expects($this->exactly($attributes->count()))->method('getElement')->willReturnSelf();
+=======
+        $eventMock->expects($this->once())
+            ->method('getForm')
+            ->willReturn($formMock);
+        $observerMock->expects($this->once())
+            ->method('getEvent')
+            ->willReturn($eventMock);
+        $this->taxModelMock->expects($this->once())
+            ->method('getWeeeAttributeCodes')
+            ->willReturn($attributes);
+        $formMock->expects($this->exactly($attributes->count()))
+            ->method('getElement')
+            ->willReturnSelf();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
         $this->observer->execute($observerMock);
     }

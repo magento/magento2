@@ -9,8 +9,13 @@ use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
+<<<<<<< HEAD
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Sales\Api\Data\OrderInterface;
+=======
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Model\Config;
 use Psr\Log\LoggerInterface;
@@ -53,7 +58,10 @@ class PlaceOrder implements ObserverInterface
 
     /**
      * {@inheritdoc}
+<<<<<<< HEAD
      * @throws NotFoundException
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function execute(Observer $observer)
     {
@@ -78,12 +86,21 @@ class PlaceOrder implements ObserverInterface
      *
      * @param OrderInterface $order
      * @return void
+<<<<<<< HEAD
      * @throws NotFoundException
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private function createCaseForOrder($order)
     {
         $orderId = $order->getEntityId();
+<<<<<<< HEAD
         if (null === $orderId || $order->getPayment()->getMethodInstance()->isOffline()) {
+=======
+        if (null === $orderId
+            || $order->getPayment()->getMethodInstance()->isOffline()
+            || $order->getState() === Order::STATE_PENDING_PAYMENT) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             return;
         }
 

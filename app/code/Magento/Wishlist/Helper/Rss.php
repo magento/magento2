@@ -7,6 +7,8 @@
 namespace Magento\Wishlist\Helper;
 
 /**
+ * Wishlist rss helper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
@@ -103,8 +105,13 @@ class Rss extends \Magento\Wishlist\Helper\Data
     {
         if ($this->_customer === null) {
             $params = $this->urlDecoder->decode($this->_getRequest()->getParam('data'));
+<<<<<<< HEAD
             $data = explode(',', $params);
             $customerId = abs((int)$data[0]);
+=======
+            $data   = explode(',', $params);
+            $customerId    = abs((int)$data[0]);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             if ($customerId && ($customerId == $this->_customerSession->getCustomerId())) {
                 $this->_customer = $this->_customerRepository->getById($customerId);
             } else {

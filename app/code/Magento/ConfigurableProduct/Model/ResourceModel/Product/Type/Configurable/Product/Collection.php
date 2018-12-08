@@ -24,6 +24,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_linkTable;
 
     /**
+     * @var \Magento\Catalog\Model\Product[]
+     */
+    private $products;
+
+    /**
      * Assign link table name
      *
      * @return void
@@ -36,6 +41,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * Init select
+     *
      * @return $this|\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
      */
     protected function _initSelect()
@@ -59,15 +65,31 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setProductFilter($product)
     {
-        $metadata = $this->getProductEntityMetadata();
-
-        $this->getSelect()->where('link_table.parent_id = ?', $product->getData($metadata->getLinkField()));
+        $this->products[] = $product;
         return $this;
     }
 
     /**
-     * Retrieve is flat enabled flag
-     * Return alvays false if magento run admin
+     * Add parent ids to `in` filter before load.
+     *
+     * @return $this
+     */
+    protected function _renderFilters()
+    {
+        parent::_renderFilters();
+        $metadata = $this->getProductEntityMetadata();
+        $parentIds = [];
+        foreach ($this->products as $product) {
+            $parentIds[] = $product->getData($metadata->getLinkField());
+        }
+
+        $this->getSelect()->where('link_table.parent_id in (?)', $parentIds);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve is flat enabled flag. Return always false if magento run admin
      *
      * @return bool
      */

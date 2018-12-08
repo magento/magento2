@@ -13,7 +13,7 @@ use Magento\Framework\App\Router\ActionList;
 use Magento\Framework\App\RouterInterface;
 
 /**
- * Matches applicaton action in case when robots.txt file was requested
+ * Matches application action in case when robots.txt file was requested
  */
 class Router implements RouterInterface
 {

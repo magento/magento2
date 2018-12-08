@@ -104,8 +104,13 @@ angular.module('select-version', ['ngStorage'])
                 $scope.updateComponents.no = false;
                 if (!$scope.componentsProcessed && !$scope.componentsProcessError) {
                     $scope.componentsReadyForNext = false;
+<<<<<<< HEAD
                     $http.get('index.php/other-components-grid/components', {'responseType': 'json'})
                         .then(function successCallback(resp) {
+=======
+                    $http.get('index.php/other-components-grid/components', {'responseType': 'json'}).
+                        then(function successCallback(resp) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                             var data = resp.data;
 
                             if (data.responseType != 'error') {

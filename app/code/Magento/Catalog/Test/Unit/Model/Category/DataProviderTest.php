@@ -16,6 +16,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -72,6 +73,11 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $fileInfo;
 
+    /**
+     * @var PoolInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $modifierPool;
+
     protected function setUp()
     {
         $this->eavValidationRules = $this->getMockBuilder(EavValidationRules::class)
@@ -120,6 +126,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->fileInfo = $this->getMockBuilder(FileInfo::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->modifierPool = $this->getMockBuilder(PoolInterface::class)->getMockForAbstractClass();
     }
 
     /**
@@ -137,6 +145,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->eavEntityMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        /** @var DataProvider $model */
         $model = $objectManager->getObject(
             DataProvider::class,
             [
@@ -147,6 +157,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'eavConfig' => $this->eavConfig,
                 'request' => $this->request,
                 'categoryFactory' => $this->categoryFactory,
+                'pool' => $this->modifierPool
             ]
         );
 
@@ -335,6 +346,10 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(['image' => $attributeMock]);
         $categoryMock->expects($this->never())
             ->method('getParentId');
+
+        $this->modifierPool->expects($this->once())
+            ->method('getModifiersInstances')
+            ->willReturn([]);
 
         $this->getModel()->getMeta();
     }

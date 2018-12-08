@@ -56,14 +56,22 @@ class Message implements MailMessageInterface
     public function setBody($body)
     {
         if (is_string($body) && $this->messageType === MailMessageInterface::TYPE_HTML) {
+<<<<<<< HEAD
             $body = $this->createHtmlMimeFromString($body);
+=======
+            $body = self::createHtmlMimeFromString($body);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
         $this->zendMessage->setBody($body);
         return $this;
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function setSubject($subject)
     {
@@ -72,7 +80,11 @@ class Message implements MailMessageInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function getSubject()
     {
@@ -80,7 +92,11 @@ class Message implements MailMessageInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function getBody()
     {
@@ -88,7 +104,11 @@ class Message implements MailMessageInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function setFrom($fromAddress)
     {
@@ -97,7 +117,11 @@ class Message implements MailMessageInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function addTo($toAddress)
     {
@@ -106,7 +130,11 @@ class Message implements MailMessageInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function addCc($ccAddress)
     {
@@ -115,7 +143,11 @@ class Message implements MailMessageInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function addBcc($bccAddress)
     {
@@ -124,7 +156,11 @@ class Message implements MailMessageInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function setReplyTo($replyToAddress)
     {
@@ -133,7 +169,11 @@ class Message implements MailMessageInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
+=======
+     * {@inheritdoc}
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function getRawMessage()
     {
@@ -141,6 +181,7 @@ class Message implements MailMessageInterface
     }
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
      */
     public function setBodyHtml($html)
@@ -159,6 +200,8 @@ class Message implements MailMessageInterface
     }
 
     /**
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * Create HTML mime message from the string.
      *
      * @param string $htmlBody
@@ -173,4 +216,25 @@ class Message implements MailMessageInterface
         $mimeMessage->addPart($htmlPart);
         return $mimeMessage;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBodyHtml($html)
+    {
+        $this->setMessageType(self::TYPE_HTML);
+        return $this->setBody($html);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBodyText($text)
+    {
+        $this->setMessageType(self::TYPE_TEXT);
+        return $this->setBody($text);
+    }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 }

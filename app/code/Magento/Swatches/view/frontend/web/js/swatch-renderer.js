@@ -94,7 +94,7 @@ define([
                 $title,
                 $corner;
 
-            if (!$element.size()) {
+            if (!$element.length) {
                 $element = $('<div class="' +
                     $widget.options.tooltipClass +
                     '"><div class="image"></div><div class="title"></div><div class="corner"></div></div>'
@@ -501,7 +501,13 @@ define([
                     label,
                     width,
                     height,
+<<<<<<< HEAD
                     attr;
+=======
+                    attr,
+                    swatchImageWidth,
+                    swatchImageHeight;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
                 if (!optionConfig.hasOwnProperty(this.id)) {
                     return '';
@@ -533,6 +539,12 @@ define([
                     ' role="option"' +
                     ' thumb-width="' + width + '"' +
                     ' thumb-height="' + height + '"';
+<<<<<<< HEAD
+=======
+
+                swatchImageWidth = _.has(sizeConfig, 'swatchImage') ? sizeConfig.swatchImage.width : 30;
+                swatchImageHeight = _.has(sizeConfig, 'swatchImage') ? sizeConfig.swatchImage.height : 20;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
                     attr += ' option-empty="true"';
@@ -552,7 +564,11 @@ define([
                     // Image
                     html += '<div class="' + optionClass + ' image" ' + attr +
                         ' style="background: url(' + value + ') no-repeat center; background-size: initial;width:' +
+<<<<<<< HEAD
                         sizeConfig.swatchImage.width + 'px; height:' + sizeConfig.swatchImage.height + 'px">' + '' +
+=======
+                        swatchImageWidth + 'px; height:' + swatchImageHeight + 'px">' + '' +
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                         '</div>';
                 } else if (type === 3) {
                     // Clear
@@ -833,7 +849,7 @@ define([
             $widget._Rewind(controls);
 
             // done if nothing selected
-            if (selected.size() <= 0) {
+            if (selected.length <= 0) {
                 return;
             }
 
@@ -843,7 +859,7 @@ define([
                     id = $this.attr('attribute-id'),
                     products = $widget._CalcProducts(id);
 
-                if (selected.size() === 1 && selected.first().attr('attribute-id') === id) {
+                if (selected.length === 1 && selected.first().attr('attribute-id') === id) {
                     return;
                 }
 
@@ -1079,12 +1095,14 @@ define([
                 mediaCallData.isAjax = true;
                 $widget._XhrKiller();
                 $widget._EnableProductMediaLoader($this);
-                $widget.xhr = $.get(
-                    $widget.options.mediaCallback,
-                    mediaCallData,
-                    mediaSuccessCallback,
-                    'json'
-                ).done(function () {
+                $widget.xhr = $.ajax({
+                    url: $widget.options.mediaCallback,
+                    cache: true,
+                    type: 'GET',
+                    dataType: 'json',
+                    data: mediaCallData,
+                    success: mediaSuccessCallback
+                }).done(function () {
                     $widget._XhrKiller();
                 });
             }
@@ -1099,7 +1117,7 @@ define([
         _EnableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').size() > 0) {
+            if ($('body.catalog-product-view').length > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .addClass($widget.options.classes.loader);
             } else {
@@ -1118,7 +1136,7 @@ define([
         _DisableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').size() > 0) {
+            if ($('body.catalog-product-view').length > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .removeClass($widget.options.classes.loader);
             } else {

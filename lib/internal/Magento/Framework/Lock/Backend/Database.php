@@ -3,8 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
 declare(strict_types=1);
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Framework\Lock\Backend;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -14,6 +19,7 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
 
+<<<<<<< HEAD
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
     /** @var ResourceConnection */
@@ -31,6 +37,34 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     /**
      * Database constructor.
      *
+=======
+/**
+ * LockManager using the DB locks
+ */
+class Database implements \Magento\Framework\Lock\LockManagerInterface
+{
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var string Lock prefix
+     */
+    private $prefix;
+
+    /**
+     * @var string|false Holds current lock name if set, otherwise false
+     */
+    private $currentLock = false;
+
+    /**
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param ResourceConnection $resource
      * @param DeploymentConfig $deploymentConfig
      * @param string|null $prefix
@@ -130,7 +164,11 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * Limited to 64 characters in MySQL.
      *
      * @param string $name
+<<<<<<< HEAD
      * @return string $name
+=======
+     * @return string
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @throws InputException
      */
     private function addPrefix(string $name): string

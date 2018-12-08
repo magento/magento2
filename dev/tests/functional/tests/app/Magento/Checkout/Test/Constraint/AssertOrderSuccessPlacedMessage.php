@@ -28,7 +28,7 @@ class AssertOrderSuccessPlacedMessage extends AbstractConstraint
      */
     public function processAssert(CheckoutOnepageSuccess $checkoutOnepageSuccess)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $checkoutOnepageSuccess->getTitleBlock()->getTitle(),
             'Wrong success message is displayed.'

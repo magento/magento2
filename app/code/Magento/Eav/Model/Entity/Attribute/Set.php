@@ -220,7 +220,12 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
             foreach ($data['not_attributes'] as $entityAttributeId) {
                 $entityAttribute = $this->_resourceAttribute->getEntityAttribute($entityAttributeId);
                 if (!$entityAttribute) {
-                    throw new LocalizedException(__('Entity attribute with id "%1" not found', $entityAttributeId));
+                    throw new LocalizedException(
+                        __(
+                            'The entity attribute with the "%1" ID isn\'t found. Reset the attribute and try again.',
+                            $entityAttributeId
+                        )
+                    );
                 }
                 $modelAttribute = $this->_eavConfig->getAttribute(
                     $this->getEntityTypeId(),
@@ -282,11 +287,13 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         $attributeSetName = $this->getAttributeSetName();
         if ($attributeSetName == '') {
-            throw new LocalizedException(__('Attribute set name is empty.'));
+            throw new LocalizedException(__('The attribute set name is empty. Enter the name and try again.'));
         }
 
         if (!$this->_getResource()->validate($this, $attributeSetName)) {
-            throw new LocalizedException(__('An attribute set named "%1" already exists.', $attributeSetName));
+            throw new LocalizedException(
+                __('A "%1" attribute set name already exists. Create a new name and try again.', $attributeSetName)
+            );
         }
 
         return true;

@@ -65,7 +65,7 @@ class AssertCartPriceRuleForm extends AbstractConstraint
             $fixtureData = array_merge($fixtureData, $salesRuleAdditional->getData());
         }
         $dataDiff = $this->verify($fixtureData, $formData);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             empty($dataDiff),
             'Sales rule data on edit page(backend) not equals to passed from fixture.'
             . "\nFailed values:\n " . implode(";\n ", $dataDiff)

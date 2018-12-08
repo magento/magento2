@@ -42,7 +42,7 @@ class AssertTaxRuleIsApplied extends AssertTaxRuleApplying
                 . "\nActual: " . $actualGrandTotal;
         }
 
-        \PHPUnit_Framework_Assert::assertTrue(empty($errorMessages), implode(";\n", $errorMessages));
+        \PHPUnit\Framework\Assert::assertTrue(empty($errorMessages), implode(";\n", $errorMessages));
     }
 
     /**

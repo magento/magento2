@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\UnionExpression;
 use Magento\Framework\App\ObjectManager;

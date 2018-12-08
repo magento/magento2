@@ -76,8 +76,13 @@ class Cron extends \Magento\Framework\App\Config\Value
 
         if ($enabled) {
             $cronExprArray = [
+<<<<<<< HEAD
                 (int)$time[1],                                    # Minute
                 (int)$time[0],                                    # Hour
+=======
+                (int) $time[1],                                 # Minute
+                (int) $time[0],                                 # Hour
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 $frequency == $frequencyMonthly ? '1' : '*',      # Day of the Month
                 '*',                                              # Month of the Year
                 $frequency == $frequencyWeekly ? '1' : '*',       # Day of the Week

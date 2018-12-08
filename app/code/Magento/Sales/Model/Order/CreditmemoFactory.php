@@ -14,7 +14,11 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 class CreditmemoFactory
 {
     /**
+<<<<<<< HEAD
      * Order convert object
+=======
+     * Order convert object.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @var \Magento\Sales\Model\Convert\Order
      */
@@ -103,6 +107,10 @@ class CreditmemoFactory
         $creditmemo->setInvoice($invoice);
 
         $invoiceRefundLimitsQtyList = $this->getInvoiceRefundLimitsQtyList($invoice);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         foreach ($invoice->getAllItems() as $invoiceItem) {
             /** @var OrderItemInterface $orderItem */
             $orderItem = $invoiceItem->getOrderItem();
@@ -116,7 +124,10 @@ class CreditmemoFactory
                 $invoiceItem->getQty()
             );
             $totalQty += $qty;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $item = $this->convertor->itemToCreditmemoItem($orderItem);
             $item->setQty($qty);
             $creditmemo->addItem($item);
@@ -214,7 +225,11 @@ class CreditmemoFactory
      * @param int $parentQty
      * @return int
      */
+<<<<<<< HEAD
     private function calculateProductOptions(Item $orderItem, $parentQty)
+=======
+    private function calculateProductOptions(Item $orderItem, int $parentQty): int
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();

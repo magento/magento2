@@ -8,8 +8,11 @@ namespace Magento\ReleaseNotification\Model\Viewer;
 use Magento\Framework\DataObject;
 
 /**
+<<<<<<< HEAD
  * Class Log
  *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * Release notification viewer log resource
  */
 class Log extends DataObject

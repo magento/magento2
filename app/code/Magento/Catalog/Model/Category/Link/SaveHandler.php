@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Model\Category\Link;
 
 use Magento\Catalog\Api\Data\CategoryLinkInterface;
-use Magento\Catalog\Model\Indexer\Product\Category;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
@@ -40,6 +39,8 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+     * Execute
+     *
      * @param object $entity
      * @param array $arguments
      * @return object
@@ -78,6 +79,8 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+     * Get category links positions
+     *
      * @param object $entity
      * @return array
      */

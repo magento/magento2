@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
     <operation name="ZeroSubtotalCheckoutPaymentMethodSetup" dataType="zero_subtotal_checkout_payment_method"
@@ -22,5 +23,12 @@
                 </object>
             </object>
         </object>
+=======
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreatePaymentMethod" dataType="payment_method" type="create">
+        <field key="method">string</field>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     </operation>
 </operations>

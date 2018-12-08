@@ -81,6 +81,9 @@ class PrintActionTest extends \PHPUnit\Framework\TestCase
      */
     protected $resultForwardMock;
 
+    /**
+     * test setup
+     */
     protected function setUp()
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)

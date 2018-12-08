@@ -6,14 +6,22 @@
  */
 namespace Magento\CatalogSearch\Controller\Result;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Action\Context;
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Action\HttpPostActionInterface;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\PopularSearchTerms;
 
-class Index extends \Magento\Framework\App\Action\Action
+/**
+ * Search result.
+ */
+class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Catalog session
@@ -76,12 +84,21 @@ class Index extends \Magento\Framework\App\Action\Action
 
         $storeId = $this->_storeManager->getStore()->getId();
         $query->setStoreId($storeId);
+<<<<<<< HEAD
 
         $queryText = $query->getQueryText();
 
         if ($queryText != '') {
             $catalogSearchHelper = $this->_objectManager->get(\Magento\CatalogSearch\Helper\Data::class);
 
+=======
+
+        $queryText = $query->getQueryText();
+
+        if ($queryText != '') {
+            $catalogSearchHelper = $this->_objectManager->get(\Magento\CatalogSearch\Helper\Data::class);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $getAdditionalRequestParameters = $this->getRequest()->getParams();
             unset($getAdditionalRequestParameters[QueryFactory::QUERY_VAR_NAME]);
 
@@ -113,9 +130,15 @@ class Index extends \Magento\Framework\App\Action\Action
                 return;
             }
         }
+<<<<<<< HEAD
 
         $catalogSearchHelper->checkNotes();
 
+=======
+
+        $catalogSearchHelper->checkNotes();
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->_view->loadLayout();
         $this->_view->renderLayout();
     }

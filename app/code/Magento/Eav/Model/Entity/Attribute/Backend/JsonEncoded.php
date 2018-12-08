@@ -63,7 +63,11 @@ class JsonEncoded extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBa
     }
 
     /**
+<<<<<<< HEAD
      * Returns true if given param is a valid json value else false.
+=======
+     * Returns true if given value is a valid json value, and false otherwise.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param string|int|float|bool|array|null $value
      * @return bool

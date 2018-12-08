@@ -7,6 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="CustomCatalogRule" type="catalogRule">
         <data key="name" unique="suffix">CatalogPriceRule</data>
@@ -17,10 +18,23 @@
         </array>
         <array key="groups">
             <item>General</item>
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultCatalogRule" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         </array>
         <data key="simple_action">by_percent</data>
         <data key="discount_amount">10</data>
     </entity>
+<<<<<<< HEAD
     <entity name="CatalogRule96PercentDiscount" type="catalogRule">
         <data key="name" unique="suffix">CatalogPriceRule</data>
         <data key="description">Catalog Price Rule Description</data>
@@ -30,6 +44,60 @@
         </array>
         <array key="websites">
             <item>Main Website</item>
+=======
+
+    <entity name="CatalogRuleByFixed" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_fixed</data>
+        <data key="discount_amount">12.3</data>
+    </entity>
+
+    <entity name="CatalogRuleToPercent" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">to_percent</data>
+        <data key="discount_amount">90</data>
+    </entity>
+
+    <entity name="CatalogRuleToFixed" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">to_fixed</data>
+        <data key="discount_amount">110.7</data>
+    </entity>
+
+    <entity name="CatalogRuleByPercentWith96Amount" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         </array>
         <data key="simple_action">by_percent</data>
         <data key="discount_amount">96</data>

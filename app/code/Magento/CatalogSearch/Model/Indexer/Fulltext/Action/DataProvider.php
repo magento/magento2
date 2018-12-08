@@ -12,6 +12,8 @@ use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
 /**
+ * Catalog search full test search data provider.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
@@ -222,7 +224,11 @@ class DataProvider
         $batch
     ) {
         $websiteId = (int)$this->storeManager->getStore($storeId)->getWebsiteId();
+<<<<<<< HEAD
         $lastProductId = (int)$lastProductId;
+=======
+        $lastProductId = (int) $lastProductId;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
         $select = $this->connection->select()
             ->useStraightJoin(true)
@@ -316,12 +322,21 @@ class DataProvider
             /** @var \Magento\Eav\Model\Entity\Attribute[] $attributes */
             $attributes = $productAttributes->getItems();
 
+<<<<<<< HEAD
             /**
              * @deprecated Event argument catelogsearch_searchable_attributes_load_after.
              * @see catalogsearch_searchable_attributes_load_after instead.
              */
+=======
+            /** @deprecated */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $this->eventManager->dispatch(
                 'catelogsearch_searchable_attributes_load_after',
+                ['engine' => $this->engine, 'attributes' => $attributes]
+            );
+            
+            $this->eventManager->dispatch(
+                'catalogsearch_searchable_attributes_load_after',
                 ['engine' => $this->engine, 'attributes' => $attributes]
             );
 
@@ -571,8 +586,8 @@ class DataProvider
             }
         }
         foreach ($indexData as $entityId => $attributeData) {
-            foreach ($attributeData as $attributeId => $attributeValue) {
-                $value = $this->getAttributeValue($attributeId, $attributeValue, $storeId);
+            foreach ($attributeData as $attributeId => $attributeValues) {
+                $value = $this->getAttributeValue($attributeId, $attributeValues, $storeId);
                 if (!empty($value)) {
                     if (isset($index[$attributeId])) {
                         $index[$attributeId][$entityId] = $value;
@@ -603,30 +618,46 @@ class DataProvider
      * Retrieve attribute source value for search
      *
      * @param int $attributeId
-     * @param mixed $valueId
+     * @param mixed $valueIds
      * @param int $storeId
      * @return string
      */
-    private function getAttributeValue($attributeId, $valueId, $storeId)
+    private function getAttributeValue($attributeId, $valueIds, $storeId)
     {
         $attribute = $this->getSearchableAttribute($attributeId);
+<<<<<<< HEAD
         $value = $this->engine->processAttributeValue($attribute, $valueId);
         if (false !== $value) {
             $optionValue = $this->getAttributeOptionValue($attributeId, $valueId, $storeId);
             if (null === $optionValue) {
                 $value = preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
+=======
+        $value = $this->engine->processAttributeValue($attribute, $valueIds);
+        if (false !== $value) {
+            $optionValue = $this->getAttributeOptionValue($attributeId, $valueIds, $storeId);
+            if (null === $optionValue) {
+                $value = $this->filterAttributeValue($value);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             } else {
                 $value = implode($this->separator, array_filter([$value, $optionValue]));
             }
         }
+<<<<<<< HEAD
 
         return $value;
     }
 
+=======
+
+        return $value;
+    }
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     /**
      * Get attribute option value
      *
      * @param int $attributeId
+<<<<<<< HEAD
      * @param int $valueId
      * @param int $storeId
      * @return null|string
@@ -634,6 +665,17 @@ class DataProvider
     private function getAttributeOptionValue($attributeId, $valueId, $storeId)
     {
         $optionKey = $attributeId . '-' . $storeId;
+=======
+     * @param int|string $valueIds
+     * @param int $storeId
+     * @return null|string
+     */
+    private function getAttributeOptionValue($attributeId, $valueIds, $storeId)
+    {
+        $optionKey = $attributeId . '-' . $storeId;
+        $attributeValueIds = explode(',', $valueIds);
+        $attributeOptionValue = '';
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         if (!array_key_exists($optionKey, $this->attributeOptions)
         ) {
             $attribute = $this->getSearchableAttribute($attributeId);
@@ -644,11 +686,38 @@ class DataProvider
                 $attribute->setStoreId($storeId);
                 $options = $attribute->getSource()->toOptionArray();
                 $this->attributeOptions[$optionKey] = array_column($options, 'label', 'value');
+<<<<<<< HEAD
+            } else {
+                $this->attributeOptions[$optionKey] = null;
+=======
+                $this->attributeOptions[$optionKey] = array_map(function ($value) {
+                    return $this->filterAttributeValue($value);
+                }, $this->attributeOptions[$optionKey]);
             } else {
                 $this->attributeOptions[$optionKey] = null;
             }
         }
+        foreach ($attributeValueIds as $attrValueId) {
+            if (isset($this->attributeOptions[$optionKey][$attrValueId])) {
+                $attributeOptionValue .= $this->attributeOptions[$optionKey][$attrValueId] . ' ';
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
+            }
+        }
+        return empty($attributeOptionValue) ? null : trim($attributeOptionValue);
+    }
 
+<<<<<<< HEAD
         return $this->attributeOptions[$optionKey][$valueId] ?? null;
+=======
+    /**
+     * Remove whitespaces and tags from attribute value
+     *
+     * @param string $value
+     * @return string
+     */
+    private function filterAttributeValue($value)
+    {
+        return preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 }

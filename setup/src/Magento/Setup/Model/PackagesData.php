@@ -480,7 +480,7 @@ class PackagesData
 
         // Check we have only one repo.magento.com repository
         if (count($magentoRepositories) === 1
-            && strpos($magentoRepositories[0], $this->packagesAuth->getCredentialBaseUrl())
+            && strpos($magentoRepositories[0], $this->packagesAuth->getCredentialBaseUrl()) !== false
         ) {
             $packagesJson = $this->getPackagesJson();
 

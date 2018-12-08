@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Controller\Adminhtml;
 
 /**
@@ -72,7 +73,11 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParams(['types' => ['invalid_type_1', 'invalid_type_2', 'config']]);
         $this->dispatch('backend/admin/cache/' . $action);
         $this->assertSessionMessages(
+<<<<<<< HEAD
             $this->contains("Specified cache type(s) don&#039;t exist: invalid_type_1, invalid_type_2"),
+=======
+            $this->contains("These cache type(s) don&#039;t exist: invalid_type_1, invalid_type_2"),
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

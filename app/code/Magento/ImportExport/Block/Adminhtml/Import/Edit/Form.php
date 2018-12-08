@@ -175,6 +175,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
+                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+                'text',
+                [
+                    'name' => \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+                    'label' => __('Empty attribute value constant'),
+                    'title' => __('Empty attribute value constant'),
+                    'required' => true,
+                    'disabled' => true,
+                    'class' => $behaviorCode,
+                    'value' => Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT,
+                ]
+            );
+            $fieldsets[$behaviorCode]->addField(
                 $behaviorCode . \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE,
                 'checkbox',
                 [

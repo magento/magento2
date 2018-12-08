@@ -6,10 +6,18 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+<<<<<<< HEAD
     <module name="Magento_ReleaseNotification" setup_version="2.2.0">
         <sequence>
             <module name="Magento_User"/>
             <module name="Magento_Backend"/>
+=======
+    <module name="Magento_ReleaseNotification" >
+        <sequence>
+            <module name="Magento_User"/>
+            <module name="Magento_Backend"/>
+            <module name="Magento_Ui"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         </sequence>
     </module>
 </config>

@@ -8,6 +8,7 @@ namespace Magento\Translation\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Translation\Model\Js\Config;
+use Magento\Framework\Escaper;
 
 /**
  * @api
@@ -68,5 +69,15 @@ class Js extends Template
     public function getTranslationFilePath()
     {
         return $this->fileManager->getTranslationFilePath();
+    }
+
+    /**
+     * Gets current version of the translation file.
+     *
+     * @return string
+     */
+    public function getTranslationFileVersion()
+    {
+        return $this->fileManager->getTranslationFileVersion();
     }
 }

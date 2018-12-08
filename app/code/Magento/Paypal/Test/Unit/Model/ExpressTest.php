@@ -99,7 +99,11 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
                 'setCurrencyCode',
                 'setTransactionId',
                 'callDoAuthorization',
+<<<<<<< HEAD
                 'setData'
+=======
+                'setData',
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
         $this->pro = $this->createPartialMock(
@@ -123,13 +127,22 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
             [
                 'data' => [$this->pro],
                 'checkoutSession' => $this->checkoutSession,
+<<<<<<< HEAD
                 'transactionBuilder' => $this->transactionBuilder
+=======
+                'transactionBuilder' => $this->transactionBuilder,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
     }
 
     /**
      * Tests order payment action.
+<<<<<<< HEAD
+=======
+     *
+     * @return void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function testOrder()
     {
@@ -151,7 +164,11 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
             \Magento\Paypal\Model\Express::class,
             [
                 'data' => [$this->pro],
+<<<<<<< HEAD
                 'checkoutSession' => $this->checkoutSession
+=======
+                'checkoutSession' => $this->checkoutSession,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
 
@@ -228,11 +245,15 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'payment_method_assign_data_' . $this->model->getCode(),
+<<<<<<< HEAD
                         $eventData
+=======
+                        $eventData,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     ],
                     [
                         'payment_method_assign_data',
-                        $eventData
+                        $eventData,
                     ]
                 ]
             );

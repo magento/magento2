@@ -86,7 +86,12 @@ class Grouped implements DimensionalIndexerInterface
 
     /**
      * {@inheritdoc}
+<<<<<<< HEAD
      *
+=======
+     * @param array $dimensions
+     * @param \Traversable $entityIds
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @throws \Exception
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds)
@@ -139,6 +144,7 @@ class Grouped implements DimensionalIndexerInterface
             []
         );
         $select->columns(
+<<<<<<< HEAD
             [
                 'i.customer_group_id',
                 'i.website_id',
@@ -151,6 +157,20 @@ class Grouped implements DimensionalIndexerInterface
             ['i' => $this->getMainTable($dimensions)],
             'i.entity_id = l.linked_product_id',
             [
+=======
+            [
+                'i.customer_group_id',
+                'i.website_id',
+            ]
+        );
+        $taxClassId = $this->getConnection()->getCheckSql('MIN(i.tax_class_id) IS NULL', '0', 'MIN(i.tax_class_id)');
+        $minCheckSql = $this->getConnection()->getCheckSql('le.required_options = 0', 'i.min_price', 0);
+        $maxCheckSql = $this->getConnection()->getCheckSql('le.required_options = 0', 'i.max_price', 0);
+        $select->join(
+            ['i' => $this->getMainTable($dimensions)],
+            'i.entity_id = l.linked_product_id',
+            [
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 'tax_class_id' => $taxClassId,
                 'price' => new \Zend_Db_Expr('NULL'),
                 'final_price' => new \Zend_Db_Expr('NULL'),

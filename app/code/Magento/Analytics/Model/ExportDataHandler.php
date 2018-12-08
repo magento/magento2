@@ -195,7 +195,11 @@ class ExportDataHandler implements ExportDataHandlerInterface
     private function validateSource(WriteInterface $directory, $path)
     {
         if (!$directory->isExist($path)) {
+<<<<<<< HEAD
             throw new LocalizedException(__('Source "%1" is not exist', $directory->getAbsolutePath($path)));
+=======
+            throw new LocalizedException(__('The "%1" source doesn\'t exist.', $directory->getAbsolutePath($path)));
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
 
         return $directory->getAbsolutePath($path);

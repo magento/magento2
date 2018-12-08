@@ -66,7 +66,13 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
             );
 
             $templateBlock = $this->_view->getLayout()->createBlock(
-                \Magento\Email\Block\Adminhtml\Template\Edit::class
+                \Magento\Email\Block\Adminhtml\Template\Edit::class,
+                'template_edit',
+                [
+                    'data' => [
+                        'email_template' => $template
+                    ]
+                ]
             );
             $template->setData('orig_template_currently_used_for', $templateBlock->getCurrentlyUsedForPaths(false));
 

@@ -13,9 +13,12 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\FlagManager;
 
+<<<<<<< HEAD
 /**
  * Class Update
  */
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**

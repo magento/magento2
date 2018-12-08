@@ -67,12 +67,16 @@ class Enabled extends Value
         try {
             if ($this->isValueChanged()) {
                 $enabled = $this->getData('value');
+<<<<<<< HEAD
 
                 if ($enabled) {
                     $this->subscriptionHandler->processEnabled();
                 } else {
                     $this->subscriptionHandler->processDisabled();
                 }
+=======
+                $enabled ? $this->subscriptionHandler->processEnabled() : $this->subscriptionHandler->processDisabled();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             }
         } catch (\Exception $e) {
             $this->_logger->error($e->getMessage());

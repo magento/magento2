@@ -9,7 +9,12 @@ namespace Magento\Backend\Block\Media;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
+<<<<<<< HEAD
 use Magento\Framework\Image\Adapter\ConfigInterface;
+=======
+use Magento\Framework\Image\Adapter\UploadConfigInterface;
+use Magento\Backend\Model\Image\UploadResizeConfigInterface;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 /**
  * Adminhtml media library uploader
@@ -39,7 +44,18 @@ class Uploader extends \Magento\Backend\Block\Widget
     private $jsonEncoder;
 
     /**
+<<<<<<< HEAD
      * @var ConfigInterface
+=======
+     * @var UploadResizeConfigInterface
+     */
+    private $imageUploadConfig;
+
+    /**
+     * @var UploadConfigInterface
+     * @deprecated
+     * @see \Magento\Backend\Model\Image\UploadResizeConfigInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private $imageConfig;
 
@@ -48,23 +64,42 @@ class Uploader extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\File\Size $fileSize
      * @param array $data
      * @param Json $jsonEncoder
+<<<<<<< HEAD
      * @param ConfigInterface $imageConfig
+=======
+     * @param UploadConfigInterface $imageConfig
+     * @param UploadResizeConfigInterface $imageUploadConfig
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
         array $data = [],
         Json $jsonEncoder = null,
+<<<<<<< HEAD
         ConfigInterface $imageConfig = null
     ) {
         $this->_fileSizeService = $fileSize;
         $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
         $this->imageConfig = $imageConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
 
+=======
+        UploadConfigInterface $imageConfig = null,
+        UploadResizeConfigInterface $imageUploadConfig = null
+    ) {
+        $this->_fileSizeService = $fileSize;
+        $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
+        $this->imageConfig = $imageConfig
+            ?: ObjectManager::getInstance()->get(UploadConfigInterface::class);
+        $this->imageUploadConfig = $imageUploadConfig
+            ?: ObjectManager::getInstance()->get(UploadResizeConfigInterface::class);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         parent::__construct($context, $data);
     }
 
     /**
+     * Initialize block.
+     *
      * @return void
      */
     protected function _construct()
@@ -103,23 +138,39 @@ class Uploader extends \Magento\Backend\Block\Widget
     }
 
     /**
+<<<<<<< HEAD
      * Get Image Upload Maximum Width Config
+=======
+     * Get Image Upload Maximum Width Config.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int
      */
     public function getImageUploadMaxWidth()
     {
+<<<<<<< HEAD
         return $this->imageConfig->getMaxWidth();
     }
 
     /**
      * Get Image Upload Maximum Height Config
+=======
+        return $this->imageUploadConfig->getMaxWidth();
+    }
+
+    /**
+     * Get Image Upload Maximum Height Config.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return int
      */
     public function getImageUploadMaxHeight()
     {
+<<<<<<< HEAD
         return $this->imageConfig->getMaxHeight();
+=======
+        return $this->imageUploadConfig->getMaxHeight();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**

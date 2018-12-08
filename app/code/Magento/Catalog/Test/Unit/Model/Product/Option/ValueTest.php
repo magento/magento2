@@ -118,8 +118,8 @@ class ValueTest extends \PHPUnit\Framework\TestCase
 
         $mockBuilder =
             $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor();
+                ->setMethods(['create'])
+                ->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
         $mock->expects($this->any())

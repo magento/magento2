@@ -50,7 +50,7 @@ class CommandManagerPool implements CommandManagerPoolInterface
     {
         if (!isset($this->executors[$paymentProviderCode])) {
             throw new NotFoundException(
-                __('Command Executor for %1 is not defined.', $paymentProviderCode)
+                __('The "%1" command executor isn\'t defined. Verify the executor and try again.', $paymentProviderCode)
             );
         }
 

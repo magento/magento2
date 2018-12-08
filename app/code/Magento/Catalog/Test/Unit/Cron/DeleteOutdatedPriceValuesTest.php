@@ -90,9 +90,20 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
         $attributeId = 15;
         $conditions = ['first', 'second'];
 
+<<<<<<< HEAD
         $this->scopeConfigMock->expects($this->once())->method('getValue')->with(Store::XML_PATH_PRICE_SCOPE)
             ->willReturn(Store::XML_PATH_PRICE_SCOPE);
         $this->attributeRepositoryMock->expects($this->once())->method('get')
+=======
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with(Store::XML_PATH_PRICE_SCOPE)
+            ->willReturn(Store::XML_PATH_PRICE_SCOPE);
+        $this->attributeRepositoryMock
+            ->expects($this->once())
+            ->method('get')
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, ProductAttributeInterface::CODE_PRICE)
             ->willReturn($this->attributeMock);
         $this->attributeMock->expects($this->once())->method('getId')->willReturn($attributeId);
@@ -117,10 +128,24 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecutePriceConfigIsNotSetToGlobal()
     {
+<<<<<<< HEAD
         $this->scopeConfigMock->expects($this->once())->method('getValue')->with(Store::XML_PATH_PRICE_SCOPE)
             ->willReturn(null);
         $this->attributeRepositoryMock->expects($this->never())->method('get');
         $this->dbAdapterMock->expects($this->never())->method('delete');
+=======
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with(Store::XML_PATH_PRICE_SCOPE)
+            ->willReturn(null);
+        $this->attributeRepositoryMock
+            ->expects($this->never())
+            ->method('get');
+        $this->dbAdapterMock
+            ->expects($this->never())
+            ->method('delete');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
         $this->deleteOutdatedPriceValues->execute();
     }

@@ -42,9 +42,15 @@ class CartFixed extends AbstractDiscount
         Validator $validator,
         DataFactory $discountDataFactory,
         PriceCurrencyInterface $priceCurrency,
+<<<<<<< HEAD
         DeltaPriceRound $deltaPriceRound = null
     ) {
         $this->deltaPriceRound = $deltaPriceRound ?: ObjectManager::getInstance()->get(DeltaPriceRound::class);
+=======
+        DeltaPriceRound $deltaPriceRound
+    ) {
+        $this->deltaPriceRound = $deltaPriceRound;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
         parent::__construct($validator, $discountDataFactory, $priceCurrency);
     }

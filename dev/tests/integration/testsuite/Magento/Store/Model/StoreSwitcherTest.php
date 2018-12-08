@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Store\Model;
 
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
@@ -38,7 +43,11 @@ class StoreSwitcherTest extends \PHPUnit\Framework\TestCase
      * @throws StoreSwitcher\CannotSwitchStoreException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+<<<<<<< HEAD
     public function testSwitch()
+=======
+    public function testSwitch(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $redirectUrl = "http://domain.com/?SID=e5h3e086dce3ckkqt9ia7avl27&___store=fixture_second_store";
         $expectedUrl = "http://domain.com/";

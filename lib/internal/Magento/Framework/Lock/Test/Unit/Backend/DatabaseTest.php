@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Framework\Lock\Test\Unit\Backend;
 
 use Magento\Framework\Lock\Backend\Database;
@@ -29,7 +34,13 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+<<<<<<< HEAD
     /** @var Database $database */
+=======
+    /**
+     * @var Database
+     */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     private $database;
 
     protected function setUp()

@@ -13,9 +13,12 @@ use Magento\Analytics\Model\IntegrationManager;
 use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
 /**
  * Class IntegrationManagerTest
  */
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class IntegrationManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**

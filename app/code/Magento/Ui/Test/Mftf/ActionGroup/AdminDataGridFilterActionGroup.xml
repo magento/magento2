@@ -29,6 +29,7 @@
 
     <!--Clear all filters in grid-->
     <actionGroup name="clearFiltersAdminDataGrid">
+<<<<<<< HEAD
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
     </actionGroup>
@@ -45,4 +46,8 @@
         <fillField userInput="{{value}}" selector="{{AdminDataGridHeaderSection.filterFieldInput('inputName')}}" stepKey="fillCodeField"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOnApplyFilters"/>
     </actionGroup>
+=======
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+    </actionGroup>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 </actionGroups>

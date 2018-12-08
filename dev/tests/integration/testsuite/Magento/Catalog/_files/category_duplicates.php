@@ -15,7 +15,7 @@ $category->setId(
 )->setParentId(
     2
 )->setPath(
-    '1/2'
+    '1/2/444'
 )->setLevel(
     '2'
 )->setDefaultSortBy(
@@ -51,7 +51,7 @@ $productModel->setTypeId(
 )->setCategoryIds(
     []
 )->setStockData(
-    ['qty' => 100, 'is_in_stock' => 1]
+    ['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1]
 )->setCategoryIds(
     [444]
 )->save();

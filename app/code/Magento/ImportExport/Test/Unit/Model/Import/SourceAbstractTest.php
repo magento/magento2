@@ -57,7 +57,7 @@ class SourceAbstractTest extends \PHPUnit\Framework\TestCase
         )->method(
             '_getNextRow'
         )->will(
-            $this->onConsecutiveCalls([1, 2, 3], [4, 5, 5], [6, 7, 8])
+            $this->onConsecutiveCalls([1, 2, 3], [4, 5, 5], [6, 7, 8], [])
         );
         $data = [];
         foreach ($this->_model as $key => $value) {

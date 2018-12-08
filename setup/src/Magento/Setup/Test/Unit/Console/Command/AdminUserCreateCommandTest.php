@@ -187,11 +187,15 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 [null, 'Doe', 'admin', 'test@test.com', '123123q', '123123q'],
+<<<<<<< HEAD
                 ['First Name is a required field.']
+=======
+                ['"First Name" is required. Enter and try again.']
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             [
                 ['John', null, null, 'test@test.com', '123123q', '123123q'],
-                ['User Name is a required field.', 'Last Name is a required field.'],
+                ['"User Name" is required. Enter and try again.', '"Last Name" is required. Enter and try again.'],
             ],
             [['John', 'Doe', 'admin', null, '123123q', '123123q'], ['Please enter a valid email.']],
             [

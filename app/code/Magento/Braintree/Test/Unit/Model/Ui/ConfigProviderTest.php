@@ -52,11 +52,19 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
         $this->braintreeAdapter = $this->getMockBuilder(BraintreeAdapter::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
         /** @var BraintreeAdapterFactory|MockObject $adapterFactory */
         $adapterFactory = $this->getMockBuilder(BraintreeAdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $adapterFactory->method('create')
+=======
+        /** @var BraintreeAdapterFactory|MockObject $adapterFactoryMock */
+        $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $adapterFactoryMock->method('create')
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->willReturn($this->braintreeAdapter);
 
         $this->session = $this->getMockBuilder(Session::class)
@@ -68,7 +76,11 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->configProvider = new ConfigProvider(
             $this->config,
+<<<<<<< HEAD
             $adapterFactory,
+=======
+            $adapterFactoryMock,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $this->session
         );
     }

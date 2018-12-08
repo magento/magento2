@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Eav;
 
 /**
@@ -56,7 +54,10 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $actionValidatorMock = $this->createMock(\Magento\Framework\Model\ActionValidator\RemoveAction::class);
         $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
 
-        $this->contextMock = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher', 'getCacheManager', 'getActionValidator']);
+        $this->contextMock = $this->createPartialMock(
+            \Magento\Framework\Model\Context::class,
+            ['getEventDispatcher', 'getCacheManager', 'getActionValidator']
+        );
 
         $this->contextMock->expects($this->any())
             ->method('getEventDispatcher')
@@ -71,7 +72,9 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $dbAdapterMock->expects($this->any())->method('getTransactionLevel')->will($this->returnValue(1));
 
-        $this->resourceMock = $this->createPartialMock(\Magento\Framework\Model\ResourceModel\AbstractResource::class, [
+        $this->resourceMock = $this->createPartialMock(
+            \Magento\Framework\Model\ResourceModel\AbstractResource::class,
+            [
                 '_construct',
                 'getConnection',
                 'getIdFieldName',
@@ -79,7 +82,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                 'saveInSetIncluding',
                 'isUsedBySuperProducts',
                 'delete'
-            ]);
+            ]
+        );
 
         $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->setMethods(['clear'])
@@ -93,14 +97,14 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-                [
-                    'context' => $this->contextMock,
-                    'productFlatIndexerProcessor' => $this->_processor,
-                    'indexerEavProcessor' => $this->_eavProcessor,
-                    'resource' => $this->resourceMock,
-                    'data' => ['id' => 1],
-                    'eavConfig' => $this->eavConfigMock
-                ]
+            [
+                'context' => $this->contextMock,
+                'productFlatIndexerProcessor' => $this->_processor,
+                'indexerEavProcessor' => $this->_eavProcessor,
+                'resource' => $this->resourceMock,
+                'data' => ['id' => 1],
+                'eavConfig' => $this->eavConfigMock
+            ]
         );
     }
 
@@ -118,7 +122,10 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $this->_processor->expects($this->once())->method('markIndexerAsInvalid');
 
-        $this->_model->setOrigData('is_global', \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE);
+        $this->_model->setOrigData(
+            'is_global',
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE
+        );
         $this->_model->setOrigData('used_in_product_listing', 1);
         $this->_model->setIsGlobal(\Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL);
         $this->_model->afterSave();
@@ -166,7 +173,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('global', $this->_model->getScope());
     }
 
-    public function testGetScopeWebiste()
+    public function testGetScopeWebsite()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(

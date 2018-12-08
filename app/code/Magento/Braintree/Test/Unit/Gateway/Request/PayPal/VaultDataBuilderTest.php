@@ -13,19 +13,30 @@ use Magento\Vault\Model\Ui\VaultConfigProvider;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class VaultDataBuilderTest
+ * Tests \Magento\Braintree\Gateway\Request\PayPal\VaultDataBuilder.
  */
 class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
+<<<<<<< HEAD
      * @var PaymentDataObjectInterface|MockObject
      */
     private $paymentDO;
+=======
+     * @var SubjectReader|MockObject
+     */
+    private $subjectReaderMock;
+
+    /**
+     * @var PaymentDataObjectInterface|MockObject
+     */
+    private $paymentDataObjectMock;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     /**
      * @var InfoInterface|MockObject
      */
-    private $paymentInfo;
+    private $paymentInfoMock;
 
     /**
      * @var VaultDataBuilder
@@ -34,11 +45,24 @@ class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+<<<<<<< HEAD
         $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+=======
+        $this->paymentDataObjectMock = $this->createMock(PaymentDataObjectInterface::class);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
-        $this->paymentInfo = $this->createMock(InfoInterface::class);
+        $this->paymentInfoMock = $this->createMock(InfoInterface::class);
 
+<<<<<<< HEAD
         $this->builder = new VaultDataBuilder(new SubjectReader());
+=======
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['readPayment'])
+            ->getMock();
+
+        $this->builder = new VaultDataBuilder($this->subjectReaderMock);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -50,6 +74,7 @@ class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuild(array $additionalInfo, array $expected)
     {
         $subject = [
+<<<<<<< HEAD
             'payment' => $this->paymentDO
         ];
 
@@ -57,6 +82,22 @@ class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->paymentInfo);
 
         $this->paymentInfo->method('getAdditionalInformation')
+=======
+            'payment' => $this->paymentDataObjectMock,
+        ];
+
+        $this->subjectReaderMock->expects(static::once())
+            ->method('readPayment')
+            ->with($subject)
+            ->willReturn($this->paymentDataObjectMock);
+
+        $this->paymentDataObjectMock->expects(static::once())
+            ->method('getPayment')
+            ->willReturn($this->paymentInfoMock);
+
+        $this->paymentInfoMock->expects(static::once())
+            ->method('getAdditionalInformation')
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->willReturn($additionalInfo);
 
         $actual = $this->builder->build($subject);

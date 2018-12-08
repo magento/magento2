@@ -1,0 +1,152 @@
+{
+    "report_compared_product_index": {
+        "column": {
+            "index_id": true,
+            "visitor_id": true,
+            "customer_id": true,
+            "product_id": true,
+            "store_id": true,
+            "added_at": true
+        },
+        "index": {
+            "REPORT_COMPARED_PRODUCT_INDEX_STORE_ID": true,
+            "REPORT_COMPARED_PRODUCT_INDEX_ADDED_AT": true,
+            "REPORT_COMPARED_PRODUCT_INDEX_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REPORT_CMPD_PRD_IDX_CSTR_ID_CSTR_ENTT_ENTT_ID": true,
+            "REPORT_CMPD_PRD_IDX_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "REPORT_COMPARED_PRODUCT_INDEX_STORE_ID_STORE_STORE_ID": true,
+            "REPORT_COMPARED_PRODUCT_INDEX_VISITOR_ID_PRODUCT_ID": true,
+            "REPORT_COMPARED_PRODUCT_INDEX_CUSTOMER_ID_PRODUCT_ID": true,
+            "REPORT_CMPD_PRD_IDX_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL": true
+        }
+    },
+    "report_viewed_product_index": {
+        "column": {
+            "index_id": true,
+            "visitor_id": true,
+            "customer_id": true,
+            "product_id": true,
+            "store_id": true,
+            "added_at": true
+        },
+        "index": {
+            "REPORT_VIEWED_PRODUCT_INDEX_STORE_ID": true,
+            "REPORT_VIEWED_PRODUCT_INDEX_ADDED_AT": true,
+            "REPORT_VIEWED_PRODUCT_INDEX_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REPORT_VIEWED_PRD_IDX_CSTR_ID_CSTR_ENTT_ENTT_ID": true,
+            "REPORT_VIEWED_PRD_IDX_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "REPORT_VIEWED_PRODUCT_INDEX_STORE_ID_STORE_STORE_ID": true,
+            "REPORT_VIEWED_PRODUCT_INDEX_VISITOR_ID_PRODUCT_ID": true,
+            "REPORT_VIEWED_PRODUCT_INDEX_CUSTOMER_ID_PRODUCT_ID": true,
+            "REPORT_VIEWED_PRD_IDX_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL": true
+        }
+    },
+    "report_event_types": {
+        "column": {
+            "event_type_id": true,
+            "event_name": true,
+            "customer_login": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "report_event": {
+        "column": {
+            "event_id": true,
+            "logged_at": true,
+            "event_type_id": true,
+            "object_id": true,
+            "subject_id": true,
+            "subtype": true,
+            "store_id": true
+        },
+        "index": {
+            "REPORT_EVENT_EVENT_TYPE_ID": true,
+            "REPORT_EVENT_SUBJECT_ID": true,
+            "REPORT_EVENT_OBJECT_ID": true,
+            "REPORT_EVENT_SUBTYPE": true,
+            "REPORT_EVENT_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REPORT_EVENT_STORE_ID_STORE_STORE_ID": true,
+            "REPORT_EVENT_EVENT_TYPE_ID_REPORT_EVENT_TYPES_EVENT_TYPE_ID": true
+        }
+    },
+    "report_viewed_product_aggregated_daily": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "product_id": true,
+            "product_name": true,
+            "product_price": true,
+            "views_num": true,
+            "rating_pos": true
+        },
+        "index": {
+            "REPORT_VIEWED_PRODUCT_AGGREGATED_DAILY_STORE_ID": true,
+            "REPORT_VIEWED_PRODUCT_AGGREGATED_DAILY_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REPORT_VIEWED_PRODUCT_AGGREGATED_DAILY_STORE_ID_STORE_STORE_ID": true,
+            "REPORT_VIEWED_PRD_AGGRED_DAILY_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "REPORT_VIEWED_PRD_AGGRED_DAILY_PERIOD_STORE_ID_PRD_ID": true,
+            "REPORT_VIEWED_PRD_AGGRED_DAILY_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL": true
+        }
+    },
+    "report_viewed_product_aggregated_monthly": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "product_id": true,
+            "product_name": true,
+            "product_price": true,
+            "views_num": true,
+            "rating_pos": true
+        },
+        "index": {
+            "REPORT_VIEWED_PRODUCT_AGGREGATED_MONTHLY_STORE_ID": true,
+            "REPORT_VIEWED_PRODUCT_AGGREGATED_MONTHLY_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REPORT_VIEWED_PRODUCT_AGGREGATED_MONTHLY_STORE_ID_STORE_STORE_ID": true,
+            "REPORT_VIEWED_PRD_AGGRED_MONTHLY_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "REPORT_VIEWED_PRD_AGGRED_MONTHLY_PERIOD_STORE_ID_PRD_ID": true,
+            "FK_0140003A30AFC1A9188D723C4634BA5D": true
+        }
+    },
+    "report_viewed_product_aggregated_yearly": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "product_id": true,
+            "product_name": true,
+            "product_price": true,
+            "views_num": true,
+            "rating_pos": true
+        },
+        "index": {
+            "REPORT_VIEWED_PRODUCT_AGGREGATED_YEARLY_STORE_ID": true,
+            "REPORT_VIEWED_PRODUCT_AGGREGATED_YEARLY_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REPORT_VIEWED_PRODUCT_AGGREGATED_YEARLY_STORE_ID_STORE_STORE_ID": true,
+            "REPORT_VIEWED_PRD_AGGRED_YEARLY_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "REPORT_VIEWED_PRD_AGGRED_YEARLY_PERIOD_STORE_ID_PRD_ID": true,
+            "REPORT_VIEWED_PRD_AGGRED_YEARLY_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL": true
+        }
+    }
+}

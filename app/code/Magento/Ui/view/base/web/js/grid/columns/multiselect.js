@@ -268,7 +268,7 @@ define([
          * Returns identifier of a record.
          *
          * @param {*} id - Id of a record or its' index in a rows array.
-         * @param {Boolean} [isIndex=false] - Flag that specifies whith what
+         * @param {Boolean} [isIndex=false] - Flag that specifies with what
          *      kind of identifier we are dealing with.
          * @returns {*}
          */

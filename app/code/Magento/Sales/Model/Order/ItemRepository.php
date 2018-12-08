@@ -3,10 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order;
 
+<<<<<<< HEAD
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
@@ -94,13 +99,15 @@ class ItemRepository implements OrderItemRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new InputException(__('ID required'));
+            throw new InputException(__('An ID is needed. Set the ID and try again.'));
         }
         if (!isset($this->registry[$id])) {
             /** @var OrderItemInterface $orderItem */
             $orderItem = $this->metadata->getNewInstance()->load($id);
             if (!$orderItem->getItemId()) {
-                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
 
             $this->productOption->add($orderItem);
@@ -186,6 +193,17 @@ class ItemRepository implements OrderItemRepositoryInterface
     {
         if ($parentId = $orderItem->getParentItemId()) {
             $orderItem->setParentItem($this->get($parentId));
+<<<<<<< HEAD
+=======
+        } else {
+            $orderCollection = $orderItem->getOrder()->getItemsCollection()->filterByParent($orderItem->getItemId());
+
+            foreach ($orderCollection->getItems() as $item) {
+                if ($item->getParentItemId() === $orderItem->getItemId()) {
+                    $item->setParentItem($orderItem);
+                }
+            }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
     }
 

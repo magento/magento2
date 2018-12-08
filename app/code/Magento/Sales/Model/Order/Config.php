@@ -125,10 +125,18 @@ class Config
      */
     private function getStatusLabelForArea(string $code, string $area): string
     {
+<<<<<<< HEAD
         $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);
 
         if ($area === 'adminhtml') {
+=======
+        $area = $this->state->getAreaCode();
+        $code = $this->maskStatusForArea($area, $code);
+        $status = $this->orderStatusFactory->create()->load($code);
+
+        if ($area == 'adminhtml') {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             return $status->getLabel();
         }
 

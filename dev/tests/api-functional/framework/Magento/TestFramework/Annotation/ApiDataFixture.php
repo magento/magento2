@@ -10,8 +10,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\TestFramework\Annotation;
 
 class ApiDataFixture
@@ -102,7 +100,11 @@ class ApiDataFixture
      * Execute single fixture script
      *
      * @param string|array $fixture
+<<<<<<< HEAD
      * @throws \Exception
+=======
+     * @throws \Throwable
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     protected function _applyOneFixture($fixture)
     {
@@ -146,7 +148,8 @@ class ApiDataFixture
      */
     protected function _revertFixtures()
     {
-        foreach ($this->_appliedFixtures as $fixture) {
+        $appliedFixtures = array_reverse($this->_appliedFixtures);
+        foreach ($appliedFixtures as $fixture) {
             if (is_callable($fixture)) {
                 $fixture[1] .= 'Rollback';
                 if (is_callable($fixture)) {

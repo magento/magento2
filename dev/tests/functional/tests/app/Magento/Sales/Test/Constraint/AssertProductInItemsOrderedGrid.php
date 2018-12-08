@@ -47,7 +47,7 @@ class AssertProductInItemsOrderedGrid extends AbstractAssertForm
         $this->productsIsConfigured = $productsIsConfigured;
         $data = $this->prepareData($products, $orderCreateIndex->getCreateBlock()->getItemsBlock());
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $data['fixtureData'],
             $data['pageData'],
             'Product data on order create page not equals to passed from fixture.'

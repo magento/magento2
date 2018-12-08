@@ -223,14 +223,26 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         /** @var ParameterReflection $parameterReflection */
         $parameterReflection = $methodReflection->getParameters()[0];
         $body = "if (!\$id) {\n"
+<<<<<<< HEAD
             . "    throw new \\" . InputException::class . "(new \\Magento\\Framework\\Phrase('ID required'));\n"
+=======
+            . "    throw new \\" . InputException::class . "(\n"
+            . "        new \\Magento\\Framework\\Phrase('An ID is needed. Set the ID and try again.')\n"
+            . "    );\n"
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             . "}\n"
             . "if (!isset(\$this->registry[\$id])) {\n"
             . "    \$entity = \$this->" . $this->_getSourcePersistorPropertyName()
             . "->loadEntity(\$id);\n"
             . "    if (!\$entity->getId()) {\n"
             . "        throw new \\" . NoSuchEntityException::class . "(\n"
+<<<<<<< HEAD
             . "            new \\Magento\\Framework\\Phrase('Requested entity doesn\\'t exist')\n"
+=======
+            . "            new \\Magento\\Framework\\Phrase(\n"
+            . "                'The entity that was requested doesn\'t exist. Verify the entity and try again.'\n"
+            . "            )\n"
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             . "        );\n"
             . "    }\n"
             . "    \$this->registry[\$id] = \$entity;\n"

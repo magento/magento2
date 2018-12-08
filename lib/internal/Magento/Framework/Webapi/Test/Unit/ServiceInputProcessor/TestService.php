@@ -21,10 +21,28 @@ class TestService
     }
 
     /**
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleConstructor $simpleConstructor
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleConstructor
+     */
+    public function simpleConstructor(SimpleConstructor $simpleConstructor)
+    {
+        return $simpleConstructor;
+    }
+
+    /**
      * @param int $entityId
      * @return string[]
      */
     public function simpleDefaultValue($entityId = self::DEFAULT_VALUE)
+    {
+        return [$entityId];
+    }
+
+    /**
+     * @param int $entityId
+     * @return string[]
+     */
+    public function constructorArguments($entityId = self::DEFAULT_VALUE)
     {
         return [$entityId];
     }

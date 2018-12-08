@@ -139,7 +139,11 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             [
                 $this->getDisplayType(),
                 $this->getProductsPerPage(),
+<<<<<<< HEAD
                 (int)$this->getRequest()->getParam($this->getData('page_var_name'), 1),
+=======
+                (int) $this->getRequest()->getParam($this->getData('page_var_name'), 1),
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 $this->serializer->serialize($this->getRequest()->getParams())
             ]
         );

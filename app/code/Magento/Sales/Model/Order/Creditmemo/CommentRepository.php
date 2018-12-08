@@ -20,8 +20,11 @@ use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
 /**
+<<<<<<< HEAD
  * Class CommentRepository
  *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CommentRepository implements CreditmemoCommentRepositoryInterface
@@ -133,6 +136,7 @@ class CommentRepository implements CreditmemoCommentRepositoryInterface
             $this->commentResource->save($entity);
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not save the creditmemo comment.'), $e);
+<<<<<<< HEAD
         }
 
         try {
@@ -140,7 +144,17 @@ class CommentRepository implements CreditmemoCommentRepositoryInterface
             $this->creditmemoCommentSender->send($creditmemo, $entity->getIsCustomerNotified(), $entity->getComment());
         } catch (\Exception $exception) {
             $this->logger->warning('Something went wrong while sending email.');
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
+
+        try {
+            $creditmemo = $this->creditmemoRepository->get($entity->getParentId());
+            $this->creditmemoCommentSender->send($creditmemo, $entity->getIsCustomerNotified(), $entity->getComment());
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+        }
+
         return $entity;
     }
 }

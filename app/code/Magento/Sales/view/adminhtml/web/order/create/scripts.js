@@ -43,6 +43,7 @@ define([
             this.excludedPaymentMethods = [];
             this.summarizePrice = true;
             this.timerId = null;
+<<<<<<< HEAD
             this.shippingTemplate = template(shippingTemplate, {
                 data: {
                     title: jQuery.mage.__('Shipping Method'),
@@ -56,6 +57,8 @@ define([
                 }
             });
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             jQuery.async('#order-items', (function(){
                 this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
                 this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
@@ -208,10 +211,27 @@ define([
             var fields = $(container).select('input', 'select', 'textarea');
             for(var i=0;i<fields.length;i++){
                 Event.observe(fields[i], 'change', this.triggerChangeEvent.bind(this));
+<<<<<<< HEAD
+=======
             }
         },
 
         /**
+         * Calls changing address field handler after timeout to prevent multiple simultaneous calls.
+         *
+         * @param {Event} event
+         */
+        triggerChangeEvent: function (event) {
+            if (this.timerId) {
+                window.clearTimeout(this.timerId);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
+            }
+
+            this.timerId = window.setTimeout(this.changeAddressField.bind(this), 500, event);
+        },
+
+        /**
+<<<<<<< HEAD
          * Calls changing address field handler after timeout to prevent multiple simultaneous calls.
          *
          * @param {Event} event
@@ -225,6 +245,8 @@ define([
         },
 
         /**
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
          * Triggers on each form's element changes.
          *
          * @param {Event} event
@@ -256,7 +278,11 @@ define([
             }
 
             data['order[' + type + '_address][customer_address_id]'] = null;
+<<<<<<< HEAD
             data['shipping_as_billing'] = +this.isShippingAsBilling();
+=======
+            data['shipping_as_billing'] = jQuery('[name="shipping_same_as_billing"]').is(':checked') ? 1 : 0;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
             if (name === 'customer_address_id') {
                 data['order[' + type + '_address][customer_address_id]'] =

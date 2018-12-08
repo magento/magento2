@@ -10,8 +10,12 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 
 /**
+<<<<<<< HEAD
  * Class AccountConfirmation.
  * Checks if email confirmation required for customer.
+=======
+ * Class AccountConfirmation. Checks if email confirmation required for customer.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class AccountConfirmation
 {
@@ -31,6 +35,11 @@ class AccountConfirmation
     private $registry;
 
     /**
+<<<<<<< HEAD
+=======
+     * AccountConfirmation constructor.
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param ScopeConfigInterface $scopeConfig
      * @param Registry $registry
      */
@@ -56,7 +65,11 @@ class AccountConfirmation
             return false;
         }
 
+<<<<<<< HEAD
         return (bool)$this->scopeConfig->getValue(
+=======
+        return $this->scopeConfig->isSetFlag(
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             self::XML_PATH_IS_CONFIRM,
             ScopeInterface::SCOPE_WEBSITES,
             $websiteId

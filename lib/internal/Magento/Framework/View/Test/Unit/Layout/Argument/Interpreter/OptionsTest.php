@@ -69,6 +69,11 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException($expectedException);
         $this->expectExceptionMessage($expectedExceptionMessage);
+<<<<<<< HEAD
+=======
+        $this->_objectManager->method('get')
+            ->willReturnSelf();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->_model->evaluate($input);
     }
 

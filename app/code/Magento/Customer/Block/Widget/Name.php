@@ -62,7 +62,7 @@ class Name extends AbstractWidget
         parent::_construct();
 
         // default template location
-        $this->setTemplate('widget/name.phtml');
+        $this->setTemplate('Magento_Customer::widget/name.phtml');
     }
 
     /**
@@ -201,7 +201,7 @@ class Name extends AbstractWidget
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getAttribute($attributeCode)
     {

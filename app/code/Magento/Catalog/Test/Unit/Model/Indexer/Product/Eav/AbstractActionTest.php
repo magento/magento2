@@ -27,6 +27,12 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
      */
     private $scopeConfig;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @return void
+     */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     protected function setUp()
     {
         $this->_eavDecimalFactoryMock = $this->createPartialMock(
@@ -50,6 +56,9 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetIndexers()
     {
         $expectedIndexers = [
@@ -85,6 +94,10 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->_model->getIndexer('unknown_type');
     }
 
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testGetIndexer()
     {
         $this->_eavSourceFactoryMock->expects($this->once())
@@ -98,6 +111,10 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('source_return_value', $this->_model->getIndexer('source'));
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     public function testReindexWithoutArgumentsExecutesReindexAll()
     {
         $eavSource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source::class)
@@ -133,14 +150,22 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
      * @param array $ids
      * @param array $parentIds
      * @param array $childIds
+<<<<<<< HEAD
      * @throws \Exception
+=======
+     * @return void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @dataProvider reindexEntitiesDataProvider
      */
     public function testReindexWithNotNullArgumentExecutesReindexEntities(
         array $ids,
         array $parentIds,
         array $childIds
+<<<<<<< HEAD
     ) {
+=======
+    ) : void {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $reindexIds = array_unique(array_merge($ids, $parentIds, $childIds));
 
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
@@ -197,6 +222,7 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->_model->reindex($ids);
     }
 
+<<<<<<< HEAD
     public function testReindexWithDisabledEavIndexer()
     {
         $this->scopeConfig->expects($this->once())
@@ -206,18 +232,37 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->_eavSourceFactoryMock->expects($this->never())->method('create');
         $this->_eavDecimalFactoryMock->expects($this->never())->method('create');
 
+=======
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function testReindexWithDisabledEavIndexer()
+    {
+        $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(0);
+        $this->_eavSourceFactoryMock->expects($this->never())->method('create');
+        $this->_eavDecimalFactoryMock->expects($this->never())->method('create');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->_model->reindex();
     }
 
     /**
      * @return array
      */
+<<<<<<< HEAD
     public function reindexEntitiesDataProvider()
+=======
+    public function reindexEntitiesDataProvider() : array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         return [
             [[4], [], [1, 2, 3]],
             [[3], [4], []],
+<<<<<<< HEAD
             [[5], [], []]
+=======
+            [[5], [], []],
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
     }
 }

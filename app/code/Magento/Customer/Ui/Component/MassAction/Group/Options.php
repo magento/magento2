@@ -7,13 +7,12 @@ namespace Magento\Customer\Ui\Component\MassAction\Group;
 
 use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
-use Zend\Stdlib\JsonSerializable;
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
  * Class Options
  */
-class Options implements JsonSerializable
+class Options implements \JsonSerializable
 {
     /**
      * @var array

@@ -63,43 +63,5 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
 
         $config['wysiwyg'] = (bool)$attrRepository->get($data['name'])->getIsWysiwygEnabled();
         parent::__construct($context, $formFactory, $wysiwygConfig, $components, $data, $config);
-        $this->setData($this->prepareData($this->getData()));
-    }
-
-    /**
-     * Prepare wysiwyg content
-     *
-     * @param array $data
-     * @return array
-     */
-    private function prepareData($data)
-    {
-        if ($this->editor->isEnabled()) {
-            $data['config']['content'] .= $this->getWysiwygButtonHtml();
-        }
-        return $data;
-    }
-
-    /**
-     * Return wysiwyg button html
-     *
-     * @return string
-     */
-    private function getWysiwygButtonHtml()
-    {
-        return $this->layout->createBlock(
-            Button::class,
-            '',
-            [
-                'data' => [
-                    'label' => __('WYSIWYG Editor'),
-                    'type' => 'button',
-                    'class' => 'action-wysiwyg',
-                    'onclick' => 'catalogWysiwygEditor.open(\'' . $this->backendHelper->getUrl(
-                        'catalog/product/wysiwyg'
-                    ) . '\', \'' . $this->editor->getHtmlId() . '\')',
-                ]
-            ]
-        )->toHtml();
     }
 }

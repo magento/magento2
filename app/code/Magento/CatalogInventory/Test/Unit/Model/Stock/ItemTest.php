@@ -417,7 +417,29 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                     'qty_increments' => 1,
                     'enable_qty_increments' => true,
                     'use_config_qty_increments' => true,
+<<<<<<< HEAD
                     'is_qty_decimal' => false
+=======
+                    'is_qty_decimal' => false,
+                ],
+                1
+            ],
+            [
+                [
+                    'qty_increments' => 1.5,
+                    'enable_qty_increments' => true,
+                    'use_config_qty_increments' => true,
+                    'is_qty_decimal' => true,
+                ],
+                1.5
+            ],
+            [
+                [
+                    'qty_increments' => 1.5,
+                    'enable_qty_increments' => true,
+                    'use_config_qty_increments' => true,
+                    'is_qty_decimal' => false,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 ],
                 1
             ],
@@ -426,7 +448,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                     'qty_increments' => -2,
                     'enable_qty_increments' => true,
                     'use_config_qty_increments' => true,
+<<<<<<< HEAD
                     'is_qty_decimal' => false
+=======
+                    'is_qty_decimal' => false,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 ],
                 false
             ],
@@ -435,7 +461,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                     'qty_increments' => 3,
                     'enable_qty_increments' => true,
                     'use_config_qty_increments' => false,
+<<<<<<< HEAD
                     'is_qty_decimal' => false
+=======
+                    'is_qty_decimal' => false,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 ],
                 3
             ],

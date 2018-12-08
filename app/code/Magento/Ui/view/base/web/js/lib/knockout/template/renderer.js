@@ -9,10 +9,11 @@ define([
 ], function ($, _, loader) {
     'use strict';
 
-    var colonReg    = /\\:/g,
-        attributes  = {},
-        elements    = {},
-        globals     = [],
+    var colonReg       = /\\:/g,
+        renderedTemplatePromises = {},
+        attributes     = {},
+        elements       = {},
+        globals        = [],
         renderer,
         preset;
 
@@ -24,11 +25,25 @@ define([
          *
          * @param {String} tmplPath - Path to the template.
          * @returns {jQueryPromise}
+         * @alias getRendered
          */
         render: function (tmplPath) {
-            var loadPromise = loader.loadTemplate(tmplPath);
+            var cachedPromise = renderedTemplatePromises[tmplPath];
 
-            return loadPromise.then(renderer.parseTemplate);
+            if (!cachedPromise) {
+                cachedPromise = renderedTemplatePromises[tmplPath] = loader
+                    .loadTemplate(tmplPath)
+                    .then(renderer.parseTemplate);
+            }
+
+            return cachedPromise;
+        },
+
+        /**
+         * @ignore
+         */
+        getRendered: function (tmplPath) {
+            return renderer.render(tmplPath);
         },
 
         /**

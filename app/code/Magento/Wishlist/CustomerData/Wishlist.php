@@ -5,7 +5,10 @@
  */
 namespace Magento\Wishlist\CustomerData;
 
+<<<<<<< HEAD
 use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\App\ObjectManager;
@@ -41,7 +44,11 @@ class Wishlist implements SectionSourceInterface
     protected $block;
 
     /**
+<<<<<<< HEAD
      * @var ItemResolverInterface
+=======
+     * @var \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private $itemResolver;
 
@@ -50,20 +57,34 @@ class Wishlist implements SectionSourceInterface
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
      * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
      * @param \Magento\Framework\App\ViewInterface $view
+<<<<<<< HEAD
      * @param ItemResolverInterface|null $itemResolver
+=======
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface|null $itemResolver
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
         \Magento\Catalog\Helper\ImageFactory $imageHelperFactory,
         \Magento\Framework\App\ViewInterface $view,
+<<<<<<< HEAD
         ItemResolverInterface $itemResolver = null
+=======
+        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     ) {
         $this->wishlistHelper = $wishlistHelper;
         $this->imageHelperFactory = $imageHelperFactory;
         $this->block = $block;
         $this->view = $view;
+<<<<<<< HEAD
         $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
+=======
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
+        );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -133,6 +154,11 @@ class Wishlist implements SectionSourceInterface
         $product = $wishlistItem->getProduct();
         return [
             'image' => $this->getImageData($this->itemResolver->getFinalProduct($wishlistItem)),
+<<<<<<< HEAD
+=======
+            'product_sku' => $product->getSku(),
+            'product_id' => $product->getId(),
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
             'product_name' => $product->getName(),
             'product_price' => $this->block->getProductPriceHtml(
@@ -161,9 +187,7 @@ class Wishlist implements SectionSourceInterface
         $helper = $this->imageHelperFactory->create()
             ->init($product, 'wishlist_sidebar_block');
 
-        $template = $helper->getFrame()
-            ? 'Magento_Catalog/product/image'
-            : 'Magento_Catalog/product/image_with_borders';
+        $template = 'Magento_Catalog/product/image_with_borders';
 
         try {
             $imagesize = $helper->getResizedImageInfo();

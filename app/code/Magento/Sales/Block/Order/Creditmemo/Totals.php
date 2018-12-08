@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Block\Order\Creditmemo;
 
 use Magento\Sales\Model\Order\Creditmemo;

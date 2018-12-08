@@ -15,6 +15,11 @@ use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
 
 /**
  * Adds product option to the order item according to product options processors pool.
+<<<<<<< HEAD
+=======
+ *
+ * @api
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class ProductOption
 {
@@ -52,9 +57,14 @@ class ProductOption
      * Adds product option to the order item.
      *
      * @param OrderItemInterface $orderItem
+<<<<<<< HEAD
      * @return void
      */
     public function add(OrderItemInterface $orderItem)
+=======
+     */
+    public function add(OrderItemInterface $orderItem): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         /** @var DataObject $request */
         $request = $orderItem->getBuyRequest();
@@ -82,9 +92,14 @@ class ProductOption
      *
      * @param OrderItemInterface $orderItem
      * @param array $data
+<<<<<<< HEAD
      * @return void
      */
     private function setProductOption(OrderItemInterface $orderItem, array $data)
+=======
+     */
+    private function setProductOption(OrderItemInterface $orderItem, array $data): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $productOption = $orderItem->getProductOption();
         if (!$productOption) {

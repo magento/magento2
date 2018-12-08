@@ -6,7 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpGetActionInterface
 {
     /**
      * Array of actions which can be processed without secret key validation
@@ -82,11 +84,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
                         ['_current' => true, 'active_tab' => null, 'tab' => null, 'store' => null]
                     )
                 );
-        }
-
-        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
-        if ($block) {
-            $block->setStoreId($product->getStoreId());
         }
 
         return $resultPage;

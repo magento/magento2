@@ -66,7 +66,7 @@ class Dob extends AbstractWidget
     public function _construct()
     {
         parent::_construct();
-        $this->setTemplate('widget/dob.phtml');
+        $this->setTemplate('Magento_Customer::widget/dob.phtml');
     }
 
     /**
@@ -211,6 +211,7 @@ class Dob extends AbstractWidget
     public function getHtmlExtraParams()
     {
         $validators = [];
+<<<<<<< HEAD
 
         if ($this->isRequired()) {
             $validators['required'] = true;
@@ -220,6 +221,14 @@ class Dob extends AbstractWidget
             'dateFormat' => $this->getDateFormat()
         ];
 
+=======
+        if ($this->isRequired()) {
+            $validators['required'] = true;
+        }
+        $validators['validate-date'] = [
+            'dateFormat' => $this->getDateFormat()
+        ];
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return 'data-validate="' . $this->_escaper->escapeHtml(json_encode($validators)) . '"';
     }
 

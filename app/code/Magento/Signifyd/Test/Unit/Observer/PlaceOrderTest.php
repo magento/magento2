@@ -10,6 +10,10 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+<<<<<<< HEAD
+=======
+use Magento\Sales\Model\Order;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Sales\Model\Order\Payment;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Model\Config;
@@ -193,6 +197,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $this->placeOrder->execute($this->observer);
     }
 
+<<<<<<< HEAD
     /**
      * Specifies order entity mock execution.
      *
@@ -201,6 +206,33 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
      * @return void
      */
     private function withOrderEntity($orderId, $storeId)
+=======
+    public function testExecuteWithOrderPendingPayment()
+    {
+        $orderId = 1;
+        $storeId = 2;
+
+        $this->withActiveSignifydIntegration(true, $storeId);
+        $this->withOrderEntity($orderId, $storeId);
+        $this->orderEntity->method('getState')
+            ->willReturn(Order::STATE_PENDING_PAYMENT);
+        $this->withAvailablePaymentMethod(true);
+
+        $this->creationService->expects(self::never())
+            ->method('createForOrder');
+
+        $this->placeOrder->execute($this->observer);
+    }
+
+    /**
+     * Specifies order entity mock execution.
+     *
+     * @param int|null $orderId
+     * @param int|null $storeId
+     * @return void
+     */
+    private function withOrderEntity($orderId, $storeId): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->orderEntity = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
@@ -226,7 +258,11 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
      * @param int|null $storeId
      * @return void
      */
+<<<<<<< HEAD
     private function withActiveSignifydIntegration($isActive, $storeId = null)
+=======
+    private function withActiveSignifydIntegration(bool $isActive, $storeId = null): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->config->method('isActive')
             ->with($storeId)

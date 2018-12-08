@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\InstantPurchase\Model;
 
 use Magento\Customer\Model\Address;
@@ -101,7 +105,13 @@ class InstantPurchaseOption
     public function getPaymentToken(): PaymentTokenInterface
     {
         if (!isset($this->paymentToken)) {
+<<<<<<< HEAD
             throw new LocalizedException(__('Payment method is not defined for instance purchase.'));
+=======
+            throw new LocalizedException(
+                __("A payment method isn't defined for instance purchase. Verify and try again.")
+            );
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
         return $this->paymentToken;
     }

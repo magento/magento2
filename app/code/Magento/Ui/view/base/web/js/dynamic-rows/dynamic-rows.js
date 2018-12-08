@@ -549,7 +549,10 @@ define([
                         columnsHeaderClasses: cell.config.columnsHeaderClasses,
                         sortOrder: cell.config.sortOrder
                     });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     labels.push(data);
                 }, this);
                 this.labels(_.sortBy(labels, 'sortOrder'));
@@ -907,7 +910,7 @@ define([
             prop = prop || this.identificationProperty;
 
             return _.reject(this.getChildItems(), function (recordData) {
-                return ~~recordData[prop] === ~~id;
+                return recordData[prop].toString() === id.toString();
             }, this);
         },
 

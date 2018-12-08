@@ -16,6 +16,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 
 /**
+ * Resource model for category entity
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category extends AbstractResource
@@ -97,6 +99,7 @@ class Category extends AbstractResource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Category\TreeFactory $categoryTreeFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
+     * @param Processor $indexerProcessor
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param Processor|null $indexerProcessor
@@ -108,6 +111,7 @@ class Category extends AbstractResource
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        Processor $indexerProcessor,
         $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         Processor $indexerProcessor = null
@@ -122,6 +126,7 @@ class Category extends AbstractResource
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
         $this->connectionName  = 'catalog';
+        $this->indexerProcessor = $indexerProcessor;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->indexerProcessor = $indexerProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
@@ -214,10 +219,16 @@ class Category extends AbstractResource
      * @param DataObject $object
      * @return $this
      */
+<<<<<<< HEAD
     protected function _afterDelete(DataObject $object): Category
     {
         $this->indexerProcessor->markIndexerAsInvalid();
 
+=======
+    protected function _afterDelete(DataObject $object)
+    {
+        $this->indexerProcessor->markIndexerAsInvalid();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return parent::_afterDelete($object);
     }
 
@@ -251,7 +262,8 @@ class Category extends AbstractResource
 
     /**
      * Process category data before saving
-     * prepare path and increment children count for parent categories
+     *
+     * Prepare path and increment children count for parent categories
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
@@ -300,7 +312,8 @@ class Category extends AbstractResource
 
     /**
      * Process category data after save category object
-     * save related products ids and update path value
+     *
+     * Save related products ids and update path value
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
@@ -492,7 +505,7 @@ class Category extends AbstractResource
     }
 
     /**
-     * Get chlden categories count
+     * Get children categories count
      *
      * @param int $categoryId
      * @return int
@@ -666,7 +679,11 @@ class Category extends AbstractResource
         $bind = ['category_id' => (int)$category->getId()];
         $counts = $this->getConnection()->fetchOne($select, $bind);
 
+<<<<<<< HEAD
         return (int)$counts;
+=======
+        return (int) $counts;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -864,6 +881,7 @@ class Category extends AbstractResource
 
     /**
      * Check category is forbidden to delete.
+     *
      * If category is root and assigned to store group return false
      *
      * @param integer $categoryId
@@ -984,6 +1002,7 @@ class Category extends AbstractResource
 
     /**
      * Process positions of old parent category children and new parent category children.
+     *
      * Get position for moved category
      *
      * @param \Magento\Catalog\Model\Category $category
@@ -1064,7 +1083,7 @@ class Category extends AbstractResource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($object)
     {
@@ -1090,6 +1109,8 @@ class Category extends AbstractResource
     }
 
     /**
+     * Returns EntityManager object
+     *
      * @return EntityManager
      */
     private function getEntityManager()
@@ -1102,6 +1123,8 @@ class Category extends AbstractResource
     }
 
     /**
+     * Returns AggregateCount object
+     *
      * @return Category\AggregateCount
      */
     private function getAggregateCount()

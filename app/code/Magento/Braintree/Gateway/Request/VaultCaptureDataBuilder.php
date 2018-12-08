@@ -6,6 +6,10 @@
 namespace Magento\Braintree\Gateway\Request;
 
 use Magento\Braintree\Gateway\SubjectReader;
+<<<<<<< HEAD
+=======
+use Magento\Framework\Exception\LocalizedException;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;

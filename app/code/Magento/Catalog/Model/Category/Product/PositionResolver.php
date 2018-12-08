@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 namespace Magento\Catalog\Model\Category\Product;
 
 /**
@@ -11,6 +16,7 @@ namespace Magento\Catalog\Model\Category\Product;
 class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+<<<<<<< HEAD
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
      */
@@ -22,6 +28,8 @@ class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
     }
 
     /**
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * Initialize resource model
      *
      * @return void
@@ -37,7 +45,11 @@ class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * @param int $categoryId
      * @return array
      */
+<<<<<<< HEAD
     public function getPositions(int $categoryId)
+=======
+    public function getPositions(int $categoryId): array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $connection = $this->getConnection();
 
@@ -52,6 +64,11 @@ class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
             $categoryId
         )->order(
             'ccp.position ' . \Magento\Framework\DB\Select::SQL_ASC
+<<<<<<< HEAD
+=======
+        )->order(
+            'ccp.product_id ' . \Magento\Framework\DB\Select::SQL_DESC
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         );
 
         return array_flip($connection->fetchCol($select));

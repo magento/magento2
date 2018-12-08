@@ -31,7 +31,7 @@ class AssertExportProduct extends AbstractConstraint
         $exportData = $export->getLatest();
 
         foreach ($products as $product) {
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $this->isProductDataInFile(
                     $exportedFields,
                     $product,

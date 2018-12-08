@@ -84,22 +84,36 @@ class HeadTest extends \PHPUnit\Framework\TestCase
 
         $structureMock->expects($this->at(9))
             ->method('addAssets')
+<<<<<<< HEAD
             ->with('path/file-1.css', [
                 'src' => 'path/file-1.css',
                 'media' => 'all',
                 'content_type' => 'css',
                 'order' => 10
             ])
+=======
+            ->with(
+                'path/file-1.css',
+                ['src' => 'path/file-1.css', 'media' => 'all', 'content_type' => 'css', 'order' => 10]
+            )
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->willReturnSelf();
 
         $structureMock->expects($this->at(10))
             ->method('addAssets')
+<<<<<<< HEAD
             ->with('path/file-2.css', [
                 'src' => 'path/file-2.css',
                 'media' => 'all',
                 'content_type' => 'css',
                 'order' => 30
             ])
+=======
+            ->with(
+                'path/file-2.css',
+                ['src' => 'path/file-2.css', 'media' => 'all', 'content_type' => 'css', 'order' => 30]
+            )
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->willReturnSelf();
 
         $this->assertEquals($this->model, $this->model->interpret($readerContextMock, $element->children()[0]));

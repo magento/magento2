@@ -5,15 +5,19 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
-use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
-class Validate extends ImportResultController
+/**
+ * Import validate controller action.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Validate extends ImportResultController implements HttpPostActionInterface
 {
     /**
      * @var Import
@@ -24,6 +28,7 @@ class Validate extends ImportResultController
      * Validate uploaded files action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function execute()
     {
@@ -67,6 +72,7 @@ class Validate extends ImportResultController
      * @param bool $validationResult
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function processValidationResult($validationResult, $resultBlock)
     {
@@ -104,6 +110,8 @@ class Validate extends ImportResultController
     }
 
     /**
+     * Provides import model.
+     *
      * @return Import
      * @deprecated 100.1.0
      */
@@ -123,6 +131,7 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function addMessageToSkipErrors(Result $resultBlock)
     {
@@ -143,6 +152,7 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function addMessageForValidResult(Result $resultBlock)
     {
@@ -156,11 +166,12 @@ class Validate extends ImportResultController
     /**
      * Collect errors and add error messages to Result block
      *
-     * Get all errors from ProcessingErrorAggregatorInterface and add appropriated error messages
+     * Get all errors from Error Aggregator and add appropriated error messages
      * to Result block.
      *
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function collectErrors(Result $resultBlock)
     {

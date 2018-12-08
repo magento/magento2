@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 /**
@@ -86,7 +87,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
      *  Test for method unassignState state is last
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The last status can't be unassigned from its current state.
+     * @expectedExceptionMessage The last status can't be changed and needs to stay assigned to its current state.
      */
     public function testUnassignStateStateIsLast()
     {
@@ -105,7 +106,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
      * Test for method unassignState status in use
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Status can't be unassigned, because it is used by existing order(s).
+     * @expectedExceptionMessage The status can't be unassigned because the status is currently used by an order.
      */
     public function testUnassignStateStatusUsed()
     {

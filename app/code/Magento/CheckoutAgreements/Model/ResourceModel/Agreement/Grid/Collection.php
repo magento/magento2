@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 namespace Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Grid;
 
@@ -13,7 +17,11 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
 {
 
     /**
+<<<<<<< HEAD
      * {@inheritdoc}
+=======
+     * @inheritdoc
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -29,6 +37,11 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Add stores to result
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return void
      */
     private function addStoresToResult()
@@ -55,6 +68,11 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get stores for agreements
+     *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return array
      */
     private function getStoresForAgreements()
@@ -63,7 +81,11 @@ class Collection extends \Magento\CheckoutAgreements\Model\ResourceModel\Agreeme
 
         if (!empty($agreementId)) {
             $select = $this->getConnection()->select()->from(
+<<<<<<< HEAD
                 ['agreement_store' => 'checkout_agreement_store']
+=======
+                ['agreement_store' => $this->getResource()->getTable('checkout_agreement_store')]
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             )->where(
                 'agreement_store.agreement_id IN (?)',
                 $agreementId

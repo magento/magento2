@@ -8,7 +8,11 @@ namespace Magento\Framework\Interception\Code\Generator;
 
 /**
  * Class Interceptor
+<<<<<<< HEAD
  *
+=======
+ ˚*
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * @package Magento\Framework\Interception\Code\Generator
  */
 class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
@@ -157,7 +161,11 @@ METHOD_BODY
                         $output .= '... ';
                     }
 
+<<<<<<< HEAD
                     $output .="\${$item['name']}";
+=======
+                    $output .= "\${$item['name']}";
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     return $output;
                 },
                 $parameters
@@ -220,6 +228,7 @@ METHOD_BODY
      * @param mixed $returnType
      * @return null|string
      */
+<<<<<<< HEAD
     private function getReturnTypeValue($returnType)
     {
         $returnTypeValue = null;
@@ -229,6 +238,16 @@ METHOD_BODY
             $returnTypeValue .= ($returnTypeName === 'self')
                 ? $this->getSourceClassName()
                 : $returnTypeName;
+=======
+    private function getReturnTypeValue($returnType): ?string
+    {
+        $returnTypeValue = null;
+        if ($returnType) {
+            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
+            $returnTypeValue .= ($returnType->getName() === 'self')
+                ? $this->getSourceClassName()
+                : $returnType->getName();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
         return $returnTypeValue;
     }

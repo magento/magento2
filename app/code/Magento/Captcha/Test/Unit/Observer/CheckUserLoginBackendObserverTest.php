@@ -74,7 +74,11 @@ class CheckUserLoginBackendObserverTest extends TestCase
      * @param bool $isRequired
      * @return void
      */
+<<<<<<< HEAD
     public function testCheckOnBackendLoginWithCorrectCaptcha(bool $isRequired)
+=======
+    public function testCheckOnBackendLoginWithCorrectCaptcha(bool $isRequired): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $formId = 'backend_login';
         $login = 'admin';
@@ -113,7 +117,11 @@ class CheckUserLoginBackendObserverTest extends TestCase
      * @return void
      * @expectedException \Magento\Framework\Exception\Plugin\AuthenticationException
      */
+<<<<<<< HEAD
     public function testCheckOnBackendLoginWithWrongCaptcha()
+=======
+    public function testCheckOnBackendLoginWithWrongCaptcha(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $formId = 'backend_login';
         $login = 'admin';

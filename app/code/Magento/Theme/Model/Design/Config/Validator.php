@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Model\Design\Config;
 
 use \Magento\Framework\Exception\LocalizedException;
@@ -74,12 +75,12 @@ class Validator
                     if (isset($params['config_path']) && $params['config_path'] == $data['config_path']) {
                         throw new LocalizedException(
                             __(
-                                "The %templateName contains an incorrect configuration. The template has " .
-                                "a reference to itself. Either remove or change the reference.",
+                                'The "%templateName" template contains an incorrect configuration, with a reference '
+                                . 'to itself. Remove or change the reference, then try again.',
                                 ["templateName" => $name]
                             )
                         );
-                    };
+                    }
                 }
             }
         }
@@ -98,7 +99,10 @@ class Validator
         }
         return false;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     /**
      * Load template text in configured scope
      *

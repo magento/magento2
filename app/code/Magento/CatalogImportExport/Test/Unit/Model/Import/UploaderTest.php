@@ -124,12 +124,17 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
      * @param int $checkAllowedExtension
      * @return void
      */
+<<<<<<< HEAD
     public function testMoveFileUrl(
         string $fileUrl,
         string $expectedHost,
         string $expectedFileName,
         int $checkAllowedExtension
     ) {
+=======
+    public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName, $checkAllowedExtension)
+    {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $destDir = 'var/dest/dir';
         $expectedRelativeFilePath = $expectedFileName;
         $this->directoryMock->expects($this->once())->method('isWritable')->with($destDir)->willReturn(true);
@@ -255,19 +260,49 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                 '$fileUrl' => 'http://test_uploader_file',
                 '$expectedHost' => 'test_uploader_file',
                 '$expectedFileName' => 'test_uploader_file',
+<<<<<<< HEAD
                 '$checkAllowedExtension' => 0,
+=======
+                '$checkAllowedExtension' => 0
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             [
                 '$fileUrl' => 'https://!:^&`;file',
                 '$expectedHost' => '!:^&`;file',
                 '$expectedFileName' => 'file',
+<<<<<<< HEAD
                 '$checkAllowedExtension' => 0,
+=======
+                '$checkAllowedExtension' => 0
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             [
                 '$fileUrl' => 'https://www.google.com/image.jpg',
                 '$expectedHost' => 'www.google.com/image.jpg',
                 '$expectedFileName' => 'image.jpg',
+<<<<<<< HEAD
                 '$checkAllowedExtension' => 1,
+=======
+                '$checkAllowedExtension' => 1
+            ],
+            [
+                '$fileUrl' => 'https://www.google.com/image.jpg?param=1',
+                '$expectedHost' => 'www.google.com/image.jpg?param=1',
+                '$expectedFileName' => 'image.jpg',
+                '$checkAllowedExtension' => 1
+            ],
+            [
+                '$fileUrl' => 'https://www.google.com/image.jpg?param=1&param=2',
+                '$expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
+                '$expectedFileName' => 'image.jpg',
+                '$checkAllowedExtension' => 1
+            ],
+            [
+                '$fileUrl' => 'http://www.google.com/image.jpg?param=1&param=2',
+                '$expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
+                '$expectedFileName' => 'image.jpg',
+                '$checkAllowedExtension' => 1
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             [
                 '$fileUrl' => 'https://www.google.com/image.jpg?param=1',

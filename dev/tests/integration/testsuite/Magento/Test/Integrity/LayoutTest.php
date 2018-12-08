@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Test\Integrity;
 
 /**
@@ -195,7 +193,8 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
              */
             function ($themeFile, $theme) {
                 $baseFiles = self::_getCachedFiles(
-                    $theme->getArea(), \Magento\Framework\View\File\Collector\Base::class,
+                    $theme->getArea(),
+                    \Magento\Framework\View\File\Collector\Base::class,
                     $theme
                 );
                 $fileKey = $themeFile->getModule() . '/' . $themeFile->getName();
@@ -239,7 +238,11 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
                 );
 
                 // Search for the overridden file in the ancestor theme
-                $ancestorFiles = self::_getCachedFiles($ancestorTheme->getFullPath(), \Magento\Framework\View\File\Collector\ThemeModular::class, $ancestorTheme);
+                $ancestorFiles = self::_getCachedFiles(
+                    $ancestorTheme->getFullPath(),
+                    \Magento\Framework\View\File\Collector\ThemeModular::class,
+                    $ancestorTheme
+                );
                 $fileKey = $themeFile->getModule() . '/' . $themeFile->getName();
                 $this->assertArrayHasKey(
                     $fileKey,

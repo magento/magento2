@@ -8,8 +8,11 @@ namespace Magento\Analytics\Model;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
+<<<<<<< HEAD
  * Class ProviderFactory
  *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * Factory for report providers
  */
 class ProviderFactory

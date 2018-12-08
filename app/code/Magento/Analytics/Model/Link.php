@@ -8,8 +8,11 @@ namespace Magento\Analytics\Model;
 use Magento\Analytics\Api\Data\LinkInterface;
 
 /**
+<<<<<<< HEAD
  * Class Link
  *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * Represents link with collected data and initialized vector for decryption.
  */
 class Link implements LinkInterface
@@ -25,8 +28,11 @@ class Link implements LinkInterface
     private $initializationVector;
 
     /**
+<<<<<<< HEAD
      * Link constructor.
      *
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param string $url
      * @param string $initializationVector
      */

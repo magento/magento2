@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -16,7 +14,10 @@ use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
+<<<<<<< HEAD
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 /**
  * Class AbstractAction
@@ -127,7 +128,10 @@ abstract class AbstractAction
     private $queryGenerator;
 
     /**
+<<<<<<< HEAD
      * Current store id.
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var int
      */
     private $currentStoreId = 0;
@@ -398,7 +402,11 @@ abstract class AbstractAction
             [
                 'cc.entity_id',
                 'ccp.product_id',
+<<<<<<< HEAD
                 'visibility'
+=======
+                'visibility',
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
     }
@@ -421,8 +429,16 @@ abstract class AbstractAction
      * @param int $range
      * @return Select[]
      */
+<<<<<<< HEAD
     protected function prepareSelectsByRange(Select $select, $field, $range = self::RANGE_CATEGORY_STEP)
     {
+=======
+    protected function prepareSelectsByRange(
+        Select $select,
+        string $field,
+        int $range = self::RANGE_CATEGORY_STEP
+    ) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         if ($this->isRangingNeeded()) {
             $iterator = $this->queryGenerator->generate(
                 $field,
@@ -487,10 +503,14 @@ abstract class AbstractAction
             'is_anchor'
         )->getId();
         $statusAttributeId = $this->config->getAttribute(Product::ENTITY, 'status')->getId();
+<<<<<<< HEAD
         $visibilityAttributeId = $this->config->getAttribute(
             Product::ENTITY,
             'visibility'
         )->getId();
+=======
+        $visibilityAttributeId = $this->config->getAttribute(Product::ENTITY, 'visibility')->getId();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
@@ -514,6 +534,10 @@ abstract class AbstractAction
         )->joinInner(
             ['ccp' => $this->getTable('catalog_category_product')],
             'ccp.category_id = cc2.child_id',
+            []
+        )->joinLeft(
+            ['ccp2' => $this->getTable('catalog_category_product')],
+            'ccp2.category_id = cc2.parent_id AND ccp.product_id = ccp2.product_id',
             []
         )->joinInner(
             ['cpe' => $this->getTable('catalog_product_entity')],
@@ -577,7 +601,9 @@ abstract class AbstractAction
             [
                 'category_id' => 'cc.entity_id',
                 'product_id' => 'ccp.product_id',
-                'position' => new \Zend_Db_Expr('ccp.position + 10000'),
+                'position' => new \Zend_Db_Expr(
+                    $this->connection->getIfNullSql('ccp2.position', 'ccp.position + 10000')
+                ),
                 'is_parent' => new \Zend_Db_Expr('0'),
                 'store_id' => new \Zend_Db_Expr($store->getId()),
                 'visibility' => new \Zend_Db_Expr($this->connection->getIfNullSql('cpvs.value', 'cpvd.value')),
@@ -590,6 +616,8 @@ abstract class AbstractAction
     }
 
     /**
+     * Get temporary table name
+     *
      * Get temporary table name for concurrent indexing in persistent connection
      * Temp table name is NOT shared between action instances and each action has it's own temp tree index
      *
@@ -645,7 +673,10 @@ abstract class AbstractAction
             ['child_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX]
         );
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         // Drop the temporary table in case it already exists on this (persistent?) connection.
         $this->connection->dropTemporaryTable($temporaryName);
         $this->connection->createTemporaryTable($temporaryTable);
@@ -677,14 +708,24 @@ abstract class AbstractAction
                     ['entity_id', 'path']
                 )->joinInner(
                     ['ccacd' => $this->getTable('catalog_category_entity_int')],
+<<<<<<< HEAD
                     'ccacd.' . $categoryLinkField . ' = c.' . $categoryLinkField
                     . ' AND ccacd.store_id = 0' . ' AND ccacd.attribute_id = ' . $isActiveAttributeId,
+=======
+                    'ccacd.' . $categoryLinkField . ' = c.' . $categoryLinkField . ' AND ccacd.store_id = 0' .
+                    ' AND ccacd.attribute_id = ' . $isActiveAttributeId,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     []
                 )->joinLeft(
                     ['ccacs' => $this->getTable('catalog_category_entity_int')],
                     'ccacs.' . $categoryLinkField . ' = c.' . $categoryLinkField
+<<<<<<< HEAD
                     . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = '
                     . $this->currentStoreId,
+=======
+                    . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' .
+                    $this->currentStoreId,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     []
                 )->where(
                     $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
@@ -756,6 +797,7 @@ abstract class AbstractAction
     protected function getAllProducts(Store $store)
     {
         if (!isset($this->productsSelects[$store->getId()])) {
+<<<<<<< HEAD
             $statusAttributeId = $this->config->getAttribute(
                 Product::ENTITY,
                 'status'
@@ -764,6 +806,10 @@ abstract class AbstractAction
                 Product::ENTITY,
                 'visibility'
             )->getId();
+=======
+            $statusAttributeId = $this->config->getAttribute(Product::ENTITY, 'status')->getId();
+            $visibilityAttributeId = $this->config->getAttribute(Product::ENTITY, 'visibility')->getId();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
             $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
             $linkField = $metadata->getLinkField();

@@ -7,7 +7,11 @@ namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
 use Braintree\Result\Error;
 use Magento\Braintree\Gateway\SubjectReader;
+<<<<<<< HEAD
 use Magento\Braintree\Gateway\Validator\ErrorCodeValidator;
+=======
+use Magento\Braintree\Gateway\Validator\ErrorCodeProvider;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
 use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\Result;
@@ -41,7 +45,11 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
         $this->responseValidator = new GeneralResponseValidator(
             $this->resultInterfaceFactory,
             new SubjectReader(),
+<<<<<<< HEAD
             new ErrorCodeValidator()
+=======
+            new ErrorCodeProvider()
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         );
     }
 
@@ -51,18 +59,24 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
      * @param array $validationSubject
      * @param bool $isValid
      * @param Phrase[] $messages
+     * @param array $errorCodes
      * @return void
      *
      * @dataProvider dataProviderTestValidate
      */
+<<<<<<< HEAD
     public function testValidate(array $validationSubject, bool $isValid, $messages)
+=======
+    public function testValidate(array $validationSubject, bool $isValid, $messages, array $errorCodes)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $result = new Result($isValid, $messages);
 
         $this->resultInterfaceFactory->method('create')
             ->with([
                 'isValid' => $isValid,
-                'failsDescription' => $messages
+                'failsDescription' => $messages,
+                'errorCodes' => $errorCodes
             ])
             ->willReturn($result);
 
@@ -80,11 +94,19 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $successTransaction = new \stdClass();
         $successTransaction->success = true;
+<<<<<<< HEAD
 
         $failureTransaction = new \stdClass();
         $failureTransaction->success = false;
         $failureTransaction->message = 'Transaction was failed.';
 
+=======
+
+        $failureTransaction = new \stdClass();
+        $failureTransaction->success = false;
+        $failureTransaction->message = 'Transaction was failed.';
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $errors = [
             'errors' => [
                 [
@@ -104,7 +126,8 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 'isValid' => true,
-                []
+                [],
+                'errorCodes' => []
             ],
             [
                 'validationSubject' => [
@@ -115,7 +138,12 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
                 'isValid' => false,
                 [
                     __('Transaction was failed.')
+<<<<<<< HEAD
                 ]
+=======
+                ],
+                'errorCodes' => []
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ],
             [
                 'validationSubject' => [
@@ -125,9 +153,15 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
                 ],
                 'isValid' => false,
                 [
+<<<<<<< HEAD
                     __('Braintree error response.'),
                     81804
                 ]
+=======
+                    __('Braintree error response.')
+                ],
+                'errorCodes' => ['81804']
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         ];
     }

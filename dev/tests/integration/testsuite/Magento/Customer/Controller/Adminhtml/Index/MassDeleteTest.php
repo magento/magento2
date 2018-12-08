@@ -13,6 +13,10 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use PHPUnit\Framework\Constraint\Constraint;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+<<<<<<< HEAD
+=======
+use Magento\Framework\App\Request\Http as HttpRequest;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -32,12 +36,23 @@ class MassDeleteTest extends AbstractBackendController
      */
     private $baseControllerUrl = 'http://localhost/index.php/backend/customer/index/index';
 
+<<<<<<< HEAD
+=======
+    /**
+     * @inheritDoc
+     *
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     protected function setUp()
     {
         parent::setUp();
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown()
     {
         /**
@@ -101,6 +116,7 @@ class MassDeleteTest extends AbstractBackendController
      */
     private function massDeleteAssertions($ids, Constraint $constraint, $messageType)
     {
+<<<<<<< HEAD
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
 
@@ -112,6 +128,14 @@ class MassDeleteTest extends AbstractBackendController
 
         $this->getRequest()->setParams($requestData);
         $this->getRequest()->setMethod('POST');
+=======
+        $requestData = [
+            'selected' => $ids,
+            'namespace' => 'customer_listing',
+        ];
+
+        $this->getRequest()->setParams($requestData)->setMethod(HttpRequest::METHOD_POST);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->dispatch('backend/customer/index/massDelete');
         $this->assertSessionMessages(
             $constraint,
@@ -130,7 +154,11 @@ class MassDeleteTest extends AbstractBackendController
         return [
             [
                 'ids' => [],
+<<<<<<< HEAD
                 'constraint' => self::equalTo(['Please select item(s).']),
+=======
+                'constraint' => self::equalTo(['An item needs to be selected. Select and try again.']),
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 'messageType' => MessageInterface::TYPE_ERROR,
             ],
             [
@@ -140,7 +168,11 @@ class MassDeleteTest extends AbstractBackendController
             ],
             [
                 'ids' => null,
+<<<<<<< HEAD
                 'constraint' => self::equalTo(['Please select item(s).']),
+=======
+                'constraint' => self::equalTo(['An item needs to be selected. Select and try again.']),
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 'messageType' => MessageInterface::TYPE_ERROR,
             ]
         ];

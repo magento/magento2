@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\Product\Option\Validator;
 use Magento\Catalog\Model\Product\Option;
 use Zend_Validate_Exception;
 
+/**
+ * Product option default validator
+ */
 class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
@@ -168,6 +171,10 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      */
     protected function isNegative($value)
     {
+<<<<<<< HEAD
         return (int)$value < 0;
+=======
+        return (int) $value < 0;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 }

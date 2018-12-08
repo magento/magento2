@@ -5,9 +5,20 @@
   * See COPYING.txt for license details.
   */
 -->
+<<<<<<< HEAD
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerAddressesSection">
         <element name="addressesList" type="text" selector=".block-addresses-list" />
     </section>
 </sections>
+=======
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerAddressesSection">
+        <element name="addressesList" type="text" selector=".block-addresses-list" />
+        <element name="deleteAdditionalAddress" type="button" selector="//ol[@class='items addresses']/li[@class='item'][{{var}}]//a[@class='action delete']" parameterized="true"/>
+    </section>
+</sections>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3

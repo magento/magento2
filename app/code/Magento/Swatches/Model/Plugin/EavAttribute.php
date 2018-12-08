@@ -9,6 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Swatches\Model\ResourceModel\Swatch as SwatchResource;
 use Magento\Swatches\Model\Swatch;
 use Magento\Swatches\Model\ResourceModel\Swatch as SwatchResource;
 
@@ -167,7 +168,12 @@ class EavAttribute
             if (!empty($additionalData)) {
                 $additionalData = $this->serializer->unserialize($additionalData);
                 if (is_array($additionalData) && isset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY])) {
+<<<<<<< HEAD
                     $this->cleanEavAttributeOptionSwatchValues($attribute->getOption());
+=======
+                    $option = $attribute->getOption() ?: [];
+                    $this->cleanEavAttributeOptionSwatchValues($option);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     unset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY]);
                     $attribute->setData('additional_data', $this->serializer->serialize($additionalData));
                 }
@@ -246,7 +252,12 @@ class EavAttribute
     {
         if ($this->swatchHelper->isVisualSwatch($attribute)) {
             $this->processVisualSwatch($attribute);
+<<<<<<< HEAD
             $this->cleanTextSwatchValuesAfterSwitch($attribute->getOptiontext());
+=======
+            $attributeOptions = $attribute->getOptiontext() ?: [];
+            $this->cleanTextSwatchValuesAfterSwitch($attributeOptions);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         } elseif ($this->swatchHelper->isTextSwatch($attribute)) {
             $this->processTextualSwatch($attribute);
         }
@@ -283,10 +294,17 @@ class EavAttribute
      * Clean swatch option values after switching to the dropdown type.
      *
      * @param array $attributeOptions
+<<<<<<< HEAD
      * @param null  $swatchType
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function cleanEavAttributeOptionSwatchValues($attributeOptions, $swatchType = null)
+=======
+     * @param int|null  $swatchType
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function cleanEavAttributeOptionSwatchValues(array $attributeOptions, int $swatchType = null)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         if (count($attributeOptions) && isset($attributeOptions['value'])) {
             $optionsIDs = array_keys($attributeOptions['value']);
@@ -301,7 +319,11 @@ class EavAttribute
      * @param array $attributeOptions
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+<<<<<<< HEAD
     private function cleanTextSwatchValuesAfterSwitch($attributeOptions)
+=======
+    private function cleanTextSwatchValuesAfterSwitch(array $attributeOptions)
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->cleanEavAttributeOptionSwatchValues($attributeOptions, Swatch::SWATCH_TYPE_TEXTUAL);
     }

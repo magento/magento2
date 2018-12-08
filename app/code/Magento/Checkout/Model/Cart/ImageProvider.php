@@ -25,6 +25,9 @@ class ImageProvider
      */
     protected $itemPool;
 
+    /** @var \Magento\Checkout\CustomerData\DefaultItem */
+    protected $customerDataItem;
+
     /**
      * @var \Magento\Checkout\CustomerData\DefaultItem
      */

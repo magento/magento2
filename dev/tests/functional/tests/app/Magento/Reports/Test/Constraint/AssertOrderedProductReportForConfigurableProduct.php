@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 namespace Magento\Reports\Test\Constraint;
 
@@ -12,13 +16,21 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
+<<<<<<< HEAD
  * Assert product name, sku and qty in Ordered Products report
  *
+=======
+ * Assert product name, sku and qty in Ordered Products report.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class AssertOrderedProductReportForConfigurableProduct extends AbstractConstraint
 {
     /**
+<<<<<<< HEAD
      * Assert product name, sku and qty in Ordered Products report
+=======
+     * Assert product name, sku and qty in Ordered Products report.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @param OrderedProductsReport $orderedProducts
      * @param OrderInjectable $order
@@ -39,7 +51,12 @@ class AssertOrderedProductReportForConfigurableProduct extends AbstractConstrain
                 }
             }
         }
+<<<<<<< HEAD
         \PHPUnit_Framework_Assert::assertContains(
+=======
+
+        \PHPUnit\Framework\Assert::assertContains(
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $simpleChildSku[0],
             $filters,
             'Ordered simple product sku is not present in the Reports grid'
@@ -47,7 +64,11 @@ class AssertOrderedProductReportForConfigurableProduct extends AbstractConstrain
     }
 
     /**
+<<<<<<< HEAD
      * Returns a string representation of the object
+=======
+     * Returns a string representation of the object.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return string
      */

@@ -89,7 +89,11 @@ class CustomOptionPriceModifier implements PriceModifierInterface
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+<<<<<<< HEAD
     public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = [])
+=======
+    public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = []) : void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         // no need to run all queries if current products have no custom options
         if (!$this->checkIfCustomOptionsExist($priceTable)) {

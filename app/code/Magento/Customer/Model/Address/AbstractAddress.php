@@ -12,6 +12,7 @@ use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Data\Address as AddressData;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -22,7 +23,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method string getFirstname()
  * @method string getMiddlename()
  * @method string getLastname()
- * @method int getCountryId()
+ * @method string getCountryId()
  * @method string getCity()
  * @method string getTelephone()
  * @method string getCompany()
@@ -119,6 +120,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     protected $dataObjectHelper;
 
+    /** @var CompositeValidator */
+    private $compositeValidator;
+
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -136,6 +140,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CompositeValidator $compositeValidator
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -154,7 +160,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CompositeValidator $compositeValidator = null
     ) {
         $this->_directoryData = $directoryData;
         $data = $this->_implodeArrayField($data);
@@ -166,6 +173,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $this->addressDataFactory = $addressDataFactory;
         $this->regionDataFactory = $regionDataFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->compositeValidator = $compositeValidator ?: ObjectManager::getInstance()
+            ->get(CompositeValidator::class);
         parent::__construct(
             $context,
             $registry,
@@ -263,7 +272,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Enforce format of the street field or other multiline custom attributes
      *
      * @param array|string $key
+<<<<<<< HEAD
      * @param null $value
+=======
+     * @param mixed $value
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @return $this
      */
     public function setData($key, $value = null)
@@ -278,6 +291,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * Check that address can have multiline attribute by this code (as street or some custom attribute)
+     *
      * @param string $code
      * @return bool
      */
@@ -395,6 +409,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Get region id
+     *
      * @return int
      */
     public function getRegionId()
@@ -417,7 +433,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * @return int
+     * Get country
+     *
+     * @return string
      */
     public function getCountry()
     {
@@ -494,6 +512,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Before save handler
+     *
      * @return $this
      */
     public function beforeSave()
@@ -565,6 +585,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /**
      * Validate address attribute values.
      *
+<<<<<<< HEAD
      * @return bool|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -660,8 +681,19 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
                 }
             }
         }
+=======
+     * @return array|bool
+     */
+    public function validate()
+    {
+        if ($this->getShouldIgnoreValidation()) {
+            return true;
+        }
 
-        if (empty($errors) || $this->getShouldIgnoreValidation()) {
+        $errors = $this->compositeValidator->validate($this);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
+
+        if (empty($errors)) {
             return true;
         }
 
@@ -669,6 +701,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Create region instance
+     *
      * @return \Magento\Directory\Model\Region
      */
     protected function _createRegionInstance()
@@ -677,6 +711,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Create country instance
+     *
      * @return \Magento\Directory\Model\Country
      */
     protected function _createCountryInstance()
@@ -686,6 +722,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * Unset Region from address
+     *
      * @return $this
      * @since 100.2.0
      */
@@ -695,6 +732,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Is company required
+     *
      * @return bool
      * @since 100.2.0
      */
@@ -704,6 +743,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Is telephone required
+     *
      * @return bool
      * @since 100.2.0
      */
@@ -713,6 +754,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Is fax required
+     *
      * @return bool
      * @since 100.2.0
      */

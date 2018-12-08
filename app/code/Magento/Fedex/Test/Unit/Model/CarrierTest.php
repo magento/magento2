@@ -232,8 +232,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $pathMap = [
             'carriers/fedex/showmethod' => 1,
             'carriers/fedex/allowed_methods' => 'ServiceType',
+<<<<<<< HEAD
             'carriers/fedex/debug' => 1
         ];
+=======
+            'carriers/fedex/debug' => 1,
+        ];
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
     }
 

@@ -8,9 +8,22 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+<<<<<<< HEAD
     <entity name="ApiCustomerGroup" type="customerGroup">
         <data key="code" unique="suffix">ApiCustomerGroup</data>
         <data key="tax_class_id">0</data>
         <data key="tax_class_name">Retail Customer</data>
     </entity>
+=======
+    <entity name="GeneralCustomerGroup" type="customerGroup">
+        <data key="code">General</data>
+        <data key="tax_class_id">3</data>
+        <data key="tax_class_name">Retail Customer</data>
+    </entity>
+    <entity name="DefaultCustomerGroup" type="customerGroup">
+        <array key="group_names">
+            <item>General</item>
+        </array>
+    </entity>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 </entities>

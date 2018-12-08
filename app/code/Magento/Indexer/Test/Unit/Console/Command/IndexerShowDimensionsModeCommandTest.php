@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
@@ -73,8 +77,13 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     /**
      * Tests method \Magento\Indexer\Console\Command\IndexerDimensionsModeCommand::execute
      *
+<<<<<<< HEAD
      * @param $command
      * @param $consoleOutput
+=======
+     * @param string $command
+     * @param string $consoleOutput
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @dataProvider dimensionModesDataProvider
      */
     public function testExecuteWithAttributes($command, $consoleOutput)

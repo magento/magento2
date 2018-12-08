@@ -3,11 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
+=======
+declare(strict_types=1);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+<<<<<<< HEAD
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -26,16 +33,20 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
+<<<<<<< HEAD
      * @var ProductResource
      */
     private $productResource;
 
     /**
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
      */
     protected function setUp()
@@ -150,16 +161,53 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             $nameUpdated,
             $product->getName()
         );
+=======
+     * Sets up common objects
+     */
+    protected function setUp()
+    {
+        $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+
+        $this->searchCriteriaBuilder = \Magento\Framework\App\ObjectManager::getInstance()->create(
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
+        );
+    }
+
+    /**
+     * Checks filtering by store_id
+     *
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     */
+    public function testFilterByStoreId()
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('store_id', '1', 'eq')
+            ->create();
+        $list = $this->productRepository->getList($searchCriteria);
+        $count = $list->getTotalCount();
+
+        $this->assertGreaterThanOrEqual(1, $count);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
      * Check a case when product should be retrieved with different SKU variations.
      *
      * @param string $sku
+<<<<<<< HEAD
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @dataProvider skuDataProvider
      */
     public function testGetProduct(string $sku)
+=======
+     * @return void
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @dataProvider skuDataProvider
+     */
+    public function testGetProduct(string $sku) : void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $expectedSku = 'simple';
         $product = $this->productRepository->get($sku);
@@ -178,11 +226,16 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         return [
             ['sku' => 'simple'],
             ['sku' => 'Simple'],
+<<<<<<< HEAD
             ['sku' => 'simple ']
+=======
+            ['sku' => 'simple '],
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
     }
 
     /**
+<<<<<<< HEAD
      * Checks filtering by store_id.
      *
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
@@ -200,6 +253,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * Test save product with gallery image
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_image.php
@@ -208,7 +263,11 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
      */
+<<<<<<< HEAD
     public function testSaveProductWithGalleryImage()
+=======
+    public function testSaveProductWithGalleryImage(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         /** @var $mediaConfig \Magento\Catalog\Model\Product\Media\Config */
         $mediaConfig = Bootstrap::getObjectManager()

@@ -93,7 +93,7 @@ class BundleSelectionPrice extends AbstractPrice
     }
 
     /**
-     * Get the price value for one of selection product
+     * Get the price value for one of selection product.
      *
      * @return bool|float
      */
@@ -143,6 +143,7 @@ class BundleSelectionPrice extends AbstractPrice
         }
         $this->value = $this->priceCurrency->round($value);
         $product->setData($bundleSelectionKey, $this->value);
+
         return $this->value;
     }
 
@@ -174,6 +175,7 @@ class BundleSelectionPrice extends AbstractPrice
             );
             $product->setData($bundleSelectionKey, $this->amount[$value]);
         }
+
         return $this->amount[$value];
     }
 

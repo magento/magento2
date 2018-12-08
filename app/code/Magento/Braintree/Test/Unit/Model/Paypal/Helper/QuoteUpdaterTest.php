@@ -110,7 +110,11 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+<<<<<<< HEAD
     public function testExecute()
+=======
+    public function testExecute(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $details = $this->getDetails();
         $quote = $this->getQuoteMock();
@@ -134,7 +138,11 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
+<<<<<<< HEAD
     private function disabledQuoteAddressValidationStep()
+=======
+    private function disabledQuoteAddressValidationStep(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->billingAddress->method('setShouldIgnoreValidation')
             ->with(true);
@@ -183,7 +191,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $details
      */
-    private function updateShippingAddressStep(array $details)
+    private function updateShippingAddressStep(array $details): void
     {
         $this->shippingAddress->method('setLastname')
             ->with($details['lastName']);
@@ -203,7 +211,11 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
      * @param MockObject $address
      * @param array $addressData
      */
+<<<<<<< HEAD
     private function updateAddressDataStep(MockObject $address, array $addressData)
+=======
+    private function updateAddressDataStep(MockObject $address, array $addressData): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $address->method('setStreet')
             ->with([$addressData['streetAddress'], $addressData['extendedAddress']]);
@@ -223,7 +235,11 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
      * @param MockObject $quoteMock
      * @param array $details
      */
+<<<<<<< HEAD
     private function updateQuoteAddressStep(MockObject $quoteMock, array $details)
+=======
+    private function updateQuoteAddressStep(MockObject $quoteMock, array $details): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $quoteMock->expects(self::exactly(2))
             ->method('getIsVirtual')
@@ -238,7 +254,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $details
      */
-    private function updateBillingAddressStep(array $details)
+    private function updateBillingAddressStep(array $details): void
     {
         $this->config->method('isRequiredBillingAddress')
             ->willReturn(true);
@@ -259,7 +275,11 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
      * @param MockObject $quote
      * @param array $details
      */
+<<<<<<< HEAD
     private function updateQuoteStep(MockObject $quote, array $details)
+=======
+    private function updateQuoteStep(MockObject $quote, array $details): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $quote->method('setMayEditShippingAddress')
             ->with(false);
@@ -299,6 +319,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
                     'collectTotals',
                     'getShippingAddress',
                     'getBillingAddress',
+                    'getExtensionAttributes'
                 ]
             )
             ->disableOriginalConstructor()
@@ -311,6 +332,10 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
 
         $quote->method('getExtensionAttributes')
             ->willReturn($cartExtension);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         return $quote;
     }
 

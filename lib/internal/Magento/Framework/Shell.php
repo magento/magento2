@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework;
 
 use Magento\Framework\Shell\CommandRendererInterface;
@@ -51,12 +52,13 @@ class Shell implements ShellInterface
 
         $disabled = explode(',', str_replace(' ', ',', ini_get('disable_functions')));
         if (in_array('exec', $disabled)) {
-            throw new Exception\LocalizedException(new \Magento\Framework\Phrase("exec function is disabled."));
+            throw new Exception\LocalizedException(new \Magento\Framework\Phrase('The exec function is disabled.'));
         }
 
         exec($command, $output, $exitCode);
         $output = implode(PHP_EOL, $output);
         $this->log($output);
+
         if ($exitCode) {
             $commandError = new \Exception($output, $exitCode);
             throw new Exception\LocalizedException(

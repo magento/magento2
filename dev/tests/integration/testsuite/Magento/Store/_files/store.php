@@ -22,7 +22,22 @@ if (!$store->load('test', 'code')->getId()) {
     $store->save();
 } else {
     if ($store->getId()) {
+<<<<<<< HEAD
         $store->delete();
+=======
+        /** @var \Magento\TestFramework\Helper\Bootstrap $registry */
+        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Registry::class
+        );
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        $store->delete();
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
         $store->setData(
             [

@@ -9,6 +9,12 @@ use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 use Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface;
 
+<<<<<<< HEAD
+=======
+/**
+ * Image extractor from xml configuration
+ */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class ImageExtractor implements TypeDataExtractorInterface
 {
     /**
@@ -36,7 +42,11 @@ class ImageExtractor implements TypeDataExtractorInterface
                     if ($attributeTagName === 'background') {
                         $nodeValue = $this->processImageBackground($attribute->nodeValue);
                     } elseif ($attributeTagName === 'width' || $attributeTagName === 'height') {
+<<<<<<< HEAD
                             $nodeValue = (int)$attribute->nodeValue;
+=======
+                        $nodeValue = (int) $attribute->nodeValue;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     } else {
                         $nodeValue = $attribute->nodeValue;
                     }

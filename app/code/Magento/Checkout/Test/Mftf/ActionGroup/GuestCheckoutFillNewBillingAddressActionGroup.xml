@@ -27,11 +27,16 @@
 
     <actionGroup name="LoggedInCheckoutFillNewBillingAddressActionGroup">
         <arguments>
+<<<<<<< HEAD
             <argument name="customerAddress"/>
+=======
+            <argument name="Address"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             <!-- the classPrefix argument is to specifically select the inputs of the correct form
                  this is to prevent having 3 action groups doing essentially the same thing -->
             <argument name="classPrefix" type="string" defaultValue=""/>
         </arguments>
+<<<<<<< HEAD
         <fillField stepKey="fillFirstName" selector="{{classPrefix}} {{CheckoutShippingSection.firstName}}" userInput="{{customerAddress.firstname}}"/>
         <fillField stepKey="fillLastName" selector="{{classPrefix}} {{CheckoutShippingSection.lastName}}" userInput="{{customerAddress.lastname}}"/>
         <fillField stepKey="fillPhoneNumber" selector="{{classPrefix}} {{CheckoutShippingSection.telephone}}" userInput="{{customerAddress.telephone}}"/>
@@ -42,6 +47,25 @@
         <selectOption stepKey="selectCounty" selector="{{classPrefix}} {{CheckoutShippingSection.country}}" userInput="{{customerAddress.country_id}}"/>
         <waitForPageLoad stepKey="waitForFormUpdate2"/>
     </actionGroup>
+=======
+        <fillField stepKey="fillFirstName" selector="{{classPrefix}} {{CheckoutShippingSection.firstName}}" userInput="{{Address.firstname}}"/>
+        <fillField stepKey="fillLastName" selector="{{classPrefix}} {{CheckoutShippingSection.lastName}}" userInput="{{Address.lastname}}"/>
+        <fillField stepKey="fillCompany" selector="{{classPrefix}} {{CheckoutShippingSection.company}}" userInput="{{Address.company}}"/>
+        <fillField stepKey="fillPhoneNumber" selector="{{classPrefix}} {{CheckoutShippingSection.telephone}}" userInput="{{Address.telephone}}"/>
+        <fillField stepKey="fillStreetAddress1" selector="{{classPrefix}} {{CheckoutShippingSection.street}}" userInput="{{Address.street[0]}}"/>
+        <fillField stepKey="fillStreetAddress2" selector="{{classPrefix}} {{CheckoutShippingSection.street2}}" userInput="{{Address.street[1]}}"/>
+        <fillField stepKey="fillCityName" selector="{{classPrefix}} {{CheckoutShippingSection.city}}" userInput="{{Address.city}}"/>
+        <selectOption stepKey="selectState" selector="{{classPrefix}} {{CheckoutShippingSection.region}}" userInput="{{Address.state}}"/>
+        <fillField stepKey="fillZip" selector="{{classPrefix}} {{CheckoutShippingSection.postcode}}" userInput="{{Address.postcode}}"/>
+        <selectOption stepKey="selectCounty" selector="{{classPrefix}} {{CheckoutShippingSection.country}}" userInput="{{Address.country_id}}"/>
+        <waitForPageLoad stepKey="waitForFormUpdate2"/>
+    </actionGroup>
+    <!--Filling address without second address field and without state field-->
+    <actionGroup name="LoggedInCheckoutWithOneAddressFieldWithoutStateField" extends="LoggedInCheckoutFillNewBillingAddressActionGroup">
+        <remove keyForRemoval="fillStreetAddress2"/>
+        <remove keyForRemoval="selectState"/>
+    </actionGroup>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
     <actionGroup name="clearCheckoutAddressPopupFieldsActionGroup">
         <arguments>
@@ -49,7 +73,13 @@
         </arguments>
         <clearField selector="{{classPrefix}} {{CheckoutShippingSection.firstName}}" stepKey="clearFieldFirstName"/>
         <clearField selector="{{classPrefix}} {{CheckoutShippingSection.lastName}}" stepKey="clearFieldLastName"/>
+<<<<<<< HEAD
         <clearField selector="{{classPrefix}} {{CheckoutShippingSection.street}}" stepKey="clearFieldStreetAddress1"/>
+=======
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.company}}" stepKey="clearFieldCompany"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.street}}" stepKey="clearFieldStreetAddress1"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.street2}}" stepKey="clearFieldStreetAddress2"/>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         <clearField selector="{{classPrefix}} {{CheckoutShippingSection.city}}" stepKey="clearFieldCityName"/>
         <selectOption selector="{{classPrefix}} {{CheckoutShippingSection.region}}" userInput="" stepKey="clearFieldRegion"/>
         <clearField selector="{{classPrefix}} {{CheckoutShippingSection.postcode}}"  stepKey="clearFieldZip"/>

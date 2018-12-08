@@ -26,7 +26,12 @@ define([
 
         describe('Test enable, disable, activate and deactivate methods', function () {
             var group = $('<div id="2"></div>'),
+<<<<<<< HEAD
                 content = $('<div data-role="content"></div>').appendTo(group);
+=======
+                content = $('<div data-role="content"></div>').appendTo(group),
+                emptyGroup = $('<div></div>');
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 
             $('<div data-role="title"></div>').prependTo(group);
 
@@ -65,6 +70,18 @@ define([
                 group.collapsible('destroy');
                 expect(group.is(':mage-collapsible')).toBeFalsy();
             });
+<<<<<<< HEAD
+=======
+
+            it('check activate method on empty group', function () {
+                emptyGroup.collapsible();
+                expect(emptyGroup.is(':mage-collapsible')).toBeTruthy();
+
+                expect(function () {
+                    emptyGroup.collapsible('activate');
+                }).not.toThrow();
+            });
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         });
 
         it('check if the widget gets expanded/collapsed when the title is clicked', function () {

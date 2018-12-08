@@ -24,7 +24,11 @@ class DimensionMode
 
     /**
      * @param string $name
+<<<<<<< HEAD
      * @param array  $dimensions
+=======
+     * @param array $dimensions
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function __construct(string $name, array $dimensions)
     {

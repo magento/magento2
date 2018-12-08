@@ -9,6 +9,12 @@ namespace Magento\Framework\Session;
 
 use Magento\Framework\App\State;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class SidResolver
+ */
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 class SidResolver implements SidResolverInterface
 {
     /**
@@ -86,8 +92,16 @@ class SidResolver implements SidResolverInterface
     }
 
     /**
+     * Get Sid
+     *
      * @param SessionManagerInterface $session
+<<<<<<< HEAD
      * @return string|null
+=======
+     *
+     * @return string|null
+     * @throws \Magento\Framework\Exception\LocalizedException
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     public function getSid(SessionManagerInterface $session)
     {
@@ -96,6 +110,10 @@ class SidResolver implements SidResolverInterface
         }
 
         $sidKey = null;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $useSidOnFrontend = $this->getUseSessionInUrl();
         if ($useSidOnFrontend && $this->request->getQuery(
             $this->getSessionIdQueryParam($session),
@@ -168,7 +186,11 @@ class SidResolver implements SidResolverInterface
         if ($this->_useSessionInUrl === null) {
             //Using config value by default, can be overridden by using the
             //setter.
+<<<<<<< HEAD
             $this->_useSessionInUrl = (bool)$this->scopeConfig->getValue(
+=======
+            $this->_useSessionInUrl = $this->scopeConfig->isSetFlag(
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 self::XML_PATH_USE_FRONTEND_SID,
                 $this->_scopeType
             );

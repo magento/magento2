@@ -16,7 +16,14 @@ use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Catalog\Model\Product;
 
 /**
+<<<<<<< HEAD
  * Applies filters by custom attributes to base select
+=======
+ * Applies filters by custom attributes to base select.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class CustomAttributeFilter
 {

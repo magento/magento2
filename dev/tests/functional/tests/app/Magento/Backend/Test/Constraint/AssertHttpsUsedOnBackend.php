@@ -58,7 +58,7 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
             $expectedProtocol .= '://';
         }
 
-        \PHPUnit_Framework_Assert::assertStringStartsWith(
+        \PHPUnit\Framework\Assert::assertStringStartsWith(
             $expectedProtocol,
             $this->browser->getUrl(),
             "$expectedProtocol is not used."
@@ -74,7 +74,11 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
     {
         $fakeUrl = str_replace(self::SCHEME_HTTPS, self::SCHEME_HTTP, $this->browser->getUrl());
         $this->browser->open($fakeUrl);
+<<<<<<< HEAD
         \PHPUnit_Framework_Assert::assertStringStartsWith(
+=======
+        \PHPUnit\Framework\Assert::assertStringStartsWith(
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             self::SCHEME_HTTPS,
             $this->browser->getUrl(),
             'Merchant is not redirected to https if tries to access the Admin panel page directly via http.'

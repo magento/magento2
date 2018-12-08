@@ -65,7 +65,11 @@ class RelationTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
+<<<<<<< HEAD
     protected function setUp()
+=======
+    protected function setUp(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->itemResource = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
@@ -100,7 +104,11 @@ class RelationTest extends \PHPUnit\Framework\TestCase
      *
      * @throws \Exception
      */
+<<<<<<< HEAD
     public function testProcessRelations()
+=======
+    public function testProcessRelations(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->shipment->method('getId')
             ->willReturn('shipment-id-value');

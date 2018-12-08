@@ -10,7 +10,11 @@ use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 
 /**
+<<<<<<< HEAD
  * Class for initialize quote item options.
+=======
+ * Quote item option initializer.
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  */
 class Option
 {
@@ -120,7 +124,11 @@ class Option
             /**
              * if option's qty was updates we also need to update quote item qty
              */
+<<<<<<< HEAD
             $quoteItem->setData('qty', (int)$qty);
+=======
+            $quoteItem->setData('qty', (int) $qty);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         }
         if ($result->getMessage() !== null) {
             $option->setMessage($result->getMessage());

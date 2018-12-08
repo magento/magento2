@@ -32,7 +32,7 @@ class DeployPackage
     private $appState;
 
     /**
-     * Locale resolver inetrface
+     * Locale resolver interface
      *
      * Check if given locale code is a valid one
      *
@@ -204,6 +204,7 @@ class DeployPackage
     private function checkIfCanCopy(PackageFile $file, Package $package, Package $parentPackage = null)
     {
         return $parentPackage
+<<<<<<< HEAD
             && $file->getOrigPackage() !== $package
             && (
                 $file->getArea() !== $package->getArea()
@@ -212,6 +213,16 @@ class DeployPackage
             )
             && $file->getOrigPackage() === $parentPackage
             && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+=======
+        && $file->getOrigPackage() !== $package
+        && (
+            $file->getArea() !== $package->getArea()
+            || $file->getTheme() !== $package->getTheme()
+            || $file->getLocale() !== $package->getLocale()
+        )
+        && $file->getOrigPackage() === $parentPackage
+        && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**

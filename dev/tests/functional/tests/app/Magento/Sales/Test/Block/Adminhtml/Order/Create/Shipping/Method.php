@@ -44,12 +44,22 @@ class Method extends Block
     public function selectShippingMethod(array $shippingMethod)
     {
         $this->waitFormLoading();
+<<<<<<< HEAD
         $shippingMethodsLink = $this->_rootElement->find($this->shippingMethodsLink);
         if ($shippingMethodsLink->isPresent()) {
             $shippingMethodsLink->click();
             $this->waitFormLoading();
         }
 
+=======
+        $this->_rootElement->waitUntil(
+            function () {
+                return $this->_rootElement->find($this->shippingMethodsLink)->isVisible() ? true : null;
+            }
+        );
+
+        $this->_rootElement->find($this->shippingMethodsLink)->click();
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $selector = sprintf(
             $this->shippingMethod,
             $shippingMethod['shipping_service'],

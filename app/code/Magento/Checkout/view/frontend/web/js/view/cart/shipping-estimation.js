@@ -14,6 +14,7 @@ define(
         'uiRegistry',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/checkout-data-resolver',
+        'Magento_Checkout/js/model/shipping-service',
         'mage/validation'
     ],
     function (
@@ -26,7 +27,8 @@ define(
         shippingRatesValidator,
         registry,
         quote,
-        checkoutDataResolver
+        checkoutDataResolver,
+        shippingService
     ) {
         'use strict';
 
@@ -41,8 +43,14 @@ define(
              */
             initialize: function () {
                 this._super();
+
+                // Prevent shipping methods showing none available whilst we resolve
+                shippingService.isLoading(true);
+
                 registry.async('checkoutProvider')(function (checkoutProvider) {
                     var address, estimatedAddress;
+
+                    shippingService.isLoading(false);
 
                     checkoutDataResolver.resolveEstimationAddress();
                     address = quote.isVirtual() ? quote.billingAddress() : quote.shippingAddress();

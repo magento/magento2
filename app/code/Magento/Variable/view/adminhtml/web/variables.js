@@ -3,14 +3,21 @@
  * See COPYING.txt for license details.
  */
 
-/* global Variables, updateElementAtCursor */
+/* global Variables, updateElementAtCursor, MagentovariablePlugin, Base64 */
 define([
     'jquery',
+    'mage/backend/notification',
     'mage/translate',
-    'Magento_Ui/js/modal/modal',
+    'wysiwygAdapter',
+    'uiRegistry',
+    'mage/apply/main',
+    'mageUtils',
+    'Magento_Variable/js/config-directive-generator',
+    'Magento_Variable/js/custom-directive-generator',
+    'Magento_Ui/js/lib/spinner',
     'jquery/ui',
     'prototype'
-], function (jQuery, $t) {
+], function (jQuery, notification, $t, wysiwyg, registry, mageApply, utils, configGenerator, customGenerator, loader) {
     'use strict';
 
     window.Variables = {
@@ -21,12 +28,19 @@ define([
         overlayShowEffectOptions: null,
         overlayHideEffectOptions: null,
         insertFunction: 'Variables.insertVariable',
+        selectedPlaceholder: null,
+        isEditMode: null,
+        editor: null,
 
         /**
+         * Initialize Variables handler.
+         *
          * @param {*} textareaElementId
          * @param {Function} insertFunction
+         * @param {Object} editor
+         * @param {Object} selectedPlaceholder
          */
-        init: function (textareaElementId, insertFunction) {
+        init: function (textareaElementId, insertFunction, editor, selectedPlaceholder) {
             if ($(textareaElementId)) {
                 this.textareaElementId = textareaElementId;
             }
@@ -34,10 +48,18 @@ define([
             if (insertFunction) {
                 this.insertFunction = insertFunction;
             }
+
+            if (selectedPlaceholder) {
+                this.selectedPlaceholder = selectedPlaceholder;
+            }
+
+            if (editor) {
+                this.editor = editor;
+            }
         },
 
         /**
-         * reset data.
+         * Reset data.
          */
         resetData: function () {
             this.variablesContent = null;
@@ -45,88 +67,235 @@ define([
         },
 
         /**
+         * Open variables chooser slideout.
+         *
          * @param {Object} variables
          */
         openVariableChooser: function (variables) {
-            if (this.variablesContent == null && variables) {
-                this.variablesContent = '<ul class="insert-variable">';
-                variables.each(function (variableGroup) {
-                    if (variableGroup.label && variableGroup.value) {
-                        this.variablesContent += '<li><b>' + variableGroup.label + '</b></li>';
-                        variableGroup.value.each(function (variable) {
-                            if (variable.value && variable.label) {
-                                this.variablesContent += '<li>' +
-                                    this.prepareVariableRow(variable.value, variable.label) + '</li>';
-                            }
-                        }.bind(this));
-                    }
-                }.bind(this));
-                this.variablesContent += '</ul>';
-            }
-
-            if (this.variablesContent) {
-                this.openDialogWindow(this.variablesContent);
+            if (variables) {
+                this.openDialogWindow(variables);
             }
         },
 
         /**
-         * @param {*} variablesContent
-         */
-        openDialogWindow: function (variablesContent) {
-            var windowId = this.dialogWindowId;
-
-            jQuery('<div id="' + windowId + '">' + Variables.variablesContent + '</div>').modal({
-                title: $t('Insert Variable...'),
-                type: 'slide',
-                buttons: [],
-
-                /** @inheritdoc */
-                closed: function (e, modal) {
-                    modal.modal.remove();
-                }
-            });
-
-            jQuery('#' + windowId).modal('openModal');
-
-            variablesContent.evalScripts.bind(variablesContent).defer();
-        },
-
-        /**
-         * Close dialog window.
+         * Close variables chooser slideout dialog window.
          */
         closeDialogWindow: function () {
             jQuery('#' + this.dialogWindowId).modal('closeModal');
         },
 
         /**
-         * @param {String} varValue
-         * @param {*} varLabel
-         * @return {String}
+         * Init ui component grid on the form
+         *
+         * @return void
          */
-        prepareVariableRow: function (varValue, varLabel) {
-            var value = varValue.replace(/"/g, '&quot;').replace(/'/g, '\\&#39;'),
-                content = '<a href="#" onclick="' +
-                    this.insertFunction +
-                    '(\'' +
-                    value +
-                    '\');return false;">' +
-                    varLabel +
-                    '</a>';
-
-            return content;
+        initUiGrid: function () {
+            mageApply.apply(document.getElementById(this.dialogWindow));
+            jQuery('#' + this.dialogWindowId).applyBindings();
+            loader.get('variables_modal.variables_modal.variables').hide();
         },
 
         /**
+         * Open slideout dialog window.
+         *
+         * @param {*} variablesContent
+         * @param {Object} selectedElement
+         */
+        openDialogWindow: function (variablesContent, selectedElement) {
+
+            var html = utils.copy(variablesContent),
+                self = this;
+
+            jQuery('<div id="' + this.dialogWindowId + '">' + html + '</div>').modal({
+                title: self.isEditMode ? $t('Edit Variable') : $t('Insert Variable'),
+                type: 'slide',
+                buttons: self.getButtonsConfig(self.isEditMode),
+
+                /**
+                 * @param {jQuery.Event} e
+                 * @param {Object} modal
+                 */
+                closed: function (e, modal) {
+                    modal.modal.remove();
+                    registry.get(
+                        'variables_modal.variables_modal.variables.variable_selector',
+                        function (radioSelect) {
+                            radioSelect.selectedVariableCode('');
+                        }
+                    );
+                }
+            });
+
+            this.selectedPlaceholder = selectedElement;
+
+            this.addNotAvailableMessage(selectedElement);
+
+            jQuery('#' + this.dialogWindowId).modal('openModal');
+
+            if (typeof selectedElement !== 'undefined') {
+                registry.get(
+                    'variables_modal.variables_modal.variables.variable_selector',
+                    function (radioSelect) {
+                        radioSelect.selectedVariableCode(MagentovariablePlugin.getElementVariablePath(selectedElement));
+                    }
+                );
+            }
+        },
+
+        /**
+         * Add message to slide out that variable is no longer available
+         *
+         * @param {Object} selectedElement
+         */
+        addNotAvailableMessage: function (selectedElement) {
+            var name,
+                msg,
+                variablePath,
+                $wrapper,
+                lostVariableClass = 'magento-placeholder-error';
+
+            if (
+                this.isEditMode &&
+                typeof selectedElement !== 'undefined' &&
+                jQuery(selectedElement).hasClass(lostVariableClass)
+            ) {
+
+                variablePath = MagentovariablePlugin.getElementVariablePath(selectedElement);
+                name = variablePath.split(':');
+                msg = $t('The variable %1 is no longer available. Select a different variable.')
+                    .replace('%1', name[1]);
+
+                jQuery('body').notification('clear')
+                    .notification('add', {
+                        error: true,
+                        message: msg,
+
+                        /**
+                         * @param {String} message
+                         */
+                        insertMethod: function (message) {
+                            $wrapper = jQuery('<div/>').html(message);
+
+                            jQuery('.modal-header .page-main-actions').after($wrapper);
+                        }
+                    });
+            }
+        },
+
+        /**
+         * Get selected variable directive.
+         *
+         * @returns {*}
+         */
+        getVariableCode: function () {
+            var code = registry.get('variables_modal.variables_modal.variables.variable_selector')
+                    .selectedVariableCode(),
+                directive = code;
+
+            // processing switch here as content must contain only path/code without type
+            if (typeof code !== 'undefined') {
+                if (code.match('^default:')) {
+                    directive = configGenerator.processConfig(code.replace('default:', ''));
+                } else if (code.match('^custom:')) {
+                    directive = customGenerator.processConfig(code.replace('custom:', ''));
+                }
+
+                return directive;
+            }
+        },
+
+        /**
+         * Get buttons configuration for slideout dialog.
+         *
+         * @param {Boolean} isEditMode
+         *
+         * @returns {Array}
+         */
+        getButtonsConfig: function (isEditMode) {
+
+            var self = this,
+                buttonsData;
+
+            buttonsData = [
+                {
+
+                    text: $t('Cancel'),
+                    'class': 'action-scalable cancel',
+
+                    /**
+                     * @param {jQuery.Event} event
+                     */
+                    click: function (event) {
+                        this.closeModal(event);
+                    }
+                },
+                {
+
+                    text: isEditMode ? $t('Save') : $t('Insert Variable'),
+                    class: 'action-primary ' + (isEditMode ? '' : 'disabled'),
+                    attr: {
+                        'id': 'insert_variable'
+                    },
+
+                    /**
+                     * Insert Variable
+                     */
+                    click: function () {
+                        self.insertVariable(self.getVariableCode());
+                    }
+                }
+            ];
+
+            return buttonsData;
+        },
+
+        /**
+         * Prepare variables row.
+         *
+         * @param {String} varValue
+         * @param {*} varLabel
+         * @return {String}
+         * @deprecated This method isn't relevant after ui changes
+         */
+        prepareVariableRow: function (varValue, varLabel) {
+            var value = varValue.replace(/"/g, '&quot;').replace(/'/g, '\\&#39;');
+
+            return '<a href="#" onclick="' +
+                this.insertFunction +
+                '(\'' +
+                value +
+                '\');return false;">' +
+                varLabel +
+                '</a>';
+        },
+
+        /**
+         * Insert variable into WYSIWYG editor.
+         *
          * @param {*} value
+         * @return {Object}
          */
         insertVariable: function (value) {
             var windowId = this.dialogWindowId,
-                textareaElm, scrollPos;
+                textareaElm, scrollPos, wysiwygEditorFocused;
 
             jQuery('#' + windowId).modal('closeModal');
             textareaElm = $(this.textareaElementId);
 
-            if (textareaElm) {
+            //to support switching between wysiwyg editors
+            wysiwygEditorFocused = wysiwyg && wysiwyg.activeEditor();
+
+            if (wysiwygEditorFocused && wysiwyg.get(this.textareaElementId)) {
+                if (jQuery(this.selectedPlaceholder).hasClass('magento-placeholder')) {
+                    wysiwyg.setCaretOnElement(this.selectedPlaceholder, 1);
+                }
+                wysiwyg.insertContent(value, false);
+
+                if (this.selectedPlaceholder && jQuery(this.selectedPlaceholder).hasClass('magento-placeholder')) {
+                    this.selectedPlaceholder.remove();
+                }
+
+            } else if (textareaElm) {
                 scrollPos = textareaElm.scrollTop;
                 updateElementAtCursor(textareaElm, value);
                 textareaElm.focus();
@@ -135,8 +304,9 @@ define([
                 textareaElm = null;
             }
 
-            return;
+            return this;
         }
+
     };
 
     window.MagentovariablePlugin = {
@@ -145,6 +315,8 @@ define([
         textareaId: null,
 
         /**
+         * Bind editor.
+         *
          * @param {*} editor
          */
         setEditor: function (editor) {
@@ -152,39 +324,47 @@ define([
         },
 
         /**
+         * Load variables chooser.
+         *
          * @param {String} url
          * @param {*} textareaId
+         * @param {Object} selectedElement
+         *
+         * @return {Object}
          */
-        loadChooser: function (url, textareaId) {
+        loadChooser: function (url, textareaId, selectedElement) {
             this.textareaId = textareaId;
 
-            if (this.variables == null) {
-                new Ajax.Request(url, {
-                    parameters: {},
-                    onComplete: function (transport) {
-                        if (transport.responseText.isJSON()) {
-                            Variables.init(null, 'MagentovariablePlugin.insertVariable');
-                            this.variables = transport.responseText.evalJSON();
-                            this.openChooser(this.variables);
-                        }
-                    }.bind(this)
-                });
-            } else {
-                this.openChooser(this.variables);
-            }
+            new Ajax.Request(url, {
+                parameters: {},
+                onComplete: function (transport) {
+                    Variables.init(this.textareaId, 'MagentovariablePlugin.insertVariable', this.editor);
+                    Variables.isEditMode = !!this.getElementVariablePath(selectedElement);
+                    this.variablesContent = transport.responseText;
+                    Variables.openDialogWindow(this.variablesContent, selectedElement);
+                    Variables.initUiGrid();
+                }.bind(this)
+            });
 
-            return;
+            return this;
         },
 
         /**
+         * Open variables chooser window.
+         *
          * @param {*} variables
+         * @deprecated This method isn't relevant after ui changes
          */
         openChooser: function (variables) {
             Variables.openVariableChooser(variables);
         },
 
         /**
+         * Insert variable.
+         *
          * @param {*} value
+         *
+         * @return {Object}
          */
         insertVariable: function (value) {
             if (this.textareaId) {
@@ -192,10 +372,28 @@ define([
                 Variables.insertVariable(value);
             } else {
                 Variables.closeDialogWindow();
-                this.editor.execCommand('mceInsertContent', false, value);
+                Variables.insertVariable(value);
             }
 
-            return;
+            return this;
+        },
+
+        /**
+         * Get element variable path.
+         *
+         * @param {Object} element
+         * @returns {String}
+         */
+        getElementVariablePath: function (element) {
+            var type, code;
+
+            if (!element || !jQuery(element).hasClass('magento-variable')) {
+                return '';
+            }
+            type = jQuery(element).hasClass('magento-custom-var') ? 'custom' : 'default';
+            code = Base64.idDecode(element.getAttribute('id'));
+
+            return type + ':' + code;
         }
     };
 });

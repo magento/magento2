@@ -79,7 +79,11 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
      * @param string $actionName
      * @return array
      */
+<<<<<<< HEAD
     public function test(string $createProduct, string $product, string $actionName = null) : array
+=======
+    public function test(string $createProduct, string $product, string $actionName = null): array
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         // Steps
         list($fixture, $dataset) = explode('::', $product);
@@ -99,10 +103,16 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
      * Perform action.
      *
      * @param string $actionName
+<<<<<<< HEAD
      * @throws \Exception
      * @return void
      */
     protected function performAction(string $actionName)
+=======
+     * @return void
+     */
+    private function performAction(string $actionName): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         if (method_exists(__CLASS__, $actionName)) {
             $this->$actionName();
@@ -114,7 +124,11 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
      *
      * @return void
      */
+<<<<<<< HEAD
     protected function clearDownloadableData()
+=======
+    private function clearDownloadableData(): void
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     {
         $this->catalogProductNew->getProductForm()->openSection('downloadable_information');
         /** @var Downloadable $downloadableInfoTab */
@@ -122,6 +136,7 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
         $downloadableInfoTab->getDownloadableBlock('Links')->clearDownloadableData();
         $downloadableInfoTab->setIsDownloadable('No');
     }
+<<<<<<< HEAD
 
     /**
      * Set "Is this downloadable Product?" value.
@@ -138,4 +153,6 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
         $downloadableInfoTab = $this->catalogProductNew->getProductForm()->getSection('downloadable_information');
         $downloadableInfoTab->setIsDownloadable($downloadable);
     }
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 }

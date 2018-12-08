@@ -46,7 +46,7 @@ class AssertCatalogSearchResultOrder extends AbstractConstraint
                 $idxInArray = array_search($productOnPage, $productsOrder, true);
                 if (false !== $idxInArray) {
                     if (0 !== $idxInArray) {
-                        \PHPUnit_Framework_Assert::assertEmpty(
+                        \PHPUnit\Framework\Assert::assertEmpty(
                             $productsOrder,
                             'Products are in incorrect order on the search result page'
                         );
@@ -56,7 +56,7 @@ class AssertCatalogSearchResultOrder extends AbstractConstraint
             }
         } while (count($productsOrder) && $resultPage->getBottomToolbar()->nextPage());
 
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             $productsOrder,
             'Products are in incorrect order on the search result page'
         );

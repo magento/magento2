@@ -3,9 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
 /**
+=======
+declare(strict_types=1);
+
+namespace Magento\Bundle\Block\Catalog\Product\View\Type;
+
+/**
+ * Test for Magento\Bundle\Block\Catalog\Product\View\Type\Bundle
+ *
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
  * @magentoDataFixture Magento/Bundle/_files/product.php
  * @magentoDbIsolation disabled
  * @magentoAppArea frontend
@@ -69,4 +79,15 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(5, $selection['prices']['basePrice']['amount']);
         $this->assertEquals(5, $selection['prices']['finalPrice']['amount']);
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Tear Down
+     */
+    protected function tearDown()
+    {
+        $this->objectManager->get(\Magento\Framework\Registry::class)->unregister('product');
+    }
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 }

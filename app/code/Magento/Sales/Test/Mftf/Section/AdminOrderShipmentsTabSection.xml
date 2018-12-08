@@ -7,8 +7,18 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<<<<<<< HEAD
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminOrderShipmentsTabSection">
         <element name="gridRow" type="text" selector="#sales_order_view_tabs_order_shipments_content .data-grid tbody > tr:nth-of-type({{row}})" parameterized="true"/>
     </section>
 </sections>
+=======
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderShipmentsTabSection">
+        <element name="spinner" type="text" selector="[data-role='spinner'][data-component*='sales_order_view_shipment']"/>
+        <element name="gridRow" type="text" selector="#sales_order_view_tabs_order_shipments_content .data-grid tbody > tr:nth-of-type({{row}})" parameterized="true"/>
+        <element name="viewGridRow" type="button" selector="#sales_order_view_tabs_order_shipments_content .data-grid tbody > tr:nth-of-type({{row}}) a[href*='order_shipment/view']" parameterized="true"/>
+    </section>
+</sections>
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3

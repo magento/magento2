@@ -21,7 +21,11 @@ define([
          * @return {*}
          */
         getShippingMethodTitle: function () {
+<<<<<<< HEAD
             var shippingMethod,
+=======
+            var shippingMethod = '',
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 shippingMethodTitle = '';
 
             if (!this.isCalculated()) {
@@ -33,7 +37,13 @@ define([
                 shippingMethodTitle = ' - ' + shippingMethod['method_title'];
             }
 
+<<<<<<< HEAD
             return shippingMethod ? shippingMethod['carrier_title'] + shippingMethodTitle : '';
+=======
+            return shippingMethod ?
+                shippingMethod['carrier_title'] + shippingMethodTitle :
+                shippingMethod['carrier_title'];
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         },
 
         /**

@@ -1153,7 +1153,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Determine if the block scope is private or public.
      *
+<<<<<<< HEAD
      * Returns true if scope is private, false otherwise.
+=======
+     * Returns true if scope is private, false otherwise
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      *
      * @return bool
      */

@@ -20,6 +20,10 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      * @param string $mimeType
      * @param string $message
      * @param string $delimiter
+<<<<<<< HEAD
+=======
+     * @throws \Magento\Framework\Exception\FileSystemException
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @backupGlobals enabled
      * @magentoDbIsolation enabled
      * @SuppressWarnings(PHPMD.Superglobals)

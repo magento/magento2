@@ -7,6 +7,7 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+<<<<<<< HEAD
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
@@ -21,6 +22,25 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Framework\Cache\FrontendInterface;
+=======
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
+use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation;
+use Magento\Framework\Serialize\Serializer\FormData;
+use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
+use Magento\Eav\Model\Entity\Attribute\Set;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Controller\Result\Json;
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -31,9 +51,15 @@ use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
+ * Product attribute save controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+<<<<<<< HEAD
 class Save extends Attribute
+=======
+class Save extends Attribute implements HttpPostActionInterface
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
 {
     /**
      * @var BuildFactory
@@ -71,7 +97,16 @@ class Save extends Attribute
     private $layoutFactory;
 
     /**
+<<<<<<< HEAD
      * @var FormData
+=======
+     * @var Presentation
+     */
+    private $presentation;
+
+    /**
+     * @var FormData|null
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      */
     private $formDataSerializer;
 
@@ -79,14 +114,23 @@ class Save extends Attribute
      * @param Context $context
      * @param FrontendInterface $attributeLabelCache
      * @param Registry $coreRegistry
+<<<<<<< HEAD
      * @param BuildFactory $buildFactory
      * @param PageFactory $resultPageFactory
+=======
+     * @param PageFactory $resultPageFactory
+     * @param BuildFactory $buildFactory
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param AttributeFactory $attributeFactory
      * @param ValidatorFactory $validatorFactory
      * @param CollectionFactory $groupCollectionFactory
      * @param FilterManager $filterManager
      * @param Product $productHelper
      * @param LayoutFactory $layoutFactory
+<<<<<<< HEAD
+=======
+     * @param Presentation|null $presentation
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @param FormData|null $formDataSerializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -102,6 +146,10 @@ class Save extends Attribute
         FilterManager $filterManager,
         Product $productHelper,
         LayoutFactory $layoutFactory,
+<<<<<<< HEAD
+=======
+        Presentation $presentation = null,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         FormData $formDataSerializer = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
@@ -112,27 +160,46 @@ class Save extends Attribute
         $this->validatorFactory = $validatorFactory;
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->layoutFactory = $layoutFactory;
+<<<<<<< HEAD
         $this->formDataSerializer = $formDataSerializer ?? ObjectManager::getInstance()->get(FormData::class);
+=======
+        $this->presentation = $presentation ?: ObjectManager::getInstance()->get(Presentation::class);
+        $this->formDataSerializer = $formDataSerializer
+            ?: ObjectManager::getInstance()->get(FormData::class);
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
      * @inheritdoc
      *
+<<<<<<< HEAD
+=======
+     * @return Redirect
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Zend_Validate_Exception
      */
     public function execute()
     {
         try {
+<<<<<<< HEAD
             $optionData = $this->formDataSerializer->unserialize(
                 $this->getRequest()->getParam('serialized_options', '[]')
             );
+=======
+            $optionData = $this->formDataSerializer
+                ->unserialize($this->getRequest()->getParam('serialized_options', '[]'));
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         } catch (\InvalidArgumentException $e) {
             $message = __("The attribute couldn't be saved due to an error. Verify your information and try again. "
                 . "If the error persists, please try again later.");
             $this->messageManager->addErrorMessage($message);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
         }
 
@@ -222,10 +289,18 @@ class Save extends Attribute
                 }
             }
 
+<<<<<<< HEAD
             if ($attributeId) {
                 if (!$model->getId()) {
                     $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
 
+=======
+            $data = $this->presentation->convertPresentationDataToInputType($data);
+
+            if ($attributeId) {
+                if (!$model->getId()) {
+                    $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
                 // entity type check

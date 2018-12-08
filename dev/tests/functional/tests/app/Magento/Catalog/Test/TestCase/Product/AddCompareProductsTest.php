@@ -76,8 +76,12 @@ class AddCompareProductsTest extends AbstractCompareProductsTest
     {
         $this->cmsIndex->open();
         $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
+<<<<<<< HEAD
         $productsCount = count($this->products);
         for ($i = 1; $i <= $productsCount; $i++) {
+=======
+        for ($i = 1, $count = count($this->products); $i <= $count; $i++) {
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             $this->catalogProductCompare->getCompareProductsBlock()->removeProduct();
         }
     }

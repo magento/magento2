@@ -120,7 +120,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'rateErrorFactory' => $this->errorFactory,
             'carrierHelper' => $carrierHelper,
             'productCollectionFactory' => $productCollectionFactory,
+<<<<<<< HEAD
             'dataHelper' => $this->dataHelper
+=======
+            'dataHelper' => $this->dataHelper,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         ];
 
         $this->dataHelper = $this->getMockBuilder(DataHelper::class)
@@ -175,18 +179,30 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     {
         $expectedCount = 5;
 
+<<<<<<< HEAD
         $this->scope->expects(self::once())
             ->method('isSetFlag')
             ->willReturn(true);
 
         $this->httpResponse->expects(self::once())
+=======
+        $this->scope->expects($this->once())
+            ->method('isSetFlag')
+            ->willReturn(true);
+
+        $this->httpResponse->expects($this->once())
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('getBody')
             ->willReturn(file_get_contents(__DIR__ . '/_files/response_rates.xml'));
 
         $data = require __DIR__ . '/_files/rates_request_data.php';
         $request = $this->objectManager->getObject(RateRequest::class, ['data' => $data[1]]);
         $rates = $this->carrier->collectRates($request)->getAllRates();
+<<<<<<< HEAD
         self::assertEquals($expectedCount, count($rates));
+=======
+        $this->assertEquals($expectedCount, count($rates));
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     public function testReturnOfShipment()
@@ -268,9 +284,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->error->method('setCarrier')
             ->with('usps');
+<<<<<<< HEAD
         $this->error->expects(self::once())
             ->method('setCarrierTitle');
         $this->error->expects(self::once())
+=======
+        $this->error->expects($this->once())
+            ->method('setCarrierTitle');
+        $this->error->expects($this->once())
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('setErrorMessage');
 
         $request = new RateRequest();
@@ -281,13 +303,20 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     {
         $this->scope->method('isSetFlag')
             ->willReturn(true);
+<<<<<<< HEAD
         $this->scope->expects(self::atLeastOnce())
+=======
+        $this->scope->expects($this->atLeastOnce())
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ->method('getValue')
             ->willReturnMap(
                 [
                     ['carriers/usps/userid' => 123],
                     ['carriers/usps/container' => 11],
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
                 ]
             );
         $request = new RateRequest();
@@ -314,7 +343,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $result = $refMethod->invoke($this->carrier, $data);
         $expectedXml = new \SimpleXMLElement($expected);
         $resultXml = new \SimpleXMLElement($result);
+<<<<<<< HEAD
         self::assertEquals($expectedXml->asXML(), $resultXml->asXML());
+=======
+        $this->assertEquals($expectedXml->asXML(), $resultXml->asXML());
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
     }
 
     /**
@@ -354,7 +387,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->with($carrierMethodCode)
             ->willReturn($displayGirthValueResult);
 
-        self::assertEquals($result, $this->carrier->isGirthAllowed($countyCode, $carrierMethodCode));
+        $this->assertEquals($result, $this->carrier->isGirthAllowed($countyCode, $carrierMethodCode));
     }
 
     /**
@@ -427,7 +460,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $rateMethod->method('setPrice')
             ->willReturnSelf();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $rateMethodFactory->method('create')
             ->willReturn($rateMethod);
 
@@ -443,12 +479,18 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getBody'])
             ->getMock();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $this->httpClient = $this->getMockBuilder(ZendClient::class)
             ->getMock();
         $this->httpClient->method('request')
             ->willReturn($this->httpResponse);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -472,7 +514,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $productCollection->method('addAttributeToSelect')
             ->willReturn([]);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
         $productCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -492,7 +537,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $carrierHelper = $this->objectManager->getObject(
             CarrierHelper::class,
             [
+<<<<<<< HEAD
                 'localeResolver' => $localeResolver
+=======
+                'localeResolver' => $localeResolver,
+>>>>>>> 35c4f041925843d91a58c1d4eec651f3013118d3
             ]
         );
 
