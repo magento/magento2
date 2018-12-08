@@ -59,8 +59,10 @@
                 transition: opacity .3s ease;
 
         .modal-inner-wrap {
-            -webkit-transform: translate(0, 0);
-                    transform: translate(0, 0);
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            margin: auto;
+            top:50%;
         }
     }
 
@@ -112,8 +114,10 @@
 
     &._show {
         .modal-inner-wrap {
-            -webkit-transform: translateY(0);
-                    transform: translateY(0);
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            margin: auto;
+            top:50%;
         }
     }
 
