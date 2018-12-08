@@ -15,11 +15,18 @@ use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 /**
+ * MySQL search query match.
+ *
  * @api
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class Match implements QueryInterface
 {
-    const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
+    /**
+     * @var string
+     */
+    const SPECIAL_CHARACTERS = '+~/\\<>\'":*$#@()!,.?`=%&^';
 
     const MINIMAL_CHARACTER_LENGTH = 3;
 
@@ -69,7 +76,7 @@ class Match implements QueryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(
         ScoreBuilder $scoreBuilder,
@@ -113,6 +120,8 @@ class Match implements QueryInterface
     }
 
     /**
+     * Prepare query value for build function.
+     *
      * @param string $queryValue
      * @param string $conditionType
      * @return string

@@ -73,7 +73,7 @@ class UpdateAccountInformation
 
         if (isset($data['email']) && $customer->getEmail() !== $data['email']) {
             if (!isset($data['password']) || empty($data['password'])) {
-                throw new GraphQlInputException(__('For changing "email" you should provide current "password".'));
+                throw new GraphQlInputException(__('Provide the current "password" to change "email".'));
             }
 
             $this->checkCustomerPassword->execute($data['password'], $customerId);
