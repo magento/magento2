@@ -33,7 +33,7 @@ class LandingUpdater extends AbstractActionController
     {
         $welcomeMsg = "Welcome to Magento Module Manager.<br>"
             . "Click 'Agree and Update Magento' or read ";
-        $docRef = "http://devdocs.magento.com/guides/v1.0/install-gde/install/install-web.html";
+        $docRef = "https://devdocs.magento.com/guides/v1.0/install-gde/install/install-web.html";
         $agreeButtonText = "Agree and Update Magento";
         $view = new ViewModel;
         $view->setTerminal(true);
