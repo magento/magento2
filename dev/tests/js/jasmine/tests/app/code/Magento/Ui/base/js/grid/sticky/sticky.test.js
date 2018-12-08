@@ -46,8 +46,10 @@ define([
                 expect(stickyObj.initListeners).toHaveBeenCalled();
             });
             it('has initOnScroll method', function () {
+                spyOn(document, 'addEventListener');
                 stickyObj.initOnScroll();
                 expect(stickyObj.lastHorizontalScrollPos).toBeDefined();
+                expect(document.addEventListener).toHaveBeenCalledWith('scroll', jasmine.any(Function));
             });
             it('has initOnListingScroll method', function () {
                 spyOn(stickyObj, 'initOnListingScroll');

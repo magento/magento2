@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminZeroSubtotalOrdersWithProcessingStatusTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="MAGETWO-72877: Zero Subtotal Orders have incorrect status"/>
+            <title value="Checking status of Zero Subtotal Orders with 'Processing' New Order Status"/>
+            <description value="Created order should be in Processing status"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95994"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simpleSubCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="simpleSubCategory"/>
+            </createData>
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+            <createData entity="ZeroSubtotalCheckoutPaymentMethodConfig" stepKey="enableZeroSubtotalCheckout"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAdminOrdersGridFilters"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{SalesRule100PercentDiscount.name}}"/>
+            </actionGroup>
+            <createData entity="ZeroSubtotalCheckoutPaymentMethodDefault" stepKey="disableZeroSubtotalCheckout"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleSubCategory" stepKey="deleteSimpleSubCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Add New Rule-->
+        <actionGroup ref="AdminCreateCartPriceRuleSpecificCouponActionGroup" stepKey="addNewRule">
+            <argument name="rule" value="SalesRule100PercentDiscount"/>
+            <argument name="userPerCoupon" value="99"/>
+        </actionGroup>
+
+        <!--Open Product Page-->
+        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.name$$)}}" stepKey="openProductPage"/>
+
+        <!--Apply Cart Rule On Storefront-->
+        <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartRule">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="couponCode" value="{{_defaultCoupon.code}}"/>
+        </actionGroup>
+        <waitForText userInput='You used coupon code "{{_defaultCoupon.code}}"' stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput='You used coupon code "{{_defaultCoupon.code}}"'
+             stepKey="seeSuccessMessageUsedCouponCode"/>
+        <waitForElementVisible selector="{{StorefrontCheckoutCartSummarySection.discountAmount}}" time="30"
+                               stepKey="waitForElementVisible"/>
+
+        <!--Navigate to Checkout-->
+        <actionGroup ref="NavigateToCheckoutActionGroup" stepKey="navigateToCheckout"/>
+
+        <!--Place Order with Free Shipping-->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="shippingMethod" value="Free Shipping"/>
+        </actionGroup>
+        <see selector="{{CheckoutPaymentSection.notAvailablePaymentSolutions}}"
+             userInput="No Payment Information Required" stepKey="seePaymentInformation"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!--Verify that Created order is in Processing status-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForCreatedOrderPageOpened"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing"
+             stepKey="seeOrderStatus"/>
+    </test>
+</tests>

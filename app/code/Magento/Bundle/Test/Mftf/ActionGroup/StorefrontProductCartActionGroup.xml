@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!-- Add Bundle Product to Cart from the category page with specified quantity to cart -->
+    <actionGroup name="StorefrontAddCategoryBundleProductToCartActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="quantity" defaultValue="1" type="string"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.productTitleByName(product.name)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.productTitleByName(product.name)}}" stepKey="openProductPage"/>
+        <waitForPageLoad time="30" stepKey="waitForBundleProductPageLoad"/>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
+        <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="{{quantity}}" stepKey="fillBundleProductQuantity"/>
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddBundleProductToCart"/>
+        <waitForText userInput="{{quantity}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
+        <see userInput="You added {{product.name}} to your shopping cart." selector="{{StorefrontMessagesSection.success}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+    <!-- Add Bundle Product to Cart with specified currency -->
+    <actionGroup name="StoreFrontAddProductToCartFromBundleWithCurrencyActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="currency" type="string" defaultValue="US Dollar"/>
+        </arguments>
+        <click selector="{{StorefrontHeaderCurrencySwitcherSection.currencyTrigger}}" stepKey="openCurrencyTrigger"/>
+        <click selector="{{StorefrontHeaderCurrencySwitcherSection.currency(currency)}}" stepKey="chooseCurrency"/>
+        <waitForPageLoad stepKey="waitForCurrencyChange"/>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+        <waitForPageLoad stepKey="waitForBundleOpen"/>
+        <checkOption selector="{{StorefrontBundledSection.bundleOptionByName(product.name)}}" stepKey="chooseProduct"/>
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="addToCartProduct"/>
+        <waitForAjaxLoad stepKey="waitForLoad"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+    </actionGroup>
+</actionGroups>

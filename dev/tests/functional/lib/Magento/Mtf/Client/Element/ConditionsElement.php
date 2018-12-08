@@ -6,9 +6,9 @@
 
 namespace Magento\Mtf\Client\Element;
 
-use Magento\Mtf\ObjectManager;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Typified element class for conditions.
@@ -136,6 +136,13 @@ class ConditionsElement extends SimpleElement
     protected $chooserGridLocator = 'div[id*=chooser]';
 
     /**
+     * Datepicker xpath.
+     *
+     * @var string
+     */
+    private $datepicker = './/*[contains(@class,"ui-datepicker-trigger")]';
+
+    /**
      * Key of last find param.
      *
      * @var int
@@ -189,10 +196,7 @@ class ConditionsElement extends SimpleElement
     protected $exception;
 
     /**
-     * Set value to conditions.
-     *
-     * @param string $value
-     * @return void
+     * @inheritdoc
      */
     public function setValue($value)
     {
@@ -411,7 +415,16 @@ class ConditionsElement extends SimpleElement
     {
         $value = $param->find('input', Locator::SELECTOR_TAG_NAME);
         if ($value->isVisible()) {
-            $value->setValue($rule);
+            if (!$value->getAttribute('readonly')) {
+                $value->setValue($rule);
+            } else {
+                $datepicker = $param->find(
+                    $this->datepicker,
+                    Locator::SELECTOR_XPATH,
+                    DatepickerElement::class
+                );
+                $datepicker->setValue($rule);
+            }
 
             $apply = $param->find('.//*[@class="rule-param-apply"]', Locator::SELECTOR_XPATH);
             if ($apply->isVisible()) {

@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- action group to create a new catalog price rule giving a catalogRule entity -->
     <actionGroup name="CreateCatalogPriceRule">
         <arguments>
@@ -55,5 +55,17 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
         <see userInput="You deleted the rule." stepKey="verifyRuleIsDeleted"/>
+    </actionGroup>
+    <!--Add Catalog Rule Condition With product SKU-->
+    <actionGroup name="newCatalogPriceRuleByUIWithConditionIsSKU" extends="CreateCatalogPriceRule">
+        <arguments>
+            <argument name="productSku" type="string"/>
+        </arguments>
+        <click selector="{{AdminCatalogPriceRuleSection.conditionsTab}}" after="discardSubsequentRules" stepKey="openConditionsTab"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.newCondition}}" after="openConditionsTab" stepKey="addNewCondition"/>
+        <selectOption selector="{{AdminCatalogPriceRuleConditionsSection.conditionSelect('1')}}" userInput="Magento\CatalogRule\Model\Rule\Condition\Product|sku" after="addNewCondition" stepKey="selectTypeCondition"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.targetEllipsis('1')}}" after="selectTypeCondition" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminCatalogPriceRuleConditionsSection.targetInput('1', '1')}}" userInput="{{productSku}}" after="clickEllipsis" stepKey="fillProductSku"/>
+        <click selector="{{AdminCatalogPriceRuleConditionsSection.applyButton('1', '1')}}" after="fillProductSku" stepKey="clickApply"/>
     </actionGroup>
 </actionGroups>

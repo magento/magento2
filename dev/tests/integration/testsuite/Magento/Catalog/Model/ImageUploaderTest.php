@@ -46,7 +46,8 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
             [
                 'baseTmpPath' => $this->mediaDirectory->getRelativePath('tmp'),
                 'basePath' => __DIR__,
-                'allowedExtensions' => ['jpg', 'jpeg', 'gif', 'png']
+                'allowedExtensions' => ['jpg', 'jpeg', 'gif', 'png'],
+                'allowedMimeTypes' => ['image/jpg', 'image/jpeg', 'image/gif', 'image/png']
             ]
         );
     }
