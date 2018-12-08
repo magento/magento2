@@ -32,6 +32,7 @@
                 <cgi_url>https://secure.authorize.net/gateway/transact.dll</cgi_url>
                 <cgi_url_td_test_mode>https://apitest.authorize.net/xml/v1/request.api</cgi_url_td_test_mode>
                 <cgi_url_td>https://api2.authorize.net/xml/v1/request.api</cgi_url_td>
+                <group>authorizenet</group>
             </authorizenet_directpost>
         </payment>
     </default>
