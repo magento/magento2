@@ -12,6 +12,8 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Api\CouponRepositoryInterface;
+use Magento\SalesRule\Api\RuleRepositoryInterface;
+use Magento\SalesRule\Api\Data\CouponInterface;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\Framework\App\ResourceConnection;
@@ -30,9 +32,14 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
     public $coupon;
 
     /**
-     * @var \Magento\SalesRule\Api\CouponRepositoryInterface
+     * @var CouponRepositoryInterface
      */
     protected $couponRepository;
+
+    /**
+     * @var RuleRepositoryInterface
+     */
+    protected $ruleRepository;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Usage
@@ -59,6 +66,7 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
      *
      * @param \Magento\SalesRule\Model\Coupon                     $coupon
      * @param \Magento\SalesRule\Api\CouponRepositoryInterface    $couponRepository
+     * @param \Magento\SalesRule\Api\RuleRepositoryInterface      $ruleRepository
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon\Usage $couponUsage
      * @param \Magento\SalesRule\Model\Rule\CustomerFactory       $customerFactory
      * @param \Magento\Framework\App\ResourceConnection           $resourceConnection
@@ -67,6 +75,7 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
     public function __construct(
         Coupon $coupon,
         CouponRepositoryInterface $couponRepository,
+        RuleRepositoryInterface $ruleRepository,
         Usage $couponUsage,
         CustomerFactory $customerFactory,
         ResourceConnection $resourceConnection,
@@ -74,6 +83,7 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
     ) {
         $this->coupon = $coupon;
         $this->couponRepository = $couponRepository;
+        $this->ruleRepository = $ruleRepository;
         $this->couponUsage = $couponUsage;
         $this->customerFactory = $customerFactory;
         $this->resourceConnection = $resourceConnection;
@@ -105,19 +115,28 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
     /**
      * Restore coupon
      *
-     * @param Coupon $coupon
-     * @param int    $customerId
+     * @param CouponInterface $coupon
+     * @param int             $customerId
+     *
+     * @return bool
      */
-    protected function restoreCoupon($coupon, $customerId)
+    protected function restoreCoupon(CouponInterface $coupon, $customerId)
     {
         $connection = $this->resourceConnection->getConnection();
         $connection->beginTransaction();
         try {
-            $couponId = $coupon->getCouponId();
             $ruleId = $coupon->getRuleId();
+            $rule = $this->ruleRepository->getById($ruleId);
+            $today = date("Y-m-d");
+            $ruleToDate = $rule->getToDate();
+            if (!$rule->getRuleId() || ($ruleToDate && $ruleToDate < $today)) {
+                return false;
+            }
+
             $coupon->setTimesUsed($coupon->getTimesUsed() - 1);
             $this->couponRepository->save($coupon);
 
+            $couponId = $coupon->getCouponId();
             $this->couponUsage->updateCustomerCouponTimesUsed($customerId, $couponId, -1);
 
             /** @var \Magento\SalesRule\Model\Rule\Customer $ruleCustomer */
@@ -133,5 +152,7 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
             $connection->rollBack();
             $this->logger->critical($e);
         }
+
+        return true;
     }
 }
