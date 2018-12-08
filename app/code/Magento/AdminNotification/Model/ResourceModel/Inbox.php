@@ -77,8 +77,7 @@ class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'is_read=?',
             0
         );
-        $return = $connection->fetchPairs($select);
-        return $return;
+        return $connection->fetchPairs($select);
     }
 
     /**
