@@ -90,6 +90,13 @@ define([
         },
 
         /**
+         * @param {Boolean} flag
+         */
+        setIsRequired: function (flag) {
+            this.currentCaptcha.setIsRequired(flag);
+        },
+
+        /**
          * @return {Boolean}
          */
         isCaseSensitive: function () {
