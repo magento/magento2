@@ -1223,7 +1223,15 @@ define([
                 }
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
-                gallery.updateData(imagesToUpdate);
+                
+                if (gallery === undefined) {
+                    context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
+                        loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
+                        loadedGallery.updateData(imagesToUpdate);
+                    }.bind(this));
+                } else {
+                    gallery.updateData(imagesToUpdate);
+                }
 
                 if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
