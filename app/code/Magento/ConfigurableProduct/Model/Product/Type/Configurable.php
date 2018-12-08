@@ -453,6 +453,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_configurableAttributes)) {
+            // for new product do not load configurable attributes
+            if (!$product->getId()) {
+                return [];
+            }
             $configurableAttributes = $this->getConfigurableAttributeCollection($product);
             $this->extensionAttributesJoinProcessor->process($configurableAttributes);
             $configurableAttributes->orderByPosition()->load();
@@ -1398,23 +1402,47 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $skipStockFilter = true
     ) {
         $collection = $this->getUsedProductCollection($product);
+
         if ($skipStockFilter) {
             $collection->setFlag('has_stock_status_filter', true);
         }
+
         $collection
-            ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
+            ->addAttributeToSelect($this->getAttributesForCollection($product))
             ->addFilterByRequiredOptions()
             ->setStoreId($product->getStoreId());
 
-        $requiredAttributes = ['name', 'price', 'weight', 'image', 'thumbnail', 'status', 'media_gallery'];
-        foreach ($requiredAttributes as $attributeCode) {
-            $collection->addAttributeToSelect($attributeCode);
-        }
-        foreach ($this->getUsedProductAttributes($product) as $usedProductAttribute) {
-            $collection->addAttributeToSelect($usedProductAttribute->getAttributeCode());
-        }
         $collection->addMediaGalleryData();
         $collection->addTierPriceData();
+
         return $collection;
+    }
+
+    /**
+     * @return array
+     */
+    private function getAttributesForCollection(\Magento\Catalog\Model\Product $product)
+    {
+        $productAttributes = $this->getCatalogConfig()->getProductAttributes();
+
+        $requiredAttributes = [
+            'name',
+            'price',
+            'weight',
+            'image',
+            'thumbnail',
+            'status',
+            'visibility',
+            'media_gallery'
+        ];
+
+        $usedAttributes = array_map(
+            function($attr) {
+                return $attr->getAttributeCode();
+            },
+            $this->getUsedProductAttributes($product)
+        );
+
+        return array_unique(array_merge($productAttributes, $requiredAttributes, $usedAttributes));
     }
 }
