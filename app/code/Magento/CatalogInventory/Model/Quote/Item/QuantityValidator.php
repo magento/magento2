@@ -105,7 +105,8 @@ class QuantityValidator
         $quoteItem = $observer->getEvent()->getItem();
         if (!$quoteItem ||
             !$quoteItem->getProductId() ||
-            !$quoteItem->getQuote()
+            !$quoteItem->getQuote() ||
+            !$quoteItem->getId()
         ) {
             return;
         }
