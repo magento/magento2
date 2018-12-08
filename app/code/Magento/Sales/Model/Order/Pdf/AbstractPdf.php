@@ -364,6 +364,38 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     }
 
     /**
+     * Detect an input string is Arabic
+     *
+     * @param string $subject
+     * @return bool
+     */
+    private function isArabic(string $subject): bool
+    {
+        return (preg_match('/\p{Arabic}/u', $subject) > 0);
+    }
+
+    /**
+     * Reverse text with Arabic characters
+     *
+     * @param string $string
+     * @return string
+     */
+    private function reverseArabicText($string)
+    {
+        $splitText = explode(' ', $string);
+        for ($i = 0; $i < count($splitText); $i++) {
+            if ($this->isArabic($splitText[$i])) {
+                for ($j = $i + 1; $j < count($splitText); $j++) {
+                    $tmp = $this->string->strrev($splitText[$j]);
+                    $splitText[$j] = $this->string->strrev($splitText[$i]);
+                    $splitText[$i] = $tmp;
+                }
+            }
+        }
+        return implode(' ', $splitText);
+    }
+
+    /**
      * Insert order to pdf page
      *
      * @param \Zend_Pdf_Page &$page
@@ -474,7 +506,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             if ($value !== '') {
                 $text = [];
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
-                    $text[] = $_value;
+                    $text[] = ($this->isArabic($_value)) ? $this->reverseArabicText($_value) : $_value;
                 }
                 foreach ($text as $part) {
                     $page->drawText(strip_tags(ltrim($part)), 35, $this->y, 'UTF-8');
@@ -491,7 +523,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 if ($value !== '') {
                     $text = [];
                     foreach ($this->string->split($value, 45, true, true) as $_value) {
-                        $text[] = $_value;
+                        $text[] = ($this->isArabic($_value)) ? $this->reverseArabicText($_value) : $_value;
                     }
                     foreach ($text as $part) {
                         $page->drawText(strip_tags(ltrim($part)), 285, $this->y, 'UTF-8');
