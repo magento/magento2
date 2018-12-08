@@ -13,12 +13,10 @@
  * $app = $bootstrap->createApplication(\Magento\Framework\App\Http::class);
  * $bootstrap->run($app);
  * --------------------------------------------
- * 
- *
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
-  */
+ */
 
 try {
     require __DIR__ . '/app/bootstrap.php';
@@ -39,4 +37,3 @@ $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
 /** @var \Magento\Framework\App\Http $app */
 $app = $bootstrap->createApplication(\Magento\Framework\App\Http::class);
 $bootstrap->run($app);
- 
