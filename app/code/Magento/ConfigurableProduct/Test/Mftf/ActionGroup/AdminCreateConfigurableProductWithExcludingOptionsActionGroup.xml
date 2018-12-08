@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateConfigurableProductExcludeOptionActionGroup" extends="AdminCreateConfigurableProductActionGroup">
+        <arguments>
+            <!-- custom multiselect attribute option name to start -->
+            <argument name="customAttributeOptionNameFrom" type="string"/>
+            <!-- custom multiselect attribute option name to end -->
+            <argument name="customAttributeOptionNameTill" type="string"/>
+            <argument name="excludedOption"/>
+        </arguments>
+
+        <selectOption userInput="{{customAttributeOptionNameFrom}}" selector="{{AdminNewAttributePanelSection.attributeSelect(ProductAttributeFrontendLabel.label)}}" after="saveEditedProductForProduct" stepKey="selectAttribute"/>
+        <dragAndDrop selector1="{{AdminNewAttributePanelSection.attributeName(customAttributeOptionNameFrom)}}" selector2="{{AdminNewAttributePanelSection.attributeName(customAttributeOptionNameTill)}}" after="selectAttribute" stepKey="selectOptions"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeByName(excludedOption.name)}}" after="clickOnSelectAllSecond" stepKey="deselectOption"/>
+    </actionGroup>
+</actionGroups>

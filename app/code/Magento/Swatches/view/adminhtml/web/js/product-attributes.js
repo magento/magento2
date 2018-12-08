@@ -16,7 +16,8 @@ define([
     'use strict';
 
     return function (optionConfig) {
-        var swatchProductAttributes = {
+        var activePanelClass = 'selected-type-options',
+            swatchProductAttributes = {
                 frontendInput: $('#frontend_input'),
                 isFilterable: $('#is_filterable'),
                 isFilterableInSearch: $('#is_filterable_in_search'),
@@ -337,6 +338,7 @@ define([
                  */
                 _showPanel: function (el) {
                     el.closest('.fieldset').show();
+                    el.addClass(activePanelClass);
                     this._render(el.attr('id'));
                 },
 
@@ -346,6 +348,7 @@ define([
                  */
                 _hidePanel: function (el) {
                     el.closest('.fieldset').hide();
+                    el.removeClass(activePanelClass);
                 },
 
                 /**
@@ -413,7 +416,11 @@ define([
             };
 
         $(function () {
-            var editForm = $('#edit_form');
+            var editForm = $('#edit_form'),
+                swatchVisualPanel = $('#swatch-visual-options-panel'),
+                swatchTextPanel = $('#swatch-text-options-panel'),
+                tableBody = $(),
+                activePanel = $();
 
             $('#frontend_input').bind('change', function () {
                 swatchProductAttributes.bindAttributeInputType();
@@ -429,30 +436,35 @@ define([
                 .collapsable()
                 .collapse('hide');
 
-            editForm.on('submit', function () {
-                var activePanel,
-                    swatchValues = [],
-                    swatchVisualPanel = $('#swatch-visual-options-panel'),
-                    swatchTextPanel = $('#swatch-text-options-panel');
+            editForm.on('beforeSubmit', function () {
+                var optionContainer, optionsValues;
 
-                activePanel = swatchTextPanel.is(':visible') ? swatchTextPanel : swatchVisualPanel;
+                activePanel = swatchTextPanel.hasClass(activePanelClass) ? swatchTextPanel : swatchVisualPanel;
+                optionContainer = activePanel.find('table tbody');
 
-                activePanel.find('table input')
-                    .each(function () {
-                        swatchValues.push(this.name + '=' + $(this).val());
-                    });
+                if (activePanel.hasClass(activePanelClass)) {
+                    optionsValues = $.map(
+                        optionContainer.find('tr'),
+                        function (row) {
+                            return $(row).find('input, select, textarea').serialize();
+                        }
+                    );
+                    $('<input>')
+                        .attr({
+                            type: 'hidden',
+                            name: 'serialized_options'
+                        })
+                        .val(JSON.stringify(optionsValues))
+                        .prependTo(editForm);
+                }
 
-                $('<input>').attr({
-                        type: 'hidden',
-                        name: 'serialized_swatch_values'
-                    })
-                    .val(JSON.stringify(swatchValues))
-                    .prependTo(editForm);
-
-                [swatchVisualPanel, swatchTextPanel].forEach(function (el) {
-                    $(el).find('table')
-                        .replaceWith($('<div>').text($.mage.__('Sending swatch values as package.')));
-                });
+                tableBody = optionContainer.detach();
+            });
+            editForm.on('afterValidate.error highlight.validate', function () {
+                if (activePanel.hasClass(activePanelClass)) {
+                    activePanel.find('table').append(tableBody);
+                    $('input[name="serialized_options"]').remove();
+                }
             });
         });
 

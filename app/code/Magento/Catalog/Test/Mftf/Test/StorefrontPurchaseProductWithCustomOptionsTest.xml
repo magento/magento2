@@ -104,12 +104,15 @@
         <see selector="{{CheckoutPaymentSection.productOptionsActiveByProductItemName($createProduct.name$)}}" userInput="Jan 1, 2018" stepKey="seeProductOptionDateAndTimeInput" />
         <see selector="{{CheckoutPaymentSection.productOptionsActiveByProductItemName($createProduct.name$)}}" userInput="1/1/18, 1:00 AM" stepKey="seeProductOptionDataInput" />
         <see selector="{{CheckoutPaymentSection.productOptionsActiveByProductItemName($createProduct.name$)}}" userInput="1:00 AM" stepKey="seeProductOptionTimeInput" />
-
+        <!--Select shipping method-->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <!--Select payment method-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <!-- Place Order -->
-
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
 
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
@@ -120,6 +123,7 @@
 
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
         <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
         <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
@@ -141,6 +145,7 @@
         <!-- Reorder and Checking the correctness of displayed custom options for user parameters on Order and correctness of displayed price Subtotal-->
 
         <click selector="{{OrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
+        <actionGroup ref="AdminCheckoutSelectCheckMoneyOrderBillingMethodActionGroup" stepKey="selectBillingMethod"/>
         <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="trySubmitOrder"/>
 
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionField.title}}" stepKey="seeAdminOrderProductOptionField1" />
