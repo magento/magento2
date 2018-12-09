@@ -29,7 +29,7 @@ class Identifier
     private $serializer;
 
     /**
-     * @var Identifier\Modifier[]
+     * @var Identifier\ModifierInterface[]
      */
     private $modifiers;
 
@@ -68,7 +68,7 @@ class Identifier
          * Add parameters appended through di
          */
         foreach ($this->modifiers as $modifier) {
-            if ($modifier instanceof Identifier\Modifier) {
+            if ($modifier instanceof Identifier\ModifierInterface) {
                 $data[] = $modifier->getData();
             }
         }
