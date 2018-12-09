@@ -8,7 +8,7 @@ namespace Magento\Framework\App\PageCache\Identifier;
 /**
  * Page Cache Identifier Modifier Interface
  */
-interface Modifier
+interface ModifierInterface
 {
     /**
      * @return string
