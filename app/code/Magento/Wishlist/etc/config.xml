@@ -10,6 +10,7 @@
         <wishlist>
             <general>
                 <active>1</active>
+                <show_in_sidebar>1</show_in_sidebar>
             </general>
             <email>
                 <email_identity>general</email_identity>
