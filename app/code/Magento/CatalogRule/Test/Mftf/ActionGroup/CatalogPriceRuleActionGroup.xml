@@ -80,6 +80,6 @@
         <fillField selector="{{AdminCatalogPriceRuleGridSection.filterByRuleName}}" userInput="{{ruleName}}" stepKey="filterByRuleName"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
         <click selector="{{AdminGridTableSection.row('1')}}" stepKey="clickEdit"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
