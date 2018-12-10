@@ -10,5 +10,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminTaxRuleFormSection">
         <element name="taxIdentifier" type="input" selector="input.admin__control-text admin__action-multiselect-search"/>
+        <element name="taxRateSearch" type="input" selector="input[data-role='advanced-select-text']"/>
+        <element name="fieldTaxRate" type="block" selector="div.field-tax_rate"/>
     </section>
 </sections>
