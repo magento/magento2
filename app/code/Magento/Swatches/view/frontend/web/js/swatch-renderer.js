@@ -1223,7 +1223,7 @@ define([
                 }
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
-                if (gallery === undefined) {
+                if (typeof gallery === undefined) {
                     context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
                         loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
                         loadedGallery.updateData(imagesToUpdate);
@@ -1241,7 +1241,7 @@ define([
                     });
                 }
 
-                if (gallery === undefined) {
+                if (typeof gallery === undefined) {
                     context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
                         loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
                         loadedGallery.first();
