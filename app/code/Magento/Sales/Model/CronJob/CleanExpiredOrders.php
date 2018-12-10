@@ -3,11 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\CronJob;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Model\StoresConfig;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class that provides functionality of cleaning expired quotes by cron
+ */
 class CleanExpiredOrders
 {
     /**
@@ -16,20 +24,28 @@ class CleanExpiredOrders
     protected $storesConfig;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
+     * @var CollectionFactory
      */
     protected $orderCollectionFactory;
 
     /**
+     * @var OrderManagementInterface
+     */
+    private $orderManagement;
+
+    /**
      * @param StoresConfig $storesConfig
-     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory
+     * @param CollectionFactory $collectionFactory
+     * @param OrderManagementInterface|null $orderManagement
      */
     public function __construct(
         StoresConfig $storesConfig,
-        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        OrderManagementInterface $orderManagement = null
     ) {
         $this->storesConfig = $storesConfig;
         $this->orderCollectionFactory = $collectionFactory;
+        $this->orderManagement = $orderManagement ?: ObjectManager::getInstance()->get(OrderManagementInterface::class);
     }
 
     /**
@@ -48,8 +64,10 @@ class CleanExpiredOrders
             $orders->getSelect()->where(
                 new \Zend_Db_Expr('TIME_TO_SEC(TIMEDIFF(CURRENT_TIMESTAMP, `updated_at`)) >= ' . $lifetime * 60)
             );
-            $orders->walk('cancel');
-            $orders->walk('save');
+
+            foreach ($orders->getAllIds() as $entityId) {
+                $this->orderManagement->cancel((int) $entityId);
+            }
         }
     }
 }
