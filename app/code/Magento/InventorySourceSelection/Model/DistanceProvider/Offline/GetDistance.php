@@ -15,7 +15,7 @@ use Magento\InventorySourceSelectionApi\Model\Request\LatLngRequestInterface;
  */
 class GetDistance implements GetDistanceInterface
 {
-    private const EARTH_RADIUS = 6371000.0;
+    private const EARTH_RADIUS_KM = 6371000.0;
 
     /**
      * @inheritdoc
@@ -33,6 +33,6 @@ class GetDistance implements GetDistanceInterface
         $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
                 cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
 
-        return $angle * (float) self::EARTH_RADIUS;
+        return $angle * (float) self::EARTH_RADIUS_KM;
     }
 }

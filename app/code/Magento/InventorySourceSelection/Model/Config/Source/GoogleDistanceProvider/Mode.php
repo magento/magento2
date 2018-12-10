@@ -11,9 +11,9 @@ use Magento\Framework\Option\ArrayInterface;
 
 class Mode implements ArrayInterface
 {
-    const MODE_DRIVING = 'driving';
-    const MODE_WALKING = 'walking';
-    const MODE_BICYCLING = 'bicycling';
+    public const MODE_DRIVING = 'driving';
+    public const MODE_WALKING = 'walking';
+    public const MODE_BICYCLING = 'bicycling';
 
     /**
      * Options getter

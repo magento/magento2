@@ -15,7 +15,7 @@ use Magento\InventorySourceSelectionApi\Api\GetGeoReferenceProviderCodeInterface
  */
 class GetGeoReferenceProviderCode implements GetGeoReferenceProviderCodeInterface
 {
-    public const XML_PATH_DEFAULT_DISTANCE_PROVIDER = 'cataloginventory/source_selection_distance_based/provider';
+    private const XML_PATH_DEFAULT_DISTANCE_PROVIDER = 'cataloginventory/source_selection_distance_based/provider';
 
     /**
      * @var ScopeConfigInterface

@@ -9,14 +9,13 @@ namespace Magento\InventorySourceSelection\Model\DistanceProvider\GoogleMap;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Get Google API KEY
  */
 class GetApiKey
 {
-    const XML_PATH_API_KEY = 'cataloginventory/source_selection_distance_based_google/api_key';
+    private const XML_PATH_API_KEY = 'cataloginventory/source_selection_distance_based_google/api_key';
 
     /**
      * @var ScopeConfigInterface

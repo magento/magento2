@@ -20,7 +20,7 @@ use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
  */
 class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterface
 {
-    public const GOOGLE_ENDPOINT = 'https://maps.google.com/maps/api/geocode/json';
+    private const GOOGLE_ENDPOINT = 'https://maps.google.com/maps/api/geocode/json';
 
     /**
      * @var array
