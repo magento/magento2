@@ -92,7 +92,8 @@ class Products implements ResolverInterface
             'items'       => $searchResult->getProductsSearchResult(),
             'page_info'   => [
                 'page_size'    => $searchCriteria->getPageSize(),
-                'current_page' => $currentPage
+                'current_page' => $currentPage,
+                'total_pages' => $maxPages
             ]
         ];
         return $data;

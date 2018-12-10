@@ -34,6 +34,7 @@ class GroupedTest extends AbstractModifierTest
     const LINKED_PRODUCT_NAME = 'linked';
     const LINKED_PRODUCT_QTY = '0';
     const LINKED_PRODUCT_POSITION = 1;
+    const LINKED_PRODUCT_POSITION_CALCULATED = 1;
     const LINKED_PRODUCT_PRICE = '1';
 
     /**
@@ -212,6 +213,7 @@ class GroupedTest extends AbstractModifierTest
                             'price' => null,
                             'qty' => self::LINKED_PRODUCT_QTY,
                             'position' => self::LINKED_PRODUCT_POSITION,
+                            'positionCalculated' => self::LINKED_PRODUCT_POSITION_CALCULATED,
                             'thumbnail' => null,
                             'type_id' => null,
                             'status' => null,
