@@ -155,6 +155,7 @@ class DataFixture
      * @param string $fixture
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private function getModulePath(string $fixture)
     {
