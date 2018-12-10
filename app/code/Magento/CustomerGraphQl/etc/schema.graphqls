@@ -16,25 +16,23 @@ type Mutation {
 }
 
 input CustomerAddressInput {
-    region: CustomerAddressRegionInput @doc(description: "An object containing the region name, region code, and region ID")
-    region_id: Int @doc(description: "A number that uniquely identifies the state, province, or other area")
-    country_id: CountryCodeEnum @doc(description: "The customer's country")
-    street: [String] @doc(description: "An array of strings that define the street number and name")
-    company: String @doc(description: "The customer's company")
-    telephone: String @doc(description: "The telephone number")
-    fax: String @doc(description: "The fax number")
-    postcode: String @doc(description: "The customer's ZIP or postal code")
-    city: String @doc(description: "The city or town")
     firstname: String @doc(description: "The first name of the person associated with the shipping/billing address")
     lastname: String @doc(description: "The family name of the person associated with the shipping/billing address")
+    company: String @doc(description: "The customer's company")
+    telephone: String @doc(description: "The telephone number")
+    street: [String] @doc(description: "An array of strings that define the street number and name")
+    city: String @doc(description: "The city or town")
+    region: CustomerAddressRegionInput @doc(description: "An object containing the region name, region code, and region ID")
+    postcode: String @doc(description: "The customer's ZIP or postal code")
+    country_id: CountryCodeEnum @doc(description: "The customer's country")
+    default_shipping: Boolean @doc(description: "Indicates whether the address is the default shipping address")
+    default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address")
+    fax: String @doc(description: "The fax number")
     middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address")
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III")
     vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
-    default_shipping: Boolean @doc(description: "Indicates whether the address is the default shipping address")
-    default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address")
     custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Address custom attributes")
-    extension_attributes: [CustomerAddressAttributeInput] @doc(description: "Address extension attributes")
 }
 
 input CustomerAddressRegionInput @doc(description: "CustomerAddressRegionInput defines the customer's state or province") {

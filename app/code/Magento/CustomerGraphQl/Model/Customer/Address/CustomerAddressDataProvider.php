@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Customer;
+namespace Magento\CustomerGraphQl\Model\Customer\Address;
 
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -19,7 +19,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Customer Address field data provider, used for GraphQL request processing.
  */
-class AddressDataProvider
+class CustomerAddressDataProvider
 {
     /**
      * @var ServiceOutputProcessor
@@ -72,10 +72,10 @@ class AddressDataProvider
         $this->customerResourceModel->load($customerModel, $addressObject->getCustomerId());
         $address[CustomerInterface::DEFAULT_BILLING] =
             ($customerModel->getDefaultBillingAddress()
-                && $addressObject->getId() == $customerModel->getDefaultBillingAddress()->getId()) ? true : false;
+                && $addressObject->getId() == $customerModel->getDefaultBillingAddress()->getId());
         $address[CustomerInterface::DEFAULT_SHIPPING] =
             ($customerModel->getDefaultShippingAddress()
-                && $addressObject->getId() == $customerModel->getDefaultShippingAddress()->getId()) ? true : false;
+                && $addressObject->getId() == $customerModel->getDefaultShippingAddress()->getId());
         return $address;
     }
 
@@ -85,7 +85,7 @@ class AddressDataProvider
      * @param AddressInterface $addressObject
      * @return array
      */
-    public function processCustomerAddress(AddressInterface $addressObject) : array
+    public function getAddressData(AddressInterface $addressObject): array
     {
         $address = $this->serviceOutputProcessor->process(
             $addressObject,

@@ -7,29 +7,45 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\TestFramework\ObjectManager;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 class CreateCustomerAddressTest extends GraphQlAbstract
 {
     /**
-     * Verify customers with valid credentials create new address
-     *
+     * @var CustomerTokenServiceInterface
+     */
+    private $customerTokenService;
+
+    /**
+     * @var AddressRepositoryInterface
+     */
+    private $addressRepository;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
+        $this->addressRepository = Bootstrap::getObjectManager()->get(AddressRepositoryInterface::class);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testAddCustomerAddressWithValidCredentials()
+    public function testCreateCustomerAddress()
     {
+        $customerId = 1;
         $newAddress = [
             'region' => [
-                'region' => 'Alaska',
+                'region' => 'Arizona',
                 'region_id' => 4,
-                'region_code' => 'AK'
+                'region_code' => 'AZ'
             ],
-            'region_id' => 4,
             'country_id' => 'US',
             'street' => ['Line 1 Street', 'Line 2'],
             'company' => 'Company name',
@@ -46,8 +62,7 @@ class CreateCustomerAddressTest extends GraphQlAbstract
             'default_shipping' => true,
             'default_billing' => false
         ];
-        $defaultShippingText = $newAddress['default_shipping'] ? "true": "false";
-        $defaultBillingText = $newAddress['default_billing'] ? "true": "false";
+
         $mutation
             = <<<MUTATION
 mutation {
@@ -57,7 +72,6 @@ mutation {
         region_id: {$newAddress['region']['region_id']}
         region_code: "{$newAddress['region']['region_code']}"
     }
-    region_id: {$newAddress['region_id']}
     country_id: {$newAddress['country_id']}
     street: ["{$newAddress['street'][0]}","{$newAddress['street'][1]}"]
     company: "{$newAddress['company']}"
@@ -71,8 +85,8 @@ mutation {
     prefix: "{$newAddress['prefix']}"
     suffix: "{$newAddress['suffix']}"
     vat_id: "{$newAddress['vat_id']}"
-    default_shipping: {$defaultShippingText}
-    default_billing: {$defaultBillingText}
+    default_shipping: true
+    default_billing: false
   }) {
     id
     customer_id
@@ -81,7 +95,6 @@ mutation {
       region_id
       region_code
     }
-    region_id
     country_id
     street
     company
@@ -100,36 +113,27 @@ mutation {
   }
 }
 MUTATION;
+
         $userName = 'customer@example.com';
         $password = 'password';
-        /** @var CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = ObjectManager::getInstance()->get(CustomerTokenServiceInterface::class);
-        $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        /** @var CustomerRepositoryInterface $customerRepository */
-        $customerRepository = ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
-        $customer = $customerRepository->get($userName);
-        $response = $this->graphQlQuery($mutation, [], '', $headerMap);
+
+        $response = $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('createCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['createCustomerAddress']);
-        $this->assertEquals($customer->getId(), $response['createCustomerAddress']['customer_id']);
+        $this->assertEquals($customerId, $response['createCustomerAddress']['customer_id']);
         $this->assertArrayHasKey('id', $response['createCustomerAddress']);
-        /** @var AddressRepositoryInterface $addressRepository */
-        $addressRepository = ObjectManager::getInstance()->get(AddressRepositoryInterface::class);
-        $addressId = $response['createCustomerAddress']['id'];
-        $address = $addressRepository->getById($addressId);
+
+        $address = $this->addressRepository->getById($response['createCustomerAddress']['id']);
         $this->assertEquals($address->getId(), $response['createCustomerAddress']['id']);
         $this->assertCustomerAddressesFields($address, $response['createCustomerAddress']);
         $this->assertCustomerAddressesFields($address, $newAddress);
     }
 
     /**
-     * Verify customers without credentials create new address
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current customer isn't authorized.
      */
-    public function testAddCustomerAddressWithoutCredentials()
+    public function testCreateCustomerAddressIfUserIsNotAuthorized()
     {
         $mutation
             = <<<MUTATION
@@ -142,22 +146,18 @@ mutation{
     telephone: "123456789"
     street: ["Line 1", "Line 2"]
     city: "Test City"
-    region_id: 1
+    region: {
+        region_id: 1
+    }
     country_id: US
     postcode: "9999"
     default_shipping: true
     default_billing: false
   }) {
     id
-    customer_id
-    firstname
-    lastname
   }
 }
 MUTATION;
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors:' . ' ' .
-            'Current customer does not have access to the resource "customer_address"');
         $this->graphQlQuery($mutation);
     }
 
@@ -166,15 +166,18 @@ MUTATION;
      * with missing required Firstname attribute
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameters are missing: firstname
      */
-    public function testAddCustomerAddressWithMissingAttributeWithValidCredentials()
+    public function testCreateCustomerAddressWithMissingAttribute()
     {
         $mutation
             = <<<MUTATION
 mutation {
   createCustomerAddress(input: {
-    region_id: 4
+    region: {
+        region_id: 1
+    }
     country_id: US
     street: ["Line 1 Street","Line 2"]
     company: "Company name"
@@ -186,54 +189,25 @@ mutation {
     lastname: "Phillis"
   }) {
     id
-    customer_id
-    region {
-      region
-      region_id
-      region_code
-    }
-    region_id
-    country_id
-    street
-    company
-    telephone
-    fax
-    postcode
-    city
-    firstname
-    lastname
-    middlename
-    prefix
-    suffix
-    vat_id
-    default_shipping
-    default_billing
   }
 }
 MUTATION;
+
         $userName = 'customer@example.com';
         $password = 'password';
-        /** @var CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = ObjectManager::getInstance()->get(CustomerTokenServiceInterface::class);
-        $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors:' . ' ' .
-            'Required parameter firstname is missing');
-        $this->graphQlQuery($mutation, [], '', $headerMap);
+        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
      * Verify the fields for Customer address
      *
-     * @param \Magento\Customer\Api\Data\AddressInterface $address
+     * @param AddressInterface $address
      * @param array $actualResponse
      */
-    private function assertCustomerAddressesFields($address, $actualResponse)
+    private function assertCustomerAddressesFields(AddressInterface $address, array $actualResponse): void
     {
         /** @var  $addresses */
         $assertionMap = [
-            ['response_field' => 'region_id', 'expected_value' => $address->getRegionId()],
             ['response_field' => 'country_id', 'expected_value' => $address->getCountryId()],
             ['response_field' => 'street', 'expected_value' => $address->getStreet()],
             ['response_field' => 'company', 'expected_value' => $address->getCompany()],
@@ -258,5 +232,16 @@ MUTATION;
             ['response_field' => 'region_id', 'expected_value' => $address->getRegion()->getRegionId()]
         ];
         $this->assertResponseFields($actualResponse['region'], $assertionRegionMap);
+    }
+
+    /**
+     * @param string $email
+     * @param string $password
+     * @return array
+     */
+    private function getCustomerAuthHeaders(string $email, string $password): array
+    {
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
+        return ['Authorization' => 'Bearer ' . $customerToken];
     }
 }

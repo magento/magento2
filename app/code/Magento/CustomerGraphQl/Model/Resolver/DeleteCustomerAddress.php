@@ -8,14 +8,13 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\Data\AddressInterface;
+use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddressForUser;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Customers address delete, used for GraphQL request processing.
@@ -33,15 +32,23 @@ class DeleteCustomerAddress implements ResolverInterface
     private $addressRepository;
 
     /**
+     * @var GetCustomerAddressForUser
+     */
+    private $getCustomerAddressForUser;
+
+    /**
      * @param CheckCustomerAccount $checkCustomerAccount
      * @param AddressRepositoryInterface $addressRepository
+     * @param GetCustomerAddressForUser $getCustomerAddressForUser
      */
     public function __construct(
         CheckCustomerAccount $checkCustomerAccount,
-        AddressRepositoryInterface $addressRepository
+        AddressRepositoryInterface $addressRepository,
+        GetCustomerAddressForUser $getCustomerAddressForUser
     ) {
         $this->checkCustomerAccount = $checkCustomerAccount;
         $this->addressRepository = $addressRepository;
+        $this->getCustomerAddressForUser = $getCustomerAddressForUser;
     }
 
     /**
@@ -59,11 +66,11 @@ class DeleteCustomerAddress implements ResolverInterface
 
         $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
 
-        return $this->processCustomerAddressDelete($currentUserId, $args['id']);
+        return $this->deleteCustomerAddress((int)$currentUserId, (int)$args['id']);
     }
 
     /**
-     * Process customer address delete
+     * Delete customer address
      *
      * @param int $customerId
      * @param int $addressId
@@ -71,21 +78,9 @@ class DeleteCustomerAddress implements ResolverInterface
      * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
      */
-    private function processCustomerAddressDelete($customerId, $addressId)
+    private function deleteCustomerAddress($customerId, $addressId)
     {
-        try {
-            /** @var AddressInterface $address */
-            $address = $this->addressRepository->getById($addressId);
-        } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(
-                __('Address id %1 does not exist.', [$addressId])
-            );
-        }
-        if ($customerId != $address->getCustomerId()) {
-            throw new GraphQlAuthorizationException(
-                __('Current customer does not have permission to delete address id %1', [$addressId])
-            );
-        }
+        $address = $this->getCustomerAddressForUser->execute($addressId, $customerId);
         if ($address->isDefaultBilling()) {
             throw new GraphQlAuthorizationException(
                 __('Customer Address %1 is set as default billing address and can not be deleted', [$addressId])

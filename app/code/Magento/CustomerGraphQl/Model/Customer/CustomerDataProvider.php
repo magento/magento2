@@ -102,7 +102,7 @@ class CustomerDataProvider
             CustomerRepositoryInterface::class,
             'get'
         );
-        $customerData['addresses'] = $this->curateAddressData($customer['addresses']);
+        $customerData['addresses'] = $this->curateAddressData($customerData['addresses']);
         if (isset($customerData['extension_attributes'])) {
             $customerData = array_merge($customerData, $customerData['extension_attributes']);
         }

@@ -9,31 +9,55 @@ namespace Magento\GraphQl\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\TestFramework\ObjectManager;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use PHPUnit\Framework\TestResult;
 
 class UpdateCustomerAddressTest extends GraphQlAbstract
 {
     /**
-     * Verify customers with valid credentials update address
-     *
+     * @var CustomerTokenServiceInterface
+     */
+    private $customerTokenService;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
+     * @var AddressRepositoryInterface
+     */
+    private $addressRepository;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
+        $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
+        $this->addressRepository = Bootstrap::getObjectManager()->get(AddressRepositoryInterface::class);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testUpdateCustomerAddressWithValidCredentials()
+    public function testUpdateCustomerAddress()
     {
         $userName = 'customer@example.com';
         $password = 'password';
+        $customerId = 1;
+        $addressId = 1;
+
         $updateAddress = [
             'region' => [
                 'region' => 'Alaska',
-                'region_id' => 4,
+                'region_id' => 2,
                 'region_code' => 'AK'
             ],
-            'region_id' => 4,
             'country_id' => 'US',
             'street' => ['Line 1 Street', 'Line 2'],
             'company' => 'Company Name',
@@ -52,14 +76,7 @@ class UpdateCustomerAddressTest extends GraphQlAbstract
         ];
         $defaultShippingText = $updateAddress['default_shipping'] ? "true": "false";
         $defaultBillingText = $updateAddress['default_billing'] ? "true": "false";
-        /** @var CustomerRepositoryInterface $customerRepository */
-        $customerRepository = ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
-        $customer = $customerRepository->get($userName);
-        /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
-        $addresses = $customer->getAddresses();
-        /** @var \Magento\Customer\Api\Data\AddressInterface $address */
-        $address = current($addresses);
-        $addressId = $address->getId();
+
         $mutation
             = <<<MUTATION
 mutation {
@@ -69,7 +86,6 @@ mutation {
         region_id: {$updateAddress['region']['region_id']}
         region_code: "{$updateAddress['region']['region_code']}"
     }
-    region_id: {$updateAddress['region_id']}
     country_id: {$updateAddress['country_id']}
     street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
     company: "{$updateAddress['company']}"
@@ -93,7 +109,6 @@ mutation {
       region_id
       region_code
     }
-    region_id
     country_id
     street
     company
@@ -112,60 +127,37 @@ mutation {
   }
 }
 MUTATION;
-        /** @var CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = ObjectManager::getInstance()->get(CustomerTokenServiceInterface::class);
-        $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        /** @var CustomerRepositoryInterface $customerRepository */
-        $customerRepository = ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
-        $customer = $customerRepository->get($userName);
-        $response = $this->graphQlQuery($mutation, [], '', $headerMap);
+
+        $response = $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('updateCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['updateCustomerAddress']);
-        $this->assertEquals($customer->getId(), $response['updateCustomerAddress']['customer_id']);
+        $this->assertEquals($customerId, $response['updateCustomerAddress']['customer_id']);
         $this->assertArrayHasKey('id', $response['updateCustomerAddress']);
-        /** @var AddressRepositoryInterface $addressRepository */
-        $addressRepository = ObjectManager::getInstance()->get(AddressRepositoryInterface::class);
-        $address = $addressRepository->getById($addressId);
+
+        $address = $this->addressRepository->getById($addressId);
         $this->assertEquals($address->getId(), $response['updateCustomerAddress']['id']);
         $this->assertCustomerAddressesFields($address, $response['updateCustomerAddress']);
         $this->assertCustomerAddressesFields($address, $updateAddress);
     }
 
     /**
-     * Verify customers without credentials update address
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current customer isn't authorized.
      */
-    public function testUpdateCustomerAddressWithoutCredentials()
+    public function testUpdateCustomerAddressIfUserIsNotAuthorized()
     {
-        $userName = 'customer@example.com';
-        /** @var CustomerRepositoryInterface $customerRepository */
-        $customerRepository = ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
-        $customer = $customerRepository->get($userName);
-        /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
-        $addresses = $customer->getAddresses();
-        /** @var \Magento\Customer\Api\Data\AddressInterface $address */
-        $address = current($addresses);
-        $addressId = $address->getId();
+        $addressId = 1;
         $mutation
             = <<<MUTATION
 mutation {
   updateCustomerAddress(id:{$addressId}, input: {
-  	city: "New City"
+    city: "New City"
     postcode: "5555"
   }) {
     id
-    customer_id
-    postcode
   }
 }
 MUTATION;
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors:' . ' ' .
-            'Current customer does not have access to the resource "customer_address"');
         $this->graphQlQuery($mutation);
     }
 
@@ -175,20 +167,15 @@ MUTATION;
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameters are missing: firstname
      */
-    public function testUpdateCustomerAddressWithMissingAttributeWithValidCredentials()
+    public function testUpdateCustomerAddressWithMissingAttribute()
     {
         $userName = 'customer@example.com';
         $password = 'password';
-        /** @var CustomerRepositoryInterface $customerRepository */
-        $customerRepository = ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
-        $customer = $customerRepository->get($userName);
-        /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
-        $addresses = $customer->getAddresses();
-        /** @var \Magento\Customer\Api\Data\AddressInterface $address */
-        $address = current($addresses);
-        $addressId = $address->getId();
+        $addressId = 1;
+
         $mutation
             = <<<MUTATION
 mutation {
@@ -197,52 +184,22 @@ mutation {
     lastname: "Phillis"
   }) {
     id
-    customer_id
-    region {
-      region
-      region_id
-      region_code
-    }
-    region_id
-    country_id
-    street
-    company
-    telephone
-    fax
-    postcode
-    city
-    firstname
-    lastname
-    middlename
-    prefix
-    suffix
-    vat_id
-    default_shipping
-    default_billing
   }
 }
 MUTATION;
-        /** @var CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = ObjectManager::getInstance()->get(CustomerTokenServiceInterface::class);
-        $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors:' . ' ' .
-            'Required parameter firstname is missing');
-        $this->graphQlQuery($mutation, [], '', $headerMap);
+        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
      * Verify the fields for Customer address
      *
-     * @param \Magento\Customer\Api\Data\AddressInterface $address
+     * @param AddressInterface $address
      * @param array $actualResponse
      */
-    private function assertCustomerAddressesFields($address, $actualResponse)
+    private function assertCustomerAddressesFields(AddressInterface $address, $actualResponse): void
     {
         /** @var  $addresses */
         $assertionMap = [
-            ['response_field' => 'region_id', 'expected_value' => $address->getRegionId()],
             ['response_field' => 'country_id', 'expected_value' => $address->getCountryId()],
             ['response_field' => 'street', 'expected_value' => $address->getStreet()],
             ['response_field' => 'company', 'expected_value' => $address->getCompany()],
@@ -261,11 +218,23 @@ MUTATION;
         ];
         $this->assertResponseFields($actualResponse, $assertionMap);
         $this->assertTrue(is_array([$actualResponse['region']]), "region field must be of an array type.");
-        $assertionRegionMap = [
-            ['response_field' => 'region', 'expected_value' => $address->getRegion()->getRegion()],
-            ['response_field' => 'region_code', 'expected_value' => $address->getRegion()->getRegionCode()],
-            ['response_field' => 'region_id', 'expected_value' => $address->getRegion()->getRegionId()]
-        ];
-        $this->assertResponseFields($actualResponse['region'], $assertionRegionMap);
+        // https://github.com/magento/graphql-ce/issues/270
+//        $assertionRegionMap = [
+//            ['response_field' => 'region', 'expected_value' => $address->getRegion()->getRegion()],
+//            ['response_field' => 'region_code', 'expected_value' => $address->getRegion()->getRegionCode()],
+//            ['response_field' => 'region_id', 'expected_value' => $address->getRegion()->getRegionId()]
+//        ];
+//        $this->assertResponseFields($actualResponse['region'], $assertionRegionMap);
+    }
+
+    /**
+     * @param string $email
+     * @param string $password
+     * @return array
+     */
+    private function getCustomerAuthHeaders(string $email, string $password): array
+    {
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
+        return ['Authorization' => 'Bearer ' . $customerToken];
     }
 }
