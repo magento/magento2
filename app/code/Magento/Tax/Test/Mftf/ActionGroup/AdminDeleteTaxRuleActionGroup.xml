@@ -13,6 +13,7 @@
             <argument name="taxRuleCode" type="string" />
         </arguments>
         <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleGridPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1" />
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters"/>
         <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="{{taxRuleCode}}" stepKey="fillTaxRuleCode"/>
         <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch"/>

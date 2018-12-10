@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateTaxRuleWithZipRange">
+    <test name="AdminCreateTaxRuleWithZipRangeTest">
         <annotations>
             <stories value="Create tax rule"/>
             <title value="Create tax rule, with zip range"/>
@@ -41,8 +41,9 @@
         </after>
 
         <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
-        <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAddNewTaxRuleButton"/>
         <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
+        <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAddNewTaxRuleButton"/>
+        <waitForPageLoad stepKey="waitForTaxRuleIndex2"/>
 
         <!-- Create a tax rule with new tax classes and tax rate -->
         <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
