@@ -27,6 +27,12 @@
         <element name="userPerCustomer" type="input" selector="//input[@name='uses_per_customer']"/>
         <element name="priority" type="input" selector="//*[@name='sort_order']"/>
 
+        <!-- Conditions sub-form -->
+        <element name="conditionsHeader" type="button" selector="div[data-index='conditions']" timeout="30"/>
+        <element name="conditionsHeaderOpen" type="button" selector="div[data-index='conditions'] div[data-state-collapsible='open']" timeout="30"/>
+        <element name="conditionsValue" type="input" selector=".rule-param-edit input"/>
+        <element name="conditionsOperator" type="select" selector=".rule-param-edit select"/>
+
         <!-- Actions sub-form -->
         <element name="actionsTab" type="text" selector="//div[@data-index='actions']//span[contains(.,'Actions')][1]"/>
         <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
