@@ -276,4 +276,41 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 
+    <!--Create a Simple Product-->
+    <actionGroup name="createSimpleProductAndAddToWebsite">
+        <arguments>
+            <argument name="product"/>
+            <argument name="website" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
+        <waitForPageLoad stepKey="waitForProductGrid"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <fillField userInput="{{product.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
+        <fillField userInput="{{product.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSKU"/>
+        <fillField userInput="{{product.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice"/>
+        <fillField userInput="{{product.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillProductQuantity"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsites"/>
+        <click selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForProductPageSave"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+    </actionGroup>
+
+    <actionGroup name="CreatedProductConnectToWebsite">
+        <arguments>
+            <argument name="website"/>
+            <argument name="product"/>
+        </arguments>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductsList"/>
+        <click stepKey="openProduct" selector="{{AdminProductGridActionSection.productName(product.name)}}"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openWebsitesList"/>
+        <waitForPageLoad stepKey="waitForWebsitesList"/>
+        <click selector="{{ProductInWebsitesSection.website(website.name)}}" stepKey="SelectWebsite"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
+        <waitForPageLoad stepKey="waitForSave"/>
+    </actionGroup>
 </actionGroups>
