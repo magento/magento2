@@ -52,7 +52,7 @@
         <see selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkState"/>
         <scrollTo selector="{{CheckoutCartSummarySection.postcode}}" stepKey="scrollToPostCodeField"/>
         <grabValueFrom  selector="{{CheckoutCartSummarySection.postcode}}" stepKey="grabTextPostCode"/>
-        <assertEquals message="pass" stepKey="checkCustomerPostcode">
+        <assertEquals message="Customer postcode is invalid" stepKey="checkCustomerPostcode">
             <expectedResult type="string">{{US_Address_CA.postcode}}</expectedResult>
             <actualResult type="variable">grabTextPostCode</actualResult>
         </assertEquals>
