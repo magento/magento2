@@ -162,7 +162,6 @@ define([
                 data[elementName] = elementValue;
             }
 
-
             return data;
         },
 
