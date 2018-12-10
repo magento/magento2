@@ -58,7 +58,7 @@ class ConfigurableAttributeData
             $optionId = $attributeOption['value_index'];
             $attributeOptionsData[] = [
                 'id' => $optionId,
-                'label' => $attributeOption['label'],
+                'label' => htmlspecialchars_decode($attributeOption['label']),
                 'products' => isset($config[$attribute->getAttributeId()][$optionId])
                     ? $config[$attribute->getAttributeId()][$optionId]
                     : [],
