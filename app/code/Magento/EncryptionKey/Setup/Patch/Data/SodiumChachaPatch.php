@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\EncryptionKey\Setup\Patch\Data;
 
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Migrate encrypted configuration values to the latest cipher
@@ -45,20 +46,20 @@ class SodiumChachaPatch implements DataPatchInterface
      * @param \Magento\Config\Model\Config\Structure\Proxy $structure
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\App\State $state
-     * @param \Magento\Framework\Config\ScopeInterface $scope
+     * @param \Magento\Framework\Config\ScopeInterface|null $scope
      */
     public function __construct(
         \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         \Magento\Config\Model\Config\Structure\Proxy $structure,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\App\State $state,
-        \Magento\Framework\Config\ScopeInterface $scope
+        \Magento\Framework\Config\ScopeInterface $scope = null
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->structure = $structure;
         $this->encryptor = $encryptor;
         $this->state = $state;
-        $this->scope = $scope;
+        $this->scope = $scope ?? ObjectManager::getInstance()->get(\Magento\Framework\Config\ScopeInterface::class);
     }
 
     /**
