@@ -38,6 +38,7 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductPage">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupPrice"/>
