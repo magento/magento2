@@ -14,7 +14,7 @@
             <stories value="Create/configure swatches and check the display characters length"/>
             <title value="Admin can create product attribute with text swatch and view the display characters  in full"/>
             <description value="Admin can create product attribute with text swatch and check the display characters in full"/>
-            <severity value="CRITICAL"/>
+            <severity value="AVERAGE"/>
             <testCaseId value="MC-5518"/>
             <group value="Swatches"/>
         </annotations>
@@ -24,6 +24,7 @@
         <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('2')}}" userInput="1234567890123456789012341234" stepKey="fillSwatch2" after="clickAddSwatch2"/>
         <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('2')}}" userInput="1234567890123456789012341234GreenD" stepKey="fillDescription2" after="fillSwatch2"/>
 
+        <!-- Create swatch #4 -->
         <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch3" after="fillDescription2"/>
         <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('3')}}" userInput="123456789012345678901" stepKey="fillSwatch3" after="clickAddSwatch3"/>
         <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('3')}}" userInput="123456789012345678901BrownD" stepKey="fillDescription3" after="fillSwatch3"/>
@@ -48,7 +49,7 @@
         <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeInLayeredNav3"/>
         <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandAttribute3"/>
         <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '3')}}" stepKey="filterBySwatch3"/>
-        
+
         <!-- Go to the category page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage4"/>
         <waitForPageLoad stepKey="waitForCategoryPage4"/>
