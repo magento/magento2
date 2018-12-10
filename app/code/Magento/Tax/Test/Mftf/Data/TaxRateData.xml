@@ -18,6 +18,27 @@
         <data key="zip_is_range">0</data>
         <data key="rate">10</data>
     </entity>
+    <entity name="US_CA_Rate_1" type="taxRate">
+        <data key="id">1</data>
+        <data key="code">US-CA-*-Rate 1</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">8.2500</data>
+    </entity>
+    <entity name="US_NY_Rate_1" type="taxRate">
+        <data key="code">US-NY-*-Rate 1</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">8.3750</data>
+        <data key="id">2</data>
+    </entity>
+    <entity name="taxRate_US_NY_8_1" type="taxRate">
+        <data key="code" unique="suffix">US-NY-*-</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_region_id">43</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">8.1</data>
+    </entity>
     <entity name="taxRateCustomRateUS" type="taxRate">
         <data key="code" unique="suffix">Tax Rate </data>
         <data key="tax_country_id">US</data>
