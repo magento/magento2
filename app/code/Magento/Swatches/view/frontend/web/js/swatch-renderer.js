@@ -1223,6 +1223,7 @@ define([
                 }
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
+
                 if (typeof gallery === undefined) {
                     context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
                         loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
