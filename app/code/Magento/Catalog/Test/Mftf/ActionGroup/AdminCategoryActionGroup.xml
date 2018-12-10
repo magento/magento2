@@ -87,4 +87,11 @@
         <see selector="{{AdminCategoryProductsGridSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
         <see selector="{{AdminCategoryProductsGridSection.priceColumn}}" userInput="{{product.price}}" stepKey="seeProductPriceInGrid"/>
     </actionGroup>
+
+    <!-- Save category form -->
+    <actionGroup name="saveCategoryForm">
+        <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="assertSuccess"/>
+    </actionGroup>
 </actionGroups>
