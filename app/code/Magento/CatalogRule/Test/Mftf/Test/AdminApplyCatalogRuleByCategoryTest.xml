@@ -17,7 +17,7 @@
             <testCaseId value="MC-74"/>
             <group value="CatalogRule"/>
             <skip>
-                <issueId value="DEVOPS-3618"/>
+                <issueId value="MC-5777"/>
             </skip>
         </annotations>
         <before>
