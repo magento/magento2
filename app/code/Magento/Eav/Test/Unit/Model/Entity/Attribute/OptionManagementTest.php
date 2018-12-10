@@ -23,14 +23,22 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
      */
     protected $resourceModelMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $getAttributeOptionIdMock;
+
     protected function setUp()
     {
         $this->attributeRepositoryMock = $this->createMock(\Magento\Eav\Model\AttributeRepository::class);
         $this->resourceModelMock =
             $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class);
+        $this->getAttributeOptionIdMock =
+            $this->createMock(\Magento\Eav\Model\ResourceModel\GetAttributeOptionId::class);
         $this->model = new \Magento\Eav\Model\Entity\Attribute\OptionManagement(
             $this->attributeRepositoryMock,
-            $this->resourceModelMock
+            $this->resourceModelMock,
+            $this->getAttributeOptionIdMock
         );
     }
 
@@ -54,7 +62,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
             false,
             false,
             true,
-            ['usesSource', 'setDefault', 'setOption']
+            ['usesSource', 'setDefault', 'setOption', 'getAttributeId']
         );
         $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionLabelInterface::class);
         $option =
@@ -69,9 +77,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
             ],
             ];
 
-        $this->attributeRepositoryMock->expects($this->at(0))->method('get')->with($entityType, $attributeCode)
-            ->willReturn($attributeMock);
-        $this->attributeRepositoryMock->expects($this->at(1))->method('get')->with('catalog_product', null)
+        $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
             ->willReturn($attributeMock);
         $attributeMock->expects($this->once())->method('usesSource')->willReturn(true);
         $optionMock->expects($this->once())->method('getLabel')->willReturn('optionLabel');
@@ -82,8 +88,14 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $optionMock->expects($this->once())->method('getIsDefault')->willReturn(true);
         $attributeMock->expects($this->once())->method('setDefault')->with(['value_new_option']);
         $attributeMock->expects($this->once())->method('setOption')->with($option);
+        $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(93);
         $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock);
-        $this->assertEquals(null, $this->model->add($entityType, $attributeCode, $optionMock));
+        $this->getAttributeOptionIdMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with(93, 'optionLabel')
+            ->willReturn(42);
+        $this->assertEquals(42, $this->model->add($entityType, $attributeCode, $optionMock));
     }
 
     /**

@@ -6,6 +6,10 @@
 
 namespace Magento\Eav\Model\Entity\Attribute;
 
+use Magento\Eav\Api\AttributeOptionManagementInterface;
+use Magento\Eav\Model\AttributeRepository;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute;
+use Magento\Eav\Model\ResourceModel\GetAttributeOptionId;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -13,29 +17,37 @@ use Magento\Framework\Exception\StateException;
 /**
  * Eav Option Management
  */
-class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInterface
+class OptionManagement implements AttributeOptionManagementInterface
 {
     /**
-     * @var \Magento\Eav\Model\AttributeRepository
+     * @var AttributeRepository
      */
     protected $attributeRepository;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
+     * @var Attribute
      */
     protected $resourceModel;
 
     /**
-     * @param \Magento\Eav\Model\AttributeRepository $attributeRepository
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $resourceModel
+     * @var GetAttributeOptionId
+     */
+    private $getAttributeOptionId;
+
+    /**
+     * @param AttributeRepository $attributeRepository
+     * @param Attribute $resourceModel
+     * @param GetAttributeOptionId $getAttributeOptionId
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Eav\Model\AttributeRepository $attributeRepository,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute $resourceModel
+        AttributeRepository $attributeRepository,
+        Attribute $resourceModel,
+        GetAttributeOptionId $getAttributeOptionId
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->resourceModel = $resourceModel;
+        $this->getAttributeOptionId = $getAttributeOptionId;
     }
 
     /**
@@ -57,6 +69,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         $options = [];
         $options['value'][$optionValue][0] = $optionLabel;
         $options['order'][$optionValue] = $option->getSortOrder();
+        $attributeId = $attribute->getAttributeId();
 
         if (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
@@ -78,7 +91,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             throw new StateException(__('The "%1" attribute can\'t be saved.', $attributeCode));
         }
 
-        return $this->getOptionId($option, $attribute);
+        return $this->getAttributeOptionId->execute($attributeId, $optionLabel);
     }
 
     /**
@@ -161,29 +174,6 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     private function getOptionValue(\Magento\Eav\Api\Data\AttributeOptionInterface $option) : string
     {
         return 'value_' . ($option->getValue() ?: 'new_option');
-    }
-
-    /**
-     * Returns option id
-     *
-     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
-     * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
-     * @return null|int
-     * @throws NoSuchEntityException
-     */
-    private function getOptionId(\Magento\Eav\Api\Data\AttributeOptionInterface $option, $attribute)
-    {
-        $optionId = null;
-
-        $attribute = $this->attributeRepository->get('catalog_product', $attribute->getAttributeCode());
-        if ($attribute->getOptions()) {
-            foreach ($attribute->getOptions() as $optionLabel) {
-                if ($option->getLabel() == $optionLabel->getLabel()) {
-                    $optionId = $attribute->getSource()->getOptionId($optionLabel->getLabel());
-                }
-            }
-        }
-            return $optionId;
     }
 
     /**
