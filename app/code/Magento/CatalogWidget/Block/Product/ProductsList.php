@@ -12,14 +12,15 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Url\Helper\Data as UrlHelper;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Widget\Block\BlockInterface;
+use Magento\Framework\Url\EncoderInterface;
 
 /**
  * Catalog Products List widget block
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements BlockInterface, IdentityInterface
 {
@@ -104,9 +105,9 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     private $layoutFactory;
 
     /**
-     * @var UrlHelper
+     * @var \Magento\Framework\Url\EncoderInterface|null
      */
-    private $urlHelper;
+    private $urlEncoder;
 
     /**
      * @var \Magento\Framework\View\Element\RendererList
@@ -124,7 +125,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * @param array $data
      * @param Json|null $json
      * @param LayoutFactory|null $layoutFactory
-     * @param UrlHelper|null $urlHelper
+     * @param \Magento\Framework\Url\EncoderInterface|null $urlEncoder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -139,7 +140,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         array $data = [],
         Json $json = null,
         LayoutFactory $layoutFactory = null,
-        UrlHelper $urlHelper = null
+        EncoderInterface $urlEncoder = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -149,7 +150,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $this->conditionsHelper = $conditionsHelper;
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
         $this->layoutFactory = $layoutFactory ?: ObjectManager::getInstance()->get(LayoutFactory::class);
-        $this->urlHelper = $urlHelper ?: ObjectManager::getInstance()->get(UrlHelper::class);
+        $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
         parent::__construct(
             $context,
             $data
@@ -180,6 +181,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Get key pieces for caching block content
      *
      * @return array
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getCacheKeyInfo()
     {
@@ -274,7 +276,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             'action' => $url,
             'data' => [
                 'product' => $product->getEntityId(),
-                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl($url),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
             ]
         ];
     }
@@ -292,6 +294,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Prepare and return product collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function createCollection()
     {
@@ -469,6 +472,22 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
                 ->get(PriceCurrencyInterface::class);
         }
         return $this->priceCurrency;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAddToCartUrl($product, $additional = [])
+    {
+        $requestingPageUrl = $this->getRequest()->getParam('requesting_page_url');
+
+        if (!empty($requestingPageUrl)) {
+            $additional['useUencPlaceholder'] = true;
+            $url = parent::getAddToCartUrl($product, $additional);
+            return str_replace('%25uenc%25', $this->urlEncoder->encode($requestingPageUrl), $url);
+        }
+
+        return parent::getAddToCartUrl($product, $additional);
     }
 
     /**
