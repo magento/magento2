@@ -33,7 +33,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         parent::setUp();
         $this->urlBuilder = $this->_objectManager->get(\Magento\Rss\Model\UrlBuilder::class);
-        $this->customerRepository = $this->_objectManager->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $this->customerRepository = $this->_objectManager->get(
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
+        );
         $this->wishlist = $this->_objectManager->get(\Magento\Wishlist\Model\Wishlist::class);
         $this->customerSession = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
     }
