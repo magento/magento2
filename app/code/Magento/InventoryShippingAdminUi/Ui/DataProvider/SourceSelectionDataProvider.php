@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryShippingAdminUi\Ui\DataProvider;
 
 use Magento\Framework\Api\Filter;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\OrderRepository;
@@ -16,7 +17,6 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\InventoryShippingAdminUi\Ui\DataProvider\GetSourcesByStockIdSkuAndQty;
 use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
 
 class SourceSelectionDataProvider extends AbstractDataProvider
@@ -42,11 +42,6 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     private $getStockItemConfiguration;
 
     /**
-     * @var GetSourcesByStockIdSkuAndQty
-     */
-    private $getSourcesByStockIdSkuAndQty;
-
-    /**
      * @var GetSkuFromOrderItemInterface
      */
     private $getSkuFromOrderItem;
@@ -55,6 +50,11 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      * @var array
      */
     private $sources = [];
+
+    /**
+     * @var GetSourcesByOrderIdStockIdSkuAndQty
+     */
+    private $getSourcesByOrderIdStockIdSkuAndQty;
 
     /**
      * @param string $name
@@ -66,9 +66,11 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param GetSourcesByStockIdSkuAndQty $getSourcesByStockIdSkuAndQty
      * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
+     * @param GetSourcesByOrderIdStockIdSkuAndQty $getSourcesByOrderIdStockIdSkuAndQty
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         $name,
@@ -80,6 +82,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
         GetStockItemConfigurationInterface $getStockItemConfiguration,
         GetSourcesByStockIdSkuAndQty $getSourcesByStockIdSkuAndQty,
         GetSkuFromOrderItemInterface $getSkuFromOrderItem,
+        GetSourcesByOrderIdStockIdSkuAndQty $getSourcesByOrderIdStockIdSkuAndQty = null,
         array $meta = [],
         array $data = []
     ) {
@@ -88,8 +91,9 @@ class SourceSelectionDataProvider extends AbstractDataProvider
         $this->orderRepository = $orderRepository;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
-        $this->getSourcesByStockIdSkuAndQty = $getSourcesByStockIdSkuAndQty;
         $this->getSkuFromOrderItem = $getSkuFromOrderItem;
+        $this->getSourcesByOrderIdStockIdSkuAndQty = $getSourcesByOrderIdStockIdSkuAndQty ?:
+            ObjectManager::getInstance()->get(GetSourcesByOrderIdStockIdSkuAndQty::class);
     }
 
     /**
@@ -160,7 +164,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      */
     private function getSources(int $orderId, int $stockId, string $sku, float $qty): array
     {
-        $sources = $this->getSourcesByStockIdSkuAndQty->execute($orderId, $stockId, $sku, $qty);
+        $sources = $this->getSourcesByOrderIdStockIdSkuAndQty->execute($orderId, $stockId, $sku, $qty);
         foreach ($sources as $source) {
             $this->sources[$source['sourceCode']] = $source['sourceName'];
         }
