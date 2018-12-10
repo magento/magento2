@@ -79,13 +79,8 @@ class AdaptApplyStockConditionToSelectPlugin
 
         $tableName = $this->stockIndexTableNameResolver->execute($stockId);
         $select->joinInner(
-            ['product' => $this->resource->getTableName('catalog_product_entity')],
-            'main_table.source_id = product.entity_id',
-            []
-        );
-        $select->joinInner(
             ['stock_index' => $tableName],
-            'product.sku = stock_index.sku',
+            'main_table.source_id = stock_index.product_id',
             []
         )->where('stock_index.' . IndexStructure::IS_SALABLE . ' = ?', 1);
 
