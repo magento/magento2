@@ -241,8 +241,7 @@
             "PRIMARY": true,
             "QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID_QUOTE_ADDRESS_ADDRESS_ID": true,
             "QUOTE_ADDR_ITEM_PARENT_ITEM_ID_QUOTE_ADDR_ITEM_ADDR_ITEM_ID": true,
-            "QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID_QUOTE_ITEM_ITEM_ID": true,
-            "QUOTE_ADDRESS_ITEM_STORE_ID_STORE_STORE_ID": true
+            "QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID_QUOTE_ITEM_ITEM_ID": true
         }
     },
     "quote_item_option": {
