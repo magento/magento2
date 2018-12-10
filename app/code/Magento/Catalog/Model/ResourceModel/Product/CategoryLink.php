@@ -118,7 +118,6 @@ class CategoryLink
         $result = ['changed' => [], 'updated' => []];
 
         $oldCategoryPositions = array_values($oldCategoryPositions);
-        $oldCategoryList = array_column($oldCategoryPositions, 'category_id');
         foreach ($newCategoryPositions as $newCategoryPosition) {
             $key = false;
 
