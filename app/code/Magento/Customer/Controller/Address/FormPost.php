@@ -276,7 +276,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function saveAddress()
+    private function saveAddress()
     {
         $addressId = $this->getRequest()->getParam('id');
         $customerId = $this->_getSession()->getCustomerId();
