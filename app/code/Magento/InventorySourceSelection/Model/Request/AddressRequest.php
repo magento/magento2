@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelection\Model\Request;
 
-use Magento\Framework\Locale\ListsInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\AddressRequestInterface;
 
 /**
@@ -41,11 +40,6 @@ class AddressRequest implements AddressRequestInterface
     private $city;
 
     /**
-     * @var ListsInterface
-     */
-    private $lists;
-
-    /**
      * ItemRequestAddress constructor.
      *
      * @param string $country
@@ -53,22 +47,19 @@ class AddressRequest implements AddressRequestInterface
      * @param string $streetAddress
      * @param string $region
      * @param string $city
-     * @param ListsInterface $lists
      */
     public function __construct(
         string $country,
         string $postcode,
         string $streetAddress,
         string $region,
-        string $city,
-        ListsInterface $lists
+        string $city
     ) {
         $this->country = $country;
         $this->postcode = $postcode;
         $this->streetAddress = $streetAddress;
         $this->region = $region;
         $this->city = $city;
-        $this->lists = $lists;
     }
 
     /**
@@ -112,6 +103,31 @@ class AddressRequest implements AddressRequestInterface
     }
 
     /**
+     * @inheritdoc
+     * @return string
+     */
+    public function getAddressStringForQuery(): string
+    {
+        return implode(' ', [
+            $this->getStreetAddress(),
+            $this->getCity(),
+            $this->getRegion(),
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     * @return string
+     */
+    public function getComponentsStringForQuery(): string
+    {
+        return implode('|', [
+            'country:' . $this->getCountry(),
+            'postal_code:' . $this->getPostcode(),
+        ]);
+    }
+
+    /**
      * Get address as string
      *
      * @return string
@@ -120,11 +136,10 @@ class AddressRequest implements AddressRequestInterface
     {
         return implode(' ', [
             $this->getStreetAddress(),
-            'ZIP',
             $this->getPostcode(),
             $this->getCity(),
             $this->getRegion(),
-            $this->lists->getCountryTranslation($this->getCountry()),
+            $this->getCountry(),
         ]);
     }
 }
