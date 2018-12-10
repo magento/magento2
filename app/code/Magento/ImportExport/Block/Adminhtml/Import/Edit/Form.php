@@ -199,7 +199,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Select File to Import'),
                 'title' => __('Select File to Import'),
                 'required' => true,
-                'class' => 'input-file'
+                'class' => 'input-file',
+                'note' => __(
+                    'File must be saved in UTF-8 encoding for proper import'
+                ),
             ]
         );
         $fieldsets['upload']->addField(

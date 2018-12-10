@@ -38,6 +38,7 @@ class PromoQuoteForm extends FormSections
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null, array $replace = null)
     {
+        $this->waitForElementNotVisible($this->waitForSelector);
         $sections = $this->getFixtureFieldsByContainers($fixture);
         if ($replace) {
             $sections = $this->prepareData($sections, $replace);
