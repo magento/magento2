@@ -93,7 +93,7 @@ class CategoryLink
     }
 
     /**
-     * Get category link metadata.
+     * Get category link metadata
      *
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
      */
@@ -116,6 +116,9 @@ class CategoryLink
     private function processCategoryLinks($newCategoryPositions, &$oldCategoryPositions)
     {
         $result = ['changed' => [], 'updated' => []];
+
+        $oldCategoryPositions = array_values($oldCategoryPositions);
+        $oldCategoryList = array_column($oldCategoryPositions, 'category_id');
         foreach ($newCategoryPositions as $newCategoryPosition) {
             $key = false;
 
@@ -129,7 +132,7 @@ class CategoryLink
             if ($key === false) {
                 $result['changed'][] = $newCategoryPosition;
             } elseif ($oldCategoryPositions[$key]['position'] != $newCategoryPosition['position']) {
-                $result['updated'][] = $newCategoryPositions[$key];
+                $result['updated'][] = $newCategoryPosition;
                 unset($oldCategoryPositions[$key]);
             }
         }
@@ -138,7 +141,7 @@ class CategoryLink
     }
 
     /**
-     * Update category links by product.
+     * Update category links
      *
      * @param ProductInterface $product
      * @param array $insertLinks
@@ -183,7 +186,7 @@ class CategoryLink
     }
 
     /**
-     * Delete category links by product.
+     * Delete category links
      *
      * @param ProductInterface $product
      * @param array $deleteLinks
