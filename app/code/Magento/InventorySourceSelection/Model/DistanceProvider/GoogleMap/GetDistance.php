@@ -23,6 +23,7 @@ class GetDistance implements GetDistanceInterface
     private const GOOGLE_ENDPOINT = 'https://maps.googleapis.com/maps/api/distancematrix/json';
     private const XML_PATH_MODE = 'cataloginventory/source_selection_distance_based_google/mode';
     private const XML_PATH_VALUE = 'cataloginventory/source_selection_distance_based_google/value';
+    private const ZERO_RESULT_RESPONSE = "ZERO_RESULTS";
 
     /**
      * @var array
@@ -92,7 +93,9 @@ class GetDistance implements GetDistanceInterface
 
             $res = $this->json->unserialize($this->client->getBody());
 
-            if ($res['status'] !== 'OK') {
+            if ($res['status'] !== 'OK'
+                || $res['rows'][0]['elements'][0]['status'] === self::ZERO_RESULT_RESPONSE
+            ) {
                 throw new LocalizedException(
                     __(
                         'Unable to get distance between %1 and %2',
