@@ -6,7 +6,7 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
 
     <actionGroup name="ConfigureBraintree">
         <!-- GoTo ConfigureBraintree fields -->
@@ -46,4 +46,8 @@
         <waitForElementVisible selector="{{BraintreeConfiguraionSection.successfulMessage}}" stepKey="waitForSuccessfullyConfigured" time="10"/>
     </actionGroup>
 
+    <actionGroup name="DisableBrainTree">
+        <magentoCLI stepKey="disableBrainTree" command="config:set payment/braintree/active 0"/>
+        <magentoCLI stepKey="disableBrainTreePaypal" command="config:set payment/braintree_paypal/active 0"/>
+    </actionGroup>
 </actionGroups>
