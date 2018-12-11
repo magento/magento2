@@ -17,4 +17,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ImportExport\Model\Import\SampleFileProvider">
+        <arguments>
+            <argument name="samples" xsi:type="array">
+                <item name="advanced_pricing" xsi:type="string">Magento_ImportExport</item>
+                <item name="catalog_product" xsi:type="string">Magento_ImportExport</item>
+                <item name="customer" xsi:type="string">Magento_ImportExport</item>
+                <item name="customer_address" xsi:type="string">Magento_ImportExport</item>
+                <item name="customer_composite" xsi:type="string">Magento_ImportExport</item>
+                <item name="customer_finance" xsi:type="string">Magento_ImportExport</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
