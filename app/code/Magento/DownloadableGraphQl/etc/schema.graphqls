@@ -6,7 +6,7 @@ type Query {
 }
 
 type customerDownloadableProducts {
-    items: [customerDownloadableProduct] @doc(description: "List of downloadable items")
+    items: [customerDownloadableProduct] @doc(description: "List of purchased downloadable items")
 }
 
 type customerDownloadableProduct {
