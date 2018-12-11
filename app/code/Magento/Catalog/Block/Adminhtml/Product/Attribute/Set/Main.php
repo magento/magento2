@@ -6,13 +6,13 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set;
 
 /**
- * Adminhtml Catalog Attribute Set Main Block
- *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface;
 
 /**
+ * Adminhtml Catalog Attribute Set Main Block.
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
