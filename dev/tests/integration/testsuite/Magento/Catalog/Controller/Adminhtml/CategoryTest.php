@@ -403,7 +403,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     {
         return [
             [400, 401, 'first_url_key', 402, 'second_url_key', false],
-            [400, 401, 'duplicated_url_key', 402, 'duplicated_url_key', true],
+            [400, 401, 'duplicated_url_key', 402, 'duplicated_url_key', false],
             [0, 401, 'first_url_key', 402, 'second_url_key', true],
             [400, 401, 'first_url_key', 0, 'second_url_key', true],
         ];

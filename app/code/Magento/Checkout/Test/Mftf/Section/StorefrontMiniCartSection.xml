@@ -28,5 +28,6 @@
         <element name="itemQuantityUpdate" type="button" selector="//a[text()='{{productName}}']/../..//span[text()='Update']" parameterized="true"/>
         <element name="itemDiscount" type="text" selector="//tr[@class='totals']//td[@class='amount']/span"/>
         <element name="subtotal" type="text" selector="//tr[@class='totals sub']//td[@class='amount']/span"/>
+        <element name="emptyCart" type="text" selector=".counter.qty.empty"/>
     </section>
 </sections>

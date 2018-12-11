@@ -49,7 +49,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     protected function _construct()
@@ -58,7 +59,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function getConnection()
@@ -67,6 +69,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Load data from table by valueId
+     *
      * @param string $tableNameAlias
      * @param array $ids
      * @param int|null $storeId
@@ -111,6 +115,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Load product gallery by attributeId
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param int $attributeId
      * @return array
@@ -132,6 +138,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Create base load select
+     *
      * @param int $entityId
      * @param int $storeId
      * @param int $attributeId
@@ -151,6 +159,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Create batch base select
+     *
      * @param int $storeId
      * @param int $attributeId
      * @return \Magento\Framework\DB\Select
@@ -190,7 +200,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'value.' . $linkField . ' = entity.' . $linkField,
                 ]
             ),
-            ['label', 'position', 'disabled']
+            []
         )->joinLeft(
             ['default_value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
             implode(
@@ -201,8 +211,15 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'default_value.' . $linkField . ' = entity.' . $linkField,
                 ]
             ),
-            ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
-        )->where(
+            []
+        )->columns([
+            'label' => $this->getConnection()->getIfNullSql('`value`.`label`', '`default_value`.`label`'),
+            'position' => $this->getConnection()->getIfNullSql('`value`.`position`', '`default_value`.`position`'),
+            'disabled' => $this->getConnection()->getIfNullSql('`value`.`disabled`', '`default_value`.`disabled`'),
+            'label_default' => 'default_value.label',
+            'position_default' => 'default_value.position',
+            'disabled_default' => 'default_value.disabled'
+        ])->where(
             $mainTableAlias . '.attribute_id = ?',
             $attributeId
         )->where(
@@ -240,6 +257,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Get main table alias
+     *
      * @return string
      * @since 101.0.0
      */
@@ -249,6 +268,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Bind value to entity
+     *
      * @param int $valueId
      * @param int $entityId
      * @return int
@@ -266,6 +287,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Save data row
+     *
      * @param string $table
      * @param array $data
      * @param array $fields

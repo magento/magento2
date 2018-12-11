@@ -190,7 +190,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Process rating codes.
+     * Process rating codes
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
@@ -215,7 +215,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Process rating stores.
+     * Process rating stores
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
@@ -240,7 +240,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Delete rating data.
+     * Delete rating data
      *
      * @param int $ratingId
      * @param string $table
@@ -265,7 +265,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Insert rating data.
+     * Insert rating data
      *
      * @param string $table
      * @param array $data
@@ -451,9 +451,11 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $data = $connection->fetchAll($select, [':review_id' => $object->getReviewId()]);
 
+        $currentStore = $this->_storeManager->isSingleStoreMode() ? $this->_storeManager->getStore()->getId() : null;
+
         if ($onlyForCurrentStore) {
             foreach ($data as $row) {
-                if ($row['store_id'] == $this->_storeManager->getStore()->getId()) {
+                if ($row['store_id'] !== $currentStore) {
                     $object->addData($row);
                 }
             }

@@ -49,7 +49,7 @@ define([
 
             if (!this.value()) {
                 defaultCountry = _.filter(result, function (item) {
-                    return item['is_default'] && item['is_default'].includes(value);
+                    return item['is_default'] && _.contains(item['is_default'], value);
                 });
 
                 if (defaultCountry.length) {
