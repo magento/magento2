@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-97041"/>
             <group value="Widget"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -24,11 +25,10 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
         </before>
         <after>
             <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
         </after>
