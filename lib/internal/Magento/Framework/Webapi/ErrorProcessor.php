@@ -195,7 +195,7 @@ class ErrorProcessor
      * Log information about exception to exception log.
      *
      * @param \Exception $exception
-     * @return string $reportId
+     * @return string
      */
     protected function _critical(\Exception $exception)
     {
