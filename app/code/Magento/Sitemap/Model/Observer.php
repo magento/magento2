@@ -9,7 +9,7 @@ use Magento\Store\Model\App\Emulation;
 use Magento\Sitemap\Model\SitemapSendEmail as SitemapEmail;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use ResourceModel\Sitemap\CollectionFactory;
+use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
 use Magento\Store\Model\ScopeInterface;
 
 /**
