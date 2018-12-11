@@ -328,7 +328,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $actualResults = $this->getActualUrlPaths($categoryFilter);
         $categoryExpectedResult = [
             ['category-1/category-1-1/category-1-1-1.html', 'catalog/category/view/id/5', 1],
-            ['category-1/category-1-1/url-key.html', 'catalog/category/view/id/5', 2],
+            ['category-1/category-1-1/url-key.html', 'catalog/category/view/id/5', $storeId],
         ];
 
         $this->assertResults($categoryExpectedResult, $actualResults);
@@ -348,7 +348,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $actualResults = $this->getActualUrlPaths($categoryFilter);
         $categoryExpectedResult = [
             ['category-1/category-1-1/category-1-1-1.html', 'catalog/category/view/id/5', 1],
-            ['category-1/category-1-1/category-1-1-1.html', 'catalog/category/view/id/5', 2],
+            ['category-1/category-1-1/category-1-1-1.html', 'catalog/category/view/id/5', $storeId],
         ];
 
         $this->assertResults($categoryExpectedResult, $actualResults);
