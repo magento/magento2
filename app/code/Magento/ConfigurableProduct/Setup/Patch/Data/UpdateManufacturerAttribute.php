@@ -15,8 +15,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
- * Class UpdateManufacturerAttribute
- * @package Magento\ConfigurableProduct\Setup\Patch
+ * Update manufacturer attribute if it's presented in system.
  */
 class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInterface
 {
@@ -31,7 +30,6 @@ class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInt
     private $eavSetupFactory;
 
     /**
-     * UpdateTierPriceAttribute constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
@@ -44,7 +42,7 @@ class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -74,7 +72,7 @@ class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -84,7 +82,7 @@ class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}\
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -92,7 +90,7 @@ class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
