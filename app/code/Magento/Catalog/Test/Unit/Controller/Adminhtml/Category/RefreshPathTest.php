@@ -66,8 +66,8 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute() : void
     {
-        $value = ['id' => 3, 'path' => '1/2/3', 'parentId' => 2];
-        $result = '{"id":3,"path":"1/2/3","parentId":"2"}';
+        $value = ['id' => 3, 'path' => '1/2/3', 'parentId' => 2, 'level' => 2];
+        $result = '{"id":3,"path":"1/2/3","parentId":"2","level":"2"}';
 
         $requestMock = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
 

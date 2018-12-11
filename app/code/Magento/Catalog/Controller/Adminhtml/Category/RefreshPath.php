@@ -44,6 +44,7 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category impleme
                 'id' => $categoryId,
                 'path' => $category->getPath(),
                 'parentId' => $category->getParentId(),
+                'level' => $category->getLevel()
             ]);
         }
     }
