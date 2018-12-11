@@ -432,7 +432,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             return $this->_getConnection()->update(
                 $this->_getDataTable(),
                 ['expire_time' => new \Zend_Db_Expr('expire_time+' . $extraLifetime)],
-                ['id=?' => $id, 'expire_time = 0 OR expire_time>' => time()]
+                ['id=?' => $id, 'expire_time = 0 OR expire_time>?' => time()]
             );
         } else {
             return true;
