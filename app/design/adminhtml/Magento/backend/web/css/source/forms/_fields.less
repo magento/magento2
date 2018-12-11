@@ -230,7 +230,7 @@
 
     .required > &, // ToDo UI: change classes 'required' to '_required'.
     ._required > & {
-        span {
+        > span {
             &:after {
                 color: @validation__color;
                 content: '*';
@@ -242,6 +242,7 @@
                 margin-top: .2rem;
                 position: absolute;
                 z-index: 1;
+                
             }
         }
     }
