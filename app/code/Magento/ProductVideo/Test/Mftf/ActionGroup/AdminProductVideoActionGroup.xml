@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Add video in Admin Product page -->
+    <actionGroup name="addProductVideo">
+        <arguments>
+            <argument name="video" defaultValue="mftfTestProductVideo"/>
+        </arguments>
+
+        <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}"
+                          dependentSelector="{{AdminProductImagesSection.imageUploadButton}}"
+                          visible="false"
+                          stepKey="openProductVideoSection"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.addVideoButton}}" stepKey="waitForAddVideoButtonVisible"/>
+        <click selector="{{AdminProductImagesSection.addVideoButton}}" stepKey="addVideo"/>
+        <waitForElementVisible selector="{{AdminProductNewVideoSection.videoUrlTextField}}" stepKey="waitForUrlElementVisible"/>
+        <fillField selector="{{AdminProductNewVideoSection.videoUrlTextField}}" userInput="{{video.videoUrl}}" stepKey="fillFieldVideoUrl"/>
+        <fillField selector="{{AdminProductNewVideoSection.videoTitleTextField}}" userInput="{{video.videoTitle}}" stepKey="fillFieldVideoTitle"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementNotVisible selector="{{AdminProductNewVideoSection.saveButtonDisabled}}" wait="30" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{AdminProductNewVideoSection.saveButton}}" stepKey="saveVideo"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+    </actionGroup>
+
+    <!-- Assert product video in Admin Product page -->
+    <actionGroup name="assertProductVideoAdminProductPage">
+        <arguments>
+            <argument name="video" defaultValue="mftfTestProductVideo"/>
+        </arguments>
+        <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}"
+                          dependentSelector="{{AdminProductImagesSection.imageUploadButton}}"
+                          visible="false"
+                          stepKey="openProductVideoSection"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeElement selector="{{AdminProductImagesSection.videoTitleText(video.videoShortTitle)}}" stepKey="seeVideoTitle"/>
+        <seeElementInDOM selector="{{AdminProductImagesSection.videoUrlHiddenField(video.videoUrl)}}" stepKey="seeVideoItem"/>
+    </actionGroup>
+</actionGroups>
