@@ -5,6 +5,9 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
+/**
+ * Class AttributeTest.
+ */
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -128,6 +131,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $attributeId = 1;
         $storeLabels = ['test_attribute_store1'];
         $frontendLabelFactory = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $resource = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class)
