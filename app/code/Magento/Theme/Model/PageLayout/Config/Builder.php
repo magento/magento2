@@ -49,7 +49,7 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
     }
 
     /**
-     * @return \Magento\Framework\View\PageLayout\Config
+     * @inheritdoc
      */
     public function getPageLayoutsConfig()
     {
@@ -61,7 +61,7 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
      */
     protected function getConfigFiles()
     {
-        if (empty($this->configFiles)) {
+        if (!$this->configFiles) {
             $configFiles = [];
             foreach ($this->themeCollection->loadRegisteredThemes() as $theme) {
                 $configFiles[] = $this->fileCollector->getFilesContent($theme, 'layouts.xml');
