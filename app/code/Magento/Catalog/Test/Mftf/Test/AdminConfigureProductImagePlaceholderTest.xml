@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigureProductImagePlaceholderTest">
+
+        <annotations>
+            <features value="Configuration"/>
+            <stories value="Configure product placeholder images"/>
+            <title value="Admin is able to configure product placeholder images"/>
+            <description value="Admin should be able to configure the images used for product image placeholders. The configured placeholders should be seen on the frontend when an image has no image."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-5005"/>
+            <group value="configuration"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="category"/>
+            <!--Create product with no images-->
+            <createData entity="ApiSimpleProduct" stepKey="productNoImages">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <!--Create product with small, base, and thumbnail image-->
+            <createData entity="ApiSimpleProduct" stepKey="productWithImages">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryTestImage" stepKey="productImage">
+                <requiredEntity createDataKey="productWithImages"/>
+            </createData>
+        </before>
+
+        <after>
+            <!--Unset product image placeholders-->
+            <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigurationPageAfter"/>
+            <waitForPageLoad stepKey="waitForConfigurationPageLoadAfter"/>
+            <conditionalClick selector="{{AdminProductImagePlaceholderConfigSection.sectionHeader}}" dependentSelector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" visible="false" stepKey="openPlaceholderSectionAfter"/>
+            <waitForElementVisible selector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" stepKey="waitForPlaceholderSectionOpenAfter"/>
+            <!--Delete base placeholder-->
+            <checkOption selector="{{AdminProductImagePlaceholderConfigSection.baseImageDelete}}" stepKey="checkDeleteBasePlaceholder"/>
+            <!--Delete small placeholder-->
+            <checkOption selector="{{AdminProductImagePlaceholderConfigSection.smallImageDelete}}" stepKey="checkDeleteSmallPlaceholder"/>
+            <!--Delete thumbnail placeholder-->
+            <checkOption selector="{{AdminProductImagePlaceholderConfigSection.thumbnailImageDelete}}" stepKey="checkDeleteThumbnailPlaceholder"/>
+            <!--Save config to delete placeholders-->
+            <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigWithPlaceholders"/>
+            <!--See placeholders are empty-->
+            <conditionalClick selector="{{AdminProductImagePlaceholderConfigSection.sectionHeader}}" dependentSelector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" visible="false" stepKey="openPlaceholderSection2"/>
+            <waitForElementVisible selector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" stepKey="waitForPlaceholderSectionOpen2"/>
+            <dontSeeElement selector="{{AdminProductImagePlaceholderConfigSection.baseImage}}" stepKey="dontSeeBaseImageSet"/>
+            <dontSeeElement selector="{{AdminProductImagePlaceholderConfigSection.smallImage}}" stepKey="dontSeeSmallImageSet"/>
+            <dontSeeElement selector="{{AdminProductImagePlaceholderConfigSection.thumbnailImage}}" stepKey="dontSeeThumbnailImageSet"/>
+            <dontSeeElement selector="{{AdminProductImagePlaceholderConfigSection.swatchImage}}" stepKey="dontSeeSwatchImageSet"/>
+
+            <!--Delete prerequisite entities-->
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="productNoImages" stepKey="deleteProductNoImages"/>
+            <deleteData createDataKey="productWithImages" stepKey="deleteProductWithImages"/>
+        </after>
+        
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        
+        <!--Admin area: configure Product Image Placeholders-->
+        <comment userInput="Configure product image placeholders in store config" stepKey="configurePlaceholderComment"/>
+        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigurationPageLoad1"/>
+        <conditionalClick selector="{{AdminProductImagePlaceholderConfigSection.sectionHeader}}" dependentSelector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" visible="false" stepKey="openPlaceholderSection1"/>
+        <waitForElementVisible selector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" stepKey="waitForPlaceholderSectionOpen1"/>
+        <!--Set base placeholder-->
+        <attachFile selector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" userInput="{{placeholderBaseImage.file}}" stepKey="uploadBasePlaceholder"/>
+        <!--Set small placeholder-->
+        <attachFile selector="{{AdminProductImagePlaceholderConfigSection.smallImageInput}}" userInput="{{placeholderSmallImage.file}}" stepKey="uploadSmallPlaceholder"/>
+        <!--Set thumbnail placeholder-->
+        <attachFile selector="{{AdminProductImagePlaceholderConfigSection.thumbnailImageInput}}" userInput="{{placeholderThumbnailImage.file}}" stepKey="uploadThumbnailPlaceholder"/>
+        <!--Save config with placeholders-->
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigWithPlaceholders"/>
+        <!--See images are saved-->
+        <conditionalClick selector="{{AdminProductImagePlaceholderConfigSection.sectionHeader}}" dependentSelector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" visible="false" stepKey="openPlaceholderSection2"/>
+        <waitForElementVisible selector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" stepKey="waitForPlaceholderSectionOpen2"/>
+        <seeElement selector="{{AdminProductImagePlaceholderConfigSection.baseImageBySrc(placeholderBaseImage.name)}}" stepKey="seeBasePlaceholderSet"/>
+        <seeElement selector="{{AdminProductImagePlaceholderConfigSection.smallImageBySrc(placeholderSmallImage.name)}}" stepKey="seeSmallPlaceholderSet"/>
+        <seeElement selector="{{AdminProductImagePlaceholderConfigSection.thumbnailImageBySrc(placeholderThumbnailImage.name)}}" stepKey="seeThumbnailPlaceholderSet"/>
+        <dontSeeElement selector="{{AdminProductImagePlaceholderConfigSection.swatchImage}}" stepKey="dontSeeSwatchImageSet"/>
+
+        <!--See correct placeholder images on category page-->
+        <comment userInput="Check placeholder images on the storefront" stepKey="checkStorefrontComment"/>
+        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryStorefront1"/>
+        <waitForPageLoad stepKey="waitForStorefrontCategory1"/>
+        <!--Product with no images uses placeholder-->
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByName($$productNoImages.name$$)}}" stepKey="seeProductNoImagesInCategory"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$productNoImages.name$$)}}" userInput="src" stepKey="getSmallPlaceholderImageSrc"/>
+        <assertContains stepKey="checkSmallPlaceholderImage">
+            <actualResult type="variable">$getSmallPlaceholderImageSrc</actualResult>
+            <expectedResult type="string">{{placeholderSmallImage.name}}</expectedResult>
+        </assertContains>
+        <!--Product with images does not use placeholder-->
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$productWithImages.name$$)}}" stepKey="seeProductWithImagesInCategory"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$productWithImages.name$$)}}" userInput="src" stepKey="getSmallNonPlaceholderImageSrc"/>
+        <assertNotContains stepKey="checkSmallPlaceholderImageNotUsed">
+            <actualResult type="variable">$getSmallNonPlaceholderImageSrc</actualResult>
+            <expectedResult type="string">{{placeholderSmallImage.name}}</expectedResult>
+        </assertNotContains>
+
+        <!--Check base image on product page-->
+        <!--Product which is using placeholder-->
+        <click selector="{{StorefrontCategoryProductSection.ProductImageByName($$productNoImages.name$$)}}" stepKey="goToProductNoImages"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad1"/>
+        <seeInCurrentUrl url="$$productNoImages.sku$$" stepKey="seeCorrectProductPage1"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile(placeholderBaseImage.name)}}" stepKey="seeBasePlaceholderImage"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addProductToCart1"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" stepKey="waitForProductAdded1"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniCart1"/>
+        <grabAttributeFrom selector="{{StorefrontMinicartSection.productImageByName($$productNoImages.name$$)}}" userInput="src" stepKey="getThumbnailPlaceholderImageSrc"/>
+        <assertContains stepKey="checkThumbnailPlaceholderImage">
+            <actualResult type="variable">$getThumbnailPlaceholderImageSrc</actualResult>
+            <expectedResult type="string">{{placeholderThumbnailImage.name}}</expectedResult>
+        </assertContains>
+        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProductFromCart1">
+            <argument name="productName" value="$$productNoImages.name$$"/>
+        </actionGroup>
+        <!--Product which is NOT using placeholder-->
+        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryStorefront2"/>
+        <waitForPageLoad stepKey="waitForStorefrontCategory2"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductImageByName($$productWithImages.name$$)}}" stepKey="goToProductWithImages"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <seeInCurrentUrl url="$$productWithImages.sku$$" stepKey="seeCorrectProductPage2"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.imageFile(placeholderBaseImage.name)}}" stepKey="dontSeeBasePlaceholderImage"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addProductToCart2"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" stepKey="waitForProductAdded2"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniCart2"/>
+        <grabAttributeFrom selector="{{StorefrontMinicartSection.productImageByName($$productWithImages.name$$)}}" userInput="src" stepKey="getThumbnailImageSrc"/>
+        <assertNotContains stepKey="checkThumbnailImage">
+            <actualResult type="variable">$getThumbnailImageSrc</actualResult>
+            <expectedResult type="string">{{placeholderThumbnailImage.name}}</expectedResult>
+        </assertNotContains>
+        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProductFromCart2">
+            <argument name="productName" value="$$productWithImages.name$$"/>
+        </actionGroup>
+    </test>
+</tests>
