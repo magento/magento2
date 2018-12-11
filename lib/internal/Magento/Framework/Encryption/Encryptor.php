@@ -228,7 +228,7 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
-     * Split password hash into parts: hash, salt, version
+     * Explode password hash
      *
      * @param string $hash
      * @return array
@@ -271,7 +271,13 @@ class Encryptor implements EncryptorInterface
      */
     private function getPasswordVersion()
     {
-        return array_map('intval', explode(self::DELIMITER, $this->passwordHashMap[self::PASSWORD_VERSION]));
+        return array_map(
+            'intval',
+            explode(
+                self::DELIMITER,
+                (string)$this->passwordHashMap[self::PASSWORD_VERSION]
+            )
+        );
     }
 
     /**
