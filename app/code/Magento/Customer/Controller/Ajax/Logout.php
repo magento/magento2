@@ -16,9 +16,9 @@ namespace Magento\Customer\Controller\Ajax;
 class Logout extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Framework\Session\Generic
+     * @var \Magento\Customer\Model\Session
      */
-    protected $session;
+    protected $customerSession;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
