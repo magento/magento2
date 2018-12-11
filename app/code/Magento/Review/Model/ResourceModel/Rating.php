@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -43,13 +44,13 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $scopeConfig;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context  $context
-     * @param \Psr\Log\LoggerInterface                           $logger
-     * @param \Magento\Framework\Module\Manager                  $moduleManager
-     * @param \Magento\Store\Model\StoreManagerInterface         $storeManager
-     * @param \Magento\Review\Model\ResourceModel\Review\Summary $reviewSummary
-     * @param string                                             $connectionName
-     * @param ScopeConfigInterface|null                          $scopeConfig
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Review\Summary $reviewSummary
+     * @param string $connectionName
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -189,6 +190,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Process rating codes.
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
@@ -212,6 +215,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Process rating stores.
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
@@ -235,6 +240,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Delete rating data.
+     *
      * @param int $ratingId
      * @param string $table
      * @param array $storeIds
@@ -258,6 +265,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Insert rating data.
+     *
      * @param string $table
      * @param array $data
      * @return void
@@ -280,6 +289,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Perform actions after object delete
+     *
      * Prepare rating data for reaggregate all data for reviews
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -290,7 +300,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         parent::_afterDelete($object);
         if (!$this->moduleManager->isEnabled('Magento_Review') &&
             !$this->scopeConfig->getValue(
-            \Magento\Review\Observer\PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE,
+                \Magento\Review\Observer\PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         ) {
