@@ -25,12 +25,10 @@
             <createData entity="_defaultProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <createData entity="EnableAllowGuestCheckout" stepKey="enableGuestCheckout"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
         <after>
-            <createData entity="DisableAllowGuestCheckout" stepKey="disableGuestCheckout"/>
             <deleteData createDataKey="product" stepKey="deleteProduct" />
             <deleteData createDataKey="category" stepKey="deleteCategory" />
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
