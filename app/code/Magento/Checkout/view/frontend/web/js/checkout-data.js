@@ -27,20 +27,6 @@ define([
         /**
          * @return {*}
          */
-        getData = function () {
-            var data = storage.get(cacheKey)();
-
-            if ($.isEmptyObject(data)) {
-                data = $.initNamespaceStorage('mage-cache-storage').localStorage.get(cacheKey);
-                if ($.isEmptyObject(data)) {
-                    data = initData();
-                    saveData(data);
-                }
-            }
-
-            return data;
-        },
-
         initData = function () {
             return {
                 'selectedShippingAddress': null, //Selected shipping address pulled from persistence storage
@@ -52,6 +38,24 @@ define([
                 'billingAddressFromData': null, //Billing address pulled from persistence storage
                 'newCustomerBillingAddress': null //Billing address pulled from persistence storage for new customer
             }
+        },
+
+        /**
+         * @return {*}
+         */
+        getData = function () {
+            var data = storage.get(cacheKey)();
+
+            if ($.isEmptyObject(data)) {
+                data = $.initNamespaceStorage('mage-cache-storage').localStorage.get(cacheKey);
+
+                if ($.isEmptyObject(data)) {
+                    data = initData();
+                    saveData(data);
+                }
+            }
+
+            return data;
         };
 
     return {
