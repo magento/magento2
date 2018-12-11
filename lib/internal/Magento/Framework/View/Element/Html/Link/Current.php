@@ -60,13 +60,14 @@ class Current extends Template
      * Get current mca
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     private function getMca()
     {
         $routeParts = [
-            $this->_request->getModuleName(),
-            $this->_request->getControllerName(),
-            $this->_request->getActionName(),
+            (string)$this->_request->getModuleName(),
+            (string)$this->_request->getControllerName(),
+            (string)$this->_request->getActionName(),
         ];
 
         $parts = [];
