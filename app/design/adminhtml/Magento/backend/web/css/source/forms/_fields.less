@@ -63,6 +63,7 @@
      *@codingStandardsIgnoreStart
      */
     #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
+    //@codingStandardsIgnoreEnd
     margin-left: @_length;
     //@codingStandardsIgnoreEnd
 }
@@ -279,6 +280,12 @@
     .admin__fieldset > & {
         margin-bottom: 3rem;
         position: relative;
+        
+        &.field-import_file {
+            .input-file {
+                margin-top: 6px;
+            }
+        }
     }
 
     //  Hide group legend and show first field label instead
@@ -287,11 +294,12 @@
             opacity: 1;
         }
     }
+
     legend.admin__field-label {
         span {
             &:after {
                 display: none;
-            } 
+            }
         }
     }
 
@@ -300,7 +308,11 @@
     //  Till that time they'll be disabled by commenting pseudo-element content property.
     &[data-config-scope] {
         &:before {
+            /**
+             *@codingStandardsIgnoreStart
+             */
             #mix-grid .return_length(@field-label-grid__column + @field-control-grid__column, @field-grid__columns);
+            //@codingStandardsIgnoreEnd
             color: @field-scope__color;
             content: attr(data-config-scope);
             display: inline-block;
