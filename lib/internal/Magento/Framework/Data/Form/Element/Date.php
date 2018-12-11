@@ -15,6 +15,9 @@ namespace Magento\Framework\Data\Form\Element;
 use Magento\Framework\Escaper;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
+/**
+ * Date element
+ */
 class Date extends AbstractElement
 {
     /**
@@ -51,8 +54,7 @@ class Date extends AbstractElement
     }
 
     /**
-     * If script executes on x64 system, converts large
-     * numeric values to timestamp limit
+     * If script executes on x64 system, converts large numeric values to timestamp limit
      *
      * @param int $value
      * @return int
@@ -99,6 +101,7 @@ class Date extends AbstractElement
 
     /**
      * Get date value as string.
+     *
      * Format can be specified, or it will be taken from $this->getFormat()
      *
      * @param string $format (compatible with \DateTime)
