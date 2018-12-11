@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\GiftMessage\Model\Plugin;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -18,21 +17,21 @@ use Magento\Sales\Api\Data\OrderItemExtensionFactory;
 class OrderItemGet
 {
     /** @var OrderItemExtensionFactory */
-    private $orderItemExtensionFactory;
+    private $orderItemFactory;
 
     /**@var GiftMessageItemRepositoryInterface */
-    private $giftMessageOrderItemRepository;
+    private $giftMessageRepository;
 
     /**
      * @param GiftMessageItemRepositoryInterface $giftMessageOrderItemRepository
      * @param OrderItemExtensionFactory $orderItemExtensionFactor
      */
     public function __construct(
-        GiftMessageItemRepositoryInterface $giftMessageOrderItemRepository,
-        OrderItemExtensionFactory $orderItemExtensionFactor
+        GiftMessageItemRepositoryInterface $giftMessageRepository,
+        OrderItemExtensionFactory $orderItemFactory
     ) {
-        $this->giftMessageOrderItemRepository = $giftMessageOrderItemRepository;
-        $this->orderItemExtensionFactory = $orderItemExtensionFactor;
+        $this->giftMessageRepository = $giftMessageRepository;
+        $this->orderItemFactory = $orderItemFactory;
     }
 
     /**
@@ -51,7 +50,7 @@ class OrderItemGet
 
         try {
             /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
-            $giftMessage = $this->giftMessageOrderItemRepository->get(
+            $giftMessage = $this->giftMessageRepository->get(
                 $orderItem->getOrderId(),
                 $orderItem->getItemId()
             );
@@ -60,7 +59,7 @@ class OrderItemGet
         }
 
         /** @var \Magento\Sales\Api\Data\OrderItemExtension $orderItemExtension */
-        $orderItemExtension = $extensionAttributes ?: $this->orderItemExtensionFactory->create();
+        $orderItemExtension = $extensionAttributes ?: $this->orderItemFactory->create();
         $orderItemExtension->setGiftMessage($giftMessage);
         $orderItem->setExtensionAttributes($orderItemExtension);
 
