@@ -112,6 +112,7 @@
         <!--Submit refund-->
         <scrollTo selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="scrollToItemsToRefund"/>
         <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" after="scrollToItemsToRefund" stepKey="fillQtyOfItemsToRefund"/>
+        <waitForElementChange selector="{{AdminCreditMemoItemsSection.updateQty}}" function="function($el) {return $el->isEnabled();}" stepKey="waitForUpdateQtyButtonEnabled1"/>
         <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateRefundQty"/>
         <waitForLoadingMaskToDisappear stepKey="waitForRefundQtyToUpdate"/>
         <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="seeSubmitRefundBtn"/>
