@@ -534,3 +534,4 @@ Addresses,Addresses
 "Edit Account Information","Edit Account Information"
 "Password forgotten","Password forgotten"
 "You are signed out","You are signed out"
+"Maximum length must be less then 32 characters.","Maximum length must be less then 32 characters."
