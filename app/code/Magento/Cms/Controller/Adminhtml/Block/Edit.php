@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 class Edit extends \Magento\Cms\Controller\Adminhtml\Block implements HttpGetActionInterface
 {

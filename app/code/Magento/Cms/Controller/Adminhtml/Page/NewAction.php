@@ -6,7 +6,9 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-class NewAction extends \Magento\Backend\App\Action
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session

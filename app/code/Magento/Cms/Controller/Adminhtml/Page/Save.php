@@ -6,7 +6,7 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Cms\Model\Page;
 use Magento\Framework\App\Request\DataPersistorInterface;

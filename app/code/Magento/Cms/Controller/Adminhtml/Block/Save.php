@@ -6,7 +6,7 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Model\Block;
