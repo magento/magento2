@@ -79,7 +79,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
         if ($website->getId() === null) {
             throw new NoSuchEntityException(
-                __(sprintf("The website %s that was requested wasn't found. Verify the website and try again.", $code))
+                __(sprintf("The website with code %s that was requested wasn't found. Verify the website and try again.", $code))
             );
         }
         $this->entities[$code] = $website;
@@ -103,7 +103,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
         if ($website->getId() === null) {
             throw new NoSuchEntityException(
-                __(sprintf("The website %s that was requested wasn't found. Verify the website and try again.", $id))
+                __(sprintf("The website with id %s that was requested wasn't found. Verify the website and try again.", $id))
             );
         }
         $this->entities[$website->getCode()] = $website;
