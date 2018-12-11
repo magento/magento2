@@ -133,7 +133,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
@@ -142,7 +142,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldSetMetaInfo($fieldSetName)
@@ -151,7 +151,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldsMetaInfo($fieldSetName)
