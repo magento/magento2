@@ -11,11 +11,13 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Widget\Block\BlockInterface;
+use Magento\Framework\Url\EncoderInterface;
 
 /**
  * Catalog Products List widget block
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements BlockInterface, IdentityInterface
 {
@@ -95,6 +97,11 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     private $json;
 
     /**
+     * @var \Magento\Framework\Url\EncoderInterface|null
+     */
+    private $urlEncoder;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
@@ -104,6 +111,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
      * @param array $data
      * @param Json|null $json
+     * @param \Magento\Framework\Url\EncoderInterface|null $urlEncoder
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -114,7 +122,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         \Magento\CatalogWidget\Model\Rule $rule,
         \Magento\Widget\Helper\Conditions $conditionsHelper,
         array $data = [],
-        Json $json = null
+        Json $json = null,
+        EncoderInterface $urlEncoder = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -123,6 +132,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $this->rule = $rule;
         $this->conditionsHelper = $conditionsHelper;
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
+        $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
         parent::__construct(
             $context,
             $data
@@ -153,6 +163,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Get key pieces for caching block content
      *
      * @return array
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getCacheKeyInfo()
     {
@@ -230,6 +241,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Prepare and return product collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function createCollection()
     {
@@ -407,6 +419,22 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
                 ->get(PriceCurrencyInterface::class);
         }
         return $this->priceCurrency;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAddToCartUrl($product, $additional = [])
+    {
+        $requestingPageUrl = $this->getRequest()->getParam('requesting_page_url');
+
+        if (!empty($requestingPageUrl)) {
+            $additional['useUencPlaceholder'] = true;
+            $url = parent::getAddToCartUrl($product, $additional);
+            return str_replace('%25uenc%25', $this->urlEncoder->encode($requestingPageUrl), $url);
+        }
+
+        return parent::getAddToCartUrl($product, $additional);
     }
 
     /**

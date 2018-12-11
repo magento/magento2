@@ -25,10 +25,13 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
+use Magento\Ui\Component\Form\Element\Multiline;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 
 /**
+ * Supplies the data for the customer UI component
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
@@ -155,10 +158,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Config $eavConfig
      * @param FilterPool $filterPool
      * @param FileProcessorFactory $fileProcessorFactory
-     * @param ContextInterface $context
      * @param array $meta
      * @param array $data
+     * @param ContextInterface $context
      * @param bool $allowToShowHiddenAttributes
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -596,8 +600,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         ) {
             $addresses[$addressId]['default_shipping'] = $customer['default_shipping'];
         }
-        if (isset($addresses[$addressId]['street']) && !is_array($addresses[$addressId]['street'])) {
-            $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
+
+        foreach ($this->meta['address']['children'] as $attributeName => $attributeMeta) {
+            if ($attributeMeta['arguments']['data']['config']['dataType'] === Multiline::NAME
+                && isset($addresses[$addressId][$attributeName])
+                && !is_array($addresses[$addressId][$attributeName])
+            ) {
+                $addresses[$addressId][$attributeName] = explode("\n", $addresses[$addressId][$attributeName]);
+            }
         }
     }
 
