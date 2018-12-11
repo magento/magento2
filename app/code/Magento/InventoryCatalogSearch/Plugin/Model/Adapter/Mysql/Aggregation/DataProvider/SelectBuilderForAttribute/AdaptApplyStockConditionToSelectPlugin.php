@@ -87,7 +87,7 @@ class AdaptApplyStockConditionToSelectPlugin
         $stockId = (int)$stock->getStockId();
 
         if ($stockId === $this->defaultStockProvider->getId()) {
-            return $proceed();
+            return $proceed($select);
         }
 
         $tableName = $this->stockIndexTableNameResolver->execute($stockId);
