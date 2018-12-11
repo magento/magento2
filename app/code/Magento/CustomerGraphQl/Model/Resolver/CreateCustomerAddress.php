@@ -14,6 +14,8 @@ use Magento\CustomerGraphQl\Model\Customer\Address\CustomerAddressCreateDataVali
 use Magento\CustomerGraphQl\Model\Customer\Address\CustomerAddressDataProvider;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -103,6 +105,7 @@ class CreateCustomerAddress implements ResolverInterface
      * @param int $customerId
      * @param array $addressData
      * @return AddressInterface
+     * @throws GraphQlInputException
      */
     private function createCustomerAddress(int $customerId, array $addressData) : AddressInterface
     {
@@ -110,6 +113,12 @@ class CreateCustomerAddress implements ResolverInterface
         $address = $this->addressInterfaceFactory->create();
         $this->dataObjectHelper->populateWithArray($address, $addressData, AddressInterface::class);
         $address->setCustomerId($customerId);
-        return $this->addressRepository->save($address);
+
+        try {
+            $address = $this->addressRepository->save($address);
+        } catch (InputException $e) {
+            throw new GraphQlInputException(__($e->getMessage()), $e);
+        }
+        return $address;
     }
 }

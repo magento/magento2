@@ -34,7 +34,7 @@ class CreateCustomerAddressTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCreateCustomerAddress()
@@ -165,7 +165,7 @@ MUTATION;
      * Verify customers with valid credentials create new address
      * with missing required Firstname attribute
      *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
      * @expectedException \Exception
      * @expectedExceptionMessage Required parameters are missing: firstname
      */
