@@ -23,4 +23,10 @@
         </array>
         <data key="calculate_subtotal">true</data>
     </entity>
+    <entity name="TaxRule" type="taxRule">
+        <data key="name" unique="suffix">TaxName</data>
+    </entity>
+    <entity name="TaxRuleZeroRate" type="taxRule">
+        <data key="name" unique="suffix">TaxNameZeroRate</data>
+    </entity>
 </entities>
