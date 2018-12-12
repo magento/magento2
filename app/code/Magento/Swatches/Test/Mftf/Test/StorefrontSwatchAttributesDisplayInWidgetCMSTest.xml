@@ -32,8 +32,8 @@
                 <argument name="ProductAttribute" value="visualSwatchAttribute"/>
             </actionGroup>
             <!--delete root category-->
-            <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPageAfterCLIReindexCommand"/>
-            <waitForPageLoad time="30" stepKey="waitForPageCategoryLoadAfterCLIReindexCommand"/>
+            <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
+            <waitForPageLoad time="30" stepKey="waitForPageCategoryLoad"/>
             <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createRootCategory.name$$')}}" stepKey="clickOnDefaultRootCategory"/>
             <waitForPageLoad stepKey="waitForPageDefaultCategoryEditLoad" />
             <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent1"/>

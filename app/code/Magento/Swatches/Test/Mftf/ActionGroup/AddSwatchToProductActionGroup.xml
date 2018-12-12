@@ -70,9 +70,8 @@
         </arguments>
 
         <!-- Go to Storefront Properties tab -->
-        <scrollToTopOfPage stepKey="scrollToTop" after="fillDefaultStoreLabel2"/>
-        <click selector="#front_fieldset-wrapper" stepKey="goToStorefrontPropertiesTab" after="scrollToTop"/>
-        <waitForElementVisible selector="//span[text()='Storefront Properties']" stepKey="waitTabLoad" after="goToStorefrontPropertiesTab"/>
+        <click selector="{{AdminNewAttributePanel.storefrontPropertiesTab}}" stepKey="goToStorefrontPropertiesTab" after="fillDefaultStoreLabel2"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.storefrontPropertiesTitle}}" stepKey="waitTabLoad" after="goToStorefrontPropertiesTab"/>
         <selectOption selector="{{AdminNewAttributePanel.useInSearch}}" stepKey="switchOnUsInSearch" userInput="Yes" after="waitTabLoad"/>
         <selectOption selector="{{AdminNewAttributePanel.visibleInAdvancedSearch}}" stepKey="switchOnVisibleInAdvancedSearch" userInput="Yes" after="switchOnUsInSearch"/>
         <selectOption selector="{{AdminNewAttributePanel.comparableOnStorefront}}" stepKey="switchOnComparableOnStorefront" userInput="Yes" after="switchOnVisibleInAdvancedSearch"/>

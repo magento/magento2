@@ -101,6 +101,7 @@
         <element name="RuleParamSelect" type="select" selector="//ul[contains(@class,'rule-param-children')]/li[{{arg1}}]//*[contains(@class,'rule-param')][{{arg2}}]//select" parameterized="true"/>
         <element name="RuleParamInput" type="input" selector="//ul[contains(@class,'rule-param-children')]/li[{{arg1}}]//*[contains(@class,'rule-param')][{{arg2}}]//input" parameterized="true"/>
         <element name="RuleParamLabel" type="input" selector="//ul[contains(@class,'rule-param-children')]/li[{{arg1}}]//*[contains(@class,'rule-param')][{{arg2}}]//a" parameterized="true"/>
+        <element name="RuleParamListExpander" selector="//div[@class='rule-chooser']//ul[contains(@class,'x-tree-root')]//li[{{arg3}}]//img[contains(@class,'x-tree-elbow-end-plus')]" parameterized="true"/>
         <element name="Chooser" type="button" selector="//img[@title='Open Chooser']"/>
         <element name="PageSize" type="input" selector="input[name='parameters[page_size]']"/>
         <element name="ProductAttribute" type="multiselect" selector="select[name='parameters[show_attributes][]']" />
