@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Sitemap\Model;
 
@@ -11,28 +12,14 @@ use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Backend\App\Area\FrontNameResolver;
-use Magento\Store\Model\Store;
+use Magento\Sitemap\Model\Observer as Observer;
+use Psr\Log\LoggerInterface;
 
 /**
  *  Sends emails for the scheduled generation of the sitemap file
  */
-class SitemapSendEmail
+class EmailNotification
 {
-    /**
-     * Error email template configuration
-     */
-    const XML_PATH_ERROR_TEMPLATE = 'sitemap/generate/error_email_template';
-
-    /**
-     * Error email identity configuration
-     */
-    const XML_PATH_ERROR_IDENTITY = 'sitemap/generate/error_email_identity';
-
-    /**
-     * 'Send error emails to' configuration
-     */
-    const XML_PATH_ERROR_RECIPIENT = 'sitemap/generate/error_email';
-
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
      */
@@ -43,66 +30,75 @@ class SitemapSendEmail
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    private $_scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
      */
-    private $_transportBuilder;
+    private $transportBuilder;
 
     /**
-     * SitemapSendEmail constructor.
+     * @var $logger
+     */
+    private $logger;
+
+    /**
+     * EmailNotification constructor.
      * @param StateInterface $inlineTranslation
      * @param TransportBuilder $transportBuilder
      * @param ScopeConfigInterface $scopeConfig
+     * @param LoggerInterface $logger
      */
     public function __construct(
         StateInterface $inlineTranslation,
         TransportBuilder $transportBuilder,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        LoggerInterface $logger
     ) {
         $this->inlineTranslation = $inlineTranslation;
-        $this->_scopeConfig = $scopeConfig;
-        $this->_transportBuilder = $transportBuilder;
+        $this->scopeConfig = $scopeConfig;
+        $this->transportBuilder = $transportBuilder;
+        $this->logger = $logger;
     }
 
     /**
      * Send's error email if sitemap generated with errors.
      *
-     * @param array $errors
-     * @throws \Magento\Framework\Exception\MailException
+     * @param array| $errors
      */
-    public function sendErrorEmail($errors)
+    public function sendErrors($errors)
     {
-        $recipient = $this->_scopeConfig->getValue(
-            self::XML_PATH_ERROR_RECIPIENT,
-            ScopeInterface::SCOPE_STORE
-        );
-        if ($errors && $recipient) {
-            $this->inlineTranslation->suspend();
-
-            $this->_transportBuilder->setTemplateIdentifier(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_ERROR_TEMPLATE,
+        $this->inlineTranslation->suspend();
+        try {
+            $this->transportBuilder->setTemplateIdentifier(
+                $this->scopeConfig->getValue(
+                    Observer::XML_PATH_ERROR_TEMPLATE,
                     ScopeInterface::SCOPE_STORE
                 )
             )->setTemplateOptions(
                 [
                     'area' => FrontNameResolver::AREA_CODE,
-                    'store' => Store::DEFAULT_STORE_ID,
+                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                 ]
             )->setTemplateVars(
                 ['warnings' => join("\n", $errors)]
             )->setFrom(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_ERROR_IDENTITY,
+                $this->scopeConfig->getValue(
+                    Observer::XML_PATH_ERROR_IDENTITY,
                     ScopeInterface::SCOPE_STORE
                 )
-            )->addTo($recipient);
+            )->addTo(
+                $this->scopeConfig->getValue(
+                    Observer::XML_PATH_ERROR_RECIPIENT,
+                    ScopeInterface::SCOPE_STORE
+                )
+            );
 
-            $transport = $this->_transportBuilder->getTransport();
+            $transport = $this->transportBuilder->getTransport();
             $transport->sendMessage();
-
+        } catch (\Exception $e) {
+            $this->logger->error('Sitemap sendErrors: '.$e->getMessage());
+        } finally {
             $this->inlineTranslation->resume();
         }
     }

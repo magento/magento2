@@ -6,7 +6,7 @@
 namespace Magento\Sitemap\Model;
 
 use Magento\Store\Model\App\Emulation;
-use Magento\Sitemap\Model\SitemapSendEmail as SitemapEmail;
+use Magento\Sitemap\Model\EmailNotification as SitemapEmail;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
@@ -32,21 +32,36 @@ class Observer
     const XML_PATH_CRON_EXPR = 'crontab/default/jobs/generate_sitemaps/schedule/cron_expr';
 
     /**
+     * Error email template configuration
+     */
+    const XML_PATH_ERROR_TEMPLATE = 'sitemap/generate/error_email_template';
+
+    /**
+     * Error email identity configuration
+     */
+    const XML_PATH_ERROR_IDENTITY = 'sitemap/generate/error_email_identity';
+
+    /**
+     * 'Send error emails to' configuration
+     */
+    const XML_PATH_ERROR_RECIPIENT = 'sitemap/generate/error_email';
+
+    /**
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory
      */
-    protected $_collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    private $storeManager;
 
     /**
      * @var Emulation
@@ -54,30 +69,30 @@ class Observer
     private $appEmulation;
 
     /**
-     * @var $sitemapEmail
+     * @var $emailNotification
      */
-    private $sitemapEmail;
+    private $emailNotification;
 
     /**
      * Observer constructor.
      * @param ScopeConfigInterface $scopeConfig
      * @param CollectionFactory $collectionFactory
      * @param StoreManagerInterface $storeManager
-     * @param SitemapSendEmail $sitemapEmail
+     * @param EmailNotification $emailNotification
      * @param Emulation $appEmulation
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         CollectionFactory $collectionFactory,
         StoreManagerInterface $storeManager,
-        SitemapEmail $sitemapEmail,
+        SitemapEmail $emailNotification,
         Emulation $appEmulation
     ) {
-        $this->_scopeConfig = $scopeConfig;
-        $this->_collectionFactory = $collectionFactory;
-        $this->_storeManager = $storeManager;
+        $this->scopeConfig = $scopeConfig;
+        $this->collectionFactory = $collectionFactory;
+        $this->storeManager = $storeManager;
         $this->appEmulation = $appEmulation;
-        $this->sitemapEmail = $sitemapEmail;
+        $this->emailNotification = $emailNotification;
     }
 
     /**
@@ -90,9 +105,12 @@ class Observer
     public function scheduledGenerateSitemaps()
     {
         $errors = [];
-
+        $recipient = $this->scopeConfig->getValue(
+            Observer::XML_PATH_ERROR_RECIPIENT,
+            ScopeInterface::SCOPE_STORE
+        );
         // check if scheduled generation enabled
-        if (!$this->_scopeConfig->isSetFlag(
+        if (!$this->scopeConfig->isSetFlag(
             self::XML_PATH_GENERATION_ENABLED,
             ScopeInterface::SCOPE_STORE
         )
@@ -100,7 +118,7 @@ class Observer
             return;
         }
 
-        $collection = $this->_collectionFactory->create();
+        $collection = $this->collectionFactory->create();
         /* @var $collection \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection */
         foreach ($collection as $sitemap) {
             /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
@@ -114,11 +132,12 @@ class Observer
                 $sitemap->generateXml();
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
-
-                $this->sitemapEmail->sendErrorEmail($errors);
             } finally {
                 $this->appEmulation->stopEnvironmentEmulation();
             }
+        }
+        if ($errors && $recipient) {
+            $this->emailNotification->sendErrors($errors);
         }
     }
 }
