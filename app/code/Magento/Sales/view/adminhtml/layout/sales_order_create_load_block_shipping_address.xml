@@ -10,7 +10,7 @@
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Address" template="Magento_Sales::order/create/form/address.phtml" name="shipping_address">
                 <arguments>
-                    <argument name="customerAddressViewModel" xsi:type="object">Magento\Sales\ViewModel\Customer\AddressFormatter</argument>
+                    <argument name="customerAddressFormatter" xsi:type="object">Magento\Sales\ViewModel\Customer\AddressFormatter</argument>
                     <argument name="customerAddressCollection" xsi:type="object">Magento\Customer\Model\ResourceModel\Address\Collection</argument>
                 </arguments>
             </block>

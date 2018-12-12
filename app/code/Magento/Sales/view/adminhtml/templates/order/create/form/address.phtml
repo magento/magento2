@@ -17,9 +17,9 @@ if ($block->getCustomerId()) {
 }
 
 /**
- * @var \Magento\Sales\ViewModel\Customer\Address $customerAddressViewModel
+ * @var \Magento\Sales\ViewModel\Customer\AddressFormatter $customerAddressFormatter
  */
-$customerAddressViewModel = $block->getData('customerAddressViewModel');
+$customerAddressFormatter = $block->getData('customerAddressFormatter');
 
 /**
  * @var \Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address|\Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Address $block
@@ -32,7 +32,7 @@ if ($block->getIsShipping()):
     require(["Magento_Sales/order/create/form"], function(){
 
         order.shippingAddressContainer = '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>';
-        order.setAddresses(<?= /* @escapeNotVerified */ $customerAddressViewModel->getAddressesJson($addressArray) ?>);
+        order.setAddresses(<?= /* @escapeNotVerified */ $customerAddressFormatter->getAddressesJson($addressArray) ?>);
 
     });
     </script>
@@ -77,7 +77,7 @@ endif; ?>
                     <?php foreach ($addressArray as $addressId => $address): ?>
                         <option
                             value="<?= /* @escapeNotVerified */ $addressId ?>"<?php if ($addressId == $block->getAddressId()): ?> selected="selected"<?php endif; ?>>
-                            <?= /* @escapeNotVerified */ $block->escapeHtml($customerAddressViewModel->getAddressAsString($address)) ?>
+                            <?= /* @escapeNotVerified */ $block->escapeHtml($customerAddressFormatter->getAddressAsString($address)) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
