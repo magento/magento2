@@ -11,10 +11,12 @@ use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ProductCollection;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
 use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
@@ -153,8 +155,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->productCollectionFactory = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory::class)
+        $this->productCollectionFactory = $this->getMockBuilder(ProductCollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -280,8 +281,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturnMap($dataMap);
-        $attribute = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class)
+        $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['addData', 'setStoreId', 'setProductId', 'save', '__wakeup', '__sleep'])
             ->getMock();
@@ -463,8 +463,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $eavAttribute->expects($this->once())->method('getSource')->willReturn($attributeSource);
         $eavAttribute->expects($this->atLeastOnce())->method('getStoreLabel')->willReturn('Store Label');
 
-        $attribute = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class)
+        $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProductAttribute', '__wakeup', '__sleep'])
             ->getMock();
@@ -523,7 +522,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $this->model->getConfigurableAttributes($product));
     }
 
-        public function testGetConfigurableAttributes()
+    public function testGetConfigurableAttributes()
     {
         $configurableAttributes = '_cache_instance_configurable_attributes';
 
@@ -590,8 +589,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['__wakeup', 'getAttributeCode', 'getOptions', 'hasData', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
-        $attributeMock = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class)
+        $attributeMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -697,7 +695,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $usedAttributeMock = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class
+            Attribute::class
         )
             ->setMethods(['getProductAttribute'])
             ->disableOriginalConstructor()
