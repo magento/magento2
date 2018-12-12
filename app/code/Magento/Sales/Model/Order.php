@@ -663,7 +663,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private function canCreditmemoForZeroTotalRefunded(float $totalRefunded): bool
     {
         $isRefundZero = abs($totalRefunded) < .0001;
-        // Case when Adjustment Fee (adjustment_negative) has been used for first credit memo
+        // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
         $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
         $hasActionFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
         if ($isRefundZero || $hasAdjustmentFee || $hasActionFlag) {
@@ -686,10 +686,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $checkAmtTotalPaid = $totalPaid <= $this->getGrandTotal();
         //case when amount is due for invoice
         $hasDueAmount = $this->canInvoice() && $checkAmtTotalPaid;
-        //case when paid amount is refunded and order has credit memo created
-        $creditMemos = ($this->getCreditmemosCollection() === false) ?
+        //case when paid amount is refunded and order has creditmemo created
+        $creditmemos = ($this->getCreditmemosCollection() === false) ?
             true : (count($this->getCreditmemosCollection()) > 0);
-        $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditMemos;
+        $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
         if (($hasDueAmount || $paidAmtIsRefunded)
             || (!$checkAmtTotalPaid && abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)
         ) {
