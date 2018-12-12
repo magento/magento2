@@ -107,8 +107,9 @@ class QueueManagement
     }
 
     /**
-     * Mark messages to be deleted if sufficient amount of time passed since last update
      * Delete marked messages
+     *
+     * Mark messages to be deleted if sufficient amount of time passed since last update
      *
      * @return void
      */

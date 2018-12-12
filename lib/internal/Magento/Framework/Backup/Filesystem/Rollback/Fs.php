@@ -94,6 +94,8 @@ class Fs extends AbstractRollback
     }
 
     /**
+     * Get file system helper instance
+     *
      * @return Helper
      * @deprecated 100.2.0
      */

@@ -141,8 +141,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Checks if field is 'subscribers_total', 'subscribers_sent'
-     * to add specific filter or adds regular filter
+     * Checks if field is 'subscribers_total', 'subscribers_sent' to add specific filter or adds regular filter
      *
      * @param string $field
      * @param null|string|array $condition

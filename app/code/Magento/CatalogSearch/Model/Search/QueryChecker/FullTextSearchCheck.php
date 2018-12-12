@@ -37,6 +37,8 @@ class FullTextSearchCheck
     }
 
     /**
+     * Process query
+     *
      * @param QueryInterface $query
      * @return bool
      * @throws \InvalidArgumentException
@@ -62,6 +64,8 @@ class FullTextSearchCheck
     }
 
     /**
+     * Process boolean query
+     *
      * @param BoolExpression $query
      * @return bool
      * @throws \InvalidArgumentException
@@ -90,6 +94,8 @@ class FullTextSearchCheck
     }
 
     /**
+     * Process filter query
+     *
      * @param Filter $query
      * @return bool
      * @throws \InvalidArgumentException

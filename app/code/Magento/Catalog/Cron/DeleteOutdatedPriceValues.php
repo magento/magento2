@@ -12,6 +12,8 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Store\Model\Store;
 
 /**
+ * Cron job for removing outdated prices.
+ *
  * Cron operation is responsible for deleting all product prices on WEBSITE level
  * in case 'Catalog Price Scope' configuration parameter is set to GLOBAL.
  */
