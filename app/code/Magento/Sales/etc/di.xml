@@ -1007,4 +1007,5 @@
     <preference
             for="Magento\Sales\Api\OrderCustomerDelegateInterface"
             type="Magento\Sales\Model\Order\OrderCustomerDelegate" />
+    <preference for="Magento\Sales\Api\LastOrderInformationManagementInterface" type="Magento\Sales\Model\LastOrderInformationManagement" />
 </config>

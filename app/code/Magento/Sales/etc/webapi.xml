@@ -277,4 +277,17 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <!-- Get last order information -->
+    <route url="/V1/order/mine/last-order-information" method="GET">
+        <service class="Magento\Sales\Api\LastOrderInformationManagementInterface" method="getLastOrderInformation"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/order/mine/last-increment-id" method="GET">
+        <service class="Magento\Sales\Api\LastOrderInformationManagementInterface" method="getLastRealOrderId"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 </routes>
