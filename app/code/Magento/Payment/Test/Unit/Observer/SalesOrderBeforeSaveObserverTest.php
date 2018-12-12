@@ -61,7 +61,7 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getMockBuilder(
             \Magento\Sales\Model\Order\Payment::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $order->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
+        $order->method('getPayment')->will($this->returnValue($paymentMock));
         $methodInstance = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
@@ -86,7 +86,7 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getMockBuilder(
             \Magento\Sales\Model\Order\Payment::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $order->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
+        $order->method('getPayment')->will($this->returnValue($paymentMock));
         $methodInstance = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
@@ -114,7 +114,7 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getMockBuilder(
             \Magento\Sales\Model\Order\Payment::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $order->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
+        $order->method('getPayment')->will($this->returnValue($paymentMock));
         $methodInstance = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
@@ -157,6 +157,29 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * The method should check that the payment is available, as this is not always the case.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @exceptedExceptionMessage Please provide payment for the order.
+     */
+    public function testDoesNothingWhenNoPaymentIsAvailable()
+    {
+        $this->_prepareEventMockWithMethods(['getOrder']);
+
+        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)->disableOriginalConstructor()->setMethods(
+            array_merge(['__wakeup', 'getPayment'])
+        )->getMock();
+
+        $this->eventMock->expects($this->once())->method('getOrder')->will(
+            $this->returnValue($order)
+        );
+
+        $order->expects($this->exactly(1))->method('getPayment')->willReturn(null);
+
+        $this->salesOrderBeforeSaveObserver->execute($this->observerMock);
+    }
+
+    /**
      * Prepares EventMock with set of methods
      *
      * @param $methodsList
@@ -184,7 +207,7 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getMockBuilder(
             \Magento\Sales\Model\Order\Payment::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $order->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
+        $order->method('getPayment')->will($this->returnValue($paymentMock));
         $methodInstance = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
