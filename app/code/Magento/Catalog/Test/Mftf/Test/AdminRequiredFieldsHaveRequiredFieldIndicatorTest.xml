@@ -9,12 +9,13 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminRequiredFieldsHaveRequiredFieldIndicatorTest">
         <annotations>
-            <stories value="Verify the presence of required field indicators across different pages in Magento Admin"/>
+            <stories value="MAGETWO-73342: Clicking on area around the label of a toggle element results in the element's state being changed"/>
             <title value="Required fields should have the required asterisk indicator "/>
             <description value="Verify that Required fields should have the required indicator icon next to the field name"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-97037"/>
             <group value="catalog"/>
+            <group value="cms"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
