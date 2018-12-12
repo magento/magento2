@@ -6,7 +6,9 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-class Delete extends \Magento\Backend\App\Action
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class Delete extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session

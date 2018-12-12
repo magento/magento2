@@ -7,7 +7,7 @@
 namespace Magento\Cms\Controller\Adminhtml\Page\Widget;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 
 class Chooser extends Action implements HttpPostActionInterface, HttpGetActionInterface
