@@ -5,30 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Sales\Model\Customer;
+namespace Magento\Sales\ViewModel\Customer;
 
-use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
- * Customer address
+ * Customer address formatter
  */
-class Address extends DataObject implements ArgumentInterface
+class AddressFormatter implements ArgumentInterface
 {
-    /**
-     * Customer addresses collection
-     *
-     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
-     */
-    private $addressCollection;
-
-    /**
-     * Customer address array
-     *
-     * @var array
-     */
-    private $addressArray;
-
     /**
      * Customer form factory
      *
@@ -37,11 +22,11 @@ class Address extends DataObject implements ArgumentInterface
     private $customerFormFactory;
 
     /**
-     * Address helper
+     * Address format helper
      *
      * @var \Magento\Customer\Helper\Address
      */
-    private $addressHelper;
+    private $addressFormatHelper;
 
     /**
      * Directory helper
@@ -67,60 +52,37 @@ class Address extends DataObject implements ArgumentInterface
     /**
      * Customer address
      *
-     * @param \Magento\Customer\Model\ResourceModel\Address\Collection $addressCollection
      * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
-     * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param \Magento\Customer\Helper\Address $addressFormatHelper
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Backend\Model\Session\Quote $session
      * @param \Magento\Framework\Serialize\Serializer\Json $jsonEncoder
      */
     public function __construct(
-        \Magento\Customer\Model\ResourceModel\Address\Collection $addressCollection,
         \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
-        \Magento\Customer\Helper\Address $addressHelper,
+        \Magento\Customer\Helper\Address $addressFormatHelper,
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Backend\Model\Session\Quote $session,
         \Magento\Framework\Serialize\Serializer\Json $jsonEncoder
     ) {
-        $this->addressCollection = $addressCollection;
         $this->customerFormFactory = $customerFormFactory;
-        $this->addressHelper = $addressHelper;
+        $this->addressFormatHelper = $addressFormatHelper;
         $this->directoryHelper = $directoryHelper;
         $this->session = $session;
         $this->jsonEncoder = $jsonEncoder;
-        parent::__construct();
-    }
-
-    /**
-     * Retrieve customer address array.
-     *
-     * @param int $customerId
-     *
-     * @return array
-     */
-    public function getAddresses(int $customerId): array
-    {
-        if ($customerId) {
-            if ($this->addressArray === null) {
-                $addressCollection = $this->addressCollection->setCustomerFilter([$customerId]);
-                $this->addressArray = $addressCollection->toArray();
-            }
-            return $this->addressArray;
-        }
-        return [];
     }
 
     /**
      * Return customer address array as JSON
      *
-     * @param int $customerId
+     * @param array $addressArray
      *
      * @return string
      */
-    public function getAddressesJson(int $customerId): string
+    public function getAddressesJson(array $addressArray): string
     {
         $data = $this->getEmptyAddressForm();
-        foreach ($this->getAddresses($customerId) as $addressId => $address) {
+        foreach ($addressArray as $addressId => $address) {
             $addressForm = $this->customerFormFactory->create(
                 'customer_address',
                 'adminhtml_customer_address',
@@ -142,7 +104,7 @@ class Address extends DataObject implements ArgumentInterface
      */
     public function getAddressAsString(array $address): string
     {
-        $formatTypeRenderer = $this->addressHelper->getFormatTypeRenderer('oneline');
+        $formatTypeRenderer = $this->addressFormatHelper->getFormatTypeRenderer('oneline');
         $result = '';
         if ($formatTypeRenderer) {
             $result = $formatTypeRenderer->renderArray($address);

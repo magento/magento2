@@ -7,9 +7,19 @@
 // @codingStandardsIgnoreFile
 
 /**
- * @var Magento\Sales\Model\Customer\Address $customerAddressModel
+ * @var \Magento\Customer\Model\ResourceModel\Address\Collection $addressCollection
  */
-$customerAddressModel = $block->getData('customerAddressModel');
+$addressCollection = $block->getData('customerAddressCollection');
+
+$addressArray = [];
+if ($block->getCustomerId()) {
+    $addressArray = $addressCollection->setCustomerFilter([$block->getCustomerId()])->toArray();
+}
+
+/**
+ * @var \Magento\Sales\ViewModel\Customer\Address $customerAddressViewModel
+ */
+$customerAddressViewModel = $block->getData('customerAddressViewModel');
 
 /**
  * @var \Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address|\Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Address $block
@@ -22,7 +32,7 @@ if ($block->getIsShipping()):
     require(["Magento_Sales/order/create/form"], function(){
 
         order.shippingAddressContainer = '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>';
-        order.setAddresses(<?= /* @escapeNotVerified */ $customerAddressModel->getAddressesJson($block->getCustomerId()) ?>);
+        order.setAddresses(<?= /* @escapeNotVerified */ $customerAddressViewModel->getAddressesJson($addressArray) ?>);
 
     });
     </script>
@@ -64,10 +74,10 @@ endif; ?>
                         onchange="order.selectAddress(this, '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>')"
                         class="admin__control-select">
                     <option value=""><?= /* @escapeNotVerified */ __('Add New Address') ?></option>
-                    <?php foreach ($customerAddressModel->getAddresses($block->getCustomerId()) as $addressId => $address): ?>
+                    <?php foreach ($addressArray as $addressId => $address): ?>
                         <option
                             value="<?= /* @escapeNotVerified */ $addressId ?>"<?php if ($addressId == $block->getAddressId()): ?> selected="selected"<?php endif; ?>>
-                            <?= /* @escapeNotVerified */ $block->escapeHtml($customerAddressModel->getAddressAsString($address)) ?>
+                            <?= /* @escapeNotVerified */ $block->escapeHtml($customerAddressViewModel->getAddressAsString($address)) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
