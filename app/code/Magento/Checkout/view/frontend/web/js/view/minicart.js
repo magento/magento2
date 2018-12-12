@@ -101,7 +101,9 @@ define([
                 self.isLoading(true);
             });
 
-            if (cartData()['website_id'] !== window.checkout.websiteId) {
+            if (cartData()['website_id'] !== window.checkout.websiteId ||
+                cartData()['storeId'] !== window.checkout.storeId
+            ) {
                 customerData.reload(['cart'], false);
             }
 
