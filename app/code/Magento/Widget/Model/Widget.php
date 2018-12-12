@@ -315,7 +315,7 @@ class Widget
                 }
             }
             if (isset($value)) {
-                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeQuote($value));
+                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeHtmlAttr($value, false));
             }
         }
 
