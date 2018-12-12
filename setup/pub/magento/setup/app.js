@@ -31,7 +31,8 @@ var app = angular.module(
         'home',
         'auth-dialog',
         'system-config',
-        'marketplace-credentials'
+        'marketplace-credentials',
+        'ngSanitize'
     ]);
 
 app.config(['$httpProvider', '$stateProvider', function ($httpProvider, $stateProvider) {
@@ -55,6 +56,9 @@ app.config(['$httpProvider', '$stateProvider', function ($httpProvider, $statePr
             return $delegate;
         });
     })
+    .config(['$locationProvider', function($locationProvider) {
+        $locationProvider.hashPrefix('');
+    }])
     .run(function ($rootScope, $state) {
         $rootScope.$state = $state;
     });
