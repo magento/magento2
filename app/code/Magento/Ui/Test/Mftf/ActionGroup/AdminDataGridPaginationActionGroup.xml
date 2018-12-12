@@ -27,4 +27,14 @@
         <click selector="{{AdminDataGridPaginationSection.perPageApplyInput}}" stepKey="applyCustomPerPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
     </actionGroup>
+
+    <actionGroup name="adminDataGridDeleteCustomPerPage">
+        <arguments>
+            <argument name="perPage"/>
+        </arguments>
+        <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown1"/>
+        <click selector="{{AdminDataGridPaginationSection.perPageEditCustomValue(perPage)}}" stepKey="clickToEditCustomPerPage"/>
+        <click selector="{{AdminDataGridPaginationSection.perPageDeleteCustomValue(perPage)}}" stepKey="clickToDeleteCustomPerPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+    </actionGroup>
 </actionGroups>

@@ -13,6 +13,8 @@
         <element name="perPageOption" type="button" selector="//div[@class='admin__data-grid-pager-wrap']//div[@class='selectmenu-items _active']//li//button[text()='{{var1}}']" parameterized="true"/>
         <element name="perPageInput" type="input" selector="//div[@class='admin__data-grid-pager-wrap']//div[@class='selectmenu-items _active']//li//div[@class='selectmenu-item-edit']//input"/>
         <element name="perPageApplyInput" type="button" selector="//div[@class='admin__data-grid-pager-wrap']//div[@class='selectmenu-items _active']//li//div[@class='selectmenu-item-edit']//button"/>
+        <element name="perPageEditCustomValue" type="button" selector="//div[@class='selectmenu-items _active']//div[@class='selectmenu-item']//button[text()='{{var1}}']/following-sibling::button[@class='action-edit']" parameterized="true"/>
+        <element name="perPageDeleteCustomValue" type="button" selector="//div[@class='selectmenu-items _active']//div[@class='selectmenu-item']//button[text()='{{var2}}']/parent::div/preceding-sibling::div/button[@class='action-delete']" parameterized="true"/>
         <element name="nextPage" type="button" selector="div.admin__data-grid-pager > button.action-next" timeout="30"/>
         <element name="previousPage" type="button" selector="div.admin__data-grid-pager > button.action-previous" timeout="30"/>
         <element name="currentPage" type="input" selector="div.admin__data-grid-pager > input[data-ui-id='current-page-input']"/>
