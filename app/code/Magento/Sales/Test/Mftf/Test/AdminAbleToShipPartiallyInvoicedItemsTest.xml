@@ -69,8 +69,8 @@
         <scrollTo selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" stepKey="scrollToItemsInvoiced"/>
         <!--Change invoiced items count-->
         <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="5" stepKey="invoiceHalfTheItems"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForUpdateQtyButton"/>
-        <click selector="{{AdminInvoiceItemsSection.updateQtyEnabled}}" stepKey="updateQtyToBeInvoiced"/>
+        <waitForElementChange selector="{{AdminInvoiceItemsSection.updateQty}}" function="function($el) {return $el->isEnabled();}" stepKey="waitForUpdateQtyButtonEnabled"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQtyToBeInvoiced"/>
         <waitForLoadingMaskToDisappear stepKey="waitForQtyToUpdate"/>
         <waitForElementVisible selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="waitforSubmitInvoiceBtn"/>
         <!--Submit Invoice-->

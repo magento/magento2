@@ -36,7 +36,12 @@
         <click selector="{{AdminProductAttributeGridSection.attributeCode(attributeCode)}}" stepKey="clickRowToEdit"/>
         <waitForPageLoad stepKey="waitForColorAttributePageLoad"/>
     </actionGroup>
-
+    <!--Save product attribute and see success message-->
+    <actionGroup name="SaveProductAttribute">
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveAttribute"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product attribute." stepKey="seeSuccessMessage"/>
+    </actionGroup>
     <actionGroup name="deleteProductAttribute">
         <arguments>
             <argument name="ProductAttribute"/>

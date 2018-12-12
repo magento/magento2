@@ -226,4 +226,42 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_objectManager->removeSharedInstance(ApiFactory::class);
         $this->_objectManager->removeSharedInstance(PaypalSession::class);
     }
+
+    /**
+     * @magentoConfigFixture current_store carriers/freeshipping/active 1
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Paypal/_files/quote_payment.php
+     * @return void
+     */
+    public function testPlaceOrderZeroGrandTotal()
+    {
+        /** @var Quote $quote */
+        $quote = $this->_objectManager->create(Quote::class);
+        $quote->load('test01', 'reserved_order_id');
+        $quote->getShippingAddress()->setShippingMethod('freeshipping');
+        $quote->getShippingAddress()->setCollectShippingRates(true);
+        /** @var \Magento\Quote\Model\Quote\Item[] $items */
+        $items = $quote->getItemsCollection()->getItems();
+        $quoteItem = reset($items);
+        /** @var \Magento\Quote\Model\Quote\Item\Updater $quoteItemUpdater */
+        $quoteItemUpdater = $this->_objectManager->get(\Magento\Quote\Model\Quote\Item\Updater::class);
+        $quoteItemUpdater->update($quoteItem, ['qty' => 1, 'custom_price' => 0]);
+        $quote->setTotalsCollectedFlag(false)->collectTotals()->save();
+
+        $this->_objectManager->get(Session::class)->setQuoteId($quote->getId());
+
+        $this->dispatch('paypal/express/placeOrder');
+        $this->assertSessionMessages(
+            $this->equalTo(
+                [
+                    htmlspecialchars(
+                        (string)__('PayPal can\'t process orders with a zero balance due. '
+                        . 'To finish your purchase, please go through the standard checkout process.'),
+                        ENT_QUOTES
+                    )
+                ]
+            ),
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+        );
+    }
 }

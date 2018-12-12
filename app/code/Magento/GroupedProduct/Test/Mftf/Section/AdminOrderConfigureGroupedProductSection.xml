@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderConfigureGroupedProductSection">
+        <element name="configureProductOk" type="button" selector="[data-role='modal']._show [data-role='action']" timeout="30"/>
+        <element name="configureProductQtyField" type="input" selector="#super-product-table tr:nth-of-type({{index}}) td.col-qty input.qty" parameterized="true"/>
+    </section>
+</sections>
