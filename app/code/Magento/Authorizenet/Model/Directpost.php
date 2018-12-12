@@ -27,7 +27,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * @var string
      */
-    protected $_infoBlockType = \Magento\Payment\Block\Info::class;
+    protected $_infoBlockType = \Magento\Authorizenet\Block\Adminhtml\Order\View\Info\PaymentDetails::class;
 
     /**
      * Payment Method feature
@@ -371,9 +371,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     }
 
     /**
-     * Refund the amount
-     *
-     * Need to decode last 4 digits for request.
+     * Refund the amount need to decode last 4 digits for request.
      *
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
      * @param float $amount
@@ -626,6 +624,14 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         if ($response->getXResponseCode() == self::RESPONSE_CODE_HELD) {
             $payment->setIsTransactionPending(true)
                 ->setIsFraudDetected(true);
+        }
+
+        $additionalInformationKeys = explode(',', $this->getValue('paymentInfoKeys'));
+        foreach ($additionalInformationKeys as $paymentInfoKey) {
+            $paymentInfoValue = $response->getDataByKey($paymentInfoKey);
+            if ($paymentInfoValue !== null) {
+                $payment->setAdditionalInformation($paymentInfoKey, $paymentInfoValue);
+            }
         }
     }
 
@@ -922,7 +928,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             $payment->setIsTransactionDenied(true);
         }
         $this->addStatusCommentOnUpdate($payment, $response, $transactionId);
-        return [];
+        return $response->getData();
     }
 
     /**
@@ -1002,10 +1008,9 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     }
 
     /**
-     * Retrieve PSR Logger if not properly loaded via DI
+     * Get psr logger.
      *
      * @return \Psr\Log\LoggerInterface
-     *
      * @deprecated 100.1.0
      */
     private function getPsrLogger()
