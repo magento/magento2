@@ -45,11 +45,11 @@ class GenerateCustomerToken implements ResolverInterface
         array $args = null
     ) {
         if (!isset($args['email'])) {
-            throw new GraphQlInputException(__('"email" value should be specified'));
+            throw new GraphQlInputException(__('Specify the "email" value.'));
         }
 
         if (!isset($args['password'])) {
-            throw new GraphQlInputException(__('"password" value should be specified'));
+            throw new GraphQlInputException(__('Specify the "password" value.'));
         }
 
         try {
