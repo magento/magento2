@@ -6,7 +6,7 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateCartPriceRuleActionGroup">
         <arguments>
             <argument name="ruleName"/>
@@ -27,9 +27,9 @@
     <!--Delete Cart price Rule for Retailer customer-->
     <actionGroup name="AdminDeleteCartPriceRuleForRetailerActionGroup">
         <click selector="{{AdminMenuSection.marketing}}" stepKey="clickOnMarketing" />
-        <waitForPageLoad stepKey="waitForMarketing" time="3"/>
+        <waitForPageLoad stepKey="waitForMarketing"/>
         <click selector="{{CartPriceRulesSubmenuSection.cartPriceRules}}" stepKey="clickOnCartPriceRules"/>
-        <waitForPageLoad stepKey="waitForCartPriceRules" time="5"/>
+        <waitForPageLoad stepKey="waitForCartPriceRules"/>
         <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{SimpleSalesRule.name}}" stepKey="filterByName"/>
         <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
         <click selector="{{AdminCartPriceRulesSection.rowByIndex('1')}}" stepKey="goToEditRulePage"/>
