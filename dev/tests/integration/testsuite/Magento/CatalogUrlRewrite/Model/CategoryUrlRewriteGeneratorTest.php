@@ -14,6 +14,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
@@ -262,5 +263,94 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
                 'Expected: ' . var_export($row, true) . "\nIn Actual: " . var_export($actual, true)
             );
         }
+    }
+
+    /**
+     * Get all actual url paths.
+     *
+     * @param array $filter
+     * @return array
+     */
+    private function getActualUrlPaths(array $filter)
+    {
+        /** @var \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder */
+        $urlFinder = $this->objectManager->get(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
+        $actualResults = [];
+        foreach ($urlFinder->findAllByData($filter) as $url) {
+            $actualResults[] = [
+                $url->getRequestPath(),
+                $url->getTargetPath(),
+                $url->getStoreId(),
+            ];
+        }
+
+        return $actualResults;
+    }
+
+    /**
+     * Test getting url path.
+     *
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testGetUrlPath()
+    {
+        /** @var \Magento\Catalog\Api\CategoryRepositoryInterface $repository */
+        $repository = $this->objectManager->get(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+
+        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
+        $storeRepository = $this->objectManager->get(\Magento\Store\Api\StoreRepositoryInterface::class);
+        $storeId = $storeRepository->get('fixture_second_store')->getId();
+
+        $storeManager = $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $store = $storeManager->getStore($storeId);
+        $storeManager->setCurrentStore($store->getCode());
+
+        $categoryFilter = [
+            UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+            UrlRewrite::ENTITY_ID => [5],
+        ];
+
+        $category = $repository->get(5);
+        $category->addData(
+            [
+                'use_default' => [
+                    'url_key' => 0,
+                ],
+                'url_key_create_redirect' => 0,
+                'url_key' => 'url-key',
+            ]);
+        $category->setStoreId($storeId);
+        $repository->save($category);
+
+        $actualResults = $this->getActualUrlPaths($categoryFilter);
+        $categoryExpectedResult = [
+            ['category-1/category-1-1/category-1-1-1.html', 'catalog/category/view/id/5', 1],
+            ['category-1/category-1-1/url-key.html', 'catalog/category/view/id/5', $storeId],
+        ];
+
+        $this->assertResults($categoryExpectedResult, $actualResults);
+
+        $category = $repository->get(5);
+
+        $category->addData(
+            [
+                'use_default' => [
+                    'url_key' => 1,
+                ],
+               'url_key' => '',
+            ]);
+
+        $repository->save($category);
+
+        $actualResults = $this->getActualUrlPaths($categoryFilter);
+        $categoryExpectedResult = [
+            ['category-1/category-1-1/category-1-1-1.html', 'catalog/category/view/id/5', 1],
+            ['category-1/category-1-1/category-1-1-1.html', 'catalog/category/view/id/5', $storeId],
+        ];
+
+        $this->assertResults($categoryExpectedResult, $actualResults);
     }
 }
