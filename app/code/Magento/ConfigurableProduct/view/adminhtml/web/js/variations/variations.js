@@ -403,6 +403,7 @@ define([
          */
         validateForm: function (formElement) {
             formElement.validate();
+
             return !formElement.additionalInvalid && !formElement.source.get('params.invalid');
         },
 
