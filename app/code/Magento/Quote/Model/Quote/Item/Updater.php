@@ -145,8 +145,8 @@ class Updater
             $item->addOption($infoBuyRequest);
         }
 
-        $item->unsetData('custom_price');
-        $item->unsetData('original_custom_price');
+        $item->setData('custom_price', null);
+        $item->setData('original_custom_price', null);
     }
 
     /**
