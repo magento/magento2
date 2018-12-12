@@ -15,7 +15,7 @@
             <title value="Admin can create product attribute with text swatch and view the display characters  in full"/>
             <description value="Admin can create product attribute with text swatch and check the display characters in full"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MC-5518"/>
+            <testCaseId value="MC-5975"/>
             <group value="Swatches"/>
         </annotations>
 
