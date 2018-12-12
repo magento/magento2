@@ -210,7 +210,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Add filter by only ready fot sending item
+     * Add filter by only ready for sending item
      *
      * @return $this
      */
