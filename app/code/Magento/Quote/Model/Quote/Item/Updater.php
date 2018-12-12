@@ -60,6 +60,7 @@ class Updater
 
     /**
      * Update quote item qty.
+     *
      * Custom price is updated in case 'custom_price' value exists
      *
      * @param Item $item
