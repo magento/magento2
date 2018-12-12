@@ -6,6 +6,8 @@
 namespace Magento\AdminNotification\Model\ResourceModel;
 
 /**
+ * Inbox resource model
+ *
  * @api
  * @since 100.0.2
  */
