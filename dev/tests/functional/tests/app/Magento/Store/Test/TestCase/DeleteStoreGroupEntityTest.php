@@ -12,6 +12,7 @@ use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Backup\Test\Page\Adminhtml\BackupIndex;
 use Magento\Store\Test\Fixture\StoreGroup;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Config\Test\TestStep\SetupConfigurationStep;
 
 /**
  * Delete StoreGroup (Store Management)
@@ -101,7 +102,15 @@ class DeleteStoreGroupEntityTest extends Injectable
     {
         //Preconditions
         $storeGroup->persist();
-        $this->backupIndex->open()->getBackupGrid()->massaction([], 'Delete', true, 'Select All');
+        /** @var SetupConfigurationStep $enableBackupsStep */
+        $enableBackupsStep = $this->objectManager->create(
+            SetupConfigurationStep::class,
+            ['configData' => 'enable_backups_functionality']
+        );
+        $enableBackupsStep->run();
+        $this->backupIndex->open()
+            ->getBackupGrid()
+            ->massaction([], 'Delete', true, 'Select All');
 
         //Steps
         $this->storeIndex->open();

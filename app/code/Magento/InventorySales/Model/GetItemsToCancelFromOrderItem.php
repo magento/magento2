@@ -112,7 +112,8 @@ class GetItemsToCancelFromOrderItem
                     $productOptions['bundle_selection_attributes']
                 );
                 if ($bundleSelectionAttributes) {
-                    $qty = $bundleSelectionAttributes['qty'] * $this->getQtyToCancel($orderItem);
+                    $shippedQty = $bundleSelectionAttributes['qty'] * $orderItem->getQtyShipped();
+                    $qty = $item->getQtyOrdered() - max($shippedQty, $item->getQtyInvoiced()) - $item->getQtyCanceled();
                     $itemSku = $this->getSkuFromOrderItem->execute($item);
                     $itemsToCancel[] = $this->itemsToSellFactory->create([
                         'sku' => $itemSku,
@@ -128,7 +129,6 @@ class GetItemsToCancelFromOrderItem
                 ]);
             }
         }
-
         return $itemsToCancel;
     }
 
