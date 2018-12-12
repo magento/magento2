@@ -75,7 +75,7 @@ class Fs extends AbstractRollback
 
         /**
          * we need these fake initializations because all magento's files in filesystem will be deleted and autoloader
-         * wont be able to load classes that we need for unpacking
+         * won't be able to load classes that we need for unpacking
          */
         new Tar();
         new Gz();

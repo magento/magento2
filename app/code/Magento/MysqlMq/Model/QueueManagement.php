@@ -223,7 +223,7 @@ class QueueManagement
     }
 
     /**
-     * In progress message delay befor retry
+     * In progress message delay before retry
      *
      * Indicates how long message will stay in IN PROGRESS status before attempted to retry
      *
