@@ -37,7 +37,7 @@ define([
                 'selectedBillingAddress': null, //Selected billing address pulled from persistence storage
                 'billingAddressFromData': null, //Billing address pulled from persistence storage
                 'newCustomerBillingAddress': null //Billing address pulled from persistence storage for new customer
-            }
+            };
         },
 
         /**
