@@ -1,0 +1,22 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    wishlist: WishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver") @doc(description: "The wishlist query returns the contents of a customer's wish list")
+}
+
+type WishlistOutput {
+    items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @doc(description: "An array of items in the customer's wish list"),
+    items_count: Int @doc(description: "The number of items in the wish list"),
+    name: String @doc(description: "When multiple wish lists are enabled, the name the customer assigns to the wishlist"),
+    sharing_code: String @doc(description: "An encrypted code that Magento uses to link to the wish list"),
+    updated_at: String @doc(description: "The time of the last modification to the wish list")
+}
+
+type WishlistItem {
+    id: Int @doc(description: "The wish list item ID")
+    qty: Float @doc(description: "The quantity of this wish list item"),
+    description: String @doc(description: "The customer's comment about this item"),
+    added_at: String @doc(description: "The time when the customer added the item to the wish list"),
+    product: ProductInterface @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\ProductResolver")
+}
