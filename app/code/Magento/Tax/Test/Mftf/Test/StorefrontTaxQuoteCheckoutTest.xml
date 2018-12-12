@@ -313,6 +313,7 @@
             <argument name="Address" value="US_Address_CA"/>
         </actionGroup>
         <click stepKey="clickNext" selector="{{CheckoutShippingSection.next}}"/>
+        <waitForPageLoad stepKey="waitForAddressToLoad"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <see stepKey="seeAddress" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxCA.state}}"/>
@@ -332,6 +333,7 @@
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
         <click stepKey="clickNext2" selector="{{CheckoutShippingSection.next}}"/>
+        <waitForPageLoad stepKey="waitForShippingToLoad"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <see stepKey="seeShipTo2" selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{SimpleTaxNY.state}}"/>
