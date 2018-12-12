@@ -38,7 +38,7 @@ class EmailNotification
     private $transportBuilder;
 
     /**
-     * @var $logger
+     * @var \Psr\Log\LoggerInterface $logger
      */
     private $logger;
 

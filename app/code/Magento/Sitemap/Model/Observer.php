@@ -7,7 +7,6 @@ namespace Magento\Sitemap\Model;
 
 use Magento\Store\Model\App\Emulation;
 use Magento\Sitemap\Model\EmailNotification as SitemapEmail;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
 use Magento\Store\Model\ScopeInterface;
@@ -59,11 +58,6 @@ class Observer
     private $collectionFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var Emulation
      */
     private $appEmulation;
@@ -77,20 +71,17 @@ class Observer
      * Observer constructor.
      * @param ScopeConfigInterface $scopeConfig
      * @param CollectionFactory $collectionFactory
-     * @param StoreManagerInterface $storeManager
      * @param EmailNotification $emailNotification
      * @param Emulation $appEmulation
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         CollectionFactory $collectionFactory,
-        StoreManagerInterface $storeManager,
         SitemapEmail $emailNotification,
         Emulation $appEmulation
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->collectionFactory = $collectionFactory;
-        $this->storeManager = $storeManager;
         $this->appEmulation = $appEmulation;
         $this->emailNotification = $emailNotification;
     }
