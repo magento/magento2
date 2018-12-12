@@ -6,6 +6,8 @@
 namespace Magento\AdminNotification\Model\System\Message\Media\Synchronization;
 
 /**
+ * Media synchronization success message class.
+ *
  * @api
  * @since 100.0.2
  */
