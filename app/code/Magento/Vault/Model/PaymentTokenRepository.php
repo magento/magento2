@@ -99,7 +99,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());
-
+        $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
 
