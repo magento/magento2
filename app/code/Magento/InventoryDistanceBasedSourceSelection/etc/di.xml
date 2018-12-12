@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetGeoReferenceProviderCodeInterface"
+                type="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetGeoReferenceProviderCode"/>
+    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface"
+                type="Magento\InventoryDistanceBasedSourceSelection\Model\Request\AddressRequest"/>
+    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface"
+                type="Magento\InventoryDistanceBasedSourceSelection\Model\Request\LatLngRequest"/>
+
+    <type name="Magento\InventorySourceSelection\Model\SourceSelectionService">
+        <arguments>
+            <argument name="sourceSelectionMethods" xsi:type="array">
+                <item name="distance"
+                      xsi:type="string">Magento\InventoryDistanceBasedSourceSelection\Model\Algorithms\DistanceBasedAlgorithm</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMapProvider"
+                 type="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GeoReferenceProvider">
+        <arguments>
+            <argument xsi:type="object" name="getDistance">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMap\GetDistance</argument>
+            <argument xsi:type="object" name="getLatLngRequestFromAddress">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMap\GetLatLngRequestFromAddress</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\OfflineProvider"
+                 type="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GeoReferenceProvider">
+        <arguments>
+            <argument xsi:type="object" name="getDistance">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline\GetDistance</argument>
+            <argument xsi:type="object" name="getLatLngRequestFromAddress">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline\GetLatLngRequestFromAddress</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\InventoryDistanceBasedSourceSelectionApi\Model\GeoReferenceProviderPool">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="google"
+                      xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMapProvider</item>
+                <item name="offline"
+                      xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\OfflineProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\InventoryApi\Api\SourceRepositoryInterface">
+        <plugin sortOrder="10" name="updateSourceLatitudeAndLongitude"
+                type="Magento\InventoryDistanceBasedSourceSelection\Plugin\FillSourceLatitudeAndLongitude"/>
+    </type>
+
+    <type name="Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrderBuilder">
+        <arguments>
+            <argument name="buildersByAlgorithm" xsi:type="array">
+                <item name="distance"
+                      xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Model\InventoryRequestBuilder\FromOrder\DistanceBuilder</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="cataloginventory/source_selection_distance_based_google/api_key" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="cataloginventory/source_selection_distance_based_google/api_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="importGeoNames" xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Console\Command\ImportGeoNamesCommand</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

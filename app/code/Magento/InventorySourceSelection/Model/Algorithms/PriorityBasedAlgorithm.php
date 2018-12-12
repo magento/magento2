@@ -10,13 +10,13 @@ namespace Magento\InventorySourceSelection\Model\Algorithms;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventorySourceSelection\Model\Algorithms\Result\GetDefaultSortedSourcesResult;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventorySourceSelectionApi\Model\Algorithms\Result\GetDefaultSortedSourcesResult;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Model\SourceSelectionInterface;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 
 /**
