@@ -823,11 +823,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     private function multiToFlatArray(array $array)
     {
         $flatArray = [];
-        foreach ($array as $key => $value) {
+        foreach ($array as $value) {
             if (is_array($value)) {
                 $flatArray = array_merge($flatArray, $this->multiToFlatArray($value));
             } else {
-                $flatArray[$key] = $value;
+                $flatArray[] = $value;
             }
         }
 
