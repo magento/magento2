@@ -75,7 +75,7 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
                 'getQty',
                 'getOrigData',
                 'setIsInStock',
-                'setStockStatusChangedAutomaticallyFlag'
+                'setStockStatusChangedAutomaticallyFlag',
             ])
             ->getMockForAbstractClass();
 
@@ -113,6 +113,9 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
         $this->model->getLowStockItems(1, 100);
     }
 
+    /**
+     * @return void
+     */
     public function testUpdateStockItemBySku()
     {
         $manageStock = 1;
@@ -137,6 +140,9 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
         $this->configureAndCallUpdateStockItemBySku();
     }
 
+    /**
+     * @return void
+     */
     public function testUpdateStockItemBySkuWithoutUpdateStockStatus()
     {
         $manageStock = 0;
@@ -154,13 +160,15 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
         $this->configureAndCallUpdateStockItemBySku();
     }
 
+    /**
+     * @return void
+     */
     private function configureAndCallUpdateStockItemBySku()
     {
         $productId = 1;
         $productSku = 'Simple';
         $websiteId = 0;
         $scopeId = 1;
-
         $data = ['item_id' => 1, 'is_in_stock' => 1];
 
         /** @var \Magento\CatalogInventory\Api\Data\StockItemInterface|MockObject $origStockItemMock */
