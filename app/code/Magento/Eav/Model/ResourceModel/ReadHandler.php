@@ -12,6 +12,9 @@ use Magento\Framework\Model\Entity\ScopeInterface;
 use Magento\Framework\Model\Entity\ScopeResolver;
 use Psr\Log\LoggerInterface;
 
+/**
+ * EAV read handler
+ */
 class ReadHandler implements AttributeInterface
 {
     /**
@@ -86,6 +89,8 @@ class ReadHandler implements AttributeInterface
     }
 
     /**
+     * Get context variables
+     *
      * @param ScopeInterface $scope
      * @return array
      */
@@ -99,6 +104,8 @@ class ReadHandler implements AttributeInterface
     }
 
     /**
+     * Execute read handler
+     *
      * @param string $entityType
      * @param array $entityData
      * @param array $arguments
@@ -129,14 +136,14 @@ class ReadHandler implements AttributeInterface
             }
         }
         if (count($attributeTables)) {
-            $attributeTables = array_keys($attributeTables);
-            foreach ($attributeTables as $attributeTable) {
+            foreach ($attributeTables as $attributeTable => $attributeIds) {
                 $select = $connection->select()
                     ->from(
                         ['t' => $attributeTable],
                         ['value' => 't.value', 'attribute_id' => 't.attribute_id']
                     )
-                    ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()]);
+                    ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
+                    ->where('attribute_id IN (?)', $attributeIds);
                 foreach ($context as $scope) {
                     //TODO: if (in table exists context field)
                     $select->where(
