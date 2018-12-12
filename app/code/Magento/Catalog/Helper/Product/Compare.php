@@ -166,7 +166,15 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function getPostDataParams($product)
     {
-        return $this->postHelper->getPostData($this->getAddUrl(), ['product' => $product->getId()]);
+        $params = ['product' => $product->getId()];
+        $requestingPageUrl = $this->_getRequest()->getParam('requesting_page_url');
+
+        if (!empty($requestingPageUrl)) {
+            $encodedUrl = $this->urlEncoder->encode($requestingPageUrl);
+            $params[\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED] = $encodedUrl;
+        }
+
+        return $this->postHelper->getPostData($this->getAddUrl(), $params);
     }
 
     /**
