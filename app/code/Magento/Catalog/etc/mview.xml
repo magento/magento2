@@ -18,6 +18,7 @@
     </view>
     <view id="catalog_category_product" class="Magento\Catalog\Model\Indexer\Category\Product" group="indexer">
         <subscriptions>
+            <table name="catalog_product_entity" entity_column="entity_id" />
             <table name="catalog_category_entity" entity_column="entity_id" />
             <table name="catalog_category_entity_int" entity_column="entity_id" />
         </subscriptions>
