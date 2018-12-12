@@ -2130,11 +2130,18 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
+     * @return \Magento\Sales\Api\Data\OrderExtensionInterface
      */
     public function getExtensionAttributes()
     {
-        return $this->_getExtensionAttributes();
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            /** @var \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes */
+            $extensionAttributes = $this->extensionAttributesFactory->create(OrderInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+
+        return $extensionAttributes;
     }
 
     /**
