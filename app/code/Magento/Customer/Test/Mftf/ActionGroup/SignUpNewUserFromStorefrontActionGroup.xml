@@ -46,4 +46,9 @@
         
         <click stepKey="saveAddress" selector="{{StorefrontCustomerAddressSection.saveAddress}}"/>
     </actionGroup>
+
+    <actionGroup name="SignUpNewCustomerStorefrontActionGroup" extends="SignUpNewUserFromStorefrontActionGroup">
+        <waitForPageLoad stepKey="waitForRegistered" after="clickCreateAccountButton"/>
+        <remove keyForRemoval="seeThankYouMessage" after="waitForRegistered"/>
+    </actionGroup>
 </actionGroups>
