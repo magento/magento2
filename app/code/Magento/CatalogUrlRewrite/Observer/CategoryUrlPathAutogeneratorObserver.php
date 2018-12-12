@@ -14,7 +14,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\Store;
 
 /**
- * Class for set or update url path.
+ * Class observer to initiate generation category url_path.
  */
 class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
 {
@@ -57,7 +57,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     }
 
     /**
-     * Method for update/set url path.
+     * Generate Category Url Path.
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
@@ -70,22 +70,38 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         $useDefaultAttribute = !$category->isObjectNew() && !empty($category->getData('use_default')['url_key']);
         if ($category->getUrlKey() !== false && !$useDefaultAttribute) {
             $resultUrlKey = $this->categoryUrlPathGenerator->getUrlKey($category);
-            if (empty($resultUrlKey)) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid URL key'));
-            }
-            $category->setUrlKey($resultUrlKey)
-                ->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
-            if (!$category->isObjectNew()) {
-                $category->getResource()->saveAttribute($category, 'url_path');
-                if ($category->dataHasChangedFor('url_path')) {
-                    $this->updateUrlPathForChildren($category);
-                }
+            $this->updateUrlKey($category, $resultUrlKey);
+        } else if ($useDefaultAttribute) {
+            $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
+            $this->updateUrlKey($category, $resultUrlKey);
+            $category->setUrlKey(null)->setUrlPath(null);
+        }
+    }
+
+    /**
+     * Update Url Key.
+     *
+     * @param Category $category
+     * @param string $urlKey
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function updateUrlKey(Category $category, string $urlKey)
+    {
+        if (empty($urlKey)) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid URL key'));
+        }
+        $category->setUrlKey($urlKey)
+            ->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
+        if (!$category->isObjectNew()) {
+            $category->getResource()->saveAttribute($category, 'url_path');
+            if ($category->dataHasChangedFor('url_path')) {
+                $this->updateUrlPathForChildren($category);
             }
         }
     }
 
     /**
-     * Update url path for children category.
+     * Update URL path for children.
      *
      * @param Category $category
      * @return void
@@ -109,8 +125,13 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         } else {
             $children = $this->childrenCategoriesProvider->getChildren($category, true);
             foreach ($children as $child) {
+                /** @var Category $child */
                 $child->setStoreId($category->getStoreId());
-                $this->updateUrlPathForCategory($child);
+                if ($child->getParentId() === $category->getId()) {
+                    $this->updateUrlPathForCategory($child, $category);
+                } else {
+                    $this->updateUrlPathForCategory($child);
+                }
             }
         }
     }
@@ -127,15 +148,16 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     }
 
     /**
-     * Update url path for category.
+     * Update URL path for category.
      *
      * @param Category $category
+     * @param Category|null $parentCategory
      * @return void
      */
-    protected function updateUrlPathForCategory(Category $category)
+    protected function updateUrlPathForCategory(Category $category, Category $parentCategory = null)
     {
         $category->unsUrlPath();
-        $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
+        $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category, $parentCategory));
         $category->getResource()->saveAttribute($category, 'url_path');
     }
 }
