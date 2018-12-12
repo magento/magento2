@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94338"/>
             <group value="Tax"/>
+            <skip>
+                <issueId value="MAGETWO-96193"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

@@ -13,6 +13,9 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 
+/**
+ * Backend model for Tierprice attribute
+ */
 class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
 {
     /**
@@ -159,8 +162,22 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      */
     protected function modifyPriceData($object, $data)
     {
+        /** @var \Magento\Catalog\Model\Product $object */
         $data = parent::modifyPriceData($object, $data);
         $price = $object->getPrice();
+
+        $specialPrice = $object->getSpecialPrice();
+        $specialPriceFromDate = $object->getSpecialFromDate();
+        $specialPriceToDate = $object->getSpecialToDate();
+        $today = time();
+
+        if ($specialPrice && ($object->getPrice() > $object->getFinalPrice())) {
+            if ($today >= strtotime($specialPriceFromDate) && $today <= strtotime($specialPriceToDate) ||
+                $today >= strtotime($specialPriceFromDate) && $specialPriceToDate === null) {
+                $price = $specialPrice;
+            }
+        }
+
         foreach ($data as $key => $tierPrice) {
             $percentageValue = $this->getPercentage($tierPrice);
             if ($percentageValue) {
@@ -172,6 +189,10 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
     }
 
     /**
+     * Update Price values in DB
+     *
+     * Updates price values in DB from array comparing to old values. Returns bool if updated
+     *
      * @param array $valuesToUpdate
      * @param array $oldValues
      * @return boolean
