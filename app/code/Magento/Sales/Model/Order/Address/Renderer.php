@@ -102,4 +102,16 @@ class Renderer
         }
         return implode(' ', $splitText);
     }
+
+    /**
+     * Check and revert arabic text
+     *
+     * @param string $string
+     * @return string
+     */
+    public function processArabicText($string)
+    {
+        return ($this->isArabic($string))
+            ? $this->reverseArabicText($string) : $string;
+    }
 }

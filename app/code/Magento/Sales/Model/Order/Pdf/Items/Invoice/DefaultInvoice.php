@@ -78,13 +78,16 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         $lines = [];
 
         // draw Product name
-        $productName = ($this->renderer->isArabic($item->getName()))
-            ? $this->renderer->reverseArabicText($item->getName()) : $item->getName();
-        $lines[0] = [['text' => $this->string->split($productName, 35, true, true), 'feed' => 35]];
+        $lines[0] = [
+            [
+                'text' => $this->string->split($this->renderer->processArabicText($item->getName()), 35, true, true),
+                'feed' => 35
+            ]
+        ];
 
         // draw SKU
         $lines[0][] = [
-            'text' => $this->string->split($this->getSku($item), 17),
+            'text' => $this->string->split($this->renderer->processArabicText($item->getSku($item)), 17),
             'feed' => 290,
             'align' => 'right',
         ];
