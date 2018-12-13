@@ -490,7 +490,7 @@ define([
 
                 return true;
             }
-            
+
             this.unserializeData();
             return false;
         },
