@@ -125,4 +125,13 @@ class Phrase implements \JsonSerializable
     {
         return $this->render();
     }
+    
+    /*
+	   * Register the translation function
+	   *
+	   */
+    public static function defineTranslationFunction()
+    {
+	    require_once __DIR__ . '/Phrase/__.php';
+    }
 }

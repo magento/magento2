@@ -28,6 +28,10 @@ HTML;
 }
 
 require_once __DIR__ . '/autoload.php';
+
+// Ensure that the translation function is defined
+\Magento\Framework\Phrase::defineTranslationFunction();
+
 // Sets default autoload mappings, may be overridden in Bootstrap::create
 \Magento\Framework\App\Bootstrap::populateAutoloader(BP, []);
 
