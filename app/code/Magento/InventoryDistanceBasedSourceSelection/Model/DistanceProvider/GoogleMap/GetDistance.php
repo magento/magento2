@@ -74,13 +74,16 @@ class GetDistance implements GetDistanceInterface
      */
     public function execute(LatLngRequestInterface $source, LatLngRequestInterface $destination): float
     {
-        $key = $source->getAsString() . '|' . $destination->getAsString();
+        $key = implode('|', [$source->getLat(), $source->getLng(), $destination->getLat(), $destination->getLng()]);
 
         if (!isset($this->distanceCache[$key])) {
+            $sourceString = $source->getLat() . ',' . $source->getLng();
+            $destinationString = $destination->getLat() . ',' . $destination->getLng();
+
             $queryString = http_build_query([
                 'key' => $this->getApiKey->execute(),
-                'origins' => $source->getAsString(),
-                'destinations' => $destination->getAsString(),
+                'origins' => $sourceString,
+                'destinations' => $destinationString,
                 'mode' => $this->scopeConfig->getValue(self::XML_PATH_MODE),
             ]);
 
@@ -95,8 +98,8 @@ class GetDistance implements GetDistanceInterface
                 throw new LocalizedException(
                     __(
                         'Unable to get distance between %1 and %2',
-                        $source->getAsString(),
-                        $destination->getAsString()
+                        $sourceString,
+                        $destinationString
                     )
                 );
             }

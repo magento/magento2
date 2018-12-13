@@ -51,12 +51,4 @@ class LatLngRequest implements LatLngRequestInterface
     {
         return $this->lng;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAsString(): string
-    {
-        return $this->getLat() . ',' . $this->getLng();
-    }
 }

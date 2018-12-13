@@ -27,11 +27,4 @@ interface LatLngRequestInterface
      * @return float
      */
     public function getLng(): float;
-
-    /**
-     * Get as string
-     *
-     * @return string
-     */
-    public function getAsString(): string;
 }
