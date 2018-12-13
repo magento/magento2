@@ -9,7 +9,7 @@ namespace Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert;
 
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface;
 
-class AddressRequestToComponentsString
+class AddressRequestToQueryString
 {
     /**
      * Get components string from address
@@ -19,10 +19,9 @@ class AddressRequestToComponentsString
      */
     public function execute(AddressRequestInterface $addressRequest): string
     {
-        return implode('|', [
-            'country:' . $addressRequest->getCountry(),
-//            'postal_code:' . $addressRequest->getPostcode(),
-            'locality:' . $addressRequest->getCity(),
-        ]);
+        return
+            $addressRequest->getStreetAddress() . ', ' .
+            $addressRequest->getPostcode() . ' ' .
+            $addressRequest->getCity();
     }
 }

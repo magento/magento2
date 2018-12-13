@@ -90,8 +90,6 @@ class GetDistance implements GetDistanceInterface
         $key = $sourceString . '|' . $destinationString;
 
         if (!isset($this->distanceCache[$key])) {
-
-
             $queryString = http_build_query([
                 'key' => $this->getApiKey->execute(),
                 'origins' => $sourceString,

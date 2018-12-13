@@ -12,6 +12,7 @@ use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToComponentsString;
+use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToQueryString;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToString;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterfaceFactory;
@@ -60,6 +61,11 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
     private $addressRequestToString;
 
     /**
+     * @var AddressRequestToQueryString
+     */
+    private $addressRequestToQueryString;
+
+    /**
      * GetLatLngRequestFromAddress constructor.
      *
      * @param ClientInterface $client
@@ -67,6 +73,7 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
      * @param Json $json
      * @param GetApiKey $getApiKey
      * @param AddressRequestToComponentsString $addressRequestToComponentsString
+     * @param AddressRequestToQueryString $addressRequestToQueryString
      * @param AddressRequestToString $addressRequestToString
      */
     public function __construct(
@@ -75,6 +82,7 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
         Json $json,
         GetApiKey $getApiKey,
         AddressRequestToComponentsString $addressRequestToComponentsString,
+        AddressRequestToQueryString $addressRequestToQueryString,
         AddressRequestToString $addressRequestToString
     ) {
         $this->client = $client;
@@ -83,6 +91,7 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
         $this->getApiKey = $getApiKey;
         $this->addressRequestToComponentsString = $addressRequestToComponentsString;
         $this->addressRequestToString = $addressRequestToString;
+        $this->addressRequestToQueryString = $addressRequestToQueryString;
     }
 
     /**
@@ -97,7 +106,7 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
             $queryString = http_build_query([
                 'key' => $this->getApiKey->execute(),
                 'components' => $this->addressRequestToComponentsString->execute($addressRequest),
-                'address' => $addressRequest->getStreetAddress(),
+                'address' => $this->addressRequestToQueryString->execute($addressRequest),
             ]);
 
             $this->client->get(self::GOOGLE_ENDPOINT . '?' . $queryString);
