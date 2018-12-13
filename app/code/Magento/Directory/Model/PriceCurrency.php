@@ -154,7 +154,11 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * @inheritdoc
+     * Round price with precision
+     *
+     * @param float $price
+     * @param int $precision
+     * @return float
      */
     public function roundPrice($price, $precision = self::DEFAULT_PRECISION)
     {
