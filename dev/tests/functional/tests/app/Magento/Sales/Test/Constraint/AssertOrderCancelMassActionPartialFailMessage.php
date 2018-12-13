@@ -16,14 +16,9 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertOrderCancelMassActionPartialFailMessage extends AbstractConstraint
 {
     /**
-     * Message displayed after cancel order from archive
-     */
-    const SUCCESS_MESSAGE = 'We canceled 1 order(s).';
-
-    /**
      * Text value to be checked
      */
-    const FAIL_CANCEL_MESSAGE = '1 order(s) cannot be canceled.';
+    const FAIL_CANCEL_MESSAGE = 'You cannot cancel the order(s).';
 
     /**
      * Assert cancel fail message is displayed on order index page
@@ -37,10 +32,6 @@ class AssertOrderCancelMassActionPartialFailMessage extends AbstractConstraint
             self::FAIL_CANCEL_MESSAGE,
             $orderIndex->getMessagesBlock()->getErrorMessage()
         );
-        \PHPUnit\Framework\Assert::assertEquals(
-            self::SUCCESS_MESSAGE,
-            $orderIndex->getMessagesBlock()->getSuccessMessage()
-        );
     }
 
     /**
@@ -50,6 +41,6 @@ class AssertOrderCancelMassActionPartialFailMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Cancel and success fail message is displayed on order index page.';
+        return 'Cancel fail message is displayed on order index page.';
     }
 }
