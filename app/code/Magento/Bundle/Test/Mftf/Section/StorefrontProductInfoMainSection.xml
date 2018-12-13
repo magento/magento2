@@ -13,5 +13,6 @@
         <element name="priceTo" type="text" selector=".product-info-price .price-to"/>
         <element name="minPrice" type="text" selector="span[data-price-type='minPrice']"/>
         <element name="maxPrice" type="text" selector="span[data-price-type='minPrice']"/>
+        <element name="productBundleOptionsCheckbox" type="checkbox" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{childName}}')]/../input" parameterized="true" timeout="30"/>
     </section>
 </sections>

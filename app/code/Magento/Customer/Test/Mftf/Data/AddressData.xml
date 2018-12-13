@@ -32,6 +32,7 @@
         <data key="vat_id">vatData</data>
         <data key="default_shipping">true</data>
         <data key="default_billing">true</data>
+        <data key="region_qty">66</data>
     </entity>
     <entity name="US_Address_TX" type="address">
         <data key="firstname">John</data>
@@ -65,6 +66,7 @@
         <data key="default_billing">Yes</data>
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionNY</requiredEntity>
+        <data key="country">United States</data>
     </entity>
     <entity name="US_Address_CA" type="address">
         <data key="firstname">John</data>
@@ -105,5 +107,12 @@
         <data key="postcode">SE1 7RW</data>
         <data key="country_id">GB</data>
         <data key="telephone">444-44-444-44</data>
+    </entity>
+    <entity name="UK_Simple_Address" extends="UK_Not_Default_Address">
+        <array key="street">
+            <item>172, Westminster Bridge Rd</item>
+            <item>7700 xyz street</item>
+        </array>
+        <data key="state">California</data>
     </entity>
 </entities>
