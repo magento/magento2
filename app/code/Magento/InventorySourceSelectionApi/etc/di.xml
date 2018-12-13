@@ -18,11 +18,6 @@
                     <item xsi:type="string" name="title" translatable="true">Source Priority</item>
                     <item xsi:type="string" name="description" translatable="true">Algorithm which provides Source Selections based on predefined priority of Source</item>
                 </item>
-                <item name="distance" xsi:type="array">
-                    <item xsi:type="string" name="code">distance</item>
-                    <item xsi:type="string" name="title" translatable="true">Distance Priority</item>
-                    <item xsi:type="string" name="description" translatable="true">Algorithm which provides Source Selections based on shipping address distance from the source</item>
-                </item>
             </argument>
         </arguments>
     </type>

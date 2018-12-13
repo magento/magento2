@@ -7,12 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelection\Model\Algorithms;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventorySourceSelection\Model\Algorithms\Result\GetDefaultSortedSourcesResult;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventorySourceSelectionApi\Model\Algorithms\Result\GetDefaultSortedSourcesResult;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Model\SourceSelectionInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * {@inheritdoc}
@@ -34,14 +39,24 @@ class PriorityBasedAlgorithm implements SourceSelectionInterface
      * PriorityBasedAlgorithm constructor.
      *
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
+     * @param SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory
+     * @param SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param GetDefaultSortedSourcesResult $getDefaultSortedSourcesResult
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
-        GetDefaultSortedSourcesResult $getDefaultSortedSourcesResult
+        SourceSelectionItemInterfaceFactory $sourceSelectionItemFactory,
+        SourceSelectionResultInterfaceFactory $sourceSelectionResultFactory,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SourceItemRepositoryInterface $sourceItemRepository,
+        GetDefaultSortedSourcesResult $getDefaultSortedSourcesResult = null
     ) {
         $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
-        $this->getDefaultSortedSourcesResult = $getDefaultSortedSourcesResult;
+        $this->getDefaultSortedSourcesResult = $getDefaultSortedSourcesResult ?:
+            ObjectManager::getInstance()->get(GetDefaultSortedSourcesResult::class);
     }
 
     /**
