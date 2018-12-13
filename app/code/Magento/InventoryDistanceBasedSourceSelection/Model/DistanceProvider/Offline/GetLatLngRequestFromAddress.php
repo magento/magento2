@@ -9,6 +9,7 @@ namespace Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\O
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
+use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToString;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterfaceFactory;
 use Magento\InventoryDistanceBasedSourceSelection\Model\ResourceModel\GetGeoNameDataByAddressRequest;
@@ -32,18 +33,26 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
     private $getGeoNameDataByAddressRequest;
 
     /**
+     * @var AddressRequestToString
+     */
+    private $addressRequestToString;
+
+    /**
      * GetLatLngRequestFromAddress constructor.
      *
      * @param GetGeoNameDataByAddressRequest $getGeoNameDataByAddressRequest
-     * @param LatLngRequestFactory $latLngRequestInterfaceFactory
+     * @param LatLngRequestInterfaceFactory $latLngRequestInterfaceFactory
+     * @param AddressRequestToString $addressRequestToString
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         GetGeoNameDataByAddressRequest $getGeoNameDataByAddressRequest,
-        LatLngRequestInterfaceFactory $latLngRequestInterfaceFactory
+        LatLngRequestInterfaceFactory $latLngRequestInterfaceFactory,
+        AddressRequestToString $addressRequestToString
     ) {
         $this->getGeoNameDataByAddressRequest = $getGeoNameDataByAddressRequest;
         $this->latLngRequestInterfaceFactory = $latLngRequestInterfaceFactory;
+        $this->addressRequestToString = $addressRequestToString;
     }
 
     /**
@@ -52,7 +61,7 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
      */
     public function execute(AddressRequestInterface $addressRequest): LatLngRequestInterface
     {
-        $cacheKey = $addressRequest->getAsString();
+        $cacheKey = $this->addressRequestToString->execute($addressRequest);
         if (!isset($this->latLngCache[$cacheKey])) {
             $geoNameData = $this->getGeoNameDataByAddressRequest->execute($addressRequest);
 

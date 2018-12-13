@@ -101,45 +101,4 @@ class AddressRequest implements AddressRequestInterface
     {
         return $this->city;
     }
-
-    /**
-     * @inheritdoc
-     * @return string
-     */
-    public function getAddressStringForQuery(): string
-    {
-        return implode(' ', [
-            $this->getStreetAddress(),
-            $this->getCity(),
-            $this->getRegion(),
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     * @return string
-     */
-    public function getComponentsStringForQuery(): string
-    {
-        return implode('|', [
-            'country:' . $this->getCountry(),
-            'postal_code:' . $this->getPostcode(),
-        ]);
-    }
-
-    /**
-     * Get address as string
-     *
-     * @return string
-     */
-    public function getAsString(): string
-    {
-        return implode(' ', [
-            $this->getStreetAddress(),
-            $this->getPostcode(),
-            $this->getCity(),
-            $this->getRegion(),
-            $this->getCountry(),
-        ]);
-    }
 }

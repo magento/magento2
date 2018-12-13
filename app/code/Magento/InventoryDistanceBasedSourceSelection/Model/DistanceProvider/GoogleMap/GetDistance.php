@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetDistanceInterface;
+use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\LatLngRequestToQueryString;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
 
 /**
@@ -50,23 +51,31 @@ class GetDistance implements GetDistanceInterface
     private $getApiKey;
 
     /**
+     * @var LatLngRequestToQueryString
+     */
+    private $latLngRequestToQueryString;
+
+    /**
      * GetLatLngFromAddress constructor.
      *
      * @param ClientInterface $client
      * @param ScopeConfigInterface $scopeConfig
      * @param Json $json
      * @param GetApiKey $getApiKey
+     * @param LatLngRequestToQueryString $latLngRequestToQueryString
      */
     public function __construct(
         ClientInterface $client,
         ScopeConfigInterface $scopeConfig,
         Json $json,
-        GetApiKey $getApiKey
+        GetApiKey $getApiKey,
+        LatLngRequestToQueryString $latLngRequestToQueryString
     ) {
         $this->client = $client;
         $this->json = $json;
         $this->getApiKey = $getApiKey;
         $this->scopeConfig = $scopeConfig;
+        $this->latLngRequestToQueryString = $latLngRequestToQueryString;
     }
 
     /**
@@ -75,11 +84,13 @@ class GetDistance implements GetDistanceInterface
      */
     public function execute(LatLngRequestInterface $source, LatLngRequestInterface $destination): float
     {
-        $key = implode('|', [$source->getLat(), $source->getLng(), $destination->getLat(), $destination->getLng()]);
+        $sourceString = $this->latLngRequestToQueryString->execute($source);
+        $destinationString =  $this->latLngRequestToQueryString->execute($destination);
+
+        $key = $sourceString . '|' . $destinationString;
 
         if (!isset($this->distanceCache[$key])) {
-            $sourceString = $source->getLat() . ',' . $source->getLng();
-            $destinationString = $destination->getLat() . ',' . $destination->getLng();
+
 
             $queryString = http_build_query([
                 'key' => $this->getApiKey->execute(),

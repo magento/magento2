@@ -48,25 +48,4 @@ interface AddressRequestInterface
      * @return string
      */
     public function getCity(): string;
-
-    /**
-     * Get address as string for build request
-     *
-     * @return string
-     */
-    public function getAddressStringForQuery(): string;
-
-    /**
-     * Get components as string for build request
-     *
-     * @return string
-     */
-    public function getComponentsStringForQuery(): string;
-
-    /**
-     * Get full address as string
-     *
-     * @return string
-     */
-    public function getAsString(): string;
 }

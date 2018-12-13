@@ -9,6 +9,7 @@ namespace Magento\InventoryDistanceBasedSourceSelection\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToString;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface;
 
 /**
@@ -22,13 +23,22 @@ class GetGeoNameDataByAddressRequest
     private $resourceConnection;
 
     /**
+     * @var AddressRequestToString
+     */
+    private $addressRequestToString;
+
+    /**
      * GetGeoNameDataByPostcode constructor.
      *
      * @param ResourceConnection $resourceConnection
+     * @param AddressRequestToString $addressRequestToString
      */
-    public function __construct(ResourceConnection $resourceConnection)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        AddressRequestToString $addressRequestToString
+    ) {
         $this->resourceConnection = $resourceConnection;
+        $this->addressRequestToString = $addressRequestToString;
     }
 
     /**
@@ -68,7 +78,9 @@ class GetGeoNameDataByAddressRequest
         }
 
         if (!$row) {
-            throw new NoSuchEntityException(__('Unknown geoname for %1', $addressRequest->getAsString()));
+            throw new NoSuchEntityException(
+                __('Unknown geoname for %1', $this->addressRequestToString->execute($addressRequest))
+            );
         }
 
         return $row;

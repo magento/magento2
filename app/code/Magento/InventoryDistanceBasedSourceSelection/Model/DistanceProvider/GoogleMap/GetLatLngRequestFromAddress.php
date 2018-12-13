@@ -11,6 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
+use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToComponentsString;
+use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToString;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterfaceFactory;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface;
@@ -48,23 +50,39 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
     private $getApiKey;
 
     /**
+     * @var AddressRequestToComponentsString
+     */
+    private $addressRequestToComponentsString;
+
+    /**
+     * @var AddressRequestToString
+     */
+    private $addressRequestToString;
+
+    /**
      * GetLatLngRequestFromAddress constructor.
      *
      * @param ClientInterface $client
      * @param LatLngRequestInterfaceFactory $latLngRequestInterfaceFactory
      * @param Json $json
      * @param GetApiKey $getApiKey
+     * @param AddressRequestToComponentsString $addressRequestToComponentsString
+     * @param AddressRequestToString $addressRequestToString
      */
     public function __construct(
         ClientInterface $client,
         LatLngRequestInterfaceFactory $latLngRequestInterfaceFactory,
         Json $json,
-        GetApiKey $getApiKey
+        GetApiKey $getApiKey,
+        AddressRequestToComponentsString $addressRequestToComponentsString,
+        AddressRequestToString $addressRequestToString
     ) {
         $this->client = $client;
         $this->latLngRequestInterfaceFactory = $latLngRequestInterfaceFactory;
         $this->json = $json;
         $this->getApiKey = $getApiKey;
+        $this->addressRequestToComponentsString = $addressRequestToComponentsString;
+        $this->addressRequestToString = $addressRequestToString;
     }
 
     /**
@@ -73,12 +91,13 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
      */
     public function execute(AddressRequestInterface $addressRequest): LatLngRequestInterface
     {
-        $cacheKey = $addressRequest->getAsString();
+        $cacheKey = $addressString = $this->addressRequestToString->execute($addressRequest);
+
         if (!isset($this->latLngCache[$cacheKey])) {
             $queryString = http_build_query([
                 'key' => $this->getApiKey->execute(),
-                'components' => $addressRequest->getComponentsStringForQuery(),
-                'address' => $addressRequest->getAddressStringForQuery(),
+                'components' => $this->addressRequestToComponentsString->execute($addressRequest),
+                'address' => $addressRequest->getStreetAddress(),
             ]);
 
             $this->client->get(self::GOOGLE_ENDPOINT . '?' . $queryString);
@@ -89,7 +108,7 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
             $res = $this->json->unserialize($this->client->getBody());
 
             if ($res['status'] !== 'OK') {
-                throw new LocalizedException(__('Unable to geocode address %1', $addressRequest->getAsString()));
+                throw new LocalizedException(__('Unable to geocode address %1', $addressString));
             }
 
             $location = $res['results'][0]['geometry']['location'];
