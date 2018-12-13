@@ -91,7 +91,7 @@ define([
         },
 
         /**
-         * Returnes true if current set of items differ from initial one,
+         * Returns true if current set of items differ from initial one,
          * or if some child has been changed.
          *
          * @returns {Boolean}
@@ -169,7 +169,7 @@ define([
         },
 
         /**
-         * Removes elememt from both collection and data storage,
+         * Removes element from both collection and data storage,
          * activates first element if removed one was active,
          * triggers 'update' event.
          *
