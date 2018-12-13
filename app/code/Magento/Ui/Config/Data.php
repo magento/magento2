@@ -6,9 +6,8 @@
 namespace Magento\Ui\Config;
 
 use Magento\Framework\Config\CacheInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Ui\Config\Converter;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -70,7 +69,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param ReaderFactory $readerFactory
      * @param CacheInterface $cache
      * @param SerializerInterface $serializer
-     * @param InterpreterInterface $argumentInterpreter,
+     * @param InterpreterInterface $argumentInterpreter
      * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
