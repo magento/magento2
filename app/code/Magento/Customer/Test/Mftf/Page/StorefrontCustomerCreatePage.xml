@@ -10,6 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontCustomerCreatePage" url="/customer/account/create/" area="storefront" module="Magento_Customer">
         <section name="StorefrontCustomerCreateFormSection"/>
-        <section name="StoreFrontCustomerCustomAttributesSection"/>
+        <section name="StoreFrontCustomerAdvancedAttributesSection"/>
     </page>
 </pages>

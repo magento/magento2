@@ -17,7 +17,7 @@
         <element name="confirmPasswordField" type="input" selector="#password-confirmation"/>
         <element name="createAccountButton" type="button" selector="button.action.submit.primary" timeout="30"/>
     </section>
-    <section name="StoreFrontCustomerCustomAttributesSection">
+    <section name="StoreFrontCustomerAdvancedAttributesSection">
         <element name="textFieldAttribute" type="input" selector="//input[@id='{{var}}']" parameterized="true" />
         <element name="textAreaAttribute" type="input" selector="//textarea[@id='{{var}}']" parameterized="true" />
         <element name="multiLineFirstAttribute" type="input" selector="//input[@id='{{var}}_0']" parameterized="true" />
