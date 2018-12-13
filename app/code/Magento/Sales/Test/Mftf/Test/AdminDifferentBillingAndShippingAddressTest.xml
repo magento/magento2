@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDifferentBillingAndShippingAddressTest">
+        <annotations>
+            <features value="Sales"/>
+            <title value="Check that Billing and Shipping addresses pre-selected for customer with existing order in the cart"/>
+            <description value="Check Billing Address and Shipping Address"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96725"/>
+            <useCaseId value="MAGETWO-96411"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Clear customer page filter-->
+            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+            <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <click stepKey="goToAddresses" selector="{{NewCustomerPageSection.addresses}}"/>
+        <waitForAjaxLoad stepKey="waitForAddresses" time="5"/>
+        <!--Uncheck Default Shipping Address checkbox-->
+        <click stepKey="thickShippingAddress" selector="{{NewCustomerPageSection.defaultShippingAddress}}"/>
+        <waitForElementVisible selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="waitForElement"/>
+        <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="clickSave"/>
+        <conditionalClick selector="{{AdminCustomerMainActionsSection.saveButton}}"
+                          dependentSelector="{{AdminCustomerMainActionsSection.saveButton}}" visible="true" stepKey="clickSave2"/>
+        <waitForElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="waitSuccessMessage"/>
+
+        <!--Create new order with existing customer-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="goToCreateOrderPage">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!--Add product to order-->
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addProductToOrder">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!--Uncheck Same As Billing Address Checkbox-->
+        <click selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="uncheckSameAsBillingAddressCheckbox"/>
+        <waitForAjaxLoad stepKey="waitForAjax" after="uncheckSameAsBillingAddressCheckbox"/>
+        <selectOption selector="{{AdminOrderFormShippingAddressSection.SelectFromExistingCustomerAddress}}"
+                      stepKey="selectAddNewCustomer" userInput="Add New Address" after="waitForAjax"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad" after="selectAddNewCustomer"/>
+
+        <!--Fill customer Shipping address information-->
+        <fillField selector="{{AdminOrderFormShippingAddressSection.FirstName}}" userInput="{{UK_Not_Default_Address.firstname}}" stepKey="fillFirstName"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.LastName}}" userInput="{{UK_Not_Default_Address.lastname}}" stepKey="fillLastName" after="fillFirstName"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.StreetLine1}}" userInput="{{UK_Not_Default_Address.street[0]}}" stepKey="fillStreetLine1" after="fillLastName"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.City}}" userInput="{{UK_Not_Default_Address.city}}" stepKey="fillCity" after="fillStreetLine1"/>
+        <selectOption selector="{{AdminOrderFormShippingAddressSection.Country}}" userInput="United Kingdom" stepKey="fillCountry" after="fillCity"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.Province}}" userInput="London" stepKey="fillProvince" after="fillCountry"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.PostalCode}}" userInput="{{UK_Not_Default_Address.postcode}}" stepKey="fillPostalCode" after="fillProvince"/>
+        <fillField selector="{{AdminOrderFormShippingAddressSection.Phone}}" userInput="{{UK_Not_Default_Address.telephone}}" stepKey="fillPhoneNumber" after="fillPostalCode"/>
+
+        <click stepKey="checkSaveBillingAddressCheckbox" selector="{{AdminOrderFormBillingAddressSection.SaveAddress}}" after="fillPhoneNumber"/>
+        <click stepKey="checkSaveShippingAddressCheckbox" selector="{{AdminOrderFormShippingAddressSection.SaveAddress}}" after="checkSaveBillingAddressCheckbox"/>
+
+        <!-- Select shipping -->
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping" after="checkSaveShippingAddressCheckbox"/>
+
+        <!--Submit Order and verify that Order created successfully-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForPageLoad stepKey="waitForOrderToProcess"/>
+        <seeElement selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+
+        <!--Open customer for edit-->
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openCustomerEdit">
+            <argument name="customer" value="$$createCustomer$$" />
+        </actionGroup>
+
+        <!--Click on *Manage Shopping Cart*-->
+        <click selector="{{AdminCustomerMainActionsSection.manageShoppingCart}}" stepKey="clickManageShoppingCartButton"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
+
+        <!--Add Product To Shopping Cart-->
+        <actionGroup ref="AdminAddProductToShoppingCartActionGroup" stepKey="addProductToShoppingCart">
+            <argument name="productName" value="$$createProduct.name$$" />
+        </actionGroup>
+
+        <!--Click on *Create Order*-->
+        <waitForElementVisible selector="{{AdminCustomerShoppingCartSection.createOrderButton}}" stepKey="waitToShoppingCartPageOpened"/>
+        <click selector="{{AdminCustomerShoppingCartSection.createOrderButton}}" stepKey="clickCreateOrderButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!--Check Billing Address and Shipping Address should be pre-selected/fill out-->
+        <waitForElementVisible stepKey="waitElementsBecomeVisible" selector="{{AdminOrderFormShippingAddressSection.FirstName}}"/>
+        <scrollTo selector="{{AdminOrderFormShippingAddressSection.FirstName}}" stepKey="scrollToMiddleOfPage"/>
+        <grabValueFrom selector="{{AdminOrderFormShippingAddressSection.FirstName}}" stepKey="grabTextShippingFirstNameValue"/>
+        <grabValueFrom selector="{{AdminOrderFormShippingAddressSection.LastName}}" stepKey="grabTextShippingLastNameValue"/>
+        <grabValueFrom selector="{{AdminOrderFormShippingAddressSection.StreetLine1}}" stepKey="grabShippingStreetLineValue"/>
+        <grabValueFrom selector="{{AdminOrderFormShippingAddressSection.City}}" stepKey="grabShippingCityValue"/>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.Country}}" stepKey="grabBillingCountryValue"/>
+
+        <assertNotEmpty actual="$grabTextShippingFirstNameValue" stepKey="assertTextShippingFirstNameIsNotEmpty" after="grabTextShippingFirstNameValue"/>
+        <assertNotEmpty actual="$grabTextShippingLastNameValue" stepKey="assertTextShippingLastNameIsNotEmpty" after="grabTextShippingLastNameValue"/>
+        <assertNotEmpty actual="$grabShippingStreetLineValue" stepKey="assertShippingStreetLineIsNotEmpty" after="grabShippingStreetLineValue"/>
+        <assertNotEmpty actual="$grabShippingCityValue" stepKey="assertShippingCityIsNotEmpty" after="grabShippingCityValue"/>
+        <assertNotEmpty actual="$grabBillingCountryValue" stepKey="assertBillingCountryIsNotEmpty" after="grabBillingCountryValue"/>
+    </test>
+</tests>
