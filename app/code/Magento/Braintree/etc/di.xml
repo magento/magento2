@@ -624,4 +624,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Quote\Api\CartManagementInterface">
+        <plugin name="order_cancellation" type="Magento\Braintree\Plugin\OrderCancellation"/>
+    </type>
 </config>
