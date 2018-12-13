@@ -32,6 +32,8 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="simpleSubCategory3"/>
             </createData>
+            <magentoCLI command="config:set catalog/seo/generate_rewrites_on_save 1" stepKey="enableGenerateUrlRewrite"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
@@ -41,7 +43,6 @@
         <!-- Steps -->
         <!-- 1. Log in to Admin -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
         <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
