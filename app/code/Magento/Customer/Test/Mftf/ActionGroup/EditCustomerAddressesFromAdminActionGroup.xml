@@ -28,7 +28,7 @@
         <fillField  stepKey="fillVAT" userInput="{{customerAddress.vat_id}}" selector="{{AdminEditCustomerAddressesSection.vat}}"/>
         <click selector="{{CustomerAccountSection.save}}" stepKey="saveAddress"/>
         <waitForPageLoad stepKey="waitForStorefrontPage"/>
-        <click selector="{{CustomerAccountSection.save}}" stepKey="saveCustomer"/>
+        <conditionalClick selector="{{CustomerAccountSection.save}}" dependentSelector="{{CustomerAccountSection.save}}" visible="true" stepKey="clickSaveAgain"/>
         <waitForPageLoad stepKey="waitForCustomerSaved"/>
         <see stepKey="seeSaveMessage" userInput="You saved the customer."/>
     </actionGroup>
