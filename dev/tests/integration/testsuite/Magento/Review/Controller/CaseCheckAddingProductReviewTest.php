@@ -17,14 +17,14 @@ use Magento\TestFramework\TestCase\AbstractController;
  *
  * @magentoAppArea frontend
  */
-class CaseCheckUnsuccessfulAddingProductReviewTest extends AbstractController
+class CaseCheckAddingProductReviewTest extends AbstractController
 {
     /**
      * Test adding a review for allowed guests with incomplete data by a not logged in user
      *
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default_store catalog/review/allow_guest 1
+     * @magentoDataFixture Magento/Review/_files/config.php
      * @magentoDataFixture Magento/Catalog/_files/products.php
      */
     public function testAttemptForGuestToAddReviewsWithIncompleteData()
@@ -50,7 +50,7 @@ class CaseCheckUnsuccessfulAddingProductReviewTest extends AbstractController
      *
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default_store catalog/review/allow_guest 0
+     * @magentoDataFixture Magento/Review/_files/disable_config.php
      * @magentoDataFixture Magento/Catalog/_files/products.php
      */
     public function testAttemptForGuestToAddReview()
@@ -69,6 +69,35 @@ class CaseCheckUnsuccessfulAddingProductReviewTest extends AbstractController
         $this->dispatch('review/product/post/id/' . $product->getId());
 
         $this->assertRedirect($this->stringContains('customer/account/login'));
+    }
+
+    /**
+     * Test successfully adding a product review by a guest
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Review/_files/config.php
+     * @magentoDataFixture Magento/Catalog/_files/products.php
+     */
+    public function testSuccessfullyAddingProductReviewForGuest()
+    {
+        $product = $this->getProduct();
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+        $post = [
+            'nickname' => 'Test nick',
+            'title' => 'Summary',
+            'detail' => 'Test Details',
+            'form_key' => $formKey->getFormKey(),
+        ];
+
+        $this->prepareRequestData($post);
+        $this->dispatch('review/product/post/id/' . $product->getId());
+
+        $this->assertSessionMessages(
+            $this->equalTo(['You submitted your review for moderation.']),
+            MessageInterface::TYPE_SUCCESS
+        );
     }
 
     /**
