@@ -15,7 +15,8 @@ define([
 
         beforeEach(function () {
             params = {
-                isRendered: false
+                isRendered: false,
+                autoRender: false
             };
             obj = new Insert(params);
         });
