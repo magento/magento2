@@ -17,5 +17,5 @@
         <element name="rowByIndex" type="text" selector="tr[data-role='row']:nth-of-type({{var1}})" parameterized="true" timeout="30"/>
         <element name="rulesRow" type="text" selector="//tr[@data-role='row']"/>
         <element name="buttonNextInactive" type="button" selector="//button[@class='action-next disabled']"/>
-        </section>
+    </section>
 </sections>
