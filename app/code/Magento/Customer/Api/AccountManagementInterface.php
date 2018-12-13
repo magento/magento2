@@ -31,15 +31,13 @@ interface AccountManagementInterface
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $password
      * @param string $redirectUrl
-     * @param string[] $extensions
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createAccount(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
         $password = null,
-        $redirectUrl = '',
-        $extensions = []
+        $redirectUrl = ''
     );
 
     /**
@@ -50,7 +48,6 @@ interface AccountManagementInterface
      * @param string $hash Password hash that we can save directly
      * @param string $redirectUrl URL fed to welcome email templates. Can be used by templates to, for example, direct
      *                            the customer to a product they were looking at after pressing confirmation link.
-     * @param string[] $extensions
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\InputException If bad input is provided
      * @throws \Magento\Framework\Exception\State\InputMismatchException If the provided email is already used
@@ -59,8 +56,7 @@ interface AccountManagementInterface
     public function createAccountWithPasswordHash(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
         $hash,
-        $redirectUrl = '',
-        $extensions = []
+        $redirectUrl = ''
     );
 
     /**
