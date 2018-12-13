@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\InventorySourceSelectionApi\Model\GetSourceSelectionAlgorithmList">
+        <arguments>
+            <argument name="availableAlgorithms" xsi:type="array">
+                <item name="distance" xsi:type="array">
+                    <item xsi:type="string" name="code">distance</item>
+                    <item xsi:type="string" name="title" translatable="true">Distance Priority</item>
+                    <item xsi:type="string" name="description" translatable="true">Algorithm which provides Source Selections based on shipping address distance from the source</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>
