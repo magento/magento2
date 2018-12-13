@@ -1166,7 +1166,7 @@ define([
         updateBaseImage: function (images, context, isInProductView, eventName) {
             var gallery = context.find(this.options.mediaGallerySelector).data('gallery');
 
-            if (eventName === undefined && gallery !== undefined) {
+            if (eventName === undefined && typeof gallery !== undefined) {
                 this.processUpdateBaseImage(images, context, isInProductView, gallery);
             } else {
                 context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
