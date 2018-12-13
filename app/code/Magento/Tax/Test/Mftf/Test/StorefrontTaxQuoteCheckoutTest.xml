@@ -66,7 +66,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -178,7 +178,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -289,7 +289,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -312,6 +312,7 @@
             <argument name="Address" value="US_Address_CA"/>
         </actionGroup>
         <click stepKey="clickNext" selector="{{CheckoutShippingSection.next}}"/>
+        <waitForPageLoad stepKey="waitForAddressToLoad"/>
         <see stepKey="seeAddress" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxCA.state}}"/>
         <see stepKey="seeShipTo" selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{SimpleTaxCA.state}}"/>
 
@@ -329,6 +330,7 @@
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
         <click stepKey="clickNext2" selector="{{CheckoutShippingSection.next}}"/>
+        <waitForPageLoad stepKey="waitForShippingToLoad"/>
         <see stepKey="seeShipTo2" selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{SimpleTaxNY.state}}"/>
 
         <!-- Assert that taxes are applied correctly for NY -->
@@ -407,7 +409,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
