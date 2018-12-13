@@ -78,6 +78,7 @@ interface PriceCurrencyInterface
     /**
      * Round price
      *
+     * @deprecated
      * @param float $price
      * @return float
      */
