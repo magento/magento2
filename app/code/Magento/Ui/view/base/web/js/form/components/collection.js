@@ -91,7 +91,7 @@ define([
         },
 
         /**
-         * Returnes true if current set of items differ from initial one,
+         * Returns true if current set of items differ from initial one,
          * or if some child has been changed.
          *
          * @returns {Boolean}
