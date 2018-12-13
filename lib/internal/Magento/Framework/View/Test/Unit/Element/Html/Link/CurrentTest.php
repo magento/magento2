@@ -65,6 +65,9 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
         $url = 'http://example.com/test/index';
 
         $this->_requestMock->expects($this->once())
+            ->method('getPathInfo')
+            ->will($this->returnValue('/test/index/'));
+        $this->_requestMock->expects($this->once())
             ->method('getModuleName')
             ->will($this->returnValue('test'));
         $this->_requestMock->expects($this->once())
