@@ -46,7 +46,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convert($amount, $scope = null, $currency = null)
     {
@@ -58,7 +58,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convertAndRound($amount, $scope = null, $currency = null, $precision = self::DEFAULT_PRECISION)
     {
@@ -66,7 +66,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function format(
         $amount,
@@ -80,7 +80,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convertAndFormat(
         $amount,
@@ -95,7 +95,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCurrency($scope = null, $currency = null)
     {
@@ -146,7 +146,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function round($price)
     {
@@ -154,7 +154,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function roundPrice($price, $precision = self::DEFAULT_PRECISION)
     {
