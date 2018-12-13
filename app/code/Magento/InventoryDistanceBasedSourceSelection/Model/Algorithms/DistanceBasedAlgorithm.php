@@ -96,18 +96,30 @@ class DistanceBasedAlgorithm implements SourceSelectionInterface
         });
 
         $geoReferenceProvider = $this->getGeoReferenceProvider->execute();
+        $distanceBySourceCode = $sortSources = $sourcesWithoutDistance = [];
+        foreach ($sources as $source) {
+            try {
+                $distanceBySourceCode[$source->getSourceCode()] = $geoReferenceProvider->getDistance(
+                    $source,
+                    $addressRequest
+                );
+                $sortSources[] = $source;
+            } catch (LocalizedException $e) {
+                $sourcesWithoutDistance[] = $source;
+            }
+        }
 
         // Sort sources by distance
         uasort(
-            $sources,
-            function (SourceInterface $a, SourceInterface $b) use ($geoReferenceProvider, $addressRequest) {
-                $distanceFromA = $geoReferenceProvider->getDistance($a, $addressRequest);
-                $distanceFromB = $geoReferenceProvider->getDistance($b, $addressRequest);
+            $sortSources,
+            function (SourceInterface $a, SourceInterface $b) use ($distanceBySourceCode) {
+                $distanceFromA = $distanceBySourceCode[$a->getSourceCode()];
+                $distanceFromB = $distanceBySourceCode[$b->getSourceCode()];
 
                 return ($distanceFromA < $distanceFromB) ? -1 : 1;
             }
         );
 
-        return $sources;
+        return array_merge($sortSources, $sourcesWithoutDistance);
     }
 }
