@@ -34,6 +34,7 @@ use Magento\Ui\DataProvider\EavValidationRules;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
+ * @deprecated \Magento\Customer\Model\Address\DataProvider is used instead
  * @api
  * @since 100.0.2
  */
@@ -162,7 +163,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $data
      * @param ContextInterface $context
      * @param bool $allowToShowHiddenAttributes
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
