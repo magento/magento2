@@ -10,7 +10,7 @@
 ?>
 
 <?php if ($block->getWishlist()->getItemsCount() && $block->getWishlist()->isSalable()): ?>
-    <button type="button" data-role="all-tocart" title="<?= $block->escapeHtmlAttr(__('Add All to Cart')) ?>" class="action tocart">
+    <button type="button" data-role="all-tocart" title="<?= $block->escapeHtmlAttr(__('Add All to Cart')) ?>" class="action tocart primary">
         <span><?= $block->escapeHtml(__('Add All to Cart')) ?></span>
     </button>
 <?php endif;?>
