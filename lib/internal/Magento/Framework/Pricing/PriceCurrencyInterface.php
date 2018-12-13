@@ -78,11 +78,20 @@ interface PriceCurrencyInterface
     /**
      * Round price
      *
+     * @deprecated
+     * @param float $price
+     * @return float
+     */
+    public function round($price);
+
+    /**
+     * Round price with precision
+     *
      * @param float $price
      * @param int $precision
      * @return float
      */
-    public function round($price, $precision = self::DEFAULT_PRECISION);
+    public function roundPrice($price, $precision = self::DEFAULT_PRECISION);
 
     /**
      * Get currency model

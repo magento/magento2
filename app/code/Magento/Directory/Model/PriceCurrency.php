@@ -62,7 +62,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      */
     public function convertAndRound($amount, $scope = null, $currency = null, $precision = self::DEFAULT_PRECISION)
     {
-        return $this->round($this->convert($amount, $scope, $currency), $precision);
+        return $this->roundPrice($this->convert($amount, $scope, $currency), $precision);
     }
 
     /**
@@ -148,7 +148,15 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     /**
      * {@inheritdoc}
      */
-    public function round($price, $precision = self::DEFAULT_PRECISION)
+    public function round($price)
+    {
+        return round($price, 2);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function roundPrice($price, $precision = self::DEFAULT_PRECISION)
     {
         return round($price, $precision);
     }
