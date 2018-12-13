@@ -40,13 +40,16 @@ function getFrontTab() {
 
 function checkOptionsPanelVisibility(){
     if($('manage-options-panel')){
-        var panel = $('manage-options-panel').up('.fieldset');
+        var panel = $('manage-options-panel').up('.fieldset'),
+            activePanelClass = 'selected-type-options';
 
         if($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect')){
             panel.show();
+            panel.addClass(activePanelClass);
         }
         else {
             panel.hide();
+            panel.removeClass(activePanelClass);
         }
     }
 }

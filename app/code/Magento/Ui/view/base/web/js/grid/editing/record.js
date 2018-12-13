@@ -50,6 +50,9 @@ define([
                     }
                 }
             },
+            ignoreTmpls: {
+                data: true
+            },
             listens: {
                 elems: 'updateFields',
                 data: 'updateState'

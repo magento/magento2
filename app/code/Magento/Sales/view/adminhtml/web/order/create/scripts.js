@@ -14,7 +14,7 @@ define([
     'prototype',
     'Magento_Catalog/catalog/product/composite/configure',
     'Magento_Ui/js/lib/view/utils/async'
-], function(jQuery, confirm, alert, template, shippingTemplate, paymentTemplate){
+], function (jQuery, confirm, alert, template, shippingTemplate, paymentTemplate) {
 
     window.AdminOrder = new Class.create();
 
@@ -42,7 +42,6 @@ define([
             this.isOnlyVirtualProduct = false;
             this.excludedPaymentMethods = [];
             this.summarizePrice = true;
-            this.timerId = null;
             this.shippingTemplate = template(shippingTemplate, {
                 data: {
                     title: jQuery.mage.__('Shipping Method'),
@@ -193,35 +192,42 @@ define([
             }
         },
 
-        isShippingField : function(fieldId){
-            if(this.shippingAsBilling){
+        /**
+         * Checks if the field belongs to the shipping address.
+         *
+         * @param {String} fieldId
+         * @return {Boolean}
+         */
+        isShippingField: function (fieldId) {
+            if (this.shippingAsBilling) {
                 return fieldId.include('billing');
             }
+
             return fieldId.include('shipping');
         },
 
-        isBillingField : function(fieldId){
+        /**
+         * Checks if the field belongs to the billing address.
+         *
+         * @param {String} fieldId
+         * @return {Boolean}
+         */
+        isBillingField: function (fieldId) {
             return fieldId.include('billing');
         },
 
-        bindAddressFields : function(container) {
-            var fields = $(container).select('input', 'select', 'textarea');
-            for(var i=0;i<fields.length;i++){
-                Event.observe(fields[i], 'change', this.triggerChangeEvent.bind(this));
-            }
-        },
-
         /**
-         * Calls changing address field handler after timeout to prevent multiple simultaneous calls.
+         * Binds events on container form fields.
          *
-         * @param {Event} event
+         * @param {String} container
          */
-        triggerChangeEvent: function (event) {
-            if (this.timerId) {
-                window.clearTimeout(this.timerId);
-            }
+        bindAddressFields: function (container) {
+            var fields = $(container).select('input', 'select', 'textarea'),
+                i;
 
-            this.timerId = window.setTimeout(this.changeAddressField.bind(this), 500, event);
+            for (i = 0; i < fields.length; i++) {
+                jQuery(fields[i]).change(this.changeAddressField.bind(this));
+            }
         },
 
         /**
@@ -235,7 +241,8 @@ define([
                 matchRes = field.name.match(re),
                 type,
                 name,
-                data;
+                data,
+                resetShipping = false;
 
             if (!matchRes) {
                 return;
@@ -251,12 +258,21 @@ define([
             }
             data = data.toObject();
 
-            if (type === 'billing' && this.shippingAsBilling || type === 'shipping' && !this.shippingAsBilling) {
+            if (type === 'billing' && this.shippingAsBilling) {
+                this.syncAddressField(this.shippingAddressContainer, field.name, field.value);
+                resetShipping = true;
+            }
+
+            if (type === 'shipping' && !this.shippingAsBilling) {
+                resetShipping = true;
+            }
+
+            if (resetShipping) {
                 data['reset_shipping'] = true;
             }
 
             data['order[' + type + '_address][customer_address_id]'] = null;
-            data['shipping_as_billing'] = +this.isShippingAsBilling();
+            data['shipping_as_billing'] = +this.shippingAsBilling;
 
             if (name === 'customer_address_id') {
                 data['order[' + type + '_address][customer_address_id]'] =
@@ -264,8 +280,9 @@ define([
             }
 
             this.resetPaymentMethod();
+
             if (data['reset_shipping']) {
-                this.resetShippingMethod(data);
+                this.resetShippingMethod();
             } else {
                 this.saveData(data);
 
@@ -275,7 +292,28 @@ define([
             }
         },
 
-        fillAddressFields : function(container, data){
+        /**
+         * Set address container form field value.
+         *
+         * @param {String} container - container ID
+         * @param {String} fieldName - form field name
+         * @param {*} fieldValue - form field value
+         */
+        syncAddressField: function (container, fieldName, fieldValue) {
+            var syncName;
+
+            if (this.isBillingField(fieldName)) {
+                syncName = fieldName.replace('billing', 'shipping');
+            }
+
+            $(container).select('[name="' + syncName + '"]').each(function (element) {
+                if (~['input', 'textarea', 'select'].indexOf(element.tagName.toLowerCase())) {
+                    element.value = fieldValue;
+                }
+            });
+        },
+
+        fillAddressFields: function(container, data){
             var regionIdElem = false;
             var regionIdElemValue = false;
 
@@ -316,10 +354,15 @@ define([
                     fields[i].setValue(data[name] ? data[name] : '');
                 }
 
-                if (fields[i].changeUpdater) fields[i].changeUpdater();
+                if (fields[i].changeUpdater) {
+                    fields[i].changeUpdater();
+                }
+
                 if (name == 'region' && data['region_id'] && !data['region']){
                     fields[i].value = data['region_id'];
                 }
+
+                jQuery(fields[i]).trigger('change');
             }
         },
 
@@ -350,16 +393,17 @@ define([
             }
         },
 
-        setShippingAsBilling : function(flag){
-            var data;
-            var areasToLoad = ['billing_method', 'shipping_address', 'totals', 'giftmessage'];
+        /**
+         * Equals shipping and billing addresses.
+         *
+         * @param {Boolean} flag
+         */
+        setShippingAsBilling: function (flag) {
+            var data,
+                areasToLoad = ['billing_method', 'shipping_address', 'shipping_method', 'totals', 'giftmessage'];
+
             this.disableShippingAddress(flag);
-            if(flag){
-                data = this.serializeData(this.billingAddressContainer);
-            } else {
-                data = this.serializeData(this.shippingAddressContainer);
-            }
-            areasToLoad.push('shipping_method');
+            data = this.serializeData(flag ? this.billingAddressContainer : this.shippingAddressContainer);
             data = data.toObject();
             data['shipping_as_billing'] = flag ? 1 : 0;
             data['reset_shipping'] = 1;
@@ -367,21 +411,18 @@ define([
         },
 
         /**
-         * Checks if shipping address is corresponds to billing address.
-         *
-         * @return {Boolean}
+         * Replace shipping method area.
          */
-        isShippingAsBilling: function () {
-            return jQuery('[name="shipping_same_as_billing"]').is(':checked');
-        },
-
-        resetShippingMethod: function() {
+        resetShippingMethod: function () {
             if (!this.isOnlyVirtualProduct) {
                 $(this.getAreaId('shipping_method')).update(this.shippingTemplate);
             }
         },
 
-        resetPaymentMethod: function() {
+        /**
+         * Replace payment method area.
+         */
+        resetPaymentMethod: function () {
             $(this.getAreaId('billing_method')).update(this.paymentTemplate);
         },
 
@@ -391,7 +432,7 @@ define([
          * @return {Boolean}
          */
         loadShippingRates: function () {
-            var addressContainer = this.isShippingAsBilling() ?
+            var addressContainer = this.shippingAsBilling ?
                     'billingAddressContainer' :
                     'shippingAddressContainer',
                 data = this.serializeData(this[addressContainer]).toObject();
@@ -1505,6 +1546,4 @@ define([
             return this._label;
         }
     };
-
 });
-

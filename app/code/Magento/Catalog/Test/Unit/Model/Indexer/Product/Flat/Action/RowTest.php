@@ -100,10 +100,10 @@ class RowTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->connection->expects($this->any())->method('select')->willReturn($selectMock);
-        $selectMock->expects($this->any())->method('from')->with(
-            $attributeTable,
-            ['value']
-        )->willReturnSelf();
+        $selectMock->method('from')
+            ->willReturnSelf();
+        $selectMock->method('joinLeft')
+            ->willReturnSelf();
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
         $selectMock->expects($this->any())->method('order')->willReturnSelf();
         $selectMock->expects($this->any())->method('limit')->willReturnSelf();
