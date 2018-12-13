@@ -695,7 +695,7 @@ define([
          */
         _sortImages: function (images) {
             return _.sortBy(images, function (image) {
-                return (image.isMain === true) ? -1 : image.position;
+                return image.isMain === true ? -1 : image.position;
             });
         },
 
