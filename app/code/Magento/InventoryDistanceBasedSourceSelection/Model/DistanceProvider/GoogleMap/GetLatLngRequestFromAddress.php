@@ -77,7 +77,8 @@ class GetLatLngRequestFromAddress implements GetLatLngRequestFromAddressInterfac
         if (!isset($this->latLngCache[$cacheKey])) {
             $queryString = http_build_query([
                 'key' => $this->getApiKey->execute(),
-                'address' => $addressRequest->getAsString(),
+                'components' => $addressRequest->getComponentsStringForQuery(),
+                'address' => $addressRequest->getAddressStringForQuery(),
             ]);
 
             $this->client->get(self::GOOGLE_ENDPOINT . '?' . $queryString);
