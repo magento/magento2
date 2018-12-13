@@ -14,7 +14,7 @@
             <title value="UI validation for Payment methods when creating an order from admin"/>
             <description value="Admin should not be able to submit orders without selecting a payment method when there is more than one"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MC-5537"/>
+            <testCaseId value="MC-6029"/>
             <group value="sales"/>
         </annotations>
         <before>
