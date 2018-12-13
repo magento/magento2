@@ -18,6 +18,7 @@
         <data key="City">Yerevan</data>
         <data key="Zip">9999</data>
         <data key="PhoneNumber">9999</data>
+        <data key="Country">Armenia</data>
     </entity>
 
 </entities>
