@@ -180,7 +180,7 @@ define([
         },
 
         /**
-         * Resolves an initial sate of a login form.
+         * Resolves an initial state of a login form.
          *
          * @returns {Boolean} - initial visibility state.
          */
