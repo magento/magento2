@@ -1,16 +1,17 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
-class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
+/**
+ * Class AddComment
+ */
+class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -18,6 +19,11 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_Sales::comment';
+
+    /**
+     * ACL resource needed to send comment email notification
+     */
+    const ADMIN_SALES_EMAIL_RESOURCE = 'Magento_Sales::emails';
 
     /**
      * Add order comment action
@@ -36,8 +42,12 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
                     );
                 }
 
-                $notify = isset($data['is_customer_notified']) ? $data['is_customer_notified'] : false;
-                $visible = isset($data['is_visible_on_front']) ? $data['is_visible_on_front'] : false;
+                $notify = $data['is_customer_notified'] ?? false;
+                $visible = $data['is_visible_on_front'] ?? false;
+
+                if ($notify && !$this->_authorization->isAllowed(self::ADMIN_SALES_EMAIL_RESOURCE)) {
+                    $notify = false;
+                }
 
                 $history = $order->addStatusHistoryComment($data['comment'], $data['status']);
                 $history->setIsVisibleOnFront($visible);
