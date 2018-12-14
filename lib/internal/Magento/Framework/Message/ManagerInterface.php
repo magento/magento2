@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Message;
 
+use Magento\Framework\Phrase;
+
 /**
  * Adds different types of messages to the session, and allows access to existing messages.
  *
