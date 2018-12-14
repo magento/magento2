@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Navigate to create product page from product grid page-->
     <actionGroup name="goToCreateProductPage">
         <arguments>
@@ -167,6 +167,21 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <dontSeeElement selector="{{AdminProductImagesSection.imageFile(image.filename)}}" stepKey="seeImage"/>
     </actionGroup>
+
+    <!--Check tier price with a discount percentage on product-->
+    <actionGroup name="AssertDiscountsPercentageOfProduct">
+        <arguments>
+            <argument name="amount" type="string" defaultValue="45"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
+        <grabValueFrom selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" stepKey="grabProductTierPriceInput"/>
+        <assertEquals stepKey="assertProductTierPriceInput">
+            <expectedResult type="string">{{amount}}</expectedResult>
+            <actualResult type="string">$grabProductTierPriceInput</actualResult>
+        </assertEquals>
+    </actionGroup>
+
     <actionGroup name="CreatedProductConnectToWebsite">
         <arguments>
             <argument name="website"/>
