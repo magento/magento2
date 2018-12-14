@@ -292,8 +292,8 @@
                 <label translate="true">Send Welcome Email From</label>
                 <imports>
                     <link name="value">${ $.provider }:data.customer.store_id</link>
-	        </imports>
-	        <listens>
+                </imports>
+                <listens>
                     <link name="${ $.provider }:data.customer.website_id">websiteIdChanged</link>
                 </listens>
             </settings>
