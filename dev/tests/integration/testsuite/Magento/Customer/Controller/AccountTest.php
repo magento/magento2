@@ -57,6 +57,35 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer_no_password.php
+     */
+    public function testLoginWithIncorrectPassword()
+    {
+        $expectedMessage = 'The account sign-in was incorrect or your account is disabled temporarily. '
+            . 'Please wait and try again later.';
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPostValue(
+                [
+                    'login' => [
+                        'username' => 'customer@example.com',
+                        'password' => '123123q'
+                    ]
+                ]
+            );
+
+        $this->dispatch('customer/account/loginPost');
+        $this->assertRedirect($this->stringContains('customer/account/login'));
+        $this->assertSessionMessages(
+            $this->equalTo(
+                [
+                    $expectedMessage
+                ]
+            )
+        );
+    }
+
+    /**
      * Test sign up form displaying.
      */
     public function testCreateAction()
