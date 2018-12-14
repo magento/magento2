@@ -930,7 +930,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     }
 
     /**
-     * Add statuc comment on update.
+     * Add status comment on update.
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @param \Magento\Framework\DataObject $response
