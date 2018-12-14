@@ -87,6 +87,15 @@
                     <element key="magentoIndexerDimensionMode">
                         <string>magentoIndexerDimensionMode</string>
                     </element>
+                    <element key="moduleName">
+                        <string>moduleName</string>
+                    </element>
+                    <element key="dataProviderFromFile">
+                        <string>dataProviderFromFile</string>
+                    </element>
+                    <element key="magentoSchemaFixture">
+                        <string>magentoSchemaFixture</string>
+                    </element>
                 </array>
             </arguments>
         </listener>
