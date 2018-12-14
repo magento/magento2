@@ -230,6 +230,17 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     }
 
     /**
+     * Make DELETE request
+     *
+     * @param string $uri uri relative to host, ex. "/index.php"
+     * @return void
+     */
+    public function delete($uri)
+    {
+        $this->makeRequest("DELETE", $uri);
+    }
+
+    /**
      * Make POST request
      *
      * String type was added to parameter $param in order to support sending JSON or XML requests.
@@ -244,6 +255,20 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     public function post($uri, $params)
     {
         $this->makeRequest("POST", $uri, $params);
+    }
+
+    /**
+     * Make PUT request
+     *
+     * @param string $uri
+     * @param array|string $params
+     * @return void
+     *
+     * @see \Magento\Framework\HTTP\Client#put($uri, $params)
+     */
+    public function put($uri, $params)
+    {
+        $this->makeRequest("PUT", $uri, $params);
     }
 
     /**
@@ -363,6 +388,9 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
             $this->curlOption(CURLOPT_POSTFIELDS, is_array($params) ? http_build_query($params) : $params);
         } elseif ($method == "GET") {
             $this->curlOption(CURLOPT_HTTPGET, 1);
+        } elseif ($method == "PUT") {
+            $this->curlOption(CURLOPT_CUSTOMREQUEST, $method);
+            $this->curlOption(CURLOPT_POSTFIELDS, is_array($params) ? http_build_query($params) : $params);
         } else {
             $this->curlOption(CURLOPT_CUSTOMREQUEST, $method);
         }
