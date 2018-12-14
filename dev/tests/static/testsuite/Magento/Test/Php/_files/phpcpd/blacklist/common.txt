@@ -206,3 +206,4 @@ Magento/InventoryCatalogAdminUi/Controller/Adminhtml
 Magento/InventoryConfigurableProductIndexer/Indexer
 Magento/InventoryGroupedProductIndexer/Indexer
 Magento/Customer/Model/FileUploaderDataResolver.php
+Magento/Customer/Model/Customer/DataProvider.php
