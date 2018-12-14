@@ -17,7 +17,7 @@ define([
 
         /**
          * Store component constructor.
-	 *
+         *
          * @returns {exports}
          */
         initialize: function () {
