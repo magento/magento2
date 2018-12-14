@@ -17,7 +17,6 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoAppIsolation enabled
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\TestCase
 {
@@ -111,12 +110,10 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
      */
     protected function tearDown()
     {
-        unset(
-            $this->order,
-            $this->coupon,
-            $this->customer,
-            $this->salesRule
-        );
+        $this->salesRule = null;
+        $this->customer = null;
+        $this->coupon = null;
+        $this->order = null;
     }
 
     /**
