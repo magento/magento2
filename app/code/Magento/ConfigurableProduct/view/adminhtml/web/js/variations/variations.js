@@ -492,6 +492,7 @@ define([
             }
 
             this.unserializeData();
+
             return false;
         },
 
