@@ -15,5 +15,6 @@
         <element name="taxRate" type="input" selector="#taxRuleGrid_filter_tax_rates_codes"/>
         <element name="nthRow" type="block" selector="tr[data-role='row']:nth-of-type({{var}})" parameterized="true" timeout="30"/>
         <element name="successMessage" type="text" selector="#messages"/>
+        <element name="emptyText" type="text" selector="//*[@id='taxRuleGrid_table']/tbody/tr"/>
     </section>
 </sections>
