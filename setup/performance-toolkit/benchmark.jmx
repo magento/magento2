@@ -33542,7 +33542,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_entity_id" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_entity_id</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{"entity_id":"(\d+)".+?"parent_id":"${admin_customer_entity_id}"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{"entity_id":"(\d+)".+?"parent_id":"${admin_customer_entity_id}"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33551,7 +33551,7 @@ vars.put("admin_user", adminUser);
        <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_created_at" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_created_at</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"created_at":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"created_at":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33560,7 +33560,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_updated_at" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_updated_at</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"updated_at":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"updated_at":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33569,7 +33569,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_is_active" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_is_active</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"is_active":"(\d+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"is_active":"(\d+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33578,7 +33578,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_city" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_city</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"city":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"city":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33587,7 +33587,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_country_id" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_country_id</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"country_id":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"country_id":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33596,7 +33596,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_firstname" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_firstname</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"firstname":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"firstname":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33605,7 +33605,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_lastname" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_lastname</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"lastname":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"lastname":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33614,7 +33614,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_postcode" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_postcode</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"postcode":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"postcode":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33623,7 +33623,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_region" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_region</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"region":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"region":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33632,7 +33632,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_region_id" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_region_id</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"region_id":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"region_id":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33641,7 +33641,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address street" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_street</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"street":\["([^"]+)"\]</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"street":\["([^"]+)"\]</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33650,7 +33650,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_telephone" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_telephone</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"telephone":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"telephone":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33659,7 +33659,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_customer_id" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_customer_id</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"customer_id":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"customer_id":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
