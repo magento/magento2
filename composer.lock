@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "48f260ff6dcef1458aee3a9e695a43a2",
+    "content-hash": "03684a14a40d0a05a9234c4135e77dde",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6503,28 +6503,32 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-allure-report",
+            "version": "dev-2.3.12-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "c6624c7bf6288d0b40acdff91a87891ca780ddb1"
+                "reference": "5a16f3da80e990f4a0ce983b3557ada1d5037d4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/c6624c7bf6288d0b40acdff91a87891ca780ddb1",
-                "reference": "c6624c7bf6288d0b40acdff91a87891ca780ddb1",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/5a16f3da80e990f4a0ce983b3557ada1d5037d4b",
+                "reference": "5a16f3da80e990f4a0ce983b3557ada1d5037d4b",
                 "shasum": ""
             },
             "require": {
-                "allure-framework/allure-codeception": "~1.2.6",
+                "allure-framework/allure-php-api": "~1.1.0",
                 "codeception/codeception": "~2.3.4",
+                "composer/composer": "^1.6",
                 "consolidation/robo": "^1.0.0",
                 "epfremme/swagger-php": "^2.0",
+                "ext-curl": "*",
                 "flow/jsonpath": ">0.2",
                 "fzaninotto/faker": "^1.6",
                 "monolog/monolog": "^1.0",
                 "mustache/mustache": "~2.5",
                 "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0",
+                "symfony/filesystem": ">=2.6",
+                "symfony/finder": ">=2.6",
                 "symfony/process": "^2.8 || ^3.1 || ^4.0",
                 "vlucas/phpdotenv": "^2.4"
             },
@@ -6536,6 +6540,7 @@
                 "goaop/framework": "2.2.0",
                 "php-coveralls/php-coveralls": "^1.0",
                 "phpmd/phpmd": "^2.6.0",
+                "phpunit/phpunit": "~6.5.0 || ~7.0.0",
                 "rregeer/phpunit-coverage-check": "^0.1.4",
                 "sebastian/phpcpd": "~3.0 || ~4.0",
                 "squizlabs/php_codesniffer": "~3.2",
@@ -6570,7 +6575,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-12-13T19:32:54+00:00"
+            "time": "2018-12-14T21:11:58+00:00"
         },
         {
             "name": "mikey179/vfsStream",
