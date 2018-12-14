@@ -41,7 +41,7 @@ define([
         },
 
         /**
-         * @param {String} value
+         * @param {String} data
          */
         websiteIdChanged: function (data) {
             this.filter(data, 'group');
