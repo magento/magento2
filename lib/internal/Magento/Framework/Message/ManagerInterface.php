@@ -93,7 +93,7 @@ interface ManagerInterface
     /**
      * Adds new error message
      *
-     * @param string $message
+     * @param Phrase|string $message
      * @param string|null $group
      * @return ManagerInterface
      */
@@ -102,7 +102,7 @@ interface ManagerInterface
     /**
      * Adds new warning message
      *
-     * @param string $message
+     * @param Phrase|string $message
      * @param string|null $group
      * @return ManagerInterface
      */
@@ -111,7 +111,7 @@ interface ManagerInterface
     /**
      * Adds new notice message
      *
-     * @param string $message
+     * @param Phrase|string $message
      * @param string|null $group
      * @return ManagerInterface
      */
@@ -120,7 +120,7 @@ interface ManagerInterface
     /**
      * Adds new success message
      *
-     * @param string $message
+     * @param Phrase|string $message
      * @param string|null $group
      * @return ManagerInterface
      */
