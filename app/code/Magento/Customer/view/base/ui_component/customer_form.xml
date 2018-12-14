@@ -281,7 +281,7 @@
                 <visible>true</visible>
             </settings>
         </field>
-        <field name="sendemail_store_id" formElement="select">
+        <field name="sendemail_store_id" component="Magento_Ui/js/form/element/store" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">customer</item>
@@ -292,7 +292,10 @@
                 <label translate="true">Send Welcome Email From</label>
                 <imports>
                     <link name="value">${ $.provider }:data.customer.store_id</link>
-                </imports>
+	        </imports>
+	        <listens>
+                    <link name="${ $.provider }:data.customer.website_id">websiteIdChanged</link>
+                </listens>
             </settings>
             <formElements>
                 <select>
