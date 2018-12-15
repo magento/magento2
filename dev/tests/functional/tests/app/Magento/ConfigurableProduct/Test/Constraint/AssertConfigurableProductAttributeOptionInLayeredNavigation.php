@@ -60,7 +60,7 @@ class AssertConfigurableProductAttributeOptionInLayeredNavigation extends Abstra
 
         $filters = $catalogCategoryView->getLayeredNavigationBlock()->getFilterContents($frontendAttributeLabel);
 
-        \PHPUnit\Framework\Assert::assertFalse(
+        \PHPUnit_Framework_Assert::assertFalse(
             in_array(strtoupper($outOfStockOption), $filters),
             'Out of Stock attribute option is present in layered navigation on category page.'
         );

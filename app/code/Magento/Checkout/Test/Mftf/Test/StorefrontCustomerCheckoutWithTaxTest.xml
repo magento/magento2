@@ -70,7 +70,6 @@
       <waitForPageLoad stepKey="waitForPage"/>
       <!-- Step 7: Click New Address button -->
       <click selector="{{CheckoutShippingSection.newAdress}}" stepKey="clickAddNewAddress"/>
-      <waitForPageLoad stepKey="waitForPagePopup"/>
       <!-- Step 8: Fill form with valid data and set: California -->
       <!-- Step 9: Click Save Address -->
       <actionGroup ref="LoggedInUserCheckoutAddNewAddressInShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingAddress">

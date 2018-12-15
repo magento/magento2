@@ -12,7 +12,7 @@
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Add configurable product to cart"/>
-            <title value="Correct error message and redirect with invalid file option"/>
+            <title value="Correct error message and redirect with invalid file custom option"/>
             <description value="Configurable product has file custom option. When adding to cart with an invalid filetype, the correct error message is shown, and options remain selected."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93318"/>
@@ -60,7 +60,6 @@
         <!--Try invalid file-->
         <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="lorem_ipsum.docx" stepKey="attachInvalidFile"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartInvalidFile"/>
-        <waitForPageLoad time="30" stepKey="waitForAddToCartWithError"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.alertMessage}}" stepKey="waitForErrorMessageInvalidFile"/>
         <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="The file 'lorem_ipsum.docx' for '{{ProductOptionFile.title}}' has an invalid extension." stepKey="seeMessageInvalidFile"/>
         <!--Option remains selected-->

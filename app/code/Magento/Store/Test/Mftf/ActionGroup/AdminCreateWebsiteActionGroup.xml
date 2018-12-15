@@ -16,6 +16,7 @@
         <amOnPage url="{{AdminSystemStoreWebsitePage.url}}" stepKey="navigateToNewWebsitePage"/>
         <waitForPageLoad stepKey="waitForStoresPageLoad"/>
         <!--Create Website-->
+        <waitForElementVisible selector="{{AdminNewWebsiteSection.name}}" stepKey="waitForWebsiteFormAppeared" />
         <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{newWebsiteName}}" stepKey="enterWebsiteName" />
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{websiteCode}}" stepKey="enterWebsiteCode" />
         <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveWebsite" />

@@ -292,8 +292,8 @@ class Context implements ContextInterface
      */
     public function sortButtons(array $itemA, array $itemB)
     {
-        $sortOrderA = isset($itemA['sort_order']) ? intval($itemA['sort_order']) : 0;
-        $sortOrderB = isset($itemB['sort_order']) ? intval($itemB['sort_order']) : 0;
+        $sortOrderA = isset($itemA['sort_order']) ? (int)$itemA['sort_order'] : 0;
+        $sortOrderB = isset($itemB['sort_order']) ? (int)$itemB['sort_order'] : 0;
 
         return $sortOrderA - $sortOrderB;
     }

@@ -47,9 +47,10 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Run test getConfig method
+     * Run test getConfig method.
      *
      * @param array $expected
+     * @return void
      * @dataProvider getConfigDataProvider
      */
     public function testGetConfig($expected)
@@ -77,13 +78,16 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                 'width' => 30, 'height' => 26, 'url' => 'https://icon.test.url'
             ]);
 
+        $this->config->method('isRequiredBillingAddress')
+            ->willReturn(1);
+
         self::assertEquals($expected, $this->configProvider->getConfig());
     }
 
     /**
      * @return array
      */
-    public function getConfigDataProvider()
+    public function getConfigDataProvider(): array
     {
         return [
             [
@@ -101,7 +105,8 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'skipOrderReview' => false,
                             'paymentIcon' => [
                                 'width' => 30, 'height' => 26, 'url' => 'https://icon.test.url'
-                            ]
+                            ],
+                            'isRequiredBillingAddress' => true,
                         ]
                     ]
                 ]

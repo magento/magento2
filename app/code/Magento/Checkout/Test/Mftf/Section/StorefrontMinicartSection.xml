@@ -10,7 +10,6 @@
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontMinicartSection">
         <element name="productCount" type="text" selector="//header//div[contains(@class, 'minicart-wrapper')]//a[contains(@class, 'showcart')]//span[@class='counter-number']"/>
-        <element name="viewAndEditCart" type="button" selector="//header//div[contains(@class, 'minicart-wrapper')]//a[contains(@class, 'viewcart')]"/>
         <element name="productLinkByName" type="button" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details']//a[contains(text(), '{{var1}}')]"  parameterized="true"/>
         <element name="productPriceByName" type="text" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details'][.//a[contains(text(), '{{var1}}')]]//span[@class='price']"  parameterized="true"/>
         <element name="productImageByName" type="text" selector="//header//ol[@id='mini-cart']//span[@class='product-image-container']//img[@alt='{{var1}}']"  parameterized="true"/>
