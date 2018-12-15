@@ -98,6 +98,10 @@ function (
                     this.saveInAddressBook(1);
                 }
                 this.isAddressDetailsVisible(true);
+
+                if (!this.canUseShippingAddress()) {
+                    this.isAddressDetailsVisible(false);
+                }
             }, this);
 
             return this;
