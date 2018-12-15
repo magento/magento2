@@ -10,6 +10,9 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated
+ * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Links
  */
 class Links extends \Magento\Backend\Block\Template
 {
