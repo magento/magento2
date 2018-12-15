@@ -36,7 +36,11 @@ class ProductPriceCalculator
         if ($productData !== null && isset($productData['rule_price'])) {
             $productPrice = $productData['rule_price'];
         } else {
-            $productPrice = $ruleData['default_price'];
+            if($ruleData['default_tire_price'] && $ruleData['default_tire_price']!=''){
+                $productPrice = $ruleData['default_tire_price'];
+            }else{
+               $productPrice = $ruleData['default_price']; 
+            }
         }
 
         switch ($ruleData['action_operator']) {

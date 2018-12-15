@@ -163,6 +163,16 @@ class RuleProductsSelectBuilder
             'default_price' => $connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
         ]);
 
+        $select->joinLeft(
+            ['tp' => $this->resource->getTableName('catalog_product_entity_tier_price')],
+            'tp.entity_id = rp.product_id AND tp.customer_group_id = rp.customer_group_id',
+            []
+        );
+
+        $select->columns([
+            'default_tire_price' => new \Zend_Db_Expr('COALESCE(tp.value, pp1.value, pp_default.value)')
+        ]);
+
         return $connection->query($select);
     }
 }
