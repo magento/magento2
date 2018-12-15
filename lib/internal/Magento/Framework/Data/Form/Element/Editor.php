@@ -487,4 +487,13 @@ class Editor extends Textarea
     {
         return !$this->getConfig()->hasData('toggle_button') || $this->getConfig('toggle_button');
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHtmlId()
+    {
+        $suffix = $this->getConfig('dynamic_id') ? '${ $.wysiwygUniqueSuffix }' : '';
+        return parent::getHtmlId() . $suffix;
+    }
 }
