@@ -454,7 +454,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      */
     private function formatAmountColumn($lineItem)
     {
-        return intval($lineItem) / 100;
+        return (int)$lineItem / 100;
     }
 
     /**

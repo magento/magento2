@@ -66,3 +66,49 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.position {
+    width: 100px;
+}
+
+.icon-rearrange-position > span {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.icon-forward,
+.icon-backward {
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Admin Icons';
+    font-size: 17px;
+    speak: none;
+}
+
+.position > * {
+    float: left;
+    margin: 3px;
+}
+
+.position-widget-input {
+    text-align: center;
+    width: 40px;
+}
+
+.icon-forward:before {
+    content: '\e618';
+}
+
+.icon-backward:before {
+    content: '\e619';
+}
+
+.icon-rearrange-position, .icon-rearrange-position:hover   {
+    color: #d9d9d9;
+    text-decoration: none;
+}

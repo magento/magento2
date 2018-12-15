@@ -154,9 +154,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         // Need to explicitly set this due to discrepancy in the keys between model and data object
         $this->setIsDefaultBilling($address->isDefaultBilling());
         $this->setIsDefaultShipping($address->isDefaultShipping());
-        if (!$this->getAttributeSetId()) {
-            $this->setAttributeSetId(AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS);
-        }
         $customAttributes = $address->getCustomAttributes();
         if ($customAttributes !== null) {
             foreach ($customAttributes as $attribute) {

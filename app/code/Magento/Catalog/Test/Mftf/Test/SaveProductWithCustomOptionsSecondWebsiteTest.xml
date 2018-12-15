@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="SaveProductWithCustomOptionsAdditionalWebsiteTest">
         <annotations>
             <features value="Save a product with Custom Options and assign to a different website"/>
@@ -86,6 +86,7 @@
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
 
         <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection"/>
+        <scrollTo stepKey="scrollToCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" />
         <seeNumberOfElements selector=".admin__dynamic-rows[data-index='values'] tr.data-row" userInput="3" stepKey="see4RowsOfOptions"/>
     </test>
 </tests>

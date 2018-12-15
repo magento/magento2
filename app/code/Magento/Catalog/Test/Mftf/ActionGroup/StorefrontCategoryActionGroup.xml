@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Check the category page -->
     <actionGroup name="StorefrontCheckCategoryActionGroup">
         <arguments>
@@ -34,5 +34,47 @@
     <actionGroup name="StorefrontSwitchCategoryViewToListMode">
         <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="switchCategoryViewToListMode"/>
         <seeElement selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryTitle"/>
+    </actionGroup>
+
+    <!-- Go to storefront category product page by given parameters -->
+    <actionGroup name="GoToStorefrontCategoryPageByParameters">
+        <arguments>
+            <argument name="category" type="string"/>
+            <argument name="mode" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+            <argument name="sort" type="string" defaultValue="asc"/>
+        </arguments>
+        <!-- Go to storefront category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url(category)}}?product_list_mode={{mode}}&amp;product_list_order={{sortBy}}&amp;product_list_dir={{sort}}" stepKey="onCategoryPage"/>
+    </actionGroup>
+
+    <actionGroup name="VerifyCategoryPageParameters">
+        <arguments>
+            <argument name="categoryName" type="string"/>
+            <argument name="mode" type="string"/>
+            <argument name="numOfProductsPerPage" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+        </arguments>
+        <amOnPage url="{{StorefrontCategoryPage.url(categoryName)}}" stepKey="navigateToCategoryPage"/>
+        <seeInTitle userInput="{{categoryName}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{categoryName}}" selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryName"/>
+        <see userInput="{{mode}}" selector="{{StorefrontCategoryPagerSection.modeGridIsActive}}" stepKey="assertViewMode"/>
+        <see userInput="{{numOfProductsPerPage}}" selector="{{StorefrontCategoryPagerSection.perPageSelected}}" stepKey="assertNumberOfProductsPerPage"/>
+        <see userInput="{{sortBy}}" selector="{{StorefrontCategoryPagerSection.sortedBy}}" stepKey="assertSortedBy"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontGoToSubCategoryPage">
+        <arguments>
+            <argument name="parentCategory"/>
+            <argument name="subCategory"/>
+            <argument name="urlPath" type="string"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName(parentCategory.name)}}" stepKey="moveMouseOnMainCategory"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(subCategory.name)}}" stepKey="waitForSubCategoryVisible"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(subCategory.name)}}" stepKey="goToCategory"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeInCurrentUrl url="{{urlPath}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{subCategory.name}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{subCategory.name}}" selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryName"/>
     </actionGroup>
 </actionGroups>

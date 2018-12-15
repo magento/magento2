@@ -6,6 +6,7 @@
 namespace Magento\Braintree\Gateway\Request;
 
 use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
 
@@ -41,6 +42,9 @@ class VaultCaptureDataBuilder implements BuilderInterface
         $payment = $paymentDO->getPayment();
         $extensionAttributes = $payment->getExtensionAttributes();
         $paymentToken = $extensionAttributes->getVaultPaymentToken();
+        if ($paymentToken === null) {
+            throw new CommandException(__('The Payment Token is not available to perform the request.'));
+        }
         return [
             'amount' => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
             'paymentMethodToken' => $paymentToken->getGatewayToken()
