@@ -8,6 +8,7 @@ namespace Magento\Deploy\Collector;
 use Magento\Deploy\Source\SourcePool;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFactory;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**
@@ -43,6 +44,9 @@ class Collector implements CollectorInterface
      * @var PackageFactory
      */
     private $packageFactory;
+    
+    /** @var \Magento\Framework\Module\Manager */
+    private $moduleManager;
 
     /**
      * Default values for package primary identifiers
@@ -65,11 +69,14 @@ class Collector implements CollectorInterface
     public function __construct(
         SourcePool $sourcePool,
         FileNameResolver $fileNameResolver,
-        PackageFactory $packageFactory
+        PackageFactory $packageFactory,
+        Manager $moduleManager  = null
     ) {
         $this->sourcePool = $sourcePool;
         $this->fileNameResolver = $fileNameResolver;
         $this->packageFactory = $packageFactory;
+        $this->moduleManager = $moduleManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+                              ->get(\Magento\Framework\Module\Manager::class);
     }
 
     /**
@@ -81,6 +88,9 @@ class Collector implements CollectorInterface
         foreach ($this->sourcePool->getAll() as $source) {
             $files = $source->get();
             foreach ($files as $file) {
+                if ($file->getModule() && !$this->moduleManager->isEnabled($file->getModule())) {
+                    continue;
+                }
                 $file->setDeployedFileName($this->fileNameResolver->resolve($file->getFileName()));
                 $params = [
                     'area' => $file->getArea(),
