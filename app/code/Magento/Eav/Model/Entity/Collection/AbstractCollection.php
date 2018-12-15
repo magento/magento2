@@ -337,7 +337,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * )
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AttributeInterface|integer|string|array $attribute
-     * @param null|string|array $condition
+     * @param null|string|int|float|array $condition
      * @param string $joinType
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException

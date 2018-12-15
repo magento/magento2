@@ -235,7 +235,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Load entity by attribute
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AttributeInterface|integer|string|array $attribute
-     * @param null|string|int|array $value
+     * @param null|string|int|float|array $value
      * @param string $additionalAttributes
      * @return bool|\Magento\Catalog\Model\AbstractModel
      */

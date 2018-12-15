@@ -101,7 +101,7 @@ class Select extends \Zend_Db_Select
      * </code>
      *
      * @param string $cond The WHERE condition.
-     * @param string|int|array|null $value OPTIONAL A single value to quote into the condition.
+     * @param string|int|float|array|null $value OPTIONAL A single value to quote into the condition.
      * @param string|int|null $type OPTIONAL The type of the given value
      * @return \Magento\Framework\DB\Select
      */
