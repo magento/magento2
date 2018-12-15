@@ -13,6 +13,8 @@ use Magento\Catalog\Model\Product;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * @deprecated Not used since cross-sell products grid moved to UI components.
+ * @see \Magento\Catalog\Ui\DataProvider\Product\Related\CrossSellDataProvider
  */
 class Crosssell extends Extended
 {
