@@ -75,7 +75,8 @@
 //  Fieldset
 //  ---------------------------------------------
 
-.admin__fieldset {
+.admin__fieldset, 
+.sales-order-address .admin__fieldset-wrapper { 
     border: 0;
     margin: 0;
     min-width: 0;
@@ -109,7 +110,8 @@
         }
     }
 
-    > .admin__field {
+    > .admin__field, 
+    .form-inline #edit_form > .admin__field {  
         border: 0;
         margin: 0;
         padding: 0;
@@ -147,6 +149,18 @@
                 }
             }
         }
+    }
+    .form-inline #edit_form .admin__field {      
+        margin-bottom: 3rem;
+        position: relative; 
+    } 
+    &.admin__fieldset-wrapper .admin__legend{ 
+        &:extend(.abs-clearfix all);
+        border-bottom: 1px solid @color-gray80;
+        line-height: 1.2;
+        padding: 14px 0 16px;
+        margin-bottom: 3rem;
+        
     }
 }
 
