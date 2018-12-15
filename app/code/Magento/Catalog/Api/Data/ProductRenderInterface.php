@@ -30,7 +30,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
     /**
      * Set information needed for render "Add To Cart" button on front
      *
-     * @param \Magento\Catalog\Api\Data\ProductRender\ButtonInterface $addToCartData
+     * @param \Magento\Catalog\Api\Data\ProductRender\ButtonInterface $cartAddToCartButton
      * @return void
      * @since 101.1.0
      */
@@ -47,7 +47,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
     /**
      * Set information needed for render "Add To Compare" button on front
      *
-     * @param ButtonInterface $compareUrlData
+     * @param ButtonInterface $compareButton
      * @return string
      * @since 101.1.0
      */

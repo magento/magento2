@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Observer;
 
-use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
@@ -53,11 +53,11 @@ class SwitchPriceAttributeScopeOnConfigChange implements ObserverInterface
      * Change scope for all price attributes according to
      * 'Catalog Price Scope' configuration parameter value
      *
-     * @param EventObserver $observer
+     * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(EventObserver $observer)
+    public function execute(Observer $observer)
     {
         $this->searchCriteriaBuilder->addFilter('frontend_input', 'price');
         $criteria = $this->searchCriteriaBuilder->create();

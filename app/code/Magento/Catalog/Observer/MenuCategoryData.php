@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Observer;
 
+/**
+ * Class MenuCategoryData
+ * @package Magento\Catalog\Observer
+ */
 class MenuCategoryData
 {
     /**

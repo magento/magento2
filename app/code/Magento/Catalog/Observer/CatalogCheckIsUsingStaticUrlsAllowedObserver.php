@@ -5,21 +5,27 @@
  */
 namespace Magento\Catalog\Observer;
 
+use Magento\Catalog\Helper\Data;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class CatalogCheckIsUsingStaticUrlsAllowedObserver
+ * @package Magento\Catalog\Observer
+ */
 class CatalogCheckIsUsingStaticUrlsAllowedObserver implements ObserverInterface
 {
     /**
      * Catalog data
      *
-     * @var \Magento\Catalog\Helper\Data
+     * @var Data
      */
     protected $catalogData;
 
     /**
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param Data $catalogData
      */
-    public function __construct(\Magento\Catalog\Helper\Data $catalogData)
+    public function __construct(Data $catalogData)
     {
         $this->catalogData = $catalogData;
     }
@@ -27,10 +33,10 @@ class CatalogCheckIsUsingStaticUrlsAllowedObserver implements ObserverInterface
     /**
      * Checking whether the using static urls in WYSIWYG allowed event
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $storeId = $observer->getEvent()->getData('store_id');
         $result = $observer->getEvent()->getData('result');

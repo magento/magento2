@@ -5,9 +5,17 @@
  */
 namespace Magento\Catalog\Plugin\Model\ResourceModel;
 
+use Magento\Eav\Model\Cache\Type;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class Config
+ * @package Magento\Catalog\Plugin\Model\ResourceModel
+ */
 class Config
 {
     /**#@+
@@ -31,23 +39,23 @@ class Config
     private $serializer;
 
     /**
-     * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
+     * @param CacheInterface $cache
+     * @param StateInterface $cacheState
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Framework\App\Cache\StateInterface $cacheState,
+        CacheInterface $cache,
+        StateInterface $cacheState,
         SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
-        $this->isCacheEnabled = $cacheState->isEnabled(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER);
+        $this->isCacheEnabled = $cacheState->isEnabled(Type::TYPE_IDENTIFIER);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Config $config
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @return array
      */
     public function aroundGetAttributesUsedInListing(
@@ -64,8 +72,8 @@ class Config
                 $this->serializer->serialize($attributes),
                 $cacheId,
                 [
-                    \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                    \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                    Type::CACHE_TAG,
+                    Attribute::CACHE_TAG
                 ]
             );
         }
@@ -74,7 +82,7 @@ class Config
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Config $config
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @return array
      */
     public function aroundGetAttributesUsedForSortBy(
@@ -92,8 +100,8 @@ class Config
                 $this->serializer->serialize($attributes),
                 $cacheId,
                 [
-                    \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                    \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                    Type::CACHE_TAG,
+                    Attribute::CACHE_TAG
                 ]
             );
         }

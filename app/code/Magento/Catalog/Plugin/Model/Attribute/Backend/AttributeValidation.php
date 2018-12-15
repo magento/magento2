@@ -5,7 +5,10 @@
  */
 namespace Magento\Catalog\Plugin\Model\Attribute\Backend;
 
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Framework\DataObject;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Attribute validation
@@ -13,7 +16,7 @@ use Magento\Store\Model\Store;
 class AttributeValidation
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
@@ -23,11 +26,11 @@ class AttributeValidation
     private $allowedEntityTypes;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param array $allowedEntityTypes
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager,
         $allowedEntityTypes = []
     ) {
         $this->storeManager = $storeManager;
@@ -37,16 +40,16 @@ class AttributeValidation
     /**
      * Around validate
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend $subject
+     * @param AbstractBackend $subject
      * @param \Closure $proceed
-     * @param \Magento\Framework\DataObject $entity
+     * @param DataObject $entity
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return bool
      */
     public function aroundValidate(
-        \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend $subject,
+        AbstractBackend $subject,
         \Closure $proceed,
-        \Magento\Framework\DataObject $entity
+        DataObject $entity
     ) {
         $isAllowedType = !empty(array_filter(array_map(function ($allowedEntity) use ($entity) {
             return $entity instanceof $allowedEntity;

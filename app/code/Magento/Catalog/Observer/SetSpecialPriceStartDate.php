@@ -5,23 +5,28 @@
  */
 namespace Magento\Catalog\Observer;
 
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- *  Set value for Special Price start date
+ * Set value for Special Price start date
+ *
+ * Class SetSpecialPriceStartDate
+ * @package Magento\Catalog\Observer
  */
 class SetSpecialPriceStartDate implements ObserverInterface
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     private $localeDate;
 
     /**
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param TimezoneInterface $localeDate
      * @codeCoverageIgnore
      */
-    public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
+    public function __construct(TimezoneInterface $localeDate)
     {
         $this->localeDate = $localeDate;
     }
@@ -29,12 +34,12 @@ class SetSpecialPriceStartDate implements ObserverInterface
     /**
      * Set the current date to Special Price From attribute if it empty
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
-        /** @var  $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $observer->getEvent()->getProduct();
         if ($product->getSpecialPrice() && !$product->getSpecialFromDate()) {
             $product->setData('special_from_date', $this->localeDate->date());

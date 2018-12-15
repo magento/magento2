@@ -21,14 +21,15 @@ interface SpecialPriceInterface
      *         'sku value 1',
      *         'sku value 2'
      *     ];
-     * @return [
+     * @return array
+     *     [
      *      'entity_id' => (int) Entity identified or entity link field.
      *      'value' => (float) Special price value.
      *      'store_id' => (int) Store Id.
      *      'sku' => (string) Product SKU.
      *      'price_from' => (string) Special price from date value in UTC.
      *      'price_to' => (string) Special price to date value in UTC.
-     * ]
+     *     ];
      * @since 101.1.0
      */
     public function get(array $skus);

@@ -148,7 +148,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Set dto with formatted prices
      *
-     * @param string[] $formattedPriceInfo
+     * @param \Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface $formattedPriceInfo
      * @return void
      * @since 101.1.0
      */

@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Observer\Compare;
 
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Model\Product\Compare\Item;
 
@@ -14,6 +15,11 @@ use Magento\Catalog\Model\Product\Compare\Item;
  */
 class BindCustomerLogoutObserver implements ObserverInterface
 {
+    /**
+     * @var Item
+     */
+    private $item;
+
     /**
      * @param Item $item
      */
@@ -25,12 +31,12 @@ class BindCustomerLogoutObserver implements ObserverInterface
 
     /**
      * Customer login bind process
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $this->item->bindCustomerLogout();
 

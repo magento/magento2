@@ -7,10 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Observer;
 
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\State;
 use Magento\MediaStorage\Service\ImageResize;
 
+/**
+ * Class ImageResizeAfterProductSave
+ * @package Magento\Catalog\Observer
+ */
 class ImageResizeAfterProductSave implements ObserverInterface
 {
     /**
@@ -39,12 +44,12 @@ class ImageResizeAfterProductSave implements ObserverInterface
     /**
      * Process event on 'save_commit_after' event
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $observer->getEvent()->getProduct();
 
         if ($this->state->isAreaCodeEmulated()) {

@@ -59,7 +59,7 @@ interface CustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Catalog\Api\Data\CustomOptionExtensionInterface|null $extensionAttributes
+     * @param \Magento\Catalog\Api\Data\CustomOptionExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
