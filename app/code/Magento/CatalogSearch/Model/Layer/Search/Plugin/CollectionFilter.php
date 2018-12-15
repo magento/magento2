@@ -8,6 +8,8 @@ namespace Magento\CatalogSearch\Model\Layer\Search\Plugin;
 
 use Magento\Catalog\Model\Category;
 use Magento\Search\Model\QueryFactory;
+use Magento\CatalogSearch\Helper\Data;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 class CollectionFilter
 {
@@ -15,13 +17,17 @@ class CollectionFilter
      * @var \Magento\Search\Model\QueryFactory
      */
     protected $queryFactory;
+    protected $helper;
+    protected $collectionFactory;
 
     /**
      * @param QueryFactory $queryFactory
      */
-    public function __construct(QueryFactory $queryFactory)
+    public function __construct(QueryFactory $queryFactory, Data $helper, CollectionFactory $collectionFactory)
     {
         $this->queryFactory = $queryFactory;
+        $this->helper = $helper;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -45,5 +51,19 @@ class CollectionFilter
         if (!$query->isQueryTextShort()) {
             $collection->addSearchFilter($query->getQueryText());
         }
+    }
+
+    public function beforeFilter(
+        \Magento\Catalog\Model\Layer\Search\CollectionFilter $subject,
+        $collection,
+        Category $category
+    ) {
+        /** @var \Magento\Search\Model\Query $query */
+        $query = $this->queryFactory->get();
+        if ($query->isQueryTextShort() && $this->helper->isMinQueryLength()) {
+            return [$this->collectionFactory->create(),$category];
+        }
+
+        return [$collection,$category];
     }
 }
