@@ -272,7 +272,15 @@
 //
 //  Field
 //  ---------------------------------------------
-
+.login-content {
+    .admin__field {
+         label[for="captcha"] > span {
+            &:after {
+                margin-top:-1.5rem;
+            }
+        }
+    }
+}
 .admin__field {
     &:extend(.abs-field-sizes all);
     margin-bottom: 0;
