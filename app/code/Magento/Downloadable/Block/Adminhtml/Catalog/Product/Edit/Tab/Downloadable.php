@@ -15,6 +15,8 @@ use Magento\Framework\Registry;
  * Adminhtml catalog product downloadable items tab and form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated
+ * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite
  */
 class Downloadable extends Widget implements TabInterface
 {
