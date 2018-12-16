@@ -33,8 +33,7 @@ class BindCustomerLogoutObserver implements ObserverInterface
      * Customer login bind process
      * @param Observer $observer
      * @return $this
-     *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(Observer $observer)
     {
