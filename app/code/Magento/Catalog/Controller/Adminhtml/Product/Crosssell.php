@@ -6,6 +6,13 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class Crosssell
+ *
+ * @package Magento\Catalog\Controller\Adminhtml\Product
+ * @deprecated Not used since cross-sell products grid moved to UI components.
+ * @see Magento_Catalog::view/adminhtml/ui_component/crosssell_product_listing.xml
+ */
 class Crosssell extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
