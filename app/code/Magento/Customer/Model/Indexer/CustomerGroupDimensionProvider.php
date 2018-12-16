@@ -34,12 +34,19 @@ class CustomerGroupDimensionProvider implements DimensionProviderInterface
      */
     private $dimensionFactory;
 
+    /**
+     * @param CustomerGroupCollectionFactory $collectionFactory
+     * @param DimensionFactory $dimensionFactory
+     */
     public function __construct(CustomerGroupCollectionFactory $collectionFactory, DimensionFactory $dimensionFactory)
     {
         $this->dimensionFactory = $dimensionFactory;
         $this->collectionFactory = $collectionFactory;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getIterator(): \Traversable
     {
         foreach ($this->getCustomerGroups() as $customerGroup) {

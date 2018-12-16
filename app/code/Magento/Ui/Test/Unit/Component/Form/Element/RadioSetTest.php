@@ -22,6 +22,9 @@ class RadioSetTest extends AbstractElementTest
         return RadioSet::class;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function testGetComponentName()
     {
         $this->assertSame(RadioSet::NAME, $this->getModel()->getComponentName());
