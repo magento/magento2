@@ -34,7 +34,7 @@
         <arguments>
             <argument name="quantity" type="string" defaultValue="1"/>
         </arguments>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.QtyInput}}" time="30" before="addToCart" stepKey="waitQuantityFieldVisible"/>
-        <fillField selector="{{StorefrontProductPageSection.QtyInput}}" userInput="{{quantity}}" after="waitQuantityFieldVisible" stepKey="fillQuantityField"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.qtyInput}}" time="30" before="addToCart" stepKey="waitQuantityFieldVisible"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{quantity}}" after="waitQuantityFieldVisible" stepKey="fillQuantityField"/>
     </actionGroup>
 </actionGroups>
