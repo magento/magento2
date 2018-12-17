@@ -10,7 +10,6 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
@@ -111,11 +110,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @since 100.1.0
      */
     protected $session;
-
-    /**
-     * @var FileProcessorFactory
-     */
-    private $fileProcessorFactory;
 
     /**
      * Customer fields that must be removed
