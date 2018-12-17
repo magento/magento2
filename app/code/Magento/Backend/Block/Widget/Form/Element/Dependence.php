@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Backend\Block\Widget\Form\Element;
+
 /**
  * Form element dependencies mapper
  * Assumes that one element may depend on other element values.
  * Will toggle as "enabled" only if all elements it depends from toggle as true.
- */
-namespace Magento\Backend\Block\Widget\Form\Element;
-
-/**
+ *
  * @api
  * @since 100.0.2
  */
@@ -117,6 +116,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
 
     /**
      * HTML output getter
+     *
      * @return string
      */
     protected function _toHtml()
@@ -140,6 +140,7 @@ require(['mage/adminhtml/form'], function(){
 
     /**
      * Field dependencies JSON map generator
+     *
      * @return string
      */
     protected function _getDependsJson()

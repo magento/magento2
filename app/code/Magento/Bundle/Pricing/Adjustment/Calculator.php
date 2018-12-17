@@ -198,6 +198,8 @@ class Calculator implements BundleCalculatorInterface
     }
 
     /**
+     * Get selection price list provider.
+     *
      * @return SelectionPriceListProviderInterface
      * @deprecated 100.2.0
      */
