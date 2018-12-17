@@ -83,6 +83,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\CatalogImportExport\Model\Import\Product::class,
             ['logger' => $this->logger]
         );
+
         parent::setUp();
     }
 
@@ -1277,6 +1278,46 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testNewProductPositionInCategory()
+    {
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/product_to_import_with_category.csv',
+                'directory' => $directory,
+            ]
+        );
+        $errors = $this->_model->setSource(
+            $source
+        )->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product',
+            ]
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() === 0);
+        $this->_model->importData();
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get('simpleImported');
+        $categoryLinks = $product->getExtensionAttributes('category_links')->getCategoryLinks();
+        $position = $categoryLinks[0]->getPosition();
+
+        $this->assertEquals(0, $position);
+    }
+
+    /**
      * @return array
      */
     public function categoryTestDataProvider()
@@ -2348,6 +2389,37 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             sprintf('%s.html', $product->getUrlKey()),
             $collUrlRewrite->getFirstItem()->getRequestPath()
         );
+    }
+
+    /**
+     * Test that product import with non existing images does not broke roles on existing images.
+     *
+     * @magentoDataIsolation enabled
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoAppIsolation enabled
+     */
+    public function testSaveProductOnImportNonExistingImage()
+    {
+        $this->importDataForMediaTest('import_media.csv');
+
+        $product = $this->getProductBySku('simple_new');
+
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
+        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
+        $this->assertEquals('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
+
+        $this->importDataForMediaTest('import_media_non_existing_images.csv', 1);
+
+        $this->assertNotEquals('/u/p/uploaded.jpg', $product->getData('image'));
+        $this->assertNotEquals('/u/p/uploaded.jpg', $product->getData('small_image'));
+        $this->assertNotEquals('/u/p/uploaded.jpg', $product->getData('thumbnail'));
+        $this->assertNotEquals('/u/p/uploaded.jpg', $product->getData('swatch_image'));
+
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
+        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
+        $this->assertEquals('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
     }
 
     /**
