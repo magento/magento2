@@ -53,7 +53,7 @@ class Storage
                 'product_id' => $record->getEntityId(),
             ];
         }
-        if ($toSave) {
+        if (count($toSave) > 0) {
             $this->productResource->saveMultiple($toSave);
         }
         return $result;
