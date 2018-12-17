@@ -31,8 +31,8 @@
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillDefaultProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{SimpleProduct.sku}}" stepKey="fillDefaultProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{SimpleProduct.price}}" stepKey="fillDefaultProductPrice"/>
-        <scrollTo selector="{{AdminProductFormBundleSection.searchEngineOptimizationDropDown}}" stepKey="scrollToSearchEngine"/>
-        <click selector="{{AdminProductFormBundleSection.searchEngineOptimizationDropDown}}" stepKey="selectSearchEngineOptimization"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="scrollToSearchEngine"/>
+        <click selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="selectSearchEngineOptimization"/>
         <fillField selector="{{AdminProductFormBundleSection.urlKey}}" userInput="{{SimpleProduct.urlKey}}" stepKey="fillUrlKey"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveDefaultProduct"/>
         <waitForPageLoad stepKey="waitForPDefaultProductSaved"/>
@@ -45,8 +45,8 @@
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{defaultSimpleProduct.sku}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{defaultSimpleProduct.price}}" stepKey="fillProductPrice"/>
         <selectOption selector="{{AdminCategoryProductsGridSection.productVisibility}}" userInput="Not Visible Individually" stepKey="selectProductVisibility"/>
-        <scrollTo selector="{{AdminProductFormBundleSection.searchEngineOptimizationDropDown}}" stepKey="scrollToSearchEngineOptimization"/>
-        <click selector="{{AdminProductFormBundleSection.searchEngineOptimizationDropDown}}" stepKey="selectSearchEngineOptimization1"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="scrollToSearchEngineOptimization"/>
+        <click selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="selectSearchEngineOptimization1"/>
         <fillField selector="{{AdminProductFormBundleSection.urlKey}}" userInput="{{defaultSimpleProduct.urlKey}}" stepKey="fillUrlKey1"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <waitForPageLoad stepKey="waitForProductSaved"/>
@@ -58,8 +58,8 @@
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
         <!--Select the default product and product with grid filter-->
-        <scrollTo selector="{{AdminCategoryBasicFieldSection.ProductsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
-        <click selector="{{AdminCategoryBasicFieldSection.ProductsInCategory}}" stepKey="clickOnProductInCategory"/>
+        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
+        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
         <fillField selector="{{AdminCategoryContentSection.ProductTableColumnName}}" userInput="{{defaultSimpleProduct.name}}"  stepKey="selectProduct"/>
         <click selector="{{AdminCategoryContentSection.ProductSearch}}" stepKey="clickSearchButton"/>
         <click selector="{{AdminCategoryContentSection.ProductTableRow}}" stepKey="selectProductFromRow"/>

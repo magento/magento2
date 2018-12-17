@@ -71,7 +71,7 @@
         <!--Delete the store/-->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
         <waitForPageLoad stepKey="waitStoreIndexPageLoad" />
-        <fillField selector="{{AdminStoresGridSection.storeSearchTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
+        <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch"/>
         <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickStoreViewInGrid"/>
         <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreView"/>

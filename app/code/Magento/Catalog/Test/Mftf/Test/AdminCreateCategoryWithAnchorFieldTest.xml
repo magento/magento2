@@ -44,23 +44,23 @@
         <!--Select Display Setting and fill the options-->
         <scrollTo selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" x="0" y="-80" stepKey="scrollToDisplaySetting"/>
         <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="selectDisplaySetting"/>
-        <selectOption selector="{{CategoryDisplaySettingsSection.DisplayMode}}" userInput="PRODUCTS_AND_PAGE" stepKey="selectDisplayMode"/>
-        <checkOption selector="{{CategoryDisplaySettingsSection.Anchor}}" stepKey="enableAnchor"/>
-        <click selector="{{CategoryDisplaySettingsSection.ProductListCheckBox}}" stepKey="enableTheAvailableProductList"/>
-        <selectOption selector="{{CategoryDisplaySettingsSection.ProductList}}" parameterArray="['Position', 'Product Name', 'Price']" stepKey="selectPrice"/>
-        <scrollTo selector="{{CategoryDisplaySettingsSection.DefaultProductLisCheckBox}}" x="0" y="-80" stepKey="scrollToDefaultProductList"/>
-        <click selector="{{CategoryDisplaySettingsSection.DefaultProductLisCheckBox}}" stepKey="enableTheDefaultProductList"/>
-        <selectOption selector="{{CategoryDisplaySettingsSection.DefaultProductList}}" userInput="name" stepKey="selectProductName"/>
-        <scrollTo selector="{{CategoryDisplaySettingsSection.LayeredNavigationPriceCheckBox}}" x="0" y="-80" stepKey="scrollToLayeredNavPrice"/>
-        <click selector="{{CategoryDisplaySettingsSection.LayeredNavigationPriceCheckBox}}" stepKey="enableLayeredNavigationPrice"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.displayMode}}" userInput="PRODUCTS_AND_PAGE" stepKey="selectdisplayMode"/>
+        <checkOption selector="{{CategoryDisplaySettingsSection.anchor}}" stepKey="enableAnchor"/>
+        <click selector="{{CategoryDisplaySettingsSection.productListCheckBox}}" stepKey="enableTheAvailableProductList"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.productList}}" parameterArray="['Position', 'Product Name', 'Price']" stepKey="selectPrice"/>
+        <scrollTo selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}" x="0" y="-80" stepKey="scrollToDefaultProductList"/>
+        <click selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}" stepKey="enableTheDefaultProductList"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.defaultProductList}}" userInput="name" stepKey="selectProductName"/>
+        <scrollTo selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceCheckBox}}" x="0" y="-80" stepKey="scrollToLayeredNavPrice"/>
+        <click selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceCheckBox}}" stepKey="enableLayeredNavigationPrice"/>
         <fillField selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceInput}}" userInput="5.5" stepKey="fillThePrice"/>
         <!--Search the products and select the category products-->
-        <scrollTo selector="{{AdminCategoryBasicFieldSection.ProductsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
-        <click selector="{{AdminCategoryBasicFieldSection.ProductsInCategory}}" stepKey="clickOnProductInCategory"/>
+        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
+        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
         <fillField selector="{{AdminCategoryContentSection.ProductTableColumnName}}" userInput="$$simpleProduct.name$$"  stepKey="selectProduct"/>
         <click selector="{{AdminCategoryContentSection.ProductSearch}}" stepKey="clickSearchButton"/>
         <click selector="{{AdminCategoryContentSection.ProductTableRow}}" stepKey="selectProductFromTableRow"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="slickSaveButton"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>

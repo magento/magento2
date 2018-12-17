@@ -11,6 +11,5 @@
     <section name="AdminProductMessagesSection">
         <element name="successMessage" type="text" selector=".message-success"/>
         <element name="errorMessage" type="text" selector=".message.message-error.error"/>
-        <element name="pageNotFound" type="text" selector="//h1[contains(.,'Whoops, our bad...')]"/>
     </section>
 </sections>
