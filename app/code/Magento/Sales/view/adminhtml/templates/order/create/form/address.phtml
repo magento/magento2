@@ -7,6 +7,21 @@
 // @codingStandardsIgnoreFile
 
 /**
+ * @var \Magento\Customer\Model\ResourceModel\Address\Collection $addressCollection
+ */
+$addressCollection = $block->getData('customerAddressCollection');
+
+$addressArray = [];
+if ($block->getCustomerId()) {
+    $addressArray = $addressCollection->setCustomerFilter([$block->getCustomerId()])->toArray();
+}
+
+/**
+ * @var \Magento\Sales\ViewModel\Customer\AddressFormatter $customerAddressFormatter
+ */
+$customerAddressFormatter = $block->getData('customerAddressFormatter');
+
+/**
  * @var \Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address|\Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Address $block
  */
 if ($block->getIsShipping()):
@@ -17,7 +32,7 @@ if ($block->getIsShipping()):
     require(["Magento_Sales/order/create/form"], function(){
 
         order.shippingAddressContainer = '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>';
-        order.setAddresses(<?= /* @escapeNotVerified */ $block->getAddressCollectionJson() ?>);
+        order.setAddresses(<?= /* @escapeNotVerified */ $customerAddressFormatter->getAddressesJson($addressArray) ?>);
 
     });
     </script>
@@ -59,13 +74,11 @@ endif; ?>
                         onchange="order.selectAddress(this, '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>')"
                         class="admin__control-select">
                     <option value=""><?= /* @escapeNotVerified */ __('Add New Address') ?></option>
-                    <?php foreach ($block->getAddressCollection() as $_address): ?>
-                        <?php //if($block->getAddressAsString($_address)!=$block->getAddressAsString($block->getAddress())): ?>
+                    <?php foreach ($addressArray as $addressId => $address): ?>
                         <option
-                            value="<?= /* @escapeNotVerified */ $_address->getId() ?>"<?php if ($_address->getId() == $block->getAddressId()): ?> selected="selected"<?php endif; ?>>
-                            <?= /* @escapeNotVerified */ $block->getAddressAsString($_address) ?>
+                            value="<?= /* @escapeNotVerified */ $addressId ?>"<?php if ($addressId == $block->getAddressId()): ?> selected="selected"<?php endif; ?>>
+                            <?= /* @escapeNotVerified */ $block->escapeHtml($customerAddressFormatter->getAddressAsString($address)) ?>
                         </option>
-                        <?php //endif; ?>
                     <?php endforeach; ?>
                 </select>
             </div>
