@@ -250,7 +250,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
 
         $collection = $this->_addProductAttributesAndPrices($collection)
-            ->addStoreFilter()
+            ->addStoreFilter($this->getData('store_id'))
             ->setPageSize($this->getPageSize())
             ->setCurPage($this->getRequest()->getParam($this->getData('page_var_name'), 1));
 
