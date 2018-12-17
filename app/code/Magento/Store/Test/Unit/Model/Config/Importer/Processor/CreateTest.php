@@ -196,14 +196,30 @@ class CreateTest extends \PHPUnit\Framework\TestCase
                 'root_category_id' => '1',
                 'default_store_id' => '1',
                 'code' => 'default',
+            ],
+            2 => [
+                'group_id' => '1',
+                'website_id' => '1',
+                'name' => 'Default1',
+                'default_store_id' => '1',
+                'code' => 'default1',
             ]
         ];
-        $this->trimmedGroup = [
-            'name' => 'Default',
-            'root_category_id' => '1',
-            'code' => 'default',
-            'default_store_id' => '1',
-        ];
+        $this->trimmedGroup =
+            [
+                0 => [
+                    'name' => 'Default',
+                    'root_category_id' => '1',
+                    'code' => 'default',
+                    'default_store_id' => '1',
+                ],
+                1 => [
+                    'name' => 'Default1',
+                    'root_category_id' => '0',
+                    'code' => 'default1',
+                    'default_store_id' => '1'
+                ]
+            ];
         $this->stores = [
             'default' => [
                 'store_id' => '1',
@@ -280,34 +296,34 @@ class CreateTest extends \PHPUnit\Framework\TestCase
                 [ScopeInterface::SCOPE_GROUPS, $this->groups, $this->groups],
             ]);
 
-        $this->websiteMock->expects($this->once())
+        $this->websiteMock->expects($this->exactly(2))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
 
-        $this->groupMock->expects($this->once())
+        $this->groupMock->expects($this->exactly(2))
             ->method('setData')
-            ->with($this->trimmedGroup)
-            ->willReturnSelf();
-        $this->groupMock->expects($this->exactly(3))
+            ->withConsecutive(
+                [$this->equalTo($this->trimmedGroup[0])],
+                [$this->equalTo($this->trimmedGroup[1])]
+            )->willReturnSelf();
+
+        $this->groupMock->expects($this->exactly(6))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
-        $this->groupMock->expects($this->once())
-            ->method('setRootCategoryId')
-            ->with(0);
-        $this->groupMock->expects($this->once())
+        $this->groupMock->expects($this->exactly(2))
             ->method('getDefaultStoreId')
             ->willReturn($defaultStoreId);
-        $this->groupMock->expects($this->once())
+        $this->groupMock->expects($this->exactly(2))
             ->method('setDefaultStoreId')
             ->with($storeId);
-        $this->groupMock->expects($this->once())
+        $this->groupMock->expects($this->exactly(2))
             ->method('setWebsite')
             ->with($this->websiteMock);
 
-        $this->storeMock->expects($this->once())
+        $this->storeMock->expects($this->exactly(2))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
-        $this->storeMock->expects($this->once())
+        $this->storeMock->expects($this->exactly(2))
             ->method('getStoreId')
             ->willReturn($storeId);
 
@@ -315,11 +331,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->withConsecutive([$this->websiteMock, 'base', 'code'], [$this->storeMock, 'default', 'code'])
             ->willReturnSelf();
-        $this->abstractDbMock->expects($this->exactly(2))
+        $this->abstractDbMock->expects($this->exactly(4))
             ->method('save')
             ->with($this->groupMock)
             ->willReturnSelf();
-        $this->abstractDbMock->expects($this->once())
+        $this->abstractDbMock->expects($this->exactly(2))
             ->method('addCommitCallback')
             ->willReturnCallback(function ($function) {
                 return $function();

@@ -14,6 +14,8 @@ use Magento\Framework\Search\RequestInterface;
 /**
  * MySQL Search Adapter
  *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Adapter implements AdapterInterface
@@ -104,6 +106,8 @@ class Adapter implements AdapterInterface
     }
 
     /**
+     * Get connection.
+     *
      * @return false|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     private function getConnection()

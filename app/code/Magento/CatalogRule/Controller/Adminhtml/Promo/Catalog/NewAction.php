@@ -6,7 +6,9 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
-class NewAction extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class NewAction extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog implements HttpGetActionInterface
 {
     /**
      * @return void

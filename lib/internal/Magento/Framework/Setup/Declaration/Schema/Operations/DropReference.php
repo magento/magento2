@@ -35,18 +35,15 @@ class DropReference implements OperationInterface
     }
 
     /**
-     * {@inheritdoc}
-     * We can drop references and this will not cause any issues.
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function isOperationDestructive()
     {
-        return false;
+        return true;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOperationName()
     {
@@ -54,7 +51,7 @@ class DropReference implements OperationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function doOperation(ElementHistory $elementHistory)
     {

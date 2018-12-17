@@ -43,7 +43,8 @@ define([
                 '</li>',
             submitBtn: 'button[type="submit"]',
             searchLabel: '[data-role=minisearch-label]',
-            isExpandable: null
+            isExpandable: null,
+            suggestionDelay: 300
         },
 
         /** @inheritdoc */
@@ -104,7 +105,8 @@ define([
 
             this.element.on('focus', this.setActiveState.bind(this, true));
             this.element.on('keydown', this._onKeyDown);
-            this.element.on('input propertychange', this._onPropertyChange);
+            // Prevent spamming the server with requests by waiting till the user has stopped typing for period of time
+            this.element.on('input propertychange', _.debounce(this._onPropertyChange, this.options.suggestionDelay));
 
             this.searchForm.on('submit', $.proxy(function (e) {
                 this._onSubmit(e);
@@ -304,12 +306,13 @@ define([
                             dropdown.append(html);
                         });
 
+                        this._resetResponseList(true);
+
                         this.responseList.indexList = this.autoComplete.html(dropdown)
                             .css(clonePosition)
                             .show()
                             .find(this.options.responseFieldElements + ':visible');
 
-                        this._resetResponseList(false);
                         this.element.removeAttr('aria-activedescendant');
 
                         if (this.responseList.indexList.length) {
@@ -336,6 +339,11 @@ define([
                                     this._resetResponseList(false);
                                 }
                             }.bind(this));
+                    } else {
+                        this._resetResponseList(true);
+                        this.autoComplete.hide();
+                        this._updateAriaHasPopup(false);
+                        this.element.removeAttr('aria-activedescendant');
                     }
                 }, this));
             } else {

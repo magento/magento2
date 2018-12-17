@@ -17,8 +17,8 @@ return [
         'admin-email' => \Magento\TestFramework\Bootstrap::ADMIN_EMAIL,
         'admin-firstname' => \Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME,
         'admin-lastname' => \Magento\TestFramework\Bootstrap::ADMIN_LASTNAME,
-        'enable_modules' => 'Magento_TestSetupModule2,Magento_TestSetupModule1,Magento_Backend',
-        'disable_modules' => 'all'
+        'enable-modules' => 'Magento_TestSetupModule2,Magento_TestSetupModule1,Magento_Backend',
+        'disable-modules' => 'all'
     ],
     'checkout' => [
         'host' => '{{db-host}}',

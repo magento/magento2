@@ -23,6 +23,13 @@ class Method extends Block
     private $paymentMethod = '#p_method_%s';
 
     /**
+     * Get available payment methods link.
+     *
+     * @var string
+     */
+    private $billingMethodsLink = '#order-billing_method_summary a';
+
+    /**
      * Purchase order number selector.
      *
      * @var string
@@ -59,6 +66,13 @@ class Method extends Block
      */
     public function selectPaymentMethod(array $payment, CreditCard $creditCard = null)
     {
+        $this->waitForElementNotVisible($this->loader);
+        $billingMethodsLink = $this->_rootElement->find($this->billingMethodsLink);
+        if ($billingMethodsLink->isPresent()) {
+            $billingMethodsLink->click();
+            $this->waitForElementNotVisible($this->loader);
+        }
+
         $paymentMethod = $payment['method'];
         $paymentInput = $this->_rootElement->find(sprintf($this->paymentMethod, $paymentMethod));
         if ($paymentInput->isVisible()) {

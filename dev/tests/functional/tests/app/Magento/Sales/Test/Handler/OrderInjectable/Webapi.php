@@ -200,7 +200,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         $this->webapiTransport->close();
         if (!is_numeric($response)) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
-            throw new \Exception("Could not set billing addresss to quote!");
+            throw new \Exception("Could not set billing address to quote!");
         }
     }
 
