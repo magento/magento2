@@ -21,5 +21,6 @@
         <element name="storeGrpNameInFirstRow" type="text" selector=".col-group_title>a"/>
         <element name="storeNameInFirstRow" type="text" selector=".col-store_title>a"/>
         <element name="firstRow" type="textarea" selector="(//*[@id='storeGrid_table']/tbody/tr)[1]"/>
+        <element name="storeSearchTextField" type="input" selector="//*[@name='group_title']"/>
      </section>
 </sections>
