@@ -71,6 +71,11 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
      */
     private $registeredThemesCache;
+    
+    /**
+     * @var array
+     */
+    private $imageConfig;
 
     /**
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
@@ -259,18 +264,13 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getImageConfig()
     {
-        $imageConfig = [];
-        foreach ($this->getRegisteredThemes() as $theme) {
-            $config = $this->viewConfig->getViewConfig([
-                'area' => Area::AREA_FRONTEND,
-                'themeModel' => $theme,
-            ]);
-            $imageConfig = array_merge(
-                $imageConfig,
-                $config->getMediaEntities('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE)
+        if (!$this->imageConfig) {
+            $this->imageConfig = $this->viewConfig->getViewConfig()->getMediaEntities(
+                'Magento_Catalog',
+                Image::MEDIA_TYPE_CONFIG_NODE
             );
         }
-        return $imageConfig;
+        return $this->imageConfig;
     }
 
     /**
