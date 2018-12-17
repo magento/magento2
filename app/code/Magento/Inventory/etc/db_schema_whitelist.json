@@ -49,7 +49,6 @@
             "INVENTORY_SOURCE_ITEM_SOURCE_CODE_SKU": true
         },
         "index": {
-            "INVENTORY_SOURCE_ITEM_SOURCE_CODE_SKU_QUANTITY": true,
             "INVENTORY_SOURCE_ITEM_SKU_SOURCE_CODE_QUANTITY": true
         }
     },
