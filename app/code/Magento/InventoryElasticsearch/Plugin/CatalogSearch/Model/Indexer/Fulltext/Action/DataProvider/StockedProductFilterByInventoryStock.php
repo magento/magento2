@@ -90,7 +90,8 @@ class StockedProductFilterByInventoryStock
                 if ($this->resourceConnection->getConnection()->isTableExists($stockTable)) {
                     $connection = $this->resourceConnection->getConnection();
                     $select = $connection->select();
-                    $select->from(['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
+                    $select->from(
+                        ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
                         ['entity_id']
                     );
                     $select->joinInner(
