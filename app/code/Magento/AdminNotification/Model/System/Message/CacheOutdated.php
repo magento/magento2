@@ -3,38 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Model\System\Message;
 
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Notification\MessageInterface;
+use Magento\Framework\UrlInterface;
+
 /**
+ * Class CacheOutdated
+ *
+ * @package Magento\AdminNotification\Model\System\Message
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class CacheOutdated implements \Magento\Framework\Notification\MessageInterface
+class CacheOutdated implements MessageInterface
 {
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
-    protected $_urlBuilder;
+    protected $_urlBuilder; //phpcs:ignore
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
-    protected $_authorization;
+    protected $_authorization; //phpcs:ignore
 
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface
+     * @var TypeListInterface
      */
-    protected $_cacheTypeList;
+    protected $_cacheTypeList; //phpcs:ignore
 
     /**
-     * @param \Magento\Framework\AuthorizationInterface $authorization
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param AuthorizationInterface $authorization
+     * @param UrlInterface $urlBuilder
+     * @param TypeListInterface $cacheTypeList
      */
     public function __construct(
-        \Magento\Framework\AuthorizationInterface $authorization,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+        AuthorizationInterface $authorization,
+        UrlInterface $urlBuilder,
+        TypeListInterface $cacheTypeList
     ) {
         $this->_authorization = $authorization;
         $this->_urlBuilder = $urlBuilder;
@@ -45,8 +57,9 @@ class CacheOutdated implements \Magento\Framework\Notification\MessageInterface
      * Get array of cache types which require data refresh
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _getCacheTypesForRefresh()
+    protected function _getCacheTypesForRefresh(): array //phpcs:ignore
     {
         $output = [];
         foreach ($this->_cacheTypeList->getInvalidated() as $type) {
@@ -60,7 +73,7 @@ class CacheOutdated implements \Magento\Framework\Notification\MessageInterface
      *
      * @return string
      */
-    public function getIdentity()
+    public function getIdentity(): string
     {
         return md5('cache' . implode(':', $this->_getCacheTypesForRefresh()));
     }
@@ -70,7 +83,7 @@ class CacheOutdated implements \Magento\Framework\Notification\MessageInterface
      *
      * @return bool
      */
-    public function isDisplayed()
+    public function isDisplayed(): bool
     {
         return $this->_authorization->isAllowed(
             'Magento_Backend::cache'
@@ -84,7 +97,7 @@ class CacheOutdated implements \Magento\Framework\Notification\MessageInterface
      *
      * @return string
      */
-    public function getText()
+    public function getText(): string
     {
         $cacheTypes = implode(', ', $this->_getCacheTypesForRefresh());
         $message = __('One or more of the Cache Types are invalidated: %1. ', $cacheTypes) . ' ';
@@ -98,7 +111,7 @@ class CacheOutdated implements \Magento\Framework\Notification\MessageInterface
      *
      * @return string|null
      */
-    public function getLink()
+    public function getLink(): ?string
     {
         return $this->_urlBuilder->getUrl('adminhtml/cache');
     }
@@ -108,8 +121,8 @@ class CacheOutdated implements \Magento\Framework\Notification\MessageInterface
      *
      * @return int
      */
-    public function getSeverity()
+    public function getSeverity(): int
     {
-        return \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL;
+        return MessageInterface::SEVERITY_CRITICAL;
     }
 }

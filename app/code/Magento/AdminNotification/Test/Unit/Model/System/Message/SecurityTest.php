@@ -3,77 +3,92 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Test\Unit\Model\System\Message;
 
-class SecurityTest extends \PHPUnit\Framework\TestCase
+use Magento\AdminNotification\Model\System\Message\Security;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\HTTP\Adapter\Curl;
+use Magento\Framework\HTTP\Adapter\CurlFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Class SecurityTest
+ *
+ * @package Magento\AdminNotification\Test\Unit\Model\System\Message
+ */
+class SecurityTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_cacheMock;
+    protected $cacheMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_scopeConfigMock;
+    protected $scopeConfigMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configMock;
+    protected $configMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_curlFactoryMock;
+    protected $curlFactoryMock;
 
     /**
-     * @var \Magento\AdminNotification\Model\System\Message\Security
+     * @var Security
      */
-    protected $_messageModel;
+    protected $messageModel;
 
     protected function setUp()
     {
         //Prepare objects for constructor
-        $this->_cacheMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
-        $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->_curlFactoryMock = $this->createPartialMock(
-            \Magento\Framework\HTTP\Adapter\CurlFactory::class,
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->curlFactoryMock = $this->createPartialMock(
+            CurlFactory::class,
             ['create']
         );
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $arguments = [
-            'cache' => $this->_cacheMock,
-            'scopeConfig' => $this->_scopeConfigMock,
-            'curlFactory' => $this->_curlFactoryMock,
+            'cache' => $this->cacheMock,
+            'scopeConfig' => $this->scopeConfigMock,
+            'curlFactory' => $this->curlFactoryMock,
         ];
-        $this->_messageModel = $objectManagerHelper->getObject(
-            \Magento\AdminNotification\Model\System\Message\Security::class,
+        $this->messageModel = $objectManagerHelper->getObject(
+            Security::class,
             $arguments
         );
     }
 
     /**
-     *
-     * @param $expectedResult
-     * @param $cached
-     * @param $response
-     * @return void
      * @dataProvider isDisplayedDataProvider
+     * @param bool $expectedResult
+     * @param bool $cached
+     * @param string $response
+     * @return void
      */
     public function testIsDisplayed($expectedResult, $cached, $response)
     {
-        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue($cached));
-        $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(null));
+        $this->cacheMock->expects(static::any())->method('load')->will(static::returnValue($cached));
+        $this->cacheMock->expects(static::any())->method('save')->will(static::returnValue(null));
 
-        $httpAdapterMock = $this->createMock(\Magento\Framework\HTTP\Adapter\Curl::class);
-        $httpAdapterMock->expects($this->any())->method('read')->will($this->returnValue($response));
-        $this->_curlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($httpAdapterMock));
+        $httpAdapterMock = $this->createMock(Curl::class);
+        $httpAdapterMock->expects(static::any())->method('read')->will(static::returnValue($response));
+        $this->curlFactoryMock->expects(static::any())->method('create')->will(static::returnValue($httpAdapterMock));
 
-        $this->_scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(null));
+        $this->scopeConfigMock->expects(static::any())->method('getValue')->will(static::returnValue(null));
 
-        $this->assertEquals($expectedResult, $this->_messageModel->isDisplayed());
+        static::assertEquals($expectedResult, $this->messageModel->isDisplayed());
     }
 
     /**
@@ -92,6 +107,6 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
     {
         $messageStart = 'Your web server is set up incorrectly';
 
-        $this->assertStringStartsWith($messageStart, (string)$this->_messageModel->getText());
+        static::assertStringStartsWith($messageStart, (string)$this->messageModel->getText());
     }
 }

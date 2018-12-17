@@ -3,21 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Model\System;
 
+use Magento\AdminNotification\Model;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Notification\MessageInterface;
+
 /**
+ * Class Message
+ *
+ * @package Magento\AdminNotification\Model\System
  * @codeCoverageIgnore
  * @api
  * @since 100.0.2
  */
-class Message extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Notification\MessageInterface
+class Message extends AbstractModel implements MessageInterface
 {
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _construct()
+    protected function _construct(): void //phpcs:ignore
     {
-        $this->_init(\Magento\AdminNotification\Model\ResourceModel\System\Message::class);
+        $this->_init(Model\ResourceModel\System\Message::class);
     }
 
     /**
@@ -25,7 +36,7 @@ class Message extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @return bool
      */
-    public function isDisplayed()
+    public function isDisplayed(): bool
     {
         return true;
     }
@@ -35,7 +46,7 @@ class Message extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @return string
      */
-    public function getText()
+    public function getText(): string
     {
         return $this->getData('text');
     }
@@ -45,7 +56,7 @@ class Message extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @return int
      */
-    public function getSeverity()
+    public function getSeverity(): int
     {
         return $this->_getData('severity');
     }
@@ -55,7 +66,7 @@ class Message extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @return string
      */
-    public function getIdentity()
+    public function getIdentity(): string
     {
         return $this->_getData('identity');
     }

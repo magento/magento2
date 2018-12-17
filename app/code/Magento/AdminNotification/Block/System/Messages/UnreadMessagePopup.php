@@ -3,22 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Block\System\Messages;
 
+use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized;
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Notification\MessageInterface;
+use Magento\Framework\Phrase;
 
 /**
+ * Class UnreadMessagePopup
+ *
+ * @package Magento\AdminNotification\Block\System\Messages
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class UnreadMessagePopup extends \Magento\Backend\Block\Template
+class UnreadMessagePopup extends Template
 {
     /**
      * List of item classes per severity
      *
      * @var array
      */
-    protected $_itemClasses = [
+    protected $_itemClasses = [ //phpcs:ignore
         MessageInterface::SEVERITY_CRITICAL => 'error',
         MessageInterface::SEVERITY_MAJOR => 'warning',
     ];
@@ -28,16 +39,16 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
      *
      * @var \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection
      */
-    protected $_messages;
+    protected $_messages; //phpcs:ignore
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages
+     * @param Context $context
+     * @param Synchronized $messages
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages,
+        Context $context,
+        Synchronized $messages,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -48,10 +59,11 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
      * Render block
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _toHtml()
+    protected function _toHtml(): string //phpcs:ignore
     {
-        if (count($this->_messages->getUnread())) {
+        if (!empty($this->_messages->getUnread())) {
             return parent::_toHtml();
         }
         return '';
@@ -62,7 +74,7 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
      *
      * @return MessageInterface[]
      */
-    public function getUnreadMessages()
+    public function getUnreadMessages(): array
     {
         return $this->_messages->getUnread();
     }
@@ -70,9 +82,9 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
     /**
      * Retrieve popup title
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
-    public function getPopupTitle()
+    public function getPopupTitle(): Phrase
     {
         $messageCount = count($this->_messages->getUnread());
         if ($messageCount > 1) {
@@ -87,7 +99,7 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
      * @param MessageInterface $message
      * @return string
      */
-    public function getItemClass(MessageInterface $message)
+    public function getItemClass(MessageInterface $message): string
     {
         return $this->_itemClasses[$message->getSeverity()];
     }

@@ -4,15 +4,21 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Ui\Component\DataProvider;
 
 use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\SynchronizedFactory;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
+ * Class DataProvider
+ *
+ * @package Magento\AdminNotification\Ui\Component\DataProvider
  * @api
  * @since 100.2.0
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends AbstractDataProvider
 {
     /**
      * DataProvider constructor.
@@ -22,6 +28,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param SynchronizedFactory $messageCollectionFactory
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         $name,

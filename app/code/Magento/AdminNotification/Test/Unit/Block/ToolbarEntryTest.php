@@ -7,28 +7,40 @@
 /**
  * Test class for \Magento\AdminNotification\Block\ToolbarEntry
  */
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Test\Unit\Block;
 
-class ToolbarEntryTest extends \PHPUnit\Framework\TestCase
+use Magento\AdminNotification\Block\ToolbarEntry;
+use Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Class ToolbarEntryTest
+ *
+ * @package Magento\AdminNotification\Test\Unit\Block
+ */
+class ToolbarEntryTest extends TestCase
 {
     /**
      * Retrieve toolbar entry block instance
      *
      * @param int $unreadNotifications number of unread notifications
-     * @return \Magento\AdminNotification\Block\ToolbarEntry
+     * @return object
      */
-    protected function _getBlockInstance($unreadNotifications)
+    private function getBlockInstance($unreadNotifications)
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         // mock collection of unread notifications
         $notificationList = $this->createPartialMock(
-            \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class,
+            Unread::class,
             ['getSize', 'setCurPage', 'setPageSize']
         );
-        $notificationList->expects($this->any())->method('getSize')->will($this->returnValue($unreadNotifications));
+        $notificationList->expects(static::any())->method('getSize')->will(static::returnValue($unreadNotifications));
 
         $block = $objectManagerHelper->getObject(
-            \Magento\AdminNotification\Block\ToolbarEntry::class,
+            ToolbarEntry::class,
             ['notificationList' => $notificationList]
         );
 
@@ -38,37 +50,37 @@ class ToolbarEntryTest extends \PHPUnit\Framework\TestCase
     public function testGetUnreadNotificationCount()
     {
         $notificationsCount = 100;
-        $block = $this->_getBlockInstance($notificationsCount);
-        $this->assertEquals($notificationsCount, $block->getUnreadNotificationCount());
+        $block = $this->getBlockInstance($notificationsCount);
+        static::assertEquals($notificationsCount, $block->getUnreadNotificationCount());
     }
 
     public function testGetLatestUnreadNotifications()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
         // 1. Create mocks
         $notificationList = $this->getMockBuilder(
-            \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class
+            Unread::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\AdminNotification\Block\ToolbarEntry $model */
+        /** @var ToolbarEntry $model */
         $model = $helper->getObject(
-            \Magento\AdminNotification\Block\ToolbarEntry::class,
+            ToolbarEntry::class,
             ['notificationList' => $notificationList]
         );
 
         // 2. Set expectations
-        $notificationList->expects($this->atLeastOnce())
+        $notificationList->expects(static::atLeastOnce())
             ->method('setPageSize')
-            ->with(\Magento\AdminNotification\Block\ToolbarEntry::NOTIFICATIONS_NUMBER)
-            ->will($this->returnSelf());
+            ->with(ToolbarEntry::NOTIFICATIONS_NUMBER)
+            ->will(static::returnSelf());
 
         // 3. Run tested method
         $result = $model->getLatestUnreadNotifications();
 
         // 4. Compare actual result with expected result
-        $this->assertEquals($notificationList, $result);
+        static::assertEquals($notificationList, $result);
     }
 }

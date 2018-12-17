@@ -6,23 +6,37 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
-class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+use Magento\Backend\Block\Context;
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Url\Helper\Data;
+
+/**
+ * Class Actions
+ *
+ * @package Magento\AdminNotification\Block\Grid\Renderer
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
+ */
+class Actions extends AbstractRenderer
 {
     /**
-     * @var \Magento\Framework\Url\Helper\Data
+     * @var Data
      */
-    protected $_urlHelper;
+    protected $_urlHelper; //phpcs:ignore
 
     /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param Context $context
+     * @param Data $urlHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Framework\Url\Helper\Data $urlHelper,
+        Context $context,
+        Data $urlHelper,
         array $data = []
     ) {
         $this->_urlHelper = $urlHelper;
@@ -32,10 +46,10 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
     /**
      * Renders grid column
      *
-     * @param   \Magento\Framework\DataObject $row
+     * @param   DataObject $row
      * @return  string
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row): string
     {
         $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' . $row->getUrl() . '">' .
             __('Read Details') . '</a>' : '';
@@ -57,7 +71,7 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
                 [
                     '_current' => true,
                     'id' => $row->getId(),
-                    \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl
+                    ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl
                 ]
             ),
             __('Are you sure?'),

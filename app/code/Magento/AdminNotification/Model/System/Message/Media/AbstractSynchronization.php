@@ -3,37 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Model\System\Message\Media;
 
+use Magento\Framework\Notification\MessageInterface;
+use Magento\MediaStorage\Model\File\Storage\Flag;
+
 /**
+ * Class AbstractSynchronization
+ *
+ * @package Magento\AdminNotification\Model\System\Message\Media
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-abstract class AbstractSynchronization implements \Magento\Framework\Notification\MessageInterface
+abstract class AbstractSynchronization implements MessageInterface
 {
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Flag
+     * @var Flag
      */
-    protected $_syncFlag;
+    protected $_syncFlag; //phpcs:ignore
 
     /**
      * Message identity
      *
      * @var string
      */
-    protected $_identity;
+    protected $_identity; //phpcs:ignore
 
     /**
      * Is displayed flag
      *
      * @var bool
      */
-    protected $_isDisplayed = null;
+    protected $_isDisplayed = null; //phpcs:ignore
 
     /**
-     * @param \Magento\MediaStorage\Model\File\Storage\Flag $fileStorage
+     * @param Flag $fileStorage
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function __construct(\Magento\MediaStorage\Model\File\Storage\Flag $fileStorage)
+    public function __construct(Flag $fileStorage)
     {
         $this->_syncFlag = $fileStorage->loadSelf();
     }
@@ -42,15 +53,16 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      * Check if message should be displayed
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    abstract protected function _shouldBeDisplayed();
+    abstract protected function _shouldBeDisplayed(); //phpcs:ignore
 
     /**
      * Retrieve unique message identity
      *
      * @return string
      */
-    public function getIdentity()
+    public function getIdentity(): string
     {
         return $this->_identity;
     }
@@ -59,13 +71,14 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      * Check whether
      *
      * @return bool
+     * @throws \Exception
      */
-    public function isDisplayed()
+    public function isDisplayed(): bool
     {
         if (null === $this->_isDisplayed) {
             $output = $this->_shouldBeDisplayed();
             if ($output) {
-                $this->_syncFlag->setState(\Magento\MediaStorage\Model\File\Storage\Flag::STATE_NOTIFIED);
+                $this->_syncFlag->setState(Flag::STATE_NOTIFIED);
                 $this->_syncFlag->save();
             }
             $this->_isDisplayed = $output;
@@ -78,8 +91,8 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      *
      * @return int
      */
-    public function getSeverity()
+    public function getSeverity(): int
     {
-        return \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR;
+        return MessageInterface::SEVERITY_MAJOR;
     }
 }

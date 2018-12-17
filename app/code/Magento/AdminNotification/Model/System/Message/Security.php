@@ -4,15 +4,28 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Model\System\Message;
 
+use Magento\Backend\App\ConfigInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\HTTP\Adapter\CurlFactory;
+use Magento\Framework\Notification\MessageInterface;
 use Magento\Store\Model\Store;
+use Zend_Http_Client;
+use Zend_Http_Response;
 
 /**
+ * Class Security
+ *
+ * @package Magento\AdminNotification\Model\System\Message
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class Security implements \Magento\Framework\Notification\MessageInterface
+class Security implements MessageInterface
 {
     /**
      * Cache key for saving verification result
@@ -24,46 +37,46 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      *
      * @var string
      */
-    private $_filePath = 'app/etc/config.php';
+    private $_filePath = 'app/etc/config.php'; //phpcs:ignore
 
     /**
      * Time out for HTTP verification request
      *
      * @var int
      */
-    private $_verificationTimeOut = 2;
+    private $_verificationTimeOut = 2; //phpcs:ignore
 
     /**
-     * @var \Magento\Framework\App\CacheInterface
+     * @var CacheInterface
      */
-    protected $_cache;
+    protected $_cache; //phpcs:ignore
 
     /**
-     * @var \Magento\Backend\App\ConfigInterface
+     * @var ConfigInterface
      */
-    protected $_backendConfig;
+    protected $_backendConfig; //phpcs:ignore
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
-    protected $_config;
+    protected $_config; //phpcs:ignore
 
     /**
-     * @var \Magento\Framework\HTTP\Adapter\CurlFactory
+     * @var CurlFactory
      */
-    protected $_curlFactory;
+    protected $_curlFactory; //phpcs:ignore
 
     /**
-     * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
+     * @param CacheInterface $cache
+     * @param ConfigInterface $backendConfig
+     * @param ScopeConfigInterface $config
+     * @param CurlFactory $curlFactory
      */
     public function __construct(
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Backend\App\ConfigInterface $backendConfig,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
+        CacheInterface $cache,
+        ConfigInterface $backendConfig,
+        ScopeConfigInterface $config,
+        CurlFactory $curlFactory
     ) {
         $this->_cache = $cache;
         $this->_backendConfig = $backendConfig;
@@ -75,8 +88,9 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      * Check verification result and return true if system must to show notification message
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    private function _canShowNotification()
+    private function _canShowNotification(): bool //phpcs:ignore
     {
         if ($this->_cache->load(self::VERIFICATION_RESULT_CACHE_KEY)) {
             return false;
@@ -87,7 +101,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
         }
 
         $adminSessionLifetime = (int)$this->_backendConfig->getValue('admin/security/session_lifetime');
-        $this->_cache->save(true, self::VERIFICATION_RESULT_CACHE_KEY, [], $adminSessionLifetime);
+        $this->_cache->save('1', self::VERIFICATION_RESULT_CACHE_KEY, [], $adminSessionLifetime);
         return false;
     }
 
@@ -95,17 +109,19 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      * If file is accessible return true or false
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function _isFileAccessible()
+    private function _isFileAccessible(): bool //phpcs:ignore
     {
         $unsecureBaseURL = $this->_config->getValue(Store::XML_PATH_UNSECURE_BASE_URL, 'default');
 
-        /** @var $http \Magento\Framework\HTTP\Adapter\Curl */
+        /** @var \Magento\Framework\HTTP\Adapter\Curl $http */
         $http = $this->_curlFactory->create();
         $http->setConfig(['timeout' => $this->_verificationTimeOut]);
-        $http->write(\Zend_Http_Client::POST, $unsecureBaseURL . $this->_filePath);
+        $http->write(Zend_Http_Client::POST, $unsecureBaseURL . $this->_filePath);
         $responseBody = $http->read();
-        $responseCode = \Zend_Http_Response::extractCode($responseBody);
+        $responseCode = Zend_Http_Response::extractCode($responseBody);
         $http->close();
 
         return $responseCode == 200;
@@ -116,7 +132,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      *
      * @return string
      */
-    public function getIdentity()
+    public function getIdentity(): string
     {
         return 'security';
     }
@@ -126,7 +142,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      *
      * @return bool
      */
-    public function isDisplayed()
+    public function isDisplayed(): bool
     {
         return $this->_canShowNotification();
     }
@@ -151,6 +167,6 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      */
     public function getSeverity()
     {
-        return \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL;
+        return MessageInterface::SEVERITY_CRITICAL;
     }
 }

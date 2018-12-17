@@ -5,25 +5,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
+use Magento\AdminNotification\Model\Inbox;
+use Magento\Backend\Block\Context;
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Magento\Framework\DataObject;
 use Magento\Framework\Notification\MessageInterface;
 
-class Severity extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+/**
+ * Class Severity
+ *
+ * @package Magento\AdminNotification\Block\Grid\Renderer
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
+ */
+class Severity extends AbstractRenderer
 {
     /**
-     * @var \Magento\AdminNotification\Model\Inbox
+     * @var Inbox
      */
-    protected $_notice;
+    protected $_notice; //phpcs:ignore
 
     /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\AdminNotification\Model\Inbox $notice
+     * @param Context $context
+     * @param Inbox $notice
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\AdminNotification\Model\Inbox $notice,
+        Context $context,
+        Inbox $notice,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -33,10 +46,10 @@ class Severity extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Renders grid column
      *
-     * @param   \Magento\Framework\DataObject $row
+     * @param   DataObject $row
      * @return  string
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row): string
     {
         $class = '';
         $value = '';
@@ -59,6 +72,6 @@ class Severity extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
                 $value = $this->_notice->getSeverities(MessageInterface::SEVERITY_NOTICE);
                 break;
         }
-        return '<span class="grid-severity-' . $class . '"><span>' . $value . '</span></span>';
+        return '<span class="grid-severity-' . $class . '"><span>' . (int)$value . '</span></span>';
     }
 }

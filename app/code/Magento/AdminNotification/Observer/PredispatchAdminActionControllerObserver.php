@@ -3,52 +3,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Observer;
 
+use Magento\AdminNotification\Model\Feed;
+use Magento\AdminNotification\Model\FeedFactory;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
  * AdminNotification observer
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @package Magento\AdminNotification\Observer
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 class PredispatchAdminActionControllerObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\AdminNotification\Model\FeedFactory
+     * @var FeedFactory
      */
-    protected $_feedFactory;
+    private $feedFactory;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
-    protected $_backendAuthSession;
+    private $backendAuthSession;
 
     /**
-     * @param \Magento\AdminNotification\Model\FeedFactory $feedFactory
-     * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
+     * @param FeedFactory $feedFactory
+     * @param Session $backendAuthSession
      */
     public function __construct(
-        \Magento\AdminNotification\Model\FeedFactory $feedFactory,
-        \Magento\Backend\Model\Auth\Session $backendAuthSession
+        FeedFactory $feedFactory,
+        Session $backendAuthSession
     ) {
-        $this->_feedFactory = $feedFactory;
-        $this->_backendAuthSession = $backendAuthSession;
+        $this->feedFactory = $feedFactory;
+        $this->backendAuthSession = $backendAuthSession;
     }
 
     /**
      * Predispatch admin action controller
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
-        if ($this->_backendAuthSession->isLoggedIn()) {
-            $feedModel = $this->_feedFactory->create();
-            /* @var $feedModel \Magento\AdminNotification\Model\Feed */
-            $feedModel->checkUpdate();
+        if ($this->backendAuthSession->isLoggedIn()) {
+            $feedModel = $this->feedFactory->create();
+            if ($feedModel instanceof Feed) {
+                $feedModel->checkUpdate();
+            }
         }
     }
 }

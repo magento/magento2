@@ -4,11 +4,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Controller\Adminhtml\System\Message;
 
+use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection;
+use Magento\Backend\App\AbstractAction;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\Notification\MessageInterface;
 
-class ListAction extends \Magento\Backend\App\AbstractAction
+/**
+ * Class ListAction
+ *
+ * @package Magento\AdminNotification\Controller\Adminhtml\System\Message
+ */
+class ListAction extends AbstractAction
 {
     /**
      * Authorization level of a basic admin session
@@ -16,27 +30,27 @@ class ListAction extends \Magento\Backend\App\AbstractAction
     const ADMIN_RESOURCE = 'Magento_AdminNotification::show_list';
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var Data
      * @deprecated
      */
     protected $jsonHelper;
 
     /**
-     * @var \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection
+     * @var Collection
      */
     protected $messageCollection;
 
     /**
      * Initialize ListAction
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection $messageCollection
+     * @param Context $context
+     * @param Data $jsonHelper
+     * @param Collection $messageCollection
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection $messageCollection
+        Context $context,
+        Data $jsonHelper,
+        Collection $messageCollection
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->messageCollection = $messageCollection;
@@ -44,9 +58,9 @@ class ListAction extends \Magento\Backend\App\AbstractAction
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Json
+     * @return Json
      */
-    public function execute()
+    public function execute(): Json
     {
         $severity = $this->getRequest()->getParam('severity');
         if ($severity) {
@@ -61,14 +75,14 @@ class ListAction extends \Magento\Backend\App\AbstractAction
         }
         if (empty($result)) {
             $result[] = [
-                'severity' => (string)\Magento\Framework\Notification\MessageInterface::SEVERITY_NOTICE,
+                'severity' => (string)MessageInterface::SEVERITY_NOTICE,
                 'text' => __(
                     'You have viewed and resolved all recent system notices. '
                     . 'Please refresh the web page to clear the notice alert.'
                 )
             ];
         }
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setData($result);
         return $resultJson;

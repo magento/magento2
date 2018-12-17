@@ -3,28 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Model\ResourceModel\Inbox;
+
+use Magento\AdminNotification\Model;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
  * AdminNotification Inbox model
  *
+ * @package Magento\AdminNotification\Model\ResourceModel\Inbox
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Resource collection initialization
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _construct()
+    protected function _construct(): void //phpcs:ignore
     {
         $this->_init(
-            \Magento\AdminNotification\Model\Inbox::class,
-            \Magento\AdminNotification\Model\ResourceModel\Inbox::class
+            Model\Inbox::class,
+            Model\ResourceModel\Inbox::class
         );
     }
 

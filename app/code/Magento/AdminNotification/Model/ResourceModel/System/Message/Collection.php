@@ -3,45 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Model\ResourceModel\System\Message;
 
+use Magento\AdminNotification\Model;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Notification\MessageList;
+use Psr\Log\LoggerInterface;
+
 /**
+ * Class Collection
+ *
+ * @package Magento\AdminNotification\Model\ResourceModel\System\Message
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * System message list
      *
-     * @var \Magento\Framework\Notification\MessageList
+     * @var MessageList
      */
-    protected $_messageList;
+    protected $_messageList; //phpcs:ignore
 
     /**
      * Number of messages by severity
      *
      * @var array
      */
-    protected $_countBySeverity = [];
+    protected $_countBySeverity = []; //phpcs:ignore
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Notification\MessageList $messageList
-     * @param mixed $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param MessageList $messageList
+     * @param AdapterInterface $connection
+     * @param AbstractDb $resource
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Notification\MessageList $messageList,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        MessageList $messageList,
+        AdapterInterface $connection = null,
+        AbstractDb $resource = null
     ) {
         $this->_messageList = $messageList;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
@@ -51,21 +68,21 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource collection initialization
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _construct()
+    protected function _construct(): void //phpcs:ignore
     {
         $this->_init(
-            \Magento\AdminNotification\Model\System\Message::class,
-            \Magento\AdminNotification\Model\ResourceModel\System\Message::class
+            Model\System\Message::class,
+            Model\ResourceModel\System\Message::class
         );
     }
 
     /**
-     * Initialize db query
-     *
-     * @return void
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _initSelect()
+    protected function _initSelect(): void //phpcs:ignore
     {
         parent::_initSelect();
         $this->addOrder('severity', self::SORT_ORDER_ASC)->addOrder('created_at');
@@ -75,8 +92,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Initialize system messages after load
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    protected function _afterLoad()
+    protected function _afterLoad() //phpcs:ignore
     {
         foreach ($this->_items as $key => $item) {
             $message = $this->_messageList->getMessageByIdentity($item->getIdentity());
@@ -111,7 +130,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $severity
      * @return int
      */
-    public function getCountBySeverity($severity)
+    public function getCountBySeverity($severity): int
     {
         return isset($this->_countBySeverity[$severity]) ? $this->_countBySeverity[$severity] : 0;
     }

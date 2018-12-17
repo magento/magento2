@@ -4,16 +4,27 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Block;
+
+use DateTime;
+use IntlDateFormatter;
+use Magento\AdminNotification\Model\ResourceModel\Inbox\Collection;
+use Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread;
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
 
 /**
  * Toolbar entry that shows latest notifications
  *
+ * @package Magento\AdminNotification\Block
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class ToolbarEntry extends \Magento\Backend\Block\Template
+class ToolbarEntry extends Template
 {
     /**
      * Number of notifications showed on expandable window
@@ -33,18 +44,18 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     /**
      * Collection of latest unread notifications
      *
-     * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
+     * @var Collection
      */
-    protected $_notificationList;
+    protected $_notificationList; //phpcs:ignore
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread $notificationList
+     * @param Context $context
+     * @param Unread $notificationList
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread $notificationList,
+        Context $context,
+        Unread $notificationList,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -56,7 +67,7 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      *
      * @return int
      */
-    public function getNotificationDescriptionLength()
+    public function getNotificationDescriptionLength(): int
     {
         return self::NOTIFICATION_DESCRIPTION_LENGTH;
     }
@@ -66,7 +77,7 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      *
      * @return int
      */
-    public function getNotificationCounterMax()
+    public function getNotificationCounterMax(): int
     {
         return self::NOTIFICATIONS_COUNTER_MAX;
     }
@@ -76,7 +87,7 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      *
      * @return int
      */
-    public function getUnreadNotificationCount()
+    public function getUnreadNotificationCount(): int
     {
         return $this->_notificationList->getSize();
     }
@@ -84,9 +95,9 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     /**
      * Retrieve the list of latest unread notifications
      *
-     * @return \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
+     * @return Collection
      */
-    public function getLatestUnreadNotifications()
+    public function getLatestUnreadNotifications(): Collection
     {
         return $this->_notificationList->setPageSize(self::NOTIFICATIONS_NUMBER);
     }
@@ -96,21 +107,23 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      *
      * @param string $dateString
      * @return string
+     * @throws \Exception
+     * @todo use \Magento\Framework\Stdlib\DateTime\TimezoneInterface instead of DateTime
      */
-    public function formatNotificationDate($dateString)
+    public function formatNotificationDate($dateString): string
     {
-        $date = new \DateTime($dateString);
-        if ($date == new \DateTime('today')) {
+        $date = new DateTime($dateString);
+        if ($date == new DateTime('today')) {
             return $this->_localeDate->formatDateTime(
                 $date,
-                \IntlDateFormatter::NONE,
-                \IntlDateFormatter::SHORT
+                IntlDateFormatter::NONE,
+                IntlDateFormatter::SHORT
             );
         }
         return $this->_localeDate->formatDateTime(
             $date,
-            \IntlDateFormatter::MEDIUM,
-            \IntlDateFormatter::MEDIUM
+            IntlDateFormatter::MEDIUM,
+            IntlDateFormatter::MEDIUM
         );
     }
 }

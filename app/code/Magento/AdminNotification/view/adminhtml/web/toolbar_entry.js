@@ -19,68 +19,68 @@ define([
      * @param {String} notificationId
      */
     var markNotificationAsRead = function (notificationId) {
-            var requestUrl = $('.notifications-wrapper .admin__action-dropdown-menu').attr('data-mark-as-read-url');
+        var requestUrl = $('.notifications-wrapper .admin__action-dropdown-menu').attr('data-mark-as-read-url');
 
-            $.ajax({
-                url: requestUrl,
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    id: notificationId
-                },
-                showLoader: false
-            });
-        },
-        notificationCount = $('.notifications-wrapper').attr('data-notification-count'),
+        $.ajax({
+            url: requestUrl,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: notificationId
+            },
+            showLoader: false
+        });
+    },
+    notificationCount = $('.notifications-wrapper').attr('data-notification-count'),
 
-        /**
-         * Remove notification from the list.
-         *
-         * @param {jQuery} notificationEntry
-         */
-        removeNotificationFromList = function (notificationEntry) {
-            var notificationIcon, actionElement;
+    /**
+     * Remove notification from the list.
+     *
+     * @param {jQuery} notificationEntry
+     */
+    removeNotificationFromList = function (notificationEntry) {
+        var notificationIcon, actionElement;
 
-            notificationEntry.remove();
-            notificationCount--;
-            $('.notifications-wrapper').attr('data-notification-count', notificationCount);
+        notificationEntry.remove();
+        notificationCount--;
+        $('.notifications-wrapper').attr('data-notification-count', notificationCount);
 
-            if (notificationCount == 0) {// eslint-disable-line eqeqeq
-                // Change appearance of the bubble and its behavior when the last notification is removed
-                $('.notifications-wrapper .admin__action-dropdown-menu').remove();
-                notificationIcon = $('.notifications-wrapper .notifications-icon');
-                notificationIcon.removeAttr('data-toggle');
-                notificationIcon.off('click.dropdown');
-                $('.notifications-action .notifications-counter').text('').hide();
-            } else {
-                // Change top counter only for allowable range
-                if (notificationCount <= 99) {
-                    $('.notifications-action .notifications-counter').text(notificationCount);
-                }
-                $('.notifications-entry-last .notifications-counter').text(notificationCount);
-                // Modify caption of the 'See All' link
-                actionElement = $('.notifications-wrapper .admin__action-dropdown-menu .last .action-more');
-                actionElement.text(actionElement.text().replace(/\d+/, notificationCount));
+        if (notificationCount == 0) {// eslint-disable-line eqeqeq
+            // Change appearance of the bubble and its behavior when the last notification is removed
+            $('.notifications-wrapper .admin__action-dropdown-menu').remove();
+            notificationIcon = $('.notifications-wrapper .notifications-icon');
+            notificationIcon.removeAttr('data-toggle');
+            notificationIcon.off('click.dropdown');
+            $('.notifications-action .notifications-counter').text('').hide();
+        } else {
+            // Change top counter only for allowable range
+            if (notificationCount <= 99) {
+                $('.notifications-action .notifications-counter').text(notificationCount);
             }
-        },
+            $('.notifications-entry-last .notifications-counter').text(notificationCount);
+            // Modify caption of the 'See All' link
+            actionElement = $('.notifications-wrapper .admin__action-dropdown-menu .last .action-more');
+            actionElement.text(actionElement.text().replace(/\d+/, notificationCount));
+        }
+    },
 
-        /**
-         * Show notification details.
-         *
-         * @param {jQuery} notificationEntry
-         */
-        showNotificationDetails = function (notificationEntry) {
-            var notificationDescription = notificationEntry.find('.notifications-entry-description'),
-                notificationDescriptionEnd = notificationEntry.find('.notifications-entry-description-end');
+    /**
+     * Show notification details.
+     *
+     * @param {jQuery} notificationEntry
+     */
+    showNotificationDetails = function (notificationEntry) {
+        var notificationDescription = notificationEntry.find('.notifications-entry-description'),
+            notificationDescriptionEnd = notificationEntry.find('.notifications-entry-description-end');
 
-            if (notificationDescriptionEnd.length > 0) {
-                notificationDescriptionEnd.addClass('_show');
-            }
+        if (notificationDescriptionEnd.length > 0) {
+            notificationDescriptionEnd.addClass('_show');
+        }
 
-            if (notificationDescription.hasClass('_cutted')) {
-                notificationDescription.removeClass('_cutted');
-            }
-        };
+        if (notificationDescription.hasClass('_cutted')) {
+            notificationDescription.removeClass('_cutted');
+        }
+    };
 
     // Show notification description when corresponding item is clicked
     $('.notifications-wrapper .admin__action-dropdown-menu .notifications-entry').on(

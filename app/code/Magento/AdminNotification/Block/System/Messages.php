@@ -3,57 +3,75 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Block\System;
 
-class Messages extends \Magento\Backend\Block\Template
+use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized;
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\Notification\MessageInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+
+/**
+ * Class Messages
+ *
+ * @package Magento\AdminNotification\Block\System
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
+ */
+class Messages extends Template
 {
     /**
      * Message list
      *
-     * @var \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized
+     * @var Synchronized
      */
-    protected $_messages;
+    protected $_messages; //phpcs:ignore
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var Data
      * @deprecated
      */
     protected $jsonHelper;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param Context $context
+     * @param Synchronized $messages
+     * @param Data $jsonHelper
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param Json|null $serializer
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        Context $context,
+        Synchronized $messages,
+        Data $jsonHelper,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer = null
     ) {
         $this->jsonHelper = $jsonHelper;
         parent::__construct($context, $data);
         $this->_messages = $messages;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(Json::class);
     }
 
     /**
      * Prepare html output
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _toHtml()
+    protected function _toHtml(): string //phpcs:ignore
     {
-        if (count($this->_messages->getItems())) {
+        if (!empty($this->_messages->getItems())) {
             return parent::_toHtml();
         }
         return '';
@@ -62,15 +80,12 @@ class Messages extends \Magento\Backend\Block\Template
     /**
      * Retrieve message list
      *
-     * @return \Magento\Framework\Notification\MessageInterface[]
+     * @return MessageInterface|null
      */
-    public function getLastCritical()
+    public function getLastCritical(): ?MessageInterface
     {
         $items = array_values($this->_messages->getItems());
-        if (isset(
-            $items[0]
-        ) && $items[0]->getSeverity() == \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL
-        ) {
+        if (isset($items[0]) && $items[0]->getSeverity() == MessageInterface::SEVERITY_CRITICAL) {
             return $items[0];
         }
         return null;
@@ -81,10 +96,10 @@ class Messages extends \Magento\Backend\Block\Template
      *
      * @return int
      */
-    public function getCriticalCount()
+    public function getCriticalCount(): int
     {
         return $this->_messages->getCountBySeverity(
-            \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL
+            MessageInterface::SEVERITY_CRITICAL
         );
     }
 
@@ -93,10 +108,10 @@ class Messages extends \Magento\Backend\Block\Template
      *
      * @return int
      */
-    public function getMajorCount()
+    public function getMajorCount(): int
     {
         return $this->_messages->getCountBySeverity(
-            \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR
+            MessageInterface::SEVERITY_MAJOR
         );
     }
 
@@ -105,7 +120,7 @@ class Messages extends \Magento\Backend\Block\Template
      *
      * @return bool
      */
-    public function hasMessages()
+    public function hasMessages(): bool
     {
         return (bool)count($this->_messages->getItems());
     }
@@ -114,8 +129,9 @@ class Messages extends \Magento\Backend\Block\Template
      * Retrieve message list url
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _getMessagesUrl()
+    protected function _getMessagesUrl(): string //phpcs:ignore
     {
         return $this->getUrl('adminhtml/system_message/list');
     }
@@ -125,7 +141,7 @@ class Messages extends \Magento\Backend\Block\Template
      *
      * @return string
      */
-    public function getSystemMessageDialogJson()
+    public function getSystemMessageDialogJson(): string
     {
         return $this->serializer->serialize(
             [

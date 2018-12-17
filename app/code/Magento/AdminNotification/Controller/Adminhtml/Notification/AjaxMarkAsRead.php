@@ -4,53 +4,66 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
+use Exception;
+use Magento\AdminNotification\Controller\Adminhtml\Notification;
+use Magento\AdminNotification\Model\NotificationService;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 
-class AjaxMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notification
+/**
+ * Class AjaxMarkAsRead
+ *
+ * @package Magento\AdminNotification\Controller\Adminhtml\Notification
+ */
+class AjaxMarkAsRead extends Notification
 {
     /**
-     * @var \Magento\AdminNotification\Model\NotificationService
+     * @var NotificationService
      */
     private $notificationService;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\AdminNotification\Model\NotificationService|null $notificationService
+     * @param NotificationService|null $notificationService
      * @throws \RuntimeException
      */
     public function __construct(
         Action\Context $context,
-        \Magento\AdminNotification\Model\NotificationService $notificationService = null
+        NotificationService $notificationService = null
     ) {
         parent::__construct($context);
-        $this->notificationService = $notificationService?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\AdminNotification\Model\NotificationService::class);
+        $this->notificationService = $notificationService ?: ObjectManager::getInstance()
+            ->get(NotificationService::class);
     }
 
     /**
      * Mark notification as read (AJAX action)
      *
-     * @return \Magento\Framework\Controller\Result\Json|void
+     * @return Json|null
      * @throws \InvalidArgumentException
      */
-    public function execute()
+    public function execute(): ?Json
     {
         if (!$this->getRequest()->getPostValue()) {
-            return;
+            return null;
         }
         $notificationId = (int)$this->getRequest()->getPost('id');
         $responseData = [];
         try {
             $this->notificationService->markAsRead($notificationId);
             $responseData['success'] = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $responseData['success'] = false;
         }
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setData($responseData);
         return $resultJson;

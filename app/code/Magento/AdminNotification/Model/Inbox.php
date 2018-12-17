@@ -3,45 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Model;
 
+use Magento\AdminNotification\Model\ResourceModel\Inbox as InboxResourceModel;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Notification\MessageInterface;
 use Magento\Framework\Notification\NotifierInterface;
-use Magento\AdminNotification\Model\InboxInterface;
 
 /**
  * AdminNotification Inbox model
  *
  * @method int getSeverity()
- * @method \Magento\AdminNotification\Model\Inbox setSeverity(int $value)
+ * @method Inbox setSeverity(int $value)
  * @method string getDateAdded()
- * @method \Magento\AdminNotification\Model\Inbox setDateAdded(string $value)
+ * @method Inbox setDateAdded(string $value)
  * @method string getTitle()
- * @method \Magento\AdminNotification\Model\Inbox setTitle(string $value)
+ * @method Inbox setTitle(string $value)
  * @method string getDescription()
- * @method \Magento\AdminNotification\Model\Inbox setDescription(string $value)
+ * @method Inbox setDescription(string $value)
  * @method string getUrl()
- * @method \Magento\AdminNotification\Model\Inbox setUrl(string $value)
+ * @method Inbox setUrl(string $value)
  * @method int getIsRead()
- * @method \Magento\AdminNotification\Model\Inbox setIsRead(int $value)
+ * @method Inbox setIsRead(int $value)
  * @method int getIsRemove()
- * @method \Magento\AdminNotification\Model\Inbox setIsRemove(int $value)
+ * @method Inbox setIsRemove(int $value)
  *
+ * @package Magento\AdminNotification\Model
  * @api
  * @since 100.0.2
  */
-class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierInterface, InboxInterface
+class Inbox extends AbstractModel implements NotifierInterface, InboxInterface
 {
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _construct()
+    protected function _construct(): void //phpcs:ignore
     {
-        $this->_init(\Magento\AdminNotification\Model\ResourceModel\Inbox::class);
+        $this->_init(InboxResourceModel::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSeverities($severity = null)
     {
@@ -63,7 +70,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadLatestNotice()
     {
@@ -100,13 +107,14 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string|string[] $description
      * @param string $url
      * @param bool $isInternal
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return $this
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function add($severity, $title, $description, $url = '', $isInternal = true)
     {
         if (!$this->getSeverities($severity)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Wrong message type'));
+            throw new LocalizedException(__('Wrong message type'));
         }
         if (is_array($description)) {
             $description = '<ul><li>' . implode('</li><li>', $description) . '</li></ul>';
@@ -135,6 +143,8 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function addCritical($title, $description, $url = '', $isInternal = true)
     {
@@ -150,6 +160,8 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function addMajor($title, $description, $url = '', $isInternal = true)
     {
@@ -165,6 +177,8 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function addMinor($title, $description, $url = '', $isInternal = true)
     {
@@ -180,6 +194,8 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function addNotice($title, $description, $url = '', $isInternal = true)
     {

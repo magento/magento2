@@ -5,31 +5,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Model\ResourceModel\Inbox\Collection;
 
+use Magento\AdminNotification\Model;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Notification\MessageInterface;
+
 /**
+ * Class Critical
+ *
+ * @package Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
  * @api
  * @since 100.0.2
  */
-class Critical extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Critical extends AbstractCollection
 {
     /**
      * Resource collection initialization
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _construct()
+    protected function _construct(): void //phpcs:ignore
     {
         $this->_init(
-            \Magento\AdminNotification\Model\Inbox::class,
-            \Magento\AdminNotification\Model\ResourceModel\Inbox::class
+            Model\Inbox::class,
+            Model\ResourceModel\Inbox::class
         );
     }
 
     /**
      * @return $this
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _initSelect()
+    protected function _initSelect() //phpcs:ignore
     {
         parent::_initSelect();
         $this->addOrder(
@@ -43,7 +55,7 @@ class Critical extends \Magento\Framework\Model\ResourceModel\Db\Collection\Abst
             ['neq' => 1]
         )->addFieldToFilter(
             'severity',
-            \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL
+            MessageInterface::SEVERITY_CRITICAL
         )->setPageSize(
             1
         );

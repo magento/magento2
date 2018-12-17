@@ -3,19 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Model;
 
+use Exception;
+use Magento\Backend\App\ConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\HTTP\Adapter\CurlFactory;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
+use SimpleXMLElement;
+use Zend_Http_Client;
 
 /**
  * AdminNotification Feed model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @package Magento\AdminNotification\Model
+ * @author Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Feed extends \Magento\Framework\Model\AbstractModel
+class Feed extends AbstractModel
 {
     const XML_USE_HTTPS_PATH = 'system/adminnotification/use_https';
 
@@ -30,20 +48,20 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_feedUrl;
+    protected $_feedUrl; //phpcs:ignore
 
     /**
-     * @var \Magento\Backend\App\ConfigInterface
+     * @var ConfigInterface
      */
-    protected $_backendConfig;
+    protected $_backendConfig; //phpcs:ignore
 
     /**
-     * @var \Magento\AdminNotification\Model\InboxFactory
+     * @var InboxFactory
      */
-    protected $_inboxFactory;
+    protected $_inboxFactory; //phpcs:ignore
 
     /**
-     * @var \Magento\Framework\HTTP\Adapter\CurlFactory
+     * @var CurlFactory
      *
      */
     protected $curlFactory;
@@ -51,45 +69,45 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     /**
      * Deployment configuration
      *
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var DeploymentConfig
      */
-    protected $_deploymentConfig;
+    protected $_deploymentConfig; //phpcs:ignore
 
     /**
-     * @var \Magento\Framework\App\ProductMetadataInterface
+     * @var ProductMetadataInterface
      */
     protected $productMetadata;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $urlBuilder;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\App\ConfigInterface $backendConfig
+     * @param Context $context
+     * @param Registry $registry
+     * @param ConfigInterface $backendConfig
      * @param InboxFactory $inboxFactory
-     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
-     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
-     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param CurlFactory $curlFactory
+     * @param DeploymentConfig $deploymentConfig
+     * @param ProductMetadataInterface $productMetadata
+     * @param UrlInterface $urlBuilder
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Backend\App\ConfigInterface $backendConfig,
-        \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
-        \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
-        \Magento\Framework\App\DeploymentConfig $deploymentConfig,
-        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        ConfigInterface $backendConfig,
+        InboxFactory $inboxFactory,
+        CurlFactory $curlFactory,
+        DeploymentConfig $deploymentConfig,
+        ProductMetadataInterface $productMetadata,
+        UrlInterface $urlBuilder,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -102,20 +120,11 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Init model
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-    }
-
-    /**
      * Retrieve feed url
      *
      * @return string
      */
-    public function getFeedUrl()
+    public function getFeedUrl(): string
     {
         $httpPath = $this->_backendConfig->isSetFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://';
         if ($this->_feedUrl === null) {
@@ -128,6 +137,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Check feed for modification
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function checkUpdate()
     {
@@ -141,17 +151,27 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
         $installDate = strtotime($this->_deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE));
 
-        if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
+        if ($feedXml
+            && !empty($feedXml->channel)
+            && !empty($feedXml->channel->item)
+        ) {
             foreach ($feedXml->channel->item as $item) {
-                $itemPublicationDate = strtotime((string)$item->pubDate);
-                if ($installDate <= $itemPublicationDate) {
-                    $feedData[] = [
-                        'severity' => (int)$item->severity,
-                        'date_added' => date('Y-m-d H:i:s', $itemPublicationDate),
-                        'title' => $this->escapeString($item->title),
-                        'description' => $this->escapeString($item->description),
-                        'url' => $this->escapeString($item->link),
-                    ];
+                if (!empty($item->pubDate)
+                    && !empty($item->severity)
+                    && !empty($item->title)
+                    && !empty($item->description)
+                    && !empty($item->link)
+                ) {
+                    $itemPublicationDate = strtotime((string)$item->pubDate);
+                    if ($itemPublicationDate && $installDate <= $itemPublicationDate) {
+                        $feedData[] = [
+                            'severity' => (int)$item->severity,
+                            'date_added' => date('Y-m-d H:i:s', $itemPublicationDate),
+                            'title' => $this->escapeString($item->title),
+                            'description' => $this->escapeString($item->description),
+                            'url' => $this->escapeString($item->link),
+                        ];
+                    }
                 }
             }
 
@@ -169,7 +189,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      *
      * @return int
      */
-    public function getFrequency()
+    public function getFrequency(): int
     {
         return $this->_backendConfig->getValue(self::XML_FREQUENCY_PATH) * 3600;
     }
@@ -179,9 +199,9 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      *
      * @return int
      */
-    public function getLastUpdate()
+    public function getLastUpdate(): int
     {
-        return $this->_cacheManager->load('admin_notifications_lastcheck');
+        return (int)$this->_cacheManager->load('admin_notifications_lastcheck');
     }
 
     /**
@@ -191,16 +211,16 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      */
     public function setLastUpdate()
     {
-        $this->_cacheManager->save(time(), 'admin_notifications_lastcheck');
+        $this->_cacheManager->save((string)time(), 'admin_notifications_lastcheck');
         return $this;
     }
 
     /**
      * Retrieve feed data as XML element
      *
-     * @return \SimpleXMLElement
+     * @return SimpleXMLElement|null
      */
-    public function getFeedData()
+    public function getFeedData(): ?SimpleXMLElement
     {
         $curl = $this->curlFactory->create();
         $curl->setConfig(
@@ -212,16 +232,16 @@ class Feed extends \Magento\Framework\Model\AbstractModel
                 'referer'   => $this->urlBuilder->getUrl('*/*/*')
             ]
         );
-        $curl->write(\Zend_Http_Client::GET, $this->getFeedUrl(), '1.0');
+        $curl->write(Zend_Http_Client::GET, $this->getFeedUrl(), '1.0');
         $data = $curl->read();
         $data = preg_split('/^\r?$/m', $data, 2);
-        $data = trim($data[1]);
+        $data = trim((string)$data[1]);
         $curl->close();
 
         try {
-            $xml = new \SimpleXMLElement($data);
-        } catch (\Exception $e) {
-            return false;
+            $xml = new SimpleXMLElement($data);
+        } catch (Exception $e) {
+            return null;
         }
 
         return $xml;
@@ -230,15 +250,15 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve feed as XML element
      *
-     * @return \SimpleXMLElement
+     * @return SimpleXMLElement
      */
-    public function getFeedXml()
+    public function getFeedXml(): SimpleXMLElement
     {
         try {
             $data = $this->getFeedData();
-            $xml = new \SimpleXMLElement($data);
-        } catch (\Exception $e) {
-            $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="utf-8" ?>');
+            $xml = new SimpleXMLElement((string)$data);
+        } catch (Exception $e) {
+            $xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8" ?>');
         }
 
         return $xml;
@@ -247,10 +267,10 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     /**
      * Converts incoming data to string format and escapes special characters.
      *
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return string
      */
-    private function escapeString(\SimpleXMLElement $data)
+    private function escapeString(SimpleXMLElement $data): string
     {
         return htmlspecialchars((string)$data);
     }

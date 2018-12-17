@@ -4,46 +4,58 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Model\System\Message;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\ValueFactory;
+use Magento\Framework\Notification\MessageInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * Class Baseurl
+ *
+ * @package Magento\AdminNotification\Model\System\Message
  * @deprecated 100.1.0
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class Baseurl implements \Magento\Framework\Notification\MessageInterface
+class Baseurl implements MessageInterface
 {
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
-    protected $_urlBuilder;
+    protected $_urlBuilder; //phpcs:ignore
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
-    protected $_config;
+    protected $_config; //phpcs:ignore
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $_storeManager; //phpcs:ignore
 
     /**
-     * @var \Magento\Framework\App\Config\ValueFactory
+     * @var ValueFactory
      */
-    protected $_configValueFactory;
+    protected $_configValueFactory; //phpcs:ignore
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
+     * @param ScopeConfigInterface $config
+     * @param StoreManagerInterface $storeManager
+     * @param UrlInterface $urlBuilder
+     * @param ValueFactory $configValueFactory
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\App\Config\ValueFactory $configValueFactory
+        ScopeConfigInterface $config,
+        StoreManagerInterface $storeManager,
+        UrlInterface $urlBuilder,
+        ValueFactory $configValueFactory
     ) {
         $this->_urlBuilder = $urlBuilder;
         $this->_config = $config;
@@ -55,24 +67,28 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Get url for config settings where base url option can be changed
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    protected function _getConfigUrl()
+    protected function _getConfigUrl(): string //phpcs:ignore
     {
         $output = '';
         $defaultUnsecure = $this->_config->getValue(Store::XML_PATH_UNSECURE_BASE_URL, 'default');
 
         $defaultSecure = $this->_config->getValue(Store::XML_PATH_SECURE_BASE_URL, 'default');
 
-        if ($defaultSecure == \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER ||
-            $defaultUnsecure == \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER
+        if ($defaultSecure === Store::BASE_URL_PLACEHOLDER ||
+            $defaultUnsecure === Store::BASE_URL_PLACEHOLDER
         ) {
             $output = $this->_urlBuilder->getUrl('adminhtml/system_config/edit', ['section' => 'web']);
         } else {
-            /** @var $dataCollection \Magento\Config\Model\ResourceModel\Config\Data\Collection */
+            /** @var \Magento\Config\Model\ResourceModel\Config\Data\Collection $dataCollection */
             $dataCollection = $this->_configValueFactory->create()->getCollection();
-            $dataCollection->addValueFilter(\Magento\Store\Model\Store::BASE_URL_PLACEHOLDER);
+            $dataCollection->addValueFilter(Store::BASE_URL_PLACEHOLDER);
 
-            /** @var $data \Magento\Framework\App\Config\ValueInterface */
+            /** @var \Magento\Framework\App\Config\ValueInterface $data */
             foreach ($dataCollection as $data) {
                 if ($data->getScope() == 'stores') {
                     $code = $this->_storeManager->getStore($data->getScopeId())->getCode();
@@ -98,8 +114,10 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Retrieve unique message identity
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getIdentity()
+    public function getIdentity(): string
     {
         return md5('BASE_URL' . $this->_getConfigUrl());
     }
@@ -108,8 +126,10 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Check whether
      *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function isDisplayed()
+    public function isDisplayed(): bool
     {
         return (bool)$this->_getConfigUrl();
     }
@@ -117,9 +137,11 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
     /**
      * Retrieve message text
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getText()
+    public function getText(): Phrase
     {
         return __(
             '{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure '
@@ -134,7 +156,7 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      *
      * @return int
      */
-    public function getSeverity()
+    public function getSeverity(): int
     {
         return self::SEVERITY_CRITICAL;
     }
