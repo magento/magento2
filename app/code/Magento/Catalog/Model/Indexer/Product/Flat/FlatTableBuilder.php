@@ -365,7 +365,7 @@ class FlatTableBuilder
                         []
                     )->columns(
                         [$columnName => $this->_connection->getIfNullSql('ts.value', 't0.value')]
-                    )->where($columnName . ' IS NOT NULL');
+                    )->where($attributeCode . ' IS NOT NULL');
                     if (!empty($changedIds)) {
                         $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
                     }
@@ -390,7 +390,7 @@ class FlatTableBuilder
 
     /**
      * Get MetadataPool
-     * 
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
