@@ -8,6 +8,7 @@ namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller;
+use Magento\Framework\Exception\NotFoundException;
 
 class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
@@ -132,9 +133,14 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * Save action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         // check if data sent
         $data = $this->getRequest()->getPostValue();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
