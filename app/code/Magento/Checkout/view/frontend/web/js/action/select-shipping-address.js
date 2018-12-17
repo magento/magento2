@@ -12,7 +12,6 @@ define([
     'use strict';
 
     return function (shippingAddress) {
-        quote.isbothAddressSame = false;
         quote.shippingAddress(shippingAddress);
         quote.billingAddress(quote.billingAddress());
     };
