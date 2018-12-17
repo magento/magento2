@@ -7,6 +7,7 @@ namespace Magento\Customer\Test\Unit\Model\Customer;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\Config\Share;
+use Magento\Customer\Model\FileUploaderDataResolver;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Config;
@@ -59,6 +60,11 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     protected $fileProcessor;
 
     /**
+     * @var FileUploaderDataResolver
+     */
+    private $fileUploaderDataResolver;
+
+    /**
      * Set up
      *
      * @return void
@@ -89,6 +95,14 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+
+        $helper = new ObjectManager($this);
+        $this->fileUploaderDataResolver = $helper->getObject(
+            FileUploaderDataResolver::class,
+            [
+                'fileProcessorFactory' => $this->fileProcessorFactory,
+            ]
+        );
     }
 
     /**
@@ -111,7 +125,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'requestFieldName' => 'request-field-name',
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->getCustomerCollectionFactoryMock(),
-                'eavConfig' => $this->getEavConfigMock()
+                'eavConfig' => $this->getEavConfigMock(),
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
             ]
         );
 
@@ -591,9 +606,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $customer->expects($this->once())
             ->method('getAddresses')
             ->willReturn([$address]);
-        $customer->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([]);
 
         $address->expects($this->atLeastOnce())
             ->method('getId')
@@ -605,9 +617,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $address->expects($this->once())
             ->method('getData')
             ->willReturn($addressData);
-        $address->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([]);
 
         $helper = new ObjectManager($this);
         $dataProvider = $helper->getObject(
@@ -723,9 +732,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $customer->expects($this->once())
             ->method('getAddresses')
             ->willReturn([$address]);
-        $customer->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([]);
 
         $address->expects($this->atLeastOnce())
             ->method('getId')
@@ -741,9 +747,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'lastname' => 'lastname',
                 'street' => "street\nstreet",
             ]);
-        $address->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([]);
 
         $helper = new ObjectManager($this);
         $dataProvider = $helper->getObject(
@@ -895,7 +898,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'requestFieldName' => 'request-field-name',
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig' => $this->getEavConfigMock()
+                'eavConfig' => $this->getEavConfigMock(),
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
             ]
         );
 
@@ -990,7 +994,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'requestFieldName' => 'request-field-name',
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig' => $this->getEavConfigMock()
+                'eavConfig' => $this->getEavConfigMock(),
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
             ]
         );
 
@@ -1115,6 +1120,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
                 'eavConfig' => $this->eavConfigMock,
                 'fileProcessorFactory' => $this->fileProcessorFactory,
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
             ]
         );
 
