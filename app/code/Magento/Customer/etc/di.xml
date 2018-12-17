@@ -230,6 +230,7 @@
                 <item name="customer_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Grid\Collection</item>
                 <item name="customer_online_grid_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Online\Grid\Collection</item>
                 <item name="customer_group_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Group\Grid\Collection</item>
+                <item name="customer_address_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Address\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -454,6 +455,14 @@
             <argument name="eventPrefix" xsi:type="string">customer_group_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">customer_group_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Group</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\Address\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">customer_address_entity</argument>
+            <argument name="eventPrefix" xsi:type="string">customer_address_entity_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">customer_address_entity_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Address</argument>
         </arguments>
     </type>
     <preference

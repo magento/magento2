@@ -260,14 +260,10 @@ class LoginTest extends \PHPUnit\Framework\TestCase
             ->with($customer);
         $this->customerSession->expects(self::never())
             ->method('regenerateId');
-        $this->customerSession->method('getData')
-            ->with('user_login_show_captcha')
-            ->willReturn(false);
 
         $result = [
             'errors' => true,
-            'message' => __('Invalid login or password.'),
-            'captcha' => false
+            'message' => __('Invalid login or password.')
         ];
         $this->resultJson->method('setData')
             ->with($result)
