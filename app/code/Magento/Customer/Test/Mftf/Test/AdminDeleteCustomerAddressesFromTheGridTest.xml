@@ -38,7 +38,6 @@
         </actionGroup>
         <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTab"/>
         <!--Step4. Click *Select* link in *Actions* column for target additional address-->
-        <wait stepKey="aaa" time="20"/>
         <conditionalClick selector="{{AdminCustomerAddressFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerAddressFiltersSection.clearAll}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
         <click selector="{{AdminCustomerAddressesGridSection.firstRowSelectLink}}" stepKey="clickOnSelectLinkInFirstRow"/>
         <!--Step5. Click *Delete*-->

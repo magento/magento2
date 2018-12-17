@@ -36,6 +36,7 @@
         </actionGroup>
         <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTab"/>
         <waitForPageLoad stepKey="waitForAddresses"/>
+        <conditionalClick selector="{{AdminCustomerAddressFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerAddressFiltersSection.clearAll}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
         <seeElement selector="{{AdminCustomerAddressesDefaultBillingSection.address}}" stepKey="seeDefaultBillingAddressSectionBeforeChangingDefaultAddress"/>
         <see userInput="The customer does not have default billing address" selector="{{AdminCustomerAddressesDefaultBillingSection.address}}" stepKey="assertThereIsNoDefaultBillingAddressSet"/>
         <seeElement selector="{{AdminCustomerAddressesDefaultShippingSection.address}}" stepKey="seeDefaultShippingAddressSectionBeforeChangingDefaultAddress"/>

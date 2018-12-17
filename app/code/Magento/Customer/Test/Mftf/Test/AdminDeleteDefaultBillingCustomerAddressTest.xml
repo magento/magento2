@@ -37,6 +37,7 @@
         </actionGroup>
         <!--Step3. Open *Addresses* tab on edit customer page and click *edit* link near *Default Billing Address* block-->
         <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTab"/>
+        <conditionalClick selector="{{AdminCustomerAddressFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerAddressFiltersSection.clearAll}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
         <seeNumberOfElements userInput="2" selector="{{AdminCustomerAddressesGridSection.rowsInGrid}}" stepKey="seeTwoCustomerAddressesInGrid"/>
         <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditNearDefaultBillingAddress"/>
         <waitForPageLoad stepKey="waitForDefaultBillingAddressPopupLoad"/>

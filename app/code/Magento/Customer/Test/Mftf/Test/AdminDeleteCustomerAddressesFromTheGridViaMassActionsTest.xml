@@ -37,6 +37,7 @@
             <argument name="customer" value="Simple_US_Customer_Multiple_Addresses"/>
         </actionGroup>
         <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTab"/>
+        <conditionalClick selector="{{AdminCustomerAddressFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerAddressFiltersSection.clearAll}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
         <!-- -
         Step4. Check checkboxes for several addresses open *Actions* dropdown at the top of addresses grid and select action *Delete*
         Step5. Press *Ok* button on the pop-up

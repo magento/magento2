@@ -37,6 +37,7 @@
             <argument name="customer" value="Simple_US_Customer_Multiple_Addresses"/>
         </actionGroup>
         <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTab"/>
+        <conditionalClick selector="{{AdminCustomerAddressFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerAddressFiltersSection.clearAll}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
         <!--Step4. Fill *Search by keyword* filed with the query and press enter or clock on the magnifier icon-->
         <fillField userInput="{{US_Address_NY.street[0]}}" selector="{{AdminCustomerAddressesGridActionsSection.search}}" stepKey="FillCustomerAddressStreetInSearchByKeyword"/>
         <pressKey parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" selector="{{AdminCustomerAddressesGridActionsSection.search}}" stepKey="pressEnterKey"/>

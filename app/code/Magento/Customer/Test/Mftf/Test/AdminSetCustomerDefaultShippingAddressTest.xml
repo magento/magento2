@@ -36,6 +36,7 @@
         </actionGroup>
         <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTab"/>
         <waitForPageLoad stepKey="waitForAddresses"/>
+        <conditionalClick selector="{{AdminCustomerAddressFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerAddressFiltersSection.clearAll}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
         <fillField userInput="{{US_Address_NY_Not_Default_Address.street[0]}}" selector="{{AdminCustomerAddressesGridActionsSection.search}}" stepKey="fillCustomerAddressStreetInSearchByKeyword"/>
         <pressKey parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" selector="{{AdminCustomerAddressesGridActionsSection.search}}" stepKey="pressEnterKey"/>
         <waitForPageLoad stepKey="waitForCustomerAddressesGridPageLoad"/>
