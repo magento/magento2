@@ -5,7 +5,6 @@
  */
 
 // @codingStandardsIgnoreFile
-
 namespace Magento\ImportExport\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -24,6 +23,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * @method string getBehavior() getBehavior()
  * @method \Magento\ImportExport\Model\Import setEntity() setEntity(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
 class Import extends \Magento\ImportExport\Model\AbstractModel
@@ -173,11 +173,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_filesystem;
 
     /**
-     * @var ManagerInterface
-     */
-    private $messageManager;
-
-    /**
      * @var History
      */
     private $importHistoryModel;
@@ -186,6 +181,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @var DateTime
      */
     private $localeDate;
+
+    /**
+     * @var ManagerInterface
+     */
+    private $messageManager;
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
@@ -466,7 +466,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
-     * Processing of import.
+     * Process import.
      *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -498,7 +498,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
-     * Move uploaded file and create source adapter instance.
+     * Move uploaded file.
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return string Source file path
@@ -630,13 +630,14 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         if ($errorsCount
             && $validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
         ) {
-            $this->messageManager->addWarningMessage(sprintf(__('Skipped errors: %d'), $errorsCount));
+            $this->messageManager->addWarningMessage(__('Skipped errors: %1', $errorsCount));
             $result = true;
         }
 
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         }
+
         return $result;
     }
 

@@ -2351,6 +2351,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test import product with wrong sku when On Error option is set as Continue Processing.
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
