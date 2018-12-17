@@ -49,11 +49,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     protected $sessionMock;
 
     /**
-     * @var \Magento\Customer\Model\FileProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fileProcessorFactory;
-
-    /**
      * @var \Magento\Customer\Model\FileProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fileProcessor;
@@ -93,11 +88,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['overrideFileUploaderMetadata', 'overrideFileUploaderData'])
             ->getMock();
-
-        $this->fileProcessorFactory = $this->getMockBuilder(\Magento\Customer\Model\FileProcessorFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
     }
 
     /**
@@ -123,12 +113,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'eavConfig' => $this->getEavConfigMock(),
                 'fileUploaderDataResolver' => $this->fileUploaderDataResolver
             ]
-        );
-
-        $helper->setBackwardCompatibleProperty(
-            $dataProvider,
-            'fileProcessorFactory',
-            $this->fileProcessorFactory
         );
 
         $meta = $dataProvider->getMeta();
@@ -635,12 +619,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerFormData')
             ->willReturn(null);
 
-        $helper->setBackwardCompatibleProperty(
-            $dataProvider,
-            'fileProcessorFactory',
-            $this->fileProcessorFactory
-        );
-
         $this->assertEquals(
             [
                 '' => [
@@ -766,12 +744,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock->expects($this->once())
             ->method('unsCustomerFormData');
 
-        $helper->setBackwardCompatibleProperty(
-            $dataProvider,
-            'fileProcessorFactory',
-            $this->fileProcessorFactory
-        );
-
         $this->assertEquals([$customerId => $customerFormData], $dataProvider->getData());
     }
 
@@ -836,11 +808,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             $this->sessionMock
         );
 
-        $objectManager->setBackwardCompatibleProperty(
-            $dataProvider,
-            'fileProcessorFactory',
-            $this->fileProcessorFactory
-        );
         $this->fileUploaderDataResolver->expects($this->atLeastOnce())->method('overrideFileUploaderData')
             ->with(
                 $customerMock,
@@ -940,13 +907,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'file_extensions' => 'ext1, eXt2 ', // Added spaces and upper-cases
             ]);
 
-        $this->fileProcessorFactory->expects($this->any())
-            ->method('create')
-            ->with([
-                'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-            ])
-            ->willReturn($this->fileProcessor);
-
         $objectManager = new ObjectManager($this);
         $dataProvider = $objectManager->getObject(
             \Magento\Customer\Model\Customer\DataProvider::class,
@@ -956,8 +916,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'requestFieldName' => 'request-field-name',
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig' => $this->eavConfigMock,
-                'fileProcessorFactory' => $this->fileProcessorFactory,
+                'eavConfig' => $this->eavConfigMock
             ]
         );
 
@@ -1057,12 +1016,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $helper->setBackwardCompatibleProperty(
-            $dataProvider,
-            'fileProcessorFactory',
-            $this->fileProcessorFactory
-        );
-
         $meta = $dataProvider->getMeta();
         $this->assertNotEmpty($meta);
         $this->assertEquals($this->getExpectationForVisibleAttributes(), $meta);
@@ -1130,11 +1083,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'fileUploaderDataResolver' => $this->fileUploaderDataResolver
 
             ]
-        );
-        $helper->setBackwardCompatibleProperty(
-            $dataProvider,
-            'fileProcessorFactory',
-            $this->fileProcessorFactory
         );
 
         $meta = $dataProvider->getMeta();
