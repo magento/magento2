@@ -49,6 +49,11 @@ class Book extends \Magento\Framework\View\Element\Template
     private $addressesCollectionFactory;
 
     /**
+     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
+     */
+    private $addressesCollection;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param CustomerRepositoryInterface $customerRepository
      * @param AddressRepositoryInterface $addressRepository
@@ -66,24 +71,15 @@ class Book extends \Magento\Framework\View\Element\Template
         \Magento\Customer\Model\Address\Config $addressConfig,
         Mapper $addressMapper,
         array $data = [],
-        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressesCollectionFactory,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor = null,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressesCollectionFactory = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->currentCustomer = $currentCustomer;
         $this->addressRepository = $addressRepository;
         $this->_addressConfig = $addressConfig;
         $this->addressMapper = $addressMapper;
-        $this->addressesCollectionFactory = $addressesCollectionFactory;
-        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->collectionProcessor = $collectionProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            'Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor'
-        );
-        $this->filterBuilder = $filterBuilder;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->addressesCollectionFactory = $addressesCollectionFactory?: ObjectManager::getInstance()
+            ->get(\Magento\Customer\Model\ResourceModel\Address\CollectionFactory::class);
 
         parent::__construct($context, $data);
     }
@@ -95,17 +91,14 @@ class Book extends \Magento\Framework\View\Element\Template
     {
         $this->pageConfig->getTitle()->set(__('Address Book'));
         parent::_prepareLayout();
-        if ($this->getAddresses()) {
+        $addresses = $this->getAddressesCollection();
+        if (null !== $addresses) {
             $pager = $this->getLayout()->createBlock(
                 \Magento\Theme\Block\Html\Pager::class,
                 'customer.addresses.pager'
-            )
-                ->setCollection(
-                $this->getAddresses()
-            )
-            ;
+            )->setCollection($this->getAddressesCollection());
             $this->setChild('pager', $pager);
-            $this->getAddresses()->load();
+            $this->getAddressesCollection()->load();
         }
         return $this;
     }
@@ -160,10 +153,7 @@ class Book extends \Magento\Framework\View\Element\Template
     public function getAdditionalAddresses()
     {
         try {
-            //$addresses = $this->customerRepository->getById($this->currentCustomer->getCustomerId())->getAddresses();
-
-            $addresses = $this->getAddresses();
-            // continue work here!!!
+            $addresses = $this->getAddressesCollection();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return false;
         }
@@ -268,71 +258,30 @@ class Book extends \Magento\Framework\View\Element\Template
         return $this->getChildHtml('pager');
     }
 
-    /**
-     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
-     */
-    private $addressesCollection;
-
-
-    /**
-     * @var \Magento\Customer\Model\ResourceModel\Address\CollectionFactory
-     */
-    private $addressCollectionFactory;
-
-    /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     */
-    private $extensionAttributesJoinProcessor;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-     */
-    private $collectionProcessor;
-
-    /**
-     * @var \Magento\Framework\Api\FilterBuilder
-     */
-    private $filterBuilder;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    private function getAddresses()
+    private function getAddressesCollection()
     {
-        $customerId = $this->currentCustomer->getCustomerId();
-
-        if (!($customerId)) {
-            return false;
-        }
-        if (!$this->addressesCollection) {
-
-            $filter = $this->filterBuilder->setField('parent_id')
-                ->setValue($customerId)
-                ->setConditionType('eq')
-                ->create();
-
-
-            $searchCriteria = $this->searchCriteriaBuilder->addFilters([$filter])->create();
-
-            //$listtt = $this->addressRepository->getList($searchCriteria);
-
-            /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
+        if (null === $this->addressesCollection) {
+           /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
             $collection = $this->addressesCollectionFactory->create();
-            $this->extensionAttributesJoinProcessor->process(
-                $collection,
-                \Magento\Customer\Api\Data\AddressInterface::class
-            );
-
-            $this->collectionProcessor->process($searchCriteria, $collection);
             $collection->setOrder(
-                'created_at',
+                'entity_id',
                 'desc'
             );
+            $collection->setCustomerFilter([$this->currentCustomer->getCustomer()->getId()]);
             $this->addressesCollection = $collection;
         }
 
         return $this->addressesCollection;
+    }
+
+    /**
+     * @param $countryId
+     * @return string
+     */
+    public function getCountryById($countryId) :string
+    {
+        $country = '';
+
+        return $country;
     }
 }
