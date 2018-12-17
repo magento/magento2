@@ -69,6 +69,7 @@
         <scrollTo selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" stepKey="scrollToItemsInvoiced"/>
         <!--Change invoiced items count-->
         <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="5" stepKey="invoiceHalfTheItems"/>
+        <waitForElementChange selector="{{AdminInvoiceItemsSection.updateQty}}" function="function($el) {return $el->isEnabled();}" stepKey="waitForEnabledQtyToBeInvoicedSubmitButton"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQtyToBeInvoiced"/>
         <waitForLoadingMaskToDisappear stepKey="waitForQtyToUpdate"/>
         <waitForElementVisible selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="waitforSubmitInvoiceBtn"/>
@@ -111,6 +112,7 @@
         <!--Submit refund-->
         <scrollTo selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="scrollToItemsToRefund"/>
         <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" after="scrollToItemsToRefund" stepKey="fillQtyOfItemsToRefund"/>
+        <waitForElementChange selector="{{AdminCreditMemoItemsSection.updateQty}}" function="function($el) {return $el->isEnabled();}" stepKey="waitForEnabledRefundQtySubmitButton"/>
         <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateRefundQty"/>
         <waitForLoadingMaskToDisappear stepKey="waitForRefundQtyToUpdate"/>
         <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="seeSubmitRefundBtn"/>
