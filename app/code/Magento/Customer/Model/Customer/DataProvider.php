@@ -160,6 +160,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param bool $allowToShowHiddenAttributes
      * @param FileUploaderDataResolver|null $fileUploaderDataResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         $name,
@@ -182,7 +183,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
-        $this->fileProcessorFactory = $fileProcessorFactory ?: $this->getFileProcessorFactory();
         $this->context = $context ?: ObjectManager::getInstance()->get(ContextInterface::class);
         $this->allowToShowHiddenAttributes = $allowToShowHiddenAttributes;
         $this->fileUploaderDataResolver = $fileUploaderDataResolver
@@ -452,20 +452,5 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $addresses[$addressId][$attributeName] = explode("\n", $addresses[$addressId][$attributeName]);
             }
         }
-    }
-
-    /**
-     * Get FileProcessorFactory instance
-     *
-     * @return FileProcessorFactory
-     * @deprecated 100.1.3
-     */
-    private function getFileProcessorFactory()
-    {
-        if ($this->fileProcessorFactory === null) {
-            $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get(\Magento\Customer\Model\FileProcessorFactory::class);
-        }
-        return $this->fileProcessorFactory;
     }
 }
