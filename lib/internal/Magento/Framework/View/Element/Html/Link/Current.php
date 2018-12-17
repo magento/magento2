@@ -71,7 +71,7 @@ class Current extends Template
         ];
 
         $parts = [];
-        $pathParts = explode('/', $this->getPath());
+        $pathParts = explode('/', trim($this->_request->getPathInfo(), '/'));
         foreach ($routeParts as $key => $value) {
             if (isset($pathParts[$key]) && $pathParts[$key] === $value) {
                 $parts[] = $value;
