@@ -158,6 +158,8 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
+     * Create Customization instance for current theme.
+     *
      * @return \Magento\Framework\View\Design\Theme\Customization
      */
     public function getCustomization()
@@ -253,7 +255,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getParentTheme()
     {
@@ -270,7 +272,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getArea()
     {
@@ -283,7 +285,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getThemePath()
     {
@@ -304,7 +306,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCode()
     {

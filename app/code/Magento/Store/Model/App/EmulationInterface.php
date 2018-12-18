@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Model\App;
 
@@ -23,7 +24,7 @@ interface EmulationInterface
      * @param bool $force A true value will ensure that environment is always emulated, regardless of current store
      * @return void
      */
-    public function startEnvironmentEmulation($storeId, $area = Area::AREA_FRONTEND, $force = false);
+    public function startEnvironmentEmulation($storeId, $area = Area::AREA_FRONTEND, $force = false): void;
 
     /**
      * Stop environment emulation
@@ -32,19 +33,19 @@ interface EmulationInterface
      *
      * @return $this
      */
-    public function stopEnvironmentEmulation();
+    public function stopEnvironmentEmulation(): self;
 
     /**
      * Stores current environment info
      *
      * @return void
      */
-    public function storeCurrentEnvironmentInfo();
+    public function storeCurrentEnvironmentInfo(): void;
 
     /**
      * Checks whether the environment is being emulated
      *
      * @return bool
      */
-    public function isEnvironmentEmulated();
+    public function isEnvironmentEmulated(): bool;
 }

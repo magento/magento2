@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Model\App;
 
-use \Magento\Framework\App\Area;
+use Magento\Framework\App\Area;
 
 /**
  * Environment emulation model
  */
-class EnvironmentEmulation extends \Magento\Framework\DataObject implements \Magento\Store\Model\App\EmulationInterface
+class EnvironmentEmulation extends \Magento\Framework\DataObject implements EmulationInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -105,9 +106,9 @@ class EnvironmentEmulation extends \Magento\Framework\DataObject implements \Mag
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function startEnvironmentEmulation($storeId, $area = Area::AREA_FRONTEND, $force = false)
+    public function startEnvironmentEmulation($storeId, $area = Area::AREA_FRONTEND, $force = false): void
     {
         // Only allow a single level of emulation
         if ($this->isEnvironmentEmulated()) {
@@ -149,9 +150,9 @@ class EnvironmentEmulation extends \Magento\Framework\DataObject implements \Mag
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function stopEnvironmentEmulation()
+    public function stopEnvironmentEmulation(): EmulationInterface
     {
         if (!$this->isEnvironmentEmulated()) {
             return $this;
@@ -169,9 +170,9 @@ class EnvironmentEmulation extends \Magento\Framework\DataObject implements \Mag
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function storeCurrentEnvironmentInfo()
+    public function storeCurrentEnvironmentInfo(): void
     {
         $this->initialEnvironmentInfo = new \Magento\Framework\DataObject();
         $this->initialEnvironmentInfo->setInitialTranslateInline(
@@ -188,9 +189,9 @@ class EnvironmentEmulation extends \Magento\Framework\DataObject implements \Mag
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function isEnvironmentEmulated()
+    public function isEnvironmentEmulated(): bool
     {
         return $this->initialEnvironmentInfo !== null;
     }
@@ -201,7 +202,7 @@ class EnvironmentEmulation extends \Magento\Framework\DataObject implements \Mag
      * @param bool $initialTranslate
      * @return $this
      */
-    private function restoreInitialInlineTranslation($initialTranslate)
+    private function restoreInitialInlineTranslation($initialTranslate): self
     {
         $this->inlineTranslation->resume($initialTranslate);
         return $this;
@@ -213,7 +214,7 @@ class EnvironmentEmulation extends \Magento\Framework\DataObject implements \Mag
      * @param array $initialDesign
      * @return $this
      */
-    private function restoreInitialDesign(array $initialDesign)
+    private function restoreInitialDesign(array $initialDesign): self
     {
         $this->viewDesign->setDesignTheme($initialDesign['theme'], $initialDesign['area']);
         return $this;
@@ -229,7 +230,7 @@ class EnvironmentEmulation extends \Magento\Framework\DataObject implements \Mag
     private function restoreInitialLocale(
         $initialLocaleCode,
         $initialArea = \Magento\Framework\App\Area::AREA_ADMINHTML
-    ) {
+    ): self {
         $this->localeResolver->setLocale($initialLocaleCode);
         $this->translate->setLocale($initialLocaleCode);
         $this->translate->loadData($initialArea);

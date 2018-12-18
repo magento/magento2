@@ -6,7 +6,6 @@
 
 namespace Magento\Theme\Model\View;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -238,7 +237,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getThemePath(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
@@ -268,6 +267,8 @@ class Design implements \Magento\Framework\View\DesignInterface
     }
 
     /**
+     * Fill locale property with given locale instance.
+     *
      * @param \Magento\Framework\Locale\ResolverInterface $locale
      * @return $this
      */
@@ -278,7 +279,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDesignParams()
     {
