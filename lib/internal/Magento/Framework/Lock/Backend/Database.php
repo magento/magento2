@@ -56,7 +56,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function lock(string $name, int $timeout = -1): bool
     {
-        if (!$this->deploymentConfig->isAvailable()) {
+        if (!$this->deploymentConfig->isDbAvailable()) {
             return true;
         };
         $name = $this->addPrefix($name);
@@ -96,7 +96,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function unlock(string $name): bool
     {
-        if (!$this->deploymentConfig->isAvailable()) {
+        if (!$this->deploymentConfig->isDbAvailable()) {
             return true;
         };
         $name = $this->addPrefix($name);
@@ -122,7 +122,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function isLocked(string $name): bool
     {
-        if (!$this->deploymentConfig->isAvailable()) {
+        if (!$this->deploymentConfig->isDbAvailable()) {
             return false;
         };
         $name = $this->addPrefix($name);

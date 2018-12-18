@@ -89,7 +89,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     public function testLock()
     {
         $this->deploymentConfig
-            ->method('isAvailable')
+            ->method('isDbAvailable')
             ->with()
             ->willReturn(true);
         $this->statement->expects($this->once())
@@ -105,7 +105,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     public function testlockWithTooLongName()
     {
         $this->deploymentConfig
-            ->method('isAvailable')
+            ->method('isDbAvailable')
             ->with()
             ->willReturn(true);
         $this->database->lock('BbXbyf9rIY5xuAVdviQJmh76FyoeeVHTDpcjmcImNtgpO4Hnz4xk76ZGEyYALvrQu');
@@ -118,7 +118,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     public function testlockWithAlreadyAcquiredLockInSameSession()
     {
         $this->deploymentConfig
-            ->method('isAvailable')
+            ->method('isDbAvailable')
             ->with()
             ->willReturn(true);
         $this->statement->expects($this->any())
@@ -138,7 +138,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfig
             ->expects($this->atLeast(1))
-            ->method('isAvailable')
+            ->method('isDbAvailable')
             ->with()
             ->willReturn(false);
         $this->assertTrue($this->database->lock('testLock'));
@@ -152,7 +152,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfig
             ->expects($this->atLeast(1))
-            ->method('isAvailable')
+            ->method('isDbAvailable')
             ->with()
             ->willReturn(false);
         $this->assertTrue($this->database->unlock('testLock'));
@@ -162,11 +162,11 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws \Magento\Framework\Exception\InputException
      */
-    public function testIsLockedWithUnavailableDeploymentConfig()
+    public function testIsLockedWithUnavailableDB()
     {
         $this->deploymentConfig
             ->expects($this->atLeast(1))
-            ->method('isAvailable')
+            ->method('isDbAvailable')
             ->with()
             ->willReturn(false);
         $this->assertFalse($this->database->isLocked('testLock'));
