@@ -8,6 +8,8 @@ namespace Magento\Customer\Block\Address;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Mapper;
+use Magento\Framework\App\ObjectManager;
+use Magento\Directory\Model\CountryFactory;
 
 /**
  * Customer address book block
@@ -54,6 +56,11 @@ class Book extends \Magento\Framework\View\Element\Template
     private $addressesCollection;
 
     /**
+     * @var CountryFactory
+     */
+    private $countryFactory;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param CustomerRepositoryInterface $customerRepository
      * @param AddressRepositoryInterface $addressRepository
@@ -62,6 +69,7 @@ class Book extends \Magento\Framework\View\Element\Template
      * @param Mapper $addressMapper
      * @param array $data
      * @param \Magento\Customer\Model\ResourceModel\Address\Collection $addressesCollection
+     * @param CountryFactory|null $countryFactory
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -71,15 +79,17 @@ class Book extends \Magento\Framework\View\Element\Template
         \Magento\Customer\Model\Address\Config $addressConfig,
         Mapper $addressMapper,
         array $data = [],
-        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressesCollectionFactory = null
+        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressesCollectionFactory = null,
+        CountryFactory $countryFactory = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->currentCustomer = $currentCustomer;
         $this->addressRepository = $addressRepository;
         $this->_addressConfig = $addressConfig;
         $this->addressMapper = $addressMapper;
-        $this->addressesCollectionFactory = $addressesCollectionFactory?: ObjectManager::getInstance()
+        $this->addressesCollectionFactory = $addressesCollectionFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Customer\Model\ResourceModel\Address\CollectionFactory::class);
+        $this->countryFactory = $countryFactory ?: ObjectManager::getInstance()->get(CountryFactory::class);
 
         parent::__construct($context, $data);
     }
@@ -258,10 +268,16 @@ class Book extends \Magento\Framework\View\Element\Template
         return $this->getChildHtml('pager');
     }
 
+    /**
+     * Get customer addresses collection.
+     * Filters collection by customer id
+     *
+     * @return \Magento\Customer\Model\ResourceModel\Address\Collection
+     */
     private function getAddressesCollection()
     {
         if (null === $this->addressesCollection) {
-           /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
+            /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
             $collection = $this->addressesCollectionFactory->create();
             $collection->setOrder(
                 'entity_id',
@@ -275,13 +291,16 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get country name by $countryId
+     * Using \Magento\Directory\Model\Country to get country name by $countryId
+     *
      * @param $countryId
      * @return string
      */
     public function getCountryById($countryId) :string
     {
-        $country = '';
-
-        return $country;
+        /** @var \Magento\Directory\Model\Country $country */
+        $country = $this->countryFactory->create();
+        return $country->loadByCode($countryId)->getName();
     }
 }
