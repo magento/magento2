@@ -50,6 +50,9 @@ define([
                     }
                 }
             },
+            ignoreTmpls: {
+                data: true
+            },
             listens: {
                 elems: 'updateFields',
                 data: 'updateState'
@@ -138,7 +141,7 @@ define([
         },
 
         /**
-         * Creates fields for the specfied columns.
+         * Creates fields for the specified columns.
          *
          * @param {Array} columns - An array of column instances.
          * @returns {Record} Chainable.
