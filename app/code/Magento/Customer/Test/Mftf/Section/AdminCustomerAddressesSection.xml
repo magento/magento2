@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerAddressesSection">
+        <element name="addNewAddress" type="button" selector="//span[text()='Add New Address']"/>
+        <element name="defaultBillingAddress" type="button" selector="div[data-index=default_billing] .admin__actions-switch-label"/>
+        <element name="defaultShippingAddress" type="button" selector="div[data-index=default_shipping] .admin__actions-switch-label"/>
+        <element name="firstNameForAddress" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'firstname')]"/>
+        <element name="lastNameForAddress" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'lastname')]"/>
+        <element name="streetAddress" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'street')]"/>
+        <element name="city" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'city')]"/>
+        <element name="country" type="select" selector="//div[@class='admin__field-control']//select[contains(@name, 'country_id')]"/>
+        <element name="state" type="select" selector="//div[@class='admin__field-control']//select[contains(@name, 'region_id')]"/>
+        <element name="zip" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'postcode')]"/>
+        <element name="phoneNumber" type="input" selector="//div[@class='admin__field-control']//input[contains(@name, 'telephone')]"/>
+        <element name="saveAddress" type="button" selector="//button[@title='Save']"/>
+        <element name="customerAddressRow" type="input" selector="//tbody//tr//td//div[contains(., '{{var1}}')]" parameterized="true"/>
+    </section>
+</sections>

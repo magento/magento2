@@ -18,9 +18,6 @@
             <testCaseId value="MAGETWO-41931"/>
             <group value="checkout"/>
             <group value="tax"/>
-            <skip>
-                <issueId value="MAGETWO-90966"/>
-            </skip>
          </annotations>
          <before>
              <!-- Preconditions  -->
