@@ -1945,7 +1945,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Get formatted order created date in store timezone
      *
-     * @param int $format date format type (\IntlDateFormatter::SHORT|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::LONG|\IntlDateFormatter::FULL)
+     * @param int $format date format type (\IntlDateFormatter::SHORT|\IntlDateFormatter::MEDIUM
+     * |\IntlDateFormatter::LONG|\IntlDateFormatter::FULL)
      * @return string
      */
     public function getCreatedAtFormatted($format)
