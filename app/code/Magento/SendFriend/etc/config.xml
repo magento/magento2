@@ -17,5 +17,21 @@
                 <check_by>0</check_by>
             </email>
         </sendfriend>
+        <captcha translate="label">
+            <frontend>
+                <areas>
+                    <product_sendtofriend_form>
+                        <label>Send To Friend Form</label>
+                    </product_sendtofriend_form>
+                </areas>
+            </frontend>
+        </captcha>
+        <customer>
+            <captcha>
+                <shown_to_logged_in_user>
+                    <product_sendtofriend_form>1</product_sendtofriend_form>
+                </shown_to_logged_in_user>
+            </captcha>
+        </customer>
     </default>
 </config>
