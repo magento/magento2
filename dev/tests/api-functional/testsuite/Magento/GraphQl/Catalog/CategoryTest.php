@@ -113,6 +113,44 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testGetCategoryById()
+    {
+        $rootCategoryId = 13;
+        $query = <<<QUERY
+{
+  category(id: {$rootCategoryId}) {
+      id
+      name
+  }
+}
+QUERY;
+
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
+        );
+        $customerToken = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $responseDataObject = new DataObject($response);
+        //Some sort of smoke testing
+        self::assertEquals(
+            'Category 1.2',
+            $responseDataObject->getData('category/name')
+        );
+        self::assertEquals(
+            13,
+            $responseDataObject->getData('category/id')
+        );
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
