@@ -23,6 +23,8 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Custom Flat Attribute Test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomFlatAttributeTest extends IndexerTestCase
 {
@@ -171,7 +173,7 @@ class CustomFlatAttributeTest extends IndexerTestCase
      * @param Store|null $store
      * @return ProductInterface
      */
-    private function getFlatProductFromStore(string $sku, ?Store $store = null): ProductInterface
+    private function getFlatProductFromStore(string $sku, $store = null): ProductInterface
     {
         if ($store) {
             /** @var StoreManagerInterface $storeManager */
