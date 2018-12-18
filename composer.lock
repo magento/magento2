@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "03684a14a40d0a05a9234c4135e77dde",
+    "content-hash": "c740fc60fa5ed7ac78b849e4d778e07c",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -4577,16 +4577,16 @@
     "packages-dev": [
         {
             "name": "allure-framework/allure-codeception",
-            "version": "1.2.7",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/allure-framework/allure-codeception.git",
-                "reference": "48598f4b4603b50b663bfe977260113a40912131"
+                "reference": "9d31d781b3622b028f1f6210bc76ba88438bd518"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/allure-framework/allure-codeception/zipball/48598f4b4603b50b663bfe977260113a40912131",
-                "reference": "48598f4b4603b50b663bfe977260113a40912131",
+                "url": "https://api.github.com/repos/allure-framework/allure-codeception/zipball/9d31d781b3622b028f1f6210bc76ba88438bd518",
+                "reference": "9d31d781b3622b028f1f6210bc76ba88438bd518",
                 "shasum": ""
             },
             "require": {
@@ -4624,7 +4624,7 @@
                 "steps",
                 "testing"
             ],
-            "time": "2018-03-07T11:18:27+00:00"
+            "time": "2018-12-18T19:47:23+00:00"
         },
         {
             "name": "allure-framework/allure-php-api",
@@ -6503,32 +6503,28 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-2.3.12-develop",
+            "version": "2.3.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "5a16f3da80e990f4a0ce983b3557ada1d5037d4b"
+                "reference": "28470cd19c91d2ec4b2f34d3c676fc607ebd68cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/5a16f3da80e990f4a0ce983b3557ada1d5037d4b",
-                "reference": "5a16f3da80e990f4a0ce983b3557ada1d5037d4b",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/28470cd19c91d2ec4b2f34d3c676fc607ebd68cb",
+                "reference": "28470cd19c91d2ec4b2f34d3c676fc607ebd68cb",
                 "shasum": ""
             },
             "require": {
-                "allure-framework/allure-php-api": "~1.1.0",
+                "allure-framework/allure-codeception": "~1.3.0",
                 "codeception/codeception": "~2.3.4",
-                "composer/composer": "^1.6",
                 "consolidation/robo": "^1.0.0",
                 "epfremme/swagger-php": "^2.0",
-                "ext-curl": "*",
                 "flow/jsonpath": ">0.2",
                 "fzaninotto/faker": "^1.6",
                 "monolog/monolog": "^1.0",
                 "mustache/mustache": "~2.5",
                 "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0",
-                "symfony/filesystem": ">=2.6",
-                "symfony/finder": ">=2.6",
                 "symfony/process": "^2.8 || ^3.1 || ^4.0",
                 "vlucas/phpdotenv": "^2.4"
             },
@@ -6540,7 +6536,6 @@
                 "goaop/framework": "2.2.0",
                 "php-coveralls/php-coveralls": "^1.0",
                 "phpmd/phpmd": "^2.6.0",
-                "phpunit/phpunit": "~6.5.0 || ~7.0.0",
                 "rregeer/phpunit-coverage-check": "^0.1.4",
                 "sebastian/phpcpd": "~3.0 || ~4.0",
                 "squizlabs/php_codesniffer": "~3.2",
@@ -6575,7 +6570,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-12-14T21:11:58+00:00"
+            "time": "2018-12-18T23:02:33+00:00"
         },
         {
             "name": "mikey179/vfsStream",

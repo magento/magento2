@@ -77,7 +77,7 @@
     <listeners>
         <listener class="Magento\TestFramework\Event\PhpUnit"/>
         <listener class="Magento\TestFramework\ErrorLog\Listener"/>
-        <listener class="Yandex\Allure\Adapter\AllureAdapter" file="../../../vendor/allure-framework/allure-phpunit/src/Yandex/Allure/Adapter/AllureAdapter.php">
+        <listener class="Yandex\Allure\Adapter\AllureAdapter">
             <arguments>
                 <string>var/allure-results</string> <!-- XML files output directory -->
                 <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
